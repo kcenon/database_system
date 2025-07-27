@@ -1,0 +1,27 @@
+{
+    "name": "database-system",
+    "version": "1.0.0",
+    "description": "Database abstraction layer with PostgreSQL support",
+    "license": "BSD-3-Clause",
+    "dependencies": [
+        "libpq",
+        "libpqxx",
+        "fmt"
+    ],
+    "features": {
+        "tests": {
+            "description": "Build unit tests",
+            "dependencies": [
+                "gtest"
+            ]
+        },
+        "samples": {
+            "description": "Build sample applications",
+            "dependencies": []
+        },
+        "docs": {
+            "description": "Build documentation",
+            "dependencies": []
+        }
+    }
+}

@@ -1,0 +1,13 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libecpg_compat
+Description: PostgreSQL libecpg_compat library
+URL: https://www.postgresql.org/
+Version: 16.9
+
+Libs: "-L${libdir}" -lecpg_compat "-L${prefix}/lib" "-L${prefix}/lib/manual-link" "-L${prefix}/lib/pkgconfig/../../lib" -lecpg -lpgcommon -lpgport -lpq -lm
+Requires:  libecpg, libpgtypes
+Cflags: "-I${includedir}"

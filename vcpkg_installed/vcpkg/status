@@ -1,0 +1,111 @@
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: f662cb9c37a6ee279c8e9aa269d372332ac025c5ee320d3215a9a6081903ce82
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: aca50ed8b5e4525367637a61f90f6c72b2ad5985b05a2b8522548a92aa11e0a5
+Description: A compression library
+Status: install ok installed
+
+Package: vcpkg-cmake-get-vars
+Version: 2025-05-29
+Depends: vcpkg-cmake
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: 56de0ceb82aaf71d56147bead8c80efc0d69982e742a10bdf9336023370615ca
+Status: install ok installed
+
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: 7e7e305f55412fc219bff273c144a69c2f5d59c24a9313262b6d075a1f16b9cc
+Status: install ok installed
+
+Package: openssl
+Version: 3.5.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config, vcpkg-cmake-get-vars
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: 68e690b77f1e1cba813cf2239de3aee12e5051ee6569eb5b33d075fccb465a90
+Description: OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.
+Status: install ok installed
+
+Package: lz4
+Version: 1.10.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: 7c998b18d63b68ca4be727f45d8a2142af9aa44fb3f10b5d42ebbf2ab5162bac
+Description: Lossless compression algorithm, providing compression speed at 400 MB/s per core.
+Status: install ok installed
+
+Package: libpq
+Version: 16.9
+Depends: vcpkg-cmake-get-vars
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: a5089c9f89ca7c98e28a16f225ede1ee2026f6f845589af75eca5abccaab3365
+Description: The official database access API of postgresql
+Default-Features: lz4, openssl, zlib
+Status: install ok installed
+
+Package: libpq
+Feature: bonjour
+Architecture: arm64-osx
+Multi-Arch: same
+Description: Build with Bonjour support
+Status: install ok installed
+
+Package: libpq
+Feature: lz4
+Depends: lz4
+Architecture: arm64-osx
+Multi-Arch: same
+Description: Use lz4
+Status: install ok installed
+
+Package: libpq
+Feature: openssl
+Depends: openssl
+Architecture: arm64-osx
+Multi-Arch: same
+Description: support for encrypted client connections and random number generation on platforms that do not have "/dev/urandom" (except windows)
+Status: install ok installed
+
+Package: libpq
+Feature: zlib
+Depends: zlib
+Architecture: arm64-osx
+Multi-Arch: same
+Description: Use zlib
+Status: install ok installed
+
+Package: libpqxx
+Version: 7.10.1
+Depends: libpq, vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: 2890ce8dfdf07cf040e28515a09e459e66569c70d68ddc40d5b54f5b455ffd3e
+Description: The official* C++ client API for PostgreSQL.
+    *) NB https://pqxx.org/libpqxx/faq/
+Status: install ok installed
+
+Package: fmt
+Version: 11.0.2
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-osx
+Multi-Arch: same
+Abi: ad3dd129c322cdd61bf789273218a05000fe8482e50ebad9afdfef71c200c5bb
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: install ok installed
+

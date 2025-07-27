@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/dongcheolshin/Sources/database_system/build/cmake_install.cmake",
+		"/Users/dongcheolshin/Sources/database_system/build/container_system/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

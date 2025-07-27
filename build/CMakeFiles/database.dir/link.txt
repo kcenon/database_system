@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/libdatabase.a CMakeFiles/database.dir/database_manager.cpp.o CMakeFiles/database.dir/postgres_manager.cpp.o
+/usr/bin/ranlib lib/libdatabase.a

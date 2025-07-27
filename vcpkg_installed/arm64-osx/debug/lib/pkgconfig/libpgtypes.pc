@@ -1,0 +1,13 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/../include
+
+Name: libpgtypes
+Description: PostgreSQL libpgtypes library
+URL: https://www.postgresql.org/
+Version: 16.9
+
+Libs: "-L${libdir}" -lpgtypes "-L${prefix}/lib" "-L${prefix}/lib/manual-link" "-L${prefix}/lib/pkgconfig/../../lib" -lpgcommon -lpgport -lm
+Requires:  
+Cflags: "-I${includedir}"

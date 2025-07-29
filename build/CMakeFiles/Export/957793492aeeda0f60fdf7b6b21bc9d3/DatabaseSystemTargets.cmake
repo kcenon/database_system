@@ -61,7 +61,7 @@ add_library(DatabaseSystem::database STATIC IMPORTED)
 set_target_properties(DatabaseSystem::database PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "DATABASE_HAS_THREAD_UTILITIES"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/database_system"
-  INTERFACE_LINK_LIBRARIES "PostgreSQL::PostgreSQL;ContainerSystem::container;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "PostgreSQL::PostgreSQL;Threads::Threads;/Users/dongcheolshin/Sources/thread_system/build/lib/libutilities.a;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/libiconv.tbd;ContainerSystem::container"
 )
 
 # Load information for each installed configuration.

@@ -180,6 +180,15 @@ if(BUILD_UNIT_TESTS AND NOT BUILD_MESSAGING_SYSTEM_AS_SUBMODULE)
 endif()
 
 ##################################################
+# Samples
+##################################################
+
+if(BUILD_DATABASE_SAMPLES)
+    add_subdirectory(samples)
+    message(STATUS "Database samples will be built")
+endif()
+
+##################################################
 # Summary
 ##################################################
 
@@ -187,3 +196,8 @@ message(STATUS "Database library configured:")
 message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Headers: ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "  Dependencies: PostgreSQL, container, utilities")
+message(STATUS "  Features:")
+message(STATUS "    - PostgreSQL support: ${USE_POSTGRESQL}")
+message(STATUS "    - MySQL support: ${USE_MYSQL}")
+message(STATUS "    - SQLite support: ${USE_SQLITE}")
+message(STATUS "    - Build samples: ${BUILD_DATABASE_SAMPLES}")

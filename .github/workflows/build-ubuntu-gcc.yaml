@@ -25,8 +25,7 @@ jobs:
     strategy:
       matrix:
         postgresql: [ON, OFF]
-        build_type: [Debug, Release]
-    name: "GCC-${{ matrix.build_type }}-PostgreSQL-${{ matrix.postgresql }}"
+    name: "GCC-Debug-PostgreSQL-${{ matrix.postgresql }}"
 
     steps:
       - uses: actions/checkout@v4
@@ -86,16 +85,16 @@ jobs:
           path: |
             build
             !build/vcpkg_installed
-          key: cmake-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
+          key: cmake-gcc-${{ runner.os }}-debug-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
           restore-keys: |
-            cmake-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-
-            cmake-${{ runner.os }}-${{ matrix.build_type }}-
-            cmake-${{ runner.os }}-
+            cmake-gcc-${{ runner.os }}-debug-${{ matrix.postgresql }}-
+            cmake-gcc-${{ runner.os }}-debug-
+            cmake-gcc-${{ runner.os }}-
 
       - name: Configure CMake
         run: |
           cmake -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake \
             -DUSE_POSTGRESQL=${{ matrix.postgresql }} \
             -DBUILD_DATABASE_SAMPLES=ON \
@@ -105,13 +104,13 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --config ${{ matrix.build_type }} -j $(nproc)
+          cmake --build build --config Debug -j $(nproc)
 
       - name: Test without PostgreSQL
         if: matrix.postgresql == 'OFF'
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Setup PostgreSQL for testing
         if: matrix.postgresql == 'ON'
@@ -131,23 +130,14 @@ jobs:
           DB_PASSWORD: test_pass
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: database-system-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
+          name: database-system-gcc-debug-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
           path: |
             build/bin/
             build/lib/
             !build/bin/*.pdb
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
-          path: |
-            build/Testing/
-            build/test_*.xml

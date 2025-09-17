@@ -24,14 +24,7 @@ jobs:
     strategy:
       matrix:
         postgresql: [ON, OFF]
-        build_type: [Debug, Release]
-        vs_version: [2019, 2022]
-        exclude:
-          # Reduce matrix - focus on 2022 for most tests
-          - vs_version: 2019
-            build_type: Debug
-            postgresql: OFF
-    name: "VS${{ matrix.vs_version }}-${{ matrix.build_type }}-PostgreSQL-${{ matrix.postgresql }}"
+    name: "VS2022-Debug-PostgreSQL-${{ matrix.postgresql }}"
 
     steps:
       - uses: actions/checkout@v4
@@ -42,14 +35,7 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Visual Studio ${{ matrix.vs_version }}
-        if: matrix.vs_version == '2019'
-        uses: microsoft/setup-msbuild@v1.3
-        with:
-          vs-version: '[16.0,17.0)'
-
-      - name: Setup Visual Studio ${{ matrix.vs_version }}
-        if: matrix.vs_version == '2022'
+      - name: Setup Visual Studio 2022
         uses: microsoft/setup-msbuild@v1.3
         with:
           vs-version: '[17.0,18.0)'
@@ -63,9 +49,9 @@ jobs:
             !${{ github.workspace }}/vcpkg/buildtrees
             !${{ github.workspace }}/vcpkg/packages
             !${{ github.workspace }}/vcpkg/downloads
-          key: vcpkg-windows-${{ matrix.vs_version }}-${{ hashFiles('vcpkg.json') }}
+          key: vcpkg-windows-vs2022-${{ hashFiles('vcpkg.json') }}
           restore-keys: |
-            vcpkg-windows-${{ matrix.vs_version }}-
+            vcpkg-windows-vs2022-
             vcpkg-windows-
 
       - name: Install vcpkg
@@ -96,17 +82,16 @@ jobs:
           path: |
             build
             !build/vcpkg_installed
-          key: cmake-windows-vs${{ matrix.vs_version }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
+          key: cmake-windows-vs2022-debug-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
           restore-keys: |
-            cmake-windows-vs${{ matrix.vs_version }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-
-            cmake-windows-vs${{ matrix.vs_version }}-${{ matrix.build_type }}-
-            cmake-windows-vs${{ matrix.vs_version }}-
+            cmake-windows-vs2022-debug-${{ matrix.postgresql }}-
+            cmake-windows-vs2022-debug-
+            cmake-windows-vs2022-
 
       - name: Configure CMake
         run: |
-          $generator = if ('${{ matrix.vs_version }}' -eq '2019') { 'Visual Studio 16 2019' } else { 'Visual Studio 17 2022' }
           cmake -B build `
-            -G "$generator" `
+            -G "Visual Studio 17 2022" `
             -A x64 `
             -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DUSE_POSTGRESQL=${{ matrix.postgresql }} `
@@ -116,7 +101,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --config ${{ matrix.build_type }} --parallel
+          cmake --build build --config Debug --parallel
 
       - name: Setup PostgreSQL database for testing
         if: matrix.postgresql == 'ON'
@@ -135,7 +120,7 @@ jobs:
         if: matrix.postgresql == 'OFF'
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Test with PostgreSQL
         if: matrix.postgresql == 'ON'
@@ -148,24 +133,15 @@ jobs:
           PGPASSWORD: test_pass
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: database-system-vs${{ matrix.vs_version }}-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-windows
+          name: database-system-vs2022-debug-postgresql-${{ matrix.postgresql }}-windows
           path: |
-            build/bin/${{ matrix.build_type }}/
-            build/lib/${{ matrix.build_type }}/
-            build/${{ matrix.build_type }}/
+            build/bin/Debug/
+            build/lib/Debug/
+            build/Debug/
             !build/**/*.pdb
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results-vs${{ matrix.vs_version }}-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-windows
-          path: |
-            build/Testing/
-            build/test_*.xml

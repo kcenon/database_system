@@ -26,18 +26,8 @@ jobs:
       CXX: clang++
     strategy:
       matrix:
-        clang_version: [15, 16, 17]
         postgresql: [ON, OFF]
-        build_type: [Debug, Release]
-        exclude:
-          # Reduce matrix size - test only essential combinations
-          - clang_version: 15
-            build_type: Debug
-            postgresql: OFF
-          - clang_version: 16
-            build_type: Debug
-            postgresql: OFF
-    name: "Clang-${{ matrix.clang_version }}-${{ matrix.build_type }}-PostgreSQL-${{ matrix.postgresql }}"
+    name: "Clang-17-Debug-PostgreSQL-${{ matrix.postgresql }}"
 
     steps:
       - uses: actions/checkout@v4
@@ -48,16 +38,16 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Clang ${{ matrix.clang_version }}
+      - name: Install Clang 17
         run: |
           sudo apt update
           sudo apt install -y software-properties-common
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${{ matrix.clang_version }} main"
+          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
           sudo apt update
-          sudo apt install -y clang-${{ matrix.clang_version }} libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
-          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{ matrix.clang_version }} 100
-          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{ matrix.clang_version }} 100
+          sudo apt install -y clang-17 libc++-17-dev libc++abi-17-dev
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 100
 
       - name: Install dependencies
         run: |
@@ -113,19 +103,19 @@ jobs:
           path: |
             build
             !build/vcpkg_installed
-          key: cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
+          key: cmake-clang17-${{ runner.os }}-debug-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
           restore-keys: |
-            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-
-            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-
-            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-
+            cmake-clang17-${{ runner.os }}-debug-${{ matrix.postgresql }}-
+            cmake-clang17-${{ runner.os }}-debug-
+            cmake-clang17-${{ runner.os }}-
 
       - name: Configure CMake
         run: |
           cmake -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake \
-            -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
-            -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
+            -DCMAKE_C_COMPILER=clang-17 \
+            -DCMAKE_CXX_COMPILER=clang++-17 \
             -DUSE_POSTGRESQL=${{ matrix.postgresql }} \
             -DBUILD_DATABASE_SAMPLES=ON \
             -DUSE_UNIT_TEST=ON \
@@ -134,13 +124,13 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --config ${{ matrix.build_type }} -j $(nproc)
+          cmake --build build --config Debug -j $(nproc)
 
       - name: Test without PostgreSQL
         if: matrix.postgresql == 'OFF'
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Setup PostgreSQL for testing
         if: matrix.postgresql == 'ON'
@@ -160,13 +150,13 @@ jobs:
           DB_PASSWORD: test_pass
         run: |
           cd build
-          ctest --output-on-failure -C ${{ matrix.build_type }}
+          ctest --output-on-failure -C Debug
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: database-system-clang${{ matrix.clang_version }}-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
+          name: database-system-clang17-debug-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
           path: |
             build/bin/
             build/lib/

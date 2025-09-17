@@ -1,0 +1,26 @@
+name: "Database System CodeQL Configuration"
+
+disable-default-queries: false
+
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+paths-ignore:
+  - build/
+  - build_*/
+  - vcpkg/
+  - vcpkg_installed/
+  - .git/
+  - docs/
+  - samples/
+  - tests/unit_tests.cpp  # Exclude test files from some security checks
+
+paths:
+  - database/
+  - CMakeLists.txt
+  - "*.h"
+  - "*.cpp"
+
+packs:
+  - codeql/cpp-queries

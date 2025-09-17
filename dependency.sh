@@ -1,401 +1,449 @@
 #!/bin/bash
 
-# Dependency installation script for Database System
-# This script installs all required dependencies including PostgreSQL
+# Database System Dependency Management Script
+# Advanced C++20 Database System with Multi-Backend Support
 
-# Color codes for output
+# Color definitions for better readability
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-# Script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR"
+# Display banner
+echo -e "${BOLD}${BLUE}============================================${NC}"
+echo -e "${BOLD}${BLUE}    Database System Dependency Installer   ${NC}"
+echo -e "${BOLD}${BLUE}============================================${NC}"
 
-# Detect OS
-OS="unknown"
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    OS="macos"
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    OS="linux"
-    # Detect Linux distribution
-    if [ -f /etc/debian_version ]; then
-        DISTRO="debian"
-    elif [ -f /etc/redhat-release ]; then
-        DISTRO="redhat"
-    elif [ -f /etc/arch-release ]; then
-        DISTRO="arch"
-    else
-        DISTRO="unknown"
-    fi
-elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-    OS="windows"
-fi
-
-# Function to print colored output
-print_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
+# Display help information
+show_help() {
+    echo -e "${BOLD}Usage:${NC} $0 [options]"
+    echo ""
+    echo -e "${BOLD}Installation Options:${NC}"
+    echo "  --system-only     Install only system dependencies (no vcpkg)"
+    echo "  --vcpkg-only      Install only vcpkg and its packages"
+    echo "  --all             Install all dependencies (default)"
+    echo ""
+    echo -e "${BOLD}Database Options:${NC}"
+    echo "  --with-postgresql Install PostgreSQL development libraries"
+    echo "  --with-mysql      Install MySQL development libraries"
+    echo "  --with-sqlite     Install SQLite development libraries"
+    echo "  --no-databases    Skip database-specific dependencies"
+    echo ""
+    echo -e "${BOLD}Development Tools:${NC}"
+    echo "  --with-docs       Install documentation tools (Doxygen, Sphinx)"
+    echo "  --with-debug      Install debugging tools (GDB, Valgrind)"
+    echo "  --with-profiling  Install profiling tools"
+    echo "  --minimal         Install only essential dependencies"
+    echo ""
+    echo -e "${BOLD}General Options:${NC}"
+    echo "  --force           Force reinstallation of all packages"
+    echo "  --dry-run         Show what would be installed without installing"
+    echo "  --verbose         Show detailed installation output"
+    echo "  --help            Display this help and exit"
+    echo ""
+    echo -e "${BOLD}Examples:${NC}"
+    echo "  $0                                    # Install all dependencies"
+    echo "  $0 --with-postgresql --with-docs     # Install with PostgreSQL and docs"
+    echo "  $0 --minimal --vcpkg-only            # Minimal vcpkg installation"
+    echo "  $0 --dry-run                         # Preview installation"
 }
 
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
+# Default values
+INSTALL_SYSTEM=true
+INSTALL_VCPKG=true
+INSTALL_POSTGRESQL=false
+INSTALL_MYSQL=false
+INSTALL_SQLITE=false
+INSTALL_DOCS=false
+INSTALL_DEBUG=false
+INSTALL_PROFILING=false
+MINIMAL=false
+FORCE=false
+DRY_RUN=false
+VERBOSE=false
 
-print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-print_step() {
-    echo -e "${BLUE}[STEP]${NC} $1"
-}
-
-# Function to check if a command exists
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# Function to check and install vcpkg
-install_vcpkg() {
-    print_step "Checking for vcpkg..."
-    
-    if command_exists vcpkg; then
-        print_info "vcpkg is already installed"
-        return 0
-    fi
-    
-    # Check common vcpkg locations
-    VCPKG_PATHS=(
-        "$HOME/vcpkg"
-        "/opt/vcpkg"
-        "/usr/local/vcpkg"
-        "$HOME/tools/vcpkg"
-    )
-    
-    for path in "${VCPKG_PATHS[@]}"; do
-        if [ -f "$path/vcpkg" ]; then
-            print_info "Found vcpkg at $path"
-            export PATH="$path:$PATH"
-            return 0
-        fi
-    done
-    
-    print_warning "vcpkg not found. Would you like to install it? (y/n)"
-    read -r response
-    if [[ "$response" =~ ^[Yy]$ ]]; then
-        print_info "Installing vcpkg..."
-        VCPKG_ROOT="$HOME/vcpkg"
-        git clone https://github.com/Microsoft/vcpkg.git "$VCPKG_ROOT"
-        cd "$VCPKG_ROOT"
-        ./bootstrap-vcpkg.sh
-        export PATH="$VCPKG_ROOT:$PATH"
-        cd "$SCRIPT_DIR"
-        print_info "vcpkg installed at $VCPKG_ROOT"
-        print_warning "Add $VCPKG_ROOT to your PATH for future use"
-    else
-        print_error "vcpkg is required for dependency management"
-        return 1
-    fi
-}
-
-# Function to install PostgreSQL
-install_postgresql() {
-    print_step "Checking for PostgreSQL..."
-    
-    case "$OS" in
-        "macos")
-            if command_exists psql; then
-                print_info "PostgreSQL is already installed"
-                PSQL_VERSION=$(psql --version | awk '{print $3}')
-                print_info "PostgreSQL version: $PSQL_VERSION"
-            else
-                print_warning "PostgreSQL not found. Would you like to install it? (y/n)"
-                read -r response
-                if [[ "$response" =~ ^[Yy]$ ]]; then
-                    print_info "Installing PostgreSQL..."
-                    brew install postgresql@16
-                    brew services start postgresql@16
-                    print_info "PostgreSQL installed and started"
-                else
-                    print_warning "PostgreSQL is required for full functionality"
-                fi
-            fi
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --help)
+            show_help
+            exit 0
             ;;
-            
-        "linux")
-            if command_exists psql; then
-                print_info "PostgreSQL is already installed"
-                PSQL_VERSION=$(psql --version | awk '{print $3}')
-                print_info "PostgreSQL version: $PSQL_VERSION"
-            else
-                print_warning "PostgreSQL not found. Would you like to install it? (y/n)"
-                read -r response
-                if [[ "$response" =~ ^[Yy]$ ]]; then
-                    case "$DISTRO" in
-                        "debian")
-                            print_info "Installing PostgreSQL..."
-                            sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-                            wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-                            sudo apt-get update
-                            sudo apt-get install -y postgresql-16 postgresql-client-16 postgresql-contrib-16 libpq-dev
-                            sudo systemctl start postgresql
-                            sudo systemctl enable postgresql
-                            ;;
-                            
-                        "redhat")
-                            print_info "Installing PostgreSQL..."
-                            sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-                            sudo yum install -y postgresql16 postgresql16-server postgresql16-contrib postgresql16-devel
-                            sudo /usr/pgsql-16/bin/postgresql-16-setup initdb
-                            sudo systemctl enable postgresql-16
-                            sudo systemctl start postgresql-16
-                            ;;
-                            
-                        "arch")
-                            print_info "Installing PostgreSQL..."
-                            sudo pacman -S postgresql postgresql-libs
-                            sudo -u postgres initdb -D /var/lib/postgres/data
-                            sudo systemctl start postgresql
-                            sudo systemctl enable postgresql
-                            ;;
-                    esac
-                else
-                    print_warning "PostgreSQL is required for database functionality"
-                fi
-            fi
+        --system-only)
+            INSTALL_SYSTEM=true
+            INSTALL_VCPKG=false
+            shift
             ;;
-            
-        "windows")
-            print_info "On Windows, please install PostgreSQL from:"
-            print_info "  https://www.postgresql.org/download/windows/"
-            print_info "Or use the installer from EnterpriseDB"
+        --vcpkg-only)
+            INSTALL_SYSTEM=false
+            INSTALL_VCPKG=true
+            shift
             ;;
-    esac
-}
-
-# Function to install system dependencies
-install_system_deps() {
-    print_step "Installing system dependencies..."
-    
-    case "$OS" in
-        "macos")
-            if ! command_exists brew; then
-                print_error "Homebrew is required on macOS. Please install from https://brew.sh"
-                exit 1
-            fi
-            
-            print_info "Updating Homebrew..."
-            brew update
-            
-            print_info "Installing dependencies..."
-            brew install cmake ninja pkg-config
-            
-            # Install PostgreSQL development files
-            if command_exists psql; then
-                print_info "Installing PostgreSQL development files..."
-                brew install libpq
-            fi
-            
-            # Optional tools
-            if ! command_exists doxygen; then
-                print_info "Installing documentation tools..."
-                brew install doxygen graphviz
-            fi
+        --all)
+            INSTALL_SYSTEM=true
+            INSTALL_VCPKG=true
+            shift
             ;;
-            
-        "linux")
-            case "$DISTRO" in
-                "debian")
-                    print_info "Installing dependencies for Debian/Ubuntu..."
-                    sudo apt-get update
-                    sudo apt-get install -y \
-                        build-essential \
-                        cmake \
-                        ninja-build \
-                        pkg-config \
-                        git \
-                        libpq-dev
-                    
-                    # Optional tools
-                    sudo apt-get install -y doxygen graphviz
-                    ;;
-                    
-                "redhat")
-                    print_info "Installing dependencies for RedHat/CentOS/Fedora..."
-                    sudo yum install -y \
-                        gcc \
-                        gcc-c++ \
-                        cmake \
-                        ninja-build \
-                        pkgconfig \
-                        git \
-                        postgresql-devel
-                    
-                    # Optional tools
-                    sudo yum install -y doxygen graphviz
-                    ;;
-                    
-                "arch")
-                    print_info "Installing dependencies for Arch Linux..."
-                    sudo pacman -S --needed \
-                        base-devel \
-                        cmake \
-                        ninja \
-                        pkg-config \
-                        git \
-                        postgresql-libs
-                    
-                    # Optional tools
-                    sudo pacman -S --needed doxygen graphviz
-                    ;;
-                    
-                *)
-                    print_error "Unknown Linux distribution. Please install manually:"
-                    print_info "  - C++ compiler (gcc/clang)"
-                    print_info "  - CMake (>= 3.16)"
-                    print_info "  - Ninja (optional)"
-                    print_info "  - pkg-config"
-                    print_info "  - PostgreSQL development libraries"
-                    exit 1
-                    ;;
-            esac
+        --with-postgresql)
+            INSTALL_POSTGRESQL=true
+            shift
             ;;
-            
-        "windows")
-            print_info "On Windows, please ensure you have:"
-            print_info "  - Visual Studio 2019 or later with C++ workload"
-            print_info "  - CMake (>= 3.16)"
-            print_info "  - Git"
-            print_info "  - PostgreSQL with development headers"
-            print_info "  - vcpkg (will be checked next)"
+        --with-mysql)
+            INSTALL_MYSQL=true
+            shift
             ;;
-            
+        --with-sqlite)
+            INSTALL_SQLITE=true
+            shift
+            ;;
+        --no-databases)
+            INSTALL_POSTGRESQL=false
+            INSTALL_MYSQL=false
+            INSTALL_SQLITE=false
+            shift
+            ;;
+        --with-docs)
+            INSTALL_DOCS=true
+            shift
+            ;;
+        --with-debug)
+            INSTALL_DEBUG=true
+            shift
+            ;;
+        --with-profiling)
+            INSTALL_PROFILING=true
+            shift
+            ;;
+        --minimal)
+            MINIMAL=true
+            shift
+            ;;
+        --force)
+            FORCE=true
+            shift
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
         *)
-            print_error "Unknown operating system: $OS"
+            echo -e "${RED}Unknown option: $1${NC}"
+            echo "Use --help for usage information"
             exit 1
             ;;
     esac
-}
+done
 
-# Function to install C++ dependencies via vcpkg
-install_cpp_deps() {
-    print_step "Installing C++ dependencies..."
-    
-    # Check if vcpkg.json exists
-    if [ ! -f "vcpkg.json" ]; then
-        print_warning "vcpkg.json not found. Creating default configuration..."
-        cat > vcpkg.json << 'EOF'
-{
-    "name": "database-system",
-    "version": "1.0.0",
-    "dependencies": [
-        "fmt",
-        "libpq",
-        "libpqxx",
-        "gtest",
-        "benchmark"
-    ]
-}
-EOF
-    fi
-    
-    # Install dependencies
-    print_info "Installing vcpkg dependencies..."
-    if ! vcpkg install; then
-        print_error "Failed to install vcpkg dependencies"
-        return 1
-    fi
-    
-    print_info "C++ dependencies installed successfully"
-}
+# Function to run command with dry-run support
+run_command() {
+    local cmd="$1"
+    local description="$2"
 
-# Function to setup PostgreSQL database for testing
-setup_test_database() {
-    print_step "Setting up test database..."
-    
-    if ! command_exists psql; then
-        print_warning "PostgreSQL not installed. Skipping test database setup."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo -e "${CYAN}[DRY RUN]${NC} Would run: $cmd"
         return 0
     fi
-    
-    print_info "Checking PostgreSQL connection..."
-    if psql -U postgres -c "SELECT 1" >/dev/null 2>&1; then
-        print_info "PostgreSQL is accessible"
-        
-        print_info "Creating test database and user..."
-        psql -U postgres << EOF
--- Create test user if not exists
-DO \$\$
-BEGIN
-    IF NOT EXISTS (SELECT FROM pg_user WHERE usename = 'dbtest') THEN
-        CREATE USER dbtest WITH PASSWORD 'dbtest123';
-    END IF;
-END\$\$;
 
--- Create test database if not exists
-SELECT 'CREATE DATABASE test_db OWNER dbtest'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'test_db')\\gexec
+    if [[ "$VERBOSE" == true ]]; then
+        echo -e "${BLUE}Running:${NC} $cmd"
+    fi
 
--- Grant privileges
-GRANT ALL PRIVILEGES ON DATABASE test_db TO dbtest;
-EOF
-        
-        print_info "Test database setup complete"
-        print_info "  Database: test_db"
-        print_info "  User: dbtest"
-        print_info "  Password: dbtest123"
+    eval "$cmd"
+    local result=$?
+
+    if [[ $result -eq 0 ]]; then
+        echo -e "${GREEN}✅ $description${NC}"
     else
-        print_warning "Cannot connect to PostgreSQL. Please ensure it's running and accessible."
-        print_info "You may need to:"
-        print_info "  - Start PostgreSQL service"
-        print_info "  - Configure pg_hba.conf for local connections"
-        print_info "  - Create a postgres superuser"
+        echo -e "${RED}❌ Failed: $description${NC}"
+        return $result
     fi
 }
 
-# Main installation process
+# Detect operating system
+detect_os() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        OS="macos"
+        PACKAGE_MANAGER="brew"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        if command -v apt-get &> /dev/null; then
+            OS="ubuntu"
+            PACKAGE_MANAGER="apt"
+        elif command -v yum &> /dev/null; then
+            OS="centos"
+            PACKAGE_MANAGER="yum"
+        elif command -v pacman &> /dev/null; then
+            OS="arch"
+            PACKAGE_MANAGER="pacman"
+        else
+            echo -e "${RED}❌ Unsupported Linux distribution${NC}"
+            exit 1
+        fi
+    elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+        OS="windows"
+        PACKAGE_MANAGER="choco"
+    else
+        echo -e "${RED}❌ Unsupported operating system: $OSTYPE${NC}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}📋 Detected OS: ${BOLD}$OS${NC} (Package manager: $PACKAGE_MANAGER)"
+}
+
+# Install system dependencies
+install_system_dependencies() {
+    if [[ "$INSTALL_SYSTEM" != true ]]; then
+        return 0
+    fi
+
+    echo -e "${BLUE}📦 Installing system dependencies...${NC}"
+
+    case "$OS" in
+        "macos")
+            # Essential build tools
+            if [[ "$MINIMAL" != true ]]; then
+                run_command "brew install cmake ninja pkg-config curl wget git" "Essential build tools"
+                run_command "brew install llvm" "LLVM/Clang compiler"
+            else
+                run_command "brew install cmake ninja" "Minimal build tools"
+            fi
+
+            # Database libraries
+            if [[ "$INSTALL_POSTGRESQL" == true ]]; then
+                run_command "brew install postgresql libpq" "PostgreSQL development libraries"
+            fi
+            if [[ "$INSTALL_MYSQL" == true ]]; then
+                run_command "brew install mysql mysql-client" "MySQL development libraries"
+            fi
+            if [[ "$INSTALL_SQLITE" == true ]]; then
+                run_command "brew install sqlite" "SQLite development libraries"
+            fi
+
+            # Development tools
+            if [[ "$INSTALL_DEBUG" == true ]]; then
+                run_command "brew install gdb lldb" "Debugging tools"
+            fi
+            if [[ "$INSTALL_PROFILING" == true ]]; then
+                run_command "brew install valgrind gperftools" "Profiling tools"
+            fi
+            if [[ "$INSTALL_DOCS" == true ]]; then
+                run_command "brew install doxygen graphviz sphinx-doc" "Documentation tools"
+            fi
+            ;;
+
+        "ubuntu")
+            # Update package list
+            run_command "sudo apt update" "Package list update"
+
+            # Essential build tools
+            if [[ "$MINIMAL" != true ]]; then
+                run_command "sudo apt install -y build-essential cmake ninja-build pkg-config curl wget git" "Essential build tools"
+                run_command "sudo apt install -y clang llvm libc++-dev libc++abi-dev" "Clang/LLVM compiler"
+                run_command "sudo apt install -y gdb autoconf automake autoconf-archive" "Development tools"
+            else
+                run_command "sudo apt install -y build-essential cmake ninja-build" "Minimal build tools"
+            fi
+
+            # Database libraries
+            if [[ "$INSTALL_POSTGRESQL" == true ]]; then
+                run_command "sudo apt install -y libpq-dev postgresql-server-dev-all" "PostgreSQL development libraries"
+            fi
+            if [[ "$INSTALL_MYSQL" == true ]]; then
+                run_command "sudo apt install -y libmysqlclient-dev" "MySQL development libraries"
+            fi
+            if [[ "$INSTALL_SQLITE" == true ]]; then
+                run_command "sudo apt install -y libsqlite3-dev" "SQLite development libraries"
+            fi
+
+            # Development tools
+            if [[ "$INSTALL_DEBUG" == true ]]; then
+                run_command "sudo apt install -y gdb valgrind" "Debugging tools"
+            fi
+            if [[ "$INSTALL_PROFILING" == true ]]; then
+                run_command "sudo apt install -y google-perftools libgoogle-perftools-dev" "Profiling tools"
+            fi
+            if [[ "$INSTALL_DOCS" == true ]]; then
+                run_command "sudo apt install -y doxygen graphviz python3-sphinx" "Documentation tools"
+            fi
+            ;;
+
+        "windows")
+            echo -e "${YELLOW}⚠️  Windows dependency installation via chocolatey${NC}"
+            run_command "choco install cmake ninja pkgconfiglite git" "Essential build tools"
+
+            if [[ "$INSTALL_POSTGRESQL" == true ]]; then
+                run_command "choco install postgresql" "PostgreSQL"
+            fi
+            if [[ "$INSTALL_MYSQL" == true ]]; then
+                run_command "choco install mysql" "MySQL"
+            fi
+            if [[ "$INSTALL_DOCS" == true ]]; then
+                run_command "choco install doxygen.install graphviz" "Documentation tools"
+            fi
+            ;;
+    esac
+}
+
+# Install vcpkg and packages
+install_vcpkg() {
+    if [[ "$INSTALL_VCPKG" != true ]]; then
+        return 0
+    fi
+
+    echo -e "${BLUE}📦 Setting up vcpkg package manager...${NC}"
+
+    # Check if vcpkg already exists
+    if [[ -d "vcpkg" && "$FORCE" != true ]]; then
+        echo -e "${YELLOW}⚠️  vcpkg directory already exists, updating...${NC}"
+        cd vcpkg
+        run_command "git pull" "Update vcpkg"
+        cd ..
+    else
+        if [[ "$FORCE" == true && -d "vcpkg" ]]; then
+            run_command "rm -rf vcpkg" "Remove existing vcpkg"
+        fi
+        run_command "git clone https://github.com/microsoft/vcpkg.git" "Clone vcpkg repository"
+    fi
+
+    # Bootstrap vcpkg
+    cd vcpkg
+    if [[ "$OS" == "windows" ]]; then
+        run_command "./bootstrap-vcpkg.bat" "Bootstrap vcpkg (Windows)"
+    else
+        run_command "./bootstrap-vcpkg.sh" "Bootstrap vcpkg (Unix)"
+    fi
+
+    # Integrate vcpkg
+    run_command "./vcpkg integrate install" "Integrate vcpkg with build system"
+
+    # Install C++ packages based on vcpkg.json if it exists
+    if [[ -f "../vcpkg.json" ]]; then
+        echo -e "${CYAN}📋 Installing packages from vcpkg.json...${NC}"
+        run_command "./vcpkg install" "Install packages from manifest"
+    else
+        echo -e "${CYAN}📋 Installing essential C++ packages...${NC}"
+
+        # Essential packages
+        run_command "./vcpkg install gtest" "Google Test framework"
+        run_command "./vcpkg install fmt" "fmt formatting library"
+        run_command "./vcpkg install spdlog" "spdlog logging library"
+
+        # Database packages
+        if [[ "$INSTALL_POSTGRESQL" == true ]]; then
+            run_command "./vcpkg install libpqxx" "PostgreSQL C++ library"
+        fi
+        if [[ "$INSTALL_MYSQL" == true ]]; then
+            run_command "./vcpkg install libmysql" "MySQL C++ library"
+        fi
+        if [[ "$INSTALL_SQLITE" == true ]]; then
+            run_command "./vcpkg install sqlite3" "SQLite3 library"
+        fi
+
+        # Additional useful packages
+        if [[ "$MINIMAL" != true ]]; then
+            run_command "./vcpkg install nlohmann-json" "JSON library"
+            run_command "./vcpkg install catch2" "Catch2 testing framework"
+        fi
+    fi
+
+    cd ..
+}
+
+# Verify installation
+verify_installation() {
+    echo -e "${BLUE}🔍 Verifying installation...${NC}"
+
+    # Check essential tools
+    local tools=("cmake" "ninja")
+    if [[ "$OS" != "windows" ]]; then
+        tools+=("pkg-config")
+    fi
+
+    for tool in "${tools[@]}"; do
+        if command -v "$tool" &> /dev/null; then
+            echo -e "${GREEN}✅ $tool is available${NC}"
+        else
+            echo -e "${RED}❌ $tool is not available${NC}"
+        fi
+    done
+
+    # Check vcpkg
+    if [[ -d "vcpkg" ]]; then
+        echo -e "${GREEN}✅ vcpkg is installed${NC}"
+        if [[ "$VERBOSE" == true ]]; then
+            cd vcpkg
+            echo -e "${CYAN}📋 Installed vcpkg packages:${NC}"
+            ./vcpkg list 2>/dev/null || echo "No packages installed yet"
+            cd ..
+        fi
+    else
+        echo -e "${YELLOW}⚠️  vcpkg is not installed${NC}"
+    fi
+
+    # Check database libraries
+    if [[ "$INSTALL_POSTGRESQL" == true ]]; then
+        if pkg-config --exists libpq 2>/dev/null || [[ "$OS" == "macos" && -d "/opt/homebrew/opt/libpq" ]]; then
+            echo -e "${GREEN}✅ PostgreSQL development libraries are available${NC}"
+        else
+            echo -e "${YELLOW}⚠️  PostgreSQL development libraries may not be available${NC}"
+        fi
+    fi
+}
+
+# Main execution
 main() {
-    print_info "Database System Dependency Installer"
-    print_info "OS: $OS"
-    if [ "$OS" = "linux" ]; then
-        print_info "Distribution: $DISTRO"
+    echo -e "${CYAN}📋 Dependency Installation Configuration:${NC}"
+    echo -e "  OS: ${BOLD}$OS${NC}"
+    echo -e "  Package Manager: ${BOLD}$PACKAGE_MANAGER${NC}"
+    echo -e "  System Dependencies: ${BOLD}$([ "$INSTALL_SYSTEM" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  vcpkg: ${BOLD}$([ "$INSTALL_VCPKG" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  PostgreSQL: ${BOLD}$([ "$INSTALL_POSTGRESQL" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  MySQL: ${BOLD}$([ "$INSTALL_MYSQL" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  SQLite: ${BOLD}$([ "$INSTALL_SQLITE" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  Documentation: ${BOLD}$([ "$INSTALL_DOCS" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  Debugging Tools: ${BOLD}$([ "$INSTALL_DEBUG" = true ] && echo "YES" || echo "NO")${NC}"
+    echo -e "  Minimal Install: ${BOLD}$([ "$MINIMAL" = true ] && echo "YES" || echo "NO")${NC}"
+    if [[ "$DRY_RUN" == true ]]; then
+        echo -e "  ${YELLOW}🔍 DRY RUN MODE - No actual installation${NC}"
     fi
     echo ""
-    
-    # Install system dependencies
-    install_system_deps
-    
-    # Install PostgreSQL
-    install_postgresql
-    
-    # Install vcpkg
-    if ! install_vcpkg; then
-        print_error "Failed to set up vcpkg"
-        exit 1
+
+    # Install dependencies
+    install_system_dependencies
+    install_vcpkg
+
+    if [[ "$DRY_RUN" != true ]]; then
+        verify_installation
+
+        echo ""
+        echo -e "${GREEN}✅ Dependency installation completed!${NC}"
+        echo -e "${CYAN}📁 vcpkg location: $(pwd)/vcpkg${NC}"
+        echo ""
+        echo -e "${CYAN}🎯 Next steps:${NC}"
+        echo "  1. Run ./build.sh to build the project"
+        echo "  2. Use CMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake for CMake"
+        echo "  3. Check build.sh --help for build options"
+    else
+        echo ""
+        echo -e "${CYAN}🔍 Dry run completed. Use without --dry-run to install.${NC}"
     fi
-    
-    # Install C++ dependencies
-    if ! install_cpp_deps; then
-        print_error "Failed to install C++ dependencies"
-        exit 1
-    fi
-    
-    # Setup test database
-    setup_test_database
-    
-    echo ""
-    print_info "All dependencies installed successfully!"
-    print_info "You can now build the project with ./build.sh"
-    
-    # Print vcpkg integration instructions
-    echo ""
-    print_step "For CMake integration, use one of these methods:"
-    print_info "1. Set CMAKE_TOOLCHAIN_FILE:"
-    print_info "   cmake -DCMAKE_TOOLCHAIN_FILE=\$(vcpkg integrate install | grep -o '[^ ]*\\.cmake') .."
-    print_info "2. Or export VCPKG_ROOT:"
-    print_info "   export VCPKG_ROOT=\$(dirname \$(which vcpkg))"
 }
 
-# Run main function
+# Check if running as root (not recommended)
+if [[ $EUID -eq 0 && "$OS" != "windows" ]]; then
+    echo -e "${YELLOW}⚠️  Running as root is not recommended for development${NC}"
+    echo -e "${YELLOW}   Consider running as a regular user${NC}"
+    echo ""
+fi
+
+# Detect OS and run main
+detect_os
 main
+
+exit 0

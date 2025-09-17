@@ -1,196 +1,332 @@
 #!/bin/bash
 
-# Build script for Database System
-# This script builds the database system library and optionally tests
+# Database System Build Script
+# Advanced C++20 Database System with Multi-Backend Support
 
-# Color codes for output
+# Color definitions for better readability
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-# Script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR"
+# Display banner
+echo -e "${BOLD}${BLUE}============================================${NC}"
+echo -e "${BOLD}${BLUE}      Database System Build Script         ${NC}"
+echo -e "${BOLD}${BLUE}============================================${NC}"
+
+# Display help information
+show_help() {
+    echo -e "${BOLD}Usage:${NC} $0 [options]"
+    echo ""
+    echo -e "${BOLD}Build Options:${NC}"
+    echo "  --clean           Perform a clean rebuild by removing the build directory"
+    echo "  --debug           Build in debug mode (default is release)"
+    echo "  --release         Build in release mode (default)"
+    echo ""
+    echo -e "${BOLD}Target Options:${NC}"
+    echo "  --all             Build all targets (default)"
+    echo "  --lib-only        Build only the database library"
+    echo "  --samples         Build only the sample applications"
+    echo "  --tests           Build and run the unit tests"
+    echo ""
+    echo -e "${BOLD}Database Options:${NC}"
+    echo "  --with-postgresql Enable PostgreSQL support (default)"
+    echo "  --no-postgresql   Disable PostgreSQL support"
+    echo "  --with-mysql      Enable MySQL support (future)"
+    echo "  --with-sqlite     Enable SQLite support (future)"
+    echo ""
+    echo -e "${BOLD}Feature Options:${NC}"
+    echo "  --no-vcpkg        Skip vcpkg and use system libraries only"
+    echo "  --use-system-deps Use system-installed dependencies"
+    echo ""
+    echo -e "${BOLD}General Options:${NC}"
+    echo "  --cores N         Use N cores for compilation (default: auto-detect)"
+    echo "  --verbose         Show detailed build output"
+    echo "  --install         Install after building"
+    echo "  --prefix PATH     Installation prefix (default: /usr/local)"
+    echo "  --help            Display this help and exit"
+    echo ""
+    echo -e "${BOLD}Compiler Options:${NC}"
+    echo "  --gcc             Use GCC compiler"
+    echo "  --clang           Use Clang compiler"
+    echo "  --compiler PATH   Use specific compiler"
+    echo ""
+    echo -e "${BOLD}Examples:${NC}"
+    echo "  $0                                    # Default build (Release, with PostgreSQL)"
+    echo "  $0 --debug --tests                   # Debug build with tests"
+    echo "  $0 --no-postgresql --lib-only        # Library only without PostgreSQL"
+    echo "  $0 --clean --release --install       # Clean release build with install"
+}
 
 # Default values
 BUILD_TYPE="Release"
-BUILD_TESTS="ON"
-BUILD_SAMPLES="OFF"
-BUILD_DOCS="OFF"
-CLEAN_BUILD=false
+BUILD_TARGET="all"
+CMAKE_ARGS=""
+CORES=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo "4")
 VERBOSE=false
-JOBS=$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 4)
+CLEAN=false
+USE_VCPKG=true
+POSTGRESQL=true
+MYSQL=false
+SQLITE=false
+INSTALL=false
+PREFIX="/usr/local"
+GENERATOR=""
 
-# Function to print colored output
-print_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-# Function to print usage
-usage() {
-    echo "Usage: $0 [OPTIONS]"
-    echo "Options:"
-    echo "  -h, --help          Show this help message"
-    echo "  -d, --debug         Build in Debug mode (default: Release)"
-    echo "  -c, --clean         Clean build (remove build directory first)"
-    echo "  -t, --no-tests      Don't build tests"
-    echo "  -s, --samples       Build samples"
-    echo "  -D, --docs          Build documentation"
-    echo "  -v, --verbose       Verbose output"
-    echo "  -j, --jobs N        Number of parallel jobs (default: $JOBS)"
-    exit 0
-}
+# Detect system and set defaults
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    CORES=$(sysctl -n hw.ncpu)
+    GENERATOR="Ninja"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux
+    CORES=$(nproc)
+    GENERATOR="Ninja"
+elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+    # Windows
+    CORES=$NUMBER_OF_PROCESSORS
+    GENERATOR="Visual Studio 17 2022"
+fi
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        -h|--help)
-            usage
+        --help)
+            show_help
+            exit 0
             ;;
-        -d|--debug)
+        --clean)
+            CLEAN=true
+            shift
+            ;;
+        --debug)
             BUILD_TYPE="Debug"
             shift
             ;;
-        -c|--clean)
-            CLEAN_BUILD=true
+        --release)
+            BUILD_TYPE="Release"
             shift
             ;;
-        -t|--no-tests)
-            BUILD_TESTS="OFF"
+        --all)
+            BUILD_TARGET="all"
             shift
             ;;
-        -s|--samples)
-            BUILD_SAMPLES="ON"
+        --lib-only)
+            BUILD_TARGET="database"
+            CMAKE_ARGS="$CMAKE_ARGS -DBUILD_DATABASE_SAMPLES=OFF -DUSE_UNIT_TEST=OFF"
             shift
             ;;
-        -D|--docs)
-            BUILD_DOCS="ON"
+        --samples)
+            BUILD_TARGET="samples"
+            CMAKE_ARGS="$CMAKE_ARGS -DBUILD_DATABASE_SAMPLES=ON -DUSE_UNIT_TEST=OFF"
             shift
             ;;
-        -v|--verbose)
+        --tests)
+            BUILD_TARGET="tests"
+            CMAKE_ARGS="$CMAKE_ARGS -DUSE_UNIT_TEST=ON"
+            shift
+            ;;
+        --with-postgresql)
+            POSTGRESQL=true
+            shift
+            ;;
+        --no-postgresql)
+            POSTGRESQL=false
+            shift
+            ;;
+        --with-mysql)
+            MYSQL=true
+            shift
+            ;;
+        --with-sqlite)
+            SQLITE=true
+            shift
+            ;;
+        --no-vcpkg)
+            USE_VCPKG=false
+            shift
+            ;;
+        --use-system-deps)
+            USE_VCPKG=false
+            shift
+            ;;
+        --cores)
+            CORES="$2"
+            shift 2
+            ;;
+        --verbose)
             VERBOSE=true
             shift
             ;;
-        -j|--jobs)
-            JOBS="$2"
+        --install)
+            INSTALL=true
+            shift
+            ;;
+        --prefix)
+            PREFIX="$2"
+            shift 2
+            ;;
+        --gcc)
+            CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++"
+            shift
+            ;;
+        --clang)
+            CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
+            shift
+            ;;
+        --compiler)
+            CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_CXX_COMPILER=$2"
             shift 2
             ;;
         *)
-            print_error "Unknown option: $1"
-            usage
+            echo -e "${RED}Unknown option: $1${NC}"
+            echo "Use --help for usage information"
+            exit 1
             ;;
     esac
 done
 
-# Print build configuration
-print_info "Database System Build Configuration:"
-print_info "  Build Type: $BUILD_TYPE"
-print_info "  Build Tests: $BUILD_TESTS"
-print_info "  Build Samples: $BUILD_SAMPLES"
-print_info "  Build Docs: $BUILD_DOCS"
-print_info "  Parallel Jobs: $JOBS"
-print_info "  Clean Build: $CLEAN_BUILD"
-
-# Clean build directory if requested
-if [ "$CLEAN_BUILD" = true ]; then
-    print_info "Cleaning build directory..."
-    rm -rf build
-fi
-
-# Create build directory
-print_info "Creating build directory..."
-mkdir -p build
-cd build
-
-# Configure with CMake
-print_info "Configuring with CMake..."
-CMAKE_ARGS=(
-    -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-    -DBUILD_DATABASE_TESTS="$BUILD_TESTS"
-    -DBUILD_DATABASE_SAMPLES="$BUILD_SAMPLES"
-    -DBUILD_DATABASE_DOCS="$BUILD_DOCS"
-)
-
-if [ "$VERBOSE" = true ]; then
-    CMAKE_ARGS+=(-DCMAKE_VERBOSE_MAKEFILE=ON)
-fi
-
-# Add vcpkg toolchain if available
-if [ -n "$VCPKG_ROOT" ]; then
-    CMAKE_ARGS+=(-DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake")
-elif command -v vcpkg >/dev/null 2>&1; then
-    VCPKG_ROOT=$(dirname $(which vcpkg))
-    CMAKE_ARGS+=(-DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake")
-fi
-
-if ! cmake "${CMAKE_ARGS[@]}" ..; then
-    print_error "CMake configuration failed!"
+# Validation
+if ! command -v cmake &> /dev/null; then
+    echo -e "${RED}❌ CMake is not installed${NC}"
     exit 1
 fi
 
+# Check for Ninja if needed
+if [[ "$GENERATOR" == "Ninja" ]] && ! command -v ninja &> /dev/null; then
+    echo -e "${YELLOW}⚠️  Ninja not found, using default generator${NC}"
+    GENERATOR=""
+fi
+
+# Setup build directory
+BUILD_DIR="build"
+if [[ "$BUILD_TYPE" == "Debug" ]]; then
+    BUILD_DIR="build_debug"
+fi
+
+echo -e "${CYAN}📋 Build Configuration:${NC}"
+echo -e "  Build Type: ${BOLD}$BUILD_TYPE${NC}"
+echo -e "  Build Target: ${BOLD}$BUILD_TARGET${NC}"
+echo -e "  PostgreSQL: ${BOLD}$([ "$POSTGRESQL" = true ] && echo "ON" || echo "OFF")${NC}"
+echo -e "  MySQL: ${BOLD}$([ "$MYSQL" = true ] && echo "ON" || echo "OFF")${NC}"
+echo -e "  SQLite: ${BOLD}$([ "$SQLITE" = true ] && echo "ON" || echo "OFF")${NC}"
+echo -e "  Use vcpkg: ${BOLD}$([ "$USE_VCPKG" = true ] && echo "YES" || echo "NO")${NC}"
+echo -e "  Cores: ${BOLD}$CORES${NC}"
+echo -e "  Generator: ${BOLD}${GENERATOR:-Default}${NC}"
+echo ""
+
+# Clean build directory if requested
+if [[ "$CLEAN" == true ]]; then
+    echo -e "${YELLOW}🧹 Cleaning build directory...${NC}"
+    rm -rf "$BUILD_DIR"
+fi
+
+# Create build directory
+mkdir -p "$BUILD_DIR"
+
+# Configure CMake options
+CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE=$BUILD_TYPE"
+CMAKE_ARGS="$CMAKE_ARGS -DUSE_POSTGRESQL=$([ "$POSTGRESQL" = true ] && echo "ON" || echo "OFF")"
+CMAKE_ARGS="$CMAKE_ARGS -DUSE_MYSQL=$([ "$MYSQL" = true ] && echo "ON" || echo "OFF")"
+CMAKE_ARGS="$CMAKE_ARGS -DUSE_SQLITE=$([ "$SQLITE" = true ] && echo "ON" || echo "OFF")"
+CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+
+if [[ "$INSTALL" == true ]]; then
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=$PREFIX"
+fi
+
+if [[ "$USE_VCPKG" == true ]]; then
+    # Check for vcpkg
+    VCPKG_ROOT=""
+    if [[ -d "vcpkg" ]]; then
+        VCPKG_ROOT="$(pwd)/vcpkg"
+    elif [[ -d "../vcpkg" ]]; then
+        VCPKG_ROOT="$(pwd)/../vcpkg"
+    elif [[ -n "$VCPKG_ROOT" ]]; then
+        # Use environment variable
+        true
+    else
+        echo -e "${YELLOW}⚠️  vcpkg not found, will try to install...${NC}"
+        if ./dependency.sh; then
+            VCPKG_ROOT="$(pwd)/vcpkg"
+        else
+            echo -e "${RED}❌ Failed to install vcpkg${NC}"
+            USE_VCPKG=false
+        fi
+    fi
+
+    if [[ "$USE_VCPKG" == true && -n "$VCPKG_ROOT" ]]; then
+        CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+        echo -e "${GREEN}✅ Using vcpkg from: $VCPKG_ROOT${NC}"
+    fi
+fi
+
+if [[ -n "$GENERATOR" ]]; then
+    CMAKE_ARGS="$CMAKE_ARGS -G \"$GENERATOR\""
+fi
+
+# Configure
+echo -e "${BLUE}⚙️  Configuring...${NC}"
+if [[ "$VERBOSE" == true ]]; then
+    echo "CMake command: cmake -B $BUILD_DIR $CMAKE_ARGS"
+fi
+
+cd "$BUILD_DIR" || exit 1
+if ! eval "cmake .. $CMAKE_ARGS"; then
+    echo -e "${RED}❌ Configuration failed${NC}"
+    exit 1
+fi
+cd ..
+
 # Build
-print_info "Building..."
-if [ "$VERBOSE" = true ]; then
-    if ! cmake --build . -j "$JOBS"; then
-        print_error "Build failed!"
+echo -e "${BLUE}🔨 Building...${NC}"
+BUILD_ARGS="--config $BUILD_TYPE --parallel $CORES"
+
+if [[ "$VERBOSE" == true ]]; then
+    BUILD_ARGS="$BUILD_ARGS --verbose"
+fi
+
+if [[ "$BUILD_TARGET" != "all" ]]; then
+    BUILD_ARGS="$BUILD_ARGS --target $BUILD_TARGET"
+fi
+
+if ! cmake --build "$BUILD_DIR" $BUILD_ARGS; then
+    echo -e "${RED}❌ Build failed${NC}"
+    exit 1
+fi
+
+# Run tests if requested
+if [[ "$BUILD_TARGET" == "tests" || "$BUILD_TARGET" == "all" ]]; then
+    echo -e "${BLUE}🧪 Running tests...${NC}"
+    cd "$BUILD_DIR"
+    if ! ctest --output-on-failure -C "$BUILD_TYPE"; then
+        echo -e "${RED}❌ Tests failed${NC}"
+        cd ..
         exit 1
     fi
-else
-    if ! cmake --build . -j "$JOBS" 2>&1 | tee build.log | grep -E "^\[|error:|warning:"; then
-        if grep -q "error:" build.log; then
-            print_error "Build failed! Check build.log for details."
-            exit 1
-        fi
+    cd ..
+fi
+
+# Install if requested
+if [[ "$INSTALL" == true ]]; then
+    echo -e "${BLUE}📦 Installing...${NC}"
+    if ! cmake --install "$BUILD_DIR" --config "$BUILD_TYPE"; then
+        echo -e "${RED}❌ Installation failed${NC}"
+        exit 1
     fi
 fi
 
-# Run tests if built
-if [ "$BUILD_TESTS" = "ON" ]; then
-    print_info "Checking for PostgreSQL..."
-    if command -v psql >/dev/null 2>&1; then
-        # Check if PostgreSQL is running
-        if psql -U postgres -c "SELECT 1" >/dev/null 2>&1; then
-            print_info "PostgreSQL is available. Running tests..."
-            if [ -f "bin/database_unit_tests" ]; then
-                if ./bin/database_unit_tests; then
-                    print_info "Unit tests passed!"
-                else
-                    print_warning "Some unit tests failed (this may be due to database configuration)"
-                fi
-            else
-                print_warning "Unit tests not found. Skipping tests."
-            fi
-        else
-            print_warning "PostgreSQL is not running or not accessible. Skipping database tests."
-            print_info "To run tests, ensure PostgreSQL is running with:"
-            print_info "  - host=localhost port=5432"
-            print_info "  - user=postgres with proper permissions"
-        fi
-    else
-        print_warning "PostgreSQL client not found. Skipping database tests."
-    fi
+echo -e "${GREEN}✅ Build completed successfully!${NC}"
+echo -e "${CYAN}📁 Build artifacts location: $(pwd)/$BUILD_DIR${NC}"
+
+if [[ "$BUILD_TARGET" == "all" || "$BUILD_TARGET" == "samples" ]]; then
+    echo -e "${CYAN}🎯 Sample programs:${NC}"
+    find "$BUILD_DIR" -name "*_usage*" -o -name "*_demo*" -o -name "*_example*" | head -5
 fi
 
-print_info "Build completed successfully!"
-print_info "Build artifacts are in: $SCRIPT_DIR/build"
-
-# Print summary
-echo ""
-print_info "Summary:"
-print_info "  Library: build/lib/libdatabase.*"
-if [ "$BUILD_TESTS" = "ON" ]; then
-    print_info "  Unit Tests: build/bin/database_unit_tests"
-    print_info "  Benchmarks: build/bin/database_benchmark_tests"
-fi
-if [ "$BUILD_SAMPLES" = "ON" ]; then
-    print_info "  Samples: build/bin/"
+if [[ "$INSTALL" == true ]]; then
+    echo -e "${CYAN}📦 Installed to: $PREFIX${NC}"
 fi

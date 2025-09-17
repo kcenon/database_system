@@ -1,0 +1,173 @@
+name: Build-Ubuntu-Clang
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_linux_clang:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BUILD_TYPE: Debug
+      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+      VCPKG_FEATURE_FLAGS: "manifests,registries,versions,binarycaching"
+      VCPKG_DEFAULT_TRIPLET: x64-linux
+      CC: clang
+      CXX: clang++
+    strategy:
+      matrix:
+        clang_version: [15, 16, 17]
+        postgresql: [ON, OFF]
+        build_type: [Debug, Release]
+        exclude:
+          # Reduce matrix size - test only essential combinations
+          - clang_version: 15
+            build_type: Debug
+            postgresql: OFF
+          - clang_version: 16
+            build_type: Debug
+            postgresql: OFF
+    name: "Clang-${{ matrix.clang_version }}-${{ matrix.build_type }}-PostgreSQL-${{ matrix.postgresql }}"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: true
+          clean: true
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Clang ${{ matrix.clang_version }}
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${{ matrix.clang_version }} main"
+          sudo apt update
+          sudo apt install -y clang-${{ matrix.clang_version }} libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{ matrix.clang_version }} 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{ matrix.clang_version }} 100
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y cmake build-essential gdb pkg-config curl zip unzip tar autoconf automake autoconf-archive ninja-build
+          sudo apt install -y libgtest-dev libgmock-dev
+          if [ "${{ matrix.postgresql }}" = "ON" ]; then
+            sudo apt install -y libpq-dev postgresql-server-dev-all
+          fi
+
+      - name: Verify Clang installation
+        run: |
+          clang --version
+          clang++ --version
+
+      - name: Check architecture
+        run: |
+          if [ "$(uname -m)" = "aarch64" ]; then
+            echo "VCPKG_FORCE_SYSTEM_BINARIES=arm" >> $GITHUB_ENV
+          fi
+
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        id: vcpkg-cache
+        with:
+          path: |
+            ${{ github.workspace }}/vcpkg
+            !${{ github.workspace }}/vcpkg/buildtrees
+            !${{ github.workspace }}/vcpkg/packages
+            !${{ github.workspace }}/vcpkg/downloads
+          key: vcpkg-clang-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-clang-${{ runner.os }}-
+            vcpkg-${{ runner.os }}-
+
+      - name: Install vcpkg
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+
+      - name: Integrate vcpkg
+        run: |
+          if [ -d "vcpkg" ]; then
+            cd vcpkg
+            git pull
+            ./vcpkg integrate install
+          fi
+
+      - name: Cache CMake build
+        uses: actions/cache@v3
+        with:
+          path: |
+            build
+            !build/vcpkg_installed
+          key: cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-${{ hashFiles('CMakeLists.txt', 'database/CMakeLists.txt') }}
+          restore-keys: |
+            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-${{ matrix.postgresql }}-
+            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-${{ matrix.build_type }}-
+            cmake-clang${{ matrix.clang_version }}-${{ runner.os }}-
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
+            -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
+            -DUSE_POSTGRESQL=${{ matrix.postgresql }} \
+            -DBUILD_DATABASE_SAMPLES=ON \
+            -DUSE_UNIT_TEST=ON \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -G Ninja
+
+      - name: Build
+        run: |
+          cmake --build build --config ${{ matrix.build_type }} -j $(nproc)
+
+      - name: Test without PostgreSQL
+        if: matrix.postgresql == 'OFF'
+        run: |
+          cd build
+          ctest --output-on-failure -C ${{ matrix.build_type }}
+
+      - name: Setup PostgreSQL for testing
+        if: matrix.postgresql == 'ON'
+        run: |
+          sudo systemctl start postgresql
+          sudo -u postgres createdb test_db
+          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'test_pass';"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE test_db TO test_user;"
+
+      - name: Test with PostgreSQL
+        if: matrix.postgresql == 'ON'
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: test_db
+          DB_USER: test_user
+          DB_PASSWORD: test_pass
+        run: |
+          cd build
+          ctest --output-on-failure -C ${{ matrix.build_type }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: database-system-clang${{ matrix.clang_version }}-${{ matrix.build_type }}-postgresql-${{ matrix.postgresql }}-${{ runner.os }}
+          path: |
+            build/bin/
+            build/lib/
+            !build/bin/*.pdb

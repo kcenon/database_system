@@ -30,6 +30,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+#pragma once
+
 #include "database_base.h"
 
 namespace database
@@ -120,12 +122,10 @@ namespace database
 		 *        and returns the resulting data.
 		 *
 		 * @param query_string The SQL SELECT query to be executed.
-		 * @return A shared pointer to a @c container_module::value_container object
-		 *         that contains the query results. May be null or empty if
-		 *         no results are returned or if an error occurs.
+		 * @return A database_result containing rows of data as key-value pairs.
+		 *         Returns empty vector if query fails or returns no results.
 		 */
-		std::unique_ptr<container_module::value_container> select_query(
-			const std::string& query_string) override;
+		database_result select_query(const std::string& query_string) override;
 
 		/**
 		 * @brief Closes the connection to the PostgreSQL database.

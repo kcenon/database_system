@@ -6,10 +6,10 @@
 #include <iostream>
 #include <string>
 #include <memory>
-#include "../database_manager.h"
-#include "../postgres_manager.h"
+#include "database/database_manager.h"
+#include "database/postgres_manager.h"
 
-using namespace database_module;
+using namespace database;
 
 int main() {
     std::cout << "=== Database System - Basic Usage Example ===" << std::endl;

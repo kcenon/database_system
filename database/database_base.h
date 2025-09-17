@@ -34,12 +34,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string>
 #include <memory>
+#include <vector>
+#include <map>
+#include <variant>
+#include <any>
 
 #include "database_types.h"
-#include "container/core/container.h"
 
 namespace database
 {
+	// Database result types for independent operation
+	using database_value = std::variant<std::string, int64_t, double, bool, std::nullptr_t>;
+	using database_row = std::map<std::string, database_value>;
+	using database_result = std::vector<database_row>;
 	/**
 	 * @class database_base
 	 * @brief Abstract base class defining common database operations.
@@ -129,15 +136,10 @@ namespace database
 		 * results.
 		 *
 		 * @param query_string The SQL SELECT query string.
-		 * @return A shared pointer to a @c container_module::value_container object
-		 *         that holds the result set of the query. If the query
-		 *         fails or returns no results, the behavior of this
-		 *         container is implementation-specific (it may be empty
-		 *         or null).
+		 * @return A database_result containing rows of data as key-value pairs.
+		 *         Returns empty vector if query fails or returns no results.
 		 */
-		virtual std::unique_ptr<container_module::value_container> select_query(
-			const std::string& query_string)
-			= 0;
+		virtual database_result select_query(const std::string& query_string) = 0;
 
 		/**
 		 * @brief Terminates the current database connection.

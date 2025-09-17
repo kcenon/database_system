@@ -125,15 +125,14 @@ namespace database
 			return 0;
 		}
 
-		return database_->update_query(query_string);
+		return database_->delete_query(query_string);
 	}
 
-	std::unique_ptr<container_module::value_container> database_manager::select_query(
-		const std::string& query_string)
+	database_result database_manager::select_query(const std::string& query_string)
 	{
 		if (database_ == nullptr)
 		{
-			return nullptr;
+			return database_result{};
 		}
 
 		return database_->select_query(query_string);

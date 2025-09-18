@@ -36,6 +36,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <mutex>
 
 #include "database_base.h"
+#include "connection_pool.h"
+#include "query_builder.h"
 
 namespace database
 {
@@ -157,6 +159,45 @@ namespace database
 		 *         (e.g., no active connection).
 		 */
 		bool disconnect(void);
+
+		/**
+		 * @brief Creates a connection pool for the specified database type.
+		 *
+		 * @param db_type The database type to create a pool for
+		 * @param config Connection pool configuration parameters
+		 * @return @c true if the pool was created successfully, @c false otherwise
+		 */
+		bool create_connection_pool(database_types db_type, const connection_pool_config& config);
+
+		/**
+		 * @brief Gets the connection pool for the specified database type.
+		 *
+		 * @param db_type The database type to get a pool for
+		 * @return Shared pointer to the connection pool, nullptr if not found
+		 */
+		std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type);
+
+		/**
+		 * @brief Gets connection pool statistics for all active pools.
+		 *
+		 * @return Map of database type to connection statistics
+		 */
+		std::map<database_types, connection_stats> get_pool_stats() const;
+
+		/**
+		 * @brief Creates a query builder for the current database type.
+		 *
+		 * @return A query builder configured for the current database
+		 */
+		query_builder create_query_builder();
+
+		/**
+		 * @brief Creates a query builder for a specific database type.
+		 *
+		 * @param db_type The database type to create a builder for
+		 * @return A query builder configured for the specified database
+		 */
+		query_builder create_query_builder(database_types db_type);
 
 	private:
 		bool connected_; ///< Indicates whether a database connection is active.

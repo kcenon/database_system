@@ -22,6 +22,8 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.h
@@ -32,6 +34,8 @@ set(HEADER_FILES
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.cpp

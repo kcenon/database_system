@@ -119,3 +119,103 @@ database_result select_query(const std::string& query) override;
 - **Error Handling**: Graceful fallbacks implemented
 
 This roadmap provides a structured approach to implementing comprehensive database support for Phase 1.
+
+---
+
+## 🌟 Phase 2: NoSQL Database Support (4 weeks)
+
+**Goal**: Implement MongoDB and Redis backends for comprehensive NoSQL database support
+**Success Criteria**: All NoSQL databases support their native operations (document/key-value)
+
+### 📝 Task 2.1: MongoDB Backend Implementation (2 weeks)
+**Assignee**: Backend Developer
+**Priority**: High
+
+**Subtask 2.1.1: MongoDB Manager Class Implementation (4 days)**
+- Create `database/backends/mongodb/mongodb_manager.h`
+- Implement `database/backends/mongodb/mongodb_manager.cpp`
+- Adapt `database_base` interface for document operations
+- MongoDB connection URI parsing
+```cpp
+// Target MongoDB-specific methods
+bool connect(const std::string& connection_string) override;
+bool insert_document(const std::string& collection, const std::string& document);
+database_result find_documents(const std::string& collection, const std::string& query);
+bool update_document(const std::string& collection, const std::string& filter, const std::string& update);
+bool delete_document(const std::string& collection, const std::string& filter);
+```
+
+**Subtask 2.1.2: BSON Integration and Type Conversion (3 days)**
+- BSON → `database_value` conversion system
+- Support for MongoDB ObjectId, Date, Binary types
+- JSON string ↔ BSON document conversion
+- Array and nested document handling
+
+**Subtask 2.1.3: MongoDB-Specific Features (2 days)**
+- Collection management (create, drop, list)
+- Index creation and management
+- Aggregation pipeline support
+- GridFS support for large files
+
+**Subtask 2.1.4: MongoDB Error Handling (1 day)**
+- MongoDB-specific exception classes
+- Connection pooling and replica set support
+- Detailed error information for operation failures
+
+**Subtask 2.1.5: MongoDB Unit Tests (2 days)**
+- Document CRUD operation tests
+- Collection and index management tests
+- Aggregation pipeline tests
+- Error scenario testing
+
+### 📝 Task 2.2: Redis Backend Implementation (2 weeks)
+**Assignee**: Backend Developer
+**Priority**: Medium
+
+**Subtask 2.2.1: Redis Manager Class Implementation (3 days)**
+- Create `database/backends/redis/redis_manager.h/.cpp`
+- Adapt `database_base` interface for key-value operations
+- Redis connection string parsing
+- Support for Redis Cluster and Sentinel
+
+**Subtask 2.2.2: Redis Data Types Support (3 days)**
+- String, Hash, List, Set, Sorted Set operations
+- Support for Redis commands: GET, SET, HGET, LPUSH, SADD, ZADD
+- Expiration and TTL management
+- Pub/Sub functionality
+
+**Subtask 2.2.3: Redis Advanced Features (2 days)**
+- Redis transactions (MULTI/EXEC)
+- Lua script execution
+- Pipeline operations for performance
+- Redis Streams support
+
+**Subtask 2.2.4: Redis Connection Management (2 days)**
+- Connection pooling implementation
+- Redis Cluster support
+- Sentinel-based high availability
+- Connection timeout and retry logic
+
+**Subtask 2.2.5: Redis Unit Tests (2 days)**
+- Key-value operation tests
+- Data type specific operation tests
+- Transaction and pipeline tests
+- Connection management tests
+
+---
+
+## Phase 2 Success Metrics
+
+### 🎯 Functional Metrics
+- **NoSQL Support**: MongoDB and Redis fully functional
+- **Document Operations**: MongoDB CRUD with BSON support
+- **Key-Value Operations**: Redis data types and advanced features
+- **Type System**: Extended `database_value` for NoSQL data types
+
+### ⚡ Performance Metrics
+- **Document Operations**: Insert, find, update, delete working
+- **Key-Value Operations**: All Redis data types supported
+- **Connection Management**: Pooling and clustering support
+- **Error Handling**: Graceful NoSQL-specific error handling
+
+This completes the foundation for both relational and NoSQL database support in the unified system.

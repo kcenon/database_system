@@ -1,7 +1,7 @@
 /*****************************************************************************
 BSD 3-Clause License
 
-Copyright (c) 2021, 🍀☀🌕🌥 🌊
+Copyright (c) 2025, 🍀☀🌕🌥 🌊
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "database/postgres_manager.h"
 #include "database/backends/mysql/mysql_manager.h"
 #include "database/backends/sqlite/sqlite_manager.h"
+#include "database/backends/mongodb/mongodb_manager.h"
+#include "database/backends/redis/redis_manager.h"
 
 namespace database
 {
@@ -63,6 +65,12 @@ namespace database
 			break;
 		case database_types::sqlite:
 			database_ = std::make_unique<sqlite_manager>();
+			break;
+		case database_types::mongodb:
+			database_ = std::make_unique<mongodb_manager>();
+			break;
+		case database_types::redis:
+			database_ = std::make_unique<redis_manager>();
 			break;
 		default:
 			break;

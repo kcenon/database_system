@@ -21,7 +21,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Threads REQUIRED)
 
 # vcpkg integration for fmt
-find_package(fmt CONFIG REQUIRED)
+find_package(fmt CONFIG QUIET)
+if(NOT fmt_FOUND)
+    message(WARNING "fmt library not found - samples may not build properly")
+endif()
 
 ##################################################
 # Sample Programs Configuration
@@ -61,7 +64,7 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
     
     # Link libraries
     target_link_libraries(${SAMPLE} PRIVATE
-        database_system
+        database
         fmt::fmt
         Threads::Threads
     )

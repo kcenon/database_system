@@ -1,27 +1,100 @@
 {
-    "name": "database-system",
-    "version": "1.0.0",
-    "description": "Database abstraction layer with PostgreSQL support",
-    "license": "BSD-3-Clause",
-    "dependencies": [
-        "libpq",
-        "libpqxx",
-        "fmt"
-    ],
-    "features": {
-        "tests": {
-            "description": "Build unit tests",
-            "dependencies": [
-                "gtest"
-            ]
-        },
-        "samples": {
-            "description": "Build sample applications",
-            "dependencies": []
-        },
-        "docs": {
-            "description": "Build documentation",
-            "dependencies": []
-        }
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "database-system",
+  "version": "1.0.0",
+  "description": "Advanced C++20 Database System with Multi-Backend Support",
+  "homepage": "https://github.com/kcenon/database_system",
+  "license": "BSD-3-Clause",
+  "builtin-baseline": "3426db05b996481ca31e95fff3734cf23e0f51bc",
+  "dependencies": [
+    {
+      "name": "fmt",
+      "version>=": "10.2.1"
     }
+  ],
+  "features": {
+    "postgresql": {
+      "description": "Enable PostgreSQL database support",
+      "dependencies": [
+        {
+          "name": "libpq"
+        },
+        {
+          "name": "libpqxx",
+          "default-features": false
+        },
+        {
+          "name": "openssl"
+        }
+      ]
+    },
+    "mysql": {
+      "description": "Enable MySQL database support",
+      "dependencies": [
+        {
+          "name": "libmysql"
+        }
+      ]
+    },
+    "sqlite": {
+      "description": "Enable SQLite database support",
+      "dependencies": [
+        {
+          "name": "sqlite3"
+        }
+      ]
+    },
+    "testing": {
+      "description": "Enable unit testing and benchmarking",
+      "dependencies": [
+        {
+          "name": "gtest",
+          "features": ["gmock"]
+        },
+        {
+          "name": "benchmark"
+        }
+      ]
+    },
+    "samples": {
+      "description": "Enable sample applications",
+      "dependencies": [
+        {
+          "name": "fmt",
+          "version>=": "10.2.1"
+        }
+      ]
+    },
+    "logging": {
+      "description": "Enable advanced logging capabilities",
+      "dependencies": [
+        {
+          "name": "spdlog",
+          "features": ["fmt_external"]
+        }
+      ]
+    },
+    "development": {
+      "description": "Enable all development tools and database backends",
+      "dependencies": [
+        {
+          "name": "gtest",
+          "features": ["gmock"]
+        },
+        {
+          "name": "benchmark"
+        },
+        {
+          "name": "spdlog",
+          "features": ["fmt_external"]
+        }
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "name": "fmt",
+      "version": "10.2.1"
+    }
+  ]
 }

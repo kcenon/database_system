@@ -68,21 +68,27 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
-# PostgreSQL dependency
+# PostgreSQL dependency (optional)
 if(USE_POSTGRESQL)
-    find_package(libpqxx CONFIG REQUIRED)
-    find_package(OpenSSL REQUIRED)
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-            libpqxx::pqxx
-            OpenSSL::SSL
-    )
-    target_compile_definitions(${PROJECT_NAME} PUBLIC USE_POSTGRESQL)
+    find_package(libpqxx CONFIG QUIET)
+    find_package(OpenSSL QUIET)
 
-    # Display PostgreSQL configuration
-    message(STATUS "PostgreSQL Configuration:")
-    message(STATUS "  libpqxx found: ${libpqxx_FOUND}")
-    message(STATUS "  OpenSSL found: ${OPENSSL_FOUND}")
+    if(libpqxx_FOUND AND OPENSSL_FOUND)
+        target_link_libraries(${PROJECT_NAME}
+            PUBLIC
+                libpqxx::pqxx
+                OpenSSL::SSL
+        )
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_POSTGRESQL)
+        message(STATUS "PostgreSQL support enabled")
+        message(STATUS "  libpqxx found: ${libpqxx_FOUND}")
+        message(STATUS "  OpenSSL found: ${OPENSSL_FOUND}")
+    else()
+        message(WARNING "PostgreSQL libraries not found, disabling PostgreSQL support")
+        message(STATUS "  libpqxx found: ${libpqxx_FOUND}")
+        message(STATUS "  OpenSSL found: ${OPENSSL_FOUND}")
+        set(USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL support disabled due to missing libraries" FORCE)
+    endif()
 endif()
 
 ##################################################

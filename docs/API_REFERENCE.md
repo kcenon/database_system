@@ -72,6 +72,13 @@ public:
     std::map<database_types, connection_stats> get_pool_stats() const;
     query_builder create_query_builder();
     query_builder create_query_builder(database_types db_type);
+
+    // Phase 4: Enterprise Features
+    bool execute_query(const std::string& query_string);
+    std::shared_ptr<orm::entity_manager> get_entity_manager();
+    std::shared_ptr<monitoring::performance_monitor> get_performance_monitor();
+    std::shared_ptr<security::access_control> get_access_control();
+    std::shared_ptr<async::async_database> get_async_database();
 };
 ```
 
@@ -692,9 +699,73 @@ int main() {
 
 ---
 
+## Phase 4: Enterprise APIs
+
+### ORM Framework
+
+```cpp
+#include <database/orm/entity.h>
+
+// Entity definition
+class User : public entity_base {
+    ENTITY_TABLE("users")
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, username, not_null() | index("idx_username"))
+    ENTITY_FIELD(std::string, email, unique())
+    ENTITY_METADATA()
+};
+
+// Entity operations
+entity_manager::instance().create_tables(db);
+auto users = User::query(db).where("age > 18").execute();
+```
+
+### Performance Monitoring
+
+```cpp
+#include <database/monitoring/performance_monitor.h>
+
+// Performance monitoring
+auto& monitor = performance_monitor::instance();
+monitor.set_alert_thresholds(0.05, std::chrono::milliseconds(1000));
+auto summary = monitor.get_performance_summary();
+```
+
+### Security Framework
+
+```cpp
+#include <database/security/secure_connection.h>
+
+// Access control
+auto& access = access_control::instance();
+access.create_role(admin_role);
+bool allowed = access.check_permission("user123", "users", "SELECT");
+
+// Audit logging
+AUDIT_LOG_ACCESS("user123", "session456", "SELECT", "users", "query_hash", true, "");
+```
+
+### Async Operations
+
+```cpp
+#include <database/async/async_operations.h>
+
+// Coroutine support
+database_awaitable<bool> async_operation() {
+    auto result = co_await async_db.execute_coro("SELECT * FROM users");
+    co_return result;
+}
+
+// Distributed transactions
+auto& coordinator = transaction_coordinator::instance();
+auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
+```
+
+---
+
 ## Version Information
 
-- **API Version**: 3.0.0 (Phase 3 - Advanced Features)
+- **API Version**: 4.0.0 (Phase 4 - Production-Ready Enterprise Features)
 - **C++ Standard**: C++20
 - **Supported Compilers**: GCC 10+, Clang 11+, MSVC 2019+
 - **Supported Platforms**: Windows, macOS, Linux

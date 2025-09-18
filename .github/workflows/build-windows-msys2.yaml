@@ -154,7 +154,7 @@ jobs:
           echo "Building with MSYS2 system packages..."
           cmake .. \
             -G "Ninja" \
-            -DUSE_UNIT_TEST=ON
+            -DUSE_UNIT_TEST=ON \
             -DBUILD_DATABASE_SAMPLES=ON \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
@@ -182,8 +182,8 @@ jobs:
           rm -rf CMakeFiles
           cmake .. \
             -G "Ninja" \
-            -DUSE_UNIT_TEST=ON
-            -DBUILD_DATABASE_SAMPLES=ON
+            -DUSE_UNIT_TEST=ON \
+            -DBUILD_DATABASE_SAMPLES=ON \
             -DUSE_POSTGRESQL=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \

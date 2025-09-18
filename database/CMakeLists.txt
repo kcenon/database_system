@@ -28,6 +28,11 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.h
+    # Phase 4 Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/security/secure_connection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/async/async_operations.h
 )
 
 # Collect all source files
@@ -38,6 +43,9 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
+    # Phase 4 Sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.cpp
 )

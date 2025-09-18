@@ -288,6 +288,51 @@ namespace database
 		return false;
 	}
 
+	bool postgres_manager::execute_query(const std::string& query_string)
+	{
+#ifdef USE_POSTGRESQL
+		try {
+			if (!connection_) {
+				std::cerr << "No active PostgreSQL connection" << std::endl;
+				return false;
+			}
+
+			pqxx::work txn{*static_cast<pqxx::connection*>(connection_)};
+			txn.exec(query_string);
+			txn.commit();
+			return true;
+		} catch (const std::exception& e) {
+			std::cerr << "PostgreSQL execute error: " << e.what() << std::endl;
+			return false;
+		}
+#elif defined(HAVE_LIBPQ)
+		if (!connection_) {
+			std::cerr << "No active PostgreSQL connection" << std::endl;
+			return false;
+		}
+
+		PGresult* result = PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
+		if (!result) {
+			std::cerr << "PostgreSQL execute failed" << std::endl;
+			return false;
+		}
+
+		ExecStatusType status = PQresultStatus(result);
+		bool success = (status == PGRES_COMMAND_OK) || (status == PGRES_TUPLES_OK);
+
+		if (!success) {
+			std::cerr << "PostgreSQL execute error: " << PQerrorMessage(static_cast<PGconn*>(connection_)) << std::endl;
+		}
+
+		PQclear(result);
+		return success;
+#else
+		// Mock execution
+		std::cout << "PostgreSQL support not compiled. Mock execute: " << query_string << std::endl;
+		return true;
+#endif
+	}
+
 	void* postgres_manager::query_result(const std::string& query_string)
 	{
 #ifdef USE_POSTGRESQL

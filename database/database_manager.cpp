@@ -33,6 +33,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "database/database_manager.h"
 
 #include "database/postgres_manager.h"
+#include "database/backends/mysql/mysql_manager.h"
+#include "database/backends/sqlite/sqlite_manager.h"
 
 namespace database
 {
@@ -55,6 +57,12 @@ namespace database
 		{
 		case database_types::postgres:
 			database_ = std::make_unique<postgres_manager>();
+			break;
+		case database_types::mysql:
+			database_ = std::make_unique<mysql_manager>();
+			break;
+		case database_types::sqlite:
+			database_ = std::make_unique<sqlite_manager>();
 			break;
 		default:
 			break;

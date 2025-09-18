@@ -47,6 +47,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           runVcpkgInstall: true
           vcpkgJsonGlob: '**/vcpkg.json'
+          vcpkgConfigurationJsonGlob: '**/vcpkg-configuration.json'
 
       - name: Cache CMake build
         uses: actions/cache@v3

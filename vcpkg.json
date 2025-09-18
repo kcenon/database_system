@@ -70,7 +70,7 @@
       "dependencies": [
         {
           "name": "spdlog",
-          "features": ["fmt_external"]
+          "features": ["fmt-external"]
         }
       ]
     },
@@ -86,7 +86,7 @@
         },
         {
           "name": "spdlog",
-          "features": ["fmt_external"]
+          "features": ["fmt-external"]
         }
       ]
     }

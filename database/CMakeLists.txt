@@ -22,12 +22,16 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
 )
 
 # Collect all source files
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
 )
 
 ##################################################
@@ -91,6 +95,44 @@ if(USE_POSTGRESQL)
     endif()
 endif()
 
+# MySQL dependency (optional)
+if(USE_MYSQL)
+    find_package(unofficial-libmysql CONFIG QUIET)
+
+    if(unofficial-libmysql_FOUND)
+        target_link_libraries(${PROJECT_NAME}
+            PUBLIC
+                unofficial::libmysql::libmysql
+        )
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_MYSQL)
+        message(STATUS "MySQL support enabled")
+        message(STATUS "  libmysql found: ${unofficial-libmysql_FOUND}")
+    else()
+        message(WARNING "MySQL libraries not found, disabling MySQL support")
+        message(STATUS "  libmysql found: ${unofficial-libmysql_FOUND}")
+        set(USE_MYSQL OFF CACHE BOOL "MySQL support disabled due to missing libraries" FORCE)
+    endif()
+endif()
+
+# SQLite dependency (optional)
+if(USE_SQLITE)
+    find_package(unofficial-sqlite3 CONFIG QUIET)
+
+    if(unofficial-sqlite3_FOUND)
+        target_link_libraries(${PROJECT_NAME}
+            PUBLIC
+                unofficial::sqlite3::sqlite3
+        )
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_SQLITE)
+        message(STATUS "SQLite support enabled")
+        message(STATUS "  sqlite3 found: ${unofficial-sqlite3_FOUND}")
+    else()
+        message(WARNING "SQLite libraries not found, disabling SQLite support")
+        message(STATUS "  sqlite3 found: ${unofficial-sqlite3_FOUND}")
+        set(USE_SQLITE OFF CACHE BOOL "SQLite support disabled due to missing libraries" FORCE)
+    endif()
+endif()
+
 ##################################################
 # Compiler Options
 ##################################################
@@ -137,4 +179,4 @@ endif()
 message(STATUS "Database library configured:")
 message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Headers: ${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "  Dependencies: Threads, libpqxx (if enabled)")
+message(STATUS "  Dependencies: Threads, libpqxx (if enabled), libmysql (if enabled)")

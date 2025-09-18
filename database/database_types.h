@@ -45,7 +45,12 @@ namespace database
 		/**
 		 * @brief Indicates a MongoDB database (future implementation).
 		 */
-		mongodb = 5
+		mongodb = 5,
+
+		/**
+		 * @brief Indicates a Redis database (future implementation).
+		 */
+		redis = 6
 	};
 
 	/**
@@ -62,6 +67,7 @@ namespace database
 		case database_types::sqlite: return "sqlite";
 		case database_types::oracle: return "oracle";
 		case database_types::mongodb: return "mongodb";
+		case database_types::redis: return "redis";
 		default: return "unknown";
 		}
 	}

@@ -24,6 +24,8 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.h
 )
 
 # Collect all source files
@@ -32,6 +34,8 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.cpp
 )
 
 ##################################################
@@ -130,6 +134,48 @@ if(USE_SQLITE)
         message(WARNING "SQLite libraries not found, disabling SQLite support")
         message(STATUS "  sqlite3 found: ${unofficial-sqlite3_FOUND}")
         set(USE_SQLITE OFF CACHE BOOL "SQLite support disabled due to missing libraries" FORCE)
+    endif()
+endif()
+
+# MongoDB dependency (optional)
+if(USE_MONGODB)
+    find_package(mongocxx CONFIG QUIET)
+    find_package(bsoncxx CONFIG QUIET)
+
+    if(mongocxx_FOUND AND bsoncxx_FOUND)
+        target_link_libraries(${PROJECT_NAME}
+            PUBLIC
+                mongo::mongocxx_shared
+                mongo::bsoncxx_shared
+        )
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_MONGODB)
+        message(STATUS "MongoDB support enabled")
+        message(STATUS "  mongocxx found: ${mongocxx_FOUND}")
+        message(STATUS "  bsoncxx found: ${bsoncxx_FOUND}")
+    else()
+        message(WARNING "MongoDB libraries not found, disabling MongoDB support")
+        message(STATUS "  mongocxx found: ${mongocxx_FOUND}")
+        message(STATUS "  bsoncxx found: ${bsoncxx_FOUND}")
+        set(USE_MONGODB OFF CACHE BOOL "MongoDB support disabled due to missing libraries" FORCE)
+    endif()
+endif()
+
+# Redis dependency (optional)
+if(USE_REDIS)
+    find_package(hiredis CONFIG QUIET)
+
+    if(hiredis_FOUND)
+        target_link_libraries(${PROJECT_NAME}
+            PUBLIC
+                hiredis::hiredis
+        )
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_REDIS)
+        message(STATUS "Redis support enabled")
+        message(STATUS "  hiredis found: ${hiredis_FOUND}")
+    else()
+        message(WARNING "Redis libraries not found, disabling Redis support")
+        message(STATUS "  hiredis found: ${hiredis_FOUND}")
+        set(USE_REDIS OFF CACHE BOOL "Redis support disabled due to missing libraries" FORCE)
     endif()
 endif()
 

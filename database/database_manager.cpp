@@ -164,6 +164,31 @@ namespace database
 		return database_->disconnect();
 	}
 
+	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
+	{
+		return connection_pool_manager::instance().create_pool(db_type, config);
+	}
+
+	std::shared_ptr<connection_pool_base> database_manager::get_connection_pool(database_types db_type)
+	{
+		return connection_pool_manager::instance().get_pool(db_type);
+	}
+
+	std::map<database_types, connection_stats> database_manager::get_pool_stats() const
+	{
+		return connection_pool_manager::instance().get_all_stats();
+	}
+
+	query_builder database_manager::create_query_builder()
+	{
+		return query_builder(database_type());
+	}
+
+	query_builder database_manager::create_query_builder(database_types db_type)
+	{
+		return query_builder(db_type);
+	}
+
 #pragma region singleton
 	std::unique_ptr<database_manager> database_manager::handle_;
 	std::once_flag database_manager::once_;

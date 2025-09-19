@@ -17,8 +17,7 @@
 #include "database/database_types.h"
 #include "database/orm/entity.h"
 #include "database/monitoring/performance_monitor.h"
-#include "database/security/rbac_manager.h"
-#include "database/security/audit_logger.h"
+#include "database/security/secure_connection.h"
 #include "database/async/async_operations.h"
 
 using namespace database;

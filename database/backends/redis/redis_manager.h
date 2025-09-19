@@ -123,6 +123,15 @@ namespace database
 		database_result select_query(const std::string& query_string) override;
 
 		/**
+		 * @brief Executes a general Redis command (raw Redis command).
+		 *
+		 * @param query_string The Redis command string to execute.
+		 * @return @c true if the command executed successfully,
+		 *         @c false otherwise.
+		 */
+		bool execute_query(const std::string& query_string) override;
+
+		/**
 		 * @brief Closes the connection to the Redis database.
 		 *
 		 * @return @c true if the disconnection is successful,

@@ -124,6 +124,15 @@ namespace database
 		database_result select_query(const std::string& query_string) override;
 
 		/**
+		 * @brief Executes a general MongoDB command (DDL, DML, admin operations).
+		 *
+		 * @param query_string The MongoDB command string to execute.
+		 * @return @c true if the command executed successfully,
+		 *         @c false otherwise.
+		 */
+		bool execute_query(const std::string& query_string) override;
+
+		/**
 		 * @brief Closes the connection to the MongoDB database.
 		 *
 		 * @return @c true if the disconnection is successful,

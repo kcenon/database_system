@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <chrono>
 #include <unordered_map>
 #include <functional>
+#include <optional>
 
 namespace database::orm
 {
@@ -49,7 +50,6 @@ namespace database::orm
 	class entity_base;
 	class field_metadata;
 	class entity_metadata;
-	template<typename T> class query_builder;
 
 	// C++20 concepts for type safety
 	template<typename T>
@@ -66,6 +66,9 @@ namespace database::orm
 	                   std::is_same_v<T, std::string> ||
 	                   std::is_same_v<T, bool> ||
 	                   std::is_same_v<T, std::chrono::system_clock::time_point>;
+
+	// Forward declaration with proper constraint
+	template<Entity EntityType> class query_builder;
 
 	// Field constraint types
 	enum class field_constraint {
@@ -232,8 +235,8 @@ namespace database::orm
 		// Aggregation methods
 		double sum(const std::string& field);
 		double avg(const std::string& field);
-		T min(const std::string& field);
-		T max(const std::string& field);
+		database_value min(const std::string& field);
+		database_value max(const std::string& field);
 
 	private:
 		std::shared_ptr<database_base> db_;

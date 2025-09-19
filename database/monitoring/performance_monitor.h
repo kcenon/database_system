@@ -75,6 +75,57 @@ namespace database::monitoring
 		std::atomic<std::chrono::microseconds> avg_acquisition_time{std::chrono::microseconds{0}};
 		std::atomic<std::chrono::microseconds> max_acquisition_time{std::chrono::microseconds{0}};
 		std::chrono::steady_clock::time_point last_update;
+
+		// Default constructor
+		connection_metrics() = default;
+
+		// Copy constructor
+		connection_metrics(const connection_metrics& other) :
+			total_connections(other.total_connections.load()),
+			active_connections(other.active_connections.load()),
+			idle_connections(other.idle_connections.load()),
+			failed_connections(other.failed_connections.load()),
+			avg_acquisition_time(other.avg_acquisition_time.load()),
+			max_acquisition_time(other.max_acquisition_time.load()),
+			last_update(other.last_update) {}
+
+		// Move constructor
+		connection_metrics(connection_metrics&& other) noexcept :
+			total_connections(other.total_connections.load()),
+			active_connections(other.active_connections.load()),
+			idle_connections(other.idle_connections.load()),
+			failed_connections(other.failed_connections.load()),
+			avg_acquisition_time(other.avg_acquisition_time.load()),
+			max_acquisition_time(other.max_acquisition_time.load()),
+			last_update(std::move(other.last_update)) {}
+
+		// Copy assignment operator
+		connection_metrics& operator=(const connection_metrics& other) {
+			if (this != &other) {
+				total_connections.store(other.total_connections.load());
+				active_connections.store(other.active_connections.load());
+				idle_connections.store(other.idle_connections.load());
+				failed_connections.store(other.failed_connections.load());
+				avg_acquisition_time.store(other.avg_acquisition_time.load());
+				max_acquisition_time.store(other.max_acquisition_time.load());
+				last_update = other.last_update;
+			}
+			return *this;
+		}
+
+		// Move assignment operator
+		connection_metrics& operator=(connection_metrics&& other) noexcept {
+			if (this != &other) {
+				total_connections.store(other.total_connections.load());
+				active_connections.store(other.active_connections.load());
+				idle_connections.store(other.idle_connections.load());
+				failed_connections.store(other.failed_connections.load());
+				avg_acquisition_time.store(other.avg_acquisition_time.load());
+				max_acquisition_time.store(other.max_acquisition_time.load());
+				last_update = std::move(other.last_update);
+			}
+			return *this;
+		}
 	};
 
 	/**

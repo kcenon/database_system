@@ -42,6 +42,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <queue>
 #include <condition_variable>
 #include <atomic>
+#include <chrono>
+#include <string>
+#include <exception>
+#include <vector>
+#include <unordered_map>
 
 namespace database::async
 {

@@ -269,6 +269,43 @@ namespace database
 		return result;
 	}
 
+	bool redis_manager::execute_query(const std::string& query_string)
+	{
+#ifdef USE_REDIS
+		if (!context_) {
+			std::cerr << "No active Redis connection" << std::endl;
+			return false;
+		}
+
+		std::lock_guard<std::mutex> lock(redis_mutex_);
+		try {
+			redisContext* ctx = static_cast<redisContext*>(context_);
+			redisReply* reply = static_cast<redisReply*>(redisCommand(ctx, "%s", query_string.c_str()));
+
+			if (reply == nullptr) {
+				std::cerr << "Redis command failed: " << ctx->errstr << std::endl;
+				return false;
+			}
+
+			bool success = true;
+			if (reply->type == REDIS_REPLY_ERROR) {
+				std::cerr << "Redis execute error: " << reply->str << std::endl;
+				success = false;
+			}
+
+			freeReplyObject(reply);
+			return success;
+		} catch (const std::exception& e) {
+			std::cerr << "Redis execute error: " << e.what() << std::endl;
+		}
+#else
+		// Mock execution for non-Redis builds
+		std::cout << "Redis support not compiled. Mock execute: " << query_string << std::endl;
+		return true;
+#endif
+		return false;
+	}
+
 	bool redis_manager::disconnect(void)
 	{
 #ifdef USE_REDIS

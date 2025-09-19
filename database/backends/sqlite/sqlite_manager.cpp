@@ -200,6 +200,36 @@ namespace database
 		return false;
 	}
 
+	bool sqlite_manager::execute_query(const std::string& query_string)
+	{
+#ifdef USE_SQLITE
+		if (!connection_) {
+			std::cerr << "No active SQLite connection" << std::endl;
+			return false;
+		}
+
+		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		sqlite3* db = static_cast<sqlite3*>(connection_);
+
+		char* error_msg = nullptr;
+		int result = sqlite3_exec(db, query_string.c_str(), nullptr, nullptr, &error_msg);
+
+		if (result != SQLITE_OK) {
+			std::cerr << "SQLite execute error: " << (error_msg ? error_msg : "Unknown error") << std::endl;
+			if (error_msg) {
+				sqlite3_free(error_msg);
+			}
+			return false;
+		}
+
+		return true;
+#else
+		// Mock execution
+		std::cout << "SQLite support not compiled. Mock execute: " << query_string << std::endl;
+		return true;
+#endif
+	}
+
 	void* sqlite_manager::query_result(const std::string& query_string)
 	{
 #ifdef USE_SQLITE

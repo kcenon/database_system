@@ -142,6 +142,18 @@ namespace database
 		virtual database_result select_query(const std::string& query_string) = 0;
 
 		/**
+		 * @brief Executes a general SQL query (DDL, DML).
+		 *
+		 * @param query_string The SQL query string to execute.
+		 * @return @c true if the query executed successfully,
+		 *         @c false otherwise.
+		 *
+		 * This function is used for executing queries that don't return
+		 * result sets (CREATE, DROP, INSERT, UPDATE, DELETE, etc.).
+		 */
+		virtual bool execute_query(const std::string& query_string) = 0;
+
+		/**
 		 * @brief Terminates the current database connection.
 		 *
 		 * @return @c true if the disconnection is successful,

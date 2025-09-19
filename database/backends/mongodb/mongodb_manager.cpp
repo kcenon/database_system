@@ -279,6 +279,38 @@ namespace database
 		return result;
 	}
 
+	bool mongodb_manager::execute_query(const std::string& query_string)
+	{
+#ifdef USE_MONGODB
+		if (!database_) {
+			std::cerr << "No active MongoDB connection" << std::endl;
+			return false;
+		}
+
+		std::lock_guard<std::mutex> lock(mongo_mutex_);
+		try {
+			auto* mongo_db = static_cast<mongocxx::database*>(database_);
+
+			// Try to parse as MongoDB command (JSON format)
+			try {
+				auto command_doc = bsoncxx::from_json(query_string);
+				auto result = mongo_db->run_command(command_doc.view());
+				return true;
+			} catch (const std::exception&) {
+				// If JSON parsing fails, treat as collection operation
+				return create_query(query_string);
+			}
+		} catch (const std::exception& e) {
+			std::cerr << "MongoDB execute error: " << e.what() << std::endl;
+		}
+#else
+		// Mock execution for non-MongoDB builds
+		std::cout << "MongoDB support not compiled. Mock execute: " << query_string << std::endl;
+		return true;
+#endif
+		return false;
+	}
+
 	bool mongodb_manager::disconnect(void)
 	{
 #ifdef USE_MONGODB

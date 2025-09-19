@@ -139,7 +139,7 @@ void demonstrate_async_connection_pool() {
     async_pool_config config;
     config.min_connections = 5;
     config.max_connections = 20;
-    config.connection_timeout = std::chrono::seconds(5);
+    config.acquire_timeout = std::chrono::milliseconds(5000);
     config.idle_timeout = std::chrono::minutes(10);
     config.health_check_interval = std::chrono::seconds(30);
 
@@ -147,7 +147,7 @@ void demonstrate_async_connection_pool() {
     std::cout << "Async connection pool configured:\n";
     std::cout << "  Min connections: " << config.min_connections << "\n";
     std::cout << "  Max connections: " << config.max_connections << "\n";
-    std::cout << "  Connection timeout: " << config.connection_timeout.count() << "s\n";
+    std::cout << "  Acquire timeout: " << config.acquire_timeout.count() << "ms\n";
 
     // Simulate concurrent connection requests
     std::cout << "\nSimulating concurrent connection requests...\n";

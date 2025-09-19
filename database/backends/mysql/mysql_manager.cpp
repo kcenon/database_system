@@ -221,6 +221,27 @@ namespace database
 		return result;
 	}
 
+	bool mysql_manager::execute_query(const std::string& query_string)
+	{
+#ifdef USE_MYSQL
+		if (!connection_) {
+			std::cerr << "No active MySQL connection" << std::endl;
+			return false;
+		}
+
+		if (mysql_query(static_cast<MYSQL*>(connection_), query_string.c_str()) != 0) {
+			std::cerr << "MySQL execute error: " << mysql_error(static_cast<MYSQL*>(connection_)) << std::endl;
+			return false;
+		}
+
+		return true;
+#else
+		// Mock execution
+		std::cout << "MySQL support not compiled. Mock execute: " << query_string << std::endl;
+		return true;
+#endif
+	}
+
 	bool mysql_manager::disconnect(void)
 	{
 #ifdef USE_MYSQL

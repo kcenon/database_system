@@ -121,6 +121,15 @@ namespace database
 		database_result select_query(const std::string& query_string) override;
 
 		/**
+		 * @brief Executes a general SQL query (DDL, DML) on SQLite.
+		 *
+		 * @param query_string The SQL query string to execute.
+		 * @return @c true if the query executed successfully,
+		 *         @c false otherwise.
+		 */
+		bool execute_query(const std::string& query_string) override;
+
+		/**
 		 * @brief Closes the connection to the SQLite database.
 		 *
 		 * @return @c true if the disconnection is successful,

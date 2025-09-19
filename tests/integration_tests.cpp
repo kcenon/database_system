@@ -24,7 +24,7 @@ using namespace database;
 using namespace database::orm;
 using namespace database::monitoring;
 using namespace database::security;
-using namespace database::async_ops;
+using namespace database::async;
 
 // Test entity for integration tests
 class IntegrationTestUser : public entity_base

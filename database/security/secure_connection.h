@@ -207,7 +207,7 @@ namespace database::security
 			select = 1,
 			insert = 2,
 			update = 4,
-			delete = 8,
+			delete_record = 8,
 			create = 16,
 			drop = 32,
 			alter = 64,

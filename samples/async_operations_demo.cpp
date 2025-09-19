@@ -17,7 +17,7 @@
 #include "database/async/async_operations.h"
 
 using namespace database;
-using namespace database::async_ops;
+using namespace database::async;
 
 void demonstrate_basic_async_operations() {
     std::cout << "=== Basic Asynchronous Database Operations ===\n";

@@ -22,7 +22,7 @@ using namespace database;
 using namespace database::orm;
 using namespace database::monitoring;
 using namespace database::security;
-using namespace database::async_ops;
+using namespace database::async;
 
 // Benchmark database manager operations
 static void BM_DatabaseManagerAccess(benchmark::State& state) {

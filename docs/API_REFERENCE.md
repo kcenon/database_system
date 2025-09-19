@@ -8,6 +8,10 @@ Complete API reference for the Database System C++20 library with multi-backend 
 - [Database Manager](#database-manager)
 - [Connection Pooling](#connection-pooling)
 - [Query Builders](#query-builders)
+- [ORM Framework](#orm-framework)
+- [Performance Monitoring](#performance-monitoring)
+- [Security Framework](#security-framework)
+- [Async Operations](#async-operations)
 - [Database Types](#database-types)
 - [Error Handling](#error-handling)
 - [Examples](#examples)
@@ -763,9 +767,8 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 
 ---
 
-## Version Information
+## System Requirements
 
-- **API Version**: 4.0.0 (Phase 4 - Production-Ready Enterprise Features)
 - **C++ Standard**: C++20
 - **Supported Compilers**: GCC 10+, Clang 11+, MSVC 2019+
 - **Supported Platforms**: Windows, macOS, Linux

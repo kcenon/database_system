@@ -1,70 +1,209 @@
 # Database System Samples
 
-This directory contains example programs demonstrating the Database System's capabilities with PostgreSQL integration.
+This directory contains comprehensive demonstration programs showcasing the capabilities of the Database System, including the advanced Phase 4 features: ORM Framework, Performance Monitoring, Security Framework, and Asynchronous Operations.
 
-## Available Samples
+## Sample Programs Overview
 
-### 1. Basic Usage (`basic_usage.cpp`)
-Demonstrates fundamental database operations:
-- Database manager creation and configuration
-- Connection management with PostgreSQL
-- Table creation with constraints and data types
-- CRUD operations (Create, Read, Update, Delete)
-- Transaction management with commit/rollback
-- Connection health monitoring
+### Core Database Features
 
-**Usage:**
-```bash
-./basic_usage
+#### `basic_usage_sample.cpp`
+**Purpose**: Demonstrates fundamental database operations and multi-backend support
+**Features Covered**:
+- Basic CRUD operations (Create, Read, Update, Delete)
+- Multi-database backend support (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- Connection management and error handling
+- Query result processing
+
+**Key Learning Points**:
+- How to configure and connect to different database types
+- Basic query execution patterns
+- Error handling and resource management
+
+#### `postgresql_advanced_sample.cpp`
+**Purpose**: Advanced PostgreSQL-specific features and optimizations
+**Features Covered**:
+- Advanced PostgreSQL features (JSONB, arrays, custom types)
+- Connection pooling configuration
+- Transaction management and isolation levels
+- Performance optimization techniques
+
+**Key Learning Points**:
+- PostgreSQL-specific data types and operations
+- Advanced query patterns and optimization
+- Production-ready connection management
+
+#### `connection_pool_demo.cpp`
+**Purpose**: Enterprise-grade connection pooling demonstration
+**Features Covered**:
+- Connection pool configuration and management
+- Thread-safe connection sharing
+- Pool health monitoring and statistics
+- Automatic connection lifecycle management
+
+**Key Learning Points**:
+- Connection pool sizing and configuration
+- Monitoring pool performance and utilization
+- Handling connection failures and recovery
+
+### Phase 4: Advanced Enterprise Features
+
+#### `orm_framework_demo.cpp`
+**Purpose**: C++20 concepts-based ORM framework demonstration
+**Features Covered**:
+- Entity definition with ENTITY_FIELD macros
+- Compile-time type safety and constraint validation
+- Automatic schema generation from entity definitions
+- Entity lifecycle management (create, read, update, delete)
+- Field metadata and constraint introspection
+
+**Key Learning Points**:
+- Modern C++20 concepts for type-safe entity definitions
+- Automatic SQL schema generation from C++ classes
+- Field constraints and validation patterns
+- Entity relationship mapping and metadata management
+
+```cpp
+// Example: Entity Definition
+class User : public entity_base {
+    ENTITY_TABLE("users")
+
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, username, not_null() | unique())
+    ENTITY_FIELD(std::string, email, not_null() | unique())
+
+    ENTITY_METADATA()
+};
 ```
 
-### 2. PostgreSQL Advanced Features (`postgres_advanced.cpp`)
-Shows PostgreSQL-specific advanced features:
-- Array operations and queries
-- JSONB data manipulation and queries
-- Common Table Expressions (CTEs)
-- Full-text search with tsvector
-- Window functions and analytics
-- Advanced indexing strategies
-- Complex nested queries
+#### `performance_monitoring_demo.cpp`
+**Purpose**: Real-time performance monitoring and analysis
+**Features Covered**:
+- Real-time metrics collection (CPU, memory, disk, network)
+- Query performance tracking and analysis
+- Connection pool performance monitoring
+- Slow query detection and alerting
+- Performance trend analysis and reporting
+- Metrics export (Prometheus, JSON, CSV formats)
+- Configurable alerting system
 
-**Usage:**
-```bash
-./postgres_advanced
+**Key Learning Points**:
+- Performance metrics collection strategies
+- Real-time monitoring and alerting setup
+- Performance bottleneck identification
+- Integration with external monitoring systems
+
+```cpp
+// Example: Performance Monitoring
+auto& monitor = performance_monitor::instance();
+monitor.configure(monitoring_config);
+monitor.record_query_execution(query_metrics);
+auto report = monitor.generate_performance_report();
 ```
 
-### 3. Connection Pool Demo (`connection_pool_demo.cpp`)
-Connection management and concurrent access examples:
-- Single and multiple connection management
-- Concurrent database access with multiple threads
-- Connection resilience and recovery testing
-- Load testing under sustained operations
-- Health monitoring and reconnection capabilities
-- Performance metrics for concurrent operations
+#### `security_framework_demo.cpp`
+**Purpose**: Comprehensive enterprise security implementation
+**Features Covered**:
+- TLS/SSL connection encryption configuration
+- Secure credential management with master key encryption
+- Role-Based Access Control (RBAC) system
+- Comprehensive audit logging with tamper-proof storage
+- SQL injection prevention and threat detection
+- Session management with timeout and validation
+- Compliance support (GDPR, SOX, HIPAA, PCI DSS)
+
+**Key Learning Points**:
+- Enterprise security best practices
+- RBAC implementation patterns
+- Audit logging and compliance requirements
+- Threat detection and prevention strategies
+
+```cpp
+// Example: RBAC Configuration
+auto& rbac = rbac_manager::instance();
+rbac_role admin_role("administrator");
+admin_role.add_permission("user.create");
+rbac.create_role(admin_role);
+rbac.assign_role_to_user("alice", "administrator");
+```
+
+#### `async_operations_demo.cpp`
+**Purpose**: Modern asynchronous operations with C++20 coroutines
+**Features Covered**:
+- std::future-based asynchronous database operations
+- C++20 coroutine integration for non-blocking operations
+- Asynchronous connection pool management
+- Real-time data streams (PostgreSQL NOTIFY, MongoDB Change Streams)
+- Distributed transaction coordination with two-phase commit
+- Saga pattern for long-running transactions
+- Asynchronous batch processing with progress tracking
+
+**Key Learning Points**:
+- Modern C++20 async programming patterns
+- Non-blocking database operation design
+- Distributed transaction management
+- Event-driven architecture with real-time streams
+
+```cpp
+// Example: Async Operations with Coroutines
+task async_database_operation() {
+    auto result = co_await executor.execute_async([]() {
+        // Database operation
+        return query_result{};
+    });
+    co_return;
+}
+```
+
+### Query Builder Demonstrations
+
+#### `sql_query_builder_examples.cpp`
+**Purpose**: Type-safe SQL query construction
+**Features Covered**:
+- Fluent API for SQL query building
+- Type-safe parameter binding
+- Complex query construction (JOINs, subqueries, aggregations)
+- Query optimization and caching
+
+#### `mongodb_query_builder_examples.cpp`
+**Purpose**: MongoDB document operations and aggregation
+**Features Covered**:
+- Document CRUD operations
+- Aggregation pipeline construction
+- Index management and optimization
+- GridFS for large file operations
+
+#### `redis_query_builder_examples.cpp`
+**Purpose**: Redis data structure operations
+**Features Covered**:
+- All Redis data types (strings, hashes, lists, sets, sorted sets)
+- Pub/Sub messaging patterns
+- Transaction and pipeline operations
+- Lua script execution
+
+### Multi-Database Examples
+
+#### `multi_database_examples.cpp`
+**Purpose**: Polyglot persistence patterns
+**Features Covered**:
+- Using multiple databases in a single application
+- Data consistency across different database types
+- Cross-database transaction coordination
+- Database selection strategies
 
 **Usage:**
 ```bash
+# Run basic usage sample
+./basic_usage_sample
+
+# Run advanced samples
+./postgresql_advanced_sample
 ./connection_pool_demo
-```
 
-### 4. Run All Samples (`run_all_samples.cpp`)
-Utility to run all samples or a specific sample:
-
-**Usage:**
-```bash
-# Run all samples
-./run_all_samples
-
-# Run specific sample
-./run_all_samples basic_usage
-./run_all_samples postgres_advanced
-./run_all_samples connection_pool_demo
-
-# List available samples
-./run_all_samples --list
-
-# Show help
-./run_all_samples --help
+# Run Phase 4 demonstrations
+./orm_framework_demo
+./performance_monitoring_demo
+./security_framework_demo
+./async_operations_demo
 ```
 
 ## Building the Samples

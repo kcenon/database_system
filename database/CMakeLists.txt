@@ -60,6 +60,14 @@ add_library(${PROJECT_NAME} STATIC
     ${SOURCE_FILES}
 )
 
+if(USE_COMMON_SYSTEM)
+    message(STATUS "Database: Enabling common_system integration")
+    target_include_directories(${PROJECT_NAME} PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../common_system/include>
+    )
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DATABASE_USE_COMMON_SYSTEM)
+endif()
+
 # Set target properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}

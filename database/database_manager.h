@@ -35,6 +35,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <mutex>
 
+#ifdef DATABASE_USE_COMMON_SYSTEM
+#include <kcenon/common/patterns/result.h>
+#endif
+
 #include "database_base.h"
 #include "connection_pool.h"
 #include "query_builder.h"
@@ -198,6 +202,23 @@ namespace database
 		 * @return A query builder configured for the specified database
 		 */
 		query_builder create_query_builder(database_types db_type);
+
+#ifdef DATABASE_USE_COMMON_SYSTEM
+		/**
+		 * @brief Result-based wrapper for connect().
+		 */
+		common::VoidResult connect_result(const std::string& connect_string);
+
+		/**
+		 * @brief Result-based wrapper for disconnect().
+		 */
+		common::VoidResult disconnect_result();
+
+		/**
+		 * @brief Result-based wrapper for create_query().
+		 */
+		common::VoidResult create_query_result(const std::string& query_string);
+#endif
 
 	private:
 		bool connected_; ///< Indicates whether a database connection is active.

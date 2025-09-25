@@ -164,6 +164,38 @@ namespace database
 		return database_->disconnect();
 	}
 
+#ifdef DATABASE_USE_COMMON_SYSTEM
+	common::VoidResult database_manager::connect_result(const std::string& connect_string)
+	{
+		if (connect(connect_string))
+		{
+			return common::ok();
+		}
+		return common::VoidResult(
+			common::error_info{-1, "Failed to connect to database", "database_system"});
+	}
+
+	common::VoidResult database_manager::disconnect_result()
+	{
+		if (disconnect())
+		{
+			return common::ok();
+		}
+		return common::VoidResult(
+			common::error_info{-1, "Failed to disconnect from database", "database_system"});
+	}
+
+	common::VoidResult database_manager::create_query_result(const std::string& query_string)
+	{
+		if (create_query(query_string))
+		{
+			return common::ok();
+		}
+		return common::VoidResult(
+			common::error_info{-1, "Failed to prepare database query", "database_system"});
+	}
+#endif
+
 	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
 	{
 		return connection_pool_manager::instance().create_pool(db_type, config);

@@ -78,6 +78,7 @@ jobs:
           cmake .. -G "Visual Studio 17 2022" -A x64 `
                   -DUSE_UNIT_TEST=ON `
                   -DBUILD_DATABASE_SAMPLES=ON `
+                  -DUSE_COMMON_SYSTEM=OFF `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DCMAKE_TOOLCHAIN_FILE="$env:GITHUB_WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" `
@@ -107,6 +108,7 @@ jobs:
                   -DUSE_UNIT_TEST=ON `
                   -DBUILD_DATABASE_SAMPLES=ON `
                   -DUSE_POSTGRESQL=OFF `
+                  -DUSE_COMMON_SYSTEM=OFF `
                   -DCMAKE_INSTALL_PREFIX="..\target" `
                   -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
                   -DCMAKE_TOOLCHAIN_FILE=""

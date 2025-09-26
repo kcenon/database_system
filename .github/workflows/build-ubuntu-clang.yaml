@@ -103,6 +103,7 @@ jobs:
             -G Ninja \
             -DUSE_UNIT_TEST=ON \
             -DBUILD_DATABASE_SAMPLES=ON \
+            -DUSE_COMMON_SYSTEM=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake" \
@@ -121,6 +122,7 @@ jobs:
             -DUSE_UNIT_TEST=ON \
             -DBUILD_DATABASE_SAMPLES=ON \
             -DUSE_POSTGRESQL=OFF \
+            -DUSE_COMMON_SYSTEM=OFF \
             -DCMAKE_INSTALL_PREFIX="../target" \
             -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DUSE_STD_FORMAT=ON \

@@ -28,7 +28,7 @@ option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
 option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
-option(USE_COMMON_SYSTEM "Enable common_system integration" ON)
+option(USE_COMMON_SYSTEM "Enable common_system integration" OFF)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

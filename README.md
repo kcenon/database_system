@@ -964,6 +964,13 @@ ninja
 # Build with samples and tests
 cmake .. -DBUILD_DATABASE_SAMPLES=ON -DUSE_UNIT_TEST=ON
 ninja
+
+# Build with common_system integration (ecosystem interface standardization)
+cmake .. -DBUILD_WITH_COMMON_SYSTEM=ON
+ninja
+
+# Note: DATABASE_USE_COMMON_SYSTEM is deprecated but still supported for backward compatibility
+# Use BUILD_WITH_COMMON_SYSTEM instead for new builds
 ```
 
 ### vcpkg Dependencies

@@ -14,8 +14,8 @@ All rights reserved.
 #include <variant>
 #include <future>
 
-// Check if common_system is available
-#ifdef USE_COMMON_SYSTEM
+// Check if common_system is available (support both flags)
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(DATABASE_USE_COMMON_SYSTEM)
 #include <kcenon/common/patterns/result.h>
 #include <kcenon/common/interfaces/database_interface.h>
 #endif
@@ -27,7 +27,7 @@ All rights reserved.
 namespace database {
 namespace adapters {
 
-#ifdef USE_COMMON_SYSTEM
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(DATABASE_USE_COMMON_SYSTEM)
 
 /**
  * @brief Result type conversions between database and common_system
@@ -405,7 +405,7 @@ public:
     }
 };
 
-#endif // USE_COMMON_SYSTEM
+#endif // BUILD_WITH_COMMON_SYSTEM || DATABASE_USE_COMMON_SYSTEM
 
 } // namespace adapters
 } // namespace database

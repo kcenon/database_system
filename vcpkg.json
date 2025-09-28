@@ -5,7 +5,6 @@
   "description": "Advanced C++20 Database System with Multi-Backend Support",
   "homepage": "https://github.com/kcenon/database_system",
   "license": "BSD-3-Clause",
-  "builtin-baseline": "c4af3593e1f1aa9e14a560a09e45ea2cb0dfd74d",
   "dependencies": [
     {
       "name": "fmt",
@@ -90,11 +89,5 @@
         }
       ]
     }
-  },
-  "overrides": [
-    {
-      "name": "fmt",
-      "version": "10.2.1"
-    }
-  ]
+  }
 }

@@ -218,6 +218,20 @@ std::future → C++20 Coroutines → Distributed Transactions → Stream Process
 - All database operations are thread-safe
 - Connection pool supports concurrent access
 - Performance monitoring uses atomic operations
+
+## Common System Result Integration
+
+- Compile-time optional integration with `common_system` Result types.
+- Define `DATABASE_USE_COMMON_SYSTEM` to enable `common::Result<T>`/`common::VoidResult` wrappers:
+  - `connect_result(const std::string&)`
+  - `disconnect_result()`
+  - `create_query_result(const std::string&)`
+- Benefits: exception-free error propagation, standardized error_info.
+
+## Interop with Other Modules
+
+- With `network_system`: typical flow is (receive) → container decode → DB op → encode → send.
+- With `container_system`: use containers for typed serialization between app/network and DB layers when applicable.
 - Security audit logging is thread-safe
 
 ## Error Handling

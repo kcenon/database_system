@@ -60,13 +60,30 @@ add_library(${PROJECT_NAME} STATIC
     ${SOURCE_FILES}
 )
 
-if(BUILD_WITH_COMMON_SYSTEM OR DATABASE_USE_COMMON_SYSTEM)
+if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Database: Enabling common_system integration")
-    target_include_directories(${PROJECT_NAME} PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../common_system/include>
+    # Try to find common_system in sibling directory
+    set(_DATABASE_COMMON_PATHS
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../common_system/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include"
     )
-    # Support both flags for backward compatibility
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DATABASE_USE_COMMON_SYSTEM BUILD_WITH_COMMON_SYSTEM)
+
+    foreach(_path ${_DATABASE_COMMON_PATHS})
+        if(EXISTS "${_path}/kcenon/common/patterns/result.h")
+            message(STATUS "Found common_system at: ${_path}")
+            target_include_directories(${PROJECT_NAME} PUBLIC
+                $<BUILD_INTERFACE:${_path}>
+            )
+            set(_FOUND_COMMON TRUE)
+            break()
+        endif()
+    endforeach()
+
+    if(NOT _FOUND_COMMON)
+        message(WARNING "common_system not found in expected locations")
+    endif()
+
+    target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # Set target properties

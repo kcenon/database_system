@@ -18,6 +18,7 @@ All rights reserved.
 #if defined(BUILD_WITH_COMMON_SYSTEM) || defined(DATABASE_USE_COMMON_SYSTEM)
 #include <kcenon/common/patterns/result.h>
 #include <kcenon/common/interfaces/database_interface.h>
+#include <kcenon/common/adapters/typed_adapter.h>
 #endif
 
 #include "../database_base.h"
@@ -75,15 +76,23 @@ inline database_value from_common_value(const ::common::database_value& value) {
 
 /**
  * @brief Adapter to expose database_base as common::interfaces::IDatabase
+ *
+ * Now inherits from typed_adapter for:
+ * - Type safety and wrapper depth tracking
+ * - Automatic prevention of infinite adapter chains (max depth: 2)
+ * - Unwrap support to access underlying database_base
  */
-class common_system_database_adapter : public ::common::interfaces::IDatabase {
+class common_system_database_adapter
+    : public ::common::adapters::typed_adapter<::common::interfaces::IDatabase, database_base> {
+    using base_type = ::common::adapters::typed_adapter<::common::interfaces::IDatabase, database_base>;
+
 public:
     /**
      * @brief Construct adapter with database_base instance
      */
     explicit common_system_database_adapter(
         std::shared_ptr<database_base> db)
-        : database_(db) {}
+        : base_type(db) {}
 
     ~common_system_database_adapter() override = default;
 
@@ -91,11 +100,11 @@ public:
      * @brief Connect to database
      */
     ::common::VoidResult connect(const std::string& connection_string) override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        if (database_->connect(connection_string)) {
+        if (this->impl_->connect(connection_string)) {
             return to_common_result_void();
         } else {
             return to_common_error(2, "Failed to connect to database");
@@ -106,11 +115,11 @@ public:
      * @brief Disconnect from database
      */
     ::common::VoidResult disconnect() override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        database_->disconnect();
+        this->impl_->disconnect();
         return to_common_result_void();
     }
 
@@ -119,11 +128,11 @@ public:
      */
     ::common::Result<::common::database_result> execute_query(
         const std::string& query) override {
-        if (!database_) {
+        if (!this->impl_) {
             return ::common::error_info(1, "Database not initialized", "database_system");
         }
 
-        auto result = database_->execute_query(query);
+        auto result = this->impl_->execute_query(query);
 
         // Convert database_result to common::database_result
         ::common::database_result common_result;
@@ -142,11 +151,11 @@ public:
      * @brief Execute a command (no results expected)
      */
     ::common::VoidResult execute_command(const std::string& command) override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        if (database_->execute(command)) {
+        if (this->impl_->execute(command)) {
             return to_common_result_void();
         } else {
             return to_common_error(3, "Failed to execute command");
@@ -157,11 +166,11 @@ public:
      * @brief Begin a transaction
      */
     ::common::VoidResult begin_transaction() override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        if (database_->begin_transaction()) {
+        if (this->impl_->begin_transaction()) {
             return to_common_result_void();
         } else {
             return to_common_error(4, "Failed to begin transaction");
@@ -172,11 +181,11 @@ public:
      * @brief Commit current transaction
      */
     ::common::VoidResult commit() override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        if (database_->commit()) {
+        if (this->impl_->commit()) {
             return to_common_result_void();
         } else {
             return to_common_error(5, "Failed to commit transaction");
@@ -187,11 +196,11 @@ public:
      * @brief Rollback current transaction
      */
     ::common::VoidResult rollback() override {
-        if (!database_) {
+        if (!this->impl_) {
             return to_common_error(1, "Database not initialized");
         }
 
-        if (database_->rollback()) {
+        if (this->impl_->rollback()) {
             return to_common_result_void();
         } else {
             return to_common_error(6, "Failed to rollback transaction");
@@ -202,11 +211,8 @@ public:
      * @brief Check if connected to database
      */
     bool is_connected() const override {
-        return database_ && database_->is_connected();
+        return this->impl_ && this->impl_->is_connected();
     }
-
-private:
-    std::shared_ptr<database_base> database_;
 };
 
 /**

@@ -28,14 +28,7 @@ option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
 option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
-option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" OFF)
-option(DATABASE_USE_COMMON_SYSTEM "Enable common_system integration (deprecated, use BUILD_WITH_COMMON_SYSTEM)" OFF)
-
-# Support both flags for backward compatibility
-if(DATABASE_USE_COMMON_SYSTEM AND NOT BUILD_WITH_COMMON_SYSTEM)
-    message(DEPRECATION "DATABASE_USE_COMMON_SYSTEM is deprecated. Please use BUILD_WITH_COMMON_SYSTEM instead.")
-    set(BUILD_WITH_COMMON_SYSTEM ON)
-endif()
+option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

@@ -164,7 +164,7 @@ namespace database
 		return database_->disconnect();
 	}
 
-#ifdef DATABASE_USE_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 	common::VoidResult database_manager::connect_result(const std::string& connect_string)
 	{
 		if (connect(connect_string))

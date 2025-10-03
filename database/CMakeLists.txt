@@ -79,11 +79,13 @@ if(BUILD_WITH_COMMON_SYSTEM)
         endif()
     endforeach()
 
-    if(NOT _FOUND_COMMON)
-        message(WARNING "common_system not found in expected locations")
+    if(_FOUND_COMMON)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
+        message(STATUS "Database: common_system integration enabled")
+    else()
+        message(WARNING "common_system not found - integration disabled. Install common_system or set BUILD_WITH_COMMON_SYSTEM=OFF to suppress this warning.")
+        set(BUILD_WITH_COMMON_SYSTEM OFF CACHE BOOL "common_system not found" FORCE)
     endif()
-
-    target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # Set target properties

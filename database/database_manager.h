@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <mutex>
 
-#ifdef DATABASE_USE_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 #include <kcenon/common/patterns/result.h>
 #endif
 
@@ -203,7 +203,7 @@ namespace database
 		 */
 		query_builder create_query_builder(database_types db_type);
 
-#ifdef DATABASE_USE_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 		/**
 		 * @brief Result-based wrapper for connect().
 		 */

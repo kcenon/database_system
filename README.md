@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/kcenon/database_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/database_system)
+
 [![Ubuntu-GCC](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-gcc.yaml)
 [![Ubuntu-Clang](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-clang.yaml)
 [![Windows-MSYS2](https://github.com/kcenon/database_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-windows-msys2.yaml)

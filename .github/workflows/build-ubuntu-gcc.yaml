@@ -14,6 +14,7 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/gh-pages'
     timeout-minutes: 60
     env:
       BUILD_TYPE: Debug

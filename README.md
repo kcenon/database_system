@@ -1140,6 +1140,28 @@ using namespace database;
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## Phase 0: Foundation Status
+
+This project is undergoing systematic architecture improvements following a phased approach.
+
+### Current Phase: Phase 0 - Foundation and Tooling Setup
+
+#### Completed Tasks
+- ✅ CI/CD Pipeline Enhancement (Sanitizers, multi-platform testing)
+- ✅ Documentation of Current State (CURRENT_STATE.md, ARCHITECTURE_ISSUES.md)
+
+#### Metrics Baseline
+| Metric | Current | Target |
+|--------|---------|--------|
+| Test Coverage | ~65% | 80%+ |
+
+#### Next Phase: Phase 1 - Backend Testing
+- Enable and test MySQL backend
+- Enable and test SQLite backend
+- Performance benchmarks
+
+For detailed improvement plans, see the project's NEED_TO_FIX.md.
+
 ## License
 
 BSD 3-Clause License - see [LICENSE](LICENSE) file for details.

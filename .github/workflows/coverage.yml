@@ -38,9 +38,11 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests
+      timeout-minutes: 5
       run: |
         cd build
-        ctest -C Debug --output-on-failure --verbose || true
+        # Run tests with timeout to prevent hanging on database connections
+        ctest -C Debug --output-on-failure --timeout 30 || true
 
     - name: Generate coverage report
       run: |

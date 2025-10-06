@@ -88,9 +88,11 @@ jobs:
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
+      timeout-minutes: 5
       run: |
         cd build
-        ctest -C Debug --output-on-failure --verbose || true
+        # Run tests with timeout to prevent hanging
+        ctest -C Debug --output-on-failure --timeout 30 || true
 
     - name: Upload build artifacts
       if: failure()
@@ -153,10 +155,12 @@ jobs:
       run: cmake --build build --config Debug
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
+      timeout-minutes: 10
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}
-        ctest -C Debug --output-on-failure --verbose || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Run with timeout to prevent hanging on database operations
+        ctest -C Debug --output-on-failure --timeout 60 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
       if: always()

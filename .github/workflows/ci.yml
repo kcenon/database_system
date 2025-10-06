@@ -85,14 +85,14 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         cmake -B build -G Ninja `
-          -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
+          -DCMAKE_BUILD_TYPE=Debug `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
           -DUSE_POSTGRESQL=OFF
 
     - name: Build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
+      run: cmake --build build --config Debug --parallel
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
@@ -109,7 +109,7 @@ jobs:
       run: |
         cd build
         # Run tests with timeout to prevent hanging
-        ctest -C $env:BUILD_TYPE --output-on-failure --timeout 30
+        ctest -C Debug --output-on-failure --timeout 30
         exit 0
 
     - name: Upload build artifacts

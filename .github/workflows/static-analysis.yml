@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev libpq-dev
+        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
 
     - name: Configure CMake
       run: |
@@ -32,15 +32,15 @@ jobs:
           -DUSE_UNIT_TEST=OFF \
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DUSE_POSTGRESQL=ON \
+          -DUSE_POSTGRESQL=OFF \
           -DUSE_MYSQL=OFF \
           -DUSE_SQLITE=OFF
 
     - name: Run clang-tidy
       continue-on-error: true  # Phase 0: Allow failures, collect baseline
       run: |
-        # Find all C++ source and header files
-        find include -name "*.h" -o -name "*.hpp" | while read file; do
+        # Find all C++ source and header files in database directory
+        find database -name "*.h" -o -name "*.hpp" | while read file; do
           echo "Analyzing: $file"
           clang-tidy "$file" -p=build -- -std=c++20 || true
         done > clang-tidy-results.txt 2>&1
@@ -113,8 +113,8 @@ jobs:
           --inline-suppr \
           --xml \
           --xml-version=2 \
-          -I include \
-          include 2> cppcheck-results.xml || true
+          -I database \
+          database 2> cppcheck-results.xml || true
 
     - name: Generate cppcheck report
       if: always()

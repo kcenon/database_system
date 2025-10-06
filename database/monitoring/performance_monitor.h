@@ -313,7 +313,7 @@ namespace database::monitoring
 
 	private:
 		std::string endpoint_;
-		int port_;
+		[[maybe_unused]] int port_;
 	};
 
 	/**

@@ -96,18 +96,20 @@ jobs:
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
-      timeout-minutes: 10
+      timeout-minutes: 5
       run: |
         cd build
-        ctest -C $BUILD_TYPE --output-on-failure --verbose || true
+        # Run tests with timeout to prevent hanging
+        ctest -C $BUILD_TYPE --output-on-failure --timeout 30 || true
 
     - name: Test (Windows)
       if: runner.os == 'Windows'
-      timeout-minutes: 10
+      timeout-minutes: 5
       shell: pwsh
       run: |
         cd build
-        ctest -C $env:BUILD_TYPE --output-on-failure --verbose
+        # Run tests with timeout to prevent hanging
+        ctest -C $env:BUILD_TYPE --output-on-failure --timeout 30
         exit 0
 
     - name: Upload build artifacts
@@ -174,7 +176,8 @@ jobs:
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}
-        ctest -C Debug --output-on-failure --verbose || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        # Run with timeout to prevent hanging
+        ctest -C Debug --output-on-failure --timeout 60 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
 
     - name: Upload sanitizer logs
       if: always()

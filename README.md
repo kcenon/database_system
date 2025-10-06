@@ -1,9 +1,8 @@
+[![CI](https://github.com/kcenon/database_system/actions/workflows/ci.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/database_system/actions/workflows/ci.yml)
+[![Code Coverage](https://github.com/kcenon/database_system/actions/workflows/coverage.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/database_system/actions/workflows/coverage.yml)
+[![Static Analysis](https://github.com/kcenon/database_system/actions/workflows/static-analysis.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/database_system/actions/workflows/static-analysis.yml)
+[![Doxygen](https://github.com/kcenon/database_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-Doxygen.yaml)
 [![codecov](https://codecov.io/gh/kcenon/database_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/database_system)
-
-[![Ubuntu-GCC](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-gcc.yaml)
-[![Ubuntu-Clang](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-ubuntu-clang.yaml)
-[![Windows-MSYS2](https://github.com/kcenon/database_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-windows-msys2.yaml)
-[![Windows-VisualStudio](https://github.com/kcenon/database_system/actions/workflows/build-windows-vs.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-windows-vs.yaml)
 
 # Database System Project
 
@@ -1139,6 +1138,28 @@ using namespace database;
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Phase 0: Foundation Status
+
+This project is undergoing systematic architecture improvements following a phased approach.
+
+### Current Phase: Phase 0 - Foundation and Tooling Setup
+
+#### Completed Tasks
+- ✅ CI/CD Pipeline Enhancement (Sanitizers, multi-platform testing)
+- ✅ Documentation of Current State (CURRENT_STATE.md, ARCHITECTURE_ISSUES.md)
+
+#### Metrics Baseline
+| Metric | Current | Target |
+|--------|---------|--------|
+| Test Coverage | ~65% | 80%+ |
+
+#### Next Phase: Phase 1 - Backend Testing
+- Enable and test MySQL backend
+- Enable and test SQLite backend
+- Performance benchmarks
+
+For detailed improvement plans, see the project's NEED_TO_FIX.md.
 
 ## License
 

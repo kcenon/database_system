@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-    # Exclude gh-pages to prevent infinite loop
+    # Exclude gh-pages and phase branches
     branches-ignore:
       - gh-pages
+      - 'phase-*'
   pull_request:
     branches:
       - main

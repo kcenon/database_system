@@ -212,7 +212,7 @@ namespace database
 		void cleanup_idle_connections();
 
 	private:
-		database_types db_type_;
+		[[maybe_unused]] database_types db_type_;
 		connection_pool_config config_;
 		std::function<std::unique_ptr<database_base>()> connection_factory_;
 

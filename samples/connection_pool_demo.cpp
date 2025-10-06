@@ -127,7 +127,7 @@ private:
 
         // Create worker threads
         for (int t = 0; t < num_threads; ++t) {
-            threads.emplace_back([t, operations_per_thread, &successful_operations, &failed_operations]() {
+            threads.emplace_back([t, operations_per_thread = operations_per_thread, &successful_operations, &failed_operations]() {
                 // Each thread gets its own connection attempt
                 // Note: In a real connection pool, you'd manage multiple connections
 
@@ -138,7 +138,7 @@ private:
                 for (int op = 0; op < operations_per_thread; ++op) {
                     try {
                         // Get database manager (singleton, so needs synchronization in real use)
-                        auto& db_manager = database_manager::handle();
+                        [[maybe_unused]] auto& db_manager = database_manager::handle();
 
                         // Simulate different operations
                         std::string query = "SELECT " + std::to_string(t * 100 + op) + " as thread_" +

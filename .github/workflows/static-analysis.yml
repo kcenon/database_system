@@ -39,8 +39,8 @@ jobs:
     - name: Run clang-tidy
       continue-on-error: true  # Phase 0: Allow failures, collect baseline
       run: |
-        # Find all C++ source and header files
-        find include -name "*.h" -o -name "*.hpp" | while read file; do
+        # Find all C++ source and header files in database directory
+        find database -name "*.h" -o -name "*.hpp" | while read file; do
           echo "Analyzing: $file"
           clang-tidy "$file" -p=build -- -std=c++20 || true
         done > clang-tidy-results.txt 2>&1
@@ -113,8 +113,8 @@ jobs:
           --inline-suppr \
           --xml \
           --xml-version=2 \
-          -I include \
-          include 2> cppcheck-results.xml || true
+          -I database \
+          database 2> cppcheck-results.xml || true
 
     - name: Generate cppcheck report
       if: always()

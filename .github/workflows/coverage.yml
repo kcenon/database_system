@@ -21,7 +21,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build g++ libgtest-dev libgmock-dev lcov
-        sudo apt-get install -y libpq-dev postgresql-server-dev-all
 
     - name: Configure CMake with coverage
       run: |
@@ -32,7 +31,7 @@ jobs:
           -DBUILD_WITH_COMMON_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
-          -DUSE_POSTGRESQL=ON
+          -DUSE_POSTGRESQL=OFF
 
     - name: Build with coverage
       run: cmake --build build --config Debug

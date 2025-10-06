@@ -10,8 +10,10 @@ jobs:
   build:
     name: ${{ matrix.os }} / ${{ matrix.compiler }}
     runs-on: ${{ matrix.os }}
-    # Skip only if pushed to gh-pages branch
-    if: github.ref != 'refs/heads/gh-pages'
+    timeout-minutes: 60
+
+    env:
+      BUILD_TYPE: Debug
 
     strategy:
       fail-fast: false
@@ -19,12 +21,16 @@ jobs:
         include:
           - os: ubuntu-22.04
             compiler: gcc
+            triplet: x64-linux
           - os: ubuntu-22.04
             compiler: clang
+            triplet: x64-linux
           - os: macos-13
             compiler: clang
+            triplet: x64-osx
           - os: windows-2022
             compiler: msvc
+            triplet: x64-windows
 
     steps:
     - name: Checkout code
@@ -37,11 +43,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev
+        sudo apt-get install -y libpq-dev postgresql-server-dev-all
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest
+        brew install ninja googletest postgresql
 
     - name: Set up compiler (GCC)
       if: matrix.compiler == 'gcc'
@@ -69,28 +76,39 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         cmake -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
           -DBUILD_WITH_COMMON_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
-          -DBUILD_DATABASE_SAMPLES=ON
+          -DBUILD_DATABASE_SAMPLES=ON \
+          -DUSE_POSTGRESQL=ON
 
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'
       run: |
         cmake -B build -G Ninja `
-          -DCMAKE_BUILD_TYPE=Debug `
+          -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DUSE_UNIT_TEST=ON `
-          -DBUILD_DATABASE_SAMPLES=ON
+          -DBUILD_DATABASE_SAMPLES=ON `
+          -DUSE_POSTGRESQL=ON
 
     - name: Build
-      run: cmake --build build --config Debug
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
+      timeout-minutes: 10
       run: |
         cd build
-        ctest -C Debug --output-on-failure --verbose || true
+        ctest -C $BUILD_TYPE --output-on-failure --verbose || true
+
+    - name: Test (Windows)
+      if: runner.os == 'Windows'
+      timeout-minutes: 10
+      shell: pwsh
+      run: |
+        cd build
+        ctest -C $env:BUILD_TYPE --output-on-failure --verbose
 
     - name: Upload build artifacts
       if: failure()
@@ -103,7 +121,7 @@ jobs:
 
   # Phase 0: Allow failures, just collect data
   sanitizers:
-    name: Sanitizers (${{ matrix.sanitizer }})
+    name: Sanitizers (${{ matrix.sanitizer.name }})
     runs-on: ubuntu-22.04
     continue-on-error: true
     timeout-minutes: 60
@@ -150,9 +168,10 @@ jobs:
           -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.sanitizer.flags }}"
 
     - name: Build with ${{ matrix.sanitizer.name }}
-      run: cmake --build build --config Debug
+      run: cmake --build build --config Debug --parallel
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
+      timeout-minutes: 10
       run: |
         cd build
         export ${{ matrix.sanitizer.env }}

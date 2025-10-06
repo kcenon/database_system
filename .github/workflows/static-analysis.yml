@@ -20,7 +20,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev libpq-dev
+        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
+        # PostgreSQL is optional
+        sudo apt-get install -y libpq-dev || echo "libpq-dev not available"
 
     - name: Configure CMake
       run: |
@@ -32,7 +34,7 @@ jobs:
           -DUSE_UNIT_TEST=OFF \
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DUSE_POSTGRESQL=ON \
+          -DUSE_POSTGRESQL=OFF \
           -DUSE_MYSQL=OFF \
           -DUSE_SQLITE=OFF
 

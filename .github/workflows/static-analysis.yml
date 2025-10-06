@@ -21,8 +21,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
-        # PostgreSQL is optional
-        sudo apt-get install -y libpq-dev || echo "libpq-dev not available"
 
     - name: Configure CMake
       run: |

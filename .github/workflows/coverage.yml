@@ -21,9 +21,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build g++ libgtest-dev libgmock-dev lcov
-        # PostgreSQL dependencies - optional for Phase 0
-        sudo apt-get install -y libpq-dev || echo "libpq-dev not available"
-        sudo apt-get install -y postgresql-server-dev-all || echo "postgresql-server-dev-all has conflicts, skipping"
 
     - name: Configure CMake with coverage
       run: |
@@ -43,7 +40,7 @@ jobs:
       timeout-minutes: 5
       run: |
         cd build
-        # Run tests with timeout to prevent hanging on database connections
+        # Run tests with timeout to prevent hanging
         ctest -C Debug --output-on-failure --timeout 30 || true
 
     - name: Generate coverage report

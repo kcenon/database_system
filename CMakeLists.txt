@@ -29,6 +29,7 @@ option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
 option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
+option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -78,6 +79,15 @@ if(USE_UNIT_TEST AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
     enable_testing()
     add_subdirectory(tests)
     message(STATUS "Database tests will be built")
+endif()
+
+##################################################
+# Benchmarks
+##################################################
+
+if(DATABASE_BUILD_BENCHMARKS AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
+    add_subdirectory(benchmarks)
+    message(STATUS "Database benchmarks will be built")
 endif()
 
 ##################################################

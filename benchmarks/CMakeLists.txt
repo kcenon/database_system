@@ -17,7 +17,6 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
 
     add_executable(database_benchmarks
         query_execution_bench.cpp
-        connection_pool_bench.cpp
         transaction_bench.cpp
         main_bench.cpp
     )

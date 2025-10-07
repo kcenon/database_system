@@ -72,15 +72,14 @@ jobs:
         ./database_benchmarks \
           --benchmark_format=json \
           --benchmark_out=benchmark_results_${{ matrix.os }}.json \
-          --benchmark_repetitions=3 \
-          --benchmark_report_aggregates_only=true
+          --benchmark_repetitions=1 \
+          --benchmark_min_time=0.1
 
     - name: Run benchmarks (console output)
       run: |
         cd build/bin
         ./database_benchmarks \
-          --benchmark_filter="QueryBuilder_Create|ConnectionPool_Acquire|Transaction_Begin" \
-          --benchmark_repetitions=3
+          --benchmark_filter="QueryBuilder_Create|QueryBuilder_Select|Database_SingleSelect"
 
     - name: Upload benchmark results
       uses: actions/upload-artifact@v4

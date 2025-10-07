@@ -52,12 +52,12 @@ if(GTest_FOUND OR gtest_FOUND)
     # Enable test discovery
     include(GoogleTest)
 
-    # Detect if sanitizers are enabled
+    # Sanitizer builds need longer timeout (5-10x slowdown for most tests)
+    # Note: Some tests are skipped under sanitizers (see test source for GTEST_SKIP)
     if(CMAKE_CXX_FLAGS MATCHES "fsanitize")
-        # Sanitizer builds need much longer timeout (10-20x slowdown)
-        set(TEST_TIMEOUT 600)  # 10 minutes per test
+        set(TEST_TIMEOUT 300)  # 5 minutes per test
     else()
-        set(TEST_TIMEOUT 120)  # 2 minutes per test
+        set(TEST_TIMEOUT 60)   # 1 minute per test
     endif()
 
     gtest_discover_tests(database_unit_tests

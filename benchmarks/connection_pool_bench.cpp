@@ -6,24 +6,28 @@
 
 #include <benchmark/benchmark.h>
 #include "database/connection_pool.h"
-#include "database/database_manager.h"
+#include "database/database_base.h"
+#include "database/database_types.h"
 #include <memory>
 #include <thread>
 #include <vector>
 
-using namespace database_module;
+using namespace database;
 
 // Mock database manager for benchmarking (no actual DB connection)
 class mock_database : public database_base {
 public:
-    bool connect() override { return true; }
+    database_types database_type() override { return database_types::postgres; }
+    bool connect(const std::string&) override { return true; }
     bool disconnect() override { return true; }
-    bool is_connected() const override { return true; }
-    bool execute(const std::string&) override { return true; }
-    bool begin_transaction() override { return true; }
-    bool commit() override { return true; }
-    bool rollback() override { return true; }
-    std::string get_last_error() const override { return ""; }
+    bool create_query(const std::string&) override { return true; }
+    unsigned int insert_query(const std::string&) override { return 1; }
+    unsigned int update_query(const std::string&) override { return 1; }
+    unsigned int delete_query(const std::string&) override { return 1; }
+    database_result select_query(const std::string&) override {
+        return database_result();
+    }
+    bool execute_query(const std::string&) override { return true; }
 };
 
 // Benchmark connection pool creation
@@ -34,9 +38,11 @@ static void BM_ConnectionPool_Create(benchmark::State& state) {
 
     for (auto _ : state) {
         connection_pool pool(
+            database_types::postgres,
             config,
             []() { return std::make_unique<mock_database>(); }
         );
+        pool.initialize();
         benchmark::DoNotOptimize(pool);
     }
 }
@@ -49,12 +55,14 @@ static void BM_ConnectionPool_AcquireSingle(benchmark::State& state) {
     config.max_connections = 10;
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
-        auto conn = pool.acquire();
+        auto conn = pool.acquire_connection();
         benchmark::DoNotOptimize(conn);
         // Connection automatically released when going out of scope
     }
@@ -68,13 +76,15 @@ static void BM_ConnectionPool_AcquireRelease(benchmark::State& state) {
     config.max_connections = 10;
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
         {
-            auto conn = pool.acquire();
+            auto conn = pool.acquire_connection();
             benchmark::DoNotOptimize(conn);
         } // Connection released here
         benchmark::ClobberMemory();
@@ -91,12 +101,14 @@ static void BM_ConnectionPool_PoolSize(benchmark::State& state) {
     config.max_connections = pool_size;
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
-        auto conn = pool.acquire();
+        auto conn = pool.acquire_connection();
         benchmark::DoNotOptimize(conn);
     }
 }
@@ -109,12 +121,14 @@ static void BM_ConnectionPool_Concurrent(benchmark::State& state) {
     config.max_connections = 50;
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
-        auto conn = pool.acquire();
+        auto conn = pool.acquire_connection();
         benchmark::DoNotOptimize(conn);
         std::this_thread::sleep_for(std::chrono::microseconds(10));
     }
@@ -128,9 +142,11 @@ static void BM_ConnectionPool_GetStats(benchmark::State& state) {
     config.max_connections = 10;
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
         auto stats = pool.get_stats();
@@ -139,39 +155,21 @@ static void BM_ConnectionPool_GetStats(benchmark::State& state) {
 }
 BENCHMARK(BM_ConnectionPool_GetStats);
 
-// Benchmark connection health check overhead
-static void BM_ConnectionPool_HealthCheck(benchmark::State& state) {
-    connection_pool_config config;
-    config.min_connections = 5;
-    config.max_connections = 10;
-    config.enable_health_checks = true;
-
-    connection_pool pool(
-        config,
-        []() { return std::make_unique<mock_database>(); }
-    );
-
-    for (auto _ : state) {
-        pool.perform_health_check();
-    }
-}
-BENCHMARK(BM_ConnectionPool_HealthCheck);
-
 // Benchmark connection pool under contention
 static void BM_ConnectionPool_Contention(benchmark::State& state) {
-    int num_threads = state.range(0);
-
     connection_pool_config config;
     config.min_connections = 2;
     config.max_connections = 5; // Intentionally small to create contention
 
     connection_pool pool(
+        database_types::postgres,
         config,
         []() { return std::make_unique<mock_database>(); }
     );
+    pool.initialize();
 
     for (auto _ : state) {
-        auto conn = pool.acquire();
+        auto conn = pool.acquire_connection();
         benchmark::DoNotOptimize(conn);
         std::this_thread::sleep_for(std::chrono::microseconds(50));
     }

@@ -5,215 +5,137 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "database/database_manager.h"
+#include "database/database_base.h"
+#include "database/database_types.h"
 #include "database/query_builder.h"
 #include <memory>
+#include <vector>
 
-using namespace database_module;
+using namespace database;
 
-// Mock database manager for transaction benchmarks
-class mock_database : public database_base {
+// Mock database for transaction benchmarking
+class mock_transaction_database : public database_base {
 public:
-    bool connect() override { return true; }
+    database_types database_type() override { return database_types::postgres; }
+    bool connect(const std::string&) override { return true; }
     bool disconnect() override { return true; }
-    bool is_connected() const override { return true; }
-
-    bool execute(const std::string&) override {
-        // Simulate small execution overhead
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
-        return true;
+    bool create_query(const std::string&) override { return true; }
+    unsigned int insert_query(const std::string&) override { return 1; }
+    unsigned int update_query(const std::string&) override { return 1; }
+    unsigned int delete_query(const std::string&) override { return 1; }
+    database_result select_query(const std::string&) override {
+        return database_result();
     }
-
-    bool begin_transaction() override {
-        transaction_active = true;
-        return true;
-    }
-
-    bool commit() override {
-        transaction_active = false;
-        return true;
-    }
-
-    bool rollback() override {
-        transaction_active = false;
-        return true;
-    }
-
-    std::string get_last_error() const override { return ""; }
-
-private:
-    bool transaction_active = false;
+    bool execute_query(const std::string&) override { return true; }
 };
 
-// Benchmark transaction begin/commit cycle
-static void BM_Transaction_BeginCommit(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
-    for (auto _ : state) {
-        db->begin_transaction();
-        db->commit();
-    }
-}
-BENCHMARK(BM_Transaction_BeginCommit);
-
-// Benchmark transaction with single query
+// Benchmark single query execution
 static void BM_Transaction_SingleQuery(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
 
-    query_builder qb;
-    auto query = qb.insert_into("users")
-                   .values({{"name", "Test"}, {"email", "test@example.com"}})
-                   .build();
+    query_builder qb(database_types::postgres);
+    std::map<std::string, database_value> data = {
+        {"name", "John"},
+        {"email", "john@example.com"}
+    };
+    auto query = qb.insert(data).build();
 
     for (auto _ : state) {
-        db->begin_transaction();
-        db->execute(query);
-        db->commit();
+        db->insert_query(query);
     }
 }
 BENCHMARK(BM_Transaction_SingleQuery);
 
-// Benchmark transaction with multiple queries
+// Benchmark multiple queries
 static void BM_Transaction_MultipleQueries(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
     int num_queries = state.range(0);
-    std::vector<std::string> queries;
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
 
-    for (int i = 0; i < num_queries; ++i) {
-        query_builder qb;
-        queries.push_back(
-            qb.insert_into("users")
-              .values({{"name", "User" + std::to_string(i)}})
-              .build()
-        );
-    }
+    query_builder qb(database_types::postgres);
+    std::map<std::string, database_value> data = {
+        {"name", "John"},
+        {"email", "john@example.com"}
+    };
+    auto query = qb.insert(data).build();
 
     for (auto _ : state) {
-        db->begin_transaction();
-        for (const auto& query : queries) {
-            db->execute(query);
+        for (int i = 0; i < num_queries; ++i) {
+            db->execute_query(query);
         }
-        db->commit();
     }
-
-    state.SetItemsProcessed(state.iterations() * num_queries);
 }
 BENCHMARK(BM_Transaction_MultipleQueries)->Arg(5)->Arg(10)->Arg(50)->Arg(100);
 
-// Benchmark transaction rollback
-static void BM_Transaction_Rollback(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
-    query_builder qb;
-    auto query = qb.insert_into("users")
-                   .values({{"name", "Test"}})
-                   .build();
-
-    for (auto _ : state) {
-        db->begin_transaction();
-        db->execute(query);
-        db->rollback();
-    }
-}
-BENCHMARK(BM_Transaction_Rollback);
-
-// Benchmark nested transaction handling
-static void BM_Transaction_Nested(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
-    for (auto _ : state) {
-        db->begin_transaction();
-        db->execute("INSERT INTO users (name) VALUES ('Outer')");
-
-        // Simulate savepoint or nested transaction
-        db->execute("SAVEPOINT sp1");
-        db->execute("INSERT INTO users (name) VALUES ('Inner')");
-        db->execute("RELEASE SAVEPOINT sp1");
-
-        db->commit();
-    }
-}
-BENCHMARK(BM_Transaction_Nested);
-
-// Benchmark transaction with mixed read/write operations
-static void BM_Transaction_MixedOperations(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
-    query_builder qb_select;
-    auto select_query = qb_select.select({"*"})
-                                 .from("users")
-                                 .where("id = 123")
-                                 .build();
-
-    query_builder qb_update;
-    auto update_query = qb_update.update("users")
-                                 .set({{"last_login", "NOW()"}})
-                                 .where("id = 123")
-                                 .build();
-
-    for (auto _ : state) {
-        db->begin_transaction();
-        db->execute(select_query);  // Read
-        db->execute(update_query);  // Write
-        db->commit();
-    }
-}
-BENCHMARK(BM_Transaction_MixedOperations);
-
-// Benchmark transaction isolation overhead
-static void BM_Transaction_IsolationOverhead(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
-    // Simulate setting isolation level
-    const std::string set_isolation = "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE";
-
-    query_builder qb;
-    auto query = qb.select({"*"}).from("users").build();
-
-    for (auto _ : state) {
-        db->execute(set_isolation);
-        db->begin_transaction();
-        db->execute(query);
-        db->commit();
-    }
-}
-BENCHMARK(BM_Transaction_IsolationOverhead);
-
-// Benchmark batch insert within transaction
+// Benchmark batch insert
 static void BM_Transaction_BatchInsert(benchmark::State& state) {
-    auto db = std::make_unique<mock_database>();
-    db->connect();
-
     int batch_size = state.range(0);
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
+
+    query_builder qb(database_types::postgres);
 
     for (auto _ : state) {
-        db->begin_transaction();
-
         for (int i = 0; i < batch_size; ++i) {
-            query_builder qb;
-            auto query = qb.insert_into("events")
-                           .values({
-                               {"event_type", "test"},
-                               {"user_id", std::to_string(i)},
-                               {"timestamp", "NOW()"}
-                           })
-                           .build();
-            db->execute(query);
+            std::map<std::string, database_value> data = {
+                {"name", "User" + std::to_string(i)},
+                {"email", "user" + std::to_string(i) + "@example.com"},
+                {"age", 20 + (i % 50)}
+            };
+            auto query = qb.insert(data).build();
+            db->insert_query(query);
         }
+    }
+}
+BENCHMARK(BM_Transaction_BatchInsert)->Arg(10)->Arg(100)->Arg(1000);
 
-        db->commit();
-        benchmark::ClobberMemory();
+// Benchmark batch insert throughput
+static void BM_Transaction_BatchInsertThroughput(benchmark::State& state) {
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
+
+    query_builder qb(database_types::postgres);
+    const int batch_size = 100;
+
+    for (auto _ : state) {
+        for (int i = 0; i < batch_size; ++i) {
+            std::map<std::string, database_value> data = {
+                {"name", "User" + std::to_string(i)},
+                {"email", "user" + std::to_string(i) + "@example.com"},
+                {"age", 20 + (i % 50)}
+            };
+            auto query = qb.insert(data).build();
+            db->insert_query(query);
+        }
     }
 
     state.SetItemsProcessed(state.iterations() * batch_size);
-    state.SetBytesProcessed(state.iterations() * batch_size * 100); // Approx 100 bytes per insert
 }
-BENCHMARK(BM_Transaction_BatchInsert)->Arg(10)->Arg(100)->Arg(1000);
+BENCHMARK(BM_Transaction_BatchInsertThroughput);
+
+// Benchmark mixed read/write operations
+static void BM_Transaction_MixedOperations(benchmark::State& state) {
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
+
+    query_builder qb_select(database_types::postgres);
+    auto select_query = qb_select.select({"*"})
+                                 .from("users")
+                                 .where("id", "=", 123)
+                                 .build();
+
+    query_builder qb_update(database_types::postgres);
+    std::map<std::string, database_value> update_data = {
+        {"status", "active"}
+    };
+    auto update_query = qb_update.update(update_data)
+                                 .where("id", "=", 123)
+                                 .build();
+
+    for (auto _ : state) {
+        db->select_query(select_query);
+        db->update_query(update_query);
+    }
+}
+BENCHMARK(BM_Transaction_MixedOperations);

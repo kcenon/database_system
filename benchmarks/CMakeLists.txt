@@ -24,7 +24,7 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
 
     target_link_libraries(database_benchmarks
         PRIVATE
-            database_system
+            database
             benchmark::benchmark
             benchmark::benchmark_main
     )

@@ -79,8 +79,34 @@ namespace database::monitoring
 	}
 
 	performance_monitor::performance_monitor()
-		: cleanup_thread_(&performance_monitor::cleanup_thread, this)
 	{
+		// Disable background thread in sanitizer builds to avoid deadlocks
+		// TSan/ASan/UBSan heavily instrument condition_variable operations causing extreme slowdowns
+		// GCC defines __SANITIZE_THREAD__, __SANITIZE_ADDRESS__
+		// Clang defines __has_feature(thread_sanitizer), __has_feature(address_sanitizer)
+
+		// Check for sanitizers at compile time
+		bool is_sanitizer_build = false;
+#if defined(__SANITIZE_THREAD__) || defined(__SANITIZE_ADDRESS__)
+		// GCC sanitizer detected
+		is_sanitizer_build = true;
+#endif
+
+#ifdef __clang__
+		// Clang-specific feature detection
+#  if __has_feature(thread_sanitizer) || __has_feature(address_sanitizer) || __has_feature(undefined_behavior_sanitizer)
+		is_sanitizer_build = true;
+#  endif
+#endif
+
+		if (is_sanitizer_build) {
+			// Sanitizer build detected - disable background thread
+			cleanup_running_ = false;
+			std::cout << "performance_monitor: background cleanup thread disabled (sanitizer build)" << std::endl;
+		} else {
+			// Normal build - start background cleanup thread
+			cleanup_thread_ = std::thread(&performance_monitor::cleanup_thread, this);
+		}
 	}
 
 	performance_monitor::~performance_monitor()

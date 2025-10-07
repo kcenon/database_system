@@ -48,10 +48,13 @@ if(GTest_FOUND OR gtest_FOUND)
     
     # Add test
     add_test(NAME DatabaseUnitTests COMMAND database_unit_tests)
-    
+
     # Enable test discovery
     include(GoogleTest)
-    gtest_discover_tests(database_unit_tests)
+    gtest_discover_tests(database_unit_tests
+        PROPERTIES
+            TIMEOUT 120  # Increase timeout for sanitizer builds (default is 30s)
+    )
 else()
     message(WARNING "GTest not found - unit tests will not be built")
 endif()

@@ -79,8 +79,22 @@ namespace database::monitoring
 	}
 
 	performance_monitor::performance_monitor()
-		: cleanup_thread_(&performance_monitor::cleanup_thread, this)
 	{
+		// Disable background thread in sanitizer builds to avoid deadlocks
+		// TSan/ASan heavily instrument condition_variable operations causing extreme slowdowns
+		const char* disable_bg = std::getenv("DISABLE_PERFORMANCE_MONITOR_BG_THREAD");
+		const char* tsan = std::getenv("TSAN_OPTIONS");
+		const char* asan = std::getenv("ASAN_OPTIONS");
+		const char* ubsan = std::getenv("UBSAN_OPTIONS");
+
+		bool should_disable = (disable_bg && std::string(disable_bg) == "1") ||
+		                     tsan != nullptr || asan != nullptr || ubsan != nullptr;
+
+		if (!should_disable) {
+			cleanup_thread_ = std::thread(&performance_monitor::cleanup_thread, this);
+		} else {
+			cleanup_running_ = false;
+		}
 	}
 
 	performance_monitor::~performance_monitor()

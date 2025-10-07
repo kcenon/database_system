@@ -81,20 +81,20 @@ namespace database::monitoring
 	performance_monitor::performance_monitor()
 	{
 		// Disable background thread in sanitizer builds to avoid deadlocks
-		// TSan/ASan heavily instrument condition_variable operations causing extreme slowdowns
-		const char* disable_bg = std::getenv("DISABLE_PERFORMANCE_MONITOR_BG_THREAD");
-		const char* tsan = std::getenv("TSAN_OPTIONS");
-		const char* asan = std::getenv("ASAN_OPTIONS");
-		const char* ubsan = std::getenv("UBSAN_OPTIONS");
-
-		bool should_disable = (disable_bg && std::string(disable_bg) == "1") ||
-		                     tsan != nullptr || asan != nullptr || ubsan != nullptr;
-
-		if (!should_disable) {
-			cleanup_thread_ = std::thread(&performance_monitor::cleanup_thread, this);
-		} else {
-			cleanup_running_ = false;
-		}
+		// TSan/ASan/UBSan heavily instrument condition_variable operations causing extreme slowdowns
+		// Sanitizers define __SANITIZE_THREAD__, __SANITIZE_ADDRESS__ at compile time
+		// or __has_feature(thread_sanitizer/address_sanitizer) for Clang
+#if defined(__SANITIZE_THREAD__) || defined(__SANITIZE_ADDRESS__) || \
+    (defined(__has_feature) && (__has_feature(thread_sanitizer) || \
+                                __has_feature(address_sanitizer) || \
+                                __has_feature(undefined_behavior_sanitizer)))
+		// Sanitizer build detected - disable background thread
+		cleanup_running_ = false;
+		std::cout << "performance_monitor: background cleanup thread disabled (sanitizer build)" << std::endl;
+#else
+		// Normal build - start background cleanup thread
+		cleanup_thread_ = std::thread(&performance_monitor::cleanup_thread, this);
+#endif
 	}
 
 	performance_monitor::~performance_monitor()

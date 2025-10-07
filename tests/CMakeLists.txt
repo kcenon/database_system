@@ -51,9 +51,18 @@ if(GTest_FOUND OR gtest_FOUND)
 
     # Enable test discovery
     include(GoogleTest)
+
+    # Detect if sanitizers are enabled
+    if(CMAKE_CXX_FLAGS MATCHES "fsanitize")
+        # Sanitizer builds need much longer timeout (10-20x slowdown)
+        set(TEST_TIMEOUT 600)  # 10 minutes per test
+    else()
+        set(TEST_TIMEOUT 120)  # 2 minutes per test
+    endif()
+
     gtest_discover_tests(database_unit_tests
         PROPERTIES
-            TIMEOUT 120  # Increase timeout for sanitizer builds (default is 30s)
+            TIMEOUT ${TEST_TIMEOUT}
     )
 else()
     message(WARNING "GTest not found - unit tests will not be built")

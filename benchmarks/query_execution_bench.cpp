@@ -61,48 +61,6 @@ static void BM_QueryBuilder_SelectComplex(benchmark::State& state) {
 }
 BENCHMARK(BM_QueryBuilder_SelectComplex);
 
-// Benchmark INSERT query building
-static void BM_QueryBuilder_Insert(benchmark::State& state) {
-    for (auto _ : state) {
-        query_builder qb(database_types::postgres);
-        std::map<std::string, database_value> data = {
-            {"name", "John"},
-            {"email", "john@example.com"}
-        };
-        auto query = qb.insert(data).build();
-        benchmark::DoNotOptimize(query);
-    }
-}
-BENCHMARK(BM_QueryBuilder_Insert);
-
-// Benchmark UPDATE query building
-static void BM_QueryBuilder_Update(benchmark::State& state) {
-    for (auto _ : state) {
-        query_builder qb(database_types::postgres);
-        std::map<std::string, database_value> data = {
-            {"name", "Jane"},
-            {"email", "jane@example.com"}
-        };
-        auto query = qb.update(data)
-                       .where("id", "=", 123)
-                       .build();
-        benchmark::DoNotOptimize(query);
-    }
-}
-BENCHMARK(BM_QueryBuilder_Update);
-
-// Benchmark DELETE query building
-static void BM_QueryBuilder_Delete(benchmark::State& state) {
-    for (auto _ : state) {
-        query_builder qb(database_types::postgres);
-        auto query = qb.remove()
-                       .where("id", "=", 123)
-                       .build();
-        benchmark::DoNotOptimize(query);
-    }
-}
-BENCHMARK(BM_QueryBuilder_Delete);
-
 // Benchmark JOIN query building
 static void BM_QueryBuilder_Join(benchmark::State& state) {
     for (auto _ : state) {
@@ -116,19 +74,6 @@ static void BM_QueryBuilder_Join(benchmark::State& state) {
     }
 }
 BENCHMARK(BM_QueryBuilder_Join);
-
-// Benchmark parameterized query building
-static void BM_QueryBuilder_Parameterized(benchmark::State& state) {
-    for (auto _ : state) {
-        query_builder qb(database_types::postgres);
-        auto query = qb.select({"*"})
-                       .from("users")
-                       .where("email", "=", "user@example.com")
-                       .build();
-        benchmark::DoNotOptimize(query);
-    }
-}
-BENCHMARK(BM_QueryBuilder_Parameterized);
 
 // Benchmark query building with varying complexity
 static void BM_QueryBuilder_ComplexityScaling(benchmark::State& state) {

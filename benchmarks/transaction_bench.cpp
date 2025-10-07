@@ -1,6 +1,6 @@
 /**
  * @file transaction_bench.cpp
- * @brief Transaction performance benchmarks
+ * @brief Database operation performance benchmarks
  * Phase 0, Task 0.2: Baseline Performance Benchmarking
  */
 
@@ -13,7 +13,7 @@
 
 using namespace database;
 
-// Mock database for transaction benchmarking
+// Mock database for benchmarking
 class mock_transaction_database : public database_base {
 public:
     database_types database_type() override { return database_types::postgres; }
@@ -29,93 +29,108 @@ public:
     bool execute_query(const std::string&) override { return true; }
 };
 
-// Benchmark single query execution
-static void BM_Transaction_SingleQuery(benchmark::State& state) {
+// Benchmark single SELECT query execution
+static void BM_Database_SingleSelect(benchmark::State& state) {
     auto db = std::make_unique<mock_transaction_database>();
     db->connect("");
 
     query_builder qb(database_types::postgres);
-    std::map<std::string, database_value> data = {
-        {"name", "John"},
-        {"email", "john@example.com"}
-    };
-    auto query = qb.insert(data).build();
+    auto query = qb.select({"*"})
+                   .from("users")
+                   .where("id", "=", 123)
+                   .build();
 
     for (auto _ : state) {
-        db->insert_query(query);
+        auto result = db->select_query(query);
+        benchmark::DoNotOptimize(result);
     }
 }
-BENCHMARK(BM_Transaction_SingleQuery);
+BENCHMARK(BM_Database_SingleSelect);
 
-// Benchmark multiple queries
-static void BM_Transaction_MultipleQueries(benchmark::State& state) {
+// Benchmark multiple SELECT queries
+static void BM_Database_MultipleSelects(benchmark::State& state) {
     int num_queries = state.range(0);
     auto db = std::make_unique<mock_transaction_database>();
     db->connect("");
 
     query_builder qb(database_types::postgres);
-    std::map<std::string, database_value> data = {
-        {"name", "John"},
-        {"email", "john@example.com"}
-    };
-    auto query = qb.insert(data).build();
+    auto query = qb.select({"*"})
+                   .from("users")
+                   .where("id", "=", 123)
+                   .build();
 
     for (auto _ : state) {
         for (int i = 0; i < num_queries; ++i) {
-            db->execute_query(query);
+            auto result = db->select_query(query);
+            benchmark::DoNotOptimize(result);
         }
     }
 }
-BENCHMARK(BM_Transaction_MultipleQueries)->Arg(5)->Arg(10)->Arg(50)->Arg(100);
+BENCHMARK(BM_Database_MultipleSelects)->Arg(5)->Arg(10)->Arg(50)->Arg(100);
 
-// Benchmark batch insert
-static void BM_Transaction_BatchInsert(benchmark::State& state) {
+// Benchmark query execution overhead
+static void BM_Database_ExecuteQuery(benchmark::State& state) {
+    auto db = std::make_unique<mock_transaction_database>();
+    db->connect("");
+
+    query_builder qb(database_types::postgres);
+    auto query = qb.select({"count(*)"})
+                   .from("users")
+                   .build();
+
+    for (auto _ : state) {
+        bool success = db->execute_query(query);
+        benchmark::DoNotOptimize(success);
+    }
+}
+BENCHMARK(BM_Database_ExecuteQuery);
+
+// Benchmark batch queries
+static void BM_Database_BatchQueries(benchmark::State& state) {
     int batch_size = state.range(0);
     auto db = std::make_unique<mock_transaction_database>();
     db->connect("");
 
-    query_builder qb(database_types::postgres);
-
     for (auto _ : state) {
         for (int i = 0; i < batch_size; ++i) {
-            std::map<std::string, database_value> data = {
-                {"name", "User" + std::to_string(i)},
-                {"email", "user" + std::to_string(i) + "@example.com"},
-                {"age", 20 + (i % 50)}
-            };
-            auto query = qb.insert(data).build();
-            db->insert_query(query);
+            query_builder qb(database_types::postgres);
+            auto query = qb.select({"*"})
+                           .from("users")
+                           .where("id", "=", i)
+                           .build();
+            auto result = db->select_query(query);
+            benchmark::DoNotOptimize(result);
         }
     }
 }
-BENCHMARK(BM_Transaction_BatchInsert)->Arg(10)->Arg(100)->Arg(1000);
+BENCHMARK(BM_Database_BatchQueries)->Arg(10)->Arg(100)->Arg(1000);
 
-// Benchmark batch insert throughput
-static void BM_Transaction_BatchInsertThroughput(benchmark::State& state) {
+// Benchmark batch query throughput
+static void BM_Database_QueryThroughput(benchmark::State& state) {
     auto db = std::make_unique<mock_transaction_database>();
     db->connect("");
 
     query_builder qb(database_types::postgres);
+    auto query = qb.select({"*"})
+                   .from("users")
+                   .where("active", "=", true)
+                   .build();
+
     const int batch_size = 100;
 
     for (auto _ : state) {
         for (int i = 0; i < batch_size; ++i) {
-            std::map<std::string, database_value> data = {
-                {"name", "User" + std::to_string(i)},
-                {"email", "user" + std::to_string(i) + "@example.com"},
-                {"age", 20 + (i % 50)}
-            };
-            auto query = qb.insert(data).build();
-            db->insert_query(query);
+            auto result = db->select_query(query);
+            benchmark::DoNotOptimize(result);
         }
     }
 
     state.SetItemsProcessed(state.iterations() * batch_size);
 }
-BENCHMARK(BM_Transaction_BatchInsertThroughput);
+BENCHMARK(BM_Database_QueryThroughput);
 
-// Benchmark mixed read/write operations
-static void BM_Transaction_MixedOperations(benchmark::State& state) {
+// Benchmark mixed query operations
+static void BM_Database_MixedOperations(benchmark::State& state) {
     auto db = std::make_unique<mock_transaction_database>();
     db->connect("");
 
@@ -125,17 +140,17 @@ static void BM_Transaction_MixedOperations(benchmark::State& state) {
                                  .where("id", "=", 123)
                                  .build();
 
-    query_builder qb_update(database_types::postgres);
-    std::map<std::string, database_value> update_data = {
-        {"status", "active"}
-    };
-    auto update_query = qb_update.update(update_data)
-                                 .where("id", "=", 123)
-                                 .build();
+    query_builder qb_count(database_types::postgres);
+    auto count_query = qb_count.select({"count(*)"})
+                               .from("users")
+                               .build();
 
     for (auto _ : state) {
-        db->select_query(select_query);
-        db->update_query(update_query);
+        auto result1 = db->select_query(select_query);
+        benchmark::DoNotOptimize(result1);
+
+        auto result2 = db->select_query(count_query);
+        benchmark::DoNotOptimize(result2);
     }
 }
-BENCHMARK(BM_Transaction_MixedOperations);
+BENCHMARK(BM_Database_MixedOperations);

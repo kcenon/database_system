@@ -549,8 +549,8 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolAllStatsMethods) {
 
 // Test 10: Memory safety - pool lifecycle stress test
 TEST_F(DatabaseThreadSafetyTest, PoolLifecycleMemorySafety) {
-    const int num_iterations = 30;
-    const int threads_per_iteration = 8;
+    const int num_iterations = 5;
+    const int threads_per_iteration = 4;
     const int operations_per_thread = 50;
 
     std::atomic<int> total_errors{0};

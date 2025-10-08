@@ -58,6 +58,9 @@ namespace database::async
 	/**
 	 * @class async_result
 	 * @brief Template class for asynchronous operation results.
+	 *
+	 * Thread-safety: Callback registration methods (then, on_error) are thread-safe.
+	 * get() and get_for() should only be called once as they consume the future.
 	 */
 	template<typename T>
 	class async_result
@@ -73,12 +76,13 @@ namespace database::async
 		bool is_ready() const;
 		std::future_status wait_for(std::chrono::milliseconds timeout) const;
 
-		// Callback support
+		// Callback support - thread-safe
 		void then(std::function<void(T)> callback);
 		void on_error(std::function<void(const std::exception&)> error_handler);
 
 	private:
 		std::future<T> future_;
+		std::mutex callback_mutex_;
 		std::function<void(T)> success_callback_;
 		std::function<void(const std::exception&)> error_callback_;
 	};
@@ -209,6 +213,11 @@ namespace database::async
 	/**
 	 * @class stream_processor
 	 * @brief Real-time data stream processing.
+	 *
+	 * Thread-safety: All public methods are thread-safe. Event handlers are called
+	 * from dedicated stream threads, so handlers must be thread-safe if they access
+	 * shared state. The handlers_mutex_ protects all handler registration and
+	 * filter operations.
 	 */
 	class stream_processor
 	{
@@ -231,17 +240,17 @@ namespace database::async
 		stream_processor(std::shared_ptr<database_base> db);
 		~stream_processor();
 
-		// Stream management
+		// Stream management - thread-safe
 		bool start_stream(stream_type type, const std::string& channel);
 		bool stop_stream(const std::string& channel);
 		void stop_all_streams();
 
-		// Event handling
+		// Event handling - thread-safe
 		void register_event_handler(const std::string& channel,
 		                           std::function<void(const stream_event&)> handler);
 		void register_global_handler(std::function<void(const stream_event&)> handler);
 
-		// Filter support
+		// Filter support - thread-safe
 		void add_event_filter(const std::string& channel,
 		                     std::function<bool(const stream_event&)> filter);
 
@@ -250,17 +259,21 @@ namespace database::async
 		void process_event(const stream_event& event);
 
 		std::shared_ptr<database_base> db_;
+		std::mutex threads_mutex_;  // Protects stream_threads_
 		std::unordered_map<std::string, std::thread> stream_threads_;
+		std::mutex handlers_mutex_;  // Protects all handler/filter containers
 		std::unordered_map<std::string, std::function<void(const stream_event&)>> event_handlers_;
 		std::vector<std::function<void(const stream_event&)>> global_handlers_;
 		std::unordered_map<std::string, std::function<bool(const stream_event&)>> event_filters_;
 		std::atomic<bool> running_{true};
-		std::mutex handlers_mutex_;
 	};
 
 	/**
 	 * @class transaction_coordinator
 	 * @brief Distributed transaction coordination.
+	 *
+	 * Thread-safety: This is a thread-safe singleton using C++11 magic statics.
+	 * All public methods are thread-safe through transactions_mutex_ protection.
 	 */
 	class transaction_coordinator
 	{
@@ -283,6 +296,7 @@ namespace database::async
 			std::chrono::system_clock::time_point last_activity;
 		};
 
+		// Thread-safe singleton using C++11 magic statics
 		static transaction_coordinator& instance();
 
 		// Transaction management

@@ -20,10 +20,89 @@ All rights reserved.
 using namespace database;
 using namespace std::chrono_literals;
 
+/**
+ * @class mock_database
+ * @brief Mock database implementation for thread safety testing
+ *
+ * This mock provides a functional database_base implementation that:
+ * - Returns successful responses for all operations
+ * - Tracks connection state
+ * - Thread-safe for concurrent testing
+ */
+class mock_database : public database_base {
+private:
+    database_types type_;
+    std::atomic<bool> connected_;
+    mutable std::mutex mutex_;
+
+public:
+    explicit mock_database(database_types type = database_types::sqlite)
+        : type_(type), connected_(false) {}
+
+    ~mock_database() override {
+        if (connected_.load()) {
+            disconnect();
+        }
+    }
+
+    database_types database_type() override {
+        return type_;
+    }
+
+    bool connect(const std::string& connect_string) override {
+        std::lock_guard<std::mutex> lock(mutex_);
+        (void)connect_string;  // Suppress unused parameter warning
+        connected_.store(true);
+        return true;
+    }
+
+    bool create_query(const std::string& query_string) override {
+        (void)query_string;
+        return connected_.load();
+    }
+
+    unsigned int insert_query(const std::string& query_string) override {
+        (void)query_string;
+        return connected_.load() ? 1 : 0;
+    }
+
+    unsigned int update_query(const std::string& query_string) override {
+        (void)query_string;
+        return connected_.load() ? 1 : 0;
+    }
+
+    unsigned int delete_query(const std::string& query_string) override {
+        (void)query_string;
+        return connected_.load() ? 1 : 0;
+    }
+
+    database_result select_query(const std::string& query_string) override {
+        (void)query_string;
+        return database_result{};  // Return empty result set
+    }
+
+    bool execute_query(const std::string& query_string) override {
+        (void)query_string;
+        return connected_.load();
+    }
+
+    bool disconnect() override {
+        std::lock_guard<std::mutex> lock(mutex_);
+        connected_.store(false);
+        return true;
+    }
+
+    bool is_connected() const {
+        return connected_.load();
+    }
+};
+
 // Mock database connection factory for testing
 std::unique_ptr<database_base> create_mock_connection() {
-    // Return nullptr for testing - connection pool will handle
-    return nullptr;
+    auto mock = std::make_unique<mock_database>();
+    // Pre-connect the mock so it's ready to use
+    mock->connect("mock_connection");
+    return mock;
 }
 
 class DatabaseThreadSafetyTest : public ::testing::Test {
@@ -365,9 +444,8 @@ TEST_F(DatabaseThreadSafetyTest, HealthCheckDuringOperations) {
 
 // Test 8: Connection wrapper metadata concurrent access
 TEST_F(DatabaseThreadSafetyTest, ConnectionWrapperMetadataConcurrent) {
-    // Create mock connection wrapper with nullptr database_base
-    std::unique_ptr<database_base> null_db(nullptr);
-    auto mock_conn = std::make_unique<connection_wrapper>(std::move(null_db));
+    // Create mock connection wrapper with actual mock database
+    auto mock_conn = std::make_unique<connection_wrapper>(create_mock_connection());
 
     const int num_threads = 15;
     const int operations_per_thread = 500;

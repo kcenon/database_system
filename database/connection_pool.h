@@ -220,7 +220,12 @@ namespace database
 		std::condition_variable pool_condition_;
 		std::queue<std::shared_ptr<connection_wrapper>> available_connections_;
 
+		// Thread-safe statistics - use atomic operations
+		std::atomic<size_t> failed_acquisitions_;
+		std::atomic<size_t> successful_acquisitions_;
+		mutable std::mutex stats_mutex_;
 		mutable connection_stats stats_;
+
 		std::atomic<bool> shutdown_requested_;
 		std::thread maintenance_thread_;
 

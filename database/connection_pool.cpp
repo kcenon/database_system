@@ -108,6 +108,8 @@ namespace database
 		: db_type_(db_type)
 		, config_(config)
 		, connection_factory_(std::move(factory))
+		, failed_acquisitions_(0)
+		, successful_acquisitions_(0)
 		, shutdown_requested_(false)
 		, active_count_(0)
 		, total_created_(0)
@@ -159,7 +161,9 @@ namespace database
 
 		while (available_connections_.empty() && !shutdown_requested_) {
 			// Try to create new connection if under limit
-			if (active_count_ + available_connections_.size() < config_.max_connections) {
+			// Calculate total connections while holding the lock to avoid race condition
+			size_t total_connections = active_count_ + available_connections_.size();
+			if (total_connections < config_.max_connections) {
 				lock.unlock();
 				auto new_conn = create_connection();
 				lock.lock();
@@ -174,13 +178,13 @@ namespace database
 
 			// Wait for connection to become available
 			if (pool_condition_.wait_until(lock, deadline) == std::cv_status::timeout) {
-				++stats_.failed_acquisitions;
+				++failed_acquisitions_;
 				return nullptr; // Timeout
 			}
 		}
 
 		if (shutdown_requested_ || available_connections_.empty()) {
-			++stats_.failed_acquisitions;
+			++failed_acquisitions_;
 			return nullptr;
 		}
 
@@ -188,11 +192,7 @@ namespace database
 		auto connection = available_connections_.front();
 		available_connections_.pop();
 		++active_count_;
-		++stats_.successful_acquisitions;
-
-		// Update statistics
-		stats_.active_connections = active_count_.load();
-		stats_.available_connections = available_connections_.size();
+		++successful_acquisitions_;
 
 		connection->update_last_used();
 		return connection;
@@ -220,10 +220,6 @@ namespace database
 		available_connections_.push(connection);
 		--active_count_;
 
-		// Update statistics
-		stats_.active_connections = active_count_.load();
-		stats_.available_connections = available_connections_.size();
-
 		// Notify waiting threads
 		pool_condition_.notify_one();
 	}
@@ -241,10 +237,15 @@ namespace database
 
 	connection_stats connection_pool::get_stats() const
 	{
-		std::lock_guard<std::mutex> lock(pool_mutex_);
+		std::lock_guard<std::mutex> pool_lock(pool_mutex_);
+		std::lock_guard<std::mutex> stats_lock(stats_mutex_);
+
 		stats_.total_connections = total_created_.load();
 		stats_.active_connections = active_count_.load();
 		stats_.available_connections = available_connections_.size();
+		stats_.failed_acquisitions = failed_acquisitions_.load();
+		stats_.successful_acquisitions = successful_acquisitions_.load();
+
 		return stats_;
 	}
 
@@ -324,8 +325,12 @@ namespace database
 		}
 
 		available_connections_ = std::move(healthy_connections);
-		stats_.last_health_check = std::chrono::steady_clock::now();
-		stats_.available_connections = available_connections_.size();
+
+		// Update last health check time with proper locking
+		{
+			std::lock_guard<std::mutex> stats_lock(stats_mutex_);
+			stats_.last_health_check = std::chrono::steady_clock::now();
+		}
 	}
 
 	bool connection_pool::validate_connection(connection_wrapper* connection)
@@ -353,22 +358,22 @@ namespace database
 	{
 		std::lock_guard<std::mutex> lock(pool_mutex_);
 
-		std::queue<std::shared_ptr<connection_wrapper>> active_connections;
+		std::queue<std::shared_ptr<connection_wrapper>> retained_connections;
 
 		while (!available_connections_.empty()) {
 			auto conn = available_connections_.front();
 			available_connections_.pop();
 
 			// Keep connection if not idle or if we're at minimum
+			// Use retained_connections.size() to track how many we're keeping
 			if (!conn->is_idle_timeout_exceeded(config_.idle_timeout) ||
-				active_connections.size() < config_.min_connections) {
-				active_connections.push(conn);
+				retained_connections.size() < config_.min_connections) {
+				retained_connections.push(conn);
 			}
 			// Idle connections beyond minimum are discarded
 		}
 
-		available_connections_ = std::move(active_connections);
-		stats_.available_connections = available_connections_.size();
+		available_connections_ = std::move(retained_connections);
 	}
 
 	// connection_pool_manager implementation

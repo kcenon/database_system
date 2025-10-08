@@ -6,8 +6,8 @@ All rights reserved.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
-#include "database_system/database/connection_pool.h"
-#include "database_system/database/async/async_operations.h"
+#include "database/connection_pool.h"
+#include "database/async/async_operations.h"
 
 #include <thread>
 #include <vector>

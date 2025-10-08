@@ -365,8 +365,9 @@ TEST_F(DatabaseThreadSafetyTest, HealthCheckDuringOperations) {
 
 // Test 8: Connection wrapper metadata concurrent access
 TEST_F(DatabaseThreadSafetyTest, ConnectionWrapperMetadataConcurrent) {
-    // Create mock connection wrapper
-    auto mock_conn = std::make_unique<connection_wrapper>(nullptr);
+    // Create mock connection wrapper with nullptr database_base
+    std::unique_ptr<database_base> null_db(nullptr);
+    auto mock_conn = std::make_unique<connection_wrapper>(std::move(null_db));
 
     const int num_threads = 15;
     const int operations_per_thread = 500;

@@ -440,13 +440,21 @@ namespace database::monitoring
 
 	void performance_monitor::cleanup_thread()
 	{
+		// Cleanup every 5 minutes, but check shutdown flag every second
+		const auto cleanup_interval = std::chrono::minutes(5);
+		auto last_cleanup = std::chrono::steady_clock::now();
+
 		while (cleanup_running_) {
 			std::unique_lock<std::mutex> lock(cleanup_mutex_);
-			cleanup_cv_.wait_for(lock, std::chrono::minutes(5), [this] { return !cleanup_running_.load(); });
+			// Wait for 1 second or until notified to stop
+			cleanup_cv_.wait_for(lock, std::chrono::seconds(1), [this] { return !cleanup_running_.load(); });
 
-			if (cleanup_running_) {
+			// Perform cleanup every 5 minutes
+			auto now = std::chrono::steady_clock::now();
+			if (cleanup_running_ && (now - last_cleanup) >= cleanup_interval) {
 				cleanup_old_metrics();
 				check_thresholds();
+				last_cleanup = now;
 			}
 		}
 	}

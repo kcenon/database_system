@@ -253,9 +253,15 @@ namespace database
 	{
 		shutdown_requested_.store(true);
 
+		// Notify both condition variables for immediate shutdown
 		{
 			std::lock_guard<std::mutex> lock(pool_mutex_);
 			pool_condition_.notify_all();
+		}
+
+		{
+			std::lock_guard<std::mutex> lock(maintenance_mutex_);
+			maintenance_cv_.notify_all();
 		}
 
 		if (maintenance_thread_.joinable()) {
@@ -293,9 +299,17 @@ namespace database
 	void connection_pool::maintenance_thread()
 	{
 		while (!shutdown_requested_) {
-			std::this_thread::sleep_for(config_.health_check_interval);
+			std::unique_lock<std::mutex> lock(maintenance_mutex_);
+
+			// Wait for configured interval or until shutdown is requested
+			// This allows immediate response to shutdown while maintaining the desired interval
+			maintenance_cv_.wait_for(lock, config_.health_check_interval,
+				[this] { return shutdown_requested_.load(); });
 
 			if (shutdown_requested_) break;
+
+			// Unlock before performing maintenance operations to avoid holding lock during I/O
+			lock.unlock();
 
 			try {
 				if (config_.enable_health_checks) {

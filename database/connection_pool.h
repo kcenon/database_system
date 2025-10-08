@@ -228,6 +228,8 @@ namespace database
 
 		std::atomic<bool> shutdown_requested_;
 		std::thread maintenance_thread_;
+		std::mutex maintenance_mutex_;              ///< Mutex for maintenance thread synchronization
+		std::condition_variable maintenance_cv_;    ///< Condition variable for responsive shutdown
 
 		std::atomic<size_t> active_count_;
 		std::atomic<size_t> total_created_;

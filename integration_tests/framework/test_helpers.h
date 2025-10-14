@@ -223,7 +223,7 @@ namespace database::testing
 	}
 
 	/**
-	 * @brief Validates connection string format.
+	 * @brief Validates connection string format for SQLite.
 	 */
 	inline bool ValidateConnectionString(const std::string& conn_str)
 	{
@@ -232,7 +232,12 @@ namespace database::testing
 			return false;
 		}
 
-		// Check for common patterns - absolute path, relative path, or in-memory
+		// Reject protocol prefixes (those are for other databases)
+		if (conn_str.find("://") != std::string::npos) {
+			return false;
+		}
+
+		// Accept: .db files, paths with /, or :memory:
 		return conn_str.find(".db") != std::string::npos ||
 		       conn_str.find("/") != std::string::npos ||
 		       conn_str == ":memory:";

@@ -267,6 +267,16 @@ TEST_F(ErrorHandlingTest, ConcurrentConstraintViolations)
  */
 TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 {
+	// Create pool for this test
+	connection_pool_config config;
+	config.min_connections = 2;
+	config.max_connections = 5;
+	config.acquire_timeout = std::chrono::milliseconds(1000);
+	config.connection_string = test_db_path_.string();
+
+	connection_pool_manager::instance().remove_pool(database_types::sqlite);
+	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
+
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 

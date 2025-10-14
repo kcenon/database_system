@@ -258,7 +258,8 @@ TEST_F(QueryExecutionTest, ResultSetIterationAndAccess)
  */
 TEST_F(QueryExecutionTest, QueryWithWhereClause)
 {
-	InsertTestUsers(10);
+	// Insert 20 users: ages 20-39 (20 + (i % 50) for i=0..19)
+	InsertTestUsers(20);
 
 	auto result = ExecuteQuery("SELECT * FROM users WHERE age >= 30 AND age < 40");
 	EXPECT_GT(result.size(), 0u) << "Should find users in age range";

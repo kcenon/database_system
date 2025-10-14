@@ -315,6 +315,9 @@ namespace database::testing
 			// Shutdown connection pool
 			connection_pool_manager::instance().shutdown_all();
 
+			// Remove the pool to allow fresh creation in next test
+			connection_pool_manager::instance().remove_pool(database_types::sqlite);
+
 			// Give time for cleanup
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
 

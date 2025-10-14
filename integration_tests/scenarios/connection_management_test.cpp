@@ -66,6 +66,9 @@ TEST_F(ConnectionManagementTest, PoolInitializationDefault)
  */
 TEST_F(ConnectionManagementTest, PoolInitializationCustomConfig)
 {
+	// Remove existing pool from SetUp() first
+	connection_pool_manager::instance().remove_pool(database_types::sqlite);
+
 	// Create pool with custom config
 	connection_pool_config custom_config;
 	custom_config.min_connections = 5;
@@ -107,15 +110,14 @@ TEST_F(ConnectionManagementTest, ConnectionReleaseSuccess)
 
 	auto initial_available = pool->available_connections();
 
-	{
-		auto conn = pool->acquire_connection();
-		ASSERT_NE(conn, nullptr);
-		EXPECT_LT(pool->available_connections(), initial_available)
-			<< "Available connections should decrease";
-	}
+	auto conn = pool->acquire_connection();
+	ASSERT_NE(conn, nullptr);
+	EXPECT_LT(pool->available_connections(), initial_available)
+		<< "Available connections should decrease";
 
-	// Connection should be released after scope
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	// Explicitly release connection back to pool
+	pool->release_connection(conn);
+
 	EXPECT_EQ(pool->available_connections(), initial_available)
 		<< "Connection should be returned to pool";
 }

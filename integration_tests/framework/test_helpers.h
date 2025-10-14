@@ -193,7 +193,25 @@ namespace database::testing
 			return false;
 		}
 
-		return it->second == expected_value;
+		// Extract string value from variant and compare
+		try {
+			if (std::holds_alternative<std::string>(it->second)) {
+				return std::get<std::string>(it->second) == expected_value;
+			}
+			// Try converting other types to string for comparison
+			if (std::holds_alternative<int64_t>(it->second)) {
+				return std::to_string(std::get<int64_t>(it->second)) == expected_value;
+			}
+			if (std::holds_alternative<double>(it->second)) {
+				return std::to_string(std::get<double>(it->second)) == expected_value;
+			}
+			if (std::holds_alternative<bool>(it->second)) {
+				return (std::get<bool>(it->second) ? "true" : "false") == expected_value;
+			}
+		} catch (...) {
+			return false;
+		}
+		return false;
 	}
 
 	/**

@@ -31,6 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
+#include <future>
+#include <atomic>
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 

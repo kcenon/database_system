@@ -200,7 +200,24 @@ namespace database::testing
 				return false;
 			}
 
-			return std::stoul(it->second) == expected_count;
+			// Extract value from variant
+			try {
+				// Try int64_t first (most common for COUNT)
+				if (std::holds_alternative<int64_t>(it->second)) {
+					return static_cast<size_t>(std::get<int64_t>(it->second)) == expected_count;
+				}
+				// Try string (some databases return count as string)
+				if (std::holds_alternative<std::string>(it->second)) {
+					return std::stoul(std::get<std::string>(it->second)) == expected_count;
+				}
+				// Try double
+				if (std::holds_alternative<double>(it->second)) {
+					return static_cast<size_t>(std::get<double>(it->second)) == expected_count;
+				}
+			} catch (...) {
+				return false;
+			}
+			return false;
 		}
 
 		/**

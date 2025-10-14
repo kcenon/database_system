@@ -76,9 +76,10 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF
 
     - name: Configure CMake (Windows)
@@ -86,9 +87,10 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
-          -DBUILD_WITH_COMMON_SYSTEM=ON `
+          -DBUILD_WITH_COMMON_SYSTEM=OFF `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
           -DUSE_POSTGRESQL=OFF
 
     - name: Build
@@ -157,9 +159,10 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF \
           -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \

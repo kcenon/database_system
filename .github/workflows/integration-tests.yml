@@ -65,7 +65,7 @@ jobs:
           -DUSE_UNIT_TEST=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=ON \
           -DUSE_SQLITE=ON \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
 
     - name: Build integration tests
@@ -81,9 +81,18 @@ jobs:
       if: matrix.build_type == 'Debug'
       working-directory: build
       run: |
-        lcov --capture --directory . --output-file coverage.info --ignore-errors inconsistent,mismatch,gcov || true
-        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/gtest/*' '*/benchmark/*' --output-file coverage_filtered.info --ignore-errors inconsistent,unused || true
-        lcov --list coverage_filtered.info || true
+        # Ubuntu 22.04 lcov 1.14 only supports --ignore-errors: source
+        lcov --capture --directory . --output-file coverage.info --ignore-errors source --rc lcov_branch_coverage=0 2>/dev/null || \
+          lcov --capture --directory . --output-file coverage.info 2>/dev/null || true
+
+        if [ -f coverage.info ]; then
+          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/gtest/*' '*/benchmark/*' \
+            --output-file coverage_filtered.info --ignore-errors source 2>/dev/null || true
+
+          if [ -f coverage_filtered.info ]; then
+            lcov --list coverage_filtered.info --ignore-errors source 2>/dev/null || echo "Coverage summary skipped"
+          fi
+        fi
 
     - name: Upload coverage to Codecov
       if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'

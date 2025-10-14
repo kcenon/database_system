@@ -48,8 +48,15 @@ set_target_properties(database_integration_tests PROPERTIES
 target_compile_definitions(database_integration_tests
     PRIVATE
         USE_SQLITE=1
-        BUILD_WITH_COMMON_SYSTEM=1
 )
+
+# Conditionally enable common_system integration
+if(BUILD_WITH_COMMON_SYSTEM)
+    target_compile_definitions(database_integration_tests
+        PRIVATE
+            BUILD_WITH_COMMON_SYSTEM=1
+    )
+endif()
 
 # Add test discovery
 include(GoogleTest)

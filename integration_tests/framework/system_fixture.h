@@ -36,6 +36,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <string>
 #include <filesystem>
+#include <thread>
+#include <chrono>
 #include "database/database_manager.h"
 #include "database/connection_pool.h"
 #include "database/backends/sqlite/sqlite_manager.h"
@@ -64,13 +66,14 @@ namespace database::testing
 			manager_ = &database_manager::handle();
 			manager_->set_mode(database_types::sqlite);
 
-			// Connect to test database
-			std::string connection_string = "file:" + test_db_path_.string();
-			connected_ = manager_->connect(connection_string);
+			// Connect to test database - use absolute path without URI prefix
+			connected_ = manager_->connect(test_db_path_.string());
 
 			if (connected_) {
 				// Create test tables
 				CreateTestTables();
+			} else {
+				std::cerr << "Failed to connect to test database: " << test_db_path_ << std::endl;
 			}
 		}
 
@@ -79,15 +82,24 @@ namespace database::testing
 			// Disconnect from database
 			if (connected_) {
 				manager_->disconnect();
+				connected_ = false;
 			}
 
 			// Shutdown all connection pools
 			connection_pool_manager::instance().shutdown_all();
 
+			// Give time for cleanup
+			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
 			// Clean up test database file
 			if (std::filesystem::exists(test_db_path_)) {
 				std::error_code ec;
 				std::filesystem::remove(test_db_path_, ec);
+				// Retry if file is still locked
+				if (std::filesystem::exists(test_db_path_)) {
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
+					std::filesystem::remove(test_db_path_, ec);
+				}
 			}
 		}
 
@@ -238,31 +250,88 @@ namespace database::testing
 	/**
 	 * @class ConnectionPoolFixture
 	 * @brief Test fixture with connection pool support.
+	 *
+	 * NOTE: This fixture does NOT call DatabaseSystemFixture::SetUp() to avoid
+	 * conflicts between database_manager singleton and connection pool.
+	 * Use connection pool directly instead of database_manager.
 	 */
-	class ConnectionPoolFixture : public DatabaseSystemFixture
+	class ConnectionPoolFixture : public ::testing::Test
 	{
 	protected:
 		void SetUp() override
 		{
-			DatabaseSystemFixture::SetUp();
+			// Create unique test database file
+			test_db_path_ = std::filesystem::temp_directory_path() /
+			                ("test_db_pool_" + std::to_string(
+			                    std::chrono::steady_clock::now().time_since_epoch().count()) +
+			                 ".db");
 
-			// Create connection pool
-			if (connected_) {
-				connection_pool_config config;
-				config.min_connections = 2;
-				config.max_connections = 10;
-				config.acquire_timeout = std::chrono::milliseconds(5000);
-				config.idle_timeout = std::chrono::milliseconds(30000);
-				config.health_check_interval = std::chrono::milliseconds(60000);
-				config.enable_health_checks = true;
-				config.connection_string = "file:" + test_db_path_.string();
+			// Create connection pool (NOT database_manager to avoid conflicts)
+			connection_pool_config config;
+			config.min_connections = 2;
+			config.max_connections = 10;
+			config.acquire_timeout = std::chrono::milliseconds(500);  // Shorter timeout for faster failures
+			config.idle_timeout = std::chrono::milliseconds(30000);
+			config.health_check_interval = std::chrono::milliseconds(60000);
+			config.enable_health_checks = true;
+			config.connection_string = test_db_path_.string();
 
-				pool_created_ = connection_pool_manager::instance().create_pool(
-					database_types::sqlite, config);
+			pool_created_ = connection_pool_manager::instance().create_pool(
+				database_types::sqlite, config);
+
+			if (!pool_created_) {
+				std::cerr << "Failed to create connection pool for: " << test_db_path_ << std::endl;
+			} else {
+				// Create test tables using a connection from the pool
+				auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+				if (pool) {
+					auto conn = pool->acquire_connection();
+					if (conn && conn->get()) {
+						conn->get()->create_query(
+							"CREATE TABLE IF NOT EXISTS users ("
+							"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+							"name TEXT NOT NULL, "
+							"email TEXT UNIQUE NOT NULL, "
+							"age INTEGER, "
+							"created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
+							")"
+						);
+						conn->get()->create_query(
+							"CREATE TABLE IF NOT EXISTS products ("
+							"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+							"name TEXT NOT NULL, "
+							"price REAL NOT NULL, "
+							"stock INTEGER DEFAULT 0"
+							")"
+						);
+						pool->release_connection(conn);
+					}
+				}
+			}
+		}
+
+		void TearDown() override
+		{
+			// Shutdown connection pool
+			connection_pool_manager::instance().shutdown_all();
+
+			// Give time for cleanup
+			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+			// Clean up test database file
+			if (std::filesystem::exists(test_db_path_)) {
+				std::error_code ec;
+				std::filesystem::remove(test_db_path_, ec);
+				// Retry if file is still locked
+				if (std::filesystem::exists(test_db_path_)) {
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
+					std::filesystem::remove(test_db_path_, ec);
+				}
 			}
 		}
 
 	protected:
+		std::filesystem::path test_db_path_;
 		bool pool_created_{false};
 	};
 

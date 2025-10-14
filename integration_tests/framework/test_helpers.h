@@ -232,9 +232,9 @@ namespace database::testing
 			return false;
 		}
 
-		// Check for common patterns
-		return conn_str.find("file:") != std::string::npos ||
-		       conn_str.find(".db") != std::string::npos ||
+		// Check for common patterns - absolute path, relative path, or in-memory
+		return conn_str.find(".db") != std::string::npos ||
+		       conn_str.find("/") != std::string::npos ||
 		       conn_str == ":memory:";
 	}
 
@@ -251,7 +251,7 @@ namespace database::testing
 	 */
 	inline std::string CreateFileConnectionString(const std::string& filename)
 	{
-		return "file:" + filename;
+		return filename;  // SQLite accepts absolute paths directly
 	}
 
 	/**

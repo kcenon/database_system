@@ -71,7 +71,7 @@ TEST_F(ConnectionManagementTest, PoolInitializationCustomConfig)
 	custom_config.min_connections = 5;
 	custom_config.max_connections = 15;
 	custom_config.acquire_timeout = std::chrono::milliseconds(3000);
-	custom_config.connection_string = "file:" + test_db_path_.string();
+	custom_config.connection_string = test_db_path_.string();
 
 	bool created = connection_pool_manager::instance().create_pool(
 		database_types::sqlite, custom_config);
@@ -150,7 +150,7 @@ TEST_F(ConnectionManagementTest, ConnectionTimeoutHandling)
 	config.min_connections = 1;
 	config.max_connections = 2;
 	config.acquire_timeout = std::chrono::milliseconds(1000);
-	config.connection_string = "file:" + test_db_path_.string();
+	config.connection_string = test_db_path_.string();
 
 	connection_pool_manager::instance().remove_pool(database_types::sqlite);
 	bool created = connection_pool_manager::instance().create_pool(
@@ -188,7 +188,7 @@ TEST_F(ConnectionManagementTest, MaxConnectionsLimitEnforcement)
 	config.min_connections = 2;
 	config.max_connections = 5;
 	config.acquire_timeout = std::chrono::milliseconds(500);
-	config.connection_string = "file:" + test_db_path_.string();
+	config.connection_string = test_db_path_.string();
 
 	connection_pool_manager::instance().remove_pool(database_types::sqlite);
 	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
@@ -266,8 +266,8 @@ TEST_F(ConnectionManagementTest, ConnectionStringParsingSQLite)
 {
 	std::vector<std::string> valid_strings = {
 		":memory:",
-		"file:test.db",
-		"file:/path/to/database.db"
+		"test.db",
+		"/path/to/database.db"
 	};
 
 	for (const auto& conn_str : valid_strings) {
@@ -342,7 +342,7 @@ TEST_F(ConnectionManagementTest, ConnectionPoolShutdown)
 	connection_pool_config config;
 	config.min_connections = 2;
 	config.max_connections = 5;
-	config.connection_string = "file:" + test_db_path_.string();
+	config.connection_string = test_db_path_.string();
 
 	connection_pool_manager::instance().remove_pool(database_types::sqlite);
 	connection_pool_manager::instance().create_pool(database_types::sqlite, config);

@@ -149,7 +149,7 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
 	config.min_connections = 1;
 	config.max_connections = 2;
 	config.acquire_timeout = std::chrono::milliseconds(500);
-	config.connection_string = "file:" + test_db_path_.string();
+	config.connection_string = test_db_path_.string();  // Use absolute path without URI prefix
 
 	connection_pool_manager::instance().remove_pool(database_types::sqlite);
 	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
@@ -187,7 +187,7 @@ TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
 	mgr->set_mode(database_types::sqlite);
 
 	// Try to connect to invalid path
-	bool connected = mgr->connect("file:/invalid/path/to/database.db");
+	bool connected = mgr->connect("/invalid/path/to/database.db");
 
 	// May succeed (SQLite creates files) or fail - both are valid
 	if (connected) {

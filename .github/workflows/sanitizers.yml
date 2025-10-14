@@ -55,8 +55,10 @@ jobs:
           -DCMAKE_C_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DUSE_UNIT_TEST=ON \
-          -DBUILD_DATABASE_SAMPLES=OFF
+          -DBUILD_DATABASE_SAMPLES=OFF \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF
 
     - name: Build with ${{ matrix.sanitizer }} sanitizer
       run: |

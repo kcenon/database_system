@@ -31,11 +31,65 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include <gtest/gtest.h>
+#include <future>
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 
 using namespace database;
 using namespace database::testing;
+
+// Helper function to extract string from variant
+inline std::string get_string_value(const database_value& val) {
+	if (std::holds_alternative<std::string>(val)) {
+		return std::get<std::string>(val);
+	}
+	if (std::holds_alternative<int64_t>(val)) {
+		return std::to_string(std::get<int64_t>(val));
+	}
+	if (std::holds_alternative<double>(val)) {
+		return std::to_string(std::get<double>(val));
+	}
+	if (std::holds_alternative<bool>(val)) {
+		return std::get<bool>(val) ? "true" : "false";
+	}
+	return "";
+}
+
+// Helper function to extract int from variant
+inline int get_int_value(const database_value& val) {
+	if (std::holds_alternative<int64_t>(val)) {
+		return static_cast<int>(std::get<int64_t>(val));
+	}
+	if (std::holds_alternative<std::string>(val)) {
+		try {
+			return std::stoi(std::get<std::string>(val));
+		} catch (...) {
+			return 0;
+		}
+	}
+	if (std::holds_alternative<double>(val)) {
+		return static_cast<int>(std::get<double>(val));
+	}
+	return 0;
+}
+
+// Helper function to extract size_t from variant
+inline size_t get_size_t_value(const database_value& val) {
+	if (std::holds_alternative<int64_t>(val)) {
+		return static_cast<size_t>(std::get<int64_t>(val));
+	}
+	if (std::holds_alternative<std::string>(val)) {
+		try {
+			return std::stoul(std::get<std::string>(val));
+		} catch (...) {
+			return 0;
+		}
+	}
+	if (std::holds_alternative<double>(val)) {
+		return static_cast<size_t>(std::get<double>(val));
+	}
+	return 0;
+}
 
 /**
  * @brief Test suite for query execution scenarios.
@@ -82,7 +136,7 @@ TEST_F(QueryExecutionTest, SimpleUpdateQuery)
 
 	auto result = ExecuteQuery("SELECT age FROM users WHERE name = 'User0'");
 	ASSERT_FALSE(result.empty());
-	EXPECT_EQ(result[0]["age"], "35") << "Age should be updated";
+	EXPECT_EQ(get_string_value(result[0].at("age")), "35") << "Age should be updated";
 }
 
 /**
@@ -179,8 +233,8 @@ TEST_F(QueryExecutionTest, ParameterizedQueryMultipleParams)
 
 	auto result = ExecuteQuery("SELECT * FROM users WHERE email = '" + email + "'");
 	ASSERT_FALSE(result.empty());
-	EXPECT_EQ(result[0]["name"], name);
-	EXPECT_EQ(result[0]["age"], std::to_string(age));
+	EXPECT_EQ(get_string_value(result[0].at("name")), name);
+	EXPECT_EQ(get_string_value(result[0].at("age")), std::to_string(age));
 }
 
 /**
@@ -194,8 +248,8 @@ TEST_F(QueryExecutionTest, ResultSetIterationAndAccess)
 	ASSERT_EQ(result.size(), 5u);
 
 	for (size_t i = 0; i < result.size(); ++i) {
-		EXPECT_FALSE(result[i]["name"].empty()) << "Name should not be empty";
-		EXPECT_FALSE(result[i]["email"].empty()) << "Email should not be empty";
+		EXPECT_FALSE(get_string_value(result[i].at("name")).empty()) << "Name should not be empty";
+		EXPECT_FALSE(get_string_value(result[i].at("email")).empty()) << "Email should not be empty";
 	}
 }
 
@@ -210,7 +264,7 @@ TEST_F(QueryExecutionTest, QueryWithWhereClause)
 	EXPECT_GT(result.size(), 0u) << "Should find users in age range";
 
 	for (const auto& row : result) {
-		int age = std::stoi(row.at("age"));
+		int age = get_int_value(row.at("age"));
 		EXPECT_GE(age, 30);
 		EXPECT_LT(age, 40);
 	}
@@ -228,7 +282,7 @@ TEST_F(QueryExecutionTest, QueryWithOrderBy)
 
 	// Verify ordering
 	for (size_t i = 1; i < result.size(); ++i) {
-		EXPECT_LE(result[i-1]["name"], result[i]["name"])
+		EXPECT_LE(get_string_value(result[i-1].at("name")), get_string_value(result[i].at("name")))
 			<< "Results should be ordered ascending";
 	}
 }
@@ -249,7 +303,7 @@ TEST_F(QueryExecutionTest, ConcurrentQueryExecution)
 			if (result.empty()) {
 				return 0ul;
 			}
-			return std::stoul(result[0]["cnt"]);
+			return get_size_t_value(result[0].at("cnt"));
 		}));
 	}
 

@@ -42,7 +42,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev
+        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev pkg-config
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
@@ -76,9 +76,10 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF
 
     - name: Configure CMake (Windows)
@@ -86,9 +87,10 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
-          -DBUILD_WITH_COMMON_SYSTEM=ON `
+          -DBUILD_WITH_COMMON_SYSTEM=OFF `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
           -DUSE_POSTGRESQL=OFF
 
     - name: Build
@@ -151,15 +153,16 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev
+        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev pkg-config
 
     - name: Configure CMake with ${{ matrix.sanitizer.name }}
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DBUILD_WITH_COMMON_SYSTEM=ON \
+          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF \
           -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \

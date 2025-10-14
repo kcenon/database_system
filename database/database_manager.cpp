@@ -101,7 +101,8 @@ namespace database
 			return false;
 		}
 
-		return database_->connect(connect_string);
+		connected_ = database_->connect(connect_string);
+		return connected_;
 	}
 
 	bool database_manager::create_query(const std::string& query_string)
@@ -161,7 +162,12 @@ namespace database
 			return false;
 		}
 
-		return database_->disconnect();
+		bool result = database_->disconnect();
+		if (result)
+		{
+			connected_ = false;
+		}
+		return result;
 	}
 
 #ifdef BUILD_WITH_COMMON_SYSTEM

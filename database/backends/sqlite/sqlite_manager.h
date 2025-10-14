@@ -166,7 +166,7 @@ namespace database
 		database_value convert_sqlite_value(void* stmt, int column_index);
 
 	private:
-		void* connection_;        ///< Pointer to the underlying SQLite connection (sqlite3*)
-		std::mutex sqlite_mutex_; ///< Mutex for thread safety
+		void* connection_;                  ///< Pointer to the underlying SQLite connection (sqlite3*)
+		std::recursive_mutex sqlite_mutex_; ///< Recursive mutex for thread safety (allows re-entrancy)
 	};
 } // namespace database

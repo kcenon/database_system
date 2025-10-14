@@ -57,7 +57,7 @@ namespace database
 	bool sqlite_manager::connect(const std::string& connect_string)
 	{
 #ifdef USE_SQLITE
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		try {
 			sqlite3* db = nullptr;
 
@@ -93,7 +93,7 @@ namespace database
 	{
 #ifdef USE_SQLITE
 		if (!connection_) return false;
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		try {
 			sqlite3* db = static_cast<sqlite3*>(connection_);
 			char* error_msg = nullptr;
@@ -136,7 +136,7 @@ namespace database
 		database_result result;
 #ifdef USE_SQLITE
 		if (!connection_) return result;
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		try {
 			sqlite3* db = static_cast<sqlite3*>(connection_);
 			sqlite3_stmt* stmt = nullptr;
@@ -189,7 +189,7 @@ namespace database
 	bool sqlite_manager::disconnect(void)
 	{
 #ifdef USE_SQLITE
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		if (connection_) {
 			sqlite3* db = static_cast<sqlite3*>(connection_);
 			int result = sqlite3_close(db);
@@ -208,7 +208,7 @@ namespace database
 			return false;
 		}
 
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		sqlite3* db = static_cast<sqlite3*>(connection_);
 
 		char* error_msg = nullptr;
@@ -234,7 +234,7 @@ namespace database
 	{
 #ifdef USE_SQLITE
 		if (!connection_) return nullptr;
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		try {
 			sqlite3* db = static_cast<sqlite3*>(connection_);
 			sqlite3_stmt* stmt = nullptr;
@@ -256,7 +256,7 @@ namespace database
 	{
 #ifdef USE_SQLITE
 		if (!connection_) return 0;
-		std::lock_guard<std::mutex> lock(sqlite_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
 		try {
 			sqlite3* db = static_cast<sqlite3*>(connection_);
 			char* error_msg = nullptr;

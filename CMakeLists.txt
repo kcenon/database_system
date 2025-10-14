@@ -30,6 +30,7 @@ option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
 option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
+option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
 
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -91,6 +92,15 @@ if(DATABASE_BUILD_BENCHMARKS AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
 endif()
 
 ##################################################
+# Integration Tests
+##################################################
+
+if(DATABASE_BUILD_INTEGRATION_TESTS AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/integration_tests)
+    add_subdirectory(integration_tests)
+    message(STATUS "Database integration tests will be built")
+endif()
+
+##################################################
 # Installation Rules
 ##################################################
 
@@ -119,6 +129,7 @@ message(STATUS "    - MySQL support: ${USE_MYSQL}")
 message(STATUS "    - SQLite support: ${USE_SQLITE}")
 message(STATUS "    - Build samples: ${BUILD_DATABASE_SAMPLES}")
 message(STATUS "    - Build tests: ${USE_UNIT_TEST}")
+message(STATUS "    - Build integration tests: ${DATABASE_BUILD_INTEGRATION_TESTS}")
 message(STATUS "  Output directories:")
 message(STATUS "    - Runtime: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "    - Library: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")

@@ -138,7 +138,11 @@ namespace database::testing
 			if (!pool) {
 				return nullptr;
 			}
-			return pool->acquire_connection();
+			auto conn_result = pool->acquire_connection();
+			if (!conn_result) {
+				return nullptr;
+			}
+			return conn_result.value();
 		}
 
 		/**
@@ -285,8 +289,9 @@ namespace database::testing
 				// Create test tables using a connection from the pool
 				auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 				if (pool) {
-					auto conn = pool->acquire_connection();
-					if (conn && conn->get()) {
+					auto conn_result = pool->acquire_connection();
+					if (conn_result && conn_result.value()->get()) {
+						auto conn = conn_result.value();
 						conn->get()->create_query(
 							"CREATE TABLE IF NOT EXISTS users ("
 							"id INTEGER PRIMARY KEY AUTOINCREMENT, "

@@ -158,18 +158,18 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire all connections
-	auto conn1 = pool->acquire_connection();
-	auto conn2 = pool->acquire_connection();
+	auto conn1_result = pool->acquire_connection();
+	auto conn2_result = pool->acquire_connection();
 
-	ASSERT_NE(conn1, nullptr);
-	ASSERT_NE(conn2, nullptr);
+	ASSERT_TRUE(conn1_result);
+	ASSERT_TRUE(conn2_result);
 
 	// Try to acquire when pool is exhausted
 	PerformanceTimer timer;
-	auto conn3 = pool->acquire_connection();
+	auto conn3_result = pool->acquire_connection();
 
 	// Should timeout or return nullptr
-	if (!conn3) {
+	if (!conn3_result) {
 		EXPECT_GE(timer.Elapsed(), 400) << "Should wait for timeout period";
 	}
 
@@ -280,8 +280,9 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
+	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy());
 
 	// Mark connection as unhealthy
@@ -292,8 +293,9 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 	pool->release_connection(conn);
 
 	// Acquire new connection - pool should provide healthy one
-	auto new_conn = pool->acquire_connection();
-	ASSERT_NE(new_conn, nullptr);
+	auto new_conn_result = pool->acquire_connection();
+	ASSERT_TRUE(new_conn_result);
+	auto new_conn = new_conn_result.value();
 	EXPECT_TRUE(new_conn->is_healthy()) << "Pool should provide healthy connection";
 }
 

@@ -95,8 +95,9 @@ TEST_F(ConnectionManagementTest, ConnectionAcquisitionSuccess)
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr) << "Should acquire connection successfully";
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result) << "Should acquire connection successfully";
+	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy()) << "Connection should be healthy";
 }
 
@@ -110,8 +111,9 @@ TEST_F(ConnectionManagementTest, ConnectionReleaseSuccess)
 
 	auto initial_available = pool->available_connections();
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
+	auto conn = conn_result.value();
 	EXPECT_LT(pool->available_connections(), initial_available)
 		<< "Available connections should decrease";
 
@@ -132,9 +134,9 @@ TEST_F(ConnectionManagementTest, ConnectionPoolingAndReuse)
 
 	// Acquire and release multiple times
 	for (int i = 0; i < 5; ++i) {
-		auto conn = pool->acquire_connection();
-		ASSERT_NE(conn, nullptr) << "Iteration " << i;
-		pool->release_connection(conn);
+		auto conn_result = pool->acquire_connection();
+		ASSERT_TRUE(conn_result) << "Iteration " << i;
+		pool->release_connection(conn_result.value());
 	}
 
 	auto stats = pool->get_stats();
@@ -165,18 +167,18 @@ TEST_F(ConnectionManagementTest, ConnectionTimeoutHandling)
 	// Acquire all connections
 	std::vector<std::shared_ptr<connection_wrapper>> conns;
 	for (size_t i = 0; i < config.max_connections; ++i) {
-		auto conn = pool->acquire_connection();
-		if (conn) {
-			conns.push_back(conn);
+		auto conn_result = pool->acquire_connection();
+		if (conn_result) {
+			conns.push_back(conn_result.value());
 		}
 	}
 
 	// Try to acquire with timeout
 	PerformanceTimer timer;
-	auto timeout_conn = pool->acquire_connection();
+	auto timeout_conn_result = pool->acquire_connection();
 
 	// Connection might be null due to timeout
-	if (!timeout_conn) {
+	if (!timeout_conn_result) {
 		EXPECT_GE(timer.Elapsed(), 900) << "Should wait for timeout";
 	}
 }
@@ -201,9 +203,9 @@ TEST_F(ConnectionManagementTest, MaxConnectionsLimitEnforcement)
 	// Try to acquire more than max
 	std::vector<std::shared_ptr<connection_wrapper>> conns;
 	for (size_t i = 0; i < config.max_connections + 2; ++i) {
-		auto conn = pool->acquire_connection();
-		if (conn) {
-			conns.push_back(conn);
+		auto conn_result = pool->acquire_connection();
+		if (conn_result) {
+			conns.push_back(conn_result.value());
 		}
 	}
 
@@ -219,8 +221,9 @@ TEST_F(ConnectionManagementTest, ConnectionHealthChecking)
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
+	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy()) << "New connection should be healthy";
 
 	// Mark as unhealthy
@@ -241,10 +244,11 @@ TEST_F(ConnectionManagementTest, ConcurrentConnectionRequests)
 
 	for (int i = 0; i < num_threads; ++i) {
 		futures.push_back(std::async(std::launch::async, [pool]() {
-			auto conn = pool->acquire_connection();
-			if (!conn) {
+			auto conn_result = pool->acquire_connection();
+			if (!conn_result) {
 				return false;
 			}
+			auto conn = conn_result.value();
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
 			pool->release_connection(conn);
 			return true;
@@ -286,8 +290,9 @@ TEST_F(ConnectionManagementTest, ConnectionMetadataTracking)
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
+	auto conn = conn_result.value();
 
 	auto initial_time = conn->last_used();
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -306,8 +311,9 @@ TEST_F(ConnectionManagementTest, IdleConnectionTimeoutDetection)
 	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
+	auto conn = conn_result.value();
 
 	// Check with very short timeout
 	auto short_timeout = std::chrono::milliseconds(1);
@@ -326,8 +332,8 @@ TEST_F(ConnectionManagementTest, ConnectionPoolStatisticsTracking)
 	ASSERT_NE(pool, nullptr);
 
 	// Perform some operations
-	auto conn1 = pool->acquire_connection();
-	auto conn2 = pool->acquire_connection();
+	auto conn1_result = pool->acquire_connection();
+	auto conn2_result = pool->acquire_connection();
 
 	auto stats = pool->get_stats();
 	EXPECT_GT(stats.total_connections, 0u) << "Should track total connections";
@@ -353,8 +359,8 @@ TEST_F(ConnectionManagementTest, ConnectionPoolShutdown)
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire connection before shutdown
-	auto conn = pool->acquire_connection();
-	ASSERT_NE(conn, nullptr);
+	auto conn_result = pool->acquire_connection();
+	ASSERT_TRUE(conn_result);
 
 	// Shutdown pool
 	pool->shutdown();

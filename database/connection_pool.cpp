@@ -152,9 +152,19 @@ namespace database
 		}
 	}
 
-	std::shared_ptr<connection_wrapper> connection_pool::acquire_connection()
+	Result<std::shared_ptr<connection_wrapper>> connection_pool::acquire_connection()
 	{
 		std::unique_lock<std::mutex> lock(pool_mutex_);
+
+		// Check if pool is shutting down immediately
+		if (shutdown_requested_) {
+			++failed_acquisitions_;
+			return error_info{
+				-500,
+				"Connection pool is shutting down",
+				"connection_pool"
+			};
+		}
 
 		// Wait for available connection or timeout
 		auto deadline = std::chrono::steady_clock::now() + config_.acquire_timeout;
@@ -173,19 +183,47 @@ namespace database
 					available_connections_.push(wrapper);
 					++total_created_;
 					break;
+				} else {
+					// Failed to create new connection
+					++failed_acquisitions_;
+					return error_info{
+						-502,
+						"Failed to create new database connection",
+						"connection_pool"
+					};
 				}
 			}
 
 			// Wait for connection to become available
 			if (pool_condition_.wait_until(lock, deadline) == std::cv_status::timeout) {
 				++failed_acquisitions_;
-				return nullptr; // Timeout
+				return error_info{
+					-501,
+					"Connection acquisition timeout after " +
+					std::to_string(config_.acquire_timeout.count()) + "ms",
+					"connection_pool"
+				};
 			}
 		}
 
-		if (shutdown_requested_ || available_connections_.empty()) {
+		// Check again for shutdown after wait
+		if (shutdown_requested_) {
 			++failed_acquisitions_;
-			return nullptr;
+			return error_info{
+				-500,
+				"Connection pool is shutting down",
+				"connection_pool"
+			};
+		}
+
+		// Check if no connections available (should not happen, but defensive)
+		if (available_connections_.empty()) {
+			++failed_acquisitions_;
+			return error_info{
+				-503,
+				"No connections available and max connections reached",
+				"connection_pool"
+			};
 		}
 
 		// Get connection from pool
@@ -195,7 +233,9 @@ namespace database
 		++successful_acquisitions_;
 
 		connection->update_last_used();
-		return connection;
+
+		// Return success with connection
+		return Result<std::shared_ptr<connection_wrapper>>(connection);
 	}
 
 	void connection_pool::release_connection(std::shared_ptr<connection_wrapper> connection)

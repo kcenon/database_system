@@ -149,6 +149,19 @@ namespace database
 	/**
 	 * @class connection_pool
 	 * @brief Generic connection pool implementation.
+	 *
+	 * ### Thread Safety
+	 * - All public methods are thread-safe.
+	 * - Connection acquisition and release are protected by pool_mutex_.
+	 * - Statistics counters use atomic operations for lock-free updates.
+	 * - Maintenance thread runs independently with its own synchronization.
+	 * - IMPORTANT: acquire_connection() may return nullptr on timeout or shutdown.
+	 *   Always check for null before dereferencing!
+	 *
+	 * ### Performance Characteristics
+	 * - Connection acquisition: O(1) when connections available, O(timeout) when waiting
+	 * - Health checks: O(n) where n = number of pooled connections
+	 * - Lock contention: Minimal due to atomic counters and separate maintenance mutex
 	 */
 	class connection_pool : public connection_pool_base
 	{

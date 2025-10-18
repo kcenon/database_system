@@ -96,6 +96,16 @@ namespace database
 	/**
 	 * @class sql_query_builder
 	 * @brief Builder for SQL queries (PostgreSQL, MySQL, SQLite).
+	 *
+	 * ### Thread Safety
+	 * - NOT thread-safe. Each thread should use its own instance.
+	 * - Builder pattern is inherently stateful and not designed for concurrent access.
+	 * - Create separate builders for each thread or protect with external mutex.
+	 *
+	 * ### SQL Injection Warning
+	 * - AVOID using *_raw() methods with user input!
+	 * - Use parameterized methods (where, set) for user-provided data.
+	 * - Raw methods are provided for advanced use cases only.
 	 */
 	class sql_query_builder
 	{
@@ -258,6 +268,11 @@ namespace database
 	/**
 	 * @class redis_query_builder
 	 * @brief Builder for Redis commands.
+	 *
+	 * ### Thread Safety
+	 * - NOT thread-safe. Each thread must use its own instance.
+	 * - Internal state (command_, args_) is not protected by mutex.
+	 * - DO NOT share instances across threads.
 	 */
 	class redis_query_builder
 	{

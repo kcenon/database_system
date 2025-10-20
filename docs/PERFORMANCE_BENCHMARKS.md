@@ -494,3 +494,6 @@ db.create_query("PRAGMA mmap_size = 268435456");  // 256MB
 ---
 
 These benchmarks provide a comprehensive view of the Database System's performance characteristics. For specific optimization needs, refer to the individual database documentation and consider your application's unique requirements.
+---
+
+*Last Updated: 2025-10-20*

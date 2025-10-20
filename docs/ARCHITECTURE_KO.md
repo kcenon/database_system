@@ -2,6 +2,54 @@
 
 > **Language:** [English](ARCHITECTURE.md) | **한국어**
 
+## 목차
+
+- [개요](#개요)
+- [아키텍처 레이어](#아키텍처-레이어)
+- [핵심 컴포넌트](#핵심-컴포넌트)
+  - [1. Database Abstraction Layer](#1-database-abstraction-layer)
+    - [database_base](#database_base)
+    - [백엔드 구현](#백엔드-구현)
+  - [2. Connection Management](#2-connection-management)
+    - [database_manager](#database_manager)
+    - [Connection Pooling](#connection-pooling)
+  - [3. Phase 4 엔터프라이즈 컴포넌트](#3-phase-4-엔터프라이즈-컴포넌트)
+    - [ORM Framework (database/orm/)](#orm-framework-databaseorm)
+    - [Performance Monitoring (database/monitoring/)](#performance-monitoring-databasemonitoring)
+    - [Security Framework (database/security/)](#security-framework-databasesecurity)
+    - [Async Operations (database/async/)](#async-operations-databaseasync)
+- [디자인 원칙](#디자인-원칙)
+  - [1. SOLID 원칙](#1-solid-원칙)
+  - [2. 현대적인 C++ 모범 사례](#2-현대적인-c-모범-사례)
+  - [3. 엔터프라이즈 패턴](#3-엔터프라이즈-패턴)
+- [스레드 안전성](#스레드-안전성)
+  - [동기화 메커니즘](#동기화-메커니즘)
+  - [스레드 안전 컴포넌트](#스레드-안전-컴포넌트)
+- [Common System Result 통합](#common-system-result-통합)
+- [다른 모듈과의 상호 운용성](#다른-모듈과의-상호-운용성)
+- [에러 처리](#에러-처리)
+  - [예외 안전성 보장](#예외-안전성-보장)
+  - [에러 전파](#에러-전파)
+- [성능 특성](#성능-특성)
+  - [Connection Pool](#connection-pool)
+  - [Query Execution](#query-execution)
+  - [Memory Management](#memory-management)
+- [확장성](#확장성)
+  - [수평 확장](#수평-확장)
+  - [수직 확장](#수직-확장)
+- [모니터링 및 관찰성](#모니터링-및-관찰성)
+  - [메트릭 수집](#메트릭-수집)
+  - [내보내기 형식](#내보내기-형식)
+- [향후 확장](#향후-확장)
+  - [계획된 기능](#계획된-기능)
+  - [확장 포인트](#확장-포인트)
+- [의존성](#의존성)
+  - [필수 라이브러리](#필수-라이브러리)
+  - [선택적 의존성](#선택적-의존성)
+- [빌드 구성](#빌드-구성)
+  - [CMake 옵션](#cmake-옵션)
+  - [컴파일 기능](#컴파일-기능)
+
 이 문서는 Database System Phase 4 구현의 아키텍처와 디자인 패턴을 설명합니다.
 
 ## 개요
@@ -345,3 +393,7 @@ option(ENABLE_REDIS "Enable Redis support" OFF)
 ---
 
 이 아키텍처는 현대적인 C++ 기능, 포괄적인 보안 및 프로덕션 준비 성능 모니터링을 갖춘 엔터프라이즈 데이터베이스 애플리케이션을 위한 견고한 기반을 제공합니다.
+
+---
+
+*Last Updated: 2025-10-20*

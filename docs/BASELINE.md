@@ -2,6 +2,31 @@
 
 > **Language:** **English** | [한국어](BASELINE_KO.md)
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+- [Target Metrics](#target-metrics)
+  - [Primary Success Criteria](#primary-success-criteria)
+- [Baseline Metrics](#baseline-metrics)
+  - [1. Query Builder Performance](#1-query-builder-performance)
+  - [2. Connection Pool Performance](#2-connection-pool-performance)
+  - [3. Transaction Performance](#3-transaction-performance)
+- [Platform-Specific Baselines](#platform-specific-baselines)
+  - [macOS (Apple Silicon)](#macos-apple-silicon)
+  - [Ubuntu 22.04 (x86_64)](#ubuntu-2204-x86_64)
+- [How to Run Benchmarks](#how-to-run-benchmarks)
+  - [Generate JSON Output](#generate-json-output)
+  - [Run Specific Categories](#run-specific-categories)
+- [Performance Improvement Opportunities](#performance-improvement-opportunities)
+  - [Identified Areas for Optimization (Phase 1+)](#identified-areas-for-optimization-phase-1)
+- [Regression Testing](#regression-testing)
+  - [CI/CD Integration](#cicd-integration)
+  - [Regression Thresholds](#regression-thresholds)
+- [Notes](#notes)
+  - [Measurement Conditions](#measurement-conditions)
+  - [Known Limitations](#known-limitations)
+  - [Future Enhancements](#future-enhancements)
+
 **Phase**: 0 - Foundation and Tooling
 **Task**: 0.2 - Baseline Performance Benchmarking
 **Date Created**: 2025-10-07

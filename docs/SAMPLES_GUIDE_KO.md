@@ -790,3 +790,7 @@ void performance_optimization()
 ---
 
 이러한 샘플은 다양한 시나리오에서 Database System을 사용하는 종합적인 예제를 제공합니다. 더 고급 사용 사례 및 특정 데이터베이스 기능에 대해서는 [API Reference](API_REFERENCE.md) 및 개별 데이터베이스 문서를 참조하십시오.
+
+---
+
+*Last Updated: 2025-10-20*

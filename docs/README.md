@@ -35,7 +35,7 @@
 - [📞 Getting Help](#-getting-help)
   - [Documentation Issues](#documentation-issues)
   - [Technical Support](#technical-support)
-  - [Community Resources](#community-resources)
+  - [Support Resources](#community-resources)
 - [📅 Documentation Roadmap](#-documentation-roadmap)
   - [Current (v3.0.0)](#current-v300)
   - [Future Enhancements](#future-enhancements)
@@ -250,9 +250,9 @@ We welcome contributions to improve our documentation! Here's how you can help:
 - **API Questions**: Review [API Reference](API_REFERENCE.md) first
 - **Performance Issues**: Consult [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)
 
-### Community Resources
+### Support Resources
 - **GitHub Issues**: For bug reports and feature requests
-- **GitHub Discussions**: For questions and community support
+- **GitHub Discussions**: For questions and maintenance support
 - **Pull Requests**: For contributing code and documentation
 
 ## 📅 Documentation Roadmap

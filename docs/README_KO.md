@@ -35,7 +35,7 @@
 - [📞 도움 받기](#-도움-받기)
   - [문서 이슈](#문서-이슈)
   - [기술 지원](#기술-지원)
-  - [커뮤니티 리소스](#커뮤니티-리소스)
+  - [지원 리소스](#커뮤니티-리소스)
 - [📅 문서 로드맵](#-문서-로드맵)
   - [현재 (v3.0.0)](#현재-v300)
   - [향후 개선사항](#향후-개선사항)
@@ -250,9 +250,9 @@ Database System을 빌드하고 배포하는 데 필요한 모든 것:
 - **API 질문**: 먼저 [API Reference](API_REFERENCE_KO.md) 검토
 - **성능 이슈**: [Performance Benchmarks](PERFORMANCE_BENCHMARKS_KO.md) 참조
 
-### 커뮤니티 리소스
+### 지원 리소스
 - **GitHub Issues**: 버그 보고 및 기능 요청
-- **GitHub Discussions**: 질문 및 커뮤니티 지원
+- **GitHub Discussions**: 질문 및 유지보수 지원
 - **Pull Requests**: 코드 및 문서 기여
 
 ## 📅 문서 로드맵

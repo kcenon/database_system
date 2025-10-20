@@ -1,58 +1,58 @@
-# Database System Performance Benchmarks
+# Database System 성능 벤치마크
 
-> **Language:** **English** | [한국어](PERFORMANCE_BENCHMARKS_KO.md)
+> **Language:** [English](PERFORMANCE_BENCHMARKS.md) | **한국어**
 
-Comprehensive performance analysis and benchmarks for the Database System with multi-backend support, connection pooling, and query builders.
+멀티 백엔드 지원, 연결 풀링, 쿼리 빌더를 갖춘 Database System에 대한 종합적인 성능 분석 및 벤치마크입니다.
 
-## Table of Contents
+## 목차
 
-- [Benchmark Overview](#benchmark-overview)
-- [Test Environment](#test-environment)
-- [Database Performance](#database-performance)
-- [Connection Pool Performance](#connection-pool-performance)
-- [Query Builder Performance](#query-builder-performance)
-- [Memory Usage Analysis](#memory-usage-analysis)
-- [Scalability Tests](#scalability-tests)
-- [Best Practices for Performance](#best-practices-for-performance)
+- [벤치마크 개요](#벤치마크-개요)
+- [테스트 환경](#테스트-환경)
+- [데이터베이스 성능](#데이터베이스-성능)
+- [Connection Pool 성능](#connection-pool-성능)
+- [Query Builder 성능](#query-builder-성능)
+- [메모리 사용량 분석](#메모리-사용량-분석)
+- [확장성 테스트](#확장성-테스트)
+- [성능을 위한 모범 사례](#성능을-위한-모범-사례)
 
-## Benchmark Overview
+## 벤치마크 개요
 
-### Testing Methodology
+### 테스트 방법론
 
-- **Automated Benchmarks**: Repeatable test suites with statistical analysis
-- **Real-world Scenarios**: Practical workloads mimicking production usage
-- **Multiple Metrics**: Latency, throughput, memory usage, and resource utilization
-- **Cross-platform Testing**: Results from Linux, macOS, and Windows environments
+- **자동화된 벤치마크**: 통계 분석을 포함한 반복 가능한 테스트 스위트
+- **실제 시나리오**: 프로덕션 사용을 모방한 실용적인 워크로드
+- **다양한 메트릭**: 지연 시간, 처리량, 메모리 사용량 및 리소스 활용도
+- **크로스 플랫폼 테스트**: Linux, macOS 및 Windows 환경의 결과
 
-### Key Performance Indicators
+### 주요 성능 지표
 
-| Metric | Description | Target |
-|--------|-------------|--------|
-| **Latency** | Time to complete single operation | < 10ms for simple queries |
-| **Throughput** | Operations per second | > 1000 ops/sec per connection |
-| **Memory Usage** | Peak memory consumption | < 100MB for typical workloads |
-| **Pool Efficiency** | Connection reuse ratio | > 95% |
-| **Scalability** | Performance with concurrent clients | Linear up to 100 connections |
+| 메트릭 | 설명 | 목표 |
+|--------|------|------|
+| **Latency** | 단일 작업 완료 시간 | 간단한 쿼리의 경우 < 10ms |
+| **Throughput** | 초당 작업 수 | 연결당 > 1000 ops/sec |
+| **Memory Usage** | 최대 메모리 소비량 | 일반적인 워크로드의 경우 < 100MB |
+| **Pool Efficiency** | 연결 재사용 비율 | > 95% |
+| **Scalability** | 동시 클라이언트에 따른 성능 | 100개 연결까지 선형 |
 
-## Test Environment
+## 테스트 환경
 
-### Hardware Specifications
+### 하드웨어 사양
 
 ```
-Primary Test System:
+기본 테스트 시스템:
 - CPU: Intel Core i7-9750H @ 2.60GHz (6 cores, 12 threads)
 - Memory: 16GB DDR4-2667
 - Storage: Samsung 970 EVO Plus 1TB NVMe SSD
 - Network: Gigabit Ethernet (local tests)
 
-Secondary Test System (ARM):
+보조 테스트 시스템 (ARM):
 - CPU: Apple M1 @ 3.20GHz (8 cores)
 - Memory: 16GB Unified Memory
 - Storage: 512GB SSD
 - Network: Wi-Fi 6
 ```
 
-### Software Environment
+### 소프트웨어 환경
 
 ```
 Operating Systems:
@@ -73,7 +73,7 @@ Database Versions:
 - Redis 7.0.5
 ```
 
-### Build Configuration
+### 빌드 구성
 
 ```bash
 # Optimized release build
@@ -87,11 +87,11 @@ cmake .. \
   -DUSE_REDIS=ON
 ```
 
-## Database Performance
+## 데이터베이스 성능
 
-### Single Operation Latency
+### 단일 작업 지연 시간
 
-Measured time for individual database operations with direct connections (no pooling).
+직접 연결(풀링 없음)을 사용한 개별 데이터베이스 작업의 측정 시간입니다.
 
 | Operation | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
 |-----------|------------|-------|--------|---------|-------|
@@ -102,11 +102,11 @@ Measured time for individual database operations with direct connections (no poo
 | **Complex JOIN** | 15ms | 18ms | 12ms | N/A | N/A |
 | **Aggregate Query** | 8ms | 10ms | 6ms | 12ms | 1ms |
 
-*Results represent median latency over 10,000 operations*
+*결과는 10,000회 작업에 대한 중간 지연 시간을 나타냄*
 
-### Bulk Operations Performance
+### 대량 작업 성능
 
-Performance for batch operations (1,000 records per batch).
+배치 작업(배치당 1,000개 레코드)에 대한 성능입니다.
 
 | Operation | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
 |-----------|------------|-------|--------|---------|-------|
@@ -115,9 +115,9 @@ Performance for batch operations (1,000 records per batch).
 | **Bulk DELETE** | 82ms | 95ms | 70ms | 61ms | 45ms |
 | **Batch SELECT** | 125ms | 145ms | 98ms | 185ms | 65ms |
 
-### Throughput Analysis
+### 처리량 분석
 
-Operations per second with optimized connections.
+최적화된 연결을 사용한 초당 작업 수입니다.
 
 | Database | Single Thread | 4 Threads | 8 Threads | 16 Threads |
 |----------|---------------|-----------|-----------|------------|
@@ -127,13 +127,13 @@ Operations per second with optimized connections.
 | **MongoDB** | 950 ops/sec | 3,600 ops/sec | 6,800 ops/sec | 9,200 ops/sec |
 | **Redis** | 8,500 ops/sec | 28,000 ops/sec | 45,000 ops/sec | 62,000 ops/sec |
 
-*¹SQLite performance plateaus due to file-based locking*
+*¹SQLite 성능은 파일 기반 잠금으로 인해 정체됨*
 
-## Connection Pool Performance
+## Connection Pool 성능
 
-### Pool Initialization Time
+### 풀 초기화 시간
 
-Time to create and initialize connection pools with different configurations.
+다양한 구성으로 연결 풀을 생성하고 초기화하는 시간입니다.
 
 | Pool Size | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
 |-----------|------------|-------|--------|---------|-------|
@@ -141,9 +141,9 @@ Time to create and initialize connection pools with different configurations.
 | **5-20 connections** | 278ms | 315ms | 115ms | 687ms | 95ms |
 | **10-50 connections** | 542ms | 625ms | 225ms | 1,350ms | 185ms |
 
-### Connection Acquisition Time
+### 연결 획득 시간
 
-Average time to acquire a connection from the pool under various load conditions.
+다양한 부하 조건에서 풀에서 연결을 획득하는 평균 시간입니다.
 
 | Scenario | Pool Utilization | Acquisition Time | Success Rate |
 |----------|------------------|------------------|--------------|
@@ -153,14 +153,14 @@ Average time to acquire a connection from the pool under various load conditions
 | **Peak Load** | 95% | 1.25ms | 97.80% |
 | **Overload** | 100%+ | 2,850ms² | 89.45% |
 
-*²Timeout scenario (5-second timeout configured)*
+*²타임아웃 시나리오 (5초 타임아웃 구성됨)*
 
-### Pool Efficiency Metrics
+### 풀 효율성 메트릭
 
-Analysis of connection reuse and pool management efficiency.
+연결 재사용 및 풀 관리 효율성 분석입니다.
 
 ```
-Connection Pool Statistics (24-hour production simulation):
+Connection Pool Statistics (24시간 프로덕션 시뮬레이션):
 ├── Total Connections Created: 45
 ├── Peak Concurrent Connections: 28
 ├── Connection Reuse Ratio: 97.8%
@@ -170,9 +170,9 @@ Connection Pool Statistics (24-hour production simulation):
 └── Memory Overhead: 2.1MB per pool
 ```
 
-### Concurrent Access Performance
+### 동시 액세스 성능
 
-Performance with multiple threads accessing the same connection pool.
+동일한 연결 풀에 액세스하는 여러 스레드의 성능입니다.
 
 | Concurrent Threads | Avg Latency | 95th Percentile | 99th Percentile | Throughput |
 |-------------------|-------------|-----------------|-----------------|------------|
@@ -183,11 +183,11 @@ Performance with multiple threads accessing the same connection pool.
 | **50 threads** | 4.2ms | 7.8ms | 12.5ms | 11,900 ops/sec |
 | **100 threads** | 8.5ms | 15.2ms | 25.8ms | 11,800 ops/sec |
 
-## Query Builder Performance
+## Query Builder 성능
 
-### Query Generation Overhead
+### 쿼리 생성 오버헤드
 
-Time overhead for building queries compared to raw SQL strings.
+원시 SQL 문자열과 비교한 쿼리 빌드 시간 오버헤드입니다.
 
 | Query Complexity | Raw SQL | SQL Builder | MongoDB Builder | Redis Builder | Overhead |
 |------------------|---------|-------------|-----------------|---------------|----------|
@@ -196,9 +196,9 @@ Time overhead for building queries compared to raw SQL strings.
 | **Aggregation** | 0.003ms | 0.038ms | 0.052ms | 0.012ms | 1.8% |
 | **Bulk INSERT** | 0.008ms | 0.125ms | 0.145ms | 0.035ms | 1.2% |
 
-### Memory Usage During Query Building
+### 쿼리 빌드 중 메모리 사용량
 
-Peak memory consumption during query construction.
+쿼리 구성 중 최대 메모리 소비량입니다.
 
 | Query Type | Base Memory | SQL Builder | MongoDB Builder | Redis Builder |
 |------------|-------------|-------------|-----------------|---------------|
@@ -206,9 +206,9 @@ Peak memory consumption during query construction.
 | **Complex Query** | 512 bytes | 1.2KB | 1.8KB | 512 bytes |
 | **Bulk Operation** | 2.5KB | 8.5KB | 12.5KB | 4.2KB |
 
-### Query Execution Time Comparison
+### 쿼리 실행 시간 비교
 
-End-to-end execution time including query building and database execution.
+쿼리 빌드 및 데이터베이스 실행을 포함한 종단간 실행 시간입니다.
 
 | Test Case | Direct SQL | Query Builder | Performance Impact |
 |-----------|------------|---------------|-------------------|
@@ -217,11 +217,11 @@ End-to-end execution time including query building and database execution.
 | **Bulk Data Import** | 450ms | 465ms | +3.3% |
 | **Real-time Dashboard** | 125ms | 129ms | +3.2% |
 
-## Memory Usage Analysis
+## 메모리 사용량 분석
 
-### Base Memory Footprint
+### 기본 메모리 풋프린트
 
-Memory usage for core components without active operations.
+활성 작업 없이 핵심 구성 요소의 메모리 사용량입니다.
 
 ```
 Core Components Memory Usage:
@@ -233,9 +233,9 @@ Core Components Memory Usage:
 └── Total Base Footprint: 10.7KB
 ```
 
-### Runtime Memory Scaling
+### 런타임 메모리 확장
 
-Memory usage scaling with active connections and operations.
+활성 연결 및 작업에 따른 메모리 사용량 확장입니다.
 
 | Scenario | Base | +10 Connections | +100 Operations | +1000 Results |
 |----------|------|-----------------|-----------------|---------------|
@@ -245,12 +245,12 @@ Memory usage scaling with active connections and operations.
 | **MongoDB** | 52KB | 3.5MB | 3.9MB | 12.5MB |
 | **Redis** | 18KB | 0.8MB | 0.9MB | 2.1MB |
 
-### Memory Leak Testing
+### 메모리 누수 테스트
 
-24-hour continuous operation test with periodic monitoring.
+주기적인 모니터링을 통한 24시간 연속 작업 테스트입니다.
 
 ```
-Memory Leak Analysis (24-hour test):
+Memory Leak Analysis (24시간 테스트):
 ├── Starting Memory: 45.2MB
 ├── Peak Memory: 127.8MB
 ├── Final Memory: 46.1MB
@@ -259,11 +259,11 @@ Memory Leak Analysis (24-hour test):
 └── Leak Detection: No significant leaks detected
 ```
 
-## Scalability Tests
+## 확장성 테스트
 
-### Horizontal Scaling (Multiple Processes)
+### 수평 확장 (다중 프로세스)
 
-Performance with multiple application instances sharing database resources.
+데이터베이스 리소스를 공유하는 여러 애플리케이션 인스턴스의 성능입니다.
 
 | Processes | Per-Process Throughput | Total Throughput | Efficiency |
 |-----------|------------------------|------------------|------------|
@@ -273,9 +273,9 @@ Performance with multiple application instances sharing database resources.
 | **8** | 780 ops/sec | 6,240 ops/sec | 62.4% |
 | **16** | 420 ops/sec | 6,720 ops/sec | 42.0% |
 
-### Vertical Scaling (Connection Pool Size)
+### 수직 확장 (Connection Pool 크기)
 
-Impact of connection pool size on performance.
+연결 풀 크기가 성능에 미치는 영향입니다.
 
 | Pool Size | Latency (P50) | Latency (P95) | Throughput | Memory Usage |
 |-----------|---------------|---------------|------------|--------------|
@@ -285,12 +285,12 @@ Impact of connection pool size on performance.
 | **20-50** | 1.4ms | 3.0ms | 11,200 ops/sec | 52.8MB |
 | **50-100** | 1.4ms | 3.1ms | 11,800 ops/sec | 98.5MB |
 
-### Load Testing Results
+### 부하 테스트 결과
 
-Sustained load testing over extended periods.
+장기간에 걸친 지속적인 부하 테스트입니다.
 
 ```
-Load Test: 1-hour sustained load
+Load Test: 1시간 지속 부하
 ├── Target: 5,000 ops/sec
 ├── Actual Average: 4,987 ops/sec
 ├── Peak Throughput: 6,240 ops/sec
@@ -301,9 +301,9 @@ Load Test: 1-hour sustained load
 └── CPU Utilization: 45% (average)
 ```
 
-## Best Practices for Performance
+## 성능을 위한 모범 사례
 
-### Connection Pool Configuration
+### Connection Pool 구성
 
 ```cpp
 // Optimized connection pool configuration
@@ -316,7 +316,7 @@ config.health_check_interval = std::chrono::minutes(1);
 config.enable_health_checks = true;
 ```
 
-### Query Optimization
+### 쿼리 최적화
 
 ```cpp
 // Efficient query patterns
@@ -363,7 +363,7 @@ void optimized_queries() {
 }
 ```
 
-### Memory Management
+### 메모리 관리
 
 ```cpp
 // Memory-efficient patterns
@@ -407,7 +407,7 @@ void memory_efficient_usage() {
 }
 ```
 
-### Monitoring and Profiling
+### 모니터링 및 프로파일링
 
 ```cpp
 // Performance monitoring
@@ -443,9 +443,9 @@ void monitor_performance() {
 }
 ```
 
-## Performance Tuning Recommendations
+## 성능 튜닝 권장사항
 
-### Database-Specific Optimizations
+### 데이터베이스별 최적화
 
 #### PostgreSQL
 ```sql
@@ -482,15 +482,15 @@ db.create_query("PRAGMA temp_store = MEMORY");
 db.create_query("PRAGMA mmap_size = 268435456");  // 256MB
 ```
 
-### Application-Level Optimizations
+### 애플리케이션 수준 최적화
 
-1. **Use Connection Pooling**: Always use connection pools for production deployments
-2. **Batch Operations**: Group multiple operations into single transactions
-3. **Appropriate Indexing**: Create indexes for frequently queried columns
-4. **Result Set Limiting**: Use LIMIT clauses to avoid large result sets
-5. **Prepared Statements**: Reuse query builders for similar operations
-6. **Monitoring**: Implement comprehensive performance monitoring
+1. **Connection Pooling 사용**: 프로덕션 배포에는 항상 연결 풀 사용
+2. **배치 작업**: 여러 작업을 단일 트랜잭션으로 그룹화
+3. **적절한 인덱싱**: 자주 쿼리하는 열에 인덱스 생성
+4. **결과 집합 제한**: LIMIT 절을 사용하여 큰 결과 집합 방지
+5. **Prepared Statements**: 유사한 작업에 쿼리 빌더 재사용
+6. **모니터링**: 종합적인 성능 모니터링 구현
 
 ---
 
-These benchmarks provide a comprehensive view of the Database System's performance characteristics. For specific optimization needs, refer to the individual database documentation and consider your application's unique requirements.
+이 벤치마크는 Database System의 성능 특성에 대한 포괄적인 시각을 제공합니다. 특정 최적화 요구 사항에 대해서는 개별 데이터베이스 문서를 참조하고 애플리케이션의 고유한 요구 사항을 고려하십시오.

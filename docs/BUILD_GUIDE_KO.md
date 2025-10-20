@@ -1,115 +1,115 @@
 # Database System Build Guide
 
-> **Language:** **English** | [한국어](BUILD_GUIDE_KO.md)
+> **Language:** [English](BUILD_GUIDE.md) | **한국어**
 
-Comprehensive guide for building the Database System with multi-backend support, connection pooling, and query builders.
+멀티 백엔드 지원, 연결 풀링 및 쿼리 빌더를 갖춘 Database System 빌드를 위한 종합 가이드입니다.
 
-## Table of Contents
+## 목차
 
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Build Configurations](#build-configurations)
-- [Database Dependencies](#database-dependencies)
-- [Platform-Specific Instructions](#platform-specific-instructions)
-- [Troubleshooting](#troubleshooting)
-- [Advanced Configuration](#advanced-configuration)
+- [사전 요구 사항](#사전-요구-사항)
+- [빠른 시작](#빠른-시작)
+- [빌드 구성](#빌드-구성)
+- [데이터베이스 의존성](#데이터베이스-의존성)
+- [플랫폼별 지침](#플랫폼별-지침)
+- [문제 해결](#문제-해결)
+- [고급 구성](#고급-구성)
 
-## Prerequisites
+## 사전 요구 사항
 
-### System Requirements
+### 시스템 요구 사항
 
-- **C++20 compatible compiler**:
+- **C++20 호환 컴파일러**:
   - GCC 10.0+ (Linux)
   - Clang 11.0+ (macOS/Linux)
   - MSVC 2019+ (Windows)
 - **CMake 3.16+**
-- **Build system**: Make, Ninja (recommended), or Visual Studio
-- **Git** (for cloning and vcpkg)
+- **빌드 시스템**: Make, Ninja (권장), 또는 Visual Studio
+- **Git** (vcpkg 및 클로닝용)
 
-### Optional Dependencies
+### 선택적 의존성
 
-Database support is optional and can be disabled for testing:
+데이터베이스 지원은 선택 사항이며 테스트를 위해 비활성화할 수 있습니다:
 
 - **PostgreSQL**: libpqxx, libpq, OpenSSL
-- **MySQL**: libmysql or mysql-connector-cpp
+- **MySQL**: libmysql 또는 mysql-connector-cpp
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
 
-## Quick Start
+## 빠른 시작
 
-### 1. Clone Repository
+### 1. 저장소 클론
 
 ```bash
 git clone https://github.com/kcenon/database_system.git
 cd database_system
 ```
 
-### 2. Basic Build (No External Dependencies)
+### 2. 기본 빌드 (외부 의존성 없음)
 
 ```bash
-# Create build directory
+# 빌드 디렉토리 생성
 mkdir build && cd build
 
-# Configure with mock implementations
+# 모의 구현으로 구성
 cmake .. -DUSE_POSTGRESQL=OFF -DUSE_MYSQL=OFF -DUSE_SQLITE=OFF -DUSE_MONGODB=OFF -DUSE_REDIS=OFF
 
-# Build
-ninja  # or make -j$(nproc)
+# 빌드
+ninja  # 또는 make -j$(nproc)
 
-# Test
+# 테스트
 ./bin/basic_usage
 ./bin/connection_pool_demo
 ```
 
-### 3. Full Build with Database Support
+### 3. 데이터베이스 지원을 포함한 전체 빌드
 
 ```bash
-# Install dependencies (see Database Dependencies section)
-# Then configure with full support
+# 의존성 설치 (데이터베이스 의존성 섹션 참조)
+# 그런 다음 전체 지원으로 구성
 cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
 
-# Build
+# 빌드
 ninja
 ```
 
-## Build Configurations
+## 빌드 구성
 
-### CMake Options
+### CMake 옵션
 
-| Option | Default | Description |
+| 옵션 | 기본값 | 설명 |
 |--------|---------|-------------|
-| `USE_POSTGRESQL` | ON | Enable PostgreSQL support (requires libpqxx) |
-| `USE_MYSQL` | OFF | Enable MySQL support (requires libmysql) |
-| `USE_SQLITE` | OFF | Enable SQLite support (requires sqlite3) |
-| `USE_MONGODB` | OFF | Enable MongoDB support (requires mongocxx) |
-| `USE_REDIS` | OFF | Enable Redis support (requires hiredis) |
-| `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
-| `USE_UNIT_TEST` | ON | Build unit tests |
-| `BUILD_SHARED_LIBS` | OFF | Build as shared library |
+| `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 (libpqxx 필요) |
+| `USE_MYSQL` | OFF | MySQL 지원 활성화 (libmysql 필요) |
+| `USE_SQLITE` | OFF | SQLite 지원 활성화 (sqlite3 필요) |
+| `USE_MONGODB` | OFF | MongoDB 지원 활성화 (mongocxx 필요) |
+| `USE_REDIS` | OFF | Redis 지원 활성화 (hiredis 필요) |
+| `BUILD_DATABASE_SAMPLES` | ON | 샘플 프로그램 빌드 |
+| `USE_UNIT_TEST` | ON | 단위 테스트 빌드 |
+| `BUILD_SHARED_LIBS` | OFF | 공유 라이브러리로 빌드 |
 
-### Build Types
+### 빌드 타입
 
 ```bash
-# Debug build (default)
+# Debug 빌드 (기본값)
 cmake .. -DCMAKE_BUILD_TYPE=Debug
 
-# Release build (optimized)
+# Release 빌드 (최적화됨)
 cmake .. -DCMAKE_BUILD_TYPE=Release
 
-# Release with debug info
+# 디버그 정보를 포함한 Release
 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
-# Minimum size release
+# 최소 크기 Release
 cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel
 ```
 
-### Common Build Scenarios
+### 일반적인 빌드 시나리오
 
-#### 1. Development Build
+#### 1. 개발 빌드
 
 ```bash
-# Full features with debug information
+# 디버그 정보를 포함한 전체 기능
 cmake .. \
   -DCMAKE_BUILD_TYPE=Debug \
   -DUSE_POSTGRESQL=ON \
@@ -119,10 +119,10 @@ cmake .. \
   -DUSE_UNIT_TEST=ON
 ```
 
-#### 2. Production Build
+#### 2. 프로덕션 빌드
 
 ```bash
-# Optimized release with specific databases
+# 특정 데이터베이스를 사용한 최적화된 Release
 cmake .. \
   -DCMAKE_BUILD_TYPE=Release \
   -DUSE_POSTGRESQL=ON \
@@ -131,10 +131,10 @@ cmake .. \
   -DUSE_UNIT_TEST=OFF
 ```
 
-#### 3. Testing/CI Build
+#### 3. 테스트/CI 빌드
 
 ```bash
-# Mock implementations only
+# 모의 구현만 사용
 cmake .. \
   -DCMAKE_BUILD_TYPE=Debug \
   -DUSE_POSTGRESQL=OFF \
@@ -146,11 +146,11 @@ cmake .. \
   -DUSE_UNIT_TEST=ON
 ```
 
-## Database Dependencies
+## 데이터베이스 의존성
 
-### Using vcpkg (Recommended)
+### vcpkg 사용 (권장)
 
-#### Install vcpkg
+#### vcpkg 설치
 
 ```bash
 git clone https://github.com/Microsoft/vcpkg.git
@@ -163,29 +163,29 @@ cd vcpkg
 ./bootstrap-vcpkg.sh
 ```
 
-#### Install Database Libraries
+#### 데이터베이스 라이브러리 설치
 
 ```bash
-# PostgreSQL support
+# PostgreSQL 지원
 vcpkg install libpqxx openssl
 
-# MySQL support
+# MySQL 지원
 vcpkg install libmysql
 
-# SQLite support
+# SQLite 지원
 vcpkg install sqlite3
 
-# MongoDB support
+# MongoDB 지원
 vcpkg install mongo-cxx-driver
 
-# Redis support
+# Redis 지원
 vcpkg install hiredis
 
-# Install all at once
+# 한 번에 모두 설치
 vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
 ```
 
-#### Build with vcpkg
+#### vcpkg로 빌드
 
 ```bash
 cmake .. \
@@ -197,7 +197,7 @@ cmake .. \
   -DUSE_REDIS=ON
 ```
 
-### Manual Installation
+### 수동 설치
 
 #### Ubuntu/Debian
 
@@ -256,42 +256,42 @@ brew install mongo-cxx-driver
 brew install hiredis
 ```
 
-#### Windows (vcpkg recommended)
+#### Windows (vcpkg 권장)
 
-For Windows, vcpkg is the recommended approach. Manual installation is complex due to dependency management.
+Windows의 경우 vcpkg가 권장되는 방법입니다. 의존성 관리로 인해 수동 설치는 복잡합니다.
 
-## Platform-Specific Instructions
+## 플랫폼별 지침
 
 ### Linux
 
 ```bash
-# Install dependencies
+# 의존성 설치
 sudo apt-get update
 sudo apt-get install build-essential cmake ninja-build git
 
-# Install database libraries (see above)
+# 데이터베이스 라이브러리 설치 (위 참조)
 
-# Build
+# 빌드
 mkdir build && cd build
 cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
 ninja
 
-# Install (optional)
+# 설치 (선택 사항)
 sudo ninja install
 ```
 
 ### macOS
 
 ```bash
-# Install Xcode command line tools
+# Xcode 명령줄 도구 설치
 xcode-select --install
 
-# Install dependencies
+# 의존성 설치
 brew install cmake ninja
 
-# Install database libraries (see above)
+# 데이터베이스 라이브러리 설치 (위 참조)
 
-# Build
+# 빌드
 mkdir build && cd build
 cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
 ninja
@@ -299,43 +299,43 @@ ninja
 
 ### Windows
 
-#### Using Visual Studio
+#### Visual Studio 사용
 
 ```batch
-# Open Developer Command Prompt
+# 개발자 명령 프롬프트 열기
 
-# Build
+# 빌드
 mkdir build
 cd build
 cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 cmake --build . --config Release
 ```
 
-#### Using MSYS2/MinGW
+#### MSYS2/MinGW 사용
 
 ```bash
-# Install MSYS2 first
+# 먼저 MSYS2 설치
 
-# Install dependencies
+# 의존성 설치
 pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja
 
-# Build
+# 빌드
 mkdir build && cd build
 cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
 ninja
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### Common Build Issues
+### 일반적인 빌드 문제
 
-#### 1. Missing C++20 Support
+#### 1. C++20 지원 누락
 
-**Error**: `error: 'std::variant' is not available before C++17`
+**오류**: `error: 'std::variant' is not available before C++17`
 
-**Solution**:
+**해결책**:
 ```bash
-# Update compiler
+# 컴파일러 업데이트
 # GCC
 sudo apt-get install gcc-10 g++-10
 export CC=gcc-10 CXX=g++-10
@@ -345,27 +345,27 @@ sudo apt-get install clang-11
 export CC=clang-11 CXX=clang++-11
 ```
 
-#### 2. Missing Database Libraries
+#### 2. 데이터베이스 라이브러리 누락
 
-**Error**: `Could NOT find libpqxx (missing: libpqxx_LIBRARY libpqxx_INCLUDE_DIR)`
+**오류**: `Could NOT find libpqxx (missing: libpqxx_LIBRARY libpqxx_INCLUDE_DIR)`
 
-**Solution**:
+**해결책**:
 ```bash
-# Disable specific database if not needed
+# 필요하지 않은 경우 특정 데이터베이스 비활성화
 cmake .. -DUSE_POSTGRESQL=OFF
 
-# Or install the library
+# 또는 라이브러리 설치
 sudo apt-get install libpqxx-dev
 
-# Or use vcpkg
+# 또는 vcpkg 사용
 vcpkg install libpqxx
 ```
 
-#### 3. CMake Version Too Old
+#### 3. CMake 버전이 너무 오래됨
 
-**Error**: `CMake 3.16 or higher is required. You are running version 3.10.2`
+**오류**: `CMake 3.16 or higher is required. You are running version 3.10.2`
 
-**Solution**:
+**해결책**:
 ```bash
 # Ubuntu/Debian
 wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
@@ -373,36 +373,36 @@ sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'
 sudo apt-get update
 sudo apt-get install cmake
 
-# Or build from source
+# 또는 소스에서 빌드
 wget https://github.com/Kitware/CMake/releases/download/v3.26.0/cmake-3.26.0.tar.gz
 tar -xzf cmake-3.26.0.tar.gz
 cd cmake-3.26.0
 ./bootstrap && make -j$(nproc) && sudo make install
 ```
 
-#### 4. Linking Errors
+#### 4. 링킹 오류
 
-**Error**: `undefined reference to 'pqxx::connection::connection(...)'`
+**오류**: `undefined reference to 'pqxx::connection::connection(...)'`
 
-**Solution**:
+**해결책**:
 ```bash
-# Make sure all dependencies are found
+# 모든 의존성이 발견되었는지 확인
 cmake .. -DCMAKE_VERBOSE_MAKEFILE=ON
 
-# Check if libraries are properly linked
+# 라이브러리가 제대로 링크되었는지 확인
 ldd bin/basic_usage
 
-# For static linking issues
+# 정적 링킹 문제의 경우
 cmake .. -DBUILD_SHARED_LIBS=OFF
 ```
 
-#### 5. MongoDB Driver Issues
+#### 5. MongoDB 드라이버 문제
 
-**Error**: `Could NOT find mongocxx`
+**오류**: `Could NOT find mongocxx`
 
-**Solution**:
+**해결책**:
 ```bash
-# Install MongoDB C++ driver manually
+# MongoDB C++ 드라이버를 수동으로 설치
 git clone https://github.com/mongodb/mongo-cxx-driver.git
 cd mongo-cxx-driver
 mkdir build && cd build
@@ -410,36 +410,36 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local
 make -j$(nproc) && sudo make install
 ```
 
-### Build Verification
+### 빌드 검증
 
-After successful build, verify installation:
+성공적인 빌드 후 설치 확인:
 
 ```bash
-# Check built files
+# 빌드된 파일 확인
 ls -la bin/
 ls -la lib/
 
-# Run tests
+# 테스트 실행
 ctest --verbose
 
-# Run samples
+# 샘플 실행
 ./bin/basic_usage
 ./bin/connection_pool_demo
-./bin/postgres_advanced  # If PostgreSQL enabled
+./bin/postgres_advanced  # PostgreSQL이 활성화된 경우
 
-# Check dependencies
+# 의존성 확인
 ldd bin/basic_usage  # Linux
 otool -L bin/basic_usage  # macOS
 ```
 
-## Advanced Configuration
+## 고급 구성
 
-### Custom Build Options
+### 사용자 정의 빌드 옵션
 
-#### Disabling Specific Features
+#### 특정 기능 비활성화
 
 ```bash
-# Minimal build - only core functionality
+# 최소 빌드 - 핵심 기능만
 cmake .. \
   -DUSE_POSTGRESQL=OFF \
   -DUSE_MYSQL=OFF \
@@ -450,65 +450,65 @@ cmake .. \
   -DUSE_UNIT_TEST=OFF
 ```
 
-#### Custom Installation Directory
+#### 사용자 정의 설치 디렉토리
 
 ```bash
 cmake .. -DCMAKE_INSTALL_PREFIX=/opt/database_system
 ninja install
 ```
 
-#### Cross-Compilation
+#### 크로스 컴파일
 
 ```bash
-# ARM64 cross-compilation example
+# ARM64 크로스 컴파일 예제
 cmake .. \
   -DCMAKE_TOOLCHAIN_FILE=arm64-toolchain.cmake \
   -DUSE_POSTGRESQL=OFF \
   -DUSE_MYSQL=OFF
 ```
 
-### Environment Variables
+### 환경 변수
 
 ```bash
-# Custom compiler
+# 사용자 정의 컴파일러
 export CC=/usr/bin/clang-12
 export CXX=/usr/bin/clang++-12
 
-# Custom library paths
+# 사용자 정의 라이브러리 경로
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-# vcpkg integration
+# vcpkg 통합
 export VCPKG_ROOT=/path/to/vcpkg
 export CMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
 ```
 
-### Performance Optimization
+### 성능 최적화
 
-#### Release Builds
+#### Release 빌드
 
 ```bash
-# Maximum optimization
+# 최대 최적화
 cmake .. \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_FLAGS="-O3 -march=native -DNDEBUG"
 
-# Link-time optimization
+# 링크 타임 최적화
 cmake .. \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
 ```
 
-#### Memory Optimization
+#### 메모리 최적화
 
 ```bash
-# Minimal size build
+# 최소 크기 빌드
 cmake .. \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DCMAKE_CXX_FLAGS="-Os -flto"
 ```
 
-### IDE Integration
+### IDE 통합
 
 #### VS Code
 
@@ -527,7 +527,7 @@ cmake .. \
 
 #### CLion
 
-Configure CMake options in Settings → Build, Execution, Deployment → CMake:
+Settings → Build, Execution, Deployment → CMake에서 CMake 옵션 구성:
 
 ```
 -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON
@@ -535,7 +535,7 @@ Configure CMake options in Settings → Build, Execution, Deployment → CMake:
 
 #### Visual Studio
 
-Use the CMake integration with vcpkg:
+vcpkg와 함께 CMake 통합 사용:
 
 ```json
 // CMakeSettings.json
@@ -561,9 +561,9 @@ Use the CMake integration with vcpkg:
 }
 ```
 
-## Continuous Integration
+## 지속적 통합
 
-### GitHub Actions Example
+### GitHub Actions 예제
 
 ```yaml
 # .github/workflows/build.yml
@@ -607,7 +607,7 @@ jobs:
         ctest --verbose
 ```
 
-### Docker Build
+### Docker 빌드
 
 ```dockerfile
 # Dockerfile
@@ -636,7 +636,7 @@ CMD ["./build/bin/basic_usage"]
 
 ---
 
-For additional help or issues not covered here, please:
-1. Check the [troubleshooting section](README.md#troubleshooting) in the main README
-2. Search existing [GitHub issues](https://github.com/kcenon/database_system/issues)
-3. Create a new issue with your build configuration and error details
+여기에서 다루지 않은 추가 도움말이나 문제는 다음을 참조하세요:
+1. 메인 README의 [문제 해결 섹션](README.md#troubleshooting) 확인
+2. 기존 [GitHub issues](https://github.com/kcenon/database_system/issues) 검색
+3. 빌드 구성 및 오류 세부 정보와 함께 새 이슈 생성

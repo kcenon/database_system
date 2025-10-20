@@ -1,5 +1,7 @@
 # Database System Documentation
 
+> **Language:** **English** | [한국어](README_KO.md)
+
 Welcome to the comprehensive documentation for the Database System - an enterprise-grade C++20 database abstraction layer with multi-backend support, connection pooling, and advanced query builders.
 
 ## 📚 Documentation Overview

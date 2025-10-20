@@ -1,28 +1,28 @@
 # Database System API Reference
 
-> **Language:** **English** | [한국어](API_REFERENCE_KO.md)
+> **Language:** [English](API_REFERENCE.md) | **한국어**
 
-Complete API reference for the Database System C++20 library with multi-backend support, connection pooling, and query builders.
+멀티 백엔드 지원, 연결 풀링, 쿼리 빌더를 갖춘 Database System C++20 라이브러리의 완전한 API 레퍼런스입니다.
 
-## Table of Contents
+## 목차
 
-- [Core Classes](#core-classes)
+- [핵심 클래스](#핵심-클래스)
 - [Database Manager](#database-manager)
-- [Connection Pooling](#connection-pooling)
-- [Query Builders](#query-builders)
-- [ORM Framework](#orm-framework)
-- [Performance Monitoring](#performance-monitoring)
-- [Security Framework](#security-framework)
-- [Async Operations](#async-operations)
-- [Database Types](#database-types)
-- [Error Handling](#error-handling)
-- [Examples](#examples)
+- [연결 풀링](#연결-풀링)
+- [쿼리 빌더](#쿼리-빌더)
+- [ORM 프레임워크](#orm-프레임워크)
+- [성능 모니터링](#성능-모니터링)
+- [보안 프레임워크](#보안-프레임워크)
+- [비동기 작업](#비동기-작업)
+- [데이터베이스 타입](#데이터베이스-타입)
+- [에러 처리](#에러-처리)
+- [예제](#예제)
 
-## Core Classes
+## 핵심 클래스
 
 ### database_base
 
-Abstract base class for all database implementations.
+모든 데이터베이스 구현의 추상 기본 클래스입니다.
 
 ```cpp
 class database_base
@@ -48,7 +48,7 @@ public:
 
 ### database_manager
 
-Singleton class for managing database connections and operations.
+데이터베이스 연결 및 작업을 관리하는 싱글톤 클래스입니다.
 
 ```cpp
 class database_manager
@@ -90,7 +90,7 @@ public:
 
 ## Database Manager
 
-### Basic Usage
+### 기본 사용법
 
 ```cpp
 #include <database/database_manager.h>
@@ -114,25 +114,25 @@ unsigned int rows = db.insert_query("INSERT INTO users (name) VALUES ('John')");
 database_result result = db.select_query("SELECT * FROM users");
 ```
 
-### Supported Methods
+### 지원 메서드
 
-| Method | Description | Returns |
-|--------|-------------|---------|
-| `set_mode(database_types)` | Set database backend type | `bool` success |
-| `database_type()` | Get current database type | `database_types` |
-| `connect(connection_string)` | Connect to database | `bool` success |
-| `disconnect()` | Disconnect from database | `bool` success |
-| `create_query(query)` | Execute DDL query | `bool` success |
-| `insert_query(query)` | Execute INSERT query | `unsigned int` rows affected |
-| `update_query(query)` | Execute UPDATE query | `unsigned int` rows affected |
-| `delete_query(query)` | Execute DELETE query | `unsigned int` rows affected |
-| `select_query(query)` | Execute SELECT query | `database_result` |
+| 메서드 | 설명 | 반환값 |
+|--------|------|--------|
+| `set_mode(database_types)` | 데이터베이스 백엔드 타입 설정 | `bool` 성공 여부 |
+| `database_type()` | 현재 데이터베이스 타입 반환 | `database_types` |
+| `connect(connection_string)` | 데이터베이스 연결 | `bool` 성공 여부 |
+| `disconnect()` | 데이터베이스 연결 해제 | `bool` 성공 여부 |
+| `create_query(query)` | DDL 쿼리 실행 | `bool` 성공 여부 |
+| `insert_query(query)` | INSERT 쿼리 실행 | `unsigned int` 영향받은 행 수 |
+| `update_query(query)` | UPDATE 쿼리 실행 | `unsigned int` 영향받은 행 수 |
+| `delete_query(query)` | DELETE 쿼리 실행 | `unsigned int` 영향받은 행 수 |
+| `select_query(query)` | SELECT 쿼리 실행 | `database_result` |
 
-## Connection Pooling
+## 연결 풀링
 
 ### connection_pool_config
 
-Configuration structure for connection pools.
+연결 풀의 구성 구조체입니다.
 
 ```cpp
 struct connection_pool_config
@@ -149,7 +149,7 @@ struct connection_pool_config
 
 ### connection_stats
 
-Statistics structure for monitoring connection pools.
+연결 풀 모니터링을 위한 통계 구조체입니다.
 
 ```cpp
 struct connection_stats
@@ -165,7 +165,7 @@ struct connection_stats
 
 ### connection_pool_base
 
-Abstract base class for connection pools.
+연결 풀의 추상 기본 클래스입니다.
 
 ```cpp
 class connection_pool_base
@@ -182,7 +182,7 @@ public:
 };
 ```
 
-### Usage Example
+### 사용 예제
 
 ```cpp
 #include <database/database_manager.h>
@@ -220,11 +220,11 @@ for (const auto& [db_type, stat] : stats) {
 }
 ```
 
-## Query Builders
+## 쿼리 빌더
 
 ### query_builder
 
-Universal query builder that adapts to different database types.
+다양한 데이터베이스 타입에 적응하는 범용 쿼리 빌더입니다.
 
 ```cpp
 class query_builder
@@ -263,7 +263,7 @@ public:
 
 ### sql_query_builder
 
-Specialized query builder for SQL databases.
+SQL 데이터베이스를 위한 특화된 쿼리 빌더입니다.
 
 ```cpp
 class sql_query_builder
@@ -323,7 +323,7 @@ public:
 
 ### mongodb_query_builder
 
-Specialized query builder for MongoDB.
+MongoDB를 위한 특화된 쿼리 빌더입니다.
 
 ```cpp
 class mongodb_query_builder
@@ -378,7 +378,7 @@ public:
 
 ### redis_query_builder
 
-Specialized query builder for Redis.
+Redis를 위한 특화된 쿼리 빌더입니다.
 
 ```cpp
 class redis_query_builder
@@ -422,7 +422,7 @@ public:
 };
 ```
 
-### Query Builder Examples
+### 쿼리 빌더 예제
 
 ```cpp
 // SQL Query Builder
@@ -455,11 +455,11 @@ std::string redis_cmd = redis_query.build();
 // Output: HGET user:123 email
 ```
 
-## Database Types
+## 데이터베이스 타입
 
 ### database_types
 
-Enumeration of supported database types.
+지원되는 데이터베이스 타입의 열거형입니다.
 
 ```cpp
 enum class database_types : uint8_t
@@ -476,7 +476,7 @@ enum class database_types : uint8_t
 
 ### database_value
 
-Variant type for database values.
+데이터베이스 값을 위한 variant 타입입니다.
 
 ```cpp
 using database_value = std::variant<std::string, int64_t, double, bool, std::monostate>;
@@ -484,14 +484,14 @@ using database_value = std::variant<std::string, int64_t, double, bool, std::mon
 
 ### database_result
 
-Type definitions for database results.
+데이터베이스 결과를 위한 타입 정의입니다.
 
 ```cpp
 using database_row = std::map<std::string, database_value>;
 using database_result = std::vector<database_row>;
 ```
 
-### Working with database_value
+### database_value 사용하기
 
 ```cpp
 // Creating values
@@ -518,11 +518,11 @@ std::visit([](const auto& value) {
 }, str_val);
 ```
 
-## Error Handling
+## 에러 처리
 
-### Exception Safety
+### 예외 안전성
 
-All database operations are exception-safe with RAII resource management.
+모든 데이터베이스 작업은 RAII 리소스 관리를 통해 예외 안전성을 제공합니다.
 
 ```cpp
 try {
@@ -544,9 +544,9 @@ try {
 }
 ```
 
-### Mock Implementations
+### Mock 구현
 
-When database libraries are not available, the system provides mock implementations that return empty results but don't throw exceptions.
+데이터베이스 라이브러리가 사용 불가능한 경우, 시스템은 빈 결과를 반환하지만 예외를 발생시키지 않는 mock 구현을 제공합니다.
 
 ```cpp
 // Even without PostgreSQL libraries, this won't crash
@@ -562,9 +562,9 @@ auto result = db.select_query("SELECT * FROM users");
 // Returns empty result with mock implementation
 ```
 
-## Examples
+## 예제
 
-### Complete Usage Example
+### 완전한 사용 예제
 
 ```cpp
 #include <database/database_manager.h>
@@ -660,7 +660,7 @@ int main() {
 }
 ```
 
-### Multi-Database Example
+### 다중 데이터베이스 예제
 
 ```cpp
 #include <database/database_manager.h>
@@ -707,7 +707,7 @@ int main() {
 
 ## Phase 4: Enterprise APIs
 
-### ORM Framework
+### ORM 프레임워크
 
 ```cpp
 #include <database/orm/entity.h>
@@ -726,7 +726,7 @@ entity_manager::instance().create_tables(db);
 auto users = User::query(db).where("age > 18").execute();
 ```
 
-### Performance Monitoring
+### 성능 모니터링
 
 ```cpp
 #include <database/monitoring/performance_monitor.h>
@@ -737,7 +737,7 @@ monitor.set_alert_thresholds(0.05, std::chrono::milliseconds(1000));
 auto summary = monitor.get_performance_summary();
 ```
 
-### Security Framework
+### 보안 프레임워크
 
 ```cpp
 #include <database/security/secure_connection.h>
@@ -751,7 +751,7 @@ bool allowed = access.check_permission("user123", "users", "SELECT");
 AUDIT_LOG_ACCESS("user123", "session456", "SELECT", "users", "query_hash", true, "");
 ```
 
-### Async Operations
+### 비동기 작업
 
 ```cpp
 #include <database/async/async_operations.h>
@@ -769,10 +769,10 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 
 ---
 
-## System Requirements
+## 시스템 요구사항
 
-- **C++ Standard**: C++20
-- **Supported Compilers**: GCC 10+, Clang 11+, MSVC 2019+
-- **Supported Platforms**: Windows, macOS, Linux
+- **C++ 표준**: C++20
+- **지원 컴파일러**: GCC 10+, Clang 11+, MSVC 2019+
+- **지원 플랫폼**: Windows, macOS, Linux
 
-For the latest API updates and changes, see the [CHANGELOG](../CHANGELOG.md).
+최신 API 업데이트 및 변경사항은 [CHANGELOG](../CHANGELOG.md)를 참조하세요.

@@ -1,5 +1,7 @@
 # Database System Architecture
 
+> **Language:** **English** | [한국어](ARCHITECTURE_KO.md)
+
 This document describes the architecture and design patterns of the Database System Phase 4 implementation.
 
 ## Overview

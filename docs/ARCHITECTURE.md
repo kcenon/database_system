@@ -2,6 +2,54 @@
 
 > **Language:** **English** | [한국어](ARCHITECTURE_KO.md)
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture Layers](#architecture-layers)
+- [Core Components](#core-components)
+  - [1. Database Abstraction Layer](#1-database-abstraction-layer)
+    - [database_base](#database_base)
+    - [Backend Implementations](#backend-implementations)
+  - [2. Connection Management](#2-connection-management)
+    - [database_manager](#database_manager)
+    - [Connection Pooling](#connection-pooling)
+  - [3. Phase 4 Enterprise Components](#3-phase-4-enterprise-components)
+    - [ORM Framework (database/orm/)](#orm-framework-databaseorm)
+    - [Performance Monitoring (database/monitoring/)](#performance-monitoring-databasemonitoring)
+    - [Security Framework (database/security/)](#security-framework-databasesecurity)
+    - [Async Operations (database/async/)](#async-operations-databaseasync)
+- [Design Principles](#design-principles)
+  - [1. SOLID Principles](#1-solid-principles)
+  - [2. Modern C++ Best Practices](#2-modern-c-best-practices)
+  - [3. Enterprise Patterns](#3-enterprise-patterns)
+- [Thread Safety](#thread-safety)
+  - [Synchronization Mechanisms](#synchronization-mechanisms)
+  - [Thread-Safe Components](#thread-safe-components)
+- [Common System Result Integration](#common-system-result-integration)
+- [Interop with Other Modules](#interop-with-other-modules)
+- [Error Handling](#error-handling)
+  - [Exception Safety Guarantees](#exception-safety-guarantees)
+  - [Error Propagation](#error-propagation)
+- [Performance Characteristics](#performance-characteristics)
+  - [Connection Pool](#connection-pool)
+  - [Query Execution](#query-execution)
+  - [Memory Management](#memory-management)
+- [Scalability](#scalability)
+  - [Horizontal Scaling](#horizontal-scaling)
+  - [Vertical Scaling](#vertical-scaling)
+- [Monitoring and Observability](#monitoring-and-observability)
+  - [Metrics Collection](#metrics-collection)
+  - [Export Formats](#export-formats)
+- [Future Extensions](#future-extensions)
+  - [Planned Features](#planned-features)
+  - [Extension Points](#extension-points)
+- [Dependencies](#dependencies)
+  - [Required Libraries](#required-libraries)
+  - [Optional Dependencies](#optional-dependencies)
+- [Build Configuration](#build-configuration)
+  - [CMake Options](#cmake-options)
+  - [Compilation Features](#compilation-features)
+
 This document describes the architecture and design patterns of the Database System Phase 4 implementation.
 
 ## Overview
@@ -345,3 +393,7 @@ option(ENABLE_REDIS "Enable Redis support" OFF)
 ---
 
 This architecture provides a solid foundation for enterprise database applications with modern C++ features, comprehensive security, and production-ready performance monitoring.
+
+---
+
+*Last Updated: 2025-10-20*

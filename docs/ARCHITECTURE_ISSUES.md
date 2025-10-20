@@ -32,3 +32,7 @@ This document catalogs known architectural issues in database_system identified 
 ---
 
 **Document Maintainer**: Architecture Team
+
+---
+
+*Last Updated: 2025-10-20*

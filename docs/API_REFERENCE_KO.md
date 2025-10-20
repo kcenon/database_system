@@ -776,3 +776,7 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 - **지원 플랫폼**: Windows, macOS, Linux
 
 최신 API 업데이트 및 변경사항은 [CHANGELOG](../CHANGELOG.md)를 참조하세요.
+
+---
+
+*Last Updated: 2025-10-20*

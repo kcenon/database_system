@@ -776,3 +776,6 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 - **Supported Platforms**: Windows, macOS, Linux
 
 For the latest API updates and changes, see the [CHANGELOG](../CHANGELOG.md).
+---
+
+*Last Updated: 2025-10-20*

@@ -1,5 +1,7 @@
 # 📜 Database System - Development History
 
+**English** | [한국어](CHANGELOG_KO.md)
+
 <div align="center">
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)

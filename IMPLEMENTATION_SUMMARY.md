@@ -1,5 +1,7 @@
 # Database System Integration Tests - Implementation Summary
 
+**English** | [한국어](IMPLEMENTATION_SUMMARY_KO.md)
+
 ## Overview
 
 This document summarizes the implementation of comprehensive integration tests for database_system, following the established patterns from common_system, thread_system, logger_system, monitoring_system, and container_system.

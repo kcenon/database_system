@@ -6,43 +6,43 @@
 
 # Database System Project
 
-> **Language:** **English** | [한국어](README_KO.md)
+> **Language:** [English](README.md) | **한국어**
 
-## Project Overview
+## 프로젝트 개요
 
-The Database System Project is a production-ready, enterprise-grade C++20 database abstraction layer designed to provide unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations. Built with a modular, interface-based architecture supporting 10,000+ concurrent connections, it delivers enterprise-grade database performance with maximum flexibility and reliability.
+Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 database abstraction layer로, ORM framework, 실시간 성능 모니터링, 엔터프라이즈 보안, 비동기 작업을 포함한 고급 기능을 제공하는 통합 다중 데이터베이스 백엔드 접근을 제공합니다. 10,000개 이상의 동시 연결을 지원하는 모듈식 인터페이스 기반 아키텍처로 구축되어 최대의 유연성과 안정성을 갖춘 엔터프라이즈급 데이터베이스 성능을 제공합니다.
 
-> **🏗️ Modular Architecture**: Comprehensive database abstraction layer with multi-backend support, enterprise security, and real-time monitoring.
+> **🏗️ 모듈식 아키텍처**: 다중 백엔드 지원, 엔터프라이즈 보안, 실시간 모니터링을 갖춘 포괄적인 database abstraction layer.
 
-> **✅ Latest Updates**: Enhanced ORM framework, connection pooling, performance monitoring, enterprise security features, and async operations. All CI/CD pipelines green across platforms.
+> **✅ 최신 업데이트**: 강화된 ORM framework, connection pooling, 성능 모니터링, 엔터프라이즈 보안 기능, 비동기 작업. 모든 플랫폼에서 CI/CD pipeline 정상 작동.
 
-## 🔗 Project Ecosystem & Inter-Dependencies
+## 🔗 프로젝트 생태계 및 상호 의존성
 
-This database system is a crucial component of a comprehensive data management and messaging ecosystem:
+이 database system은 포괄적인 데이터 관리 및 메시징 생태계의 핵심 구성 요소입니다:
 
-### Project Dependencies
-- **[container_system](https://github.com/kcenon/container_system)**: Data serialization for database storage
-  - Integration: Native container serialization for BLOB storage
-  - Benefits: Type-safe data persistence with efficient binary formats
-  - Role: Serialized container storage and retrieval
+### 프로젝트 의존성
+- **[container_system](https://github.com/kcenon/container_system)**: database 저장을 위한 데이터 직렬화
+  - 통합: BLOB 저장을 위한 네이티브 container 직렬화
+  - 이점: 효율적인 바이너리 형식의 타입 안전 데이터 영속성
+  - 역할: 직렬화된 container 저장 및 검색
 
-### Related Projects
-- **[messaging_system](https://github.com/kcenon/messaging_system)**: Message persistence and queuing
-  - Relationship: Database backend for message persistence and queuing
-  - Synergy: Reliable message delivery with database durability guarantees
-  - Integration: Message archival, replay, and transaction logging
+### 관련 프로젝트
+- **[messaging_system](https://github.com/kcenon/messaging_system)**: 메시지 영속성 및 큐잉
+  - 관계: 메시지 영속성 및 큐잉을 위한 database 백엔드
+  - 시너지: database 내구성 보장을 통한 안정적인 메시지 전달
+  - 통합: 메시지 아카이빙, 재생, 트랜잭션 로깅
 
-- **[network_system](https://github.com/kcenon/network_system)**: Network-based database operations
-  - Relationship: Remote database access and distributed operations
-  - Benefits: Network-transparent database operations and clustering
-  - Integration: Remote procedure calls and distributed transactions
+- **[network_system](https://github.com/kcenon/network_system)**: 네트워크 기반 database 작업
+  - 관계: 원격 database 접근 및 분산 작업
+  - 이점: 네트워크 투명 database 작업 및 클러스터링
+  - 통합: 원격 프로시저 호출 및 분산 트랜잭션
 
-- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database performance monitoring
-  - Usage: Real-time database performance metrics and alerting
-  - Benefits: Comprehensive observability and performance optimization
-  - Reference: Database health monitoring and performance analysis
+- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database 성능 모니터링
+  - 사용: 실시간 database 성능 메트릭 및 알림
+  - 이점: 포괄적인 관찰 가능성 및 성능 최적화
+  - 참조: Database 상태 모니터링 및 성능 분석
 
-### Integration Architecture
+### 통합 아키텍처
 ```
 ┌─────────────────┐     ┌─────────────────┐
 │container_system │ ──► │database_system  │
@@ -60,117 +60,117 @@ This database system is a crucial component of a comprehensive data management a
     └─────────────────────────┘
 ```
 
-### Integration Benefits
-- **Universal data persistence**: Unified storage for all ecosystem components
-- **Performance-optimized**: Enterprise-grade connection pooling and query optimization
-- **Multi-backend flexibility**: Support for SQL and NoSQL databases as needed
-- **Enterprise security**: TLS/SSL encryption, RBAC, and audit logging
-- **Real-time monitoring**: Comprehensive performance metrics and alerting
+### 통합 이점
+- **범용 데이터 영속성**: 모든 생태계 구성 요소를 위한 통합 스토리지
+- **성능 최적화**: 엔터프라이즈급 connection pooling 및 쿼리 최적화
+- **다중 백엔드 유연성**: 필요에 따라 SQL 및 NoSQL database 지원
+- **엔터프라이즈 보안**: TLS/SSL 암호화, RBAC, 감사 로깅
+- **실시간 모니터링**: 포괄적인 성능 메트릭 및 알림
 
-> 📖 **[Complete Architecture Guide](docs/ARCHITECTURE.md)**: Comprehensive documentation of the entire ecosystem architecture, dependency relationships, and integration patterns.
+> 📖 **[완전한 아키텍처 가이드](docs/ARCHITECTURE.md)**: 전체 생태계 아키텍처, 의존성 관계, 통합 패턴에 대한 포괄적인 문서.
 
-## Project Purpose & Mission
+## 프로젝트 목적 및 미션
 
-This project addresses the fundamental challenge faced by developers worldwide: **making enterprise-grade database access accessible, reliable, and efficient**. Traditional database approaches often lock you into specific vendors, lack comprehensive security features, and provide insufficient monitoring capabilities. Our mission is to provide a comprehensive solution that:
+이 프로젝트는 전 세계 개발자가 직면한 근본적인 과제를 해결합니다: **엔터프라이즈급 database 접근을 접근 가능하고, 안정적이며, 효율적으로 만드는 것**. 전통적인 database 접근 방식은 종종 특정 벤더에 종속되고, 포괄적인 보안 기능이 부족하며, 불충분한 모니터링 기능을 제공합니다. 우리의 미션은 다음을 제공하는 포괄적인 솔루션을 제공하는 것입니다:
 
-- **Eliminates vendor lock-in** through unified interface supporting multiple database backends
-- **Ensures enterprise security** with TLS/SSL encryption, RBAC, and comprehensive audit logging
-- **Maximizes performance** through intelligent connection pooling and query optimization
-- **Promotes reliability** through automatic failover, health monitoring, and transaction management
-- **Accelerates development** by providing ORM framework, query builders, and async operations
+- **벤더 종속 제거**: 다중 database 백엔드를 지원하는 통합 인터페이스를 통해
+- **엔터프라이즈 보안 보장**: TLS/SSL 암호화, RBAC, 포괄적인 감사 로깅
+- **성능 극대화**: 지능형 connection pooling 및 쿼리 최적화를 통해
+- **안정성 향상**: 자동 failover, 상태 모니터링, 트랜잭션 관리를 통해
+- **개발 가속화**: ORM framework, query builder, 비동기 작업 제공
 
-## Core Advantages & Benefits
+## 핵심 장점 및 이점
 
-### 🚀 **Performance Excellence**
-- **Enterprise-grade connection pooling**: Support for 10,000+ concurrent connections
-- **Query optimization**: Intelligent query planning and execution optimization
-- **Async operations**: C++20 coroutines for non-blocking database operations
-- **Bulk operations**: Optimized batch processing for high-throughput scenarios
+### 🚀 **성능 우수성**
+- **엔터프라이즈급 connection pooling**: 10,000개 이상의 동시 연결 지원
+- **쿼리 최적화**: 지능형 쿼리 계획 및 실행 최적화
+- **비동기 작업**: non-blocking database 작업을 위한 C++20 coroutine
+- **대량 작업**: 높은 처리량 시나리오를 위한 최적화된 배치 처리
 
-### 🛡️ **Production-Grade Reliability**
-- **Multi-backend support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
-- **Automatic failover**: Health monitoring with automatic connection recovery
-- **Transaction management**: ACID compliance with distributed transaction support
-- **Comprehensive error handling**: Graceful degradation and recovery patterns
+### 🛡️ **프로덕션급 안정성**
+- **다중 백엔드 지원**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **자동 failover**: 자동 연결 복구를 통한 상태 모니터링
+- **트랜잭션 관리**: 분산 트랜잭션 지원을 통한 ACID 준수
+- **포괄적인 오류 처리**: 우아한 성능 저하 및 복구 패턴
 
-### 🔧 **Developer Productivity**
-- **ORM framework**: C++20 concepts-based entity system with automatic schema management
-- **Type-safe query builders**: Compile-time query validation for SQL and NoSQL
-- **Intuitive API design**: Clean, self-documenting interfaces reduce learning curve
-- **Mock implementations**: Testing support without requiring actual databases
+### 🔧 **개발자 생산성**
+- **ORM framework**: 자동 스키마 관리를 갖춘 C++20 concept 기반 entity system
+- **타입 안전 query builder**: SQL 및 NoSQL을 위한 컴파일 타임 쿼리 검증
+- **직관적인 API 디자인**: 명확하고 자체 문서화된 인터페이스로 학습 곡선 감소
+- **Mock 구현**: 실제 database 없이 테스트 지원
 
-### 🌐 **Cross-Platform Compatibility**
-- **Universal support**: Works on Windows, Linux, and macOS
-- **Database flexibility**: Support for cloud, on-premise, and embedded databases
-- **Compiler compatibility**: Compatible with GCC, Clang, and MSVC
-- **Container support**: Docker-ready with configuration management
+### 🌐 **크로스 플랫폼 호환성**
+- **범용 지원**: Windows, Linux, macOS에서 작동
+- **Database 유연성**: 클라우드, 온프레미스, 임베디드 database 지원
+- **컴파일러 호환성**: GCC, Clang, MSVC와 호환
+- **Container 지원**: 구성 관리를 통한 Docker 준비
 
-### 📈 **Enterprise-Ready Features**
-- **Security framework**: TLS/SSL encryption, RBAC, and audit logging
-- **Performance monitoring**: Real-time metrics with Prometheus integration
-- **Schema management**: Version-controlled migrations and automatic updates
-- **Distributed operations**: Sharding, replication, and clustering support
+### 📈 **엔터프라이즈 준비 기능**
+- **보안 framework**: TLS/SSL 암호화, RBAC, 감사 로깅
+- **성능 모니터링**: Prometheus 통합을 통한 실시간 메트릭
+- **스키마 관리**: 버전 관리 마이그레이션 및 자동 업데이트
+- **분산 작업**: 샤딩, 복제, 클러스터링 지원
 
-## Real-World Impact & Use Cases
+## 실제 영향 및 사용 사례
 
-### 🎯 **Ideal Applications**
-- **Enterprise web applications**: Multi-tenant applications with complex data models
-- **Financial systems**: High-frequency trading with ACID transaction requirements
-- **IoT platforms**: Time-series data storage with real-time analytics
-- **Content management systems**: Large-scale content storage and retrieval
-- **Gaming platforms**: Player data persistence with real-time leaderboards
-- **E-commerce platforms**: Order processing with inventory management
+### 🎯 **이상적인 애플리케이션**
+- **엔터프라이즈 웹 애플리케이션**: 복잡한 데이터 모델을 갖춘 멀티 테넌트 애플리케이션
+- **금융 시스템**: ACID 트랜잭션 요구사항을 갖춘 고빈도 거래
+- **IoT 플랫폼**: 실시간 분석을 통한 시계열 데이터 저장
+- **컨텐츠 관리 시스템**: 대규모 컨텐츠 저장 및 검색
+- **게임 플랫폼**: 실시간 리더보드를 통한 플레이어 데이터 영속성
+- **전자상거래 플랫폼**: 재고 관리를 통한 주문 처리
 
-### 📊 **Performance Benchmarks**
+### 📊 **성능 벤치마크**
 
-*Benchmarked on Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD storage, Enterprise database configurations*
+*Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD 스토리지, 엔터프라이즈 database 구성에서 벤치마크*
 
-> **🚀 Architecture Update**: Latest modular architecture with connection pooling and query optimization delivers exceptional performance for database-intensive applications. Enterprise-grade security ensures reliability without performance compromise.
+> **🚀 아키텍처 업데이트**: connection pooling 및 쿼리 최적화를 통한 최신 모듈식 아키텍처는 database 집약적인 애플리케이션에 대해 탁월한 성능을 제공합니다. 엔터프라이즈급 보안은 성능 저하 없이 안정성을 보장합니다.
 
-#### Core Performance Metrics (Latest Benchmarks)
-- **Connection Pooling**: 0.1ms average connection acquisition time
-- **Query Performance**:
-  - Simple SELECT operations: 1.2ms (PostgreSQL), 0.8ms (SQLite), 0.3ms (Redis)
-  - Complex JOIN operations: 15ms (PostgreSQL), 12ms (SQLite)
-  - Bulk INSERT (1K records): 45ms (PostgreSQL), 38ms (SQLite), 28ms (Redis)
-- **Concurrent Operations**:
-  - 10,000 concurrent connections: Stable performance
-  - Connection pool utilization: 95%+ efficiency
-  - Transaction throughput: 5,000 TPS (PostgreSQL)
-- **Memory efficiency**: <50MB baseline with intelligent connection management
+#### 핵심 성능 메트릭 (최신 벤치마크)
+- **Connection Pooling**: 0.1ms 평균 연결 획득 시간
+- **쿼리 성능**:
+  - 단순 SELECT 작업: 1.2ms (PostgreSQL), 0.8ms (SQLite), 0.3ms (Redis)
+  - 복잡한 JOIN 작업: 15ms (PostgreSQL), 12ms (SQLite)
+  - 대량 INSERT (1K 레코드): 45ms (PostgreSQL), 38ms (SQLite), 28ms (Redis)
+- **동시 작업**:
+  - 10,000개의 동시 연결: 안정적인 성능
+  - Connection pool 활용률: 95% 이상 효율성
+  - 트랜잭션 처리량: 5,000 TPS (PostgreSQL)
+- **메모리 효율성**: 지능형 연결 관리를 통한 50MB 미만의 기준선
 
-#### Performance Comparison with Industry Standards
-| Database Operation | Our System | Native Driver | ORM Overhead | Best Use Case |
+#### 산업 표준과의 성능 비교
+| Database 작업 | 우리 시스템 | Native Driver | ORM 오버헤드 | 최상의 사용 사례 |
 |-------------------|------------|---------------|--------------|---------------|
-| 🏆 **Connection Pool** | **0.1ms** | 2-5ms | 0ms | All scenarios (optimized) |
-| 📦 **Simple SELECT** | **1.2ms** | 1.0ms | +20% | OLTP applications |
-| 📦 **Complex JOIN** | **15ms** | 14ms | +7% | Analytical queries |
-| 📦 **Bulk INSERT** | **45ms** | 42ms | +7% | ETL operations |
-| 📦 **NoSQL Ops** | **0.3ms** | 0.2ms | +50% | Caching and real-time |
+| 🏆 **Connection Pool** | **0.1ms** | 2-5ms | 0ms | 모든 시나리오 (최적화) |
+| 📦 **단순 SELECT** | **1.2ms** | 1.0ms | +20% | OLTP 애플리케이션 |
+| 📦 **복잡한 JOIN** | **15ms** | 14ms | +7% | 분석 쿼리 |
+| 📦 **대량 INSERT** | **45ms** | 42ms | +7% | ETL 작업 |
+| 📦 **NoSQL 작업** | **0.3ms** | 0.2ms | +50% | 캐싱 및 실시간 |
 
-#### Key Performance Insights
-- 🏃 **Connection pooling**: 20x faster connection acquisition vs. native
-- 🏋️ **Query optimization**: Minimal overhead for complex operations
-- ⏱️ **Type safety**: Zero runtime overhead for query validation
-- 📈 **Scalability**: Linear scaling up to 10,000+ concurrent connections
+#### 주요 성능 인사이트
+- 🏃 **Connection pooling**: native 대비 20배 빠른 연결 획득
+- 🏋️ **쿼리 최적화**: 복잡한 작업에 대한 최소 오버헤드
+- ⏱️ **타입 안전성**: 쿼리 검증에 대한 런타임 오버헤드 제로
+- 📈 **확장성**: 10,000개 이상의 동시 연결까지 선형 확장
 
-## Features
+## 기능
 
-### 🎯 Core Capabilities
-- **Multi-Backend Support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis with unified interface
-- **ORM Framework**: C++20 concepts-based entity system with automatic schema management
-- **Connection Pooling**: Enterprise-grade connection management with adaptive sizing
-- **Query Builders**: Type-safe query construction for SQL and NoSQL databases
-- **Performance Monitoring**: Real-time metrics, alerting, and Prometheus integration
-- **Enterprise Security**: TLS/SSL encryption, RBAC, audit logging, and threat detection
-- **Async Operations**: C++20 coroutines, distributed transactions, and real-time streaming
-- **Thread Safety**: Concurrent database operations with proper synchronization
-- **Modern C++**: C++20 concepts, coroutines, variants, and RAII patterns
-- **Production Ready**: Enterprise architecture supporting 10,000+ concurrent connections
+### 🎯 핵심 기능
+- **다중 백엔드 지원**: 통합 인터페이스로 PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **ORM Framework**: 자동 스키마 관리를 갖춘 C++20 concept 기반 entity system
+- **Connection Pooling**: 적응형 크기 조정을 통한 엔터프라이즈급 연결 관리
+- **Query Builder**: SQL 및 NoSQL database를 위한 타입 안전 쿼리 구성
+- **성능 모니터링**: 실시간 메트릭, 알림, Prometheus 통합
+- **엔터프라이즈 보안**: TLS/SSL 암호화, RBAC, 감사 로깅, 위협 탐지
+- **비동기 작업**: C++20 coroutine, 분산 트랜잭션, 실시간 스트리밍
+- **Thread 안전성**: 적절한 동기화를 통한 동시 database 작업
+- **Modern C++**: C++20 concept, coroutine, variant, RAII 패턴
+- **프로덕션 준비**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처
 
-### 🗄️ Supported Databases
+### 🗄️ 지원 Database
 
-| Database | Status | Features | Performance | ORM Support | Security |
+| Database | 상태 | 기능 | 성능 | ORM 지원 | 보안 |
 |----------|--------|----------|-------------|-------------|----------|
 | PostgreSQL | ✅ Full | JSONB, Arrays, CTEs, Prepared Statements | Excellent | ✅ | TLS/SSL |
 | MySQL | ✅ Full | Full-text search, Transactions, Prepared Statements | Very Good | ✅ | TLS/SSL |
@@ -178,7 +178,7 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 | MongoDB | ✅ Full | Documents, Aggregation, GridFS | Very Good | ✅ | TLS/SSL |
 | Redis | ✅ Full | All data types, Pub/Sub, Transactions | Excellent | ✅ | TLS/SSL |
 
-### 📊 Database Types
+### 📊 Database 타입
 
 ```cpp
 enum class database_types : uint8_t
@@ -193,7 +193,7 @@ enum class database_types : uint8_t
 };
 ```
 
-## Architecture
+## 아키텍처
 
 ```
 database_system/
@@ -218,9 +218,9 @@ database_system/
 └── CMakeLists.txt                     # Main build configuration
 ```
 
-### Data Types
+### 데이터 타입
 
-The system uses modern C++ types for database results:
+시스템은 database 결과를 위해 modern C++ 타입을 사용합니다:
 
 ```cpp
 // Database result types for independent operation
@@ -229,28 +229,28 @@ using database_row = std::map<std::string, database_value>;
 using database_result = std::vector<database_row>;
 ```
 
-## Technology Stack & Architecture
+## 기술 스택 및 아키텍처
 
-### 🏗️ **Modern C++ Foundation**
-- **C++20 features**: Concepts, coroutines, `std::variant`, and ranges for enhanced performance
-- **Template metaprogramming**: Type-safe, compile-time database schema validation
-- **Memory management**: Smart pointers and RAII for automatic resource cleanup
-- **Exception safety**: Strong exception safety guarantees throughout
-- **Async programming**: C++20 coroutines for non-blocking database operations
-- **Interface-based design**: Clean abstraction layer supporting multiple database backends
-- **Modular architecture**: Pluggable database backends with consistent API
+### 🏗️ **Modern C++ 기반**
+- **C++20 기능**: 향상된 성능을 위한 concept, coroutine, `std::variant`, range
+- **Template metaprogramming**: 타입 안전, 컴파일 타임 database 스키마 검증
+- **메모리 관리**: 자동 리소스 정리를 위한 smart pointer 및 RAII
+- **Exception 안전성**: 전체에 걸친 강력한 exception 안전성 보장
+- **비동기 프로그래밍**: non-blocking database 작업을 위한 C++20 coroutine
+- **인터페이스 기반 디자인**: 다중 database 백엔드를 지원하는 깔끔한 abstraction layer
+- **모듈식 아키텍처**: 일관된 API를 통한 플러그형 database 백엔드
 
-### 🔄 **Design Patterns Implementation**
-- **Abstract Factory Pattern**: Pluggable database backend creation
-- **Singleton Pattern**: Database manager with global access and resource management
-- **Object Pool Pattern**: Enterprise-grade connection pooling with health monitoring
-- **Builder Pattern**: Type-safe query construction with fluent API
-- **Strategy Pattern**: Configurable database backends and query optimization
-- **Observer Pattern**: Real-time performance monitoring and alerting
+### 🔄 **디자인 패턴 구현**
+- **Abstract Factory Pattern**: 플러그형 database 백엔드 생성
+- **Singleton Pattern**: 전역 접근 및 리소스 관리를 통한 database manager
+- **Object Pool Pattern**: 상태 모니터링을 통한 엔터프라이즈급 connection pooling
+- **Builder Pattern**: fluent API를 통한 타입 안전 쿼리 구성
+- **Strategy Pattern**: 구성 가능한 database 백엔드 및 쿼리 최적화
+- **Observer Pattern**: 실시간 성능 모니터링 및 알림
 
-## Project Structure
+## 프로젝트 구조
 
-### 📁 **Directory Organization**
+### 📁 **디렉토리 구성**
 
 ```
 database_system/
@@ -315,27 +315,27 @@ database_system/
 └── 📄 vcpkg.json                   # Dependencies
 ```
 
-### 📖 **Key Files and Their Purpose**
+### 📖 **주요 파일 및 용도**
 
-#### Core Module Files
-- **`database_base.h/cpp`**: Abstract interface for all database backends
-- **`database_manager.h/cpp`**: Singleton manager with connection pooling and lifecycle management
-- **`database_types.h`**: Type definitions, enums, and result structures
-- **`connection_pool.h/cpp`**: Enterprise-grade connection pooling with health monitoring
+#### 핵심 모듈 파일
+- **`database_base.h/cpp`**: 모든 database 백엔드를 위한 추상 인터페이스
+- **`database_manager.h/cpp`**: connection pooling 및 생명주기 관리를 갖춘 singleton manager
+- **`database_types.h`**: 타입 정의, enum, 결과 구조
+- **`connection_pool.h/cpp`**: 상태 모니터링을 통한 엔터프라이즈급 connection pooling
 
-#### Backend Implementation Files
-- **`postgres_manager.h/cpp`**: PostgreSQL backend with advanced features (JSONB, arrays, CTEs)
-- **`mysql_manager.h/cpp`**: MySQL/MariaDB backend with full-text search and transactions
-- **`sqlite_manager.h/cpp`**: SQLite backend with WAL mode and FTS5 support
-- **`mongodb_manager.h/cpp`**: MongoDB backend with document operations and aggregation
-- **`redis_manager.h/cpp`**: Redis backend with all data types and pub/sub
+#### 백엔드 구현 파일
+- **`postgres_manager.h/cpp`**: 고급 기능 (JSONB, array, CTE)을 갖춘 PostgreSQL 백엔드
+- **`mysql_manager.h/cpp`**: full-text search 및 transaction을 갖춘 MySQL/MariaDB 백엔드
+- **`sqlite_manager.h/cpp`**: WAL 모드 및 FTS5 지원을 갖춘 SQLite 백엔드
+- **`mongodb_manager.h/cpp`**: document 작업 및 aggregation을 갖춘 MongoDB 백엔드
+- **`redis_manager.h/cpp`**: 모든 데이터 타입 및 pub/sub을 갖춘 Redis 백엔드
 
-#### Query and ORM Files
-- **`query_builder.h/cpp`**: Type-safe query builder with compile-time validation
-- **`entity.h/cpp`**: C++20 concepts-based entity system with automatic schema generation
-- **`schema_manager.h/cpp`**: Version-controlled schema migrations and updates
+#### Query 및 ORM 파일
+- **`query_builder.h/cpp`**: 컴파일 타임 검증을 통한 타입 안전 query builder
+- **`entity.h/cpp`**: 자동 스키마 생성을 갖춘 C++20 concept 기반 entity system
+- **`schema_manager.h/cpp`**: 버전 관리 스키마 마이그레이션 및 업데이트
 
-### 🔗 **Module Dependencies**
+### 🔗 **모듈 의존성**
 
 ```
 core (database_base, database_manager, database_types)
@@ -358,11 +358,11 @@ Optional External Projects:
 - monitoring_system (integrates with database performance monitoring)
 ```
 
-## Quick Start & Usage Examples
+## 빠른 시작 및 사용 예제
 
-### 🚀 **Getting Started in 5 Minutes**
+### 🚀 **5분 안에 시작하기**
 
-#### Enterprise Database Integration Example
+#### 엔터프라이즈 Database 통합 예제
 
 ```cpp
 #include <database/database_manager.h>
@@ -508,11 +508,11 @@ int main() {
 }
 ```
 
-> **Performance Tip**: The database system automatically optimizes connection pooling and query execution. Use query builders for type safety, connection pools for scalability, and monitoring for performance insights.
+> **성능 팁**: Database system은 connection pooling 및 쿼리 실행을 자동으로 최적화합니다. 타입 안전성을 위해 query builder를, 확장성을 위해 connection pool을, 성능 인사이트를 위해 모니터링을 사용하세요.
 
-### 🔄 **More Usage Examples**
+### 🔄 **추가 사용 예제**
 
-#### Multi-Database Architecture
+#### 다중 Database 아키텍처
 ```cpp
 #include <database/database_manager.h>
 #include <database/backends/postgres_manager.h>
@@ -553,7 +553,7 @@ if (user_result && !user_result->empty()) {
 }
 ```
 
-#### Enterprise Security Implementation
+#### 엔터프라이즈 보안 구현
 ```cpp
 #include <database/security/secure_connection.h>
 #include <database/security/access_control.h>
@@ -596,35 +596,35 @@ access.assign_role_to_user("admin_user", "admin");
 AUDIT_LOG_ACCESS("admin_user", "session123", "DELETE", "users", "WHERE id > 1000", true, "");
 ```
 
-### 📚 **Comprehensive Sample Collection**
+### 📚 **포괄적인 샘플 컬렉션**
 
-Our samples demonstrate real-world usage patterns and enterprise best practices:
+샘플은 실제 사용 패턴 및 엔터프라이즈 모범 사례를 보여줍니다:
 
-#### **Core Functionality**
-- **[Basic Usage](samples/basic_usage/)**: Database connections and simple operations
-- **[Connection Pooling](samples/connection_pool_demo/)**: Enterprise-grade connection management
-- **[Query Builders](samples/query_examples/)**: Type-safe query construction
-- **[Multi-Backend](samples/multi_database/)**: Using multiple database types together
+#### **핵심 기능**
+- **[기본 사용법](samples/basic_usage/)**: Database 연결 및 간단한 작업
+- **[Connection Pooling](samples/connection_pool_demo/)**: 엔터프라이즈급 연결 관리
+- **[Query Builder](samples/query_examples/)**: 타입 안전 쿼리 구성
+- **[다중 백엔드](samples/multi_database/)**: 여러 database 타입을 함께 사용
 
-#### **Advanced Features**
-- **[ORM Framework](samples/orm_examples/)**: Entity mapping and automatic schema generation
-- **[Enterprise Security](samples/enterprise_features/)**: TLS/SSL, RBAC, and audit logging
-- **[Performance Monitoring](samples/monitoring_examples/)**: Real-time metrics and alerting
-- **[Async Operations](samples/async_examples/)**: C++20 coroutines and distributed transactions
+#### **고급 기능**
+- **[ORM Framework](samples/orm_examples/)**: Entity 매핑 및 자동 스키마 생성
+- **[엔터프라이즈 보안](samples/enterprise_features/)**: TLS/SSL, RBAC, 감사 로깅
+- **[성능 모니터링](samples/monitoring_examples/)**: 실시간 메트릭 및 알림
+- **[비동기 작업](samples/async_examples/)**: C++20 coroutine 및 분산 트랜잭션
 
-#### **Integration Examples**
-- **[Container Integration](samples/container_integration/)**: Serialized container storage
-- **[Messaging Integration](samples/messaging_integration/)**: Message persistence and queuing
-- **[Monitoring Integration](samples/monitoring_integration/)**: Performance metrics integration
+#### **통합 예제**
+- **[Container 통합](samples/container_integration/)**: 직렬화된 container 저장
+- **[Messaging 통합](samples/messaging_integration/)**: 메시지 영속성 및 큐잉
+- **[Monitoring 통합](samples/monitoring_integration/)**: 성능 메트릭 통합
 
-### 🛠️ **Build & Integration**
+### 🛠️ **빌드 및 통합**
 
-#### Prerequisites
-- **Compiler**: C++20 capable (GCC 10+, Clang 11+, MSVC 2019+)
-- **Build System**: CMake 3.16+
-- **Database Libraries**: Optional (see vcpkg dependencies)
+#### 사전 요구사항
+- **컴파일러**: C++20 지원 (GCC 10+, Clang 11+, MSVC 2019+)
+- **빌드 시스템**: CMake 3.16+
+- **Database 라이브러리**: 선택 사항 (vcpkg 의존성 참조)
 
-#### Build Steps
+#### 빌드 단계
 
 ```bash
 # Clone the repository
@@ -652,7 +652,7 @@ cmake --build .
 ctest
 ```
 
-#### CMake Integration
+#### CMake 통합
 
 ```cmake
 # Using as a subdirectory
@@ -676,18 +676,18 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(database_system)
 ```
 
-## Documentation
+## 문서
 
-- Module READMEs:
+- 모듈 README:
   - core/README.md
   - backends/README.md
   - query/README.md
-- Guides:
-  - docs/USER_GUIDE.md (setup, connections, queries)
-  - docs/API_REFERENCE.md (complete API documentation)
-  - docs/ARCHITECTURE.md (system design and enterprise features)
+- 가이드:
+  - docs/USER_GUIDE.md (설정, 연결, 쿼리)
+  - docs/API_REFERENCE.md (완전한 API 문서)
+  - docs/ARCHITECTURE.md (시스템 디자인 및 엔터프라이즈 기능)
 
-Build API docs with Doxygen (optional):
+Doxygen으로 API 문서 빌드 (선택 사항):
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -695,9 +695,9 @@ cmake --build build --target docs
 # Open documents/html/index.html
 ```
 
-## Usage Examples
+## 사용 예제
 
-### Basic Database Operations
+### 기본 Database 작업
 
 ### Connection Pooling
 
@@ -788,7 +788,7 @@ int main() {
 }
 ```
 
-### Working with Results
+### 결과 작업
 
 ```cpp
 // INSERT data
@@ -818,7 +818,7 @@ for (const auto& row : users) {
 }
 ```
 
-## 🏢 Enterprise Features (Phase 4)
+## 🏢 엔터프라이즈 기능 (Phase 4)
 
 ### ORM Framework
 
@@ -847,7 +847,7 @@ auto users = User::query(db)
 entity_manager::instance().create_tables(db);
 ```
 
-### Performance Monitoring
+### 성능 모니터링
 
 ```cpp
 #include <database/monitoring/performance_monitor.h>
@@ -874,7 +874,7 @@ prometheus_exporter exporter("http://prometheus:9090", 9091);
 exporter.export_metrics(summary);
 ```
 
-### Enterprise Security
+### 엔터프라이즈 보안
 
 ```cpp
 #include <database/security/secure_connection.h>
@@ -907,7 +907,7 @@ access.assign_role_to_user("user123", "admin");
 AUDIT_LOG_ACCESS("user123", "session456", "SELECT", "users", "query_hash", true, "");
 ```
 
-### Asynchronous Operations
+### 비동기 작업
 
 ```cpp
 #include <database/async/async_operations.h>
@@ -938,15 +938,15 @@ processor.register_event_handler("user_changes", [](const stream_event& event) {
 });
 ```
 
-## Building
+## 빌드
 
-### Prerequisites
+### 사전 요구사항
 
-- C++20 compatible compiler (GCC 10+, Clang 11+, MSVC 2019+)
+- C++20 호환 컴파일러 (GCC 10+, Clang 11+, MSVC 2019+)
 - CMake 3.16+
-- Optional: Database development libraries (see vcpkg section)
+- 선택 사항: Database 개발 라이브러리 (vcpkg 섹션 참조)
 
-### Build Options
+### 빌드 옵션
 
 ```bash
 # Build with all database support (requires libraries)
@@ -974,7 +974,7 @@ ninja
 # Use BUILD_WITH_COMMON_SYSTEM instead for new builds
 ```
 
-### vcpkg Dependencies
+### vcpkg 의존성
 
 ```bash
 # PostgreSQL support
@@ -993,9 +993,9 @@ vcpkg install mongo-cxx-driver
 vcpkg install hiredis
 ```
 
-## Configuration
+## 구성
 
-### Environment Variables
+### 환경 변수
 
 ```bash
 # PostgreSQL connection settings
@@ -1013,20 +1013,20 @@ export REDIS_HOST=localhost
 export REDIS_PORT=6379
 ```
 
-### CMake Options
+### CMake 옵션
 
-| Option | Default | Description |
+| 옵션 | 기본값 | 설명 |
 |--------|---------|-------------|
-| `USE_POSTGRESQL` | ON | Enable PostgreSQL support |
-| `USE_MYSQL` | OFF | Enable MySQL support |
-| `USE_SQLITE` | OFF | Enable SQLite support |
-| `USE_MONGODB` | OFF | Enable MongoDB support |
-| `USE_REDIS` | OFF | Enable Redis support |
-| `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
-| `USE_UNIT_TEST` | ON | Build unit tests |
-| `BUILD_SHARED_LIBS` | OFF | Build as shared library |
+| `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 |
+| `USE_MYSQL` | OFF | MySQL 지원 활성화 |
+| `USE_SQLITE` | OFF | SQLite 지원 활성화 |
+| `USE_MONGODB` | OFF | MongoDB 지원 활성화 |
+| `USE_REDIS` | OFF | Redis 지원 활성화 |
+| `BUILD_DATABASE_SAMPLES` | ON | 샘플 프로그램 빌드 |
+| `USE_UNIT_TEST` | ON | 단위 테스트 빌드 |
+| `BUILD_SHARED_LIBS` | OFF | 공유 라이브러리로 빌드 |
 
-### Connection Pool Configuration
+### Connection Pool 구성
 
 ```cpp
 struct connection_pool_config {
@@ -1040,33 +1040,33 @@ struct connection_pool_config {
 };
 ```
 
-## Enterprise Features
+## 엔터프라이즈 기능
 
 ### 🏊‍♂️ Connection Pooling
-- **Thread-safe operations** with configurable pool limits
-- **Health monitoring** with automatic connection validation
-- **Statistics and monitoring** for pool performance tracking
-- **Automatic cleanup** of idle and unhealthy connections
+- 구성 가능한 pool 제한을 통한 **thread 안전 작업**
+- 자동 연결 검증을 통한 **상태 모니터링**
+- pool 성능 추적을 위한 **통계 및 모니터링**
+- 유휴 및 비정상 연결의 **자동 정리**
 
-### 🔍 Query Builders
-- **Type-safe construction** with compile-time validation
-- **Fluent interface** for intuitive query building
-- **Multi-database support** with automatic dialect handling
-- **Raw query passthrough** when needed for complex operations
+### 🔍 Query Builder
+- 컴파일 타임 검증을 통한 **타입 안전 구성**
+- 직관적인 쿼리 빌드를 위한 **fluent 인터페이스**
+- 자동 방언 처리를 통한 **다중 database 지원**
+- 복잡한 작업에 필요할 때 **원시 쿼리 통과**
 
-### 🛡️ Error Handling
-- **Graceful fallbacks** when database libraries are unavailable
-- **Mock implementations** for testing without actual databases
-- **Comprehensive logging** with detailed error information
-- **Exception safety** with RAII resource management
+### 🛡️ 오류 처리
+- database 라이브러리를 사용할 수 없을 때 **우아한 fallback**
+- 실제 database 없이 테스트를 위한 **mock 구현**
+- 상세한 오류 정보를 포함한 **포괄적인 로깅**
+- RAII 리소스 관리를 통한 **exception 안전성**
 
-### 📊 Monitoring
-- **Real-time statistics** for connection pool utilization
-- **Performance metrics** for query execution times
-- **Health status** monitoring for all database connections
-- **Resource tracking** for memory and connection usage
+### 📊 모니터링
+- connection pool 활용을 위한 **실시간 통계**
+- 쿼리 실행 시간에 대한 **성능 메트릭**
+- 모든 database 연결에 대한 **상태 상태** 모니터링
+- 메모리 및 연결 사용에 대한 **리소스 추적**
 
-## Testing
+## 테스트
 
 ```bash
 # Run all tests
@@ -1084,26 +1084,26 @@ ctest
 ./bin/run_all_samples
 ```
 
-## Performance Benchmarks
+## 성능 벤치마크
 
-| Operation | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
+| 작업 | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
 |-----------|------------|-------|--------|---------|-------|
-| Simple SELECT | 1.2ms | 1.5ms | 0.8ms | 2.1ms | 0.3ms |
-| Complex JOIN | 15ms | 18ms | 12ms | N/A | N/A |
-| Bulk INSERT (1K) | 45ms | 52ms | 38ms | 35ms | 28ms |
+| 단순 SELECT | 1.2ms | 1.5ms | 0.8ms | 2.1ms | 0.3ms |
+| 복잡한 JOIN | 15ms | 18ms | 12ms | N/A | N/A |
+| 대량 INSERT (1K) | 45ms | 52ms | 38ms | 35ms | 28ms |
 | Connection Pool | 0.1ms | 0.1ms | 0.1ms | 0.2ms | 0.05ms |
 
-*Benchmarks performed on Intel i7-9750H, 16GB RAM, SSD storage*
+*Intel i7-9750H, 16GB RAM, SSD 스토리지에서 벤치마크 수행*
 
-## Migration Guide
+## 마이그레이션 가이드
 
-### From Previous Versions
+### 이전 버전에서
 
-1. **Headers**: Include from `database/` subdirectory
-2. **Types**: Use `database_result` with `std::monostate` for NULL
-3. **Namespace**: Use `database` namespace
-4. **Pooling**: Use new connection pool APIs for better performance
-5. **Queries**: Consider using query builders for type safety
+1. **헤더**: `database/` 하위 디렉토리에서 포함
+2. **타입**: NULL을 위해 `std::monostate`와 함께 `database_result` 사용
+3. **Namespace**: `database` namespace 사용
+4. **Pooling**: 더 나은 성능을 위해 새로운 connection pool API 사용
+5. **Query**: 타입 안전성을 위해 query builder 사용 고려
 
 ```cpp
 // Old way
@@ -1117,81 +1117,81 @@ using namespace database_module;
 using namespace database;
 ```
 
-## Development Roadmap
+## 개발 로드맵
 
-### ✅ Completed (Phase 1-3)
-- Multi-database backend support (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
-- Enterprise-grade connection pooling with health monitoring
-- Comprehensive query builders for SQL and NoSQL databases
-- Thread-safe operations and RAII resource management
-- Mock implementations for testing and CI/CD
+### ✅ 완료 (Phase 1-3)
+- 다중 database 백엔드 지원 (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- 상태 모니터링을 통한 엔터프라이즈급 connection pooling
+- SQL 및 NoSQL database를 위한 포괄적인 query builder
+- Thread 안전 작업 및 RAII 리소스 관리
+- 테스트 및 CI/CD를 위한 mock 구현
 
-### 🔮 Future Enhancements (Phase 4+)
-- **ORM Framework**: Object-relational mapping with entity definitions
-- **Schema Migrations**: Version-controlled database schema management
-- **Async Operations**: Coroutine-based async database operations
-- **Distributed Features**: Sharding, replication, and clustering support
-- **Advanced Query Optimization**: Query planning and performance analysis
+### 🔮 향후 개선 (Phase 4+)
+- **ORM Framework**: entity 정의를 통한 object-relational mapping
+- **스키마 마이그레이션**: 버전 관리 database 스키마 관리
+- **비동기 작업**: coroutine 기반 비동기 database 작업
+- **분산 기능**: 샤딩, 복제, 클러스터링 지원
+- **고급 쿼리 최적화**: 쿼리 계획 및 성능 분석
 
-## Contributing
+## 기여
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Repository를 fork하세요
+2. feature branch를 만드세요 (`git checkout -b feature/amazing-feature`)
+3. 변경 사항을 커밋하세요 (`git commit -m 'Add amazing feature'`)
+4. branch에 push하세요 (`git push origin feature/amazing-feature`)
+5. Pull Request를 여세요
 
-## Production Quality & Architecture
+## 프로덕션 품질 및 아키텍처
 
-### Build & Testing Infrastructure
+### 빌드 및 테스트 인프라
 
-**Comprehensive Multi-Platform CI/CD**
-- **Sanitizer Coverage**: Automated builds with ThreadSanitizer, AddressSanitizer, and UBSanitizer
-- **Multi-Platform Testing**: Continuous validation across Ubuntu (GCC/Clang), Windows (MSVC), and macOS
-- **Code Coverage**: codecov integration with coverage tracking and reporting
-- **Static Analysis**: Clang-tidy and Cppcheck integration with modernize checks
-- **Automated Testing**: Complete CI/CD pipeline with coverage reports
+**포괄적인 다중 플랫폼 CI/CD**
+- **Sanitizer 커버리지**: ThreadSanitizer, AddressSanitizer, UBSanitizer를 통한 자동 빌드
+- **다중 플랫폼 테스트**: Ubuntu (GCC/Clang), Windows (MSVC), macOS에서 지속적인 검증
+- **코드 커버리지**: 커버리지 추적 및 보고를 통한 codecov 통합
+- **정적 분석**: modernize 검사를 통한 Clang-tidy 및 Cppcheck 통합
+- **자동 테스트**: 커버리지 보고서를 통한 완전한 CI/CD pipeline
 
-**Performance Baselines**
-- **Transaction Throughput**: 5,000 TPS (PostgreSQL)
-- **Query Performance**: 1.2 ms average for simple SELECT operations (PostgreSQL)
-- **Connection Pool**: 0.1 ms connection acquisition time (20x faster than native)
-- **Concurrent Connections**: 10,000+ connections with 95%+ pool efficiency
-- **Memory Efficiency**: <50 MB baseline, scales to 850 MB with 10K connections
+**성능 기준선**
+- **트랜잭션 처리량**: 5,000 TPS (PostgreSQL)
+- **쿼리 성능**: 단순 SELECT 작업에 대해 평균 1.2ms (PostgreSQL)
+- **Connection Pool**: 0.1ms 연결 획득 시간 (native 대비 20배 빠름)
+- **동시 연결**: 95% 이상의 pool 효율성으로 10,000개 이상의 연결
+- **메모리 효율성**: 50MB 미만의 기준선, 10K 연결로 850MB까지 확장
 
-See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and multi-backend benchmarks.
+포괄적인 성능 메트릭 및 다중 백엔드 벤치마크는 [BASELINE.md](BASELINE.md)를 참조하세요.
 
-**Complete Documentation Suite**
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md): System design and ecosystem integration
-- [USER_GUIDE.md](docs/USER_GUIDE.md): Setup, connections, and query guide
-- [API_REFERENCE.md](docs/API_REFERENCE.md): Complete API documentation
-- [CURRENT_STATE.md](docs/CURRENT_STATE.md): Current implementation status
+**완전한 문서 모음**
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): 시스템 디자인 및 생태계 통합
+- [USER_GUIDE.md](docs/USER_GUIDE.md): 설정, 연결, 쿼리 가이드
+- [API_REFERENCE.md](docs/API_REFERENCE.md): 완전한 API 문서
+- [CURRENT_STATE.md](docs/CURRENT_STATE.md): 현재 구현 상태
 
-### Thread Safety & Concurrency
+### Thread 안전성 및 동시성
 
-**Enterprise-Grade Connection Pooling (100% Complete)**
-- **10,000+ Concurrent Connections**: Thread-safe pool management with adaptive sizing
-- **0.1 ms Acquisition Time**: Ultra-fast connection acquisition (20x faster than native drivers)
-- **Atomic Operations**: Thread-safe pool statistics and health monitoring
-- **ThreadSanitizer Compliance**: Zero data races detected across all test scenarios
-- **95%+ Pool Efficiency**: Optimal connection utilization with health monitoring
+**엔터프라이즈급 Connection Pooling (100% 완료)**
+- **10,000개 이상의 동시 연결**: 적응형 크기 조정을 통한 thread 안전 pool 관리
+- **0.1ms 획득 시간**: 초고속 연결 획득 (native driver 대비 20배 빠름)
+- **원자적 작업**: thread 안전 pool 통계 및 상태 모니터링
+- **ThreadSanitizer 준수**: 모든 테스트 시나리오에서 데이터 경합 제로 감지
+- **95% 이상의 Pool 효율성**: 상태 모니터링을 통한 최적 연결 활용
 
-**Synchronization Excellence**
-- **Lock-Based Coordination**: Proper mutex usage for shared state management
-- **Health Monitoring**: Automatic connection validation and cleanup
-- **Adaptive Sizing**: Dynamic pool management based on load
-- **Production-Proven**: Stable performance under high concurrent load
+**동기화 우수성**
+- **Lock 기반 조정**: 공유 상태 관리를 위한 적절한 mutex 사용
+- **상태 모니터링**: 자동 연결 검증 및 정리
+- **적응형 크기 조정**: 부하에 따른 동적 pool 관리
+- **프로덕션 검증**: 높은 동시 부하에서 안정적인 성능
 
-### Resource Management (RAII - Grade A)
+### 리소스 관리 (RAII - Grade A)
 
-**Comprehensive RAII Compliance**
-- **100% Smart Pointer Usage**: All resources managed through `std::shared_ptr` and `std::unique_ptr`
-- **AddressSanitizer Validation**: Zero memory leaks detected across all test scenarios
-- **RAII Patterns**: Connection wrappers, query result lifetime management, prepared statement handling
-- **Automatic Cleanup**: Database connections, prepared statements, and query results properly managed
-- **No Manual Memory Management**: Complete elimination of raw pointers in public interfaces
+**포괄적인 RAII 준수**
+- **100% Smart Pointer 사용**: `std::shared_ptr` 및 `std::unique_ptr`를 통해 관리되는 모든 리소스
+- **AddressSanitizer 검증**: 모든 테스트 시나리오에서 메모리 누수 제로 감지
+- **RAII 패턴**: 연결 래퍼, 쿼리 결과 수명 관리, prepared statement 처리
+- **자동 정리**: database 연결, prepared statement, 쿼리 결과 적절히 관리
+- **수동 메모리 관리 없음**: public 인터페이스에서 원시 포인터 완전 제거
 
-**Memory Efficiency Under Load**
+**부하 하의 메모리 효율성**
 ```bash
 # AddressSanitizer: Clean across all tests
 ==12345==ERROR: LeakSanitizer: detected memory leaks
@@ -1203,11 +1203,11 @@ With 10K connections: ~850 MB
 Automatic cleanup: All connections RAII-managed
 ```
 
-### Error Handling (Production Ready - 85% Complete)
+### 오류 처리 (프로덕션 준비 - 85% 완료)
 
-**Adapter Pattern for Database Compatibility**
+**Database 호환성을 위한 Adapter Pattern**
 
-The database_system implements a sophisticated adapter layer that provides Result<T> for external APIs while maintaining full compatibility with traditional database driver APIs:
+database_system은 외부 API를 위한 Result<T>를 제공하면서 전통적인 database driver API와의 완전한 호환성을 유지하는 정교한 adapter layer를 구현합니다:
 
 ```cpp
 #include <database/adapters/common_system_adapter.h>
@@ -1253,64 +1253,64 @@ if (!commit_result) {
 }
 ```
 
-**Adapter Layer Architecture**
-- **`common_system_database_adapter`**: All database operations (`connect`, `disconnect`, `execute_query`, `execute_command`) return `Result<T>`
-- **`common_connection_pool_adapter`**: Connection pool operations with Result<T> error handling
-- **`common_database_factory`**: Factory pattern for creating Result<T>-enabled database instances
-- **Transaction Support**: Full ACID transaction support with Result<T> error reporting
+**Adapter Layer 아키텍처**
+- **`common_system_database_adapter`**: 모든 database 작업 (`connect`, `disconnect`, `execute_query`, `execute_command`)은 `Result<T>`를 반환
+- **`common_connection_pool_adapter`**: Result<T> 오류 처리를 통한 connection pool 작업
+- **`common_database_factory`**: Result<T> 활성화 database 인스턴스 생성을 위한 factory pattern
+- **트랜잭션 지원**: Result<T> 오류 보고를 통한 완전한 ACID 트랜잭션 지원
 
-**Design Philosophy: Compatibility and Safety**
-- **Internal Operations**: Traditional database API (bool, direct results) for maximum compatibility
-- **External API**: Result<T> adapters for type-safe error handling at system boundaries
-- **Transaction Safety**: Full ACID support with comprehensive Result<T> error reporting
-- **Connection Pool Integration**: Seamless integration with connection pool error handling
+**디자인 철학: 호환성 및 안전성**
+- **내부 작업**: 최대 호환성을 위한 전통적인 database API (bool, 직접 결과)
+- **외부 API**: 시스템 경계에서 타입 안전 오류 처리를 위한 Result<T> adapter
+- **트랜잭션 안전성**: 포괄적인 Result<T> 오류 보고를 통한 완전한 ACID 지원
+- **Connection Pool 통합**: connection pool 오류 처리와의 원활한 통합
 
-This hybrid approach delivers:
-- **Compatibility**: Works with all standard database drivers (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
-- **Safety**: Type-safe error handling for application code and ecosystem integrations
-- **Performance**: Zero overhead for internal database operations
-- **Reliability**: Enterprise-grade transaction support with comprehensive error handling
+이 하이브리드 접근 방식은 다음을 제공합니다:
+- **호환성**: 모든 표준 database driver (PostgreSQL, MySQL, SQLite, MongoDB, Redis)와 작동
+- **안전성**: 애플리케이션 코드 및 생태계 통합을 위한 타입 안전 오류 처리
+- **성능**: 내부 database 작업에 대한 오버헤드 제로
+- **안정성**: 포괄적인 오류 처리를 통한 엔터프라이즈급 트랜잭션 지원
 
-**Error Code Integration**
-- **Allocated Range**: `-500` to `-599` in centralized error code registry (common_system)
-- **Categorization**: Connection (-500 to -509), Query execution (-510 to -519), Transaction (-520 to -529), Pool management (-530 to -539), Security (-540 to -549)
-- **Meaningful Messages**: Comprehensive error context for all failure scenarios
+**오류 코드 통합**
+- **할당된 범위**: 중앙 집중식 오류 코드 레지스트리 (common_system)에서 `-500`부터 `-599`까지
+- **분류**: 연결 (-500 ~ -509), 쿼리 실행 (-510 ~ -519), 트랜잭션 (-520 ~ -529), Pool 관리 (-530 ~ -539), 보안 (-540 ~ -549)
+- **의미 있는 메시지**: 모든 실패 시나리오에 대한 포괄적인 오류 컨텍스트
 
-**Remaining Optional Enhancements**
-- 📝 **Error Tests**: Add comprehensive adapter error scenario test suite
-- 📝 **Documentation**: Expand Result<T> transaction pattern examples
-- 📝 **Connection Pool**: Enhance pool error reporting with Result<T>
+**남은 선택적 개선사항**
+- 📝 **오류 테스트**: 포괄적인 adapter 오류 시나리오 테스트 모음 추가
+- 📝 **문서**: Result<T> 트랜잭션 패턴 예제 확장
+- 📝 **Connection Pool**: Result<T>를 통한 pool 오류 보고 향상
 
-For detailed implementation notes, see [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md).
+상세한 구현 참고 사항은 [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md)를 참조하세요.
 
-**Future Enhancements**
-- 📝 **Enterprise Features**: ORM framework with C++20 concepts, schema migrations, Prometheus integration, enterprise security (TLS/SSL, RBAC, audit logging)
-- 📝 **Advanced Operations**: Async operations with C++20 coroutines, distributed transactions, real-time data streaming, query optimization
+**향후 개선사항**
+- 📝 **엔터프라이즈 기능**: C++20 concept을 갖춘 ORM framework, 스키마 마이그레이션, Prometheus 통합, 엔터프라이즈 보안 (TLS/SSL, RBAC, 감사 로깅)
+- 📝 **고급 작업**: C++20 coroutine을 통한 비동기 작업, 분산 트랜잭션, 실시간 데이터 스트리밍, 쿼리 최적화
 
-For detailed improvement plans and tracking, see the project's [NEED_TO_FIX.md](/Users/dongcheolshin/Sources/NEED_TO_FIX.md).
+상세한 개선 계획 및 추적은 프로젝트의 [NEED_TO_FIX.md](/Users/dongcheolshin/Sources/NEED_TO_FIX.md)를 참조하세요.
 
-### Architecture Improvement Phases
+### 아키텍처 개선 단계
 
-**Phase Status Overview** (as of 2025-10-09):
+**Phase 상태 개요** (2025-10-09 기준):
 
-| Phase | Status | Completion | Key Achievements |
+| Phase | 상태 | 완료율 | 주요 성과 |
 |-------|--------|------------|------------------|
-| **Phase 0**: Foundation | ✅ Complete | 100% | CI/CD pipelines, baseline metrics, test coverage |
-| **Phase 1**: Thread Safety | ✅ Complete | 100% | ThreadSanitizer validation, 10K+ concurrent connections |
-| **Phase 2**: Resource Management | ✅ Complete | 100% | Grade A RAII, AddressSanitizer clean |
-| **Phase 3**: Error Handling | 🔄 In Progress | 85% | **Adapter Pattern** - Compatibility + Safety |
-| **Phase 4**: Performance | ⏳ Planned | 0% | Advanced query optimization, zero-copy operations |
-| **Phase 5**: Stability | ⏳ Planned | 0% | API stabilization, semantic versioning |
-| **Phase 6**: Documentation | ⏳ Planned | 0% | Comprehensive guides, tutorials, examples |
+| **Phase 0**: 기반 | ✅ 완료 | 100% | CI/CD pipeline, 기준선 메트릭, 테스트 커버리지 |
+| **Phase 1**: Thread 안전성 | ✅ 완료 | 100% | ThreadSanitizer 검증, 10K+ 동시 연결 |
+| **Phase 2**: 리소스 관리 | ✅ 완료 | 100% | Grade A RAII, AddressSanitizer clean |
+| **Phase 3**: 오류 처리 | 🔄 진행 중 | 85% | **Adapter Pattern** - 호환성 + 안전성 |
+| **Phase 4**: 성능 | ⏳ 계획됨 | 0% | 고급 쿼리 최적화, zero-copy 작업 |
+| **Phase 5**: 안정성 | ⏳ 계획됨 | 0% | API 안정화, semantic versioning |
+| **Phase 6**: 문서 | ⏳ 계획됨 | 0% | 포괄적인 가이드, 튜토리얼, 예제 |
 
-#### Phase 3: Error Handling (85% Complete) - Adapter Pattern
+#### Phase 3: 오류 처리 (85% 완료) - Adapter Pattern
 
-The database_system implements a **sophisticated adapter pattern** for database compatibility:
-- **Internal Operations**: Traditional database API (bool, direct results) for maximum driver compatibility
-- **External API**: Result<T> adapters for type-safe error handling at system boundaries
-- **Transaction Safety**: Full ACID support with comprehensive Result<T> error reporting
+database_system은 database 호환성을 위한 **정교한 adapter pattern**을 구현합니다:
+- **내부 작업**: 최대 driver 호환성을 위한 전통적인 database API (bool, 직접 결과)
+- **외부 API**: 시스템 경계에서 타입 안전 오류 처리를 위한 Result<T> adapter
+- **트랜잭션 안전성**: 포괄적인 Result<T> 오류 보고를 통한 완전한 ACID 지원
 
-**Implementation Pattern: Compatibility Adapter**
+**구현 패턴: 호환성 Adapter**
 ```cpp
 #include <database/adapters/common_system_adapter.h>
 using namespace database::adapters;
@@ -1341,38 +1341,38 @@ if (!cmd_result) {
 auto commit_result = adapter->commit();
 ```
 
-**Error Code Allocation**: `-500` to `-599` (Centralized in common_system)
-- **-500 to -509**: Connection errors
-- **-510 to -519**: Query execution errors
-- **-520 to -529**: Transaction errors
-- **-530 to -539**: Pool management errors
-- **-540 to -549**: Security errors
+**오류 코드 할당**: `-500`부터 `-599`까지 (common_system에 중앙 집중)
+- **-500 ~ -509**: 연결 오류
+- **-510 ~ -519**: 쿼리 실행 오류
+- **-520 ~ -529**: 트랜잭션 오류
+- **-530 ~ -539**: Pool 관리 오류
+- **-540 ~ -549**: 보안 오류
 
-**Design Philosophy**:
-- **Compatibility**: Works with all standard database drivers (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
-- **Safety**: Type-safe error handling for application code and ecosystem integrations
-- **Performance**: Zero overhead for internal database operations
-- **Reliability**: Enterprise-grade transaction support with comprehensive error handling
+**디자인 철학**:
+- **호환성**: 모든 표준 database driver (PostgreSQL, MySQL, SQLite, MongoDB, Redis)와 작동
+- **안전성**: 애플리케이션 코드 및 생태계 통합을 위한 타입 안전 오류 처리
+- **성능**: 내부 database 작업에 대한 오버헤드 제로
+- **안정성**: 포괄적인 오류 처리를 통한 엔터프라이즈급 트랜잭션 지원
 
-**Why Adapter Pattern?**
-1. **Maximum Compatibility**: Maintains compatibility with all database driver APIs
-2. **Safe Boundaries**: External API provides Result<T> for type-safe error handling
-3. **Enterprise Transactions**: Full ACID support with Result<T> error reporting
-4. **Zero Performance Cost**: No overhead for internal database operations
+**왜 Adapter Pattern인가?**
+1. **최대 호환성**: 모든 database driver API와의 호환성 유지
+2. **안전한 경계**: 외부 API는 타입 안전 오류 처리를 위한 Result<T> 제공
+3. **엔터프라이즈 트랜잭션**: Result<T> 오류 보고를 통한 완전한 ACID 지원
+4. **성능 비용 제로**: 내부 database 작업에 대한 오버헤드 없음
 
-**Enterprise Achievement**: database_system supports **10,000+ concurrent connections** with **95%+ pool efficiency** and **0.1ms connection acquisition time** (20x faster than native drivers).
+**엔터프라이즈 성과**: database_system은 **95% 이상의 pool 효율성** 및 **0.1ms 연결 획득 시간** (native driver 대비 20배 빠름)으로 **10,000개 이상의 동시 연결**을 지원합니다.
 
-**Remaining Work** (15%):
-- Comprehensive adapter error scenario test suite
-- Expanded Result<T> transaction pattern examples
-- Enhanced pool error reporting with Result<T>
+**남은 작업** (15%):
+- 포괄적인 adapter 오류 시나리오 테스트 모음
+- 확장된 Result<T> 트랜잭션 패턴 예제
+- Result<T>를 통한 향상된 pool 오류 보고
 
-For detailed Phase 3 implementation notes, see [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md).
+상세한 Phase 3 구현 참고 사항은 [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md)를 참조하세요.
 
-## License
+## 라이선스
 
-BSD 3-Clause License - see [LICENSE](LICENSE) file for details.
+BSD 3-Clause License - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
 ---
 
-**Database System** - From prototype to enterprise-grade: A journey through Phase 1 (Relational Databases), Phase 2 (NoSQL Support), and Phase 3 (Advanced Features) delivering a production-ready C++20 database abstraction layer.
+**Database System** - 프로토타입에서 엔터프라이즈급까지: Phase 1 (관계형 Database), Phase 2 (NoSQL 지원), Phase 3 (고급 기능)을 통해 프로덕션 수준의 C++20 database abstraction layer를 제공하는 여정.

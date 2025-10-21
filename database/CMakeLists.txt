@@ -62,8 +62,13 @@ add_library(${PROJECT_NAME} STATIC
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Database: Enabling common_system integration")
-    # Try to find common_system in sibling directory
+    # Try to find common_system with priority order:
+    # 1. macOS: /Users/${USER}/Sources/common_system
+    # 2. Linux: /home/${USER}/Sources/common_system
+    # 3. Relative paths as fallback
     set(_DATABASE_COMMON_PATHS
+        "/Users/$ENV{USER}/Sources/common_system/include"
+        "/home/$ENV{USER}/Sources/common_system/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../common_system/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include"
     )

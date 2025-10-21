@@ -7,7 +7,8 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Find Google Test
-find_package(GTest REQUIRED)
+# Note: If not found, parent CMakeLists.txt may provide it via FetchContent
+find_package(GTest QUIET)
 
 # Include directories
 include_directories(

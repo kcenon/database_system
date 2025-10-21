@@ -32,6 +32,16 @@ option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
 
+# Respect global BUILD_INTEGRATION_TESTS flag if set
+if(DEFINED BUILD_INTEGRATION_TESTS)
+    if(BUILD_INTEGRATION_TESTS)
+        set(_DATABASE_BUILD_IT_VALUE ON)
+    else()
+        set(_DATABASE_BUILD_IT_VALUE OFF)
+    endif()
+    set(DATABASE_BUILD_INTEGRATION_TESTS ${_DATABASE_BUILD_IT_VALUE} CACHE BOOL "Build database system integration tests" FORCE)
+endif()
+
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

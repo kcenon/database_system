@@ -56,6 +56,11 @@ namespace database::testing
 	protected:
 		void SetUp() override
 		{
+#ifndef USE_SQLITE
+			GTEST_SKIP() << "SQLite support not compiled. "
+			             << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
+#endif
+
 			// Create unique test database file
 			test_db_path_ = std::filesystem::temp_directory_path() /
 			                ("test_db_" + std::to_string(
@@ -74,6 +79,7 @@ namespace database::testing
 				CreateTestTables();
 			} else {
 				std::cerr << "Failed to connect to test database: " << test_db_path_ << std::endl;
+				GTEST_SKIP() << "Failed to connect to SQLite test database";
 			}
 		}
 
@@ -139,7 +145,7 @@ namespace database::testing
 				return nullptr;
 			}
 			auto conn_result = pool->acquire_connection();
-			if (!conn_result) {
+			if (conn_result.is_err()) {
 				return nullptr;
 			}
 			return conn_result.value();
@@ -264,6 +270,11 @@ namespace database::testing
 	protected:
 		void SetUp() override
 		{
+#ifndef USE_SQLITE
+			GTEST_SKIP() << "SQLite support not compiled. "
+			             << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
+#endif
+
 			// Create unique test database file
 			test_db_path_ = std::filesystem::temp_directory_path() /
 			                ("test_db_pool_" + std::to_string(
@@ -285,12 +296,13 @@ namespace database::testing
 
 			if (!pool_created_) {
 				std::cerr << "Failed to create connection pool for: " << test_db_path_ << std::endl;
+				GTEST_SKIP() << "Failed to create SQLite connection pool";
 			} else {
 				// Create test tables using a connection from the pool
 				auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
 				if (pool) {
 					auto conn_result = pool->acquire_connection();
-					if (conn_result && conn_result.value()->get()) {
+					if (conn_result.is_ok() && conn_result.value()->get()) {
 						auto conn = conn_result.value();
 						conn->get()->create_query(
 							"CREATE TABLE IF NOT EXISTS users ("

@@ -135,7 +135,7 @@ TEST_F(DatabaseThreadSafetyTest, ConcurrentConnectionAcquireRelease) {
             for (int j = 0; j < acquisitions_per_thread; ++j) {
                 try {
                     auto conn = pool.acquire_connection();
-                    if (conn) {
+                    if (conn.is_ok()) {
                         ++successful_acquisitions;
                         std::this_thread::sleep_for(1ms);
                         pool.release_connection(std::move(conn.value()));
@@ -187,7 +187,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolStatsAccess) {
                         (void)stats;  // Use stats to avoid warning
                     } else {
                         auto conn = pool.acquire_connection();
-                        if (conn) {
+                        if (conn.is_ok()) {
                             pool.release_connection(std::move(conn.value()));
                         }
                     }
@@ -414,7 +414,7 @@ TEST_F(DatabaseThreadSafetyTest, HealthCheckDuringOperations) {
             for (int j = 0; j < operations_per_thread && running.load(); ++j) {
                 try {
                     auto conn = pool.acquire_connection();
-                    if (conn) {
+                    if (conn.is_ok()) {
                         pool.release_connection(std::move(conn.value()));
                     }
                 } catch (...) {
@@ -522,7 +522,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolAllStatsMethods) {
                         }
                         case 3: {
                             auto conn = pool.acquire_connection();
-                            if (conn) {
+                            if (conn.is_ok()) {
                                 pool.release_connection(std::move(conn.value()));
                             }
                             break;
@@ -571,7 +571,7 @@ TEST_F(DatabaseThreadSafetyTest, PoolLifecycleMemorySafety) {
                 for (int j = 0; j < operations_per_thread; ++j) {
                     try {
                         auto conn = pool.acquire_connection();
-                        if (conn) {
+                        if (conn.is_ok()) {
                             pool.release_connection(std::move(conn.value()));
                         }
 

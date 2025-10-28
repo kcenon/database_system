@@ -96,7 +96,7 @@ TEST_F(ConnectionManagementTest, ConnectionAcquisitionSuccess)
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result) << "Should acquire connection successfully";
+	ASSERT_TRUE(conn_result.is_ok()) << "Should acquire connection successfully";
 	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy()) << "Connection should be healthy";
 }
@@ -112,7 +112,7 @@ TEST_F(ConnectionManagementTest, ConnectionReleaseSuccess)
 	auto initial_available = pool->available_connections();
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 	auto conn = conn_result.value();
 	EXPECT_LT(pool->available_connections(), initial_available)
 		<< "Available connections should decrease";
@@ -135,7 +135,7 @@ TEST_F(ConnectionManagementTest, ConnectionPoolingAndReuse)
 	// Acquire and release multiple times
 	for (int i = 0; i < 5; ++i) {
 		auto conn_result = pool->acquire_connection();
-		ASSERT_TRUE(conn_result) << "Iteration " << i;
+		ASSERT_TRUE(conn_result.is_ok()) << "Iteration " << i;
 		pool->release_connection(conn_result.value());
 	}
 
@@ -168,7 +168,7 @@ TEST_F(ConnectionManagementTest, ConnectionTimeoutHandling)
 	std::vector<std::shared_ptr<connection_wrapper>> conns;
 	for (size_t i = 0; i < config.max_connections; ++i) {
 		auto conn_result = pool->acquire_connection();
-		if (conn_result) {
+		if (conn_result.is_ok()) {
 			conns.push_back(conn_result.value());
 		}
 	}
@@ -178,7 +178,7 @@ TEST_F(ConnectionManagementTest, ConnectionTimeoutHandling)
 	auto timeout_conn_result = pool->acquire_connection();
 
 	// Connection might be null due to timeout
-	if (!timeout_conn_result) {
+	if (timeout_conn_result.is_err()) {
 		EXPECT_GE(timer.Elapsed(), 900) << "Should wait for timeout";
 	}
 }
@@ -204,7 +204,7 @@ TEST_F(ConnectionManagementTest, MaxConnectionsLimitEnforcement)
 	std::vector<std::shared_ptr<connection_wrapper>> conns;
 	for (size_t i = 0; i < config.max_connections + 2; ++i) {
 		auto conn_result = pool->acquire_connection();
-		if (conn_result) {
+		if (conn_result.is_ok()) {
 			conns.push_back(conn_result.value());
 		}
 	}
@@ -222,7 +222,7 @@ TEST_F(ConnectionManagementTest, ConnectionHealthChecking)
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy()) << "New connection should be healthy";
 
@@ -245,7 +245,7 @@ TEST_F(ConnectionManagementTest, ConcurrentConnectionRequests)
 	for (int i = 0; i < num_threads; ++i) {
 		futures.push_back(std::async(std::launch::async, [pool]() {
 			auto conn_result = pool->acquire_connection();
-			if (!conn_result) {
+			if (conn_result.is_err()) {
 				return false;
 			}
 			auto conn = conn_result.value();
@@ -291,7 +291,7 @@ TEST_F(ConnectionManagementTest, ConnectionMetadataTracking)
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 	auto conn = conn_result.value();
 
 	auto initial_time = conn->last_used();
@@ -312,7 +312,7 @@ TEST_F(ConnectionManagementTest, IdleConnectionTimeoutDetection)
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 	auto conn = conn_result.value();
 
 	// Check with very short timeout
@@ -360,7 +360,7 @@ TEST_F(ConnectionManagementTest, ConnectionPoolShutdown)
 
 	// Acquire connection before shutdown
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 
 	// Shutdown pool
 	pool->shutdown();

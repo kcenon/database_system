@@ -161,15 +161,15 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
 	auto conn1_result = pool->acquire_connection();
 	auto conn2_result = pool->acquire_connection();
 
-	ASSERT_TRUE(conn1_result);
-	ASSERT_TRUE(conn2_result);
+	ASSERT_TRUE(conn1_result.is_ok());
+	ASSERT_TRUE(conn2_result.is_ok());
 
 	// Try to acquire when pool is exhausted
 	PerformanceTimer timer;
 	auto conn3_result = pool->acquire_connection();
 
-	// Should timeout or return nullptr
-	if (!conn3_result) {
+	// Should timeout or return error
+	if (conn3_result.is_err()) {
 		EXPECT_GE(timer.Elapsed(), 400) << "Should wait for timeout period";
 	}
 
@@ -281,7 +281,7 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result);
+	ASSERT_TRUE(conn_result.is_ok());
 	auto conn = conn_result.value();
 	EXPECT_TRUE(conn->is_healthy());
 
@@ -294,7 +294,7 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 
 	// Acquire new connection - pool should provide healthy one
 	auto new_conn_result = pool->acquire_connection();
-	ASSERT_TRUE(new_conn_result);
+	ASSERT_TRUE(new_conn_result.is_ok());
 	auto new_conn = new_conn_result.value();
 	EXPECT_TRUE(new_conn->is_healthy()) << "Pool should provide healthy connection";
 }

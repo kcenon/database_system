@@ -49,8 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		#include <kcenon/common/patterns/result.h>
 		namespace database {
 			template<typename T>
-			using Result = kcenon::common::Result<T>;
-			using error_info = kcenon::common::error_info;
+			using Result = common::Result<T>;
+			using error_info = common::error_info;
 		}
 	#elif __has_include(<common/patterns/result.h>)
 		#include <common/patterns/result.h>

@@ -68,7 +68,7 @@ gtest_discover_tests(database_integration_tests
 )
 
 # Add custom target to run only integration tests
-add_custom_target(run_integration_tests
+add_custom_target(database_run_integration_tests
     COMMAND database_integration_tests --gtest_color=yes
     DEPENDS database_integration_tests
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

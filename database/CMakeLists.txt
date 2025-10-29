@@ -61,13 +61,21 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 # Suppress warnings inherited from parent project
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wno-c++98-compat-extra-semi
-    -Wno-extra-semi
-    -Wno-unused-private-field
-    -Wno-sign-conversion
-    -Wno-conversion
-)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wno-c++98-compat-extra-semi
+        -Wno-extra-semi
+        -Wno-unused-private-field
+        -Wno-sign-conversion
+        -Wno-conversion
+    )
+elseif(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /wd4244  # conversion from 'type1' to 'type2', possible loss of data
+        /wd4267  # conversion from 'size_t' to 'type', possible loss of data
+        /wd4100  # unreferenced formal parameter
+    )
+endif()
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Database: Enabling common_system integration")

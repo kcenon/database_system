@@ -33,10 +33,15 @@ endif()
 ##################################################
 
 # List of all sample programs
+# Note: Advanced samples excluded - require API features not yet fully implemented
 set(SAMPLE_PROGRAMS
     basic_usage
     postgres_advanced
     connection_pool_demo
+    # async_operations_demo  # Excluded: requires async_executor API not yet implemented
+    # orm_framework_demo  # Excluded: requires ORM framework API not yet implemented
+    # performance_monitoring_demo  # Excluded: requires performance monitoring API updates
+    # security_framework_demo  # Excluded: requires RBAC/audit APIs not yet implemented
     run_all_samples
 )
 
@@ -116,10 +121,10 @@ install(TARGETS ${SAMPLE_PROGRAMS}
 
 # Install sample source files for reference
 install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/basic_usage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/database_basic_usage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_advanced.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool_demo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/run_all_samples.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/database_run_all_samples.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md
     DESTINATION share/database_system/samples

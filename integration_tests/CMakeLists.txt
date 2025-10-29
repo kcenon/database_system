@@ -6,9 +6,23 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-# Find Google Test
-# Note: If not found, parent CMakeLists.txt may provide it via FetchContent
+# Find or fetch Google Test
 find_package(GTest QUIET)
+
+if(NOT GTest_FOUND)
+    message(STATUS "GTest not found - fetching from GitHub")
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.14.0
+        GIT_SHALLOW TRUE
+    )
+    # Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+    message(STATUS "GTest fetched successfully")
+endif()
 
 # Include directories
 include_directories(
@@ -30,13 +44,25 @@ add_executable(database_integration_tests
 )
 
 # Link libraries
-target_link_libraries(database_integration_tests
-    PRIVATE
-        database
-        GTest::GTest
-        GTest::Main
-        Threads::Threads
-)
+if(TARGET GTest::GTest)
+    # Using system-installed GTest
+    target_link_libraries(database_integration_tests
+        PRIVATE
+            database
+            GTest::GTest
+            GTest::Main
+            Threads::Threads
+    )
+else()
+    # Using FetchContent GTest
+    target_link_libraries(database_integration_tests
+        PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+    )
+endif()
 
 # Set C++ standard
 set_target_properties(database_integration_tests PROPERTIES

@@ -48,6 +48,9 @@ connection_pool_v2::connection_pool_v2(
 #ifdef USE_THREAD_SYSTEM
     , scheduler_pool_(nullptr)
     , thread_count_(thread_count)
+    , metrics_(std::make_shared<monitoring::priority_metrics<connection_priority>>())
+#else
+    , metrics_(std::make_shared<monitoring::pool_metrics>())
 #endif
     , shutdown_requested_(false)
 {
@@ -113,8 +116,37 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
     auto promise = std::make_shared<std::promise<Result<std::shared_ptr<connection_wrapper>>>>();
     auto future = promise->get_future();
 
-    // Create completion callback
-    auto callback = [promise](Result<std::shared_ptr<connection_wrapper>> result) {
+    // Record start time for metrics
+    auto start_time = std::chrono::steady_clock::now();
+
+    // Update queued count
+    if (metrics_) {
+        metrics_->update_queued(1);
+    }
+
+    // Capture metrics as shared_ptr to avoid accessing `this` from worker thread
+    auto metrics_copy = metrics_;
+
+    // Create completion callback with metrics tracking
+    auto callback = [promise, start_time, priority, metrics_copy](Result<std::shared_ptr<connection_wrapper>> result) {
+        // Calculate wait time
+        auto end_time = std::chrono::steady_clock::now();
+        auto wait_time_us = std::chrono::duration_cast<std::chrono::microseconds>(
+            end_time - start_time
+        ).count();
+
+        // Record metrics
+        if (metrics_copy) {
+            metrics_copy->update_queued(-1);
+
+            if (result.is_ok()) {
+                metrics_copy->record_acquisition_with_priority(priority, wait_time_us, true);
+                metrics_copy->update_active(1);
+            } else {
+                metrics_copy->record_acquisition_with_priority(priority, wait_time_us, false);
+            }
+        }
+
         promise->set_value(std::move(result));
     };
 
@@ -129,6 +161,11 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
     auto enqueue_result = scheduler_pool_->enqueue(std::move(job));
     if (enqueue_result.has_error()) {
         // Failed to enqueue - return immediate error
+        if (metrics_) {
+            metrics_->update_queued(-1);
+            metrics_->record_acquisition_with_priority(priority, 0, false);
+        }
+
         promise->set_value(error_info{
             -598,
             "Failed to enqueue connection request: " + enqueue_result.get_error().message(),
@@ -142,10 +179,41 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
     auto promise = std::make_shared<std::promise<Result<std::shared_ptr<connection_wrapper>>>>();
     auto future = promise->get_future();
 
+    // Record start time for metrics
+    auto start_time = std::chrono::steady_clock::now();
+
+    if (metrics_) {
+        metrics_->update_queued(1);
+    }
+
     try {
         auto result = underlying_pool_->acquire_connection();
+
+        // Calculate wait time
+        auto end_time = std::chrono::steady_clock::now();
+        auto wait_time_us = std::chrono::duration_cast<std::chrono::microseconds>(
+            end_time - start_time
+        ).count();
+
+        // Record metrics
+        if (metrics_) {
+            metrics_->update_queued(-1);
+
+            if (result.is_ok()) {
+                metrics_->record_acquisition(wait_time_us, true);
+                metrics_->update_active(1);
+            } else {
+                metrics_->record_acquisition(wait_time_us, false);
+            }
+        }
+
         promise->set_value(std::move(result));
     } catch (const std::exception& e) {
+        if (metrics_) {
+            metrics_->update_queued(-1);
+            metrics_->record_acquisition(0, false);
+        }
+
         promise->set_value(error_info{
             -597,
             std::string("Exception in acquire_connection: ") + e.what(),
@@ -160,6 +228,11 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
 void connection_pool_v2::release_connection(std::shared_ptr<connection_wrapper> connection) {
     if (underlying_pool_) {
         underlying_pool_->release_connection(std::move(connection));
+
+        // Update active connection count
+        if (metrics_) {
+            metrics_->update_active(-1);
+        }
     }
 }
 
@@ -207,6 +280,18 @@ connection_stats connection_pool_v2::get_stats() const {
     }
     return connection_stats{};
 }
+
+#ifdef USE_THREAD_SYSTEM
+std::shared_ptr<monitoring::priority_metrics<connection_priority>>
+connection_pool_v2::get_metrics() const {
+    return metrics_;
+}
+#else
+std::shared_ptr<monitoring::pool_metrics>
+connection_pool_v2::get_metrics() const {
+    return metrics_;
+}
+#endif
 
 void connection_pool_v2::shutdown() {
     if (shutdown_requested_.exchange(true)) {

@@ -78,9 +78,6 @@ if(USE_THREAD_SYSTEM)
                 target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
                 target_link_libraries(${SAMPLE_NAME} PRIVATE
                     ThreadSystem
-                    thread_base
-                    interfaces
-                    utilities
                 )
                 break()
             endif()
@@ -110,6 +107,9 @@ if(USE_THREAD_SYSTEM)
 
     # Simple test for debugging
     configure_migration_sample(test_simple_v2 migration/test_simple_v2.cpp)
+
+    # Phase 3: Metrics test
+    configure_migration_sample(test_metrics_v2 migration/test_metrics_v2.cpp)
 endif()
 
 # Output directory

@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../connection_pool.h"
 #include "../database_base.h"
 #include "../database_types.h"
+#include "../monitoring/pool_metrics.h"
 #include <memory>
 #include <chrono>
 #include <future>
@@ -344,6 +345,33 @@ public:
         return async::using_thread_system;
     }
 
+    /**
+     * @brief Gets performance metrics for this pool
+     * @return Shared pointer to metrics (priority-aware with thread_system, basic otherwise)
+     *
+     * ### Example
+     * @code
+     * auto metrics = pool.get_metrics();
+     * std::cout << "Success rate: " << metrics->success_rate() << "%\n";
+     * std::cout << "Avg latency: " << metrics->average_wait_time_us() << " μs\n";
+     *
+     * #ifdef USE_THREAD_SYSTEM
+     * auto priority_metrics = std::dynamic_pointer_cast<
+     *     monitoring::priority_metrics<connection_priority>>(metrics);
+     * if (priority_metrics) {
+     *     std::cout << "CRITICAL avg: "
+     *               << priority_metrics->average_wait_time_for_priority(
+     *                      connection_priority::CRITICAL) << " μs\n";
+     * }
+     * #endif
+     * @endcode
+     */
+#ifdef USE_THREAD_SYSTEM
+    std::shared_ptr<monitoring::priority_metrics<connection_priority>> get_metrics() const;
+#else
+    std::shared_ptr<monitoring::pool_metrics> get_metrics() const;
+#endif
+
 private:
     // Underlying connection pool (actual connection management)
     std::shared_ptr<connection_pool> underlying_pool_;
@@ -352,6 +380,12 @@ private:
     // Priority-based job scheduler
     std::shared_ptr<kcenon::thread::typed_thread_pool_t<connection_priority>> scheduler_pool_;
     size_t thread_count_;
+
+    // Performance metrics with priority tracking
+    std::shared_ptr<monitoring::priority_metrics<connection_priority>> metrics_;
+#else
+    // Basic performance metrics (fallback mode)
+    std::shared_ptr<monitoring::pool_metrics> metrics_;
 #endif
 
     std::atomic<bool> shutdown_requested_;

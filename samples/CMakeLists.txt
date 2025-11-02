@@ -45,6 +45,65 @@ set(SAMPLE_PROGRAMS
     run_all_samples
 )
 
+# Migration samples (thread_system integration demos)
+if(USE_THREAD_SYSTEM)
+    # Add migration sample separately due to subdirectory structure
+    add_executable(async_executor_v2_demo migration/async_executor_v2_demo.cpp)
+
+    set_target_properties(async_executor_v2_demo PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        CXX_EXTENSIONS OFF
+    )
+
+    target_include_directories(async_executor_v2_demo PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+        ${CMAKE_CURRENT_SOURCE_DIR}/../..
+    )
+
+    target_link_libraries(async_executor_v2_demo PRIVATE
+        database
+        Threads::Threads
+    )
+
+    # Link thread_system libraries
+    set(_THREAD_LIB_PATHS
+        "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+        "/home/$ENV{USER}/Sources/thread_system/build/lib"
+    )
+
+    foreach(_lib_path ${_THREAD_LIB_PATHS})
+        if(EXISTS "${_lib_path}")
+            message(STATUS "Linking thread_system from: ${_lib_path}")
+            target_link_directories(async_executor_v2_demo PRIVATE ${_lib_path})
+
+            # Link all thread_system libraries
+            target_link_libraries(async_executor_v2_demo PRIVATE
+                ThreadSystem
+                thread_base
+                interfaces
+                utilities
+            )
+            break()
+        endif()
+    endforeach()
+
+    # thread_system requires fmt
+    if(fmt_FOUND)
+        target_link_libraries(async_executor_v2_demo PRIVATE fmt::fmt)
+    else()
+        message(WARNING "fmt not found - async_executor_v2_demo requires fmt for thread_system")
+    endif()
+
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(async_executor_v2_demo PRIVATE
+            -Wall -Wextra -Wpedantic -Wno-unused-parameter
+        )
+    endif()
+
+    message(STATUS "Migration sample configured: async_executor_v2_demo (thread_system)")
+endif()
+
 # Output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

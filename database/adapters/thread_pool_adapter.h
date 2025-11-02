@@ -95,9 +95,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         using thread_context_type = kcenon::thread::thread_context;
 
         /**
-         * @brief Type alias for monitoring interface
+         * @brief Type alias for monitoring interface (placeholder)
+         * Note: thread_system uses internal monitoring, not exposed as interface
          */
-        using monitoring_interface_type = kcenon::thread::monitoring_interface;
+        using monitoring_interface_type = void;
 
         /**
          * @brief Type alias for logger interface

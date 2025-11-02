@@ -41,10 +41,49 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifdef USE_THREAD_SYSTEM
     #include <kcenon/thread/core/job.h>
+    #include <kcenon/thread/core/thread_worker.h>
     #include <kcenon/thread/interfaces/thread_context.h>
+    #include <kcenon/thread/core/error_handling.h>
 #endif
 
 namespace database::async {
+
+#ifdef USE_THREAD_SYSTEM
+/**
+ * @class lambda_job
+ * @brief Wrapper to convert std::function into thread_system job
+ *
+ * This internal class adapts lambda/function objects to the thread_system
+ * job interface by overriding do_work().
+ */
+class lambda_job : public kcenon::thread::job {
+public:
+    explicit lambda_job(std::function<void()> func, const std::string& name = "lambda_job")
+        : job(name), func_(std::move(func)) {}
+
+    kcenon::thread::result_void do_work() override {
+        try {
+            if (func_) {
+                func_();
+            }
+            return kcenon::thread::result_void{};  // Success
+        } catch (const std::exception& e) {
+            return kcenon::thread::error{
+                kcenon::thread::error_code::job_execution_failed,
+                std::string("Exception in lambda_job: ") + e.what()
+            };
+        } catch (...) {
+            return kcenon::thread::error{
+                kcenon::thread::error_code::job_execution_failed,
+                "Unknown exception in lambda_job"
+            };
+        }
+    }
+
+private:
+    std::function<void()> func_;
+};
+#endif
 
 /**
  * @class async_executor_v2
@@ -106,7 +145,20 @@ public:
         : pool_(std::make_shared<thread_pool_type>("db_async_executor", context))
         , thread_count_(thread_count)
     {
-        // Initialize thread pool
+        // Add workers to the pool
+        auto job_queue = pool_->get_job_queue();
+        for (size_t i = 0; i < thread_count_; ++i) {
+            auto worker = std::make_unique<kcenon::thread::thread_worker>(true, context);
+            worker->set_job_queue(job_queue);
+
+            auto add_result = pool_->enqueue(std::move(worker));
+            if (add_result.has_error()) {
+                throw std::runtime_error("Failed to add worker: " +
+                                       add_result.get_error().message());
+            }
+        }
+
+        // Start thread pool
         auto result = pool_->start();
         if (result.has_error()) {
             throw std::runtime_error("Failed to start async executor: " +
@@ -176,9 +228,10 @@ public:
 
         auto future = task->get_future();
 
-        // Wrap as job for thread_system
-        auto job = std::make_unique<job_type>(
-            [task]() { (*task)(); }
+        // Wrap lambda as job for thread_system
+        auto job = std::make_unique<lambda_job>(
+            [task]() { (*task)(); },
+            "async_task"
         );
 
         // Submit to thread pool

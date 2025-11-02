@@ -47,61 +47,69 @@ set(SAMPLE_PROGRAMS
 
 # Migration samples (thread_system integration demos)
 if(USE_THREAD_SYSTEM)
-    # Add migration sample separately due to subdirectory structure
-    add_executable(async_executor_v2_demo migration/async_executor_v2_demo.cpp)
+    # Helper function to configure migration samples
+    function(configure_migration_sample SAMPLE_NAME SOURCE_FILE)
+        add_executable(${SAMPLE_NAME} ${SOURCE_FILE})
 
-    set_target_properties(async_executor_v2_demo PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-        CXX_EXTENSIONS OFF
-    )
-
-    target_include_directories(async_executor_v2_demo PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${CMAKE_CURRENT_SOURCE_DIR}/../..
-    )
-
-    target_link_libraries(async_executor_v2_demo PRIVATE
-        database
-        Threads::Threads
-    )
-
-    # Link thread_system libraries
-    set(_THREAD_LIB_PATHS
-        "/Users/$ENV{USER}/Sources/thread_system/build/lib"
-        "/home/$ENV{USER}/Sources/thread_system/build/lib"
-    )
-
-    foreach(_lib_path ${_THREAD_LIB_PATHS})
-        if(EXISTS "${_lib_path}")
-            message(STATUS "Linking thread_system from: ${_lib_path}")
-            target_link_directories(async_executor_v2_demo PRIVATE ${_lib_path})
-
-            # Link all thread_system libraries
-            target_link_libraries(async_executor_v2_demo PRIVATE
-                ThreadSystem
-                thread_base
-                interfaces
-                utilities
-            )
-            break()
-        endif()
-    endforeach()
-
-    # thread_system requires fmt
-    if(fmt_FOUND)
-        target_link_libraries(async_executor_v2_demo PRIVATE fmt::fmt)
-    else()
-        message(WARNING "fmt not found - async_executor_v2_demo requires fmt for thread_system")
-    endif()
-
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        target_compile_options(async_executor_v2_demo PRIVATE
-            -Wall -Wextra -Wpedantic -Wno-unused-parameter
+        set_target_properties(${SAMPLE_NAME} PROPERTIES
+            CXX_STANDARD 20
+            CXX_STANDARD_REQUIRED ON
+            CXX_EXTENSIONS OFF
         )
-    endif()
 
-    message(STATUS "Migration sample configured: async_executor_v2_demo (thread_system)")
+        target_include_directories(${SAMPLE_NAME} PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/..
+            ${CMAKE_CURRENT_SOURCE_DIR}/../..
+        )
+
+        target_link_libraries(${SAMPLE_NAME} PRIVATE
+            database
+            Threads::Threads
+        )
+
+        # Link thread_system libraries
+        set(_THREAD_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+            "/home/$ENV{USER}/Sources/thread_system/build/lib"
+        )
+
+        foreach(_lib_path ${_THREAD_LIB_PATHS})
+            if(EXISTS "${_lib_path}")
+                target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
+                target_link_libraries(${SAMPLE_NAME} PRIVATE
+                    ThreadSystem
+                    thread_base
+                    interfaces
+                    utilities
+                )
+                break()
+            endif()
+        endforeach()
+
+        # thread_system requires fmt
+        if(fmt_FOUND)
+            target_link_libraries(${SAMPLE_NAME} PRIVATE fmt::fmt)
+        else()
+            message(WARNING "fmt not found - ${SAMPLE_NAME} requires fmt for thread_system")
+        endif()
+
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(${SAMPLE_NAME} PRIVATE
+                -Wall -Wextra -Wpedantic -Wno-unused-parameter
+            )
+        endif()
+
+        message(STATUS "Migration sample configured: ${SAMPLE_NAME} (thread_system)")
+    endfunction()
+
+    # Phase 1: Async Executor
+    configure_migration_sample(async_executor_v2_demo migration/async_executor_v2_demo.cpp)
+
+    # Phase 2: Connection Pool with Priority Scheduling
+    configure_migration_sample(connection_pool_v2_demo migration/connection_pool_v2_demo.cpp)
+
+    # Simple test for debugging
+    configure_migration_sample(test_simple_v2 migration/test_simple_v2.cpp)
 endif()
 
 # Output directory

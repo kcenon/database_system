@@ -50,6 +50,14 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.cpp
 )
 
+# Phase 2: connection_pool_v2 (added conditionally with thread_system)
+if(USE_THREAD_SYSTEM)
+    list(APPEND SOURCE_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_priority_instantiation.cpp
+    )
+endif()
+
 ##################################################
 # Library Target Configuration
 ##################################################
@@ -162,6 +170,38 @@ if(USE_THREAD_SYSTEM)
     if(_FOUND_THREAD_INCLUDE)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_THREAD_SYSTEM)
         message(STATUS "Database: thread_system integration enabled")
+
+        # Store thread_system source directory for typed_pool implementation
+        set(_THREAD_SYSTEM_SOURCE "")
+        foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
+            if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
+                # Get parent directory (remove /include)
+                get_filename_component(_THREAD_SYSTEM_SOURCE "${_path}" DIRECTORY)
+                message(STATUS "Database: thread_system source directory: ${_THREAD_SYSTEM_SOURCE}")
+                break()
+            endif()
+        endforeach()
+
+        # thread_system requires fmt
+        find_package(fmt CONFIG REQUIRED)
+        if(fmt_FOUND)
+            target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
+            message(STATUS "Database: fmt library found (required by thread_system)")
+        else()
+            message(FATAL_ERROR "Database: fmt library not found - required by thread_system")
+        endif()
+
+        # Add thread_system src directory to include paths for instantiation file
+        if(_THREAD_SYSTEM_SOURCE AND EXISTS "${_THREAD_SYSTEM_SOURCE}/src/impl/typed_pool")
+            message(STATUS "Database: Configured typed_pool instantiation for connection_priority")
+
+            # Add thread_system src directory so we can #include "impl/typed_pool/*.cpp"
+            target_include_directories(${PROJECT_NAME} PRIVATE
+                ${_THREAD_SYSTEM_SOURCE}/src
+            )
+        else()
+            message(WARNING "Database: typed_pool implementation not found - connection_pool_v2 may have linking issues")
+        endif()
 
         # Try to link thread_system library if built
         set(_THREAD_LIB_PATHS

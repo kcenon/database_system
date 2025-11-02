@@ -138,6 +138,52 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
+# thread_system integration (optional)
+if(USE_THREAD_SYSTEM)
+    # Try to find thread_system
+    set(_DATABASE_THREAD_INCLUDE_PATHS
+        "/Users/$ENV{USER}/Sources/thread_system/include"
+        "/home/$ENV{USER}/Sources/thread_system/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../thread_system/include"
+    )
+
+    set(_FOUND_THREAD_INCLUDE FALSE)
+    foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
+        if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
+            message(STATUS "Database: Found thread_system headers at: ${_path}")
+            target_include_directories(${PROJECT_NAME} PUBLIC
+                $<BUILD_INTERFACE:${_path}>
+            )
+            set(_FOUND_THREAD_INCLUDE TRUE)
+            break()
+        endif()
+    endforeach()
+
+    if(_FOUND_THREAD_INCLUDE)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_THREAD_SYSTEM)
+        message(STATUS "Database: thread_system integration enabled")
+
+        # Try to link thread_system library if built
+        set(_THREAD_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+            "/home/$ENV{USER}/Sources/thread_system/build/lib"
+        )
+
+        foreach(_lib_path ${_THREAD_LIB_PATHS})
+            if(EXISTS "${_lib_path}")
+                message(STATUS "Database: Found thread_system library path: ${_lib_path}")
+                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                # Link to thread_system libraries if they exist
+                # Note: thread_system is mostly header-only, so this is optional
+                break()
+            endif()
+        endforeach()
+    else()
+        message(WARNING "Database: thread_system headers not found - integration disabled")
+        set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not found" FORCE)
+    endif()
+endif()
+
 # PostgreSQL dependency (optional)
 if(USE_POSTGRESQL)
     find_package(libpqxx CONFIG QUIET)

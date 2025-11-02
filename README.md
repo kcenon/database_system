@@ -26,6 +26,12 @@ This database system is a crucial component of a comprehensive data management a
   - Benefits: Type-safe data persistence with efficient binary formats
   - Role: Serialized container storage and retrieval
 
+- **[thread_system](https://github.com/kcenon/thread_system)**: High-performance concurrent execution (optional)
+  - Integration: Async database operations with adaptive thread pool
+  - Benefits: 1.16M+ ops/s throughput, 77ns latency, adaptive queue strategy
+  - Role: Async executor for database operations and connection pooling
+  - Status: ✨ **NEW** - Phase 1 integration complete
+
 ### Related Projects
 - **[messaging_system](https://github.com/kcenon/messaging_system)**: Message persistence and queuing
   - Relationship: Database backend for message persistence and queuing
@@ -86,6 +92,11 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 - **Query optimization**: Intelligent query planning and execution optimization
 - **Async operations**: C++20 coroutines for non-blocking database operations
 - **Bulk operations**: Optimized batch processing for high-throughput scenarios
+- **✨ NEW: High-performance threading**: Optional thread_system integration
+  - **1.16M+ ops/s** throughput (23x improvement over std::thread)
+  - **77ns** job scheduling latency (65x faster than standard library)
+  - **Adaptive queues**: Automatic strategy switching based on load
+  - See [Migration Guide](docs/THREAD_SYSTEM_MIGRATION.md) for details
 
 ### 🛡️ **Production-Grade Reliability**
 - **Multi-backend support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis

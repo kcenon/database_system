@@ -13,7 +13,7 @@
 // Conditional includes based on monitoring_system availability
 #if defined(USE_MONITORING_SYSTEM)
 	#include <kcenon/monitoring/core/performance_monitor.h>
-	#include <kcenon/monitoring/core/system_monitor.h>
+	// #include <kcenon/monitoring/core/system_monitor.h> // Not yet available
 #else
 	#include <atomic>
 	#include <mutex>
@@ -97,7 +97,7 @@ public:
 			// Create system monitor if health checks enabled
 			if (config_.enable_health_checks)
 			{
-				system_monitor_ = std::make_unique<monitoring_system::system_monitor>();
+// 				system_monitor_ = std::make_unique<monitoring_system::system_monitor>();
 			}
 
 			start_time_ = std::chrono::steady_clock::now();
@@ -125,7 +125,7 @@ public:
 				profiler_->clear_all_samples();
 				profiler_.reset();
 			}
-			system_monitor_.reset();
+// 			system_monitor_.reset();
 			initialized_ = false;
 			return common::ok();
 		}
@@ -426,7 +426,7 @@ private:
 	const db_monitoring_config& config_;
 	bool initialized_;
 	std::unique_ptr<monitoring_system::performance_profiler> profiler_;
-	std::unique_ptr<monitoring_system::system_monitor> system_monitor_;
+// 	std::unique_ptr<monitoring_system::system_monitor> system_monitor_;
 	std::chrono::steady_clock::time_point start_time_;
 
 	database_metrics metrics_;

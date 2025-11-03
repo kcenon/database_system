@@ -330,8 +330,8 @@ public:
 		}
 		else
 		{
-			auto monitor_health = monitor_->perform_health_check();
-			if (!monitor_health.is_ok() || !monitor_health.value())
+			auto monitor_health = monitor_->check_health();
+			if (!monitor_health.is_ok())
 			{
 				overall_healthy = false;
 				if (logger_)
@@ -346,19 +346,8 @@ public:
 		{
 			overall_healthy = false;
 		}
-		else
-		{
-			// Thread pool health check: verify statistics are accessible
-			auto stats_result = thread_pool_->get_statistics();
-			if (!stats_result.is_ok())
-			{
-				overall_healthy = false;
-				if (logger_)
-				{
-					logger_->log(db_log_level::warning, "Thread pool health check failed");
-				}
-			}
-		}
+		// Thread pool is healthy if it exists
+		// (No statistics method available in thread_adapter yet)
 
 		return common::Result<bool>(overall_healthy);
 	}

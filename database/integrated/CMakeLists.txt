@@ -22,6 +22,8 @@ set(INTEGRATED_DB_HEADERS
     adapters/logger_adapter.h
     adapters/monitoring_adapter.h
     adapters/thread_adapter.h
+    # Unified System
+    unified_database_system.h
 )
 
 set(INTEGRATED_DB_SOURCES
@@ -31,6 +33,8 @@ set(INTEGRATED_DB_SOURCES
     adapters/logger_adapter.cpp
     adapters/monitoring_adapter.cpp
     adapters/thread_adapter.cpp
+    # Unified System
+    unified_database_system.cpp
 )
 
 ##################################################
@@ -144,6 +148,17 @@ endif()
 ##################################################
 # Dependencies
 ##################################################
+
+# fmt library (required by thread_system headers)
+find_package(fmt QUIET)
+if(fmt_FOUND)
+    if(INTEGRATED_DB_SOURCES)
+        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC fmt::fmt)
+    else()
+        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE fmt::fmt)
+    endif()
+    message(STATUS "Integrated DB: Linked with fmt library")
+endif()
 
 # Link external systems (if found)
 

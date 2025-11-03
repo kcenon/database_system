@@ -95,6 +95,27 @@ add_test(NAME IntegratedThreadAdapterTest
          COMMAND integrated_thread_adapter_test)
 
 ##################################################
+# Test 5: Database Coordinator Test
+##################################################
+
+add_executable(integrated_coordinator_test
+    test_database_coordinator.cpp
+)
+
+target_link_libraries(integrated_coordinator_test PRIVATE
+    integrated_database
+)
+
+set_target_properties(integrated_coordinator_test PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED ON
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+add_test(NAME IntegratedCoordinatorTest
+         COMMAND integrated_coordinator_test)
+
+##################################################
 # All Integrated Tests Target
 ##################################################
 
@@ -104,6 +125,7 @@ add_custom_target(integrated_tests
         integrated_logger_adapter_test
         integrated_monitoring_adapter_test
         integrated_thread_adapter_test
+        integrated_coordinator_test
 )
 
-message(STATUS "Integrated tests configured (Phases 1-4)")
+message(STATUS "Integrated tests configured (Phases 1-5)")

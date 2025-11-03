@@ -17,19 +17,20 @@ set(INTEGRATED_DB_TARGET integrated_database)
 set(INTEGRATED_DB_HEADERS
     # Core
     core/configuration.h
+    core/database_coordinator.h
     # Adapters
     adapters/logger_adapter.h
     adapters/monitoring_adapter.h
     adapters/thread_adapter.h
-    # Note: coordinator headers will be added in later phases
 )
 
 set(INTEGRATED_DB_SOURCES
+    # Core
+    core/database_coordinator.cpp
     # Adapters
     adapters/logger_adapter.cpp
     adapters/monitoring_adapter.cpp
     adapters/thread_adapter.cpp
-    # Note: more implementation files will be added in later phases
 )
 
 ##################################################

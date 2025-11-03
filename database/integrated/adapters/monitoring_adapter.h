@@ -90,56 +90,16 @@
 #include <string>
 #include <unordered_map>
 
-// Conditional Result pattern inclusion
+// Use common Result pattern from shared header
+#include "../core/common_result.h"
+
+// Conditional monitoring interface inclusion
 #if defined(USE_COMMON_SYSTEM)
 	#include <kcenon/common/interfaces/monitoring_interface.h>
-	#include <kcenon/common/patterns/result.h>
 #else
-	// Minimal Result/IMonitor replacement if common_system not available
+	// Minimal IMonitor replacement if common_system not available
 namespace common
 {
-	struct Error
-	{
-		std::string message;
-		int code;
-	};
-
-	template <typename T>
-	class Result
-	{
-	public:
-		Result(T value) : value_(std::move(value)), has_value_(true)
-		{
-		}
-		Result(Error error) : error_(std::move(error)), has_value_(false)
-		{
-		}
-		bool is_ok() const
-		{
-			return has_value_;
-		}
-		const T& value() const
-		{
-			return value_;
-		}
-		const Error& error() const
-		{
-			return error_;
-		}
-
-	private:
-		T value_;
-		Error error_;
-		bool has_value_;
-	};
-
-	using VoidResult = Result<bool>;
-
-	inline VoidResult ok()
-	{
-		return VoidResult(true);
-	}
-
 namespace interfaces
 {
 	struct metrics_snapshot
@@ -147,13 +107,31 @@ namespace interfaces
 		std::unordered_map<std::string, double> gauges;
 		std::unordered_map<std::string, std::uint64_t> counters;
 		std::unordered_map<std::string, double> histograms;
+		std::string source_id; // Source identifier
+
+		// Helper method to add metrics
+		void add_metric(const std::string& name, double value)
+		{
+			gauges[name] = value;
+		}
+	};
+
+	enum class health_status
+	{
+		healthy,
+		degraded,
+		unhealthy,
+		unknown
 	};
 
 	struct health_check_result
 	{
-		bool is_healthy;
-		std::string status_message;
-		std::unordered_map<std::string, std::string> details;
+		health_status status;
+		std::string message;
+		std::unordered_map<std::string, std::string> metadata;
+		bool is_healthy() const { return status == health_status::healthy; }
+		std::string status_message() const { return message; }
+		std::unordered_map<std::string, std::string> details() const { return metadata; }
 	};
 
 	class IMonitor

@@ -93,55 +93,8 @@
 #include <memory>
 #include <type_traits>
 
-// Conditional Result pattern inclusion
-#if defined(USE_COMMON_SYSTEM)
-	#include <kcenon/common/patterns/result.h>
-#else
-namespace common
-{
-	struct Error
-	{
-		std::string message;
-		int code;
-	};
-
-	template <typename T>
-	class Result
-	{
-	public:
-		Result(T value) : value_(std::move(value)), has_value_(true)
-		{
-		}
-		Result(Error error) : error_(std::move(error)), has_value_(false)
-		{
-		}
-		bool is_ok() const
-		{
-			return has_value_;
-		}
-		const T& value() const
-		{
-			return value_;
-		}
-		const Error& error() const
-		{
-			return error_;
-		}
-
-	private:
-		T value_;
-		Error error_;
-		bool has_value_;
-	};
-
-	using VoidResult = Result<bool>;
-
-	inline VoidResult ok()
-	{
-		return VoidResult(true);
-	}
-} // namespace common
-#endif
+// Use common Result pattern from shared header
+#include "../core/common_result.h"
 
 namespace database
 {

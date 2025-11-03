@@ -56,6 +56,29 @@ namespace database::integrated {
 // Helper Functions
 // ============================================================================
 
+namespace {
+
+inline common::VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
+{
+#if defined(USE_COMMON_SYSTEM)
+    return common::VoidResult(common::error_info{code, msg, context});
+#else
+    return common::VoidResult(common::Error{msg, code});
+#endif
+}
+
+template <typename T>
+inline common::Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
+{
+#if defined(USE_COMMON_SYSTEM)
+    return common::Result<T>(common::error_info{code, msg, context});
+#else
+    return common::Result<T>(common::Error{msg, code});
+#endif
+}
+
+} // anonymous namespace
+
 /**
  * @brief Convert backend_type to database_types
  */
@@ -166,7 +189,7 @@ public:
         const std::vector<query_param>& params) override {
 
         if (!active_) {
-            return Result<query_result>(common::error_info{-1, "Transaction not active", "transaction"});
+            return make_error_result<query_result>("Transaction not active", -1, "transaction");
         }
 
         // TODO: Handle parameters properly
@@ -180,11 +203,11 @@ public:
 
     VoidResult commit() override {
         if (!active_) {
-            return VoidResult(common::error_info{-1, "Transaction not active", "transaction"});
+            return make_error("Transaction not active", -1, "transaction");
         }
 
         if (!backend_->create_query("COMMIT")) {
-            return VoidResult(common::error_info{-1, "Commit failed", "transaction"});
+            return make_error("Commit failed", -1, "transaction");
         }
 
         active_ = false;
@@ -193,11 +216,11 @@ public:
 
     VoidResult rollback() override {
         if (!active_) {
-            return VoidResult(common::error_info{-1, "Transaction not active", "transaction"});
+            return make_error("Transaction not active", -1, "transaction");
         }
 
         if (!backend_->create_query("ROLLBACK")) {
-            return VoidResult(common::error_info{-1, "Rollback failed", "transaction"});
+            return make_error("Rollback failed", -1, "transaction");
         }
 
         active_ = false;
@@ -247,7 +270,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (connected_) {
-            return VoidResult(common::error_info{-1, "Already connected", "unified_database_system"});
+            return make_error("Already connected", -1, "unified_database_system");
         }
 
         backend_type_ = backend;
@@ -256,12 +279,12 @@ public:
         // Create backend instance
         backend_ = create_backend(backend);
         if (!backend_) {
-            return VoidResult(common::error_info{-2, "Unsupported backend type", "unified_database_system"});
+            return make_error("Unsupported backend type", -2, "unified_database_system");
         }
 
         // Connect to database
         if (!backend_->connect(connection_string)) {
-            return VoidResult(common::error_info{-3, "Connection failed", "unified_database_system"});
+            return make_error("Connection failed", -3, "unified_database_system");
         }
 
         // Create connection pool
@@ -291,8 +314,7 @@ public:
 
         if (!pool_->initialize()) {
             backend_->disconnect();
-            return VoidResult(common::error_info{-4, "Connection pool initialization failed",
-                "unified_database_system"});
+            return make_error("Connection pool initialization failed", -4, "unified_database_system");
         }
 
         connected_ = true;
@@ -354,7 +376,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return Result<query_result>(common::error_info{-1, "Not connected to database", "unified_database_system"});
+            return make_error_result<query_result>("Not connected to database", -1, "unified_database_system");
         }
 
         // Record query start
@@ -396,8 +418,7 @@ public:
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
             std::promise<Result<query_result>> promise;
-            promise.set_value(common::error_info{-1, "Thread pool not available",
-                "unified_database_system"});
+            promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
             return promise.get_future();
         }
 
@@ -415,8 +436,7 @@ public:
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
             std::promise<Result<query_result>> promise;
-            promise.set_value(common::error_info{-1, "Thread pool not available",
-                "unified_database_system"});
+            promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
             return promise.get_future();
         }
 
@@ -435,7 +455,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return Result<std::unique_ptr<transaction>>(common::error_info{-1, "Not connected to database", "unified_database_system"});
+            return make_error_result<std::unique_ptr<transaction>>("Not connected to database", -1, "unified_database_system");
         }
 
         ++metrics_.transactions_started;

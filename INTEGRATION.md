@@ -32,7 +32,54 @@ This comprehensive guide describes how to integrate database_system with other m
 
 ## Quick Start
 
-### Basic Database Connection
+### Unified Database System (Recommended)
+
+The unified_database_system provides the easiest way to get started with integrated logging, monitoring, and thread management:
+
+```cpp
+#include "integrated/unified_database_system.h"
+
+using namespace database::integrated;
+
+int main() {
+    // 1. Zero-config initialization
+    unified_database_system db;
+
+    // 2. Connect to database
+    auto conn_result = db.connect("host=localhost dbname=mydb user=myuser password=mypass");
+    if (!conn_result) {
+        std::cerr << "Connection failed: " << conn_result.error() << std::endl;
+        return 1;
+    }
+
+    // 3. Execute query with automatic logging and monitoring
+    auto result = db.execute("SELECT * FROM users WHERE id = $1", {42});
+    if (result) {
+        for (const auto& row : result->rows) {
+            std::cout << "User: " << row["name"] << std::endl;
+        }
+    }
+
+    // 4. Check health and metrics (built-in monitoring)
+    auto health = db.check_health();
+    auto metrics = db.get_metrics();
+
+    std::cout << "Queries executed: " << metrics.total_queries << std::endl;
+    std::cout << "Avg latency: " << metrics.avg_latency_ms << "ms" << std::endl;
+
+    return 0;
+}
+```
+
+**Benefits of unified_database_system**:
+- ✅ Zero-configuration with smart defaults
+- ✅ Integrated logging (logger_system or fallback)
+- ✅ Built-in monitoring and metrics
+- ✅ Thread pool for async operations
+- ✅ Type-safe Result<T> pattern
+- ✅ Fallback implementations (no external dependencies required)
+
+### Legacy API: Basic Database Connection
 
 ```cpp
 #include <database/database_manager.h>
@@ -940,6 +987,68 @@ auto execute_with_retry = [](auto db, auto query, int max_retries = 3) {
     return result;
 };
 ```
+
+---
+
+## Integration Modes and Configuration
+
+### Build Configuration
+
+The system supports multiple integration modes via CMake flags:
+
+```cmake
+# Full integration (all external systems enabled)
+cmake .. -DUSE_LOGGER_SYSTEM=ON -DUSE_MONITORING_SYSTEM=ON -DUSE_THREAD_SYSTEM=ON
+
+# Fallback mode (no external dependencies)
+cmake .. -DUSE_LOGGER_SYSTEM=OFF -DUSE_MONITORING_SYSTEM=OFF -DUSE_THREAD_SYSTEM=OFF
+
+# Partial integration (e.g., monitoring only)
+cmake .. -DUSE_LOGGER_SYSTEM=OFF -DUSE_MONITORING_SYSTEM=ON -DUSE_THREAD_SYSTEM=OFF
+```
+
+**Recommended**: Use fallback mode for production deployments until external systems are fully stabilized.
+
+### Migration from Legacy API
+
+To migrate from the legacy `database_manager` API to `unified_database_system`:
+
+1. **Replace includes**:
+   ```cpp
+   // OLD
+   #include <database/database_manager.h>
+
+   // NEW
+   #include "integrated/unified_database_system.h"
+   ```
+
+2. **Update initialization**:
+   ```cpp
+   // OLD
+   database_manager& db = database_manager::handle();
+   db.set_mode(database_types::postgres);
+   db.create_connection_pool(database_types::postgres, pool_config);
+
+   // NEW
+   unified_database_system db = unified_database_system::builder()
+       .with_connection_string("host=localhost dbname=mydb")
+       .with_pool_size(10, 100)
+       .build();
+   ```
+
+3. **Update query execution**:
+   ```cpp
+   // OLD
+   auto result = db.execute_query("SELECT * FROM users");
+
+   // NEW
+   auto result = db.execute("SELECT * FROM users");
+   if (result) {
+       // Process result->rows
+   }
+   ```
+
+See `samples/integrated/migration_from_legacy.cpp` for a complete migration example.
 
 ---
 

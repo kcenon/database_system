@@ -30,6 +30,9 @@ option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
 option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
 option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
+option(USE_LOGGER_SYSTEM "Enable logger_system integration for advanced logging" ON)
+option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)
+option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter pattern" ON)
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
 
@@ -98,6 +101,78 @@ if(USE_THREAD_SYSTEM)
     else()
         message(WARNING "thread_system not found - integration disabled. Install thread_system or set USE_THREAD_SYSTEM=OFF to suppress this warning.")
         set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not found" FORCE)
+    endif()
+endif()
+
+# logger_system integration (optional)
+if(USE_LOGGER_SYSTEM)
+    message(STATUS "Searching for logger_system...")
+
+    set(_DATABASE_LOGGER_PATHS
+        "/Users/$ENV{USER}/Sources/logger_system"
+        "/home/$ENV{USER}/Sources/logger_system"
+    )
+
+    set(_FOUND_LOGGER_SYSTEM FALSE)
+    foreach(_path ${_DATABASE_LOGGER_PATHS})
+        if(EXISTS "${_path}/CMakeLists.txt")
+            message(STATUS "Found logger_system source at: ${_path}")
+            set(logger_system_DIR "${_path}/build" CACHE PATH "logger_system build directory")
+            set(_FOUND_LOGGER_SYSTEM TRUE)
+            break()
+        endif()
+    endforeach()
+
+    # Try CONFIG mode if not found in source paths
+    if(NOT _FOUND_LOGGER_SYSTEM)
+        find_package(logger_system CONFIG QUIET)
+        if(logger_system_FOUND)
+            set(_FOUND_LOGGER_SYSTEM TRUE)
+            message(STATUS "Found logger_system via CONFIG mode")
+        endif()
+    endif()
+
+    if(_FOUND_LOGGER_SYSTEM)
+        message(STATUS "logger_system integration enabled")
+    else()
+        message(WARNING "logger_system not found - integration disabled. Install logger_system or set USE_LOGGER_SYSTEM=OFF to suppress this warning.")
+        set(USE_LOGGER_SYSTEM OFF CACHE BOOL "logger_system not found" FORCE)
+    endif()
+endif()
+
+# monitoring_system integration (optional)
+if(USE_MONITORING_SYSTEM)
+    message(STATUS "Searching for monitoring_system...")
+
+    set(_DATABASE_MONITORING_PATHS
+        "/Users/$ENV{USER}/Sources/monitoring_system"
+        "/home/$ENV{USER}/Sources/monitoring_system"
+    )
+
+    set(_FOUND_MONITORING_SYSTEM FALSE)
+    foreach(_path ${_DATABASE_MONITORING_PATHS})
+        if(EXISTS "${_path}/CMakeLists.txt")
+            message(STATUS "Found monitoring_system source at: ${_path}")
+            set(monitoring_system_DIR "${_path}/build" CACHE PATH "monitoring_system build directory")
+            set(_FOUND_MONITORING_SYSTEM TRUE)
+            break()
+        endif()
+    endforeach()
+
+    # Try CONFIG mode if not found in source paths
+    if(NOT _FOUND_MONITORING_SYSTEM)
+        find_package(monitoring_system CONFIG QUIET)
+        if(monitoring_system_FOUND)
+            set(_FOUND_MONITORING_SYSTEM TRUE)
+            message(STATUS "Found monitoring_system via CONFIG mode")
+        endif()
+    endif()
+
+    if(_FOUND_MONITORING_SYSTEM)
+        message(STATUS "monitoring_system integration enabled")
+    else()
+        message(WARNING "monitoring_system not found - integration disabled. Install monitoring_system or set USE_MONITORING_SYSTEM=OFF to suppress this warning.")
+        set(USE_MONITORING_SYSTEM OFF CACHE BOOL "monitoring_system not found" FORCE)
     endif()
 endif()
 
@@ -178,7 +253,13 @@ message(STATUS "  Features:")
 message(STATUS "    - PostgreSQL support: ${USE_POSTGRESQL}")
 message(STATUS "    - MySQL support: ${USE_MYSQL}")
 message(STATUS "    - SQLite support: ${USE_SQLITE}")
-message(STATUS "    - thread_system integration: ${USE_THREAD_SYSTEM}")
+message(STATUS "  Integration:")
+message(STATUS "    - common_system: ${BUILD_WITH_COMMON_SYSTEM}")
+message(STATUS "    - thread_system: ${USE_THREAD_SYSTEM}")
+message(STATUS "    - logger_system: ${USE_LOGGER_SYSTEM}")
+message(STATUS "    - monitoring_system: ${USE_MONITORING_SYSTEM}")
+message(STATUS "    - Integrated database system: ${BUILD_INTEGRATED_DATABASE}")
+message(STATUS "  Build:")
 message(STATUS "    - Build samples: ${BUILD_DATABASE_SAMPLES}")
 message(STATUS "    - Build tests: ${USE_UNIT_TEST}")
 message(STATUS "    - Build integration tests: ${DATABASE_BUILD_INTEGRATION_TESTS}")

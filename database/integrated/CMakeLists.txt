@@ -19,12 +19,14 @@ set(INTEGRATED_DB_HEADERS
     core/configuration.h
     # Adapters
     adapters/logger_adapter.h
+    adapters/monitoring_adapter.h
     # Note: coordinator headers will be added in later phases
 )
 
 set(INTEGRATED_DB_SOURCES
     # Adapters
     adapters/logger_adapter.cpp
+    adapters/monitoring_adapter.cpp
     # Note: more implementation files will be added in later phases
 )
 

@@ -387,6 +387,15 @@ if(USE_UNIT_TEST AND NOT BUILD_DATABASE_SYSTEM_AS_SUBMODULE)
 endif()
 
 ##################################################
+# Integrated Database System (Adapter Pattern)
+##################################################
+
+if(BUILD_INTEGRATED_DATABASE)
+    add_subdirectory(integrated)
+    message(STATUS "Building integrated database system with adapter pattern")
+endif()
+
+##################################################
 # Summary
 ##################################################
 

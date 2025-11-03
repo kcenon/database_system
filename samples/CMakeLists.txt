@@ -199,6 +199,16 @@ install(FILES
 )
 
 ##################################################
+# Integrated Samples (Phase 6)
+##################################################
+
+# Add integrated samples subdirectory if building integrated system
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/integrated/CMakeLists.txt)
+    add_subdirectory(integrated)
+    message(STATUS "Integrated samples subdirectory added")
+endif()
+
+##################################################
 # Summary
 ##################################################
 

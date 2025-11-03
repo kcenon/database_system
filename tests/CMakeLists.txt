@@ -148,6 +148,127 @@ if(GTest_FOUND OR gtest_FOUND)
 endif()
 
 ##################################################
+# Integrated Database Configuration Tests
+##################################################
+
+if(BUILD_INTEGRATED_DATABASE)
+    # Simple configuration test (no external dependencies)
+    add_executable(integrated_configuration_test
+        integrated/test_configuration.cpp
+    )
+
+    target_link_libraries(integrated_configuration_test PRIVATE
+        integrated_database
+    )
+
+    set_target_properties(integrated_configuration_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedConfigurationTest COMMAND integrated_configuration_test)
+
+    # Logger adapter test
+    add_executable(integrated_logger_adapter_test
+        integrated/test_logger_adapter.cpp
+    )
+
+    target_link_libraries(integrated_logger_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_logger_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedLoggerAdapterTest COMMAND integrated_logger_adapter_test)
+
+    # Monitoring adapter test
+    add_executable(integrated_monitoring_adapter_test
+        integrated/test_monitoring_adapter.cpp
+    )
+
+    target_link_libraries(integrated_monitoring_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_monitoring_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedMonitoringAdapterTest COMMAND integrated_monitoring_adapter_test)
+
+    # Thread adapter test
+    add_executable(integrated_thread_adapter_test
+        integrated/test_thread_adapter.cpp
+    )
+
+    target_link_libraries(integrated_thread_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_thread_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedThreadAdapterTest COMMAND integrated_thread_adapter_test)
+
+    # Database coordinator test
+    add_executable(integrated_coordinator_test
+        integrated/test_database_coordinator.cpp
+    )
+
+    target_link_libraries(integrated_coordinator_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_coordinator_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedCoordinatorTest COMMAND integrated_coordinator_test)
+
+    # Unified database system test (Phase 6)
+    add_executable(integrated_unified_system_test
+        integrated/test_unified_database_system.cpp
+    )
+
+    target_link_libraries(integrated_unified_system_test PRIVATE
+        integrated_database
+        database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_unified_system_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedUnifiedSystemTest COMMAND integrated_unified_system_test)
+
+    message(STATUS "Integrated database configuration test configured")
+    message(STATUS "Integrated database logger adapter test configured")
+    message(STATUS "Integrated database monitoring adapter test configured")
+    message(STATUS "Integrated database thread adapter test configured")
+    message(STATUS "Integrated database coordinator test configured")
+    message(STATUS "Integrated database unified system test configured (Phase 6)")
+endif()
+
+##################################################
 # Test Data Setup
 ##################################################
 

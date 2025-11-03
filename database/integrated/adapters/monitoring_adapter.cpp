@@ -175,20 +175,31 @@ public:
 		}
 
 		common::interfaces::metrics_snapshot snapshot;
+		snapshot.source_id = "database_system";
 
-		// Add database metrics to snapshot
-		snapshot.gauges["db.connections.active"] = static_cast<double>(metrics_.active_connections);
-		snapshot.gauges["db.connections.idle"] = static_cast<double>(metrics_.idle_connections);
-		snapshot.gauges["db.connections.usage_percent"] = metrics_.connection_usage_percent;
-		snapshot.gauges["db.query.avg_latency_us"]
-			= static_cast<double>(metrics_.avg_query_latency.count());
-		snapshot.gauges["db.query.success_rate"] = metrics_.query_success_rate;
+		// Add database metrics to snapshot (using new API)
+		snapshot.add_metric("db.connections.active",
+			static_cast<double>(metrics_.active_connections));
+		snapshot.add_metric("db.connections.idle",
+			static_cast<double>(metrics_.idle_connections));
+		snapshot.add_metric("db.connections.usage_percent",
+			metrics_.connection_usage_percent);
+		snapshot.add_metric("db.query.avg_latency_us",
+			static_cast<double>(metrics_.avg_query_latency.count()));
+		snapshot.add_metric("db.query.success_rate",
+			metrics_.query_success_rate);
 
-		snapshot.counters["db.queries.total"] = metrics_.total_queries;
-		snapshot.counters["db.queries.successful"] = metrics_.successful_queries;
-		snapshot.counters["db.queries.failed"] = metrics_.failed_queries;
-		snapshot.counters["db.transactions.committed"] = metrics_.committed_transactions;
-		snapshot.counters["db.transactions.rolled_back"] = metrics_.rolled_back_transactions;
+		// Counters (using add_metric with implicit gauge type)
+		snapshot.add_metric("db.queries.total",
+			static_cast<double>(metrics_.total_queries));
+		snapshot.add_metric("db.queries.successful",
+			static_cast<double>(metrics_.successful_queries));
+		snapshot.add_metric("db.queries.failed",
+			static_cast<double>(metrics_.failed_queries));
+		snapshot.add_metric("db.transactions.committed",
+			static_cast<double>(metrics_.committed_transactions));
+		snapshot.add_metric("db.transactions.rolled_back",
+			static_cast<double>(metrics_.rolled_back_transactions));
 
 		return common::Result<common::interfaces::metrics_snapshot>(snapshot);
 	}
@@ -515,26 +526,36 @@ public:
 		std::lock_guard<std::mutex> lock(mutex_);
 
 		common::interfaces::metrics_snapshot snapshot;
+		snapshot.source_id = "database_system_fallback";
 
-		// Database-specific metrics as gauges
-		snapshot.gauges["db.connections.active"] = static_cast<double>(metrics_.active_connections);
-		snapshot.gauges["db.connections.idle"] = static_cast<double>(metrics_.idle_connections);
-		snapshot.gauges["db.connections.usage_percent"] = metrics_.connection_usage_percent;
-		snapshot.gauges["db.query.avg_latency_us"]
-			= static_cast<double>(metrics_.avg_query_latency.count());
-		snapshot.gauges["db.query.success_rate"] = metrics_.query_success_rate;
+		// Database-specific metrics (using new API)
+		snapshot.add_metric("db.connections.active",
+			static_cast<double>(metrics_.active_connections));
+		snapshot.add_metric("db.connections.idle",
+			static_cast<double>(metrics_.idle_connections));
+		snapshot.add_metric("db.connections.usage_percent",
+			metrics_.connection_usage_percent);
+		snapshot.add_metric("db.query.avg_latency_us",
+			static_cast<double>(metrics_.avg_query_latency.count()));
+		snapshot.add_metric("db.query.success_rate",
+			metrics_.query_success_rate);
 
 		// Counters
-		snapshot.counters["db.queries.total"] = metrics_.total_queries;
-		snapshot.counters["db.queries.successful"] = metrics_.successful_queries;
-		snapshot.counters["db.queries.failed"] = metrics_.failed_queries;
-		snapshot.counters["db.transactions.committed"] = metrics_.committed_transactions;
-		snapshot.counters["db.transactions.rolled_back"] = metrics_.rolled_back_transactions;
+		snapshot.add_metric("db.queries.total",
+			static_cast<double>(metrics_.total_queries));
+		snapshot.add_metric("db.queries.successful",
+			static_cast<double>(metrics_.successful_queries));
+		snapshot.add_metric("db.queries.failed",
+			static_cast<double>(metrics_.failed_queries));
+		snapshot.add_metric("db.transactions.committed",
+			static_cast<double>(metrics_.committed_transactions));
+		snapshot.add_metric("db.transactions.rolled_back",
+			static_cast<double>(metrics_.rolled_back_transactions));
 
 		// Generic metrics
 		for (const auto& [name, value] : generic_metrics_)
 		{
-			snapshot.gauges[name] = value;
+			snapshot.add_metric(name, value);
 		}
 
 		return common::Result<common::interfaces::metrics_snapshot>(snapshot);
@@ -558,22 +579,28 @@ public:
 		if (metrics_.connection_usage_percent
 			> config_.connection_usage_warning_threshold * 100.0)
 		{
-			result.is_healthy = false;
-			result.status_message = "Connection pool usage critical";
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Connection pool usage critical";
+			result.metadata["connection_usage"]
+				= std::to_string(metrics_.connection_usage_percent) + "%";
 		}
 
 		// Query latency health check
 		if (metrics_.avg_query_latency > config_.query_latency_warning)
 		{
-			result.is_healthy = false;
-			result.status_message = "Query latency critical";
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Query latency critical";
+			result.metadata["avg_latency_us"]
+				= std::to_string(metrics_.avg_query_latency.count());
 		}
 
 		// Query success rate health check
 		if (metrics_.total_queries > 10 && metrics_.query_success_rate < 0.95)
 		{
-			result.is_healthy = false;
-			result.status_message = "Query success rate low";
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Query success rate low";
+			result.metadata["success_rate"]
+				= std::to_string(metrics_.query_success_rate);
 		}
 
 		return common::Result<common::interfaces::health_check_result>(result);
@@ -618,6 +645,16 @@ public:
 		}
 
 		update_latency_stats();
+	}
+
+	void record_connection_acquired()
+	{
+		// Handled by update_pool_stats
+	}
+
+	void record_connection_released()
+	{
+		// Handled by update_pool_stats
 	}
 
 	void update_pool_stats(std::size_t active, std::size_t idle, std::size_t total)

@@ -226,13 +226,38 @@ if(USE_LOGGER_SYSTEM)
 endif()
 
 # monitoring_system
-if(USE_MONITORING_SYSTEM AND TARGET monitoring_system)
-    if(INTEGRATED_DB_SOURCES)
-        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system)
+if(USE_MONITORING_SYSTEM)
+    # Try to find monitoring_system library
+    if(TARGET monitoring_system)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system)
+        endif()
+        message(STATUS "Integrated DB: Linked with monitoring_system target")
     else()
-        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system)
+        # Try to link directly with monitoring_system library
+        set(_MONITORING_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/monitoring_system/build"
+            "/home/$ENV{USER}/Sources/monitoring_system/build"
+        )
+
+        foreach(_path ${_MONITORING_LIB_PATHS})
+            if(EXISTS "${_path}/libmonitoring_system.a")
+                if(INTEGRATED_DB_SOURCES)
+                    target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC
+                        "${_path}/libmonitoring_system.a"
+                    )
+                else()
+                    target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE
+                        "${_path}/libmonitoring_system.a"
+                    )
+                endif()
+                message(STATUS "Integrated DB: Linked with monitoring_system library at ${_path}")
+                break()
+            endif()
+        endforeach()
     endif()
-    message(STATUS "Integrated DB: Linked with monitoring_system")
 endif()
 
 ##################################################

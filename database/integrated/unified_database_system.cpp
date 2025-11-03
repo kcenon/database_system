@@ -58,24 +58,29 @@ namespace database::integrated {
 
 namespace {
 
-inline common::VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
-{
 #if defined(USE_COMMON_SYSTEM)
-    return common::VoidResult(common::error_info{code, msg, context});
-#else
-    return common::VoidResult(common::Error{msg, code});
-#endif
+inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
+{
+    return VoidResult(common::error_info{code, msg, context});
 }
 
 template <typename T>
-inline common::Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
+inline Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
 {
-#if defined(USE_COMMON_SYSTEM)
-    return common::Result<T>(common::error_info{code, msg, context});
-#else
-    return common::Result<T>(common::Error{msg, code});
-#endif
+    return Result<T>(common::error_info{code, msg, context});
 }
+#else
+inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
+{
+    return VoidResult(error_info{code, msg, context});
+}
+
+template <typename T>
+inline Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
+{
+    return Result<T>(error_info{code, msg, context});
+}
+#endif
 
 } // anonymous namespace
 

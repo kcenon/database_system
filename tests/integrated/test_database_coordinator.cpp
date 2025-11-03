@@ -16,11 +16,15 @@
  */
 
 #include "../../database/integrated/core/database_coordinator.h"
+#include "../../database/integrated/adapters/logger_adapter.h"
+#include "../../database/integrated/adapters/monitoring_adapter.h"
+#include "../../database/integrated/adapters/thread_adapter.h"
 #include <chrono>
 #include <iostream>
 #include <thread>
 
 using namespace database::integrated;
+using namespace database::integrated::adapters;
 
 // Test result tracking
 int tests_passed = 0;
@@ -50,11 +54,11 @@ int tests_failed = 0;
 // Test 1: Basic initialization and shutdown
 TEST(basic_initialization_and_shutdown) {
 	unified_db_config config;
-	config.logger.log_level = db_log_level::info;
-	config.logger.enable_console_logging = true;
+	config.logger.min_log_level = db_log_level::info;
+	// enable_console_logging does not exist
 	config.logger.enable_file_logging = false;
 	config.monitoring.enable_metrics = true;
-	config.thread.pool_size = 2;
+	config.thread.thread_count = 2;
 
 	database_coordinator coordinator(config);
 
@@ -75,9 +79,9 @@ TEST(basic_initialization_and_shutdown) {
 // Test 2: Adapter access
 TEST(adapter_access) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 	config.monitoring.enable_metrics = true;
-	config.thread.pool_size = 2;
+	config.thread.thread_count = 2;
 
 	database_coordinator coordinator(config);
 
@@ -102,8 +106,8 @@ TEST(adapter_access) {
 // Test 3: Logger functionality through coordinator
 TEST(logger_functionality) {
 	unified_db_config config;
-	config.logger.log_level = db_log_level::debug;
-	config.logger.enable_console_logging = false;
+	config.logger.min_log_level = db_log_level::debug;
+	// config.logger.enable_console_logging does not exist
 
 	database_coordinator coordinator(config);
 	coordinator.initialize();
@@ -122,7 +126,7 @@ TEST(logger_functionality) {
 // Test 4: Monitoring functionality through coordinator
 TEST(monitoring_functionality) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 	config.monitoring.enable_metrics = true;
 	config.monitoring.enable_profiling = true;
 
@@ -148,8 +152,8 @@ TEST(monitoring_functionality) {
 // Test 5: Thread pool functionality through coordinator
 TEST(thread_pool_functionality) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
-	config.thread.pool_size = 2;
+	// config.logger.enable_console_logging does not exist
+	config.thread.thread_count = 2;
 
 	database_coordinator coordinator(config);
 	coordinator.initialize();
@@ -175,9 +179,9 @@ TEST(thread_pool_functionality) {
 // Test 6: Health check
 TEST(health_check) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 	config.monitoring.enable_health_checks = true;
-	config.thread.pool_size = 2;
+	config.thread.thread_count = 2;
 
 	database_coordinator coordinator(config);
 
@@ -199,7 +203,7 @@ TEST(health_check) {
 // Test 7: Statistics
 TEST(statistics) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 
 	database_coordinator coordinator(config);
 
@@ -228,7 +232,7 @@ TEST(statistics) {
 // Test 8: Double initialization
 TEST(double_initialization) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 
 	database_coordinator coordinator(config);
 
@@ -256,7 +260,7 @@ TEST(shutdown_without_initialization) {
 // Test 10: Automatic shutdown in destructor
 TEST(automatic_shutdown_in_destructor) {
 	unified_db_config config;
-	config.logger.enable_console_logging = false;
+	// config.logger.enable_console_logging does not exist
 
 	{
 		database_coordinator coordinator(config);
@@ -271,11 +275,11 @@ TEST(automatic_shutdown_in_destructor) {
 // Test 11: Integration - all adapters working together
 TEST(full_integration) {
 	unified_db_config config;
-	config.logger.log_level = db_log_level::info;
-	config.logger.enable_console_logging = false;
+	config.logger.min_log_level = db_log_level::info;
+	// config.logger.enable_console_logging does not exist
 	config.monitoring.enable_metrics = true;
 	config.monitoring.enable_profiling = true;
-	config.thread.pool_size = 4;
+	config.thread.thread_count = 4;
 
 	database_coordinator coordinator(config);
 	coordinator.initialize();

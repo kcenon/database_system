@@ -50,6 +50,7 @@
 #include <vector>
 
 using namespace database::integrated;
+using namespace database::integrated::adapters;
 
 // Test result tracking
 int tests_passed = 0;
@@ -79,8 +80,8 @@ int tests_failed = 0;
 // Test 1: Initialization and shutdown
 TEST(initialization_and_shutdown) {
 	db_thread_config config;
-	config.pool_size = 4;
-	config.queue_size = 100;
+	config.thread_count = 4;
+	config.max_queue_size = 100;
 	config.pool_type = thread_pool_type::standard;
 
 	thread_adapter adapter(config);
@@ -97,23 +98,20 @@ TEST(initialization_and_shutdown) {
 // Test 2: Basic task submission
 TEST(basic_task_submission) {
 	db_thread_config config;
-	config.pool_size = 2;
+	config.thread_count = 2;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
 
 	std::atomic<int> counter{0};
 
-	// Submit simple task
-	auto result = adapter.submit([&counter]() {
+	// Submit simple task - submit() returns std::future directly
+	auto future = adapter.submit([&counter]() {
 		counter++;
 		return 42;
 	});
 
-	ASSERT_TRUE(result.is_ok());
-
 	// Wait for completion
-	auto future = result.value();
 	auto value = future.get();
 
 	ASSERT_TRUE(counter == 1);
@@ -125,7 +123,7 @@ TEST(basic_task_submission) {
 // Test 3: Multiple task submissions
 TEST(multiple_task_submissions) {
 	db_thread_config config;
-	config.pool_size = 4;
+	config.thread_count = 4;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
@@ -135,13 +133,12 @@ TEST(multiple_task_submissions) {
 
 	std::vector<std::future<void>> futures;
 
-	// Submit multiple tasks
+	// Submit multiple tasks - submit() returns std::future directly
 	for (int i = 0; i < num_tasks; ++i) {
-		auto result = adapter.submit([&counter]() {
+		auto future = adapter.submit([&counter]() {
 			counter++;
 		});
-		ASSERT_TRUE(result.is_ok());
-		futures.push_back(std::move(result.value()));
+		futures.push_back(std::move(future));
 	}
 
 	// Wait for all tasks
@@ -157,8 +154,9 @@ TEST(multiple_task_submissions) {
 // Test 4: Priority task submission
 TEST(priority_task_submission) {
 	db_thread_config config;
-	config.pool_size = 1; // Single thread to test priority
-	config.pool_type = thread_pool_type::priority;
+	config.thread_count = 1; // Single thread to test priority
+	// priority pool_type does not exist in thread_pool_type enum
+	config.enable_priority_scheduling = true;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
@@ -168,24 +166,21 @@ TEST(priority_task_submission) {
 	std::mutex order_mutex;
 
 	// Submit tasks with different priorities
-	// High priority task should execute first even if submitted last
-	auto low_result = adapter.submit_with_priority([&]() {
+	// submit_with_priority(priority, func, args...)
+	auto low_future = adapter.submit_with_priority(1, [&]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		std::lock_guard<std::mutex> lock(order_mutex);
 		order.push_back(1); // Low priority
-	}, 1);
+	});
 
-	auto high_result = adapter.submit_with_priority([&]() {
+	auto high_future = adapter.submit_with_priority(10, [&]() {
 		std::lock_guard<std::mutex> lock(order_mutex);
 		order.push_back(2); // High priority
-	}, 10);
+	});
 
-	ASSERT_TRUE(low_result.is_ok());
-	ASSERT_TRUE(high_result.is_ok());
-
-	// Wait for completion
-	low_result.value().get();
-	high_result.value().get();
+	// Wait for completion - futures returned directly
+	low_future.get();
+	high_future.get();
 
 	// Note: Priority ordering may vary based on timing
 	ASSERT_TRUE(order.size() == 2);
@@ -196,19 +191,16 @@ TEST(priority_task_submission) {
 // Test 5: Task with return value
 TEST(task_with_return_value) {
 	db_thread_config config;
-	config.pool_size = 2;
+	config.thread_count = 2;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
 
-	// Submit task that returns a value
-	auto result = adapter.submit([]() -> std::string {
+	// Submit task that returns a value - returns future directly
+	auto future = adapter.submit([]() -> std::string {
 		return "Hello from thread pool!";
 	});
 
-	ASSERT_TRUE(result.is_ok());
-
-	auto future = result.value();
 	auto message = future.get();
 
 	ASSERT_TRUE(message == "Hello from thread pool!");
@@ -219,7 +211,7 @@ TEST(task_with_return_value) {
 // Test 6: Task with exception
 TEST(task_with_exception) {
 	db_thread_config config;
-	config.pool_size = 2;
+	config.thread_count = 2;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
@@ -251,33 +243,26 @@ TEST(task_with_exception) {
 // Test 7: Thread pool statistics
 TEST(thread_pool_statistics) {
 	db_thread_config config;
-	config.pool_size = 4;
+	config.thread_count = 4;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
 
-	// Get initial stats
-	auto stats_result = adapter.get_statistics();
-	ASSERT_TRUE(stats_result.is_ok());
+	// get_statistics() does not exist - use worker_count() and queue_size()
+	ASSERT_TRUE(adapter.worker_count() == 4);
+	ASSERT_TRUE(adapter.queue_size() == 0);
 
-	const auto& stats = stats_result.value();
-	ASSERT_TRUE(stats.pool_size == 4);
-	ASSERT_TRUE(stats.active_tasks == 0);
-	ASSERT_TRUE(stats.queued_tasks == 0);
-
-	// Submit a long-running task
-	auto result = adapter.submit([]() {
+	// Submit a long-running task - returns future directly
+	auto future = adapter.submit([]() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	});
-	ASSERT_TRUE(result.is_ok());
 
 	// Check stats while task is running
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	auto active_stats = adapter.get_statistics();
-	ASSERT_TRUE(active_stats.is_ok());
+	// get_statistics() does not exist - skip active stats check
 
 	// Wait for completion
-	result.value().get();
+	future.get();
 
 	adapter.shutdown();
 }
@@ -285,7 +270,7 @@ TEST(thread_pool_statistics) {
 // Test 8: Graceful shutdown with pending tasks
 TEST(graceful_shutdown) {
 	db_thread_config config;
-	config.pool_size = 1;
+	config.thread_count = 1;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
@@ -314,7 +299,7 @@ TEST(graceful_shutdown) {
 // Test 9: Thread safety - concurrent submissions
 TEST(thread_safety) {
 	db_thread_config config;
-	config.pool_size = 4;
+	config.thread_count = 4;
 
 	thread_adapter adapter(config);
 	adapter.initialize();
@@ -352,7 +337,7 @@ TEST(thread_safety) {
 // Test 10: Queue capacity
 TEST(queue_capacity) {
 	db_thread_config config;
-	config.pool_size = 1;
+	config.thread_count = 1;
 	config.queue_size = 10; // Small queue
 
 	thread_adapter adapter(config);

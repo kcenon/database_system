@@ -452,7 +452,7 @@ bool test_error_handling_no_connection() {
     // Try to execute a query without connecting
     auto result = db.execute("SELECT 1");
 
-    ASSERT_TRUE(result.is_err(), "Query without connection should fail");
+    ASSERT_TRUE(result.is_error(), "Query without connection should fail");
 
     TEST_END();
 }

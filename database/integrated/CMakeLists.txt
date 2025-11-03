@@ -50,6 +50,29 @@ if(INTEGRATED_DB_SOURCES)
                 $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/common_system/include>
         )
     endif()
+
+    # Add logger_system include path if available
+    if(USE_LOGGER_SYSTEM)
+        target_include_directories(${INTEGRATED_DB_TARGET}
+            PUBLIC
+                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/logger_system/include>
+                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/logger_system/include>
+                # logger_system needs thread_system headers when built with USE_THREAD_SYSTEM_INTEGRATION
+                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/thread_system/include>
+                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/thread_system/include>
+        )
+        # logger_system was built with USE_THREAD_SYSTEM_INTEGRATION, so we need to define it too
+        target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_THREAD_SYSTEM_INTEGRATION)
+    endif()
+
+    # Add monitoring_system include path if available
+    if(USE_MONITORING_SYSTEM)
+        target_include_directories(${INTEGRATED_DB_TARGET}
+            PUBLIC
+                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/monitoring_system/include>
+                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/monitoring_system/include>
+        )
+    endif()
 else()
     # Header-only for now (Phase 1)
     add_library(${INTEGRATED_DB_TARGET} INTERFACE)
@@ -142,13 +165,44 @@ if(USE_THREAD_SYSTEM AND TARGET thread_system)
 endif()
 
 # logger_system
-if(USE_LOGGER_SYSTEM AND TARGET logger_system)
-    if(INTEGRATED_DB_SOURCES)
-        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC logger_system)
+if(USE_LOGGER_SYSTEM)
+    # Try to find logger_system library
+    if(TARGET logger_system)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC logger_system)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE logger_system)
+        endif()
+        message(STATUS "Integrated DB: Linked with logger_system target")
     else()
-        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE logger_system)
+        # Try to link directly with LoggerSystem library
+        set(_LOGGER_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/logger_system/build/lib"
+            "/home/$ENV{USER}/Sources/logger_system/build/lib"
+        )
+
+        foreach(_path ${_LOGGER_LIB_PATHS})
+            if(EXISTS "${_path}/libLoggerSystem.a")
+                if(INTEGRATED_DB_SOURCES)
+                    target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC
+                        "${_path}/libLoggerSystem.a"
+                        "${_path}/libthread_base.a"
+                        "${_path}/libutilities.a"
+                        "${_path}/libinterfaces.a"
+                    )
+                else()
+                    target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE
+                        "${_path}/libLoggerSystem.a"
+                        "${_path}/libthread_base.a"
+                        "${_path}/libutilities.a"
+                        "${_path}/libinterfaces.a"
+                    )
+                endif()
+                message(STATUS "Integrated DB: Linked with LoggerSystem library at ${_path}")
+                break()
+            endif()
+        endforeach()
     endif()
-    message(STATUS "Integrated DB: Linked with logger_system")
 endif()
 
 # monitoring_system

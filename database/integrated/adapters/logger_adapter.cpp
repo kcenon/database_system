@@ -143,7 +143,7 @@ kcenon::logger::log_level convert_log_level(db_log_level level)
 		case db_log_level::debug:
 			return kcenon::logger::log_level::debug;
 		case db_log_level::info:
-			return kcenon::logger::log_level::information;
+			return kcenon::logger::log_level::info;
 		case db_log_level::warning:
 			return kcenon::logger::log_level::warning;
 		case db_log_level::error:
@@ -153,7 +153,7 @@ kcenon::logger::log_level convert_log_level(db_log_level level)
 		case db_log_level::fatal:
 			return kcenon::logger::log_level::fatal;
 		default:
-			return kcenon::logger::log_level::information;
+			return kcenon::logger::log_level::info;
 	}
 }
 #endif
@@ -191,27 +191,38 @@ public:
 
 		try
 		{
-			// Create logger with buffer size
-			logger_ = std::make_unique<kcenon::logger::logger>("database_logger", 1024);
+			// Create logger with async support and buffer size
+			logger_ = std::make_unique<kcenon::logger::logger>(
+				true,  // async mode for better performance
+				8192   // buffer size
+			);
 
 			// Add console writer
-			auto console = std::make_shared<kcenon::logger::console_writer>();
-			logger_->add_writer(console);
+			auto console = std::make_unique<kcenon::logger::console_writer>();
+			auto add_console_result = logger_->add_writer(std::move(console));
+			if (!add_console_result)
+			{
+				return make_error("Failed to add console writer");
+			}
 
 			// Add file writer if enabled
 			if (config_.enable_file_logging)
 			{
-				auto file_writer = std::make_shared<kcenon::logger::file_writer>(
-					config_.log_directory, "database", config_.log_rotation_size,
-					config_.log_rotation_count);
-				logger_->add_writer(file_writer);
+				std::string log_file = config_.log_directory + "/database.log";
+				auto file_writer = std::make_unique<kcenon::logger::file_writer>(log_file);
+				auto add_file_result = logger_->add_writer(std::move(file_writer));
+				if (!add_file_result)
+				{
+					return make_error("Failed to add file writer");
+				}
 			}
 
 			// Set minimum log level
-			logger_->set_level(convert_log_level(config_.min_log_level));
+			logger_->set_min_level(convert_log_level(config_.min_log_level));
 
 			// Start the logger
-			if (!logger_->start())
+			auto start_result = logger_->start();
+			if (!start_result)
 			{
 				return make_error("Failed to start logger");
 			}
@@ -236,7 +247,12 @@ public:
 		{
 			if (logger_)
 			{
-				logger_->stop();
+				flush();
+				auto stop_result = logger_->stop();
+				if (!stop_result)
+				{
+					return make_error("Failed to stop logger");
+				}
 				logger_.reset();
 			}
 			initialized_ = false;
@@ -266,14 +282,14 @@ public:
 			return;
 		}
 
-		logger_->write(convert_log_level(level), message);
+		logger_->log(convert_log_level(level), message);
 	}
 
 	void flush()
 	{
 		if (logger_)
 		{
-			// logger_system handles flushing automatically
+			logger_->flush();
 		}
 	}
 

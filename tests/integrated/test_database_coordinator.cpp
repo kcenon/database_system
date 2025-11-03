@@ -163,13 +163,12 @@ TEST(thread_pool_functionality) {
 
 	// Submit a simple task
 	std::atomic<bool> task_executed{false};
-	auto result = thread_pool->submit([&task_executed]() {
+	auto future = thread_pool->submit([&task_executed]() {
 		task_executed = true;
 		return 42;
 	});
 
-	ASSERT_TRUE(result.is_ok());
-	auto value = result.value().get();
+	auto value = future.get();
 	ASSERT_TRUE(value == 42);
 	ASSERT_TRUE(task_executed);
 
@@ -309,8 +308,7 @@ TEST(full_integration) {
 		return true;
 	});
 
-	ASSERT_TRUE(query_future.is_ok());
-	ASSERT_TRUE(query_future.value().get() == true);
+	ASSERT_TRUE(query_future.get() == true);
 
 	// Check health
 	auto health = coordinator.check_health();

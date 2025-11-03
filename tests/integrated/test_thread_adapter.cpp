@@ -217,14 +217,10 @@ TEST(task_with_exception) {
 	adapter.initialize();
 
 	// Submit task that throws exception
-	auto result = adapter.submit([]() -> int {
+	auto future = adapter.submit([]() -> int {
 		throw std::runtime_error("Task error");
 		return 42;
 	});
-
-	ASSERT_TRUE(result.is_ok());
-
-	auto future = result.value();
 
 	// Should throw when getting result
 	bool exception_caught = false;
@@ -280,12 +276,11 @@ TEST(graceful_shutdown) {
 	// Submit multiple tasks
 	std::vector<std::future<void>> futures;
 	for (int i = 0; i < 10; ++i) {
-		auto result = adapter.submit([&completed]() {
+		auto future = adapter.submit([&completed]() {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			completed++;
 		});
-		ASSERT_TRUE(result.is_ok());
-		futures.push_back(std::move(result.value()));
+		futures.push_back(std::move(future));
 	}
 
 	// Shutdown should wait for all tasks to complete
@@ -314,12 +309,10 @@ TEST(thread_safety) {
 	for (int i = 0; i < num_threads; ++i) {
 		threads.emplace_back([&adapter, &counter, tasks_per_thread]() {
 			for (int j = 0; j < tasks_per_thread; ++j) {
-				auto result = adapter.submit([&counter]() {
+				auto future = adapter.submit([&counter]() {
 					counter++;
 				});
-				if (result.is_ok()) {
-					result.value().get();
-				}
+				future.get();
 			}
 		});
 	}
@@ -348,14 +341,11 @@ TEST(queue_capacity) {
 	// Submit tasks that take time
 	std::vector<std::future<void>> futures;
 	for (int i = 0; i < 20; ++i) {
-		auto result = adapter.submit([&tasks_submitted]() {
+		auto future = adapter.submit([&tasks_submitted]() {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			tasks_submitted++;
 		});
-
-		if (result.is_ok()) {
-			futures.push_back(std::move(result.value()));
-		}
+		futures.push_back(std::move(future));
 	}
 
 	// Wait for all submitted tasks

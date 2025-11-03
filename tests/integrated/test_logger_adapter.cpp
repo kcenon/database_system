@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <thread>
+#include <vector>
 
 using namespace database::integrated;
 using namespace database::integrated::adapters;

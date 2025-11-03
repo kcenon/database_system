@@ -340,10 +340,7 @@ TEST(prometheus_export) {
 	monitor.update_pool_stats(2, 8, 10);
 
 	// Get Prometheus format
-	auto prometheus_result = monitor.export_prometheus_metrics();
-	ASSERT_TRUE(prometheus_result.is_ok());
-
-	const auto& prometheus_text = prometheus_result.value();
+	auto prometheus_text = monitor.export_prometheus_metrics();
 
 	// Verify format contains expected metrics
 	ASSERT_TRUE(prometheus_text.find("db_active_connections") != std::string::npos);

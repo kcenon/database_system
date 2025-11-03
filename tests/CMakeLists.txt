@@ -148,6 +148,31 @@ if(GTest_FOUND OR gtest_FOUND)
 endif()
 
 ##################################################
+# Integrated Database Configuration Tests
+##################################################
+
+if(BUILD_INTEGRATED_DATABASE)
+    # Simple configuration test (no external dependencies)
+    add_executable(integrated_configuration_test
+        integrated/test_configuration.cpp
+    )
+
+    target_link_libraries(integrated_configuration_test PRIVATE
+        integrated_database
+    )
+
+    set_target_properties(integrated_configuration_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedConfigurationTest COMMAND integrated_configuration_test)
+
+    message(STATUS "Integrated database configuration test configured")
+endif()
+
+##################################################
 # Test Data Setup
 ##################################################
 

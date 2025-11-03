@@ -169,7 +169,26 @@ if(BUILD_INTEGRATED_DATABASE)
 
     add_test(NAME IntegratedConfigurationTest COMMAND integrated_configuration_test)
 
+    # Logger adapter test
+    add_executable(integrated_logger_adapter_test
+        integrated/test_logger_adapter.cpp
+    )
+
+    target_link_libraries(integrated_logger_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_logger_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedLoggerAdapterTest COMMAND integrated_logger_adapter_test)
+
     message(STATUS "Integrated database configuration test configured")
+    message(STATUS "Integrated database logger adapter test configured")
 endif()
 
 ##################################################

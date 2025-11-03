@@ -17,12 +17,15 @@ set(INTEGRATED_DB_TARGET integrated_database)
 set(INTEGRATED_DB_HEADERS
     # Core
     core/configuration.h
-    # Note: adapters and coordinator headers will be added in later phases
+    # Adapters
+    adapters/logger_adapter.h
+    # Note: coordinator headers will be added in later phases
 )
 
 set(INTEGRATED_DB_SOURCES
-    # Core implementation files will be added as we implement them
-    # core/configuration.cpp (if needed for non-header-only implementation)
+    # Adapters
+    adapters/logger_adapter.cpp
+    # Note: more implementation files will be added in later phases
 )
 
 ##################################################
@@ -38,6 +41,15 @@ if(INTEGRATED_DB_SOURCES)
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>  # For #include "integrated/..."
             $<INSTALL_INTERFACE:include>
     )
+
+    # Add common_system include path if available
+    if(BUILD_WITH_COMMON_SYSTEM)
+        target_include_directories(${INTEGRATED_DB_TARGET}
+            PUBLIC
+                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/common_system/include>
+                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/common_system/include>
+        )
+    endif()
 else()
     # Header-only for now (Phase 1)
     add_library(${INTEGRATED_DB_TARGET} INTERFACE)

@@ -151,7 +151,8 @@ kcenon::logger::log_level convert_log_level(db_log_level level)
 		case db_log_level::critical:
 			return kcenon::logger::log_level::critical;
 		case db_log_level::fatal:
-			return kcenon::logger::log_level::fatal;
+			// logger_system doesn't have fatal, map to critical
+			return kcenon::logger::log_level::critical;
 		default:
 			return kcenon::logger::log_level::info;
 	}

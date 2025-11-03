@@ -187,8 +187,46 @@ if(BUILD_INTEGRATED_DATABASE)
 
     add_test(NAME IntegratedLoggerAdapterTest COMMAND integrated_logger_adapter_test)
 
+    # Monitoring adapter test
+    add_executable(integrated_monitoring_adapter_test
+        integrated/test_monitoring_adapter.cpp
+    )
+
+    target_link_libraries(integrated_monitoring_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_monitoring_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedMonitoringAdapterTest COMMAND integrated_monitoring_adapter_test)
+
+    # Thread adapter test
+    add_executable(integrated_thread_adapter_test
+        integrated/test_thread_adapter.cpp
+    )
+
+    target_link_libraries(integrated_thread_adapter_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_thread_adapter_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedThreadAdapterTest COMMAND integrated_thread_adapter_test)
+
     message(STATUS "Integrated database configuration test configured")
     message(STATUS "Integrated database logger adapter test configured")
+    message(STATUS "Integrated database monitoring adapter test configured")
+    message(STATUS "Integrated database thread adapter test configured")
 endif()
 
 ##################################################

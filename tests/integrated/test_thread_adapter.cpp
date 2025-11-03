@@ -331,7 +331,7 @@ TEST(thread_safety) {
 TEST(queue_capacity) {
 	db_thread_config config;
 	config.thread_count = 1;
-	config.queue_size = 10; // Small queue
+	config.max_queue_size = 10; // Small queue
 
 	thread_adapter adapter(config);
 	adapter.initialize();

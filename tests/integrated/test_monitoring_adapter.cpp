@@ -61,13 +61,15 @@ int tests_failed = 0;
 #define RUN_TEST(name) \
 	do { \
 		std::cout << "Running test: " << #name << " ... "; \
-		test_##name(); \
-		std::cout << "PASSED\n"; \
-		tests_passed++; \
-	} catch (const std::exception& e) { \
-		std::cout << "FAILED: " << e.what() << "\n"; \
-		tests_failed++; \
-	}
+		try { \
+			test_##name(); \
+			std::cout << "PASSED\n"; \
+			tests_passed++; \
+		} catch (const std::exception& e) { \
+			std::cout << "FAILED: " << e.what() << "\n"; \
+			tests_failed++; \
+		} \
+	} while(0)
 
 #define ASSERT_TRUE(condition) \
 	if (!(condition)) { \

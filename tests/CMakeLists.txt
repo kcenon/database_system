@@ -241,11 +241,31 @@ if(BUILD_INTEGRATED_DATABASE)
 
     add_test(NAME IntegratedCoordinatorTest COMMAND integrated_coordinator_test)
 
+    # Unified database system test (Phase 6)
+    add_executable(integrated_unified_system_test
+        integrated/test_unified_database_system.cpp
+    )
+
+    target_link_libraries(integrated_unified_system_test PRIVATE
+        integrated_database
+        database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_unified_system_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedUnifiedSystemTest COMMAND integrated_unified_system_test)
+
     message(STATUS "Integrated database configuration test configured")
     message(STATUS "Integrated database logger adapter test configured")
     message(STATUS "Integrated database monitoring adapter test configured")
     message(STATUS "Integrated database thread adapter test configured")
     message(STATUS "Integrated database coordinator test configured")
+    message(STATUS "Integrated database unified system test configured (Phase 6)")
 endif()
 
 ##################################################

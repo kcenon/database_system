@@ -116,6 +116,27 @@ add_test(NAME IntegratedCoordinatorTest
          COMMAND integrated_coordinator_test)
 
 ##################################################
+# Test 6: Unified Database System Test (Phase 6)
+##################################################
+
+add_executable(integrated_unified_system_test
+    test_unified_database_system.cpp
+)
+
+target_link_libraries(integrated_unified_system_test PRIVATE
+    integrated_database
+)
+
+set_target_properties(integrated_unified_system_test PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED ON
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+add_test(NAME IntegratedUnifiedSystemTest
+         COMMAND integrated_unified_system_test)
+
+##################################################
 # All Integrated Tests Target
 ##################################################
 
@@ -126,6 +147,7 @@ add_custom_target(integrated_tests
         integrated_monitoring_adapter_test
         integrated_thread_adapter_test
         integrated_coordinator_test
+        integrated_unified_system_test
 )
 
-message(STATUS "Integrated tests configured (Phases 1-5)")
+message(STATUS "Integrated tests configured (Phases 1-6)")

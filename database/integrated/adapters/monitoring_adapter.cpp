@@ -202,34 +202,34 @@ public:
 		}
 
 		common::interfaces::health_check_result result;
-		result.is_healthy = true;
-		result.status_message = "Database system healthy";
+		result.status = common::interfaces::health_status::healthy;
+		result.message = "Database system healthy";
 
 		// Check connection pool usage
 		if (metrics_.connection_usage_percent
 			> config_.connection_usage_warning_threshold * 100.0)
 		{
-			result.is_healthy = false;
-			result.status_message = "Connection pool usage critical";
-			result.details["connection_usage"]
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Connection pool usage critical";
+			result.metadata["connection_usage"]
 				= std::to_string(metrics_.connection_usage_percent) + "%";
 		}
 
 		// Check query latency
 		if (metrics_.avg_query_latency > config_.query_latency_warning)
 		{
-			result.is_healthy = false;
-			result.status_message = "Query latency critical";
-			result.details["avg_latency_us"]
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Query latency critical";
+			result.metadata["avg_latency_us"]
 				= std::to_string(metrics_.avg_query_latency.count());
 		}
 
 		// Check query success rate
 		if (metrics_.query_success_rate < 0.95)
 		{
-			result.is_healthy = false;
-			result.status_message = "Query success rate low";
-			result.details["success_rate"] = std::to_string(metrics_.query_success_rate);
+			result.status = common::interfaces::health_status::degraded;
+			result.message = "Query success rate low";
+			result.metadata["success_rate"] = std::to_string(metrics_.query_success_rate);
 		}
 
 		return common::Result<common::interfaces::health_check_result>(result);
@@ -551,8 +551,8 @@ public:
 		std::lock_guard<std::mutex> lock(mutex_);
 
 		common::interfaces::health_check_result result;
-		result.is_healthy = true;
-		result.status_message = "Database system healthy";
+		result.status = common::interfaces::health_status::healthy;
+		result.message = "Database system healthy";
 
 		// Connection pool health check
 		if (metrics_.connection_usage_percent

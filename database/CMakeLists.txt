@@ -34,6 +34,9 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/security/secure_connection.h
     ${CMAKE_CURRENT_SOURCE_DIR}/async/async_operations.h
+    # Sprint 5 Headers (Backend Plugin System)
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.h
 )
 
 # Collect all source files
@@ -50,6 +53,9 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.cpp
+    # Sprint 5 Sources (Backend Plugin System)
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.cpp
 )
 
 # Phase 2: connection_pool_v2 (added conditionally with thread_system)

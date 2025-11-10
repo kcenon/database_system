@@ -114,10 +114,35 @@ namespace database::security
 	/**
 	 * @class credential_manager
 	 * @brief Manages encrypted credential storage and retrieval.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_credential_manager() (Sprint 3, Task 3.3).
+	 *
+	 * @deprecated Use database_context::get_credential_manager() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& cred_mgr = credential_manager::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto cred_mgr = context->get_credential_manager();
+	 * @endcode
 	 */
 	class credential_manager
 	{
 	public:
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		credential_manager() = default;
+
+		/**
+		 * @deprecated Use database_context::get_credential_manager() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_credential_manager() instead. See migration guide in class documentation.")]]
 		static credential_manager& instance();
 
 		// Credential management
@@ -134,8 +159,6 @@ namespace database::security
 		bool verify_password(const std::string& password, const std::string& hash) const;
 
 	private:
-		credential_manager() = default;
-
 		std::string encrypt_data(const std::string& data) const;
 		std::string decrypt_data(const std::string& encrypted_data) const;
 
@@ -199,6 +222,21 @@ namespace database::security
 	/**
 	 * @class access_control
 	 * @brief Role-based access control (RBAC) system.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_access_control() (Sprint 3, Task 3.3).
+	 *
+	 * @deprecated Use database_context::get_access_control() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& access_ctrl = access_control::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto access_ctrl = context->get_access_control();
+	 * @endcode
 	 */
 	class access_control
 	{
@@ -233,6 +271,16 @@ namespace database::security
 			bool active = true;
 		};
 
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		access_control() = default;
+
+		/**
+		 * @deprecated Use database_context::get_access_control() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_access_control() instead. See migration guide in class documentation.")]]
 		static access_control& instance();
 
 		// Role management
@@ -253,8 +301,6 @@ namespace database::security
 		void cleanup_expired_sessions();
 
 	private:
-		access_control() = default;
-
 		mutable std::mutex access_mutex_;
 		std::unordered_map<std::string, role> roles_;
 		std::unordered_map<std::string, std::vector<std::string>> user_roles_;
@@ -264,10 +310,35 @@ namespace database::security
 	/**
 	 * @class audit_logger
 	 * @brief Security audit logging system.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_audit_logger() (Sprint 3, Task 3.3).
+	 *
+	 * @deprecated Use database_context::get_audit_logger() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& audit_log = audit_logger::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto audit_log = context->get_audit_logger();
+	 * @endcode
 	 */
 	class audit_logger
 	{
 	public:
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		audit_logger() = default;
+
+		/**
+		 * @deprecated Use database_context::get_audit_logger() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_audit_logger() instead. See migration guide in class documentation.")]]
 		static audit_logger& instance();
 
 		// Audit logging
@@ -297,8 +368,6 @@ namespace database::security
 		bool export_logs_to_file(const std::string& filename) const;
 
 	private:
-		audit_logger() = default;
-
 		mutable std::mutex audit_mutex_;
 		std::vector<audit_log_entry> audit_logs_;
 		std::chrono::hours retention_period_{24 * 30}; // 30 days
@@ -307,6 +376,21 @@ namespace database::security
 	/**
 	 * @class security_monitor
 	 * @brief Real-time security monitoring and alerting.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_security_monitor() (Sprint 3, Task 3.3).
+	 *
+	 * @deprecated Use database_context::get_security_monitor() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& sec_monitor = security_monitor::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto sec_monitor = context->get_security_monitor();
+	 * @endcode
 	 */
 	class security_monitor
 	{
@@ -327,6 +411,16 @@ namespace database::security
 			std::chrono::system_clock::time_point timestamp;
 		};
 
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		security_monitor() = default;
+
+		/**
+		 * @deprecated Use database_context::get_security_monitor() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_security_monitor() instead. See migration guide in class documentation.")]]
 		static security_monitor& instance();
 
 		// Threat detection
@@ -344,8 +438,6 @@ namespace database::security
 		double calculate_security_score() const;
 
 	private:
-		security_monitor() = default;
-
 		void emit_security_alert(threat_level level, const std::string& type,
 		                        const std::string& description, const std::string& user_id = "");
 
@@ -361,10 +453,35 @@ namespace database::security
 	/**
 	 * @class encryption_manager
 	 * @brief Data encryption and key management.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_encryption_manager() (Sprint 3, Task 3.3).
+	 *
+	 * @deprecated Use database_context::get_encryption_manager() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& enc_mgr = encryption_manager::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto enc_mgr = context->get_encryption_manager();
+	 * @endcode
 	 */
 	class encryption_manager
 	{
 	public:
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		encryption_manager() = default;
+
+		/**
+		 * @deprecated Use database_context::get_encryption_manager() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_encryption_manager() instead. See migration guide in class documentation.")]]
 		static encryption_manager& instance();
 
 		// Data encryption
@@ -382,8 +499,6 @@ namespace database::security
 		bool is_column_encrypted(const std::string& table, const std::string& column) const;
 
 	private:
-		encryption_manager() = default;
-
 		std::string derive_key(const std::string& field_name) const;
 
 		mutable std::mutex encryption_mutex_;

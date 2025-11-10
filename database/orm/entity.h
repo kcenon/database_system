@@ -253,10 +253,35 @@ namespace database::orm
 	/**
 	 * @class entity_manager
 	 * @brief Manages entity metadata and provides factory methods.
+	 *
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_entity_manager() (Sprint 3, Task 3.1).
+	 *
+	 * @deprecated Use database_context::get_entity_manager() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& entity_mgr = entity_manager::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto entity_mgr = context->get_entity_manager();
+	 * @endcode
 	 */
 	class entity_manager
 	{
 	public:
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		entity_manager() = default;
+
+		/**
+		 * @deprecated Use database_context::get_entity_manager() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_entity_manager() instead. See migration guide in class documentation.")]]
 		static entity_manager& instance();
 
 		template<Entity EntityType>
@@ -275,7 +300,6 @@ namespace database::orm
 
 	private:
 		std::unordered_map<std::string, std::unique_ptr<entity_metadata>> metadata_cache_;
-		entity_manager() = default;
 	};
 
 	// Helper macros for entity definition

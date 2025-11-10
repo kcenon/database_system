@@ -199,7 +199,10 @@ public:
             return make_error_result<query_result>("Transaction not active", -1, "transaction");
         }
 
-        // TODO: Handle parameters properly
+        // Note: Parameterized queries are not yet supported by database_base interface.
+        // Once database_base adds support for prepared statements, this should be updated to:
+        // auto db_result = backend_->select_query_prepared(query, params);
+        // For now, params are ignored and query is executed as-is (ensure query is pre-sanitized).
         auto start = std::chrono::steady_clock::now();
         auto db_result = backend_->select_query(query);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -605,11 +608,19 @@ private:
             metrics_.max_latency = latency;
         }
 
-        // Simple average (TODO: Use proper moving average)
-        metrics_.average_latency = std::chrono::microseconds{
-            (metrics_.average_latency.count() * (metrics_.total_queries - 1) +
-             latency.count()) / metrics_.total_queries
-        };
+        // Exponential Moving Average (EMA) with alpha = 0.1 (gives more weight to recent values)
+        // EMA formula: EMA_new = alpha * value + (1 - alpha) * EMA_old
+        constexpr double alpha = 0.1;
+        if (metrics_.total_queries == 1) {
+            // First query: initialize with actual latency
+            metrics_.average_latency = latency;
+        } else {
+            // Subsequent queries: apply EMA formula
+            auto current_avg_us = metrics_.average_latency.count();
+            auto new_latency_us = latency.count();
+            auto ema_us = static_cast<int64_t>(alpha * new_latency_us + (1.0 - alpha) * current_avg_us);
+            metrics_.average_latency = std::chrono::microseconds{ema_us};
+        }
 
         // Calculate throughput
         auto duration = std::chrono::steady_clock::now() - metrics_.measurement_start;

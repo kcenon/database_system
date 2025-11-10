@@ -223,26 +223,7 @@ namespace database
 	}
 #endif
 
-	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
-	{
-		// Use cached pool_manager for better performance
-		return pool_manager_ ? pool_manager_->create_pool(db_type, config) : false;
-	}
-
-	std::shared_ptr<connection_pool_base> database_manager::get_connection_pool(database_types db_type)
-	{
-		// Use cached pool_manager for better performance
-		return pool_manager_ ? pool_manager_->get_pool(db_type) : nullptr;
-	}
-
-	std::map<database_types, connection_stats> database_manager::get_pool_stats() const
-	{
-		// Use cached pool_manager for better performance
-		if (pool_manager_) {
-			return pool_manager_->get_all_stats();
-		}
-		return {};
-	}
+	// Connection pool methods moved to header as inline functions for performance
 
 	query_builder database_manager::create_query_builder()
 	{

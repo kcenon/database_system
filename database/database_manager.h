@@ -222,23 +222,38 @@ namespace database
 		 * @param db_type The database type to create a pool for
 		 * @param config Connection pool configuration parameters
 		 * @return @c true if the pool was created successfully, @c false otherwise
+		 *
+		 * @note Inline for zero overhead in hot paths (batch operations)
 		 */
-		bool create_connection_pool(database_types db_type, const connection_pool_config& config);
+		inline bool create_connection_pool(database_types db_type, const connection_pool_config& config) {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->create_pool(db_type, config) : false;
+		}
 
 		/**
 		 * @brief Gets the connection pool for the specified database type.
 		 *
 		 * @param db_type The database type to get a pool for
 		 * @return Shared pointer to the connection pool, nullptr if not found
+		 *
+		 * @note Inline for zero overhead in hot paths (batch operations)
 		 */
-		std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type);
+		inline std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type) {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->get_pool(db_type) : nullptr;
+		}
 
 		/**
 		 * @brief Gets connection pool statistics for all active pools.
 		 *
 		 * @return Map of database type to connection statistics
+		 *
+		 * @note Inline for zero overhead in hot paths (monitoring)
 		 */
-		std::map<database_types, connection_stats> get_pool_stats() const;
+		inline std::map<database_types, connection_stats> get_pool_stats() const {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->get_all_stats() : std::map<database_types, connection_stats>{};
+		}
 
 		/**
 		 * @brief Creates a query builder for the current database type.

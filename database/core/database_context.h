@@ -117,26 +117,27 @@ public:
      * @brief Check if context is initialized
      * @return true if all required components are initialized
      */
-    bool is_initialized() const {
+    inline bool is_initialized() const noexcept {
         return pool_manager_ != nullptr;
     }
 
     /**
-     * @brief Get connection pool manager instance
+     * @brief Get connection pool manager instance (inline for zero overhead)
      * @return Shared pointer to connection pool manager
      *
      * @details Returns the connection pool manager for this context. This manages
      * connection pools for different database types.
      *
-     * @note This method is lock-free and thread-safe because std::shared_ptr
-     * has atomic reference counting. The pool_manager_ is set once during
-     * construction and never modified, making it safe to read without locks.
+     * @note This method is lock-free, inline, and noexcept for maximum performance.
+     * The pool_manager_ is set once during construction and never modified,
+     * making it safe to read without locks.
      *
      * @since Sprint 2 (Task 2.3)
      */
-    std::shared_ptr<connection_pool_manager> get_pool_manager() const {
+    inline std::shared_ptr<connection_pool_manager> get_pool_manager() const noexcept {
         // Lock-free read: pool_manager_ is immutable after construction
         // std::shared_ptr copy is thread-safe due to atomic ref counting
+        // Inline for zero call overhead in hot paths
         return pool_manager_;
     }
 

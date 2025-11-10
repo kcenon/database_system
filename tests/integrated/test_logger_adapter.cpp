@@ -490,12 +490,8 @@ bool test_log_level_filtering()
 int main()
 {
 	std::cout << "=== Running Logger Adapter Tests ===\n";
-
-#if defined(USE_LOGGER_SYSTEM)
-	std::cout << "\nMode: Using logger_system integration\n";
-#else
-	std::cout << "\nMode: Using fallback implementation (std::cout + std::ofstream)\n";
-#endif
+	std::cout << "\nMode: Backend pattern with runtime selection\n";
+	std::cout << "Backend will be auto-selected (system_logger -> fallback_logger)\n";
 
 	// Run all tests
 	test_initialization();

@@ -130,11 +130,11 @@ TEST(api_availability_submit) {
 	// If init failed, that's acceptable for unit test
 }
 
-// Test 4: API availability - priority submission
+// Test 4: API availability - task submission (priority not supported in backend pattern)
 TEST(api_availability_priority) {
 	db_thread_config config;
 	config.thread_count = 1;
-	config.enable_priority_scheduling = true;
+	// Note: enable_priority_scheduling flag exists but priority is not implemented in backend pattern
 
 	thread_adapter adapter(config);
 
@@ -143,7 +143,9 @@ TEST(api_availability_priority) {
 	if (init_result.is_ok()) {
 		std::atomic<bool> executed{false};
 
-		auto future = adapter.submit_with_priority(5, [&executed]() {
+		// Backend pattern removed priority support for simplification
+		// Use regular submit instead
+		auto future = adapter.submit([&executed]() {
 			executed = true;
 		});
 

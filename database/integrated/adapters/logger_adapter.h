@@ -31,11 +31,15 @@
 
 /**
  * @file logger_adapter.h
- * @brief Database logging adapter with conditional logger_system integration
+ * @brief Database logging adapter with runtime backend selection
  *
- * This adapter provides unified logging interface for database operations:
- * - When USE_LOGGER_SYSTEM is defined: Uses kcenon/logger_system for advanced logging
- * - When USE_LOGGER_SYSTEM is not defined: Falls back to std::cout + std::ofstream
+ * This adapter provides unified logging interface for database operations
+ * using the backend pattern for runtime polymorphism.
+ *
+ * Available backends:
+ * - system_logger_backend: Uses kcenon/logger_system for advanced logging (default)
+ * - fallback_logger_backend: Uses std::cout + std::ofstream (when logger_system unavailable)
+ * - null_logger_backend: No-op backend for disabling logging
  *
  * Features:
  * - SQL query logging with sanitization (password removal, truncation)
@@ -44,6 +48,7 @@
  * - Transaction logging
  * - Error logging with SQL state codes
  * - Thread-safe operation
+ * - Runtime backend selection (no conditional compilation)
  *
  * @example
  * @code
@@ -56,6 +61,7 @@
  * config.enable_file_logging = true;
  * config.log_directory = "/var/log/myapp";
  *
+ * // Auto-selects best available backend
  * logger_adapter logger(config);
  * auto result = logger.initialize();
  * if (!result.is_ok()) {
@@ -93,6 +99,12 @@
 // Use common Result pattern from shared header
 #include "../core/common_result.h"
 
+// Forward declare backend interface
+namespace database::integrated::adapters::backends
+{
+	class logger_backend;
+}
+
 namespace database
 {
 namespace integrated
@@ -101,12 +113,22 @@ namespace adapters
 {
 
 /**
+ * @brief Logger backend type selection
+ */
+enum class logger_backend_type
+{
+	auto_select,  ///< Automatically select best available backend
+	system,       ///< Use logger_system (fails if unavailable)
+	fallback,     ///< Use std::cout + std::ofstream
+	null          ///< No-op backend (discard all logs)
+};
+
+/**
  * @class logger_adapter
  * @brief Unified logging adapter for database operations
  *
- * Provides a consistent logging interface regardless of whether logger_system
- * is available. Uses PIMPL idiom for ABI stability and to hide implementation
- * details.
+ * Provides a consistent logging interface with runtime backend selection.
+ * No longer uses conditional compilation - backend is selected at runtime.
  *
  * Thread Safety: All public methods are thread-safe.
  */
@@ -116,8 +138,11 @@ public:
 	/**
 	 * @brief Construct logger adapter with configuration
 	 * @param config Logger configuration settings
+	 * @param backend_type Backend type to use (default: auto_select)
 	 */
-	explicit logger_adapter(const db_logger_config& config);
+	explicit logger_adapter(
+		const db_logger_config& config,
+		logger_backend_type backend_type = logger_backend_type::auto_select);
 
 	/**
 	 * @brief Destructor - ensures proper shutdown
@@ -130,9 +155,9 @@ public:
 	logger_adapter(const logger_adapter&) = delete;
 	logger_adapter& operator=(const logger_adapter&) = delete;
 
-	// Movable
+	// Move constructor only (const reference member prevents move assignment)
 	logger_adapter(logger_adapter&&) noexcept;
-	logger_adapter& operator=(logger_adapter&&) noexcept;
+	logger_adapter& operator=(logger_adapter&&) = delete;
 
 	/**
 	 * @brief Initialize the logger
@@ -250,9 +275,15 @@ public:
 	void flush();
 
 private:
-	class impl; ///< PIMPL idiom: Implementation details hidden
+	/**
+	 * @brief Create appropriate backend based on type
+	 */
+	static std::unique_ptr<backends::logger_backend> create_backend(
+		const db_logger_config& config,
+		logger_backend_type backend_type);
 
-	std::unique_ptr<impl> pimpl_; ///< Pointer to implementation
+	const db_logger_config& config_;
+	std::unique_ptr<backends::logger_backend> backend_; ///< Logger backend implementation
 };
 
 } // namespace adapters

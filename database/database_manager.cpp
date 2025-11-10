@@ -44,8 +44,10 @@ namespace database
 		: connected_(false)
 		, database_(nullptr)
 		, context_(std::make_shared<database_context>())
+		, pool_manager_(context_->get_pool_manager())
 	{
 		// Default constructor creates a default context for backward compatibility
+		// Cache pool_manager for performance (avoids repeated context lookups)
 	}
 
 	database_manager::database_manager(std::shared_ptr<database_context> context)
@@ -59,6 +61,8 @@ namespace database
 			// Fallback to default context if nullptr passed
 			context_ = std::make_shared<database_context>();
 		}
+		// Cache pool_manager for performance
+		pool_manager_ = context_->get_pool_manager();
 	}
 
 	database_manager::~database_manager() {}
@@ -221,21 +225,21 @@ namespace database
 
 	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
 	{
-		auto pool_mgr = context_->get_pool_manager();
-		return pool_mgr ? pool_mgr->create_pool(db_type, config) : false;
+		// Use cached pool_manager for better performance
+		return pool_manager_ ? pool_manager_->create_pool(db_type, config) : false;
 	}
 
 	std::shared_ptr<connection_pool_base> database_manager::get_connection_pool(database_types db_type)
 	{
-		auto pool_mgr = context_->get_pool_manager();
-		return pool_mgr ? pool_mgr->get_pool(db_type) : nullptr;
+		// Use cached pool_manager for better performance
+		return pool_manager_ ? pool_manager_->get_pool(db_type) : nullptr;
 	}
 
 	std::map<database_types, connection_stats> database_manager::get_pool_stats() const
 	{
-		auto pool_mgr = context_->get_pool_manager();
-		if (pool_mgr) {
-			return pool_mgr->get_all_stats();
+		// Use cached pool_manager for better performance
+		if (pool_manager_) {
+			return pool_manager_->get_all_stats();
 		}
 		return {};
 	}

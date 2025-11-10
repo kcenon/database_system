@@ -277,6 +277,7 @@ namespace database
 		std::unique_ptr<database_base>
 			database_;	 ///< The underlying database interface.
 		std::shared_ptr<database_context> context_; ///< Dependency injection context
+		std::shared_ptr<connection_pool_manager> pool_manager_; ///< Cached pool manager for performance
 
 #pragma region singleton
 	public:

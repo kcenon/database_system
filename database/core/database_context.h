@@ -128,10 +128,15 @@ public:
      * @details Returns the connection pool manager for this context. This manages
      * connection pools for different database types.
      *
+     * @note This method is lock-free and thread-safe because std::shared_ptr
+     * has atomic reference counting. The pool_manager_ is set once during
+     * construction and never modified, making it safe to read without locks.
+     *
      * @since Sprint 2 (Task 2.3)
      */
     std::shared_ptr<connection_pool_manager> get_pool_manager() const {
-        std::lock_guard lock(mutex_);
+        // Lock-free read: pool_manager_ is immutable after construction
+        // std::shared_ptr copy is thread-safe due to atomic ref counting
         return pool_manager_;
     }
 

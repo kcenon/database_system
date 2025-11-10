@@ -459,10 +459,20 @@ auto pool_mgr = context->get_pool_manager();
 
 - [ ] **Task 3.1**: Convert ORM singletons (2 weeks)
   - `entity_manager::instance()` → DI
+  - `transaction_coordinator::instance()` → DI
   - Update ORM framework integration
-- [ ] **Task 3.2**: Convert monitoring singletons (1 week)
-  - `performance_monitor::instance()` → DI
-  - `connection_leak_detector::instance()` → DI
+- [x] **Task 3.2**: Convert monitoring singletons (1 week) ✅ **COMPLETED** (2025-11-10)
+  - **Status**: ✅ Completed
+  - **Commit**: 06255010 "feat(database): Remove singleton pattern from monitoring components"
+  - **Changes**:
+    - Converted `performance_monitor::instance()` to DI pattern
+    - Converted `connection_leak_detector::instance()` to DI pattern
+    - Added monitoring components to database_context
+    - Updated query_timer with new constructor accepting performance_monitor
+    - Deprecated singleton instance() methods with migration guides
+  - **Test Results**: 22/23 tests passing (1 skipped)
+  - **Build Status**: ✅ Success
+  - **Migration Guide**: Included in deprecated method documentation
 - [ ] **Task 3.3**: Convert security singletons (1 week)
   - `credential_manager::instance()` → DI
   - `access_control::instance()` → DI
@@ -475,7 +485,7 @@ auto pool_mgr = context->get_pool_manager();
 
 **Resources**: 3 developers (1 Senior + 2 Mid)
 **Risk Level**: High
-**Status**: ⏳ Pending
+**Status**: ⏳ **In Progress** (Task 3.2 completed, Tasks 3.1, 3.3, 3.4 pending)
 
 ---
 

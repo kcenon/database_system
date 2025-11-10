@@ -309,7 +309,7 @@ public:
 #if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
 	kcenon::common::Result<kcenon::common::interfaces::metrics_snapshot>
 #else
-	common::Result<common::error_info>  // Fallback when common_system not available
+	common::Result<common::interfaces::metrics_snapshot>  // Fallback when common_system not available
 #endif
 	get_metrics()
 #if defined(USE_COMMON_SYSTEM)

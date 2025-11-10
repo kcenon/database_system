@@ -36,21 +36,13 @@ namespace
 
 inline common::VoidResult make_error(const std::string& msg, int code = -1)
 {
-#if defined(USE_COMMON_SYSTEM)
-	return common::VoidResult(common::error_info{ code, msg });
-#else
-	return common::VoidResult(common::Error{ msg, code });
-#endif
+	return common::VoidResult(common::error_info{ code, msg, "" });
 }
 
 template <typename T>
 inline common::Result<T> make_error_result(const std::string& msg, int code = -1)
 {
-#if defined(USE_COMMON_SYSTEM)
-	return common::Result<T>(common::error_info{ code, msg });
-#else
-	return common::Result<T>(common::Error{ msg, code });
-#endif
+	return common::Result<T>(common::error_info{ code, msg, "" });
 }
 
 } // anonymous namespace
@@ -607,17 +599,40 @@ public:
 		return common::Result<kcenon::common::interfaces::health_check_result>(result);
 	}
 #else
-	common::Result<common::error_info> get_metrics()
+	common::Result<common::interfaces::metrics_snapshot> get_metrics()
 	{
 		if (!initialized_)
 		{
-			return make_error_result<common::error_info>(
+			return make_error_result<common::interfaces::metrics_snapshot>(
 				"Monitoring adapter not initialized");
 		}
 
-		// Fallback: return error indicating monitoring not available
-		return make_error_result<common::error_info>(
-			"Metrics export requires common_system support");
+		std::lock_guard<std::mutex> lock(mutex_);
+
+		common::interfaces::metrics_snapshot snapshot;
+		snapshot.source_id = "database_system_fallback";
+
+		// Add database metrics using the helper method
+		snapshot.add_metric("db.connections.active",
+			static_cast<double>(metrics_.active_connections));
+		snapshot.add_metric("db.connections.idle",
+			static_cast<double>(metrics_.idle_connections));
+		snapshot.add_metric("db.connections.usage_percent",
+			metrics_.connection_usage_percent);
+		snapshot.add_metric("db.query.avg_latency_us",
+			static_cast<double>(metrics_.avg_query_latency.count()));
+		snapshot.add_metric("db.query.success_rate",
+			metrics_.query_success_rate);
+
+		// Counters
+		snapshot.add_metric("db.queries.total",
+			static_cast<double>(metrics_.total_queries));
+		snapshot.add_metric("db.queries.successful",
+			static_cast<double>(metrics_.successful_queries));
+		snapshot.add_metric("db.queries.failed",
+			static_cast<double>(metrics_.failed_queries));
+
+		return common::Result<common::interfaces::metrics_snapshot>(snapshot);
 	}
 
 	common::Result<bool> check_health()
@@ -878,7 +893,7 @@ common::Result<kcenon::common::interfaces::health_check_result> monitoring_adapt
 	return pimpl_->check_health();
 }
 #else
-common::Result<common::error_info> monitoring_adapter::get_metrics()
+common::Result<common::interfaces::metrics_snapshot> monitoring_adapter::get_metrics()
 {
 	return pimpl_->get_metrics();
 }

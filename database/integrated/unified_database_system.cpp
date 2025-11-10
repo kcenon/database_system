@@ -450,13 +450,13 @@ public:
             return promise.get_future();
         }
 
-        // Use priority-based submission
-        return thread_pool->submit_with_priority(
-            priority,
-            [this, query, params]() -> Result<query_result> {
-                return this->execute(query, params);
-            }
-        );
+        // Note: Priority parameter is currently ignored
+        // Backend pattern removed priority support for simplification
+        (void)priority; // Suppress unused parameter warning
+
+        return thread_pool->submit([this, query, params]() -> Result<query_result> {
+            return this->execute(query, params);
+        });
     }
 
     // Transaction management

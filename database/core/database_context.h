@@ -69,6 +69,7 @@ namespace database
 
 // Forward declarations
 class connection_pool_base;
+class connection_pool_manager;
 struct connection_pool_config;
 enum class database_types : uint8_t;
 
@@ -117,12 +118,28 @@ public:
      * @return true if all required components are initialized
      */
     bool is_initialized() const {
-        return true; // For now, always initialized
+        return pool_manager_ != nullptr;
+    }
+
+    /**
+     * @brief Get connection pool manager instance
+     * @return Shared pointer to connection pool manager
+     *
+     * @details Returns the connection pool manager for this context. This manages
+     * connection pools for different database types.
+     *
+     * @since Sprint 2 (Task 2.3)
+     */
+    std::shared_ptr<connection_pool_manager> get_pool_manager() const {
+        std::lock_guard lock(mutex_);
+        return pool_manager_;
     }
 
 private:
-    // Future Sprint 3: Add component members here
-    // std::shared_ptr<connection_pool_manager_interface> pool_manager_;
+    /// Connection pool manager instance (Sprint 2, Task 2.3)
+    std::shared_ptr<connection_pool_manager> pool_manager_;
+
+    // Future Sprint 3: Add other component members here
     // std::shared_ptr<performance_monitor_interface> perf_monitor_;
     // std::shared_ptr<credential_manager_interface> credential_mgr_;
 

@@ -221,17 +221,23 @@ namespace database
 
 	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
 	{
-		return connection_pool_manager::instance().create_pool(db_type, config);
+		auto pool_mgr = context_->get_pool_manager();
+		return pool_mgr ? pool_mgr->create_pool(db_type, config) : false;
 	}
 
 	std::shared_ptr<connection_pool_base> database_manager::get_connection_pool(database_types db_type)
 	{
-		return connection_pool_manager::instance().get_pool(db_type);
+		auto pool_mgr = context_->get_pool_manager();
+		return pool_mgr ? pool_mgr->get_pool(db_type) : nullptr;
 	}
 
 	std::map<database_types, connection_stats> database_manager::get_pool_stats() const
 	{
-		return connection_pool_manager::instance().get_all_stats();
+		auto pool_mgr = context_->get_pool_manager();
+		if (pool_mgr) {
+			return pool_mgr->get_all_stats();
+		}
+		return {};
 	}
 
 	query_builder database_manager::create_query_builder()

@@ -31,19 +31,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "database/core/database_context.h"
+#include "database/connection_pool.h"
 
 namespace database
 {
 
 database_context::database_context()
+    : pool_manager_(std::make_shared<connection_pool_manager>())
 {
-    // Default constructor - will initialize components in Sprint 3
-    // when other singletons are converted
+    // Sprint 2, Task 2.3: Initialize connection pool manager
+    // Future Sprint 3: Initialize other components
 }
 
 database_context::~database_context()
 {
-    // Cleanup will be added in Sprint 3
+    // Cleanup: pool_manager will be automatically destroyed
+    // Future Sprint 3: Add cleanup for other components
 }
 
 } // namespace database

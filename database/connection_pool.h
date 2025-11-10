@@ -275,14 +275,37 @@ namespace database
 	/**
 	 * @class connection_pool_manager
 	 * @brief Manages multiple connection pools for different database types.
+	 *
+	 * @note As of Sprint 2 (Task 2.3), this class has been refactored to support
+	 * dependency injection. The singleton API is deprecated and will be removed
+	 * in a future version.
 	 */
 	class connection_pool_manager
 	{
 	public:
 		/**
+		 * @brief Default constructor - recommended for new code.
+		 *
+		 * @details Creates a connection pool manager instance. For DI usage,
+		 * obtain the instance from database_context::get_pool_manager() instead.
+		 *
+		 * @since Sprint 2 (1.0.0)
+		 */
+		connection_pool_manager() = default;
+
+		/**
 		 * @brief Gets the singleton instance.
 		 * @return Reference to the connection pool manager
+		 *
+		 * @deprecated Use dependency injection with database_context instead:
+		 * @code
+		 * auto context = std::make_shared<database_context>();
+		 * auto pool_mgr = context->get_pool_manager();
+		 * @endcode
+		 *
+		 * @note Will be removed in next major version (2.0.0)
 		 */
+		[[deprecated("Use dependency injection with database_context instead. See Sprint 2 migration guide.")]]
 		static connection_pool_manager& instance();
 
 		/**
@@ -317,10 +340,12 @@ namespace database
 		 */
 		std::map<database_types, connection_stats> get_all_stats() const;
 
-	private:
-		connection_pool_manager() = default;
+		/**
+		 * @brief Destructor.
+		 */
 		~connection_pool_manager();
 
+	private:
 		/**
 		 * @brief Creates a connection factory for a database type.
 		 * @param db_type Database type
@@ -331,7 +356,6 @@ namespace database
 			database_types db_type,
 			const std::string& connection_string);
 
-	private:
 		mutable std::mutex pools_mutex_;
 		std::map<database_types, std::shared_ptr<connection_pool>> pools_;
 	};

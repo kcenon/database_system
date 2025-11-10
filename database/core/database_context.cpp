@@ -32,21 +32,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "database/core/database_context.h"
 #include "database/connection_pool.h"
+#include "database/monitoring/performance_monitor.h"
+#include "database/leak_detector_enhanced.h"
 
 namespace database
 {
 
 database_context::database_context()
     : pool_manager_(std::make_shared<connection_pool_manager>())
+    , performance_monitor_(std::make_shared<monitoring::performance_monitor>())
+    , leak_detector_(nullptr) // Will be created when needed with specific pool
 {
     // Sprint 2, Task 2.3: Initialize connection pool manager
-    // Future Sprint 3: Initialize other components
+    // Sprint 3, Task 3.2: Initialize performance monitor
+    // Note: leak_detector requires a connection_pool, so it's created on-demand
 }
 
 database_context::~database_context()
 {
-    // Cleanup: pool_manager will be automatically destroyed
-    // Future Sprint 3: Add cleanup for other components
+    // Cleanup: All shared_ptrs will be automatically destroyed
+    // Sprint 3, Task 3.2: performance_monitor and leak_detector cleanup
 }
 
 } // namespace database

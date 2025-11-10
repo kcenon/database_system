@@ -31,6 +31,10 @@ set(INTEGRATED_DB_HEADERS
     adapters/backends/monitoring_backend.h
     adapters/backends/fallback_monitoring_backend.h
     adapters/backends/null_monitoring_backend.h
+    # Thread Backends
+    adapters/backends/thread_backend.h
+    adapters/backends/fallback_thread_backend.h
+    adapters/backends/null_thread_backend.h
     # Unified System
     unified_database_system.h
 )
@@ -46,6 +50,8 @@ set(INTEGRATED_DB_SOURCES
     adapters/backends/fallback_logger_backend.cpp
     # Monitoring Backends (always include fallback)
     adapters/backends/fallback_monitoring_backend.cpp
+    # Thread Backends (always include fallback)
+    adapters/backends/fallback_thread_backend.cpp
     # Unified System
     unified_database_system.cpp
 )
@@ -141,15 +147,10 @@ if(BUILD_WITH_COMMON_SYSTEM)
 endif()
 
 # Thread system integration
+# NOTE: No longer need USE_THREAD_SYSTEM compile definition with backend pattern
+# Backend selection happens at runtime
 if(USE_THREAD_SYSTEM)
-    if(TARGET ${INTEGRATED_DB_TARGET})
-        if(INTEGRATED_DB_SOURCES)
-            target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_THREAD_SYSTEM)
-        else()
-            target_compile_definitions(${INTEGRATED_DB_TARGET} INTERFACE USE_THREAD_SYSTEM)
-        endif()
-    endif()
-    message(STATUS "Integrated DB: thread_system integration enabled")
+    message(STATUS "Integrated DB: thread_system backend available (runtime selection)")
 endif()
 
 # Logger system integration

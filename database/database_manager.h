@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Use unified Result<T> implementation
 #include "core/result.h"
+#include "core/database_context.h"
 
 #include "database_base.h"
 #include "connection_pool.h"
@@ -78,15 +79,16 @@ namespace database
 {
 	/**
 	 * @class database_manager
-	 * @brief Manages database connections and operations in a singleton
-	 * pattern.
+	 * @brief Manages database connections and operations.
 	 *
 	 * The @c database_manager class provides a high-level interface for
 	 * controlling database connections and executing queries. It wraps
 	 * a @c database_base instance and exposes methods such as @c connect,
-	 * @c disconnect, @c create_query, @c insert_query, etc. This class
-	 * also follows the singleton design pattern, allowing only one
-	 * instance of the manager to exist at a time.
+	 * @c disconnect, @c create_query, @c insert_query, etc.
+	 *
+	 * @note As of Sprint 2, this class has been refactored to use dependency
+	 * injection instead of singleton pattern. The singleton API is deprecated
+	 * and will be removed in a future version.
 	 */
 	class database_manager
 	{
@@ -94,11 +96,30 @@ namespace database
 		/**
 		 * @brief Default constructor.
 		 *
+		 * @deprecated Use database_manager(std::shared_ptr<database_context>) instead.
+		 * This constructor creates a default context internally for backward compatibility.
+		 *
 		 * Initializes the manager with no active database connection.
-		 * This constructor is private in many singleton implementations,
-		 * but can remain public if the design requires it.
 		 */
 		database_manager();
+
+		/**
+		 * @brief DI constructor - Recommended for new code.
+		 *
+		 * @param context Dependency injection context containing shared components
+		 *
+		 * @details This constructor accepts a database_context for dependency injection.
+		 * Use this for better testability and to support multiple database instances.
+		 *
+		 * @example
+		 * @code
+		 * auto context = std::make_shared<database_context>();
+		 * auto db_mgr = std::make_shared<database_manager>(context);
+		 * @endcode
+		 *
+		 * @since Sprint 2 (1.0.0)
+		 */
+		explicit database_manager(std::shared_ptr<database_context> context);
 
 		/**
 		 * @brief Destructor.
@@ -201,23 +222,38 @@ namespace database
 		 * @param db_type The database type to create a pool for
 		 * @param config Connection pool configuration parameters
 		 * @return @c true if the pool was created successfully, @c false otherwise
+		 *
+		 * @note Inline for zero overhead in hot paths (batch operations)
 		 */
-		bool create_connection_pool(database_types db_type, const connection_pool_config& config);
+		inline bool create_connection_pool(database_types db_type, const connection_pool_config& config) {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->create_pool(db_type, config) : false;
+		}
 
 		/**
 		 * @brief Gets the connection pool for the specified database type.
 		 *
 		 * @param db_type The database type to get a pool for
 		 * @return Shared pointer to the connection pool, nullptr if not found
+		 *
+		 * @note Inline for zero overhead in hot paths (batch operations)
 		 */
-		std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type);
+		inline std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type) {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->get_pool(db_type) : nullptr;
+		}
 
 		/**
 		 * @brief Gets connection pool statistics for all active pools.
 		 *
 		 * @return Map of database type to connection statistics
+		 *
+		 * @note Inline for zero overhead in hot paths (monitoring)
 		 */
-		std::map<database_types, connection_stats> get_pool_stats() const;
+		inline std::map<database_types, connection_stats> get_pool_stats() const {
+			// Direct access to cached pool_manager for performance
+			return pool_manager_ ? pool_manager_->get_all_stats() : std::map<database_types, connection_stats>{};
+		}
 
 		/**
 		 * @brief Creates a query builder for the current database type.
@@ -255,30 +291,43 @@ namespace database
 		bool connected_; ///< Indicates whether a database connection is active.
 		std::unique_ptr<database_base>
 			database_;	 ///< The underlying database interface.
+		std::shared_ptr<database_context> context_; ///< Dependency injection context
+		std::shared_ptr<connection_pool_manager> pool_manager_; ///< Cached pool manager for performance
 
 #pragma region singleton
 	public:
 		/**
 		 * @brief Provides access to the single @c database_manager instance.
 		 *
+		 * @deprecated This singleton pattern is deprecated. Use dependency injection instead:
+		 * @code
+		 * auto context = std::make_shared<database_context>();
+		 * auto db_mgr = std::make_shared<database_manager>(context);
+		 * @endcode
+		 *
 		 * This static method returns a reference to the singleton instance,
 		 * ensuring that only one instance of @c database_manager exists
 		 * throughout the application.
 		 *
 		 * @return A reference to the singleton @c database_manager instance.
+		 *
+		 * @note Will be removed in next major version (2.0.0)
 		 */
+		[[deprecated("Use dependency injection with database_context instead. See Sprint 2 migration guide.")]]
 		static database_manager& handle(void);
 
 	private:
 		/**
 		 * @brief A unique pointer holding the singleton instance of
 		 *        @c database_manager.
+		 * @deprecated Part of deprecated singleton pattern
 		 */
 		static std::unique_ptr<database_manager> handle_;
 
 		/**
 		 * @brief A flag used to ensure the singleton instance is created
 		 *        only once in a thread-safe manner.
+		 * @deprecated Part of deprecated singleton pattern
 		 */
 		static std::once_flag once_;
 #pragma endregion

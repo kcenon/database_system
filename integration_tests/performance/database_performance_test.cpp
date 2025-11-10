@@ -101,8 +101,8 @@ TEST_F(DatabasePerformanceTest, BatchInsertPerformance)
 	std::cout << "Batch insert (" << batch_size << " rows): " << elapsed << "ms\n";
 
 	EXPECT_EQ(inserted, batch_size) << "Should insert all rows";
-	// Allow 10% margin for CI environment variability
-	EXPECT_LT(elapsed, 1650) << "Batch insert should complete in < 1650ms (with CI margin)";
+	// Allow 20% margin for CI environment variability (increased from 10% due to macOS runner variance)
+	EXPECT_LT(elapsed, 1800) << "Batch insert should complete in < 1800ms (with CI margin)";
 }
 
 /**

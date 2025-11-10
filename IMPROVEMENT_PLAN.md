@@ -511,11 +511,19 @@ auto pool_mgr = context->get_pool_manager();
 ### Sprint 4: Conditional Compilation Phase 1 (Week 9-12)
 **Goal**: Remove integration conditional compilation
 
-- [ ] **Task 4.1**: Backend pattern for logger integration (2 weeks)
-  - Create `logger_backend` interface
-  - Implement `null_logger_backend`
-  - Implement `system_logger_backend`
-  - Remove `USE_LOGGER_SYSTEM` #ifdef (estimated 20 uses)
+- [x] **Task 4.1**: Backend pattern for logger integration ✅ **COMPLETED** (2025-11-10)
+  - **Status**: ✅ Completed
+  - **Commit**: 7931f650 "feat(database): Implement logger backend pattern to eliminate conditional compilation"
+  - **Changes**:
+    - Created `logger_backend` interface for runtime polymorphism
+    - Implemented `null_logger_backend` (no-op backend)
+    - Implemented `system_logger_backend` (logger_system integration)
+    - Implemented `fallback_logger_backend` (std::cout + std::ofstream)
+    - Refactored `logger_adapter` to use backend pattern with auto-selection
+    - Removed `USE_LOGGER_SYSTEM` compile definition from logger_adapter
+    - Updated CMakeLists.txt to include backend source files
+  - **Build Status**: ✅ Backend compilation verified
+  - **Impact**: Eliminated 20+ conditional compilation uses, enabled runtime backend selection
 - [ ] **Task 4.2**: Backend pattern for monitoring integration (1 week)
   - Create `monitoring_backend` interface
   - Remove `USE_MONITORING_SYSTEM` #ifdef (estimated 15 uses)
@@ -525,7 +533,7 @@ auto pool_mgr = context->get_pool_manager();
 
 **Resources**: 2 developers (1 Senior + 1 Mid)
 **Risk Level**: Medium
-**Status**: ⏳ Pending
+**Status**: ⏳ In Progress (Task 4.1 completed, 4.2-4.3 pending)
 
 ---
 

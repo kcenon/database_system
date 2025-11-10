@@ -73,6 +73,11 @@ class connection_pool_manager;
 struct connection_pool_config;
 enum class database_types : uint8_t;
 
+namespace monitoring {
+    class performance_monitor;
+    class connection_leak_detector;
+}
+
 /**
  * @class database_context
  * @brief Dependency injection container for database components
@@ -141,13 +146,46 @@ public:
         return pool_manager_;
     }
 
+    /**
+     * @brief Get performance monitor instance
+     * @return Shared pointer to performance monitor
+     *
+     * @details Returns the performance monitor for tracking query metrics,
+     * connection usage, and system performance.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.2)
+     */
+    inline std::shared_ptr<monitoring::performance_monitor> get_performance_monitor() const noexcept {
+        return performance_monitor_;
+    }
+
+    /**
+     * @brief Get connection leak detector instance
+     * @return Shared pointer to connection leak detector
+     *
+     * @details Returns the leak detector for monitoring connection leases.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.2)
+     */
+    inline std::shared_ptr<monitoring::connection_leak_detector> get_leak_detector() const noexcept {
+        return leak_detector_;
+    }
+
 private:
     /// Connection pool manager instance (Sprint 2, Task 2.3)
     std::shared_ptr<connection_pool_manager> pool_manager_;
 
-    // Future Sprint 3: Add other component members here
-    // std::shared_ptr<performance_monitor_interface> perf_monitor_;
-    // std::shared_ptr<credential_manager_interface> credential_mgr_;
+    /// Performance monitor instance (Sprint 3, Task 3.2)
+    std::shared_ptr<monitoring::performance_monitor> performance_monitor_;
+
+    /// Connection leak detector instance (Sprint 3, Task 3.2)
+    std::shared_ptr<monitoring::connection_leak_detector> leak_detector_;
+
+    // Future Sprint 3+: Add other component members here
+    // std::shared_ptr<orm::entity_manager> entity_mgr_;
+    // std::shared_ptr<security::credential_manager> credential_mgr_;
 
     /// Mutex for thread-safe access
     mutable std::mutex mutex_;

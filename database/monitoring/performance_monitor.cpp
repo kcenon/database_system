@@ -47,8 +47,23 @@ namespace database::monitoring
 	}
 
 	// query_timer implementation
+
+	// New constructor with explicit performance_monitor (Sprint 3, Task 3.2)
+	query_timer::query_timer(const std::string& query, database_types db_type,
+	                         std::shared_ptr<performance_monitor> monitor)
+		: start_time_(std::chrono::steady_clock::now())
+		, monitor_(std::move(monitor))
+	{
+		metrics_.query_hash = std::to_string(std::hash<std::string>{}(query));
+		metrics_.start_time = start_time_;
+		metrics_.db_type = db_type;
+		metrics_.success = true; // Assume success unless error is set
+	}
+
+	// Legacy constructor using singleton (DEPRECATED)
 	query_timer::query_timer(const std::string& query, database_types db_type)
 		: start_time_(std::chrono::steady_clock::now())
+		, monitor_(nullptr) // Will use singleton in destructor
 	{
 		metrics_.query_hash = std::to_string(std::hash<std::string>{}(query));
 		metrics_.start_time = start_time_;
@@ -62,7 +77,12 @@ namespace database::monitoring
 		metrics_.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(
 			metrics_.end_time - metrics_.start_time);
 
-		performance_monitor::instance().record_query_metrics(metrics_);
+		// Use injected monitor if available, otherwise fall back to singleton (deprecated)
+		if (monitor_) {
+			monitor_->record_query_metrics(metrics_);
+		} else {
+			performance_monitor::instance().record_query_metrics(metrics_);
+		}
 	}
 
 	void query_timer::set_error(const std::string& error)

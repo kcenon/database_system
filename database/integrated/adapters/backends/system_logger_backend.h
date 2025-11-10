@@ -55,9 +55,25 @@ namespace logger
 }
 }
 
-// Import log_level from logger_system
+// Import log_level from logger_system (conditionally)
 // Note: We can't forward-declare this because logger.h has a using declaration
+#if __has_include(<kcenon/logger/interfaces/logger_types.h>)
 #include <kcenon/logger/interfaces/logger_types.h>
+#else
+// Fallback: Define minimal logger_system namespace for compilation
+namespace logger_system
+{
+	enum class log_level
+	{
+		trace,
+		debug,
+		information,
+		warning,
+		error,
+		fatal
+	};
+}
+#endif
 
 namespace database
 {

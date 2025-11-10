@@ -68,17 +68,8 @@
  *     return execute_query("SELECT * FROM users");
  * });
  *
- * // Submit with priority
- * auto high_priority = pool.submit_with_priority(100, []() {
- *     return execute_critical_query();
- * });
- *
- * // Cancellable task
- * auto token = pool.create_cancellation_token();
- * auto cancellable = pool.submit_cancellable(token, []() {
- *     return long_running_query();
- * });
- * // Later: pool.cancel_token(token);
+ * // Wait for completion
+ * future.wait();
  *
  * pool.shutdown();
  * @endcode
@@ -200,54 +191,6 @@ public:
 	template <typename F, typename... Args>
 	auto submit(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>;
 
-	/**
-	 * @brief Submit a task with priority
-	 *
-	 * Higher priority tasks are executed before lower priority tasks.
-	 * Priority range: 0-255 (higher = more urgent)
-	 *
-	 * @tparam F Function type
-	 * @tparam Args Argument types
-	 * @param priority Priority level (0-255)
-	 * @param f Function to execute
-	 * @param args Arguments to pass to function
-	 * @return Future containing the result
-	 */
-	template <typename F, typename... Args>
-	auto submit_with_priority(int priority, F&& f, Args&&... args)
-		-> std::future<std::invoke_result_t<F, Args...>>;
-
-	// ═══════════════════════════════════════════════════════════════
-	// Cancellation Support
-	// ═══════════════════════════════════════════════════════════════
-
-	/**
-	 * @brief Create a cancellation token
-	 *
-	 * Token can be used to cancel associated operations.
-	 * Token is ref-counted and can be shared across multiple tasks.
-	 *
-	 * @return Shared pointer to cancellation token
-	 */
-	std::shared_ptr<cancellation_token> create_cancellation_token();
-
-	/**
-	 * @brief Submit a cancellable task
-	 *
-	 * Task will check cancellation token before and during execution.
-	 * If cancelled, std::future will throw operation_cancelled exception.
-	 *
-	 * @tparam F Function type
-	 * @tparam Args Argument types
-	 * @param token Cancellation token
-	 * @param f Function to execute
-	 * @param args Arguments to pass to function
-	 * @return Future containing the result
-	 */
-	template <typename F, typename... Args>
-	auto submit_cancellable(std::shared_ptr<cancellation_token> token, F&& f, Args&&... args)
-		-> std::future<std::invoke_result_t<F, Args...>>;
-
 	// ═══════════════════════════════════════════════════════════════
 	// Work Completion & Statistics
 	// ═══════════════════════════════════════════════════════════════
@@ -311,65 +254,6 @@ auto thread_adapter::submit(F&& f, Args&&... args) -> std::future<std::invoke_re
 	auto result = task->get_future();
 
 	execute([task = std::move(task)]() { (*task)(); });
-
-	return result;
-}
-
-template <typename F, typename... Args>
-auto thread_adapter::submit_with_priority(int priority, F&& f, Args&&... args)
-	-> std::future<std::invoke_result_t<F, Args...>>
-{
-	using return_type = std::invoke_result_t<F, Args...>;
-
-	auto task = std::make_shared<std::packaged_task<return_type()>>(
-		std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-
-	auto result = task->get_future();
-
-	// Priority is handled inside execute() implementation
-	execute([task = std::move(task)]() { (*task)(); });
-
-	return result;
-}
-
-template <typename F, typename... Args>
-auto thread_adapter::submit_cancellable(
-	std::shared_ptr<cancellation_token> token, F&& f, Args&&... args)
-	-> std::future<std::invoke_result_t<F, Args...>>
-{
-	using return_type = std::invoke_result_t<F, Args...>;
-
-	auto promise = std::make_shared<std::promise<return_type>>();
-	auto result = promise->get_future();
-
-	// Wrap task with cancellation check
-	execute([promise, token, func = std::bind(std::forward<F>(f), std::forward<Args>(args)...)]() {
-		try
-		{
-			// Check if cancelled before executing
-			if (token && token->is_cancelled())
-			{
-				promise->set_exception(
-					std::make_exception_ptr(std::runtime_error("Operation cancelled")));
-				return;
-			}
-
-			// Execute and set result
-			if constexpr (std::is_void_v<return_type>)
-			{
-				func();
-				promise->set_value();
-			}
-			else
-			{
-				promise->set_value(func());
-			}
-		}
-		catch (...)
-		{
-			promise->set_exception(std::current_exception());
-		}
-	});
 
 	return result;
 }

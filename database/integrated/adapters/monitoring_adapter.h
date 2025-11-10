@@ -97,12 +97,13 @@
 // Use common Result pattern from shared header
 #include "../core/common_result.h"
 
-// Forward declare backend interface
+// Include backend interface for complete types needed by Result<>
+#include "backends/monitoring_backend.h"
+
+// Forward declare backend class only
 namespace database::integrated::adapters::backends
 {
 	class monitoring_backend;
-	struct metrics_snapshot;
-	struct health_check_result;
 }
 
 namespace database
@@ -199,9 +200,9 @@ public:
 	monitoring_adapter(const monitoring_adapter&) = delete;
 	monitoring_adapter& operator=(const monitoring_adapter&) = delete;
 
-	// Movable
+	// Move constructor only (const reference member prevents move assignment)
 	monitoring_adapter(monitoring_adapter&&) noexcept;
-	monitoring_adapter& operator=(monitoring_adapter&&) noexcept;
+	monitoring_adapter& operator=(monitoring_adapter&&) = delete;
 
 	/**
 	 * @brief Initialize monitoring system

@@ -58,7 +58,6 @@ monitoring_adapter::~monitoring_adapter()
 }
 
 monitoring_adapter::monitoring_adapter(monitoring_adapter&&) noexcept = default;
-monitoring_adapter& monitoring_adapter::operator=(monitoring_adapter&&) noexcept = default;
 
 common::VoidResult monitoring_adapter::initialize()
 {

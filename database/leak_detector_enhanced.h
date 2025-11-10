@@ -6,6 +6,12 @@
 
 namespace database {
 
+/**
+ * @class connection_leak_detector
+ * @brief Enhanced connection leak detector with stack trace capture
+ *
+ * @note Sprint 3 (Task 3.2): Converted from singleton to dependency injection pattern
+ */
 class connection_leak_detector {
 public:
     struct connection_info {
@@ -14,6 +20,27 @@ public:
         std::thread::id thread_id;
     };
 
+    /**
+     * @brief Default constructor (now public for dependency injection)
+     * @since Sprint 3 (Task 3.2)
+     */
+    connection_leak_detector() = default;
+
+    /**
+     * @brief Singleton instance accessor (DEPRECATED)
+     * @deprecated Use dependency injection via database_context instead.
+     *
+     * Migration guide:
+     * @code
+     * // Old (deprecated):
+     * auto& detector = connection_leak_detector::instance();
+     *
+     * // New (recommended):
+     * auto context = std::make_shared<database_context>();
+     * auto detector = context->get_leak_detector();
+     * @endcode
+     */
+    [[deprecated("Use database_context::get_leak_detector() instead")]]
     static connection_leak_detector& instance() {
         static connection_leak_detector detector;
         return detector;

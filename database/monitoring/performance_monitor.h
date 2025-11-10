@@ -46,6 +46,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace database::monitoring
 {
+	// Forward declaration for query_timer
+	class performance_monitor;
+
 	/**
 	 * @struct query_metrics
 	 * @brief Metrics for individual query execution.
@@ -194,7 +197,25 @@ namespace database::monitoring
 	class query_timer
 	{
 	public:
+		/**
+		 * @brief Constructor with explicit performance_monitor (recommended)
+		 * @param query Query string
+		 * @param db_type Database type
+		 * @param monitor Performance monitor instance
+		 * @since Sprint 3 (Task 3.2)
+		 */
+		query_timer(const std::string& query, database_types db_type,
+		           std::shared_ptr<performance_monitor> monitor);
+
+		/**
+		 * @brief Constructor using singleton (DEPRECATED)
+		 * @param query Query string
+		 * @param db_type Database type
+		 * @deprecated Use constructor with explicit performance_monitor instead
+		 */
+		[[deprecated("Use query_timer(query, db_type, monitor) instead")]]
 		query_timer(const std::string& query, database_types db_type);
+
 		~query_timer();
 
 		void set_rows_affected(size_t rows) { metrics_.rows_affected = rows; }
@@ -203,6 +224,7 @@ namespace database::monitoring
 	private:
 		query_metrics metrics_;
 		std::chrono::steady_clock::time_point start_time_;
+		std::shared_ptr<performance_monitor> monitor_; // Sprint 3: Store monitor instance
 	};
 
 	/**
@@ -212,7 +234,31 @@ namespace database::monitoring
 	class performance_monitor
 	{
 	public:
+		/**
+		 * @brief Constructor - now public for dependency injection
+		 * @since Sprint 3 (Task 3.2)
+		 */
+		performance_monitor();
+
+		/**
+		 * @brief Singleton instance accessor (DEPRECATED)
+		 * @deprecated Use dependency injection via database_context instead.
+		 *
+		 * Migration guide:
+		 * @code
+		 * // Old (deprecated):
+		 * auto& monitor = performance_monitor::instance();
+		 *
+		 * // New (recommended):
+		 * auto context = std::make_shared<database_context>();
+		 * auto monitor = context->get_performance_monitor();
+		 * @endcode
+		 *
+		 * @since Sprint 2 (will be removed in future version)
+		 */
+		[[deprecated("Use database_context::get_performance_monitor() instead")]]
 		static performance_monitor& instance();
+
 		~performance_monitor();
 
 		// Configuration
@@ -249,8 +295,6 @@ namespace database::monitoring
 		std::string get_dashboard_html() const;
 
 	private:
-		performance_monitor();
-
 		// Internal methods
 		void cleanup_thread();
 		void check_thresholds();

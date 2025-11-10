@@ -272,8 +272,22 @@ namespace database::async
 	 * @class transaction_coordinator
 	 * @brief Distributed transaction coordination.
 	 *
-	 * Thread-safety: This is a thread-safe singleton using C++11 magic statics.
-	 * All public methods are thread-safe through transactions_mutex_ protection.
+	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * Access via database_context::get_transaction_coordinator() (Sprint 3, Task 3.1).
+	 *
+	 * @deprecated Use database_context::get_transaction_coordinator() instead of instance()
+	 *
+	 * Migration example:
+	 * @code
+	 * // Old (deprecated)
+	 * auto& txn_coord = transaction_coordinator::instance();
+	 *
+	 * // New (recommended)
+	 * auto context = std::make_shared<database_context>();
+	 * auto txn_coord = context->get_transaction_coordinator();
+	 * @endcode
+	 *
+	 * Thread-safety: All public methods are thread-safe through transactions_mutex_ protection.
 	 */
 	class transaction_coordinator
 	{
@@ -296,7 +310,16 @@ namespace database::async
 			std::chrono::system_clock::time_point last_activity;
 		};
 
-		// Thread-safe singleton using C++11 magic statics
+		/**
+		 * @brief Default constructor - used by database_context
+		 */
+		transaction_coordinator() = default;
+
+		/**
+		 * @deprecated Use database_context::get_transaction_coordinator() instead
+		 * This method will be removed in the next major version.
+		 */
+		[[deprecated("Use database_context::get_transaction_coordinator() instead. See migration guide in class documentation.")]]
 		static transaction_coordinator& instance();
 
 		// Transaction management
@@ -317,8 +340,6 @@ namespace database::async
 		std::vector<distributed_transaction> get_active_transactions() const;
 
 	private:
-		transaction_coordinator() = default;
-
 		async_result<bool> two_phase_commit(const std::string& transaction_id);
 		void cleanup_completed_transactions();
 

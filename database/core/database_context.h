@@ -78,6 +78,14 @@ namespace monitoring {
     class connection_leak_detector;
 }
 
+namespace orm {
+    class entity_manager;
+}
+
+namespace async {
+    class transaction_coordinator;
+}
+
 /**
  * @class database_context
  * @brief Dependency injection container for database components
@@ -173,6 +181,32 @@ public:
         return leak_detector_;
     }
 
+    /**
+     * @brief Get entity manager instance
+     * @return Shared pointer to entity manager
+     *
+     * @details Returns the ORM entity manager for entity metadata and query building.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.1)
+     */
+    inline std::shared_ptr<orm::entity_manager> get_entity_manager() const noexcept {
+        return entity_manager_;
+    }
+
+    /**
+     * @brief Get transaction coordinator instance
+     * @return Shared pointer to transaction coordinator
+     *
+     * @details Returns the transaction coordinator for distributed transaction management.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.1)
+     */
+    inline std::shared_ptr<async::transaction_coordinator> get_transaction_coordinator() const noexcept {
+        return transaction_coordinator_;
+    }
+
 private:
     /// Connection pool manager instance (Sprint 2, Task 2.3)
     std::shared_ptr<connection_pool_manager> pool_manager_;
@@ -183,9 +217,18 @@ private:
     /// Connection leak detector instance (Sprint 3, Task 3.2)
     std::shared_ptr<monitoring::connection_leak_detector> leak_detector_;
 
-    // Future Sprint 3+: Add other component members here
-    // std::shared_ptr<orm::entity_manager> entity_mgr_;
+    /// Entity manager instance (Sprint 3, Task 3.1)
+    std::shared_ptr<orm::entity_manager> entity_manager_;
+
+    /// Transaction coordinator instance (Sprint 3, Task 3.1)
+    std::shared_ptr<async::transaction_coordinator> transaction_coordinator_;
+
+    // Future Sprint 3+: Add security component members here
     // std::shared_ptr<security::credential_manager> credential_mgr_;
+    // std::shared_ptr<security::access_control> access_ctrl_;
+    // std::shared_ptr<security::audit_logger> audit_log_;
+    // std::shared_ptr<security::security_monitor> sec_monitor_;
+    // std::shared_ptr<security::encryption_manager> encryption_mgr_;
 
     /// Mutex for thread-safe access
     mutable std::mutex mutex_;

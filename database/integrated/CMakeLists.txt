@@ -22,6 +22,11 @@ set(INTEGRATED_DB_HEADERS
     adapters/logger_adapter.h
     adapters/monitoring_adapter.h
     adapters/thread_adapter.h
+    # Logger Backends
+    adapters/backends/logger_backend.h
+    adapters/backends/system_logger_backend.h
+    adapters/backends/fallback_logger_backend.h
+    adapters/backends/null_logger_backend.h
     # Unified System
     unified_database_system.h
 )
@@ -33,9 +38,18 @@ set(INTEGRATED_DB_SOURCES
     adapters/logger_adapter.cpp
     adapters/monitoring_adapter.cpp
     adapters/thread_adapter.cpp
+    # Logger Backends (always include fallback)
+    adapters/backends/fallback_logger_backend.cpp
     # Unified System
     unified_database_system.cpp
 )
+
+# Conditionally add system_logger_backend if logger_system is available
+if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
+    list(APPEND INTEGRATED_DB_SOURCES
+        adapters/backends/system_logger_backend.cpp
+    )
+endif()
 
 ##################################################
 # Create Library Target
@@ -133,15 +147,10 @@ if(USE_THREAD_SYSTEM)
 endif()
 
 # Logger system integration
+# NOTE: No longer need USE_LOGGER_SYSTEM compile definition with backend pattern
+# Backend selection happens at runtime using __has_include check
 if(USE_LOGGER_SYSTEM)
-    if(TARGET ${INTEGRATED_DB_TARGET})
-        if(INTEGRATED_DB_SOURCES)
-            target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_LOGGER_SYSTEM)
-        else()
-            target_compile_definitions(${INTEGRATED_DB_TARGET} INTERFACE USE_LOGGER_SYSTEM)
-        endif()
-    endif()
-    message(STATUS "Integrated DB: logger_system integration enabled")
+    message(STATUS "Integrated DB: logger_system backend available (runtime selection)")
 endif()
 
 # Monitoring system integration

@@ -4,34 +4,20 @@
 // All rights reserved.
 
 #include "logger_adapter.h"
+#include "backends/logger_backend.h"
+#include "backends/null_logger_backend.h"
+#include "backends/fallback_logger_backend.h"
+
+// Try to include system backend, fall back if unavailable
+#ifdef __has_include
+	#if __has_include("backends/system_logger_backend.h")
+		#include "backends/system_logger_backend.h"
+		#define SYSTEM_LOGGER_AVAILABLE 1
+	#endif
+#endif
 
 #include <algorithm>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
 #include <sstream>
-#include <stdexcept>
-
-// Helper namespace for internal use
-namespace
-{
-	inline common::VoidResult make_error(const std::string& msg, int code = -1)
-	{
-		return common::VoidResult(common::error_info{ code, msg, "" });
-	}
-}
-
-// Conditional includes based on logger_system availability
-#if defined(USE_LOGGER_SYSTEM)
-	#include <kcenon/logger/core/logger.h>
-	#include <kcenon/logger/writers/console_writer.h>
-	#include <kcenon/logger/writers/file_writer.h>
-#else
-	#include <filesystem>
-	#include <fstream>
-	#include <iostream>
-	#include <mutex>
-#endif
 
 namespace database
 {
@@ -83,366 +69,86 @@ std::string sanitize_query(const std::string& query)
 	return sanitized;
 }
 
-/**
- * @brief Format timestamp for logging
- */
-std::string format_timestamp()
-{
-	auto now = std::chrono::system_clock::now();
-	auto time_t_now = std::chrono::system_clock::to_time_t(now);
-	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-
-	std::stringstream ss;
-	ss << std::put_time(std::localtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
-	ss << '.' << std::setfill('0') << std::setw(3) << ms.count();
-	return ss.str();
-}
-
-/**
- * @brief Convert db_log_level to string
- */
-const char* log_level_to_string(db_log_level level)
-{
-	switch (level)
-	{
-		case db_log_level::trace:
-			return "TRACE";
-		case db_log_level::debug:
-			return "DEBUG";
-		case db_log_level::info:
-			return "INFO ";
-		case db_log_level::warning:
-			return "WARN ";
-		case db_log_level::error:
-			return "ERROR";
-		case db_log_level::critical:
-			return "CRIT ";
-		case db_log_level::fatal:
-			return "FATAL";
-		default:
-			return "UNKN ";
-	}
-}
-
-#if defined(USE_LOGGER_SYSTEM)
-/**
- * @brief Convert db_log_level to logger_system's log_level
- */
-kcenon::logger::log_level convert_log_level(db_log_level level)
-{
-	switch (level)
-	{
-		case db_log_level::trace:
-			return kcenon::logger::log_level::trace;
-		case db_log_level::debug:
-			return kcenon::logger::log_level::debug;
-		case db_log_level::info:
-			return kcenon::logger::log_level::info;
-		case db_log_level::warning:
-			return kcenon::logger::log_level::warning;
-		case db_log_level::error:
-			return kcenon::logger::log_level::error;
-		case db_log_level::critical:
-			return kcenon::logger::log_level::critical;
-		case db_log_level::fatal:
-			// logger_system doesn't have fatal, map to critical
-			return kcenon::logger::log_level::critical;
-		default:
-			return kcenon::logger::log_level::info;
-	}
-}
-#endif
-
 } // anonymous namespace
 
 // ═══════════════════════════════════════════════════════════════
-// PIMPL Implementation - WITH logger_system
+// Backend Factory
 // ═══════════════════════════════════════════════════════════════
 
-#if defined(USE_LOGGER_SYSTEM)
-
-class logger_adapter::impl
+std::unique_ptr<backends::logger_backend> logger_adapter::create_backend(
+	const db_logger_config& config,
+	logger_backend_type backend_type)
 {
-public:
-	explicit impl(const db_logger_config& config)
-		: config_(config), initialized_(false), logger_(nullptr)
+	switch (backend_type)
 	{
-	}
-
-	~impl()
-	{
-		if (initialized_)
+		case logger_backend_type::auto_select:
 		{
-			shutdown();
-		}
-	}
-
-	common::VoidResult initialize()
-	{
-		if (initialized_)
-		{
-			return common::ok();
-		}
-
-		try
-		{
-			// Create logger with async support and buffer size
-			logger_ = std::make_unique<kcenon::logger::logger>(
-				true,  // async mode for better performance
-				8192   // buffer size
-			);
-
-			// Add console writer
-			auto console = std::make_unique<kcenon::logger::console_writer>();
-			auto add_console_result = logger_->add_writer(std::move(console));
-			if (!add_console_result)
+#ifdef SYSTEM_LOGGER_AVAILABLE
+			// Try system backend first
+			try
 			{
-				return make_error("Failed to add console writer");
-			}
-
-			// Add file writer if enabled
-			if (config_.enable_file_logging)
-			{
-				std::string log_file = config_.log_directory + "/database.log";
-				auto file_writer = std::make_unique<kcenon::logger::file_writer>(log_file);
-				auto add_file_result = logger_->add_writer(std::move(file_writer));
-				if (!add_file_result)
+				auto backend = std::make_unique<backends::system_logger_backend>(config);
+				auto init_result = backend->initialize();
+				if (init_result.is_ok())
 				{
-					return make_error("Failed to add file writer");
+					return backend;
 				}
+				// If initialization failed, fall back to fallback backend
 			}
-
-			// Set minimum log level
-			logger_->set_min_level(convert_log_level(config_.min_log_level));
-
-			// Start the logger
-			auto start_result = logger_->start();
-			if (!start_result)
+			catch (...)
 			{
-				return make_error("Failed to start logger");
+				// If system backend construction/init failed, fall back
 			}
-
-			initialized_ = true;
-			return common::ok();
-		}
-		catch (const std::exception& e)
-		{
-			return make_error(std::string("Logger initialization failed: ") + e.what());
-		}
-	}
-
-	common::VoidResult shutdown()
-	{
-		if (!initialized_)
-		{
-			return common::ok();
-		}
-
-		try
-		{
-			if (logger_)
-			{
-				flush();
-				auto stop_result = logger_->stop();
-				if (!stop_result)
-				{
-					return make_error("Failed to stop logger");
-				}
-				logger_.reset();
-			}
-			initialized_ = false;
-			return common::ok();
-		}
-		catch (const std::exception& e)
-		{
-			return make_error(std::string("Logger shutdown failed: ") + e.what());
-		}
-	}
-
-	bool is_initialized() const
-	{
-		return initialized_;
-	}
-
-	void log(db_log_level level, const std::string& message)
-	{
-		if (!initialized_ || !logger_)
-		{
-			return;
-		}
-
-		// Check if this level should be logged
-		if (level < config_.min_log_level)
-		{
-			return;
-		}
-
-		logger_->log(convert_log_level(level), message);
-	}
-
-	void flush()
-	{
-		if (logger_)
-		{
-			logger_->flush();
-		}
-	}
-
-private:
-	const db_logger_config& config_;
-	bool initialized_;
-	std::unique_ptr<kcenon::logger::logger> logger_;
-};
-
-#else
-
-// ═══════════════════════════════════════════════════════════════
-// PIMPL Implementation - Fallback (std::cout + std::ofstream)
-// ═══════════════════════════════════════════════════════════════
-
-class logger_adapter::impl
-{
-public:
-	explicit impl(const db_logger_config& config)
-		: config_(config), initialized_(false)
-	{
-	}
-
-	~impl()
-	{
-		if (initialized_)
-		{
-			shutdown();
-		}
-	}
-
-	common::VoidResult initialize()
-	{
-		if (initialized_)
-		{
-			return common::ok();
-		}
-
-		try
-		{
-			// Open log file if file logging enabled
-			if (config_.enable_file_logging)
-			{
-				// Create directory if it doesn't exist
-				std::filesystem::path log_dir(config_.log_directory);
-				if (!std::filesystem::exists(log_dir))
-				{
-					std::filesystem::create_directories(log_dir);
-				}
-
-				std::string log_path = config_.log_directory + "/database.log";
-				log_file_.open(log_path, std::ios::app);
-				if (!log_file_.is_open())
-				{
-					return make_error("Failed to open log file: " + log_path);
-				}
-			}
-
-			initialized_ = true;
-			return common::ok();
-		}
-		catch (const std::exception& e)
-		{
-			return make_error(std::string("Logger initialization failed: ") + e.what());
-		}
-	}
-
-	common::VoidResult shutdown()
-	{
-		if (!initialized_)
-		{
-			return common::ok();
-		}
-
-		try
-		{
-			std::lock_guard<std::mutex> lock(mutex_);
-			if (log_file_.is_open())
-			{
-				log_file_.flush();
-				log_file_.close();
-			}
-			initialized_ = false;
-			return common::ok();
-		}
-		catch (const std::exception& e)
-		{
-			return make_error(std::string("Logger shutdown failed: ") + e.what());
-		}
-	}
-
-	bool is_initialized() const
-	{
-		return initialized_;
-	}
-
-	void log(db_log_level level, const std::string& message)
-	{
-		if (!initialized_)
-		{
-			return;
-		}
-
-		// Check if this level should be logged
-		if (level < config_.min_log_level)
-		{
-			return;
-		}
-
-		std::lock_guard<std::mutex> lock(mutex_);
-
-		// Format: [2025-01-03 14:30:45.123] [INFO ] message
-		std::string log_line
-			= "[" + format_timestamp() + "] [" + log_level_to_string(level) + "] " + message;
-
-		// Write to console
-		std::cout << log_line << std::endl;
-
-		// Write to file if enabled
-		if (config_.enable_file_logging && log_file_.is_open())
-		{
-			log_file_ << log_line << std::endl;
-		}
-	}
-
-	void flush()
-	{
-		std::lock_guard<std::mutex> lock(mutex_);
-		std::cout.flush();
-		if (log_file_.is_open())
-		{
-			log_file_.flush();
-		}
-	}
-
-private:
-	const db_logger_config& config_;
-	bool initialized_;
-	std::mutex mutex_;
-	std::ofstream log_file_;
-};
-
 #endif
+			// Fall back to fallback_logger_backend
+			return std::make_unique<backends::fallback_logger_backend>(config);
+		}
+
+		case logger_backend_type::system:
+		{
+#ifdef SYSTEM_LOGGER_AVAILABLE
+			return std::make_unique<backends::system_logger_backend>(config);
+#else
+			throw std::runtime_error(
+				"system_logger_backend not available (logger_system not found)");
+#endif
+		}
+
+		case logger_backend_type::fallback:
+			return std::make_unique<backends::fallback_logger_backend>(config);
+
+		case logger_backend_type::null:
+			return std::make_unique<backends::null_logger_backend>(config);
+
+		default:
+			return std::make_unique<backends::fallback_logger_backend>(config);
+	}
+}
 
 // ═══════════════════════════════════════════════════════════════
 // Public Interface Implementation
 // ═══════════════════════════════════════════════════════════════
 
-logger_adapter::logger_adapter(const db_logger_config& config)
-	: pimpl_(std::make_unique<impl>(config))
+logger_adapter::logger_adapter(
+	const db_logger_config& config,
+	logger_backend_type backend_type)
+	: config_(config)
+	, backend_(create_backend(config, backend_type))
 {
+	// Backend is created and potentially initialized (if auto_select)
+	// If auto_select didn't initialize, caller must call initialize()
+	if (backend_type != logger_backend_type::auto_select)
+	{
+		// For explicit backend selection, don't auto-initialize
+		// Caller must call initialize() explicitly
+	}
 }
 
 logger_adapter::~logger_adapter()
 {
-	if (pimpl_ && pimpl_->is_initialized())
+	if (backend_ && backend_->is_initialized())
 	{
-		pimpl_->shutdown();
+		backend_->shutdown();
 	}
 }
 
@@ -451,17 +157,28 @@ logger_adapter& logger_adapter::operator=(logger_adapter&&) noexcept = default;
 
 common::VoidResult logger_adapter::initialize()
 {
-	return pimpl_->initialize();
+	if (!backend_)
+	{
+		return common::VoidResult(
+			common::error_info{ -1, "Backend not created", "" });
+	}
+
+	return backend_->initialize();
 }
 
 common::VoidResult logger_adapter::shutdown()
 {
-	return pimpl_->shutdown();
+	if (!backend_)
+	{
+		return common::ok();
+	}
+
+	return backend_->shutdown();
 }
 
 bool logger_adapter::is_initialized() const
 {
-	return pimpl_ && pimpl_->is_initialized();
+	return backend_ && backend_->is_initialized();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -471,7 +188,7 @@ bool logger_adapter::is_initialized() const
 void logger_adapter::log_query(
 	db_log_level level, const std::string& query, std::chrono::microseconds duration)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -483,23 +200,20 @@ void logger_adapter::log_query(
 	std::stringstream ss;
 	ss << "Query executed in " << duration.count() << "μs: " << safe_query;
 
-	pimpl_->log(level, ss.str());
+	backend_->log(level, ss.str());
 
 	// Check for slow query
 	auto duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
-	if (duration_ms > std::chrono::milliseconds(1000)) // Basic threshold
+	if (config_.log_slow_queries && duration_ms > config_.slow_query_threshold)
 	{
-		// Check config threshold
-		db_logger_config dummy_config;
-		// Note: We can't access config_ here, so we use a heuristic
-		// In practice, connection_pool_v2 should call log_slow_query explicitly
+		log_slow_query(query, duration, config_.slow_query_threshold);
 	}
 }
 
 void logger_adapter::log_slow_query(const std::string& query, std::chrono::microseconds duration,
 	std::chrono::milliseconds threshold)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -511,12 +225,12 @@ void logger_adapter::log_slow_query(const std::string& query, std::chrono::micro
 	   << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()
 	   << "ms): " << safe_query;
 
-	pimpl_->log(db_log_level::warning, ss.str());
+	backend_->log(db_log_level::warning, ss.str());
 }
 
 void logger_adapter::log_connection_event(const std::string& event, const std::string& details)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -524,13 +238,13 @@ void logger_adapter::log_connection_event(const std::string& event, const std::s
 	std::stringstream ss;
 	ss << "Connection event [" << event << "]: " << details;
 
-	pimpl_->log(db_log_level::debug, ss.str());
+	backend_->log(db_log_level::debug, ss.str());
 }
 
 void logger_adapter::log_transaction(
 	const std::string& operation, bool success, const std::string& details)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -542,12 +256,12 @@ void logger_adapter::log_transaction(
 		ss << ": " << details;
 	}
 
-	pimpl_->log(success ? db_log_level::info : db_log_level::error, ss.str());
+	backend_->log(success ? db_log_level::info : db_log_level::error, ss.str());
 }
 
 void logger_adapter::log_pool_event(const std::string& event, std::size_t active, std::size_t idle)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -556,13 +270,13 @@ void logger_adapter::log_pool_event(const std::string& event, std::size_t active
 	ss << "Pool event [" << event << "]: active=" << active << ", idle=" << idle
 	   << ", total=" << (active + idle);
 
-	pimpl_->log(db_log_level::info, ss.str());
+	backend_->log(db_log_level::info, ss.str());
 }
 
 void logger_adapter::log_error(
 	const std::string& operation, const std::string& error_msg, const std::string& sql_state)
 {
-	if (!pimpl_)
+	if (!backend_)
 	{
 		return;
 	}
@@ -574,22 +288,22 @@ void logger_adapter::log_error(
 		ss << " (SQL state: " << sql_state << ")";
 	}
 
-	pimpl_->log(db_log_level::error, ss.str());
+	backend_->log(db_log_level::error, ss.str());
 }
 
 void logger_adapter::log(db_log_level level, const std::string& message)
 {
-	if (pimpl_)
+	if (backend_)
 	{
-		pimpl_->log(level, message);
+		backend_->log(level, message);
 	}
 }
 
 void logger_adapter::flush()
 {
-	if (pimpl_)
+	if (backend_)
 	{
-		pimpl_->flush();
+		backend_->flush();
 	}
 }
 

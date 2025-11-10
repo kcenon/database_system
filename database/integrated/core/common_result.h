@@ -48,6 +48,9 @@
 			std::string context;
 		};
 
+		// Alias for backward compatibility
+		using Error = error_info;
+
 		template<typename T>
 		class Result {
 		public:
@@ -68,5 +71,14 @@
 		};
 
 		using VoidResult = Result<std::monostate>;
+
+		// Helper functions
+		inline VoidResult ok() {
+			return VoidResult(std::monostate{});
+		}
+
+		inline VoidResult error(const std::string& msg, int code = -1) {
+			return VoidResult(error_info{code, msg, ""});
+		}
 	}
 #endif

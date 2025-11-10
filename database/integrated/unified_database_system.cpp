@@ -588,6 +588,12 @@ public:
         return stats;
     }
 
+    // Query builder
+
+    sql_query_builder create_query_builder() const {
+        return sql_query_builder{};
+    }
+
 private:
     void update_metrics(std::chrono::microseconds latency, bool success) {
         ++metrics_.total_queries;
@@ -785,6 +791,12 @@ backend_type unified_database_system::get_backend_type() const {
 
 unified_database_system::pool_stats unified_database_system::get_pool_stats() const {
     return pimpl_->get_pool_stats();
+}
+
+// Query builder
+
+sql_query_builder unified_database_system::create_query_builder() const {
+    return pimpl_->create_query_builder();
 }
 
 // ============================================================================

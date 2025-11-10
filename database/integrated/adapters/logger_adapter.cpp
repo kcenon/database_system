@@ -153,7 +153,6 @@ logger_adapter::~logger_adapter()
 }
 
 logger_adapter::logger_adapter(logger_adapter&&) noexcept = default;
-logger_adapter& logger_adapter::operator=(logger_adapter&&) noexcept = default;
 
 common::VoidResult logger_adapter::initialize()
 {

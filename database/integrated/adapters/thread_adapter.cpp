@@ -58,7 +58,6 @@ thread_adapter::~thread_adapter()
 }
 
 thread_adapter::thread_adapter(thread_adapter&&) noexcept = default;
-thread_adapter& thread_adapter::operator=(thread_adapter&&) noexcept = default;
 
 common::VoidResult thread_adapter::initialize()
 {

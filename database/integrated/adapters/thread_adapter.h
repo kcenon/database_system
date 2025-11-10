@@ -142,9 +142,9 @@ public:
 	thread_adapter(const thread_adapter&) = delete;
 	thread_adapter& operator=(const thread_adapter&) = delete;
 
-	// Movable
+	// Move constructor only (const reference member prevents move assignment)
 	thread_adapter(thread_adapter&&) noexcept;
-	thread_adapter& operator=(thread_adapter&&) noexcept;
+	thread_adapter& operator=(thread_adapter&&) = delete;
 
 	/**
 	 * @brief Initialize thread pool

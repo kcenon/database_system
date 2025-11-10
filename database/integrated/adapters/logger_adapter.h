@@ -155,9 +155,9 @@ public:
 	logger_adapter(const logger_adapter&) = delete;
 	logger_adapter& operator=(const logger_adapter&) = delete;
 
-	// Movable
+	// Move constructor only (const reference member prevents move assignment)
 	logger_adapter(logger_adapter&&) noexcept;
-	logger_adapter& operator=(logger_adapter&&) noexcept;
+	logger_adapter& operator=(logger_adapter&&) = delete;
 
 	/**
 	 * @brief Initialize the logger

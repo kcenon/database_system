@@ -24,6 +24,7 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.h
@@ -37,6 +38,7 @@ set(HEADER_FILES
 
 # Collect all source files
 set(SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.cpp

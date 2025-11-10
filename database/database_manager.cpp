@@ -40,8 +40,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace database
 {
-	database_manager::database_manager() : connected_(false), database_(nullptr)
+	database_manager::database_manager()
+		: connected_(false)
+		, database_(nullptr)
+		, context_(std::make_shared<database_context>())
+		, pool_manager_(context_->get_pool_manager())
 	{
+		// Default constructor creates a default context for backward compatibility
+		// Cache pool_manager for performance (avoids repeated context lookups)
+	}
+
+	database_manager::database_manager(std::shared_ptr<database_context> context)
+		: connected_(false)
+		, database_(nullptr)
+		, context_(std::move(context))
+	{
+		// DI constructor - recommended for new code
+		if (!context_)
+		{
+			// Fallback to default context if nullptr passed
+			context_ = std::make_shared<database_context>();
+		}
+		// Cache pool_manager for performance
+		pool_manager_ = context_->get_pool_manager();
 	}
 
 	database_manager::~database_manager() {}
@@ -202,20 +223,7 @@ namespace database
 	}
 #endif
 
-	bool database_manager::create_connection_pool(database_types db_type, const connection_pool_config& config)
-	{
-		return connection_pool_manager::instance().create_pool(db_type, config);
-	}
-
-	std::shared_ptr<connection_pool_base> database_manager::get_connection_pool(database_types db_type)
-	{
-		return connection_pool_manager::instance().get_pool(db_type);
-	}
-
-	std::map<database_types, connection_stats> database_manager::get_pool_stats() const
-	{
-		return connection_pool_manager::instance().get_all_stats();
-	}
+	// Connection pool methods moved to header as inline functions for performance
 
 	query_builder database_manager::create_query_builder()
 	{

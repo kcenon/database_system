@@ -39,6 +39,11 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.h
     # Sprint 5.2 Headers (PostgreSQL Backend Plugin)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgresql_backend.h
+    # Sprint 5.3 Headers (Additional Backend Plugins)
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql_backend.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
 )
 
 # Collect all source files
@@ -60,6 +65,11 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.cpp
     # Sprint 5.2 Sources (PostgreSQL Backend Plugin)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgresql_backend.cpp
+    # Sprint 5.3 Sources (Additional Backend Plugins)
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql_backend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
 )
 
 # Phase 2: connection_pool_v2 (added conditionally with thread_system)

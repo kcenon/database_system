@@ -1287,7 +1287,7 @@ if (!commit_result) {
 - 📝 **엔터프라이즈 기능**: C++20 concept을 갖춘 ORM framework, 스키마 마이그레이션, Prometheus 통합, 엔터프라이즈 보안 (TLS/SSL, RBAC, 감사 로깅)
 - 📝 **고급 작업**: C++20 coroutine을 통한 비동기 작업, 분산 트랜잭션, 실시간 데이터 스트리밍, 쿼리 최적화
 
-상세한 개선 계획 및 추적은 프로젝트의 [NEED_TO_FIX.md](/Users/dongcheolshin/Sources/NEED_TO_FIX.md)를 참조하세요.
+상세한 개선 계획 및 추적은 프로젝트의 [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md)를 참조하세요.
 
 ### 아키텍처 개선 단계
 

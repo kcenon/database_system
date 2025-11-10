@@ -35,13 +35,44 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <mutex>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-#include <kcenon/common/patterns/result.h>
-#endif
+// Use unified Result<T> implementation
+#include "core/result.h"
 
 #include "database_base.h"
 #include "connection_pool.h"
 #include "query_builder.h"
+
+// Provide common:: namespace for compatibility (only when BUILD_WITH_COMMON_SYSTEM is enabled)
+#ifdef BUILD_WITH_COMMON_SYSTEM
+namespace common {
+	using kcenon::common::VoidResult;
+	using kcenon::common::error_info;
+
+	// Helper functions
+	inline VoidResult ok() {
+		return VoidResult(std::monostate{});
+	}
+
+	inline VoidResult error(error_info err) {
+		return VoidResult(std::move(err));
+	}
+}
+#else
+// When BUILD_WITH_COMMON_SYSTEM is not defined, use database:: namespace types directly
+namespace common {
+	using database::VoidResult;
+	using database::error_info;
+
+	// Helper functions
+	inline VoidResult ok() {
+		return VoidResult(std::monostate{});
+	}
+
+	inline VoidResult error(error_info err) {
+		return VoidResult(std::move(err));
+	}
+}
+#endif
 
 namespace database
 {

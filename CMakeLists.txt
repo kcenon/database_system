@@ -61,42 +61,19 @@ elseif(APPLE)
     add_definitions(-DAPPLE_PLATFORM)
 endif()
 
+# Include CMake utilities
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(FindSystemDependency)
+
 # Find required packages
 find_package(Threads REQUIRED)
 
 # thread_system integration (optional)
 if(USE_THREAD_SYSTEM)
     message(STATUS "Searching for thread_system...")
+    find_system_dependency(thread_system)
 
-    # Try to find thread_system with priority order:
-    # 1. macOS: /Users/${USER}/Sources/thread_system
-    # 2. Linux: /home/${USER}/Sources/thread_system
-    # 3. CONFIG mode (installed or vcpkg)
-    set(_DATABASE_THREAD_PATHS
-        "/Users/$ENV{USER}/Sources/thread_system"
-        "/home/$ENV{USER}/Sources/thread_system"
-    )
-
-    set(_FOUND_THREAD_SYSTEM FALSE)
-    foreach(_path ${_DATABASE_THREAD_PATHS})
-        if(EXISTS "${_path}/CMakeLists.txt")
-            message(STATUS "Found thread_system source at: ${_path}")
-            set(thread_system_DIR "${_path}/build" CACHE PATH "thread_system build directory")
-            set(_FOUND_THREAD_SYSTEM TRUE)
-            break()
-        endif()
-    endforeach()
-
-    # Try CONFIG mode if not found in source paths
-    if(NOT _FOUND_THREAD_SYSTEM)
-        find_package(thread_system CONFIG QUIET)
-        if(thread_system_FOUND)
-            set(_FOUND_THREAD_SYSTEM TRUE)
-            message(STATUS "Found thread_system via CONFIG mode")
-        endif()
-    endif()
-
-    if(_FOUND_THREAD_SYSTEM)
+    if(thread_system_FOUND)
         message(STATUS "thread_system integration enabled")
     else()
         message(WARNING "thread_system not found - integration disabled. Install thread_system or set USE_THREAD_SYSTEM=OFF to suppress this warning.")
@@ -107,32 +84,9 @@ endif()
 # logger_system integration (optional)
 if(USE_LOGGER_SYSTEM)
     message(STATUS "Searching for logger_system...")
+    find_system_dependency(logger_system)
 
-    set(_DATABASE_LOGGER_PATHS
-        "/Users/$ENV{USER}/Sources/logger_system"
-        "/home/$ENV{USER}/Sources/logger_system"
-    )
-
-    set(_FOUND_LOGGER_SYSTEM FALSE)
-    foreach(_path ${_DATABASE_LOGGER_PATHS})
-        if(EXISTS "${_path}/CMakeLists.txt")
-            message(STATUS "Found logger_system source at: ${_path}")
-            set(logger_system_DIR "${_path}/build" CACHE PATH "logger_system build directory")
-            set(_FOUND_LOGGER_SYSTEM TRUE)
-            break()
-        endif()
-    endforeach()
-
-    # Try CONFIG mode if not found in source paths
-    if(NOT _FOUND_LOGGER_SYSTEM)
-        find_package(logger_system CONFIG QUIET)
-        if(logger_system_FOUND)
-            set(_FOUND_LOGGER_SYSTEM TRUE)
-            message(STATUS "Found logger_system via CONFIG mode")
-        endif()
-    endif()
-
-    if(_FOUND_LOGGER_SYSTEM)
+    if(logger_system_FOUND)
         message(STATUS "logger_system integration enabled")
     else()
         message(WARNING "logger_system not found - integration disabled. Install logger_system or set USE_LOGGER_SYSTEM=OFF to suppress this warning.")
@@ -143,32 +97,9 @@ endif()
 # monitoring_system integration (optional)
 if(USE_MONITORING_SYSTEM)
     message(STATUS "Searching for monitoring_system...")
+    find_system_dependency(monitoring_system)
 
-    set(_DATABASE_MONITORING_PATHS
-        "/Users/$ENV{USER}/Sources/monitoring_system"
-        "/home/$ENV{USER}/Sources/monitoring_system"
-    )
-
-    set(_FOUND_MONITORING_SYSTEM FALSE)
-    foreach(_path ${_DATABASE_MONITORING_PATHS})
-        if(EXISTS "${_path}/CMakeLists.txt")
-            message(STATUS "Found monitoring_system source at: ${_path}")
-            set(monitoring_system_DIR "${_path}/build" CACHE PATH "monitoring_system build directory")
-            set(_FOUND_MONITORING_SYSTEM TRUE)
-            break()
-        endif()
-    endforeach()
-
-    # Try CONFIG mode if not found in source paths
-    if(NOT _FOUND_MONITORING_SYSTEM)
-        find_package(monitoring_system CONFIG QUIET)
-        if(monitoring_system_FOUND)
-            set(_FOUND_MONITORING_SYSTEM TRUE)
-            message(STATUS "Found monitoring_system via CONFIG mode")
-        endif()
-    endif()
-
-    if(_FOUND_MONITORING_SYSTEM)
+    if(monitoring_system_FOUND)
         message(STATUS "monitoring_system integration enabled")
     else()
         message(WARNING "monitoring_system not found - integration disabled. Install monitoring_system or set USE_MONITORING_SYSTEM=OFF to suppress this warning.")

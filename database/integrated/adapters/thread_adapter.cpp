@@ -80,11 +80,7 @@ namespace
 
 inline common::VoidResult make_error(const std::string& msg, int code = -1)
 {
-#if defined(USE_COMMON_SYSTEM)
-	return common::VoidResult(common::error_info{ code, msg });
-#else
-	return common::VoidResult(common::Error{ msg, code });
-#endif
+	return common::VoidResult(common::error_info{ code, msg, "" });
 }
 
 } // anonymous namespace

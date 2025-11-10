@@ -8,12 +8,10 @@
 #include "backends/null_logger_backend.h"
 #include "backends/fallback_logger_backend.h"
 
-// Try to include system backend, fall back if unavailable
-#ifdef __has_include
-	#if __has_include("backends/system_logger_backend.h")
-		#include "backends/system_logger_backend.h"
-		#define SYSTEM_LOGGER_AVAILABLE 1
-	#endif
+// Include system backend only if built
+// HAVE_SYSTEM_LOGGER_BACKEND is defined by CMake when system_logger_backend.cpp is compiled
+#ifdef HAVE_SYSTEM_LOGGER_BACKEND
+	#include "backends/system_logger_backend.h"
 #endif
 
 #include <algorithm>
@@ -83,7 +81,7 @@ std::unique_ptr<backends::logger_backend> logger_adapter::create_backend(
 	{
 		case logger_backend_type::auto_select:
 		{
-#ifdef SYSTEM_LOGGER_AVAILABLE
+#ifdef HAVE_SYSTEM_LOGGER_BACKEND
 			// Try system backend first
 			try
 			{
@@ -106,7 +104,7 @@ std::unique_ptr<backends::logger_backend> logger_adapter::create_backend(
 
 		case logger_backend_type::system:
 		{
-#ifdef SYSTEM_LOGGER_AVAILABLE
+#ifdef HAVE_SYSTEM_LOGGER_BACKEND
 			return std::make_unique<backends::system_logger_backend>(config);
 #else
 			throw std::runtime_error(

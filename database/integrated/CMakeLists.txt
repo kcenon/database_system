@@ -61,6 +61,8 @@ if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
     list(APPEND INTEGRATED_DB_SOURCES
         adapters/backends/system_logger_backend.cpp
     )
+    # Define compile flag so logger_adapter can use it
+    set(HAVE_SYSTEM_LOGGER_BACKEND ON)
 endif()
 
 ##################################################
@@ -154,9 +156,13 @@ if(USE_THREAD_SYSTEM)
 endif()
 
 # Logger system integration
-# NOTE: No longer need USE_LOGGER_SYSTEM compile definition with backend pattern
-# Backend selection happens at runtime using __has_include check
-if(USE_LOGGER_SYSTEM)
+# Add compile definition when system_logger_backend is built
+if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
+    if(INTEGRATED_DB_SOURCES)
+        target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC HAVE_SYSTEM_LOGGER_BACKEND)
+    else()
+        target_compile_definitions(${INTEGRATED_DB_TARGET} INTERFACE HAVE_SYSTEM_LOGGER_BACKEND)
+    endif()
     message(STATUS "Integrated DB: logger_system backend available (runtime selection)")
 endif()
 

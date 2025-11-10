@@ -111,11 +111,13 @@
 // Use unified Result<T> implementation
 #include "../core/result.h"
 
+// Include query builder
+#include "../query_builder.h"
+
 namespace database::integrated {
 
 // Forward declarations
 class database_coordinator;
-class query_builder;
 class transaction;
 
 /**
@@ -528,15 +530,16 @@ public:
      * @return Query builder instance
      *
      * @example
-     * auto query = db.query_builder()
-     *     .select("users")
-     *     .where("age > ?", 18)
+     * auto builder = db.create_query_builder();
+     * builder.select("name, email")
+     *     .from("users")
+     *     .where("age", ">", 18)
      *     .order_by("name")
-     *     .limit(10)
-     *     .build();
-     * auto users = db.execute(query);
+     *     .limit(10);
+     * auto query_str = builder.build();
+     * auto users = db.execute(query_str);
      */
-    // query_builder create_query_builder();  // TODO: Implement in Phase 6
+    sql_query_builder create_query_builder() const;
 
     // Monitoring and health
 

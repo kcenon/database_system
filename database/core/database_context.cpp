@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "database/leak_detector_enhanced.h"
 #include "database/orm/entity.h"
 #include "database/async/async_operations.h"
+#include "database/security/secure_connection.h"
 
 namespace database
 {
@@ -46,10 +47,16 @@ database_context::database_context()
     , leak_detector_(nullptr) // Will be created when needed with specific pool
     , entity_manager_(std::make_shared<orm::entity_manager>())
     , transaction_coordinator_(std::make_shared<async::transaction_coordinator>())
+    , credential_manager_(std::make_shared<security::credential_manager>())
+    , access_control_(std::make_shared<security::access_control>())
+    , audit_logger_(std::make_shared<security::audit_logger>())
+    , security_monitor_(std::make_shared<security::security_monitor>())
+    , encryption_manager_(std::make_shared<security::encryption_manager>())
 {
     // Sprint 2, Task 2.3: Initialize connection pool manager
     // Sprint 3, Task 3.2: Initialize performance monitor
     // Sprint 3, Task 3.1: Initialize ORM components
+    // Sprint 3, Task 3.3: Initialize security components
     // Note: leak_detector requires a connection_pool, so it's created on-demand
 }
 

@@ -86,6 +86,14 @@ namespace async {
     class transaction_coordinator;
 }
 
+namespace security {
+    class credential_manager;
+    class access_control;
+    class audit_logger;
+    class security_monitor;
+    class encryption_manager;
+}
+
 /**
  * @class database_context
  * @brief Dependency injection container for database components
@@ -207,6 +215,71 @@ public:
         return transaction_coordinator_;
     }
 
+    /**
+     * @brief Get credential manager instance
+     * @return Shared pointer to credential manager
+     *
+     * @details Returns the credential manager for encrypted credential storage.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.3)
+     */
+    inline std::shared_ptr<security::credential_manager> get_credential_manager() const noexcept {
+        return credential_manager_;
+    }
+
+    /**
+     * @brief Get access control instance
+     * @return Shared pointer to access control
+     *
+     * @details Returns the access control for RBAC (Role-Based Access Control).
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.3)
+     */
+    inline std::shared_ptr<security::access_control> get_access_control() const noexcept {
+        return access_control_;
+    }
+
+    /**
+     * @brief Get audit logger instance
+     * @return Shared pointer to audit logger
+     *
+     * @details Returns the audit logger for security event logging.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.3)
+     */
+    inline std::shared_ptr<security::audit_logger> get_audit_logger() const noexcept {
+        return audit_logger_;
+    }
+
+    /**
+     * @brief Get security monitor instance
+     * @return Shared pointer to security monitor
+     *
+     * @details Returns the security monitor for threat detection and alerting.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.3)
+     */
+    inline std::shared_ptr<security::security_monitor> get_security_monitor() const noexcept {
+        return security_monitor_;
+    }
+
+    /**
+     * @brief Get encryption manager instance
+     * @return Shared pointer to encryption manager
+     *
+     * @details Returns the encryption manager for data encryption and key management.
+     *
+     * @note Lock-free read, inline for performance.
+     * @since Sprint 3 (Task 3.3)
+     */
+    inline std::shared_ptr<security::encryption_manager> get_encryption_manager() const noexcept {
+        return encryption_manager_;
+    }
+
 private:
     /// Connection pool manager instance (Sprint 2, Task 2.3)
     std::shared_ptr<connection_pool_manager> pool_manager_;
@@ -223,12 +296,12 @@ private:
     /// Transaction coordinator instance (Sprint 3, Task 3.1)
     std::shared_ptr<async::transaction_coordinator> transaction_coordinator_;
 
-    // Future Sprint 3+: Add security component members here
-    // std::shared_ptr<security::credential_manager> credential_mgr_;
-    // std::shared_ptr<security::access_control> access_ctrl_;
-    // std::shared_ptr<security::audit_logger> audit_log_;
-    // std::shared_ptr<security::security_monitor> sec_monitor_;
-    // std::shared_ptr<security::encryption_manager> encryption_mgr_;
+    /// Security component instances (Sprint 3, Task 3.3)
+    std::shared_ptr<security::credential_manager> credential_manager_;
+    std::shared_ptr<security::access_control> access_control_;
+    std::shared_ptr<security::audit_logger> audit_logger_;
+    std::shared_ptr<security::security_monitor> security_monitor_;
+    std::shared_ptr<security::encryption_manager> encryption_manager_;
 
     /// Mutex for thread-safe access
     mutable std::mutex mutex_;

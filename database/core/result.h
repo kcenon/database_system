@@ -29,8 +29,13 @@
 			std::string message;
 			std::string module;
 
+			// Default constructor
 			error_info(int c = 0, std::string msg = "", std::string mod = "")
 				: code(c), message(std::move(msg)), module(std::move(mod)) {}
+
+			// Constructor accepting message only (for compatibility with common_system)
+			explicit error_info(const std::string& msg)
+				: code(-1), message(msg), module("") {}
 		};
 
 		/// Result type for database operations
@@ -45,6 +50,20 @@
 			Result(const T& value) : value_(value) {}
 			Result(error_info&& error) : value_(std::forward<error_info>(error)) {}
 			Result(const error_info& error) : value_(error) {}
+
+			// Static factory methods (for compatibility with common_system)
+			template<typename U = T>
+			static Result<T> ok(U&& value) {
+				return Result<T>(std::forward<U>(value));
+			}
+
+			static Result<T> err(const error_info& error) {
+				return Result<T>(error);
+			}
+
+			static Result<T> err(error_info&& error) {
+				return Result<T>(std::move(error));
+			}
 
 			// Check status
 			bool is_ok() const { return std::holds_alternative<T>(value_); }

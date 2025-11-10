@@ -22,11 +22,7 @@ namespace
 {
 	inline common::VoidResult make_error(const std::string& msg, int code = -1)
 	{
-#if defined(USE_COMMON_SYSTEM)
-		return common::VoidResult(common::error_info{ code, msg });
-#else
-		return common::VoidResult(common::Error{ msg, code });
-#endif
+		return common::VoidResult(common::error_info{ code, msg, "" });
 	}
 }
 
@@ -307,11 +303,7 @@ public:
 		if (!initialized_)
 		{
 			return common::Result<bool>(
-#if defined(USE_COMMON_SYSTEM)
-				common::error_info{ -1, "Coordinator not initialized" }
-#else
-				common::Error{ "Coordinator not initialized", -1 }
-#endif
+				common::error_info{ -1, "Coordinator not initialized", "" }
 			);
 		}
 

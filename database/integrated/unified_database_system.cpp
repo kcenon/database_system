@@ -59,15 +59,17 @@ namespace database::integrated {
 namespace {
 
 #if defined(USE_COMMON_SYSTEM)
+// Helper to create error VoidResult - error_info is already defined via database::integrated namespace
 inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
 {
-    return VoidResult(common::error_info{code, msg, context});
+    return VoidResult(error_info{code, msg, context});
 }
 
+// Helper to create error Result<T> - error_info is already defined via database::integrated namespace
 template <typename T>
 inline Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
 {
-    return Result<T>(common::error_info{code, msg, context});
+    return Result<T>(error_info{code, msg, context});
 }
 #else
 inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")

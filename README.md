@@ -1391,7 +1391,7 @@ For detailed implementation notes, see [PHASE_3_PREPARATION.md](docs/PHASE_3_PRE
 - 📝 **Enterprise Features**: ORM framework with C++20 concepts, schema migrations, Prometheus integration, enterprise security (TLS/SSL, RBAC, audit logging)
 - 📝 **Advanced Operations**: Async operations with C++20 coroutines, distributed transactions, real-time data streaming, query optimization
 
-For detailed improvement plans and tracking, see the project's [NEED_TO_FIX.md](/Users/dongcheolshin/Sources/NEED_TO_FIX.md).
+For detailed improvement plans and tracking, see the project's [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md).
 
 ### Current Architecture Status
 

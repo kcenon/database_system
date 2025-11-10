@@ -108,46 +108,8 @@
 #include <functional>
 #include <optional>
 
-// Conditional Result pattern inclusion
-#if defined(USE_COMMON_SYSTEM)
-#include <kcenon/common/patterns/result.h>
-namespace database::integrated {
-    template<typename T> using Result = common::Result<T>;
-    using VoidResult = common::VoidResult;
-}
-#else
-// Fallback Result implementation
-#include <variant>
-#include <string>
-namespace database::integrated {
-    struct error_info {
-        int code{0};
-        std::string message;
-        std::string context;
-    };
-
-    template<typename T>
-    class Result {
-    public:
-        Result(T value) : data_(std::move(value)) {}
-        Result(error_info error) : data_(std::move(error)) {}
-
-        bool is_ok() const { return std::holds_alternative<T>(data_); }
-        bool is_error() const { return !is_ok(); }
-
-        T& value() { return std::get<T>(data_); }
-        const T& value() const { return std::get<T>(data_); }
-
-        error_info& error() { return std::get<error_info>(data_); }
-        const error_info& error() const { return std::get<error_info>(data_); }
-
-    private:
-        std::variant<T, error_info> data_;
-    };
-
-    using VoidResult = Result<std::monostate>;
-}
-#endif
+// Use unified Result<T> implementation
+#include "../core/result.h"
 
 namespace database::integrated {
 

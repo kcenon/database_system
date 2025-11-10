@@ -7,120 +7,78 @@
  * @file common_result.h
  * @brief Common Result<T> pattern for integrated database system
  *
- * Provides a fallback Result<T> implementation when common_system is not available.
- * This ensures the integrated database system can work without external dependencies.
+ * This file provides compatibility with existing code that expects common:: namespace.
  */
 
 #pragma once
 
-#if defined(USE_COMMON_SYSTEM)
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
+	// Use common_system's Result implementation directly
 	#include <kcenon/common/patterns/result.h>
+
+	// Re-export at global common:: namespace for backward compatibility
+	namespace common {
+		template<typename T>
+		using Result = kcenon::common::Result<T>;
+		using VoidResult = kcenon::common::VoidResult;
+		using error_info = kcenon::common::error_info;
+
+		// Add ok() helper for VoidResult
+		inline VoidResult ok() {
+			return VoidResult(std::monostate{});
+		}
+	}
+
+	// Import monitoring interfaces separately (only when monitoring_interface.h is included)
+	#ifdef KCENON_COMMON_INTERFACES_MONITORING_INTERFACE_H
+	namespace common {
+		namespace interfaces = kcenon::common::interfaces;
+	}
+	#endif
 #else
+	// Fallback: minimal Result<T> implementation
+	#include <variant>
 	#include <string>
 	#include <utility>
 
-namespace common
-{
-	/**
-	 * @brief Error structure for Result<T> pattern
-	 */
-	struct Error
-	{
-		std::string message; ///< Error message
-		int code;            ///< Error code
-	};
+	namespace common {
+		struct error_info {
+			int code{0};
+			std::string message;
+			std::string context;
+		};
 
-	/**
-	 * @brief Result<T> pattern for type-safe error handling
-	 *
-	 * @tparam T The value type on success
-	 */
-	template <typename T>
-	class Result
-	{
-	public:
-		/**
-		 * @brief Construct a successful result
-		 * @param value The success value
-		 */
-		Result(T value) : value_(std::move(value)), has_value_(true)
-		{
+		// Alias for backward compatibility
+		using Error = error_info;
+
+		template<typename T>
+		class Result {
+		public:
+			Result(T value) : data_(std::move(value)) {}
+			Result(error_info error) : data_(std::move(error)) {}
+
+			bool is_ok() const { return std::holds_alternative<T>(data_); }
+			bool is_error() const { return !is_ok(); }
+
+			T& value() { return std::get<T>(data_); }
+			const T& value() const { return std::get<T>(data_); }
+
+			error_info& error() { return std::get<error_info>(data_); }
+			const error_info& error() const { return std::get<error_info>(data_); }
+
+		private:
+			std::variant<T, error_info> data_;
+		};
+
+		using VoidResult = Result<std::monostate>;
+
+		// Helper functions
+		inline VoidResult ok() {
+			return VoidResult(std::monostate{});
 		}
 
-		/**
-		 * @brief Construct an error result
-		 * @param error The error information
-		 */
-		Result(Error error) : error_(std::move(error)), has_value_(false)
-		{
+		inline VoidResult error(const std::string& msg, int code = -1) {
+			return VoidResult(error_info{code, msg, ""});
 		}
-
-		/**
-		 * @brief Check if result contains a value
-		 * @return true if successful, false if error
-		 */
-		bool is_ok() const
-		{
-			return has_value_;
-		}
-
-		/**
-		 * @brief Get the success value
-		 * @return Reference to the value
-		 * @note Only call if is_ok() returns true
-		 */
-		const T& value() const
-		{
-			return value_;
-		}
-
-		/**
-		 * @brief Get the error information
-		 * @return Reference to the error
-		 * @note Only call if is_ok() returns false
-		 */
-		const Error& error() const
-		{
-			return error_;
-		}
-
-		/**
-		 * @brief Conversion operator for use in boolean context
-		 */
-		explicit operator bool() const
-		{
-			return has_value_;
-		}
-
-	private:
-		T value_;        ///< The success value
-		Error error_;    ///< The error information
-		bool has_value_; ///< True if contains value, false if error
-	};
-
-	/**
-	 * @brief Type alias for void results (operations with no return value)
-	 */
-	using VoidResult = Result<bool>;
-
-	/**
-	 * @brief Helper function to create a successful void result
-	 * @return A successful VoidResult
-	 */
-	inline VoidResult ok()
-	{
-		return VoidResult(true);
 	}
-
-	/**
-	 * @brief Helper function to create an error void result
-	 * @param message Error message
-	 * @param code Error code
-	 * @return An error VoidResult
-	 */
-	inline VoidResult error(const std::string& message, int code = -1)
-	{
-		return VoidResult(Error{message, code});
-	}
-} // namespace common
 #endif

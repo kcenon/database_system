@@ -53,34 +53,45 @@ if(INTEGRATED_DB_SOURCES)
 
     # Add common_system include path if available
     if(BUILD_WITH_COMMON_SYSTEM)
-        target_include_directories(${INTEGRATED_DB_TARGET}
-            PUBLIC
-                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/common_system/include>
-                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/common_system/include>
-        )
+        find_system_dependency_include(common_system)
+        if(common_system_INCLUDE_DIR)
+            target_include_directories(${INTEGRATED_DB_TARGET}
+                PUBLIC
+                    $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
+            )
+        endif()
     endif()
 
     # Add logger_system include path if available
     if(USE_LOGGER_SYSTEM)
-        target_include_directories(${INTEGRATED_DB_TARGET}
-            PUBLIC
-                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/logger_system/include>
-                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/logger_system/include>
-                # logger_system needs thread_system headers when built with USE_THREAD_SYSTEM_INTEGRATION
-                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/thread_system/include>
-                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/thread_system/include>
-        )
+        find_system_dependency_include(logger_system)
+        find_system_dependency_include(thread_system)
+        if(logger_system_INCLUDE_DIR)
+            target_include_directories(${INTEGRATED_DB_TARGET}
+                PUBLIC
+                    $<BUILD_INTERFACE:${logger_system_INCLUDE_DIR}>
+            )
+        endif()
+        # logger_system needs thread_system headers when built with USE_THREAD_SYSTEM_INTEGRATION
+        if(thread_system_INCLUDE_DIR)
+            target_include_directories(${INTEGRATED_DB_TARGET}
+                PUBLIC
+                    $<BUILD_INTERFACE:${thread_system_INCLUDE_DIR}>
+            )
+        endif()
         # logger_system was built with USE_THREAD_SYSTEM_INTEGRATION, so we need to define it too
         target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_THREAD_SYSTEM_INTEGRATION)
     endif()
 
     # Add monitoring_system include path if available
     if(USE_MONITORING_SYSTEM)
-        target_include_directories(${INTEGRATED_DB_TARGET}
-            PUBLIC
-                $<BUILD_INTERFACE:/Users/$ENV{USER}/Sources/monitoring_system/include>
-                $<BUILD_INTERFACE:/home/$ENV{USER}/Sources/monitoring_system/include>
-        )
+        find_system_dependency_include(monitoring_system)
+        if(monitoring_system_INCLUDE_DIR)
+            target_include_directories(${INTEGRATED_DB_TARGET}
+                PUBLIC
+                    $<BUILD_INTERFACE:${monitoring_system_INCLUDE_DIR}>
+            )
+        endif()
     endif()
 else()
     # Header-only for now (Phase 1)
@@ -196,10 +207,8 @@ if(USE_LOGGER_SYSTEM)
         message(STATUS "Integrated DB: Linked with logger_system target")
     else()
         # Try to link directly with LoggerSystem library
-        set(_LOGGER_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/logger_system/build/lib"
-            "/home/$ENV{USER}/Sources/logger_system/build/lib"
-        )
+        find_system_dependency_library(logger_system)
+        set(_LOGGER_LIB_PATHS ${logger_system_LIBRARY_DIR})
 
         foreach(_path ${_LOGGER_LIB_PATHS})
             if(EXISTS "${_path}/libLoggerSystem.a")
@@ -237,10 +246,8 @@ if(USE_MONITORING_SYSTEM)
         message(STATUS "Integrated DB: Linked with monitoring_system target")
     else()
         # Try to link directly with monitoring_system library
-        set(_MONITORING_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/monitoring_system/build"
-            "/home/$ENV{USER}/Sources/monitoring_system/build"
-        )
+        find_system_dependency_library(monitoring_system)
+        set(_MONITORING_LIB_PATHS ${monitoring_system_LIBRARY_DIR})
 
         foreach(_path ${_MONITORING_LIB_PATHS})
             if(EXISTS "${_path}/libmonitoring_system.a")

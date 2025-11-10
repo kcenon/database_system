@@ -40,8 +40,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace database
 {
-	database_manager::database_manager() : connected_(false), database_(nullptr)
+	database_manager::database_manager()
+		: connected_(false)
+		, database_(nullptr)
+		, context_(std::make_shared<database_context>())
 	{
+		// Default constructor creates a default context for backward compatibility
+	}
+
+	database_manager::database_manager(std::shared_ptr<database_context> context)
+		: connected_(false)
+		, database_(nullptr)
+		, context_(std::move(context))
+	{
+		// DI constructor - recommended for new code
+		if (!context_)
+		{
+			// Fallback to default context if nullptr passed
+			context_ = std::make_shared<database_context>();
+		}
 	}
 
 	database_manager::~database_manager() {}

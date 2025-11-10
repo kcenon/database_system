@@ -515,6 +515,7 @@ public:
 		return record_metric(name, value);
 	}
 
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
 	common::Result<kcenon::common::interfaces::metrics_snapshot> get_metrics()
 	{
 		if (!initialized_)
@@ -605,6 +606,51 @@ public:
 
 		return common::Result<kcenon::common::interfaces::health_check_result>(result);
 	}
+#else
+	common::Result<common::error_info> get_metrics()
+	{
+		if (!initialized_)
+		{
+			return make_error_result<common::error_info>(
+				"Monitoring adapter not initialized");
+		}
+
+		// Fallback: return error indicating monitoring not available
+		return make_error_result<common::error_info>(
+			"Metrics export requires common_system support");
+	}
+
+	common::Result<bool> check_health()
+	{
+		if (!initialized_)
+		{
+			return make_error_result<bool>("Monitoring adapter not initialized");
+		}
+
+		std::lock_guard<std::mutex> lock(mutex_);
+
+		// Simple health check based on connection pool
+		bool is_healthy = true;
+
+		if (metrics_.connection_usage_percent
+			> config_.connection_usage_warning_threshold * 100.0)
+		{
+			is_healthy = false;
+		}
+
+		if (metrics_.avg_query_latency > config_.query_latency_warning)
+		{
+			is_healthy = false;
+		}
+
+		if (metrics_.total_queries > 10 && metrics_.query_success_rate < 0.95)
+		{
+			is_healthy = false;
+		}
+
+		return common::Result<bool>(is_healthy);
+	}
+#endif
 
 	common::VoidResult reset()
 	{
@@ -799,18 +845,29 @@ bool monitoring_adapter::is_initialized() const
 	return pimpl_->is_initialized();
 }
 
-common::VoidResult monitoring_adapter::record_metric(const std::string& name, double value)
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
+kcenon::common::VoidResult
+#else
+common::VoidResult
+#endif
+monitoring_adapter::record_metric(const std::string& name, double value)
 {
 	return pimpl_->record_metric(name, value);
 }
 
-common::VoidResult monitoring_adapter::record_metric(
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
+kcenon::common::VoidResult
+#else
+common::VoidResult
+#endif
+monitoring_adapter::record_metric(
 	const std::string& name, double value,
 	const std::unordered_map<std::string, std::string>& tags)
 {
 	return pimpl_->record_metric(name, value, tags);
 }
 
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
 common::Result<kcenon::common::interfaces::metrics_snapshot> monitoring_adapter::get_metrics()
 {
 	return pimpl_->get_metrics();
@@ -820,8 +877,24 @@ common::Result<kcenon::common::interfaces::health_check_result> monitoring_adapt
 {
 	return pimpl_->check_health();
 }
+#else
+common::Result<common::error_info> monitoring_adapter::get_metrics()
+{
+	return pimpl_->get_metrics();
+}
 
-common::VoidResult monitoring_adapter::reset()
+common::Result<bool> monitoring_adapter::check_health()
+{
+	return pimpl_->check_health();
+}
+#endif
+
+#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
+kcenon::common::VoidResult
+#else
+common::VoidResult
+#endif
+monitoring_adapter::reset()
 {
 	return pimpl_->reset();
 }

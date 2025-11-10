@@ -31,11 +31,14 @@
 
 /**
  * @file monitoring_adapter.h
- * @brief Database monitoring adapter with conditional monitoring_system integration
+ * @brief Database monitoring adapter with runtime backend selection
  *
- * This adapter provides unified monitoring interface for database operations:
- * - When USE_MONITORING_SYSTEM is defined: Uses monitoring_system for advanced metrics
- * - When USE_MONITORING_SYSTEM is not defined: Uses internal pool_metrics and performance_monitor
+ * This adapter provides unified monitoring interface for database operations
+ * using the backend pattern for runtime polymorphism.
+ *
+ * Available backends:
+ * - fallback_monitoring_backend: Uses internal metrics storage (default)
+ * - null_monitoring_backend: No-op backend for disabling monitoring
  *
  * Features:
  * - Connection pool metrics (active, idle, usage percentage)
@@ -43,6 +46,7 @@
  * - Transaction monitoring (commits, rollbacks, active transactions)
  * - Health checks and alerting
  * - Prometheus-compatible metrics export
+ * - Runtime backend selection (no conditional compilation)
  *
  * @example
  * @code
@@ -93,63 +97,13 @@
 // Use common Result pattern from shared header
 #include "../core/common_result.h"
 
-// Conditional monitoring interface inclusion
-#if defined(USE_COMMON_SYSTEM)
-	#include <kcenon/common/interfaces/monitoring_interface.h>
-#else
-	// Minimal IMonitor replacement if common_system not available
-namespace common
+// Forward declare backend interface
+namespace database::integrated::adapters::backends
 {
-namespace interfaces
-{
-	struct metrics_snapshot
-	{
-		std::unordered_map<std::string, double> gauges;
-		std::unordered_map<std::string, std::uint64_t> counters;
-		std::unordered_map<std::string, double> histograms;
-		std::string source_id; // Source identifier
-
-		// Helper method to add metrics
-		void add_metric(const std::string& name, double value)
-		{
-			gauges[name] = value;
-		}
-	};
-
-	enum class health_status
-	{
-		healthy,
-		degraded,
-		unhealthy,
-		unknown
-	};
-
-	struct health_check_result
-	{
-		health_status status;
-		std::string message;
-		std::unordered_map<std::string, std::string> metadata;
-		bool is_healthy() const { return status == health_status::healthy; }
-		std::string status_message() const { return message; }
-		std::unordered_map<std::string, std::string> details() const { return metadata; }
-	};
-
-	class IMonitor
-	{
-	public:
-		virtual ~IMonitor() = default;
-		virtual VoidResult record_metric(const std::string& name, double value) = 0;
-		virtual VoidResult record_metric(
-			const std::string& name, double value,
-			const std::unordered_map<std::string, std::string>& tags)
-			= 0;
-		virtual Result<metrics_snapshot> get_metrics() = 0;
-		virtual Result<health_check_result> check_health() = 0;
-		virtual VoidResult reset() = 0;
-	};
-} // namespace interfaces
-} // namespace common
-#endif
+	class monitoring_backend;
+	struct metrics_snapshot;
+	struct health_check_result;
+}
 
 namespace database
 {
@@ -157,6 +111,16 @@ namespace integrated
 {
 namespace adapters
 {
+
+/**
+ * @brief Monitoring backend type selection
+ */
+enum class monitoring_backend_type
+{
+	auto_select,  ///< Automatically select best available backend
+	fallback,     ///< Use internal metrics storage
+	null          ///< No-op backend (discard all metrics)
+};
 
 /**
  * @brief Database-specific metrics structure
@@ -202,38 +166,34 @@ struct database_metrics
 /**
  * @brief Monitoring adapter for database operations
  *
- * Provides comprehensive monitoring capabilities with conditional compilation support.
- * Implements IMonitor interface from common_system (or provides fallback if unavailable).
+ * Provides comprehensive monitoring capabilities with runtime backend selection.
+ * No longer uses conditional compilation - backend is selected at runtime.
  *
  * Features:
  * - Connection pool monitoring
  * - Query performance tracking with percentiles
  * - Transaction lifecycle tracking
  * - Health checks with configurable thresholds
- * - Prometheus metrics export (when monitoring_system available)
+ * - Prometheus metrics export
  *
  * Thread Safety: Thread-safe with internal synchronization
  */
 class monitoring_adapter
-#if defined(USE_COMMON_SYSTEM)
-	: public kcenon::common::interfaces::IMonitor
-#endif
 {
 public:
 	/**
 	 * @brief Construct monitoring adapter with configuration
 	 * @param config Monitoring configuration
+	 * @param backend_type Backend type to use (default: auto_select)
 	 */
-	explicit monitoring_adapter(const db_monitoring_config& config);
+	explicit monitoring_adapter(
+		const db_monitoring_config& config,
+		monitoring_backend_type backend_type = monitoring_backend_type::auto_select);
 
 	/**
 	 * @brief Destructor - ensures graceful shutdown
 	 */
-	~monitoring_adapter()
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+	~monitoring_adapter();
 
 	// Non-copyable
 	monitoring_adapter(const monitoring_adapter&) = delete;
@@ -262,7 +222,7 @@ public:
 	bool is_initialized() const;
 
 	// ═══════════════════════════════════════════════════════════════
-	// IMonitor Interface Implementation
+	// Monitoring Interface
 	// ═══════════════════════════════════════════════════════════════
 
 	/**
@@ -271,16 +231,7 @@ public:
 	 * @param value Metric value
 	 * @return Ok on success
 	 */
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
-	kcenon::common::VoidResult
-#else
-	common::VoidResult
-#endif
-	record_metric(const std::string& name, double value)
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+	common::VoidResult record_metric(const std::string& name, double value);
 
 	/**
 	 * @brief Record a metric value with tags
@@ -289,63 +240,27 @@ public:
 	 * @param tags Metric tags/labels
 	 * @return Ok on success
 	 */
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
-	kcenon::common::VoidResult
-#else
-	common::VoidResult
-#endif
-	record_metric(
+	common::VoidResult record_metric(
 		const std::string& name, double value,
-		const std::unordered_map<std::string, std::string>& tags)
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+		const std::unordered_map<std::string, std::string>& tags);
 
 	/**
 	 * @brief Get current metrics snapshot
 	 * @return Metrics snapshot on success
 	 */
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
-	kcenon::common::Result<kcenon::common::interfaces::metrics_snapshot>
-#else
-	common::Result<common::interfaces::metrics_snapshot>  // Fallback when common_system not available
-#endif
-	get_metrics()
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+	common::Result<backends::metrics_snapshot> get_metrics();
 
 	/**
 	 * @brief Perform health check
 	 * @return Health check result
 	 */
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
-	kcenon::common::Result<kcenon::common::interfaces::health_check_result>
-#else
-	common::Result<bool>  // Fallback when common_system not available
-#endif
-	check_health()
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+	common::Result<backends::health_check_result> check_health();
 
 	/**
 	 * @brief Reset all metrics
 	 * @return Ok on success
 	 */
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
-	kcenon::common::VoidResult
-#else
-	common::VoidResult
-#endif
-	reset()
-#if defined(USE_COMMON_SYSTEM)
-		override
-#endif
-		;
+	common::VoidResult reset();
 
 	// ═══════════════════════════════════════════════════════════════
 	// Database-Specific Monitoring Methods
@@ -404,8 +319,15 @@ public:
 	std::string export_prometheus_metrics();
 
 private:
-	class impl;
-	std::unique_ptr<impl> pimpl_;
+	/**
+	 * @brief Create appropriate backend based on type
+	 */
+	static std::unique_ptr<backends::monitoring_backend> create_backend(
+		const db_monitoring_config& config,
+		monitoring_backend_type backend_type);
+
+	const db_monitoring_config& config_;
+	std::unique_ptr<backends::monitoring_backend> backend_; ///< Monitoring backend implementation
 };
 
 } // namespace adapters

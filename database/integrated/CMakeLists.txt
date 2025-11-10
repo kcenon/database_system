@@ -27,6 +27,10 @@ set(INTEGRATED_DB_HEADERS
     adapters/backends/system_logger_backend.h
     adapters/backends/fallback_logger_backend.h
     adapters/backends/null_logger_backend.h
+    # Monitoring Backends
+    adapters/backends/monitoring_backend.h
+    adapters/backends/fallback_monitoring_backend.h
+    adapters/backends/null_monitoring_backend.h
     # Unified System
     unified_database_system.h
 )
@@ -40,6 +44,8 @@ set(INTEGRATED_DB_SOURCES
     adapters/thread_adapter.cpp
     # Logger Backends (always include fallback)
     adapters/backends/fallback_logger_backend.cpp
+    # Monitoring Backends (always include fallback)
+    adapters/backends/fallback_monitoring_backend.cpp
     # Unified System
     unified_database_system.cpp
 )
@@ -154,15 +160,10 @@ if(USE_LOGGER_SYSTEM)
 endif()
 
 # Monitoring system integration
+# NOTE: No longer need USE_MONITORING_SYSTEM compile definition with backend pattern
+# Backend selection happens at runtime
 if(USE_MONITORING_SYSTEM)
-    if(TARGET ${INTEGRATED_DB_TARGET})
-        if(INTEGRATED_DB_SOURCES)
-            target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_MONITORING_SYSTEM)
-        else()
-            target_compile_definitions(${INTEGRATED_DB_TARGET} INTERFACE USE_MONITORING_SYSTEM)
-        endif()
-    endif()
-    message(STATUS "Integrated DB: monitoring_system integration enabled")
+    message(STATUS "Integrated DB: monitoring_system backend available (runtime selection)")
 endif()
 
 ##################################################

@@ -87,29 +87,13 @@ endif()
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Database: Enabling common_system integration")
-    # Try to find common_system with priority order:
-    # 1. macOS: /Users/${USER}/Sources/common_system
-    # 2. Linux: /home/${USER}/Sources/common_system
-    # 3. Relative paths as fallback
-    set(_DATABASE_COMMON_PATHS
-        "/Users/$ENV{USER}/Sources/common_system/include"
-        "/home/$ENV{USER}/Sources/common_system/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../common_system/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../common_system/include"
-    )
+    find_system_dependency_include(common_system)
 
-    foreach(_path ${_DATABASE_COMMON_PATHS})
-        if(EXISTS "${_path}/kcenon/common/patterns/result.h")
-            message(STATUS "Found common_system at: ${_path}")
-            target_include_directories(${PROJECT_NAME} PUBLIC
-                $<BUILD_INTERFACE:${_path}>
-            )
-            set(_FOUND_COMMON TRUE)
-            break()
-        endif()
-    endforeach()
-
-    if(_FOUND_COMMON)
+    if(common_system_INCLUDE_DIR)
+        message(STATUS "Found common_system at: ${common_system_INCLUDE_DIR}")
+        target_include_directories(${PROJECT_NAME} PUBLIC
+            $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
+        )
         target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
         message(STATUS "Database: common_system integration enabled")
     else()
@@ -149,11 +133,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 # thread_system integration (optional)
 if(USE_THREAD_SYSTEM)
     # Try to find thread_system
-    set(_DATABASE_THREAD_INCLUDE_PATHS
-        "/Users/$ENV{USER}/Sources/thread_system/include"
-        "/home/$ENV{USER}/Sources/thread_system/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../thread_system/include"
-    )
+    find_system_dependency_include(thread_system)
+    set(_DATABASE_THREAD_INCLUDE_PATHS ${thread_system_INCLUDE_DIR})
 
     set(_FOUND_THREAD_INCLUDE FALSE)
     foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})

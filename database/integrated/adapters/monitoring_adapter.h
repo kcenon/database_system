@@ -216,7 +216,7 @@ struct database_metrics
  */
 class monitoring_adapter
 #if defined(USE_COMMON_SYSTEM)
-	: public common::interfaces::IMonitor
+	: public kcenon::common::interfaces::IMonitor
 #endif
 {
 public:
@@ -271,7 +271,7 @@ public:
 	 * @param value Metric value
 	 * @return Ok on success
 	 */
-	common::VoidResult record_metric(const std::string& name, double value)
+	kcenon::common::VoidResult record_metric(const std::string& name, double value)
 #if defined(USE_COMMON_SYSTEM)
 		override
 #endif
@@ -284,7 +284,7 @@ public:
 	 * @param tags Metric tags/labels
 	 * @return Ok on success
 	 */
-	common::VoidResult record_metric(
+	kcenon::common::VoidResult record_metric(
 		const std::string& name, double value,
 		const std::unordered_map<std::string, std::string>& tags)
 #if defined(USE_COMMON_SYSTEM)
@@ -296,7 +296,7 @@ public:
 	 * @brief Get current metrics snapshot
 	 * @return Metrics snapshot on success
 	 */
-	common::Result<common::interfaces::metrics_snapshot> get_metrics()
+	kcenon::common::Result<kcenon::common::interfaces::metrics_snapshot> get_metrics()
 #if defined(USE_COMMON_SYSTEM)
 		override
 #endif
@@ -306,7 +306,7 @@ public:
 	 * @brief Perform health check
 	 * @return Health check result
 	 */
-	common::Result<common::interfaces::health_check_result> check_health()
+	kcenon::common::Result<kcenon::common::interfaces::health_check_result> check_health()
 #if defined(USE_COMMON_SYSTEM)
 		override
 #endif
@@ -316,7 +316,7 @@ public:
 	 * @brief Reset all metrics
 	 * @return Ok on success
 	 */
-	common::VoidResult reset()
+	kcenon::common::VoidResult reset()
 #if defined(USE_COMMON_SYSTEM)
 		override
 #endif

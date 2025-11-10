@@ -87,7 +87,7 @@ public:
 		try
 		{
 			// Create monitoring_system's performance profiler
-			profiler_ = std::make_unique<monitoring_system::performance_profiler>();
+			profiler_ = std::make_unique<kcenon::monitoring::performance_profiler>();
 
 			if (config_.enable_profiling)
 			{
@@ -151,7 +151,7 @@ public:
 		{
 			auto duration = std::chrono::nanoseconds(static_cast<int64_t>(value));
 			auto result = profiler_->record_sample(name, duration, true);
-			if (!result)
+			if (!result.is_ok())
 			{
 				return make_error("Failed to record metric");
 			}
@@ -166,15 +166,15 @@ public:
 		return record_metric(name, value);
 	}
 
-	common::Result<common::interfaces::metrics_snapshot> get_metrics()
+	common::Result<kcenon::common::interfaces::metrics_snapshot> get_metrics()
 	{
 		if (!initialized_)
 		{
-			return make_error_result<common::interfaces::metrics_snapshot>(
+			return make_error_result<kcenon::common::interfaces::metrics_snapshot>(
 				"Monitoring adapter not initialized");
 		}
 
-		common::interfaces::metrics_snapshot snapshot;
+		kcenon::common::interfaces::metrics_snapshot snapshot;
 		snapshot.source_id = "database_system";
 
 		// Add database metrics to snapshot (using new API)
@@ -201,26 +201,26 @@ public:
 		snapshot.add_metric("db.transactions.rolled_back",
 			static_cast<double>(metrics_.rolled_back_transactions));
 
-		return common::Result<common::interfaces::metrics_snapshot>(snapshot);
+		return common::Result<kcenon::common::interfaces::metrics_snapshot>(snapshot);
 	}
 
-	common::Result<common::interfaces::health_check_result> check_health()
+	common::Result<kcenon::common::interfaces::health_check_result> check_health()
 	{
 		if (!initialized_)
 		{
-			return make_error_result<common::interfaces::health_check_result>(
+			return make_error_result<kcenon::common::interfaces::health_check_result>(
 				"Monitoring adapter not initialized");
 		}
 
-		common::interfaces::health_check_result result;
-		result.status = common::interfaces::health_status::healthy;
+		kcenon::common::interfaces::health_check_result result;
+		result.status = kcenon::common::interfaces::health_status::healthy;
 		result.message = "Database system healthy";
 
 		// Check connection pool usage
 		if (metrics_.connection_usage_percent
 			> config_.connection_usage_warning_threshold * 100.0)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Connection pool usage critical";
 			result.metadata["connection_usage"]
 				= std::to_string(metrics_.connection_usage_percent) + "%";
@@ -229,7 +229,7 @@ public:
 		// Check query latency
 		if (metrics_.avg_query_latency > config_.query_latency_warning)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Query latency critical";
 			result.metadata["avg_latency_us"]
 				= std::to_string(metrics_.avg_query_latency.count());
@@ -238,12 +238,12 @@ public:
 		// Check query success rate
 		if (metrics_.query_success_rate < 0.95)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Query success rate low";
 			result.metadata["success_rate"] = std::to_string(metrics_.query_success_rate);
 		}
 
-		return common::Result<common::interfaces::health_check_result>(result);
+		return common::Result<kcenon::common::interfaces::health_check_result>(result);
 	}
 
 	common::VoidResult reset()
@@ -436,7 +436,7 @@ private:
 
 	const db_monitoring_config& config_;
 	bool initialized_;
-	std::unique_ptr<monitoring_system::performance_profiler> profiler_;
+	std::unique_ptr<kcenon::monitoring::performance_profiler> profiler_;
 // 	std::unique_ptr<monitoring_system::system_monitor> system_monitor_;
 	std::chrono::steady_clock::time_point start_time_;
 
@@ -515,17 +515,17 @@ public:
 		return record_metric(name, value);
 	}
 
-	common::Result<common::interfaces::metrics_snapshot> get_metrics()
+	common::Result<kcenon::common::interfaces::metrics_snapshot> get_metrics()
 	{
 		if (!initialized_)
 		{
-			return make_error_result<common::interfaces::metrics_snapshot>(
+			return make_error_result<kcenon::common::interfaces::metrics_snapshot>(
 				"Monitoring adapter not initialized");
 		}
 
 		std::lock_guard<std::mutex> lock(mutex_);
 
-		common::interfaces::metrics_snapshot snapshot;
+		kcenon::common::interfaces::metrics_snapshot snapshot;
 		snapshot.source_id = "database_system_fallback";
 
 		// Database-specific metrics (using new API)
@@ -558,28 +558,28 @@ public:
 			snapshot.add_metric(name, value);
 		}
 
-		return common::Result<common::interfaces::metrics_snapshot>(snapshot);
+		return common::Result<kcenon::common::interfaces::metrics_snapshot>(snapshot);
 	}
 
-	common::Result<common::interfaces::health_check_result> check_health()
+	common::Result<kcenon::common::interfaces::health_check_result> check_health()
 	{
 		if (!initialized_)
 		{
-			return make_error_result<common::interfaces::health_check_result>(
+			return make_error_result<kcenon::common::interfaces::health_check_result>(
 				"Monitoring adapter not initialized");
 		}
 
 		std::lock_guard<std::mutex> lock(mutex_);
 
-		common::interfaces::health_check_result result;
-		result.status = common::interfaces::health_status::healthy;
+		kcenon::common::interfaces::health_check_result result;
+		result.status = kcenon::common::interfaces::health_status::healthy;
 		result.message = "Database system healthy";
 
 		// Connection pool health check
 		if (metrics_.connection_usage_percent
 			> config_.connection_usage_warning_threshold * 100.0)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Connection pool usage critical";
 			result.metadata["connection_usage"]
 				= std::to_string(metrics_.connection_usage_percent) + "%";
@@ -588,7 +588,7 @@ public:
 		// Query latency health check
 		if (metrics_.avg_query_latency > config_.query_latency_warning)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Query latency critical";
 			result.metadata["avg_latency_us"]
 				= std::to_string(metrics_.avg_query_latency.count());
@@ -597,13 +597,13 @@ public:
 		// Query success rate health check
 		if (metrics_.total_queries > 10 && metrics_.query_success_rate < 0.95)
 		{
-			result.status = common::interfaces::health_status::degraded;
+			result.status = kcenon::common::interfaces::health_status::degraded;
 			result.message = "Query success rate low";
 			result.metadata["success_rate"]
 				= std::to_string(metrics_.query_success_rate);
 		}
 
-		return common::Result<common::interfaces::health_check_result>(result);
+		return common::Result<kcenon::common::interfaces::health_check_result>(result);
 	}
 
 	common::VoidResult reset()
@@ -811,12 +811,12 @@ common::VoidResult monitoring_adapter::record_metric(
 	return pimpl_->record_metric(name, value, tags);
 }
 
-common::Result<common::interfaces::metrics_snapshot> monitoring_adapter::get_metrics()
+common::Result<kcenon::common::interfaces::metrics_snapshot> monitoring_adapter::get_metrics()
 {
 	return pimpl_->get_metrics();
 }
 
-common::Result<common::interfaces::health_check_result> monitoring_adapter::check_health()
+common::Result<kcenon::common::interfaces::health_check_result> monitoring_adapter::check_health()
 {
 	return pimpl_->check_health();
 }

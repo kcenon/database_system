@@ -43,61 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <atomic>
 #include <functional>
 
-// Use common_system Result<T> pattern for type-safe error handling
-#ifdef BUILD_WITH_COMMON_SYSTEM
-	#if __has_include(<kcenon/common/patterns/result.h>)
-		#include <kcenon/common/patterns/result.h>
-		namespace database {
-			template<typename T>
-			using Result = common::Result<T>;
-			using error_info = common::error_info;
-		}
-	#elif __has_include(<common/patterns/result.h>)
-		#include <common/patterns/result.h>
-		namespace database {
-			template<typename T>
-			using Result = common::Result<T>;
-			using error_info = common::error_info;
-		}
-	#else
-		#error "BUILD_WITH_COMMON_SYSTEM is ON but common_system headers not found"
-	#endif
-#else
-	// Fallback: Define minimal Result<T> type if common_system not available
-	#include <variant>
-	#include <string>
-	namespace database {
-		struct error_info {
-			int code;
-			std::string message;
-			std::string module;
-
-			error_info(int c = 0, std::string msg = "", std::string mod = "")
-				: code(c), message(std::move(msg)), module(std::move(mod)) {}
-		};
-
-		template<typename T>
-		class Result {
-		private:
-			std::variant<T, error_info> value_;
-		public:
-			Result(T&& value) : value_(std::forward<T>(value)) {}
-			Result(const T& value) : value_(value) {}
-			Result(error_info&& error) : value_(std::forward<error_info>(error)) {}
-			Result(const error_info& error) : value_(error) {}
-
-			bool is_ok() const { return std::holds_alternative<T>(value_); }
-			bool is_err() const { return std::holds_alternative<error_info>(value_); }
-
-			const T& value() const { return std::get<T>(value_); }
-			T& value() { return std::get<T>(value_); }
-
-			const error_info& error() const { return std::get<error_info>(value_); }
-
-			explicit operator bool() const { return is_ok(); }
-		};
-	}
-#endif
+// Use unified Result<T> implementation
+#include "core/result.h"
 
 namespace database
 {

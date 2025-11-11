@@ -51,24 +51,32 @@ namespace database::orm
 	class field_metadata;
 	class entity_metadata;
 
-	// C++20 concepts for type safety
-	template<typename T>
-	concept Entity = requires(T t) {
-		typename T::primary_key_type;
-		{ t.table_name() } -> std::convertible_to<std::string>;
-		{ t.get_metadata() } -> std::same_as<const entity_metadata&>;
-	};
+	// Type traits for type safety (C++17 compatible)
+	template<typename T, typename = void>
+	struct is_entity : std::false_type {};
 
 	template<typename T>
-	concept FieldType = std::is_same_v<T, int32_t> ||
-	                   std::is_same_v<T, int64_t> ||
-	                   std::is_same_v<T, double> ||
-	                   std::is_same_v<T, std::string> ||
-	                   std::is_same_v<T, bool> ||
-	                   std::is_same_v<T, std::chrono::system_clock::time_point>;
+	struct is_entity<T, std::void_t<
+		typename T::primary_key_type,
+		decltype(std::declval<T>().table_name()),
+		decltype(std::declval<T>().get_metadata())
+	>> : std::is_convertible<decltype(std::declval<T>().table_name()), std::string> {};
 
-	// Forward declaration with proper constraint
-	template<Entity EntityType> class query_builder;
+	template<typename T>
+	inline constexpr bool is_entity_v = is_entity<T>::value;
+
+	template<typename T>
+	inline constexpr bool is_field_type_v =
+		std::is_same_v<T, int32_t> ||
+		std::is_same_v<T, int64_t> ||
+		std::is_same_v<T, double> ||
+		std::is_same_v<T, std::string> ||
+		std::is_same_v<T, bool> ||
+		std::is_same_v<T, std::chrono::system_clock::time_point>;
+
+	// Forward declaration with SFINAE constraint
+	template<typename EntityType, typename = std::enable_if_t<is_entity_v<EntityType>>>
+	class query_builder;
 
 	// Field constraint types
 	enum class field_constraint {
@@ -180,7 +188,7 @@ namespace database::orm
 	 * @class field_accessor
 	 * @brief Template class for type-safe field access.
 	 */
-	template<FieldType T>
+	template<typename T, typename = std::enable_if_t<is_field_type_v<T>>>
 	class field_accessor
 	{
 	public:
@@ -208,7 +216,7 @@ namespace database::orm
 	 * @class query_builder
 	 * @brief Template query builder for type-safe ORM queries.
 	 */
-	template<Entity EntityType>
+	template<typename EntityType, typename>
 	class query_builder
 	{
 	public:
@@ -221,11 +229,11 @@ namespace database::orm
 		query_builder& offset(size_t count);
 
 		// Join operations
-		template<Entity OtherEntity>
-		query_builder& join(const std::string& condition);
+		template<typename OtherEntity>
+		std::enable_if_t<is_entity_v<OtherEntity>, query_builder&> join(const std::string& condition);
 
-		template<Entity OtherEntity>
-		query_builder& left_join(const std::string& condition);
+		template<typename OtherEntity>
+		std::enable_if_t<is_entity_v<OtherEntity>, query_builder&> left_join(const std::string& condition);
 
 		// Execution methods
 		std::vector<EntityType> execute();
@@ -284,14 +292,14 @@ namespace database::orm
 		[[deprecated("Use database_context::get_entity_manager() instead. See migration guide in class documentation.")]]
 		static entity_manager& instance();
 
-		template<Entity EntityType>
-		void register_entity();
+		template<typename EntityType>
+		std::enable_if_t<is_entity_v<EntityType>> register_entity();
 
-		template<Entity EntityType>
-		const entity_metadata& get_metadata();
+		template<typename EntityType>
+		std::enable_if_t<is_entity_v<EntityType>, const entity_metadata&> get_metadata();
 
-		template<Entity EntityType>
-		query_builder<EntityType> query(std::shared_ptr<database_base> db);
+		template<typename EntityType>
+		std::enable_if_t<is_entity_v<EntityType>, query_builder<EntityType>> query(std::shared_ptr<database_base> db);
 
 		// Schema operations
 		bool create_tables(std::shared_ptr<database_base> db);

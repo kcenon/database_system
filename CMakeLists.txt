@@ -15,10 +15,33 @@ project(database_system
 )
 
 # C++ Standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Detect C++20 coroutine support (optional feature)
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+    #include <coroutine>
+    struct task {
+        struct promise_type {
+            task get_return_object() { return {}; }
+            std::suspend_never initial_suspend() { return {}; }
+            std::suspend_never final_suspend() noexcept { return {}; }
+            void return_void() {}
+            void unhandled_exception() {}
+        };
+    };
+    task foo() { co_return; }
+    int main() {}
+" HAS_COROUTINES)
+
+if(HAS_COROUTINES)
+    message(STATUS "C++20 coroutines available - async features enabled")
+else()
+    message(STATUS "C++20 coroutines not available - async features disabled")
+endif()
 
 # Options
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)

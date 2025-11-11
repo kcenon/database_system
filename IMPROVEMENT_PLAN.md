@@ -799,3 +799,209 @@ auto pool_mgr = context->get_pool_manager();
 **Responsibility**: Senior Developer (Database Expert) + Lead Architect
 **Priority**: High - Foundational system with widespread usage
 **Status**: ✅ **COMPLETED** - All 6 Sprints completed and verified
+
+---
+
+## 🟡 Sprint 7: C++17 Migration (Phase 3)
+
+**Date**: 2025-11-11
+**Status**: ⏳ Planning Phase
+**Priority**: High - Platform Compatibility
+**Effort**: 2-3 weeks
+
+### Overview
+
+database_system uses **C++20 Coroutines extensively** - most complex migration:
+- **Coroutines** (co_await, co_return) - Used extensively in async operations
+- **Concepts** (Entity, FieldType) - ORM framework
+- std::format (documentation only, not in code)
+
+**Migration Effort**: **HIGH** (2-3 weeks, 2 developers) - **Coroutines are critical**
+
+### Migration Strategy: C++17 Minimum, C++20 Coroutines Optional
+
+**Key Decision**: Coroutines cannot be easily backported to C++17.
+
+**Approach**: Make async/coroutine features **optional** (C++20 only)
+
+```cmake
+# CMakeLists.txt Line 18-19
+set(CMAKE_CXX_STANDARD 17)  # Minimum
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+# Detect C++20 coroutine support
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+    #include <coroutine>
+    struct task {
+        struct promise_type {
+            task get_return_object() { return {}; }
+            std::suspend_never initial_suspend() { return {}; }
+            std::suspend_never final_suspend() noexcept { return {}; }
+            void return_void() {}
+            void unhandled_exception() {}
+        };
+    };
+    task foo() { co_return; }
+    int main() {}
+" HAS_COROUTINES)
+
+if(HAS_COROUTINES)
+    message(STATUS "C++20 coroutines detected - async features enabled")
+    target_compile_definitions(database_system PRIVATE HAS_COROUTINES=1)
+else()
+    message(STATUS "C++20 coroutines NOT available - async features disabled")
+endif()
+```
+
+### Tasks (2-3 weeks)
+
+**Task 1**: Make Coroutines Optional (Week 1, 5 days)
+
+**Affected Files**:
+- `samples/async_operations_demo.cpp` - Coroutine demos
+- `database/async/async_operations.h:440-450` - co_await, co_return
+
+**Strategy**: Conditional compilation
+```cpp
+// database/async/async_operations.h
+#ifdef HAS_COROUTINES
+    #include <coroutine>
+    
+    // Coroutine-based async operations
+    auto async_query(...) -> task<result> {
+        co_return execute_query(...);
+    }
+#else
+    // Fallback: std::future-based async
+    auto async_query(...) -> std::future<result> {
+        return std::async(std::launch::async, [=]() {
+            return execute_query(...);
+        });
+    }
+#endif
+```
+
+**Task 2**: Replace Concepts with SFINAE (Week 2, 3 days)
+
+**Affected Files**:
+- `database/orm/entity.h:56` - `concept Entity`
+- `database/orm/entity.h:63` - `concept FieldType`
+
+```cpp
+// Before (C++20 Concepts)
+template<typename T>
+concept Entity = requires(T t) {
+    { t.get_table_name() } -> std::convertible_to<std::string>;
+    { t.get_fields() } -> std::same_as<std::vector<field_info>>;
+};
+
+// After (C++17 SFINAE)
+template<typename T, typename = void>
+struct is_entity : std::false_type {};
+
+template<typename T>
+struct is_entity<T, std::void_t<
+    decltype(std::declval<T>().get_table_name()),
+    decltype(std::declval<T>().get_fields())
+>> : std::true_type {};
+
+template<typename T>
+inline constexpr bool is_entity_v = is_entity<T>::value;
+
+// Usage
+template<typename T, typename = std::enable_if_t<is_entity_v<T>>>
+void register_entity(T&& entity);
+```
+
+**Task 3**: Update CMakeLists.txt & Build System (Week 2, 2 days)
+- Change C++20 → C++17
+- Add coroutine feature detection
+- Add concept feature detection
+- Update compiler requirements
+
+**Task 4**: Update Documentation (Week 3, 3 days)
+
+**Files to update**:
+1. **README.md**:
+   - Line 13: "C++20" → "C++17 (C++20 for async features)"
+   - Line 93: "Async operations: C++20 coroutines" → "Async operations: C++20 coroutines (optional)"
+   - Line 108: Update ORM concepts mention
+   - Line 723: Update compiler requirements
+   - Lines 1391-1392: Update features section
+
+2. **ARCHITECTURE.md**, **INTEGRATION.md**: Update coroutine examples
+   - Mark coroutine examples as "C++20 only"
+   - Add std::future alternative examples
+
+**Task 5**: Update Samples (Week 3, 2 days)
+- `samples/async_operations_demo.cpp` - Make conditional
+- Add non-coroutine async examples
+
+**Task 6**: Testing (Week 3, 2 days)
+- Build with C++17 (async features disabled)
+- Build with C++20 (async features enabled)
+- Verify 22/23 tests pass in both modes
+
+### Success Metrics
+
+| Metric | Current | Target |
+|--------|---------|--------|
+| **Minimum C++ Standard** | 20 | 17 |
+| **C++20 Support** | Required | Optional (for async) |
+| **Coroutines** | Core feature | Optional (C++20 only) |
+| **Concepts** | ORM (2 uses) | 0 (SFINAE) |
+| **Compiler Support** | GCC 10+, Clang 11+ | GCC 7+, Clang 5+ |
+| **Test Pass Rate** | 22/23 (95.7%) | 22/23 (maintain) |
+
+### Risk Management
+
+#### Critical Risk: Coroutine Complexity
+- **Risk**: Coroutine fallback may not match behavior
+- **Impact**: HIGH - Major feature
+- **Mitigation**:
+  - Clearly document C++20 requirement for async features
+  - Provide std::future-based alternatives
+  - Make async features optional (not required)
+  - Extensive testing in both modes
+
+#### High Risk: API Breaking Changes
+- **Risk**: Removing coroutines changes API
+- **Impact**: HIGH
+- **Mitigation**:
+  - Keep synchronous API unchanged (works in C++17)
+  - Mark async features as "Requires C++20"
+  - Provide migration guide
+
+### Acceptance Criteria
+
+- [ ] Builds with `-std=c++17` (synchronous features only)
+- [ ] Builds with `-std=c++20` (full async features)
+- [ ] Coroutines made conditional with HAS_COROUTINES
+- [ ] Concepts replaced with SFINAE
+- [ ] All 22/23 tests pass in both modes
+- [ ] Documentation clearly states C++20 requirement for async
+- [ ] Synchronous API fully functional in C++17
+- [ ] std::future alternatives provided
+
+**Testing**:
+```bash
+# C++17 build (no coroutines)
+cmake -DCMAKE_CXX_STANDARD=17 ..
+cmake --build .
+ctest
+
+# C++20 build (with coroutines)
+cmake -DCMAKE_CXX_STANDARD=20 ..
+cmake --build .
+ctest
+```
+
+---
+
+**Review Status**: ⏳ **PLANNING**
+**Created**: 2025-11-11
+**Estimated Effort**: 2-3 weeks
+**Resources**: 2 developers (1 Senior Database + 1 Mid-level)
+**Priority**: High - Coroutines are core feature
+**Note**: **Async/coroutine features require C++20** - cannot be fully backported

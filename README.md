@@ -10,7 +10,7 @@
 
 ## Overview
 
-The Database System Project is a production-ready, enterprise-grade C++20 database abstraction layer designed to provide unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations. Built with a modular, interface-based architecture supporting 10,000+ concurrent connections, it delivers enterprise-grade database performance with maximum flexibility and reliability.
+The Database System Project is a production-ready, enterprise-grade C++17/C++20 database abstraction layer designed to provide unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations (C++20 coroutines optional). Built with a modular, interface-based architecture supporting 10,000+ concurrent connections, it delivers enterprise-grade database performance with maximum flexibility and reliability.
 
 > **🏗️ Modular Architecture**: Comprehensive database abstraction layer with multi-backend support, enterprise security, and real-time monitoring.
 

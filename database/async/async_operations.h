@@ -36,7 +36,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../database_base.h"
 #include <future>
 #include <memory>
+#ifdef HAS_COROUTINES
 #include <coroutine>
+#endif
 #include <functional>
 #include <thread>
 #include <queue>
@@ -87,9 +89,11 @@ namespace database::async
 		std::function<void(const std::exception&)> error_callback_;
 	};
 
+#ifdef HAS_COROUTINES
 	/**
 	 * @class coroutine_support
 	 * @brief C++20 coroutine support for database operations.
+	 * @note Requires C++20 coroutines. Only available when HAS_COROUTINES is defined.
 	 */
 	template<typename T>
 	class database_awaitable
@@ -145,6 +149,7 @@ namespace database::async
 	private:
 		std::coroutine_handle<promise_type> handle_;
 	};
+#endif // HAS_COROUTINES
 
 	/**
 	 * @class async_database
@@ -159,9 +164,11 @@ namespace database::async
 		async_result<bool> execute_async(const std::string& query);
 		async_result<database_result> select_async(const std::string& query);
 
-		// Coroutine support
+#ifdef HAS_COROUTINES
+		// Coroutine support (C++20 only)
 		database_awaitable<bool> execute_coro(const std::string& query);
 		database_awaitable<database_result> select_coro(const std::string& query);
+#endif
 
 		// Batch operations
 		async_result<std::vector<bool>> execute_batch_async(const std::vector<std::string>& queries);

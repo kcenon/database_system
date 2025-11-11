@@ -128,10 +128,15 @@ endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     POSITION_INDEPENDENT_CODE ON
-    CXX_STANDARD 20
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
 )
+
+# Add HAS_COROUTINES definition if C++20 coroutines are available
+if(HAS_COROUTINES)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC HAS_COROUTINES)
+endif()
 
 ##################################################
 # Include Directories

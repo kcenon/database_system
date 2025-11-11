@@ -433,7 +433,8 @@ namespace database::async
 		return async_result<T>(promise.get_future());
 	}
 
-	// Coroutine helpers
+	// Coroutine helpers (C++20 only)
+#ifdef HAS_COROUTINES
 	inline auto when_all(std::vector<database_awaitable<bool>> awaitables) -> database_awaitable<std::vector<bool>> {
 		std::vector<bool> results;
 		for (auto& awaitable : awaitables) {
@@ -449,5 +450,6 @@ namespace database::async
 		}
 		co_return false;
 	}
+#endif // HAS_COROUTINES
 
 } // namespace database::async

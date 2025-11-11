@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.16)
 # Project definition
 project(database_system
     VERSION 1.0.0
-    DESCRIPTION "Advanced C++20 Database System with Multi-Backend Support"
+    DESCRIPTION "Advanced C++17 Database System with Multi-Backend Support (C++20 for async features)"
     LANGUAGES CXX
 )
 

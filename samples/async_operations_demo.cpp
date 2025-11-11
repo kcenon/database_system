@@ -4,7 +4,18 @@
  *
  * Asynchronous Operations Demonstration
  * Shows C++20 coroutines, async database operations, and distributed transactions
+ *
+ * NOTE: This demo requires C++20 coroutines. Build with -DCMAKE_CXX_STANDARD=20
  */
+
+#ifndef HAS_COROUTINES
+#include <iostream>
+int main() {
+    std::cout << "This demo requires C++20 coroutines support.\n";
+    std::cout << "Please build with -DCMAKE_CXX_STANDARD=20 and ensure your compiler supports coroutines.\n";
+    return 1;
+}
+#else
 
 #include <iostream>
 #include <string>
@@ -458,3 +469,5 @@ int main() {
 
     return 0;
 }
+
+#endif // HAS_COROUTINES

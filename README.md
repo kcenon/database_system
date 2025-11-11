@@ -90,7 +90,7 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 ### 🚀 **Performance Excellence**
 - **Enterprise-grade connection pooling**: Support for 10,000+ concurrent connections
 - **Query optimization**: Intelligent query planning and execution optimization
-- **Async operations**: C++20 coroutines for non-blocking database operations
+- **Async operations**: C++20 coroutines for non-blocking database operations (optional, C++17 std::future fallback available)
 - **Bulk operations**: Optimized batch processing for high-throughput scenarios
 - **✨ NEW: High-performance threading**: Optional thread_system integration
   - **1.16M+ ops/s** throughput (23x improvement over std::thread)
@@ -105,7 +105,7 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 - **Comprehensive error handling**: Graceful degradation and recovery patterns
 
 ### 🔧 **Developer Productivity**
-- **ORM framework**: C++20 concepts-based entity system with automatic schema management
+- **ORM framework**: Type-safe entity system with automatic schema management (C++17 SFINAE-based)
 - **Type-safe query builders**: Compile-time query validation for SQL and NoSQL
 - **Intuitive API design**: Clean, self-documenting interfaces reduce learning curve
 - **Mock implementations**: Testing support without requiring actual databases
@@ -169,14 +169,14 @@ This project addresses the fundamental challenge faced by developers worldwide: 
 
 ### 🎯 Core Capabilities
 - **Multi-Backend Support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis with unified interface
-- **ORM Framework**: C++20 concepts-based entity system with automatic schema management
+- **ORM Framework**: Type-safe entity system with automatic schema management (C++17 SFINAE-based)
 - **Connection Pooling**: Enterprise-grade connection management with adaptive sizing
 - **Query Builders**: Type-safe query construction for SQL and NoSQL databases
 - **Performance Monitoring**: Real-time metrics, alerting, and Prometheus integration
 - **Enterprise Security**: TLS/SSL encryption, RBAC, audit logging, and threat detection
-- **Async Operations**: C++20 coroutines, distributed transactions, and real-time streaming
+- **Async Operations**: C++20 coroutines (optional), distributed transactions, and real-time streaming
 - **Thread Safety**: Concurrent database operations with proper synchronization
-- **Modern C++**: C++20 concepts, coroutines, variants, and RAII patterns
+- **Modern C++**: C++17/C++20 with variants, RAII patterns, and optional coroutines
 - **Production Ready**: Enterprise architecture supporting 10,000+ concurrent connections
 
 ### 🗄️ Supported Databases
@@ -720,7 +720,7 @@ Our samples demonstrate real-world usage patterns and enterprise best practices:
 ### 🛠️ **Build & Integration**
 
 #### Prerequisites
-- **Compiler**: C++20 capable (GCC 10+, Clang 11+, MSVC 2019+)
+- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+), C++20 for async coroutines (GCC 10+, Clang 11+, MSVC 2019+)
 - **Build System**: CMake 3.16+
 - **Database Libraries**: Optional (see vcpkg dependencies)
 
@@ -1388,8 +1388,8 @@ This hybrid approach delivers:
 For detailed implementation notes, see [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md).
 
 **Future Enhancements**
-- 📝 **Enterprise Features**: ORM framework with C++20 concepts, schema migrations, Prometheus integration, enterprise security (TLS/SSL, RBAC, audit logging)
-- 📝 **Advanced Operations**: Async operations with C++20 coroutines, distributed transactions, real-time data streaming, query optimization
+- 📝 **Enterprise Features**: ORM framework with type-safe entities, schema migrations, Prometheus integration, enterprise security (TLS/SSL, RBAC, audit logging)
+- 📝 **Advanced Operations**: Async operations with C++20 coroutines (optional), distributed transactions, real-time data streaming, query optimization
 
 For detailed improvement plans and tracking, see the project's [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md).
 

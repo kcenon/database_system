@@ -2,275 +2,351 @@
 
 > **Language:** **English** | [한국어](README_KO.md)
 
+**Version:** 1.0
+**Last Updated:** 2025-11-11
+**Status:** Comprehensive
+
+Welcome to the database_system documentation! This unified database abstraction layer supports 5 backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) with enterprise-grade connection pooling and advanced query builders.
+
+---
+
+## 🚀 Quick Navigation
+
+| I want to... | Document |
+|--------------|----------|
+| ⚡ Get started in 5 minutes | [Quick Start](guides/QUICK_START.md) |
+| 🏗️ Understand the architecture | [Architecture](01-ARCHITECTURE.md) |
+| 📖 Look up an API | [API Reference](02-API_REFERENCE.md) |
+| 🔧 Build from source | [Build Guide](guides/BUILD_GUIDE.md) |
+| ❓ Find answers to common questions | [FAQ](guides/FAQ.md) (20+ Q&A) |
+| 🐛 Troubleshoot an issue | [Troubleshooting](guides/TROUBLESHOOTING.md) |
+| ✨ Learn best practices | [Best Practices](guides/BEST_PRACTICES.md) |
+| 🤝 Contribute to the project | [Contributing](contributing/CONTRIBUTING.md) |
+
+---
+
 ## Table of Contents
 
-- [📚 Documentation Overview](#-documentation-overview)
-  - [📖 Available Documentation](#-available-documentation)
-  - [🚀 Quick Start](#-quick-start)
-- [📋 Project Information](#-project-information)
-  - [Current Status](#current-status)
-  - [Supported Databases](#supported-databases)
-  - [Key Features](#key-features)
-- [📖 Documentation Structure](#-documentation-structure)
-  - [Core Documentation](#core-documentation)
-    - [[API Reference](API_REFERENCE.md)](#api-referenceapi_referencemd)
-    - [[Build Guide](BUILD_GUIDE.md)](#build-guidebuild_guidemd)
-    - [[Samples Guide](SAMPLES_GUIDE.md)](#samples-guidesamples_guidemd)
-    - [[Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)](#performance-benchmarksperformance_benchmarksmd)
-  - [Additional Resources](#additional-resources)
-    - [[Changelog](../CHANGELOG.md)](#changelogchangelogmd)
-    - [[Project README](../README.md)](#project-readmereadmemd)
-- [🎯 Documentation by Use Case](#-documentation-by-use-case)
-  - [For New Users](#for-new-users)
-  - [For Experienced Developers](#for-experienced-developers)
-  - [For DevOps and System Administrators](#for-devops-and-system-administrators)
-  - [For Students and Researchers](#for-students-and-researchers)
-- [🔍 Finding Information](#-finding-information)
-  - [By Feature](#by-feature)
-  - [By Database Type](#by-database-type)
-- [🤝 Contributing to Documentation](#-contributing-to-documentation)
-  - [Documentation Standards](#documentation-standards)
-  - [Areas for Improvement](#areas-for-improvement)
-  - [Submission Process](#submission-process)
-- [📞 Getting Help](#-getting-help)
-  - [Documentation Issues](#documentation-issues)
-  - [Technical Support](#technical-support)
-  - [Support Resources](#community-resources)
-- [📅 Documentation Roadmap](#-documentation-roadmap)
-  - [Current (v3.0.0)](#current-v300)
-  - [Future Enhancements](#future-enhancements)
+- [Documentation Structure](#documentation-structure)
+- [Documentation by Role](#documentation-by-role)
+- [By Feature](#by-feature)
+- [By Database Type](#by-database-type)
+- [Contributing to Documentation](#contributing-to-documentation)
 
-Welcome to the comprehensive documentation for the Database System - an enterprise-grade C++20 database abstraction layer with multi-backend support, connection pooling, and advanced query builders.
+---
 
-## 📚 Documentation Overview
+## Documentation Structure
 
-This documentation provides everything you need to effectively use, build, and contribute to the Database System project.
+### 📘 Core Documentation
 
-### 📖 Available Documentation
+Essential documents for understanding the system:
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[API Reference](API_REFERENCE.md)** | Complete API documentation with examples | Developers |
-| **[Build Guide](BUILD_GUIDE.md)** | Comprehensive build instructions and troubleshooting | Developers, DevOps |
-| **[Samples Guide](SAMPLES_GUIDE.md)** | Detailed walkthrough of sample programs | Developers, Students |
-| **[Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)** | Performance analysis and optimization guide | Architects, DevOps |
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design decisions, backend plugin system | [🇰🇷](01-ARCHITECTURE_KO.md) | 600+ |
+| [02-API_REFERENCE.md](02-API_REFERENCE.md) | Complete API docs: database_manager, connection_pool, ORM, query builders | [🇰🇷](02-API_REFERENCE_KO.md) | 1000+ |
 
-### 🚀 Quick Start
+### 📗 User Guides
 
-1. **For Developers**: Start with the [main README](../README.md) and then dive into [API Reference](API_REFERENCE.md)
-2. **For DevOps**: Check [Build Guide](BUILD_GUIDE.md) for deployment instructions
-3. **For Learning**: Follow [Samples Guide](SAMPLES_GUIDE.md) for hands-on examples
-4. **For Performance**: Review [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md) for optimization
+Step-by-step guides for users:
 
-## 📋 Project Information
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [QUICK_START.md](guides/QUICK_START.md) | 5-minute getting started guide | - | 170 |
+| [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) | Build instructions, dependencies, troubleshooting | [🇰🇷](guides/BUILD_GUIDE_KO.md) | 500+ |
+| [FAQ.md](guides/FAQ.md) | 20+ frequently asked questions with answers | - | 484 |
+| [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) | Common problems and solutions | - | 964 |
+| [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) | Recommended patterns for connection, queries, security | - | 1255 |
+| [SAMPLES_GUIDE.md](guides/SAMPLES_GUIDE.md) | Walkthrough of example applications | [🇰🇷](guides/SAMPLES_GUIDE_KO.md) | 800+ |
+
+### 📙 Advanced Topics
+
+For experienced users and contributors:
+
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [TYPE_SYSTEM.md](advanced/TYPE_SYSTEM.md) | database_value, type mapping, ORM integration | - | 484 |
+| [THREAD_SYSTEM_MIGRATION.md](advanced/THREAD_SYSTEM_MIGRATION.md) | Thread system integration guide | - | 300+ |
+| [CURRENT_STATE.md](advanced/CURRENT_STATE.md) | Current implementation status | [🇰🇷](advanced/CURRENT_STATE_KO.md) | 100+ |
+| [ARCHITECTURE_ISSUES.md](advanced/ARCHITECTURE_ISSUES.md) | Known architectural issues | [🇰🇷](advanced/ARCHITECTURE_ISSUES_KO.md) | 50+ |
+
+### 📊 Performance
+
+Performance metrics and optimization:
+
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [BASELINE.md](performance/BASELINE.md) | Performance baseline: 1.2ms queries, 5K TPS, 1.16M ops/s | [🇰🇷](performance/BASELINE_KO.md) | 300+ |
+| [BENCHMARKS.md](performance/BENCHMARKS.md) | Detailed benchmark results by backend | [🇰🇷](performance/BENCHMARKS_KO.md) | 600+ |
+| [STATIC_ANALYSIS_BASELINE.md](performance/STATIC_ANALYSIS_BASELINE.md) | Static analysis results (Clang-Tidy, Cppcheck) | [🇰🇷](performance/STATIC_ANALYSIS_BASELINE_KO.md) | 100+ |
+
+### 🤝 Contributing
+
+For contributors and maintainers:
+
+| Document | Description | Korean | Lines |
+|----------|-------------|--------|-------|
+| [CONTRIBUTING.md](contributing/CONTRIBUTING.md) | Contribution guidelines, code style, testing | - | 955 |
+| [CI_CD_GUIDE.md](contributing/CI_CD_GUIDE.md) | CI/CD pipeline, sanitizers, benchmarks | - | 530 |
+
+---
+
+## Documentation by Role
+
+### 👤 For New Users
+
+**Getting Started Path**:
+1. **⚡ Quick Start** - [5-minute guide](guides/QUICK_START.md) to first program
+2. **🏗️ Architecture** - [System overview](01-ARCHITECTURE.md) and design
+3. **📖 API Reference** - [Complete API](02-API_REFERENCE.md) documentation
+4. **💡 Examples** - [Samples guide](guides/SAMPLES_GUIDE.md) with walkthroughs
+
+**When You Have Issues**:
+- Check [FAQ](guides/FAQ.md) first (20+ common questions)
+- Use [Troubleshooting](guides/TROUBLESHOOTING.md) for problems
+- Search [GitHub Issues](https://github.com/kcenon/database_system/issues)
+
+### 💻 For Experienced Developers
+
+**Advanced Usage Path**:
+1. **🏗️ Architecture** - Understand [backend plugin system](01-ARCHITECTURE.md)
+2. **📖 API Reference** - Study [advanced APIs](02-API_REFERENCE.md)
+3. **✨ Best Practices** - Learn [optimization patterns](guides/BEST_PRACTICES.md)
+4. **📊 Performance** - Review [benchmarks](performance/BENCHMARKS.md)
+
+**Deep Dive Topics**:
+- [Type System](advanced/TYPE_SYSTEM.md) - Type mapping and ORM
+- [Thread Integration](advanced/THREAD_SYSTEM_MIGRATION.md) - Multi-threading
+- [Security Best Practices](guides/BEST_PRACTICES.md#security-best-practices)
+
+### 🔧 For DevOps Engineers
+
+**Deployment Path**:
+1. **🔧 Build Guide** - [Build and install](guides/BUILD_GUIDE.md)
+2. **📊 Benchmarks** - [Performance baselines](performance/BENCHMARKS.md)
+3. **✨ Best Practices** - [Connection tuning](guides/BEST_PRACTICES.md#connection-management)
+4. **🐛 Troubleshooting** - [Common issues](guides/TROUBLESHOOTING.md)
+
+**Monitoring and Tuning**:
+- [Connection Pool Performance](performance/BASELINE.md) - 0.1ms acquisition
+- [Query Performance](performance/BENCHMARKS.md) - Backend-specific metrics
+- [CI/CD Pipeline](contributing/CI_CD_GUIDE.md) - Automation
+
+### 🤝 For Contributors
+
+**Contribution Path**:
+1. **🤝 Contributing** - [How to contribute](contributing/CONTRIBUTING.md)
+2. **🔧 Build Guide** - [Development setup](guides/BUILD_GUIDE.md)
+3. **🚀 CI/CD** - [Pipeline documentation](contributing/CI_CD_GUIDE.md)
+4. **🏗️ Architecture** - [System internals](01-ARCHITECTURE.md)
+
+**Development Resources**:
+- [Code Style](contributing/CONTRIBUTING.md#code-style-guidelines)
+- [Testing Guide](contributing/CI_CD_GUIDE.md#running-checks-locally)
+- [Current Status](advanced/CURRENT_STATE.md) - Implementation status
+
+---
+
+## By Feature
+
+### 🔗 Connection Management
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| API | [API Reference](02-API_REFERENCE.md) | database_manager |
+| Pooling | [Best Practices](guides/BEST_PRACTICES.md) | Connection Management |
+| Performance | [Benchmarks](performance/BENCHMARKS.md) | Connection Pool |
+| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) | Connection Pool Demo |
+
+### 🏊 Connection Pooling
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| API | [API Reference](02-API_REFERENCE.md) | connection_pool |
+| Configuration | [FAQ](guides/FAQ.md) | Connection Pooling |
+| Tuning | [Best Practices](guides/BEST_PRACTICES.md) | Performance Optimization |
+| Benchmarks | [Baseline](performance/BASELINE.md) | 0.1ms acquisition |
+
+### 🔍 Query Building
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| API | [API Reference](02-API_REFERENCE.md) | Query Builders |
+| SQL Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | SQL Query Builder |
+| MongoDB Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | MongoDB Query Builder |
+| Redis Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | Redis Query Builder |
+
+### 🗂️ ORM Framework
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| API | [API Reference](02-API_REFERENCE.md) | entity_manager |
+| Type System | [Type System](advanced/TYPE_SYSTEM.md) | ORM Integration |
+| Examples | [FAQ](guides/FAQ.md) | ORM Framework |
+| Best Practices | [Best Practices](guides/BEST_PRACTICES.md) | Entity Mapping |
+
+### 🔐 Security
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| Credentials | [Best Practices](guides/BEST_PRACTICES.md) | Security Best Practices |
+| SQL Injection | [FAQ](guides/FAQ.md) | Security |
+| Access Control | [Architecture](01-ARCHITECTURE.md) | RBAC |
+| Audit Logging | [Best Practices](guides/BEST_PRACTICES.md) | Audit Logging |
+
+---
+
+## By Database Type
+
+### 🐘 PostgreSQL
+
+| Topic | Document |
+|-------|----------|
+| Setup | [Build Guide](guides/BUILD_GUIDE.md) - PostgreSQL dependencies |
+| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - PostgreSQL advanced |
+| Performance | [Benchmarks](performance/BENCHMARKS.md) - 1.2ms SELECT |
+| Tips | [Best Practices](guides/BEST_PRACTICES.md) - PostgreSQL-specific |
+
+### 🐬 MySQL
+
+| Topic | Document |
+|-------|----------|
+| Setup | [Build Guide](guides/BUILD_GUIDE.md) - MySQL dependencies |
+| Query Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) - SQL query builder |
+| Performance | [Benchmarks](performance/BENCHMARKS.md) - MySQL metrics |
+| Tips | [Best Practices](guides/BEST_PRACTICES.md) - MySQL-specific |
+
+### 🗄️ SQLite
+
+| Topic | Document |
+|-------|----------|
+| Setup | [Quick Start](guides/QUICK_START.md) - Easiest to start |
+| Usage | [Samples Guide](guides/SAMPLES_GUIDE.md) - Local database |
+| Performance | [Benchmarks](performance/BENCHMARKS.md) - 0.8ms SELECT |
+| Tips | [Best Practices](guides/BEST_PRACTICES.md) - SQLite-specific |
+
+### 🍃 MongoDB
+
+| Topic | Document |
+|-------|----------|
+| Setup | [Build Guide](guides/BUILD_GUIDE.md) - MongoDB dependencies |
+| Query Builder | [API Reference](02-API_REFERENCE.md) - mongodb_query_builder |
+| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - MongoDB examples |
+| Tips | [Best Practices](guides/BEST_PRACTICES.md) - MongoDB-specific |
+
+### 🔴 Redis
+
+| Topic | Document |
+|-------|----------|
+| Setup | [Build Guide](guides/BUILD_GUIDE.md) - Redis dependencies |
+| Query Builder | [API Reference](02-API_REFERENCE.md) - redis_query_builder |
+| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - Redis examples |
+| Performance | [Benchmarks](performance/BENCHMARKS.md) - 0.3ms operations |
+
+---
+
+## Project Information
 
 ### Current Status
-- **Latest Release**: January 19, 2025
-- **C++ Standard**: C++20
+- **Version**: 1.0 (Phase 3 C++17 Migration Complete)
+- **C++ Standard**: C++17 (C++20 for async/coroutines)
 - **License**: BSD 3-Clause
+- **Test Status**: 22/23 passing (95.7%)
 
 ### Supported Databases
-- ✅ **PostgreSQL** - Full support with advanced features
-- ✅ **MySQL/MariaDB** - Complete implementation
-- ✅ **SQLite** - File and in-memory databases
-- ✅ **MongoDB** - Document operations and aggregation
-- ✅ **Redis** - All data types and operations
+- ✅ **PostgreSQL** - Full support with JSONB, CTEs, prepared statements
+- ✅ **MySQL/MariaDB** - Complete implementation with utf8mb4
+- ✅ **SQLite** - File and in-memory with WAL mode, FTS5
+- ✅ **MongoDB** - Document operations and aggregation pipeline
+- ✅ **Redis** - All data types with pipelining
 
 ### Key Features
-- 🔗 **Multi-Backend Support** - Unified interface for SQL and NoSQL databases
-- 🏊‍♂️ **Connection Pooling** - Enterprise-grade connection management
-- 🔍 **Query Builders** - Type-safe query construction
-- 🧵 **Thread Safety** - Concurrent operations with proper synchronization
-- 🛡️ **Production Ready** - Mock fallbacks, error handling, monitoring
+- 🔗 **Multi-Backend** - Unified interface for 5 database types
+- 🏊 **Connection Pooling** - 0.1ms acquisition, 10K+ connections
+- 🔍 **Query Builders** - Type-safe SQL, MongoDB, Redis builders
+- 🗂️ **ORM Framework** - Entity mapping with type-safe CRUD
+- 🔐 **Security** - Credential encryption, RBAC, audit logging
+- 🧵 **Thread Safe** - Concurrent operations verified with TSan
+- 🛡️ **Production Ready** - Mock fallbacks, dependency injection
 
-## 📖 Documentation Structure
+---
 
-### Core Documentation
-
-#### [API Reference](API_REFERENCE.md)
-Complete reference for all classes, methods, and interfaces:
-- Core classes (`database_base`, `database_manager`)
-- Connection pooling APIs (`connection_pool`, `connection_stats`)
-- Query builders (`sql_query_builder`, `mongodb_query_builder`, `redis_query_builder`)
-- Type system (`database_types`, `database_value`)
-- Comprehensive code examples and usage patterns
-
-#### [Build Guide](BUILD_GUIDE.md)
-Everything needed to build and deploy the Database System:
-- Prerequisites and system requirements
-- Platform-specific instructions (Linux, macOS, Windows)
-- Database dependency installation (vcpkg, manual)
-- Build configurations and optimization
-- Troubleshooting common issues
-- CI/CD integration examples
-
-#### [Samples Guide](SAMPLES_GUIDE.md)
-Detailed exploration of sample programs:
-- Basic usage patterns with step-by-step explanations
-- Advanced PostgreSQL features and optimizations
-- Connection pooling demonstrations
-- Query builder examples for all database types
-- Multi-database usage patterns
-- Performance optimization techniques
-
-#### [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)
-Comprehensive performance analysis:
-- Latency and throughput measurements
-- Connection pool efficiency metrics
-- Query builder overhead analysis
-- Memory usage profiling
-- Scalability testing results
-- Optimization recommendations
-
-### Additional Resources
-
-#### [Changelog](../CHANGELOG.md)
-Complete version history with:
-- Feature additions and enhancements
-- Breaking changes and migration guides
-- Bug fixes and improvements
-- Performance optimizations
-
-#### [Project README](../README.md)
-Main project documentation with:
-- Project overview and features
-- Quick start instructions
-- Usage examples
-- Contributing guidelines
-
-## 🎯 Documentation by Use Case
-
-### For New Users
-1. Start with [Project README](../README.md) for overview
-2. Follow [Build Guide](BUILD_GUIDE.md) to get started
-3. Explore [Samples Guide](SAMPLES_GUIDE.md) for hands-on learning
-4. Reference [API Reference](API_REFERENCE.md) as needed
-
-### For Experienced Developers
-1. Review [API Reference](API_REFERENCE.md) for advanced features
-2. Check [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md) for optimization
-3. Use [Samples Guide](SAMPLES_GUIDE.md) for specific patterns
-4. Consult [Build Guide](BUILD_GUIDE.md) for deployment
-
-### For DevOps and System Administrators
-1. Focus on [Build Guide](BUILD_GUIDE.md) for deployment strategies
-2. Review [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md) for tuning
-3. Use [API Reference](API_REFERENCE.md) for monitoring setup
-4. Check [Changelog](../CHANGELOG.md) for version planning
-
-### For Students and Researchers
-1. Begin with [Project README](../README.md) for context
-2. Work through [Samples Guide](SAMPLES_GUIDE.md) for learning
-3. Study [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md) for analysis
-4. Reference [API Reference](API_REFERENCE.md) for implementation details
-
-## 🔍 Finding Information
-
-### By Feature
-
-**Connection Management**
-- API: [Database Manager](API_REFERENCE.md#database-manager)
-- Examples: [Basic Usage](SAMPLES_GUIDE.md#basic-usage-sample)
-- Build: [Database Dependencies](BUILD_GUIDE.md#database-dependencies)
-
-**Connection Pooling**
-- API: [Connection Pooling](API_REFERENCE.md#connection-pooling)
-- Examples: [Connection Pool Demo](SAMPLES_GUIDE.md#connection-pool-demo)
-- Performance: [Pool Performance](PERFORMANCE_BENCHMARKS.md#connection-pool-performance)
-
-**Query Building**
-- API: [Query Builders](API_REFERENCE.md#query-builders)
-- Examples: [Query Builder Examples](SAMPLES_GUIDE.md#query-builder-examples)
-- Performance: [Builder Performance](PERFORMANCE_BENCHMARKS.md#query-builder-performance)
-
-**Multi-Database Support**
-- API: [Database Types](API_REFERENCE.md#database-types)
-- Examples: [Multi-Database Examples](SAMPLES_GUIDE.md#multi-database-examples)
-- Build: [Build Configurations](BUILD_GUIDE.md#build-configurations)
-
-### By Database Type
-
-**PostgreSQL**
-- API: [postgres_manager](API_REFERENCE.md#database_base)
-- Examples: [PostgreSQL Advanced](SAMPLES_GUIDE.md#postgresql-advanced-sample)
-- Performance: [PostgreSQL Benchmarks](PERFORMANCE_BENCHMARKS.md#database-performance)
-
-**MySQL**
-- Build: [MySQL Dependencies](BUILD_GUIDE.md#manual-installation)
-- Examples: [SQL Query Builder](SAMPLES_GUIDE.md#sql-query-builder-examples)
-- Performance: [MySQL Performance](PERFORMANCE_BENCHMARKS.md#database-performance)
-
-**SQLite**
-- Build: [SQLite Support](BUILD_GUIDE.md#build-configurations)
-- Examples: [Local Database Usage](SAMPLES_GUIDE.md#basic-usage-sample)
-- Performance: [SQLite Benchmarks](PERFORMANCE_BENCHMARKS.md#database-performance)
-
-**MongoDB**
-- API: [mongodb_query_builder](API_REFERENCE.md#mongodb_query_builder)
-- Examples: [MongoDB Examples](SAMPLES_GUIDE.md#mongodb-query-builder-examples)
-- Performance: [MongoDB Performance](PERFORMANCE_BENCHMARKS.md#database-performance)
-
-**Redis**
-- API: [redis_query_builder](API_REFERENCE.md#redis_query_builder)
-- Examples: [Redis Examples](SAMPLES_GUIDE.md#redis-query-builder-examples)
-- Performance: [Redis Performance](PERFORMANCE_BENCHMARKS.md#database-performance)
-
-## 🤝 Contributing to Documentation
-
-We welcome contributions to improve our documentation! Here's how you can help:
+## Contributing to Documentation
 
 ### Documentation Standards
-- Use clear, concise language
-- Include practical examples for all concepts
-- Maintain consistent formatting and structure
-- Test all code examples before submission
+Follow the [Documentation Standard](/Users/raphaelshin/Sources/template_document/DOCUMENTATION_STANDARD.md):
+- Front matter on all documents
+- Code examples must compile
+- Bilingual support (English/Korean)
+- Cross-references with relative links
 
 ### Areas for Improvement
-- Additional usage examples
-- More detailed troubleshooting guides
-- Performance optimization tips
-- Platform-specific instructions
+- [ ] Korean translations for new guides (FAQ, TROUBLESHOOTING, BEST_PRACTICES)
+- [ ] Video tutorials
+- [ ] Interactive examples
+- [ ] More troubleshooting scenarios
 
 ### Submission Process
-1. Fork the repository
-2. Create a documentation branch
-3. Make your improvements
-4. Test any code examples
-5. Submit a pull request with clear description
+1. Read [Contributing Guide](contributing/CONTRIBUTING.md)
+2. Edit markdown files
+3. Test all code examples
+4. Update Korean translations
+5. Submit pull request
+
+---
 
 ## 📞 Getting Help
 
 ### Documentation Issues
-- **Missing Information**: Create an issue describing what's needed
-- **Incorrect Examples**: Report with details about the problem
-- **Unclear Instructions**: Suggest specific improvements
+- **Missing info**: [Open documentation issue](https://github.com/kcenon/database_system/issues/new?labels=documentation)
+- **Incorrect examples**: Report with details
+- **Unclear instructions**: Suggest improvements
 
 ### Technical Support
-- **Build Problems**: Check [Build Guide](BUILD_GUIDE.md) troubleshooting section
-- **API Questions**: Review [API Reference](API_REFERENCE.md) first
-- **Performance Issues**: Consult [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)
+1. Check [FAQ](guides/FAQ.md) - 20+ common questions
+2. Read [Troubleshooting](guides/TROUBLESHOOTING.md) - Solutions to common problems
+3. Search [GitHub Issues](https://github.com/kcenon/database_system/issues)
+4. Ask on [GitHub Discussions](https://github.com/kcenon/database_system/discussions)
 
 ### Support Resources
-- **GitHub Issues**: For bug reports and feature requests
-- **GitHub Discussions**: For questions and maintenance support
-- **Pull Requests**: For contributing code and documentation
-
-## 📅 Documentation Roadmap
-
-### Current (v3.0.0)
-- ✅ Complete API reference with examples
-- ✅ Comprehensive build guide with troubleshooting
-- ✅ Detailed samples guide with walkthroughs
-- ✅ Performance benchmarks with real-world data
-
-### Future Enhancements
-- 📋 Interactive API documentation
-- 🎥 Video tutorials and walkthroughs
-- 📊 More detailed performance analysis
-- 🌐 Multi-language documentation
+- **Issues**: Bug reports and feature requests
+- **Discussions**: Questions and support
+- **Pull Requests**: Code and documentation contributions
 
 ---
 
-**Database System Documentation** - Comprehensive guides for enterprise-grade database abstraction in C++20.
+## External Resources
 
-Last updated: January 19, 2025
+- **GitHub Repository**: [kcenon/database_system](https://github.com/kcenon/database_system)
+- **Issue Tracker**: [GitHub Issues](https://github.com/kcenon/database_system/issues)
+- **Main README**: [../README.md](../README.md)
+- **Improvement Plan**: [../IMPROVEMENT_PLAN.md](../IMPROVEMENT_PLAN.md)
+- **Changelog**: [../CHANGELOG.md](../CHANGELOG.md)
+
+---
+
+## Documentation Roadmap
+
+### ✅ Current (v1.0 - 2025-11-11)
+- ✅ Complete API reference with examples
+- ✅ Comprehensive build guide
+- ✅ 20+ FAQ questions
+- ✅ Detailed troubleshooting guide
+- ✅ Best practices documentation
+- ✅ Performance benchmarks
+- ✅ CI/CD documentation
+- ✅ Type system documentation
+
+### 📋 Future Enhancements
+- 📝 Korean translations for new guides
+- 🎥 Video tutorials
+- 📊 Interactive performance dashboard
+- 🌐 Multi-language support (Japanese, Chinese)
+- 📖 Migration guides for major versions
+
+---
+
+**Database System Documentation** - Enterprise-grade database abstraction for C++17/20
+
+**Last Updated**: 2025-11-11
+**Next Review**: 2026-02-11

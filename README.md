@@ -731,6 +731,20 @@ Our samples demonstrate real-world usage patterns and enterprise best practices:
 git clone https://github.com/kcenon/database_system.git
 cd database_system
 
+# Option 1: Using build scripts (recommended for quick start)
+./scripts/dependency.sh  # Install dependencies (Linux/macOS)
+# or
+scripts\dependency.bat   # Windows Command Prompt
+# or
+.\scripts\dependency.ps1 # Windows PowerShell
+
+./scripts/build.sh       # Build project (Linux/macOS)
+# or
+scripts\build.bat        # Windows Command Prompt
+# or
+.\scripts\build.ps1      # Windows PowerShell
+
+# Option 2: Manual CMake build
 # Install database dependencies via vcpkg (optional)
 vcpkg install libpqxx           # PostgreSQL
 vcpkg install libmysql          # MySQL

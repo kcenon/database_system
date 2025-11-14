@@ -31,17 +31,26 @@
  * @file connection_pool_bench.cpp
  * @brief Connection pool performance benchmarks
  * Phase 0, Task 0.2: Baseline Performance Benchmarking
+ *
+ * Compares performance across connection pool versions:
+ * - v1: Original connection pool (baseline)
+ * - v2: Priority-based connection pool with typed_thread_pool
+ * - v3: Adaptive queue with lock-free optimizations
  */
 
 #include <benchmark/benchmark.h>
 #include "database/connection_pool.h"
+#include "database/pooling/connection_pool_v2.h"
+#include "database/pooling/connection_pool_v3.h"
 #include "database/database_base.h"
 #include "database/database_types.h"
 #include <memory>
 #include <thread>
 #include <vector>
+#include <atomic>
 
 using namespace database;
+using namespace database::pooling;
 
 // Mock database manager for benchmarking (no actual DB connection)
 class mock_database : public database_base {
@@ -208,3 +217,338 @@ BENCHMARK(BM_ConnectionPool_Contention)
     ->Arg(8)
     ->Arg(16)
     ->UseRealTime();
+
+// ============================================================================
+// CONNECTION POOL V2 BENCHMARKS (Priority-based with typed_thread_pool)
+// ============================================================================
+
+// Benchmark v2 connection acquisition with priority
+static void BM_ConnectionPoolV2_AcquirePriority(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v2 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    auto priority = static_cast<connection_priority>(state.range(0));
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(priority);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+}
+BENCHMARK(BM_ConnectionPoolV2_AcquirePriority)
+    ->Arg(static_cast<int>(connection_priority::HEALTH_CHECK))
+    ->Arg(static_cast<int>(connection_priority::NORMAL_QUERY))
+    ->Arg(static_cast<int>(connection_priority::TRANSACTION))
+    ->Arg(static_cast<int>(connection_priority::CRITICAL));
+
+// Benchmark v2 concurrent acquisition with mixed priorities
+static void BM_ConnectionPoolV2_MixedPriority(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v2 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    std::atomic<int> counter{0};
+
+    for (auto _ : state) {
+        // Alternate between priorities
+        auto priority = (counter++ % 4 == 0)
+            ? connection_priority::CRITICAL
+            : connection_priority::NORMAL_QUERY;
+
+        auto future = pool.acquire_connection(priority);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+}
+BENCHMARK(BM_ConnectionPoolV2_MixedPriority)->Threads(4)->Threads(8)->Threads(16);
+
+// Benchmark v2 high-load scenario
+static void BM_ConnectionPoolV2_HighLoad(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 5;
+    config.max_connections = 20;
+
+    connection_pool_v2 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+        std::this_thread::sleep_for(std::chrono::microseconds(10));
+    }
+}
+BENCHMARK(BM_ConnectionPoolV2_HighLoad)->Threads(8)->Threads(16)->Threads(32);
+
+// ============================================================================
+// CONNECTION POOL V3 BENCHMARKS (Adaptive queue with lock-free optimization)
+// ============================================================================
+
+// Benchmark v3 connection acquisition latency
+static void BM_ConnectionPoolV3_AcquireLatency(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::FORCE_LEGACY
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+
+    // Report latency statistics
+    state.SetLabel("Latency (legacy queue)");
+}
+BENCHMARK(BM_ConnectionPoolV3_AcquireLatency);
+
+// Benchmark v3 with adaptive queue
+static void BM_ConnectionPoolV3_AdaptiveQueue(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::ADAPTIVE
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+
+    state.SetLabel("Adaptive queue");
+}
+BENCHMARK(BM_ConnectionPoolV3_AdaptiveQueue)->Threads(1)->Threads(4)->Threads(8)->Threads(16);
+
+// Benchmark v3 throughput with high concurrency
+static void BM_ConnectionPoolV3_Throughput(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 20;
+    config.max_connections = 100;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::ADAPTIVE
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+
+    // Calculate ops/sec
+    state.counters["ops_per_sec"] = benchmark::Counter(
+        state.iterations(),
+        benchmark::Counter::kIsRate
+    );
+}
+BENCHMARK(BM_ConnectionPoolV3_Throughput)
+    ->Threads(16)
+    ->Threads(32)
+    ->Threads(64)
+    ->UseRealTime();
+
+// Benchmark v3 priority handling
+static void BM_ConnectionPoolV3_PriorityHandling(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::ADAPTIVE
+    );
+    pool.initialize();
+
+    auto priority = static_cast<connection_priority>(state.range(0));
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(priority);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+}
+BENCHMARK(BM_ConnectionPoolV3_PriorityHandling)
+    ->Arg(static_cast<int>(connection_priority::HEALTH_CHECK))
+    ->Arg(static_cast<int>(connection_priority::NORMAL_QUERY))
+    ->Arg(static_cast<int>(connection_priority::TRANSACTION))
+    ->Arg(static_cast<int>(connection_priority::CRITICAL))
+    ->Threads(8);
+
+// ============================================================================
+// COMPARISON BENCHMARKS (v1 vs v2 vs v3)
+// ============================================================================
+
+// Benchmark v1 vs v2 vs v3 - Single-threaded
+static void BM_Compare_V1_SingleThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto conn = pool.acquire_connection();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v1");
+}
+BENCHMARK(BM_Compare_V1_SingleThread);
+
+static void BM_Compare_V2_SingleThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v2 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v2");
+}
+BENCHMARK(BM_Compare_V2_SingleThread);
+
+static void BM_Compare_V3_SingleThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::ADAPTIVE
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v3");
+}
+BENCHMARK(BM_Compare_V3_SingleThread);
+
+// Benchmark v1 vs v2 vs v3 - Multi-threaded
+static void BM_Compare_V1_MultiThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto conn = pool.acquire_connection();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v1");
+}
+BENCHMARK(BM_Compare_V1_MultiThread)->Threads(16);
+
+static void BM_Compare_V2_MultiThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v2 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); }
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v2");
+}
+BENCHMARK(BM_Compare_V2_MultiThread)->Threads(16);
+
+static void BM_Compare_V3_MultiThread(benchmark::State& state) {
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 50;
+
+    connection_pool_v3 pool(
+        database_types::postgres,
+        config,
+        []() { return std::make_unique<mock_database>(); },
+        std::thread::hardware_concurrency(),
+        kcenon::thread::adaptive_typed_job_queue_t<connection_priority>::queue_strategy::ADAPTIVE
+    );
+    pool.initialize();
+
+    for (auto _ : state) {
+        auto future = pool.acquire_connection(connection_priority::NORMAL_QUERY);
+        auto conn = future.get();
+        benchmark::DoNotOptimize(conn);
+    }
+    state.SetLabel("v3");
+}
+BENCHMARK(BM_Compare_V3_MultiThread)->Threads(16);
+
+BENCHMARK_MAIN();

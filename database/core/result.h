@@ -204,6 +204,11 @@ namespace database {
 
 		explicit error_info(const std::string& msg)
 			: code(-1), message(msg), module("") {}
+
+		// Conversion to error for standalone builds
+		operator error() const {
+			return error(error_code::unknown_error, message);
+		}
 	};
 
 	// Simple result<T> implementation for standalone builds
@@ -218,6 +223,9 @@ namespace database {
 		// Error constructor
 		result(const error& err) : error_(err), has_value_(false) {}
 		result(error&& err) : error_(std::move(err)), has_value_(false) {}
+
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : error_(e), has_value_(false) {}
 
 		// Copy/move
 		result(const result&) = default;
@@ -249,19 +257,19 @@ namespace database {
 		}
 
 		// Error access
-		const error& get_error() const {
+		const class error& get_error() const {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
-		error& get_error() {
+		class error& get_error() {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
 		// Legacy error() method
-		const error& error() const { return get_error(); }
-		error& error() { return get_error(); }
+		const class error& error() const { return get_error(); }
+		class error& error() { return get_error(); }
 
 		// Static factory methods
 		template<typename U = T>
@@ -269,17 +277,17 @@ namespace database {
 			return result<T>(std::forward<U>(value));
 		}
 
-		static result<T> err(const error& e) {
+		static result<T> err(const class error& e) {
 			return result<T>(e);
 		}
 
-		static result<T> err(error&& e) {
+		static result<T> err(class error&& e) {
 			return result<T>(std::move(e));
 		}
 
 	private:
 		T value_;
-		error error_;
+		class error error_;
 		bool has_value_;
 	};
 
@@ -297,6 +305,9 @@ namespace database {
 		result(const error& err) : error_(err), has_value_(false) {}
 		result(error&& err) : error_(std::move(err)), has_value_(false) {}
 
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : error_(e), has_value_(false) {}
+
 		// Copy/move
 		result(const result&) = default;
 		result(result&&) = default;
@@ -311,35 +322,35 @@ namespace database {
 		bool has_error() const noexcept { return !has_value_; }
 
 		// Error access
-		const error& get_error() const {
+		const class error& get_error() const {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
-		error& get_error() {
+		class error& get_error() {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
 		// Legacy error() method
-		const error& error() const { return get_error(); }
-		error& error() { return get_error(); }
+		const class error& error() const { return get_error(); }
+		class error& error() { return get_error(); }
 
 		// Static factory methods
 		static result<void> ok(std::monostate = std::monostate{}) {
 			return result<void>();
 		}
 
-		static result<void> err(const error& e) {
+		static result<void> err(const class error& e) {
 			return result<void>(e);
 		}
 
-		static result<void> err(error&& e) {
+		static result<void> err(class error&& e) {
 			return result<void>(std::move(e));
 		}
 
 	private:
-		error error_;
+		class error error_;
 		bool has_value_;
 	};
 

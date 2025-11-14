@@ -78,6 +78,13 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
 )
 
+# Add container-based protocol serialization if container_system is available
+if(USE_CONTAINER_SYSTEM AND _FOUND_CONTAINER_INCLUDE)
+    list(APPEND SOURCE_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol_container.cpp
+    )
+endif()
+
 # Phase 2: connection_pool_v2 and connection_pool_v3 (added conditionally with thread_system)
 if(USE_THREAD_SYSTEM)
     list(APPEND SOURCE_FILES

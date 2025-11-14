@@ -70,6 +70,10 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
+    # P0-3 Sources (Database Proxy Server)
+    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
 )
 
 # Phase 2: connection_pool_v2 and connection_pool_v3 (added conditionally with thread_system)

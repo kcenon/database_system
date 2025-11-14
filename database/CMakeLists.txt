@@ -74,6 +74,8 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
+    # P0-4 Sources (Remote Database Client)
+    ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
 )
 
 # Phase 2: connection_pool_v2 and connection_pool_v3 (added conditionally with thread_system)

@@ -15,6 +15,12 @@ All rights reserved.
 #include "../connection_pool.h"
 #include "../protocol/database_protocol.h"
 
+// network_system integration
+#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <network_system/core/messaging_server.h>
+#include <network_system/session/messaging_session.h>
+#endif
+
 namespace database::server {
 
 /**
@@ -29,11 +35,10 @@ namespace database::server {
  * - TLS/SSL encryption (via network_system)
  *
  * Architecture:
- * - Uses network_system::messaging_server (TODO: integrate)
+ * - Uses network_system::messaging_server for network communication
  * - Connection pool for database connections
  * - Thread pool for query execution
- *
- * @note This is a stub implementation. Full network integration is TODO.
+ * - Binary protocol for efficient communication
  */
 class database_proxy_server {
 public:
@@ -77,31 +82,54 @@ public:
 private:
     /**
      * @brief Handle client connection
-     * @param session_id New session ID
-     *
-     * TODO: Implement with network_system
+     * @param network_session network_system messaging session
      */
-    void handle_client_connect(const std::string& session_id);
+    void handle_client_connect(
+#ifdef BUILD_WITH_COMMON_SYSTEM
+        std::shared_ptr<network_system::session::messaging_session> network_session
+#else
+        const std::string& session_id
+#endif
+    );
 
     /**
      * @brief Handle client disconnection
      * @param session_id Session ID
-     *
-     * TODO: Implement with network_system
      */
     void handle_client_disconnect(const std::string& session_id);
 
     /**
      * @brief Handle incoming message
-     * @param session_id Session ID
+     * @param network_session Network session
      * @param data Message data
-     *
-     * TODO: Implement message processing
      */
-    void handle_message(const std::string& session_id, const std::vector<uint8_t>& data);
+    void handle_message(
+#ifdef BUILD_WITH_COMMON_SYSTEM
+        std::shared_ptr<network_system::session::messaging_session> network_session,
+#else
+        const std::string& session_id,
+#endif
+        const std::vector<uint8_t>& data
+    );
+
+    /**
+     * @brief Process query request message
+     * @param header Message header
+     * @param payload Request payload
+     * @return Response payload
+     */
+    std::vector<uint8_t> process_query_request(
+        const protocol::message_header& header,
+        const std::vector<uint8_t>& payload
+    );
 
     uint16_t port_;
     std::shared_ptr<connection_pool_manager> db_pool_;
+
+#ifdef BUILD_WITH_COMMON_SYSTEM
+    std::shared_ptr<network_system::core::messaging_server> network_server_;
+    std::unordered_map<std::string, std::shared_ptr<network_system::session::messaging_session>> network_sessions_;
+#endif
 
     mutable std::mutex sessions_mutex_;
     std::unordered_map<std::string, std::shared_ptr<database_session>> sessions_;

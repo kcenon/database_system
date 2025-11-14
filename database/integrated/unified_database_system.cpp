@@ -262,7 +262,7 @@ public:
         auto init_result = coordinator_->initialize();
         if (!init_result.is_ok()) {
             throw std::runtime_error("Failed to initialize database coordinator: " +
-                init_result.error().message);
+                init_result.get_error().message);
         }
 
         // Initialize metrics
@@ -478,7 +478,7 @@ public:
     VoidResult execute_transaction(const std::vector<std::string>& queries) {
         auto tx_result = begin_transaction();
         if (!tx_result.is_ok()) {
-            return tx_result.error();
+            return tx_result.get_error();
         }
 
         auto tx = std::move(tx_result.value());
@@ -488,7 +488,7 @@ public:
             if (!result.is_ok()) {
                 tx->rollback();
                 ++metrics_.transactions_rolled_back;
-                return result.error();
+                return result.get_error();
             }
         }
 
@@ -716,7 +716,7 @@ Result<size_t> unified_database_system::insert(
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.error();
+    return result.get_error();
 }
 
 Result<size_t> unified_database_system::update(
@@ -726,7 +726,7 @@ Result<size_t> unified_database_system::update(
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.error();
+    return result.get_error();
 }
 
 Result<size_t> unified_database_system::remove(
@@ -736,7 +736,7 @@ Result<size_t> unified_database_system::remove(
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.error();
+    return result.get_error();
 }
 
 // Query execution (async)
@@ -874,7 +874,7 @@ std::unique_ptr<unified_database_system> unified_database_system::builder::build
     if (!connection_string_.empty()) {
         auto result = system->connect(config_.database.type, connection_string_);
         if (!result.is_ok()) {
-            throw std::runtime_error("Failed to connect: " + result.error().message());
+            throw std::runtime_error("Failed to connect: " + result.get_error().message());
         }
     }
 

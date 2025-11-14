@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
                 }
 
             } else {
-                std::cout << "❌ Query failed: " << query_result.error().message() << "\n";
+                std::cout << "❌ Query failed: " << query_result.get_error().message() << "\n";
             }
 
             // Step 5: Check metrics
@@ -164,7 +164,7 @@ int main(int argc, char* argv[]) {
             }
 
         } else {
-            std::cout << "❌ Connection failed: " << connect_result.error().message() << "\n";
+            std::cout << "❌ Connection failed: " << connect_result.get_error().message() << "\n";
             std::cout << "\nNote: This is expected if PostgreSQL is not running.\n";
             std::cout << "The example demonstrates the API even without a real database.\n";
         }

@@ -89,10 +89,6 @@ namespace database {
 		bool is_err() const noexcept { return !this->has_value(); }
 		bool is_error() const noexcept { return !this->has_value(); }
 
-		// Accessing error with legacy method name
-		const database::error& error() const { return this->get_error(); }
-		database::error& error() { return this->get_error(); }
-
 		// Static factory methods for compatibility
 		template<typename U = T>
 		static result<T> ok(U&& value) {
@@ -135,10 +131,6 @@ namespace database {
 		bool is_ok() const noexcept { return this->has_value(); }
 		bool is_err() const noexcept { return !this->has_value(); }
 		bool is_error() const noexcept { return !this->has_value(); }
-
-		// Accessing error with legacy method name
-		const database::error& error() const { return this->get_error(); }
-		database::error& error() { return this->get_error(); }
 
 		// Static factory methods for compatibility
 		static result<void> ok(std::monostate = std::monostate{}) {
@@ -267,10 +259,6 @@ namespace database {
 			return error_;
 		}
 
-		// Legacy error() method
-		const class error& error() const { return get_error(); }
-		class error& error() { return get_error(); }
-
 		// Static factory methods
 		template<typename U = T>
 		static result<T> ok(U&& value) {
@@ -331,10 +319,6 @@ namespace database {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
-
-		// Legacy error() method
-		const class error& error() const { return get_error(); }
-		class error& error() { return get_error(); }
 
 		// Static factory methods
 		static result<void> ok(std::monostate = std::monostate{}) {

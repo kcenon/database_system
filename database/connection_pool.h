@@ -131,7 +131,7 @@ namespace database
 		 * @code
 		 * auto result = pool->acquire_connection();
 		 * if (!result) {
-		 *     std::cerr << "Failed: " << result.error().message << "\n";
+		 *     std::cerr << "Failed: " << result.get_error().message << "\n";
 		 *     return;
 		 * }
 		 * auto conn = result.value();

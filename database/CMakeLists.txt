@@ -70,12 +70,6 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
-    # P0-3 Sources (Database Proxy Server)
-    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
-    # P0-4 Sources (Remote Database Client)
-    ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
 )
 
 # Add container-based protocol serialization if container_system is available
@@ -91,6 +85,18 @@ if(USE_THREAD_SYSTEM)
         ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_priority_instantiation.cpp
+    )
+endif()
+
+# P0-3 and P0-4: Database Proxy Server and Remote Client (added conditionally with network_system)
+if(USE_NETWORK_SYSTEM)
+    list(APPEND SOURCE_FILES
+        # P0-3 Sources (Database Proxy Server)
+        ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
+        # P0-4 Sources (Remote Database Client)
+        ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
     )
 endif()
 
@@ -300,6 +306,63 @@ if(USE_CONTAINER_SYSTEM)
     else()
         message(WARNING "Database: container_system headers not found - integration disabled")
         set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not found" FORCE)
+    endif()
+endif()
+
+# network_system integration (optional)
+if(USE_NETWORK_SYSTEM)
+    # Try to find network_system source directory first
+    find_system_dependency(network_system)
+
+    if(network_system_FOUND AND network_system_SOURCE_DIR)
+        # Network headers are in the source directory root
+        set(_DATABASE_NETWORK_INCLUDE_PATHS
+            "${network_system_SOURCE_DIR}"
+            "${network_system_SOURCE_DIR}/include"
+        )
+    else()
+        # Fallback to include search
+        find_system_dependency_include(network_system)
+        set(_DATABASE_NETWORK_INCLUDE_PATHS ${network_system_INCLUDE_DIR})
+    endif()
+
+    set(_FOUND_NETWORK_INCLUDE FALSE)
+    foreach(_path ${_DATABASE_NETWORK_INCLUDE_PATHS})
+        if(EXISTS "${_path}/network_system/core/messaging_server.h" OR EXISTS "${_path}/core/messaging_server.h")
+            message(STATUS "Database: Found network_system headers at: ${_path}")
+            target_include_directories(${PROJECT_NAME} PUBLIC
+                $<BUILD_INTERFACE:${_path}>
+            )
+            set(_FOUND_NETWORK_INCLUDE TRUE)
+            break()
+        endif()
+    endforeach()
+
+    if(_FOUND_NETWORK_INCLUDE)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
+        message(STATUS "Database: network_system integration enabled")
+
+        # Try to link network_system library if built
+        set(_NETWORK_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/network_system/build/lib"
+            "/home/$ENV{USER}/Sources/network_system/build/lib"
+        )
+
+        foreach(_lib_path ${_NETWORK_LIB_PATHS})
+            if(EXISTS "${_lib_path}")
+                message(STATUS "Database: Found network_system library path: ${_lib_path}")
+                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                # Link to network_system library if it exists
+                if(EXISTS "${_lib_path}/libnetwork.a" OR EXISTS "${_lib_path}/libnetwork.dylib")
+                    target_link_libraries(${PROJECT_NAME} PUBLIC network)
+                    message(STATUS "Database: Linked network_system library")
+                endif()
+                break()
+            endif()
+        endforeach()
+    else()
+        message(WARNING "Database: network_system headers not found - integration disabled")
+        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
     endif()
 endif()
 

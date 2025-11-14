@@ -58,10 +58,10 @@ database::result<void> remote_database_client::initialize(const core::connection
 
         // Connect to server
         auto result = network_client_->connect();
-        if (!result) {
+        if (result.is_err()) {
             initialized_ = false;
             return database::result<void>::err(database::error(
-                database::error_code::invalid_state,
+                database::error_code::unknown_error,
                 "Failed to connect to database server: " + result.error().message
             ));
         }
@@ -71,7 +71,7 @@ database::result<void> remote_database_client::initialize(const core::connection
     } catch (const std::exception& e) {
         initialized_ = false;
         return database::result<void>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             std::string("Exception during initialization: ") + e.what()
         ));
     }
@@ -105,7 +105,7 @@ database::result<void> remote_database_client::shutdown() {
     // Disconnect from network
     if (network_client_) {
         auto result = network_client_->disconnect();
-        if (!result) {
+        if (result.is_err()) {
             std::cerr << "Failed to disconnect: " << result.error().message << "\n";
         }
     }
@@ -122,7 +122,7 @@ bool remote_database_client::is_initialized() const {
 
 database::result<uint64_t> remote_database_client::insert_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -142,7 +142,7 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to deserialize query response"
         ));
     }
@@ -164,7 +164,7 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
 
 database::result<uint64_t> remote_database_client::update_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -182,7 +182,7 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to deserialize query response"
         ));
     }
@@ -204,7 +204,7 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
 
 database::result<uint64_t> remote_database_client::delete_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -222,7 +222,7 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to deserialize query response"
         ));
     }
@@ -244,7 +244,7 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
 
 database::result<core::database_result> remote_database_client::select_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<core::database_result>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<core::database_result>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -262,7 +262,7 @@ database::result<core::database_result> remote_database_client::select_query(con
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<core::database_result>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to deserialize query response"
         ));
     }
@@ -294,7 +294,7 @@ database::result<core::database_result> remote_database_client::select_query(con
 
 database::result<void> remote_database_client::execute_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -312,7 +312,7 @@ database::result<void> remote_database_client::execute_query(const std::string& 
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<void>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to deserialize query response"
         ));
     }
@@ -334,11 +334,11 @@ database::result<void> remote_database_client::execute_query(const std::string& 
 
 database::result<void> remote_database_client::begin_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
     if (in_transaction_.exchange(true)) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "Transaction already in progress"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "Transaction already in progress"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -364,11 +364,11 @@ database::result<void> remote_database_client::begin_transaction() {
 
 database::result<void> remote_database_client::commit_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
     if (!in_transaction_.exchange(false)) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "No active transaction"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "No active transaction"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -392,11 +392,11 @@ database::result<void> remote_database_client::commit_transaction() {
 
 database::result<void> remote_database_client::rollback_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
     if (!in_transaction_.exchange(false)) {
-        return database::result<void>::err(database::error(database::error_code::invalid_state, "No active transaction"));
+        return database::result<void>::err(database::error(database::error_code::unknown_error, "No active transaction"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -465,7 +465,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     std::chrono::milliseconds timeout
 ) {
     if (!is_initialized()) {
-        return database::result<std::vector<uint8_t>>::err(database::error(database::error_code::invalid_state, "Client not initialized"));
+        return database::result<std::vector<uint8_t>>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -494,13 +494,13 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
 
     // Send request
     auto send_result = network_client_->send_with_retry(std::move(header_bytes));
-    if (!send_result) {
+    if (send_result.is_err()) {
         // Remove pending request
         std::lock_guard<std::mutex> lock(requests_mutex_);
         pending_responses_.erase(req_id);
 
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Failed to send request: " + send_result.error().message
         ));
     }
@@ -513,7 +513,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
         pending_responses_.erase(req_id);
 
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Request timeout"
         ));
     }
@@ -522,7 +522,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     auto response_data = response_future.get();
     if (response_data.empty()) {
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::invalid_state,
+            database::error_code::unknown_error,
             "Empty response received"
         ));
     }

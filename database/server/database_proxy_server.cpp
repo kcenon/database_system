@@ -57,7 +57,7 @@ bool database_proxy_server::start() {
     );
 
     auto result = network_server_->start_server(port_);
-    if (!result) {
+    if (result.is_err()) {
         running_ = false;
         std::cerr << "Failed to start network server: " << result.error().message << "\n";
         return false;
@@ -89,7 +89,7 @@ void database_proxy_server::stop() {
     // Stop network server
     if (network_server_) {
         auto result = network_server_->stop_server();
-        if (!result) {
+        if (result.is_err()) {
             std::cerr << "Failed to stop network server: " << result.error().message << "\n";
         }
     }

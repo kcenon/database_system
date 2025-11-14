@@ -874,7 +874,7 @@ std::unique_ptr<unified_database_system> unified_database_system::builder::build
     if (!connection_string_.empty()) {
         auto result = system->connect(config_.database.type, connection_string_);
         if (!result.is_ok()) {
-            throw std::runtime_error("Failed to connect: " + result.get_error().message());
+            throw std::runtime_error("Failed to connect: " + result.get_error().message);
         }
     }
 

@@ -197,38 +197,31 @@ namespace database {
 		// Add more as needed
 	};
 
-	// Simple error class for standalone builds
-	class error {
-	public:
-		error() : code_(error_code::success), message_("") {}
-		error(error_code code, std::string message)
-			: code_(code), message_(std::move(message)) {}
-
-		error_code code() const { return code_; }
-		const std::string& message() const { return message_; }
-
-	private:
-		error_code code_;
-		std::string message_;
-	};
-
-	// Legacy error_info for compatibility
+	// Simple error_info struct for standalone builds (compatible with common_system)
 	struct error_info {
 		int code;
 		std::string message;
 		std::string module;
 
-		error_info(int c = 0, std::string msg = "", std::string mod = "")
+		error_info() : code(0) {}
+
+		error_info(int c, std::string msg, std::string mod = "")
 			: code(c), message(std::move(msg)), module(std::move(mod)) {}
 
 		explicit error_info(const std::string& msg)
 			: code(-1), message(msg), module("") {}
 
-		// Conversion to error for standalone builds
-		operator error() const {
-			return error(error_code::unknown_error, message);
+		bool operator==(const error_info& other) const {
+			return code == other.code && message == other.message && module == other.module;
+		}
+
+		bool operator!=(const error_info& other) const {
+			return !(*this == other);
 		}
 	};
+
+	// Use error_info as the primary error type for fallback
+	using error = error_info;
 
 	// Simple result<T> implementation for standalone builds
 	template<typename T>
@@ -242,9 +235,6 @@ namespace database {
 		// Error constructor
 		result(const error& err) : error_(err), has_value_(false) {}
 		result(error&& err) : error_(std::move(err)), has_value_(false) {}
-
-		// Constructor from error_info (for legacy compatibility)
-		result(const error_info& e) : error_(e), has_value_(false) {}
 
 		// Copy/move
 		result(const result&) = default;
@@ -276,12 +266,12 @@ namespace database {
 		}
 
 		// Error access
-		const class error& get_error() const {
+		const error& get_error() const {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
-		class error& get_error() {
+		error& get_error() {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
@@ -292,17 +282,17 @@ namespace database {
 			return result<T>(std::forward<U>(value));
 		}
 
-		static result<T> err(const class error& e) {
+		static result<T> err(const error& e) {
 			return result<T>(e);
 		}
 
-		static result<T> err(class error&& e) {
+		static result<T> err(error&& e) {
 			return result<T>(std::move(e));
 		}
 
 	private:
 		T value_;
-		class error error_;
+		error error_;
 		bool has_value_;
 	};
 
@@ -320,9 +310,6 @@ namespace database {
 		result(const error& err) : error_(err), has_value_(false) {}
 		result(error&& err) : error_(std::move(err)), has_value_(false) {}
 
-		// Constructor from error_info (for legacy compatibility)
-		result(const error_info& e) : error_(e), has_value_(false) {}
-
 		// Copy/move
 		result(const result&) = default;
 		result(result&&) = default;
@@ -337,12 +324,12 @@ namespace database {
 		bool has_error() const noexcept { return !has_value_; }
 
 		// Error access
-		const class error& get_error() const {
+		const error& get_error() const {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
 
-		class error& get_error() {
+		error& get_error() {
 			if (has_value_) throw std::runtime_error("Accessing error of success result");
 			return error_;
 		}
@@ -352,16 +339,16 @@ namespace database {
 			return result<void>();
 		}
 
-		static result<void> err(const class error& e) {
+		static result<void> err(const error& e) {
 			return result<void>(e);
 		}
 
-		static result<void> err(class error&& e) {
+		static result<void> err(error&& e) {
 			return result<void>(std::move(e));
 		}
 
 	private:
-		class error error_;
+		error error_;
 		bool has_value_;
 	};
 

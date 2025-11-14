@@ -306,6 +306,20 @@ public:
      */
     static result<error_response> deserialize_error_response(const std::vector<uint8_t>& data);
 
+    /**
+     * @brief Serialize transaction response
+     * @param response Transaction response
+     * @return Serialized bytes
+     */
+    static std::vector<uint8_t> serialize(const transaction_response& response);
+
+    /**
+     * @brief Deserialize transaction response
+     * @param data Serialized bytes
+     * @return Deserialized response or error
+     */
+    static result<transaction_response> deserialize_transaction_response(const std::vector<uint8_t>& data);
+
 private:
     // Helper methods for primitive types
     static void write_uint8(std::vector<uint8_t>& buffer, uint8_t value);

@@ -262,6 +262,24 @@ result<error_response> protocol_serializer::deserialize_error_response(const std
     return response;
 }
 
+std::vector<uint8_t> protocol_serializer::serialize(const transaction_response& response) {
+    std::vector<uint8_t> buffer;
+    write_uint8(buffer, response.success ? 1 : 0);
+    write_string(buffer, response.error_message);
+    return buffer;
+}
+
+result<transaction_response> protocol_serializer::deserialize_transaction_response(const std::vector<uint8_t>& data) {
+    transaction_response response;
+    size_t offset = 0;
+    if (data.empty()) {
+        return error{error_code::invalid_argument, "Empty data"};
+    }
+    response.success = (read_uint8(data, offset) != 0);
+    response.error_message = read_string(data, offset);
+    return response;
+}
+
 // Helper methods for primitive types (little-endian)
 void protocol_serializer::write_uint8(std::vector<uint8_t>& buffer, uint8_t value) {
     buffer.push_back(value);

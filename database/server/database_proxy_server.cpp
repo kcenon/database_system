@@ -200,12 +200,75 @@ void database_proxy_server::handle_message(
         case protocol::message_type::BEGIN_TRANSACTION:
         case protocol::message_type::COMMIT_TRANSACTION:
         case protocol::message_type::ROLLBACK_TRANSACTION:
-            // TODO: Implement transaction handling
             {
+                // Deserialize transaction request
+                auto txn_request_result = protocol::protocol_serializer::deserialize_transaction_request(payload);
+
                 protocol::transaction_response txn_response;
-                txn_response.success = false;
-                txn_response.error_message = "TODO: Implement transaction handling";
-                response = protocol::protocol_serializer::serialize(txn_response);
+
+                if (!txn_request_result.has_value()) {
+                    txn_response.success = false;
+                    txn_response.error_message = "Failed to deserialize transaction request";
+                } else {
+                    // Get connection from pool
+                    auto pool = db_pool_->get_pool(database_types::sqlite);
+                    if (!pool) {
+                        txn_response.success = false;
+                        txn_response.error_message = "No connection pool available";
+                    } else {
+                        auto conn_result = pool->acquire_connection();
+                        if (!conn_result.is_ok()) {
+                            txn_response.success = false;
+                            txn_response.error_message = "Failed to acquire database connection";
+                        } else {
+                            auto conn_wrapper = conn_result.value();
+                            auto db_conn = std::shared_ptr<database_base>(conn_wrapper->get(), [conn_wrapper](database_base*) {
+                                // Keep conn_wrapper alive, do not delete the raw pointer
+                            });
+
+                            // Create temporary session
+                            auto temp_session = std::make_shared<database_session>(
+                                "txn_temp_" + std::to_string(header.request_id),
+                                db_conn
+                            );
+
+                            // Execute transaction command
+                            try {
+                                switch (header.type) {
+                                    case protocol::message_type::BEGIN_TRANSACTION:
+                                        txn_response = temp_session->begin_transaction();
+                                        break;
+                                    case protocol::message_type::COMMIT_TRANSACTION:
+                                        txn_response = temp_session->commit_transaction();
+                                        break;
+                                    case protocol::message_type::ROLLBACK_TRANSACTION:
+                                        txn_response = temp_session->rollback_transaction();
+                                        break;
+                                    default:
+                                        txn_response.success = false;
+                                        txn_response.error_message = "Unknown transaction type";
+                                        break;
+                                }
+                            } catch (const std::exception& e) {
+                                txn_response.success = false;
+                                txn_response.error_message = std::string("Exception during transaction: ") + e.what();
+                            }
+                        }
+                    }
+                }
+
+                // Serialize transaction response with header
+                auto txn_response_bytes = protocol::protocol_serializer::serialize(txn_response);
+
+                protocol::message_header txn_response_header;
+                txn_response_header.type = protocol::message_type::TRANSACTION_RESPONSE;
+                txn_response_header.request_id = header.request_id;
+                txn_response_header.payload_size = static_cast<uint32_t>(txn_response_bytes.size());
+
+                auto txn_header_bytes = protocol::protocol_serializer::serialize_header(txn_response_header);
+                txn_header_bytes.insert(txn_header_bytes.end(), txn_response_bytes.begin(), txn_response_bytes.end());
+
+                response = txn_header_bytes;
             }
             break;
 
@@ -254,11 +317,47 @@ std::vector<uint8_t> database_proxy_server::process_query_request(
 
     const auto& request = request_result.value();
 
-    // TODO: Execute query using connection pool
     protocol::query_response response;
-    response.success = false;
-    response.error_message = "TODO: Implement query execution with connection pool";
-    response.error_code = -999;
+
+    // Get connection from pool
+    // For now, use SQLite as default. In production, this would be determined by
+    // client configuration or connection request
+    auto pool = db_pool_->get_pool(database_types::sqlite);
+    if (!pool) {
+        response.success = false;
+        response.error_message = "No connection pool available for requested database type";
+        response.error_code = -4;
+    } else {
+        // Acquire connection from pool
+        auto conn_result = pool->acquire_connection();
+        if (!conn_result.is_ok()) {
+            response.success = false;
+            response.error_message = "Failed to acquire database connection";
+            response.error_code = -5;
+        } else {
+            auto conn_wrapper = conn_result.value();
+            auto db_conn = std::shared_ptr<database_base>(conn_wrapper->get(), [conn_wrapper](database_base*) {
+                // Keep conn_wrapper alive, do not delete the raw pointer
+            });
+
+            // Create temporary session for this request
+            auto temp_session = std::make_shared<database_session>(
+                "temp_" + std::to_string(header.request_id),
+                db_conn
+            );
+
+            // Execute query through session
+            try {
+                response = temp_session->execute_query(request);
+            } catch (const std::exception& e) {
+                response.success = false;
+                response.error_message = std::string("Exception during query execution: ") + e.what();
+                response.error_code = -6;
+            }
+
+            // Session and connection will be automatically released
+        }
+    }
 
     // Serialize response with header
     auto response_bytes = protocol::protocol_serializer::serialize(response);

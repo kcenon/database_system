@@ -239,6 +239,63 @@ if(USE_THREAD_SYSTEM)
     endif()
 endif()
 
+# container_system integration (optional)
+if(USE_CONTAINER_SYSTEM)
+    # Try to find container_system source directory first
+    find_system_dependency(container_system)
+
+    if(container_system_FOUND AND container_system_SOURCE_DIR)
+        # Container headers are in the source directory root
+        set(_DATABASE_CONTAINER_INCLUDE_PATHS
+            "${container_system_SOURCE_DIR}"
+            "${container_system_SOURCE_DIR}/include"
+        )
+    else()
+        # Fallback to include search
+        find_system_dependency_include(container_system)
+        set(_DATABASE_CONTAINER_INCLUDE_PATHS ${container_system_INCLUDE_DIR})
+    endif()
+
+    set(_FOUND_CONTAINER_INCLUDE FALSE)
+    foreach(_path ${_DATABASE_CONTAINER_INCLUDE_PATHS})
+        if(EXISTS "${_path}/core/container.h")
+            message(STATUS "Database: Found container_system headers at: ${_path}")
+            target_include_directories(${PROJECT_NAME} PUBLIC
+                $<BUILD_INTERFACE:${_path}>
+            )
+            set(_FOUND_CONTAINER_INCLUDE TRUE)
+            break()
+        endif()
+    endforeach()
+
+    if(_FOUND_CONTAINER_INCLUDE)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)
+        message(STATUS "Database: container_system integration enabled")
+
+        # Try to link container_system library if built
+        set(_CONTAINER_LIB_PATHS
+            "/Users/$ENV{USER}/Sources/container_system/build/lib"
+            "/home/$ENV{USER}/Sources/container_system/build/lib"
+        )
+
+        foreach(_lib_path ${_CONTAINER_LIB_PATHS})
+            if(EXISTS "${_lib_path}")
+                message(STATUS "Database: Found container_system library path: ${_lib_path}")
+                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                # Link to container_system library if it exists
+                if(EXISTS "${_lib_path}/libcontainer.a" OR EXISTS "${_lib_path}/libcontainer.dylib")
+                    target_link_libraries(${PROJECT_NAME} PUBLIC container)
+                    message(STATUS "Database: Linked container_system library")
+                endif()
+                break()
+            endif()
+        endforeach()
+    else()
+        message(WARNING "Database: container_system headers not found - integration disabled")
+        set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not found" FORCE)
+    endif()
+endif()
+
 # PostgreSQL dependency (optional)
 if(USE_POSTGRESQL)
     find_package(libpqxx CONFIG QUIET)

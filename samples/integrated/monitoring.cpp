@@ -369,7 +369,7 @@ int main(int argc, char* argv[]) {
             std::cout << "\n✅ Disconnected\n";
 
         } else {
-            std::cout << "❌ Connection failed: " << connect_result.get_error().message() << "\n";
+            std::cout << "❌ Connection failed: " << connect_result.get_error().message << "\n";
             std::cout << "\nNote: This example requires a real database connection.\n";
         }
 

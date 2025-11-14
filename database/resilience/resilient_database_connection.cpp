@@ -32,6 +32,7 @@
 #include "resilient_database_connection.h"
 #include <thread>
 #include <algorithm>
+#include <cmath>
 
 namespace database {
 namespace resilience {

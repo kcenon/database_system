@@ -44,17 +44,17 @@ backend_registry& backend_registry::instance()
 	return instance;
 }
 
-database::VoidResult backend_registry::register_backend(const std::string& name,
+database::result<void> backend_registry::register_backend(const std::string& name,
                                                         backend_factory_fn factory)
 {
 	if (name.empty())
 	{
-		return database::VoidResult(database::error_info{1, "Backend name cannot be empty", "backend_registry"});
+		return database::result<void>(database::error_info{1, "Backend name cannot be empty", "backend_registry"});
 	}
 
 	if (!factory)
 	{
-		return database::VoidResult(database::error_info{2, "Factory function cannot be null", "backend_registry"});
+		return database::result<void>(database::error_info{2, "Factory function cannot be null", "backend_registry"});
 	}
 
 	std::lock_guard<std::mutex> lock(mutex_);
@@ -62,25 +62,25 @@ database::VoidResult backend_registry::register_backend(const std::string& name,
 	// Check if backend already registered
 	if (factories_.find(name) != factories_.end())
 	{
-		return database::VoidResult(database::error_info{3, "Backend '" + name + "' is already registered", "backend_registry"});
+		return database::result<void>(database::error_info{3, "Backend '" + name + "' is already registered", "backend_registry"});
 	}
 
 	factories_[name] = factory;
-	return database::VoidResult(std::monostate{});
+	return database::result<void>(std::monostate{});
 }
 
-database::VoidResult backend_registry::unregister_backend(const std::string& name)
+database::result<void> backend_registry::unregister_backend(const std::string& name)
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 
 	auto it = factories_.find(name);
 	if (it == factories_.end())
 	{
-		return database::VoidResult(database::error_info{4, "Backend '" + name + "' not found", "backend_registry"});
+		return database::result<void>(database::error_info{4, "Backend '" + name + "' not found", "backend_registry"});
 	}
 
 	factories_.erase(it);
-	return database::VoidResult(std::monostate{});
+	return database::result<void>(std::monostate{});
 }
 
 std::unique_ptr<database_backend> backend_registry::create(const std::string& name) const

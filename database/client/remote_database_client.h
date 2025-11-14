@@ -93,13 +93,13 @@ public:
      * Establishes connection using network_system::resilient_client with
      * automatic reconnection support.
      */
-    database::VoidResult initialize(const core::connection_config& config) override;
+    database::result<void> initialize(const core::connection_config& config) override;
 
     /**
      * @brief Shutdown connection gracefully
      * @return VoidResult::ok() on success, error on failure
      */
-    database::VoidResult shutdown() override;
+    database::result<void> shutdown() override;
 
     /**
      * @brief Check if client is connected and ready
@@ -112,53 +112,53 @@ public:
      * @param query_string INSERT statement
      * @return Number of rows inserted, or error
      */
-    database::Result<uint64_t> insert_query(const std::string& query_string) override;
+    database::result<uint64_t> insert_query(const std::string& query_string) override;
 
     /**
      * @brief Execute UPDATE query remotely
      * @param query_string UPDATE statement
      * @return Number of rows updated, or error
      */
-    database::Result<uint64_t> update_query(const std::string& query_string) override;
+    database::result<uint64_t> update_query(const std::string& query_string) override;
 
     /**
      * @brief Execute DELETE query remotely
      * @param query_string DELETE statement
      * @return Number of rows deleted, or error
      */
-    database::Result<uint64_t> delete_query(const std::string& query_string) override;
+    database::result<uint64_t> delete_query(const std::string& query_string) override;
 
     /**
      * @brief Execute SELECT query remotely
      * @param query_string SELECT statement
      * @return Query results, or error
      */
-    database::Result<core::database_result> select_query(const std::string& query_string) override;
+    database::result<core::database_result> select_query(const std::string& query_string) override;
 
     /**
      * @brief Execute general query remotely
      * @param query_string SQL statement
      * @return VoidResult::ok() on success, error on failure
      */
-    database::VoidResult execute_query(const std::string& query_string) override;
+    database::result<void> execute_query(const std::string& query_string) override;
 
     /**
      * @brief Begin remote transaction
      * @return VoidResult::ok() on success, error on failure
      */
-    database::VoidResult begin_transaction() override;
+    database::result<void> begin_transaction() override;
 
     /**
      * @brief Commit remote transaction
      * @return VoidResult::ok() on success, error on failure
      */
-    database::VoidResult commit_transaction() override;
+    database::result<void> commit_transaction() override;
 
     /**
      * @brief Rollback remote transaction
      * @return VoidResult::ok() on success, error on failure
      */
-    database::VoidResult rollback_transaction() override;
+    database::result<void> rollback_transaction() override;
 
     /**
      * @brief Check if in remote transaction
@@ -187,7 +187,7 @@ public:
      *
      * Allows non-blocking query execution with futures.
      */
-    std::future<database::Result<core::database_result>> execute_async(const std::string& query_string);
+    std::future<database::result<core::database_result>> execute_async(const std::string& query_string);
 
 private:
     /**
@@ -197,7 +197,7 @@ private:
      * @param timeout Timeout duration
      * @return Response payload, or error
      */
-    database::Result<std::vector<uint8_t>> send_request(
+    database::result<std::vector<uint8_t>> send_request(
         protocol::message_type request_type,
         const std::vector<uint8_t>& payload,
         std::chrono::milliseconds timeout = std::chrono::seconds(30)

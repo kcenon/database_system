@@ -122,27 +122,27 @@ public:
 
 	database_types type() const override;
 
-	database::VoidResult initialize(const core::connection_config& config) override;
+	database::result<void> initialize(const core::connection_config& config) override;
 
-	database::VoidResult shutdown() override;
+	database::result<void> shutdown() override;
 
 	bool is_initialized() const override;
 
-	database::Result<uint64_t> insert_query(const std::string& query_string) override;
+	database::result<uint64_t> insert_query(const std::string& query_string) override;
 
-	database::Result<uint64_t> update_query(const std::string& query_string) override;
+	database::result<uint64_t> update_query(const std::string& query_string) override;
 
-	database::Result<uint64_t> delete_query(const std::string& query_string) override;
+	database::result<uint64_t> delete_query(const std::string& query_string) override;
 
-	database::Result<database_result> select_query(const std::string& query_string) override;
+	database::result<database_result> select_query(const std::string& query_string) override;
 
-	database::VoidResult execute_query(const std::string& query_string) override;
+	database::result<void> execute_query(const std::string& query_string) override;
 
-	database::VoidResult begin_transaction() override;
+	database::result<void> begin_transaction() override;
 
-	database::VoidResult commit_transaction() override;
+	database::result<void> commit_transaction() override;
 
-	database::VoidResult rollback_transaction() override;
+	database::result<void> rollback_transaction() override;
 
 	bool in_transaction() const override;
 

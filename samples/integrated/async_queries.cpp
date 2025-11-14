@@ -63,7 +63,7 @@ void example_single_async_query(unified_database_system& db) {
         std::cout << "   Rows: " << result.value().size() << "\n";
         std::cout << "   Duration: " << duration.count() << " ms\n";
     } else {
-        std::cout << "❌ Query failed: " << result.error().message << "\n";
+        std::cout << "❌ Query failed: " << result.get_error().message() << "\n";
     }
 }
 
@@ -102,7 +102,7 @@ void example_concurrent_queries(unified_database_system& db) {
         } else {
             failed++;
             std::cout << "  Query " << (i + 1) << ": ❌ Failed - "
-                      << result.error().message << "\n";
+                      << result.get_error().message() << "\n";
         }
     }
 
@@ -134,7 +134,7 @@ void example_query_with_timeout(unified_database_system& db) {
         if (result.is_ok()) {
             std::cout << "   Result: Success\n";
         } else {
-            std::cout << "   Result: " << result.error().message << "\n";
+            std::cout << "   Result: " << result.get_error().message() << "\n";
         }
     } else if (status == std::future_status::timeout) {
         std::cout << "⏱️  Query timed out (still executing in background)\n";
@@ -183,7 +183,7 @@ void example_batch_operations(unified_database_system& db) {
         if (result.is_ok()) {
             std::cout << "✅ " << result.value().size() << " rows\n";
         } else {
-            std::cout << "❌ " << result.error().message << "\n";
+            std::cout << "❌ " << result.get_error().message() << "\n";
         }
     }
 
@@ -210,8 +210,8 @@ void example_error_handling(unified_database_system& db) {
         std::cout << "✅ Query succeeded (unexpected)\n";
     } else {
         std::cout << "❌ Query failed (expected):\n";
-        std::cout << "   Error Code: " << result.error().code << "\n";
-        std::cout << "   Error Message: " << result.error().message << "\n";
+        std::cout << "   Error Code: " << static_cast<int>(result.get_error().code()) << "\n";
+        std::cout << "   Error Message: " << result.get_error().message() << "\n";
     }
 }
 
@@ -266,7 +266,7 @@ int main(int argc, char* argv[]) {
             std::cout << "\n✅ Disconnected\n";
 
         } else {
-            std::cout << "❌ Connection failed: " << connect_result.error().message << "\n";
+            std::cout << "❌ Connection failed: " << connect_result.get_error().message() << "\n";
             std::cout << "\nNote: This example requires a real database connection.\n";
             std::cout << "Usage: " << argv[0] << " \"host=localhost dbname=test user=test password=test\"\n";
             return 1;

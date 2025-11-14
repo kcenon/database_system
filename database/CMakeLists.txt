@@ -70,12 +70,19 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
+    # P0-3 Sources (Database Proxy Server)
+    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
+    # P0-4 Sources (Remote Database Client)
+    ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
 )
 
-# Phase 2: connection_pool_v2 (added conditionally with thread_system)
+# Phase 2: connection_pool_v2 and connection_pool_v3 (added conditionally with thread_system)
 if(USE_THREAD_SYSTEM)
     list(APPEND SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_priority_instantiation.cpp
     )
 endif()

@@ -74,9 +74,9 @@ public:
 				return make_error(
 					"Logger initialization failed: "
 #if defined(USE_COMMON_SYSTEM)
-						+ logger_result.get_error().message
+						+ logger_result.error().message
 #else
-						+ logger_result.get_error().message
+						+ logger_result.error().message
 #endif
 				);
 			}
@@ -101,9 +101,9 @@ public:
 				return make_error(
 					"Monitoring initialization failed: "
 #if defined(USE_COMMON_SYSTEM)
-						+ monitor_result.get_error().message
+						+ monitor_result.error().message
 #else
-						+ monitor_result.get_error().message
+						+ monitor_result.error().message
 #endif
 				);
 			}
@@ -130,9 +130,9 @@ public:
 				return make_error(
 					"Thread pool initialization failed: "
 #if defined(USE_COMMON_SYSTEM)
-						+ thread_result.get_error().message
+						+ thread_result.error().message
 #else
-						+ thread_result.get_error().message
+						+ thread_result.error().message
 #endif
 				);
 			}
@@ -205,9 +205,9 @@ public:
 						logger_->log(db_log_level::warning,
 									 "Thread pool shutdown warning: "
 #if defined(USE_COMMON_SYSTEM)
-										 + thread_result.get_error().message
+										 + thread_result.error().message
 #else
-										 + thread_result.get_error().message
+										 + thread_result.error().message
 #endif
 						);
 					}
@@ -235,9 +235,9 @@ public:
 						logger_->log(db_log_level::warning,
 									 "Monitoring shutdown warning: "
 #if defined(USE_COMMON_SYSTEM)
-										 + monitor_result.get_error().message
+										 + monitor_result.error().message
 #else
-										 + monitor_result.get_error().message
+										 + monitor_result.error().message
 #endif
 						);
 					}

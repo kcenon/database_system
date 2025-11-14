@@ -262,7 +262,7 @@ public:
         auto init_result = coordinator_->initialize();
         if (!init_result.is_ok()) {
             throw std::runtime_error("Failed to initialize database coordinator: " +
-                init_result.get_error().message);
+                init_result.error().message);
         }
 
         // Initialize metrics

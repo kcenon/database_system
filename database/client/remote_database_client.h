@@ -13,8 +13,15 @@ All rights reserved.
 #include <mutex>
 #include <atomic>
 #include <unordered_map>
+#include <condition_variable>
 #include "../core/database_backend.h"
 #include "../protocol/database_protocol.h"
+
+// network_system integration
+#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <network_system/utils/resilient_client.h>
+#include <network_system/core/messaging_client.h>
+#endif
 
 namespace database::client {
 
@@ -27,14 +34,14 @@ namespace database::client {
  *
  * Features:
  * - database_backend interface compatibility
- * - Auto-reconnect with exponential backoff
+ * - Auto-reconnect with exponential backoff (via resilient_client)
  * - Async query support
  * - TLS/SSL encryption (via network_system)
  * - Request-response correlation
  *
  * Architecture:
- * - Uses network_system::resilient_client (TODO: integrate)
- * - Binary protocol for communication
+ * - Uses network_system::resilient_client for reliable communication
+ * - Binary protocol for efficient communication
  * - Thread-safe request/response handling
  *
  * Example Usage:
@@ -83,7 +90,8 @@ public:
      * @param config Connection configuration (host, port, credentials)
      * @return VoidResult::ok() on success, error on failure
      *
-     * TODO: Integrate network_system::resilient_client
+     * Establishes connection using network_system::resilient_client with
+     * automatic reconnection support.
      */
     database::VoidResult initialize(const core::connection_config& config) override;
 
@@ -186,20 +194,18 @@ private:
      * @brief Send request and wait for response
      * @param request_type Message type
      * @param payload Request payload
+     * @param timeout Timeout duration
      * @return Response payload, or error
-     *
-     * TODO: Implement with network_system
      */
     database::Result<std::vector<uint8_t>> send_request(
         protocol::message_type request_type,
-        const std::vector<uint8_t>& payload
+        const std::vector<uint8_t>& payload,
+        std::chrono::milliseconds timeout = std::chrono::seconds(30)
     );
 
     /**
      * @brief Handle incoming response message
      * @param message_data Raw message bytes
-     *
-     * TODO: Implement message routing to pending requests
      */
     void handle_response(const std::vector<uint8_t>& message_data);
 
@@ -209,12 +215,19 @@ private:
      */
     uint64_t next_request_id();
 
-    // TODO: Network layer (requires network_system)
-    // std::shared_ptr<network_system::resilient_client> network_client_;
+#ifdef BUILD_WITH_COMMON_SYSTEM
+    // Network layer (network_system integration)
+    std::shared_ptr<network_system::utils::resilient_client> network_client_;
+#endif
 
     // Request/response tracking
+    struct pending_response {
+        std::promise<std::vector<uint8_t>> promise;
+        std::chrono::steady_clock::time_point deadline;
+    };
+
     mutable std::mutex requests_mutex_;
-    std::unordered_map<uint64_t, std::promise<protocol::query_response>> pending_requests_;
+    std::unordered_map<uint64_t, pending_response> pending_responses_;
     std::atomic<uint64_t> next_request_id_{1};
 
     // Connection state

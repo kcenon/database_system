@@ -60,10 +60,10 @@ database_types mysql_backend::type() const
 	return database_types::mysql;
 }
 
-database::VoidResult mysql_backend::initialize(const core::connection_config& config)
+database::result<void> mysql_backend::initialize(const core::connection_config& config)
 {
 	if (initialized_) {
-		return database::VoidResult::err(database::error_info("Backend already initialized"));
+		return database::result<void>::err(database::error_info("Backend already initialized"));
 	}
 
 	connection_config_ = config;
@@ -71,18 +71,18 @@ database::VoidResult mysql_backend::initialize(const core::connection_config& co
 
 	if (!manager_->connect(conn_str)) {
 		last_error_ = "Failed to connect to MySQL server";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	initialized_ = true;
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
-database::VoidResult mysql_backend::shutdown()
+database::result<void> mysql_backend::shutdown()
 {
 	if (!initialized_) {
-		return database::VoidResult::ok(std::monostate{}); // Already shutdown
+		return database::result<void>::ok(std::monostate{}); // Already shutdown
 	}
 
 	// Rollback any active transaction before disconnecting
@@ -92,12 +92,12 @@ database::VoidResult mysql_backend::shutdown()
 
 	if (!manager_->disconnect()) {
 		last_error_ = "Failed to disconnect from MySQL server";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	initialized_ = false;
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
 bool mysql_backend::is_initialized() const
@@ -105,135 +105,135 @@ bool mysql_backend::is_initialized() const
 	return initialized_;
 }
 
-database::Result<uint64_t> mysql_backend::insert_query(const std::string& query_string)
+database::result<uint64_t> mysql_backend::insert_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::Result<uint64_t>::err(database::error_info(last_error_));
+		return database::result<uint64_t>::err(database::error_info(last_error_));
 	}
 
 	unsigned int affected = manager_->insert_query(query_string);
 	last_error_.clear();
-	return database::Result<uint64_t>::ok(static_cast<uint64_t>(affected));
+	return database::result<uint64_t>::ok(static_cast<uint64_t>(affected));
 }
 
-database::Result<uint64_t> mysql_backend::update_query(const std::string& query_string)
+database::result<uint64_t> mysql_backend::update_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::Result<uint64_t>::err(database::error_info(last_error_));
+		return database::result<uint64_t>::err(database::error_info(last_error_));
 	}
 
 	unsigned int affected = manager_->update_query(query_string);
 	last_error_.clear();
-	return database::Result<uint64_t>::ok(static_cast<uint64_t>(affected));
+	return database::result<uint64_t>::ok(static_cast<uint64_t>(affected));
 }
 
-database::Result<uint64_t> mysql_backend::delete_query(const std::string& query_string)
+database::result<uint64_t> mysql_backend::delete_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::Result<uint64_t>::err(database::error_info(last_error_));
+		return database::result<uint64_t>::err(database::error_info(last_error_));
 	}
 
 	unsigned int affected = manager_->delete_query(query_string);
 	last_error_.clear();
-	return database::Result<uint64_t>::ok(static_cast<uint64_t>(affected));
+	return database::result<uint64_t>::ok(static_cast<uint64_t>(affected));
 }
 
-database::Result<database_result> mysql_backend::select_query(const std::string& query_string)
+database::result<database_result> mysql_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::Result<database_result>::err(database::error_info(last_error_));
+		return database::result<database_result>::err(database::error_info(last_error_));
 	}
 
 	database_result result = manager_->select_query(query_string);
 	last_error_.clear();
-	return database::Result<database_result>::ok(std::move(result));
+	return database::result<database_result>::ok(std::move(result));
 }
 
-database::VoidResult mysql_backend::execute_query(const std::string& query_string)
+database::result<void> mysql_backend::execute_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (!manager_->execute_query(query_string)) {
 		last_error_ = "Query execution failed";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
-database::VoidResult mysql_backend::begin_transaction()
+database::result<void> mysql_backend::begin_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (in_transaction_) {
 		last_error_ = "Transaction already active";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (!manager_->execute_query("START TRANSACTION")) {
 		last_error_ = "Failed to begin transaction";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	in_transaction_ = true;
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
-database::VoidResult mysql_backend::commit_transaction()
+database::result<void> mysql_backend::commit_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (!in_transaction_) {
 		last_error_ = "No active transaction";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (!manager_->execute_query("COMMIT")) {
 		last_error_ = "Failed to commit transaction";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	in_transaction_ = false;
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
-database::VoidResult mysql_backend::rollback_transaction()
+database::result<void> mysql_backend::rollback_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	if (!in_transaction_) {
 		// Not an error - already rolled back or never started
-		return database::VoidResult::ok(std::monostate{});
+		return database::result<void>::ok(std::monostate{});
 	}
 
 	if (!manager_->execute_query("ROLLBACK")) {
 		last_error_ = "Failed to rollback transaction";
 		in_transaction_ = false; // Force state reset even on error
-		return database::VoidResult::err(database::error_info(last_error_));
+		return database::result<void>::err(database::error_info(last_error_));
 	}
 
 	in_transaction_ = false;
 	last_error_.clear();
-	return database::VoidResult::ok(std::monostate{});
+	return database::result<void>::ok(std::monostate{});
 }
 
 bool mysql_backend::in_transaction() const

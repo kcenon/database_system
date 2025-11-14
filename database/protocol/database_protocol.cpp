@@ -46,12 +46,19 @@ result<message_header> protocol_serializer::deserialize_header(const std::vector
     return header;
 }
 
-// Stub implementations for other serialization methods
+// Implementations for request/response serialization
 std::vector<uint8_t> protocol_serializer::serialize(const connect_request& request) {
     std::vector<uint8_t> buffer;
     write_string(buffer, request.database_type);
     write_string(buffer, request.connection_string);
-    // TODO: Serialize options map
+
+    // Serialize options map
+    write_uint32(buffer, static_cast<uint32_t>(request.options.size()));
+    for (const auto& [key, value] : request.options) {
+        write_string(buffer, key);
+        write_string(buffer, value);
+    }
+
     return buffer;
 }
 
@@ -63,7 +70,21 @@ result<connect_request> protocol_serializer::deserialize_connect_request(const s
     }
     request.database_type = read_string(data, offset);
     request.connection_string = read_string(data, offset);
-    // TODO: Deserialize options
+
+    // Deserialize options map
+    if (offset + 4 > data.size()) {
+        return error{error_code::invalid_argument, "Data too small for options"};
+    }
+    uint32_t options_count = read_uint32(data, offset);
+    for (uint32_t i = 0; i < options_count; ++i) {
+        if (offset >= data.size()) {
+            return error{error_code::invalid_argument, "Data truncated in options"};
+        }
+        std::string key = read_string(data, offset);
+        std::string value = read_string(data, offset);
+        request.options[key] = value;
+    }
+
     return request;
 }
 
@@ -71,7 +92,13 @@ std::vector<uint8_t> protocol_serializer::serialize(const query_request& request
     std::vector<uint8_t> buffer;
     write_uint8(buffer, static_cast<uint8_t>(request.operation));
     write_string(buffer, request.query_string);
-    // TODO: Serialize parameters
+
+    // Serialize parameters vector
+    write_uint32(buffer, static_cast<uint32_t>(request.parameters.size()));
+    for (const auto& param : request.parameters) {
+        write_string(buffer, param);
+    }
+
     return buffer;
 }
 
@@ -83,7 +110,20 @@ result<query_request> protocol_serializer::deserialize_query_request(const std::
     }
     request.operation = static_cast<query_operation>(read_uint8(data, offset));
     request.query_string = read_string(data, offset);
-    // TODO: Deserialize parameters
+
+    // Deserialize parameters vector
+    if (offset + 4 > data.size()) {
+        return error{error_code::invalid_argument, "Data too small for parameters"};
+    }
+    uint32_t param_count = read_uint32(data, offset);
+    request.parameters.reserve(param_count);
+    for (uint32_t i = 0; i < param_count; ++i) {
+        if (offset >= data.size()) {
+            return error{error_code::invalid_argument, "Data truncated in parameters"};
+        }
+        request.parameters.push_back(read_string(data, offset));
+    }
+
     return request;
 }
 
@@ -91,8 +131,27 @@ std::vector<uint8_t> protocol_serializer::serialize(const query_response& respon
     std::vector<uint8_t> buffer;
     write_uint8(buffer, response.success ? 1 : 0);
     write_uint64(buffer, response.affected_rows);
+    write_uint64(buffer, response.last_insert_id);
+    write_uint32(buffer, static_cast<uint32_t>(response.error_code));
     write_string(buffer, response.error_message);
-    // TODO: Serialize rows and columns
+
+    // Serialize column names
+    write_uint32(buffer, static_cast<uint32_t>(response.column_names.size()));
+    for (const auto& column : response.column_names) {
+        write_string(buffer, column);
+    }
+
+    // Serialize rows (vector of maps)
+    write_uint32(buffer, static_cast<uint32_t>(response.rows.size()));
+    for (const auto& row : response.rows) {
+        // Each row is a map<string, string>
+        write_uint32(buffer, static_cast<uint32_t>(row.size()));
+        for (const auto& [key, value] : row) {
+            write_string(buffer, key);
+            write_string(buffer, value);
+        }
+    }
+
     return buffer;
 }
 
@@ -104,8 +163,46 @@ result<query_response> protocol_serializer::deserialize_query_response(const std
     }
     response.success = (read_uint8(data, offset) != 0);
     response.affected_rows = read_uint64(data, offset);
+    response.last_insert_id = read_uint64(data, offset);
+    response.error_code = static_cast<int32_t>(read_uint32(data, offset));
     response.error_message = read_string(data, offset);
-    // TODO: Deserialize rows and columns
+
+    // Deserialize column names
+    if (offset + 4 > data.size()) {
+        return error{error_code::invalid_argument, "Data too small for column names"};
+    }
+    uint32_t column_count = read_uint32(data, offset);
+    response.column_names.reserve(column_count);
+    for (uint32_t i = 0; i < column_count; ++i) {
+        if (offset >= data.size()) {
+            return error{error_code::invalid_argument, "Data truncated in column names"};
+        }
+        response.column_names.push_back(read_string(data, offset));
+    }
+
+    // Deserialize rows
+    if (offset + 4 > data.size()) {
+        return error{error_code::invalid_argument, "Data too small for rows"};
+    }
+    uint32_t row_count = read_uint32(data, offset);
+    response.rows.reserve(row_count);
+    for (uint32_t i = 0; i < row_count; ++i) {
+        if (offset + 4 > data.size()) {
+            return error{error_code::invalid_argument, "Data too small for row"};
+        }
+        uint32_t field_count = read_uint32(data, offset);
+        std::map<std::string, std::string> row;
+        for (uint32_t j = 0; j < field_count; ++j) {
+            if (offset >= data.size()) {
+                return error{error_code::invalid_argument, "Data truncated in row fields"};
+            }
+            std::string key = read_string(data, offset);
+            std::string value = read_string(data, offset);
+            row[key] = value;
+        }
+        response.rows.push_back(std::move(row));
+    }
+
     return response;
 }
 
@@ -162,6 +259,24 @@ result<error_response> protocol_serializer::deserialize_error_response(const std
     response.error_code = static_cast<int32_t>(read_uint32(data, offset));
     response.error_message = read_string(data, offset);
     response.error_context = read_string(data, offset);
+    return response;
+}
+
+std::vector<uint8_t> protocol_serializer::serialize(const transaction_response& response) {
+    std::vector<uint8_t> buffer;
+    write_uint8(buffer, response.success ? 1 : 0);
+    write_string(buffer, response.error_message);
+    return buffer;
+}
+
+result<transaction_response> protocol_serializer::deserialize_transaction_response(const std::vector<uint8_t>& data) {
+    transaction_response response;
+    size_t offset = 0;
+    if (data.empty()) {
+        return error{error_code::invalid_argument, "Empty data"};
+    }
+    response.success = (read_uint8(data, offset) != 0);
+    response.error_message = read_string(data, offset);
     return response;
 }
 

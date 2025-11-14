@@ -44,6 +44,9 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
+    # P1-1 Headers (Resilient Connection)
+    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.h
 )
 
 # Collect all source files
@@ -70,6 +73,9 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
+    # P1-1 Sources (Resilient Connection)
+    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.cpp
 )
 
 # Add container-based protocol serialization if container_system is available

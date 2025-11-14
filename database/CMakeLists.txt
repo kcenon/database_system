@@ -47,6 +47,8 @@ set(HEADER_FILES
     # P1-1 Headers (Resilient Connection)
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.h
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.h
+    # P1-2 Headers (Immutable Query Builder)
+    ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
 )
 
 # Collect all source files
@@ -76,6 +78,8 @@ set(SOURCE_FILES
     # P1-1 Sources (Resilient Connection)
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.cpp
+    # P1-2 Sources (Immutable Query Builder)
+    ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.cpp
 )
 
 # Add container-based protocol serialization if container_system is available

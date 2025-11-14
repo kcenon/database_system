@@ -65,7 +65,7 @@
  * logger_adapter logger(config);
  * auto result = logger.initialize();
  * if (!result.is_ok()) {
- *     std::cerr << "Logger init failed: " << result.error().message << "\n";
+ *     std::cerr << "Logger init failed: " << result.get_error().message << "\n";
  *     return;
  * }
  *

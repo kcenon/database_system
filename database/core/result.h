@@ -29,96 +29,333 @@
 
 #pragma once
 
+#include <variant>
+#include <string>
+#include <stdexcept>
+
 // Result<T> header for database_system
-// This file provides a fallback Result<T> implementation when BUILD_WITH_COMMON_SYSTEM is not enabled
+// Provides unified error handling with conditional thread_system integration
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
-	// Use common_system's Result implementation
-	#include <kcenon/common/patterns/result.h>
-	namespace database {
-		using kcenon::common::Result;
-		using kcenon::common::VoidResult;
-		using kcenon::common::error_info;
-	}
-	namespace database::integrated {
-		using kcenon::common::Result;
-		using kcenon::common::VoidResult;
-		using kcenon::common::error_info;
-	}
+// Include thread_system's error handling when available
+#include <kcenon/thread/core/error_handling.h>
+
+namespace database {
+	// Primary type aliases using thread_system's result
+	using error_code = kcenon::thread::error_code;
+	using error = kcenon::thread::error;
+
+	// Compatibility type for error_info (legacy, will be deprecated)
+	// Must be defined before result<T> classes
+	struct error_info {
+		int code;
+		std::string message;
+		std::string module;
+
+		error_info(int c = 0, std::string msg = "", std::string mod = "")
+			: code(c), message(std::move(msg)), module(std::move(mod)) {}
+
+		explicit error_info(const std::string& msg)
+			: code(-1), message(msg), module("") {}
+
+		// Conversion to/from thread_system::error
+		error_info(const error& e)
+			: code(static_cast<int>(e.code())), message(e.message()), module("") {}
+
+		operator error() const {
+			return kcenon::thread::error(static_cast<error_code>(code), message);
+		}
+	};
+
+	// Compatibility layer: wrapper around thread_system::result with legacy API
+	template<typename T>
+	class result : public kcenon::thread::result<T> {
+	public:
+		using base_type = kcenon::thread::result<T>;
+		using value_type = T;
+
+		// Inherit all constructors
+		using base_type::base_type;
+
+		// Constructor from base type
+		result(const base_type& other) : base_type(other) {}
+		result(base_type&& other) : base_type(std::move(other)) {}
+
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : base_type(kcenon::thread::error(static_cast<error_code>(e.code), e.message)) {}
+
+		// Compatibility methods
+		bool is_ok() const noexcept { return this->has_value(); }
+		bool is_err() const noexcept { return !this->has_value(); }
+		bool is_error() const noexcept { return !this->has_value(); }
+
+		// Static factory methods for compatibility
+		template<typename U = T>
+		static result<T> ok(U&& value) {
+			return result<T>(std::forward<U>(value));
+		}
+
+		static result<T> err(const database::error& e) {
+			return result<T>(e);
+		}
+
+		static result<T> err(database::error&& e) {
+			return result<T>(std::move(e));
+		}
+	};
+
+	// Specialization for void
+	template<>
+	class result<void> : public kcenon::thread::result<void> {
+	public:
+		using base_type = kcenon::thread::result<void>;
+		using value_type = void;
+
+		// Inherit constructors
+		using base_type::base_type;
+
+		// Default constructor for success
+		result() : base_type() {}
+
+		// Constructor from base type
+		result(const base_type& other) : base_type(other) {}
+		result(base_type&& other) : base_type(std::move(other)) {}
+
+		// Constructor from std::monostate (for legacy compatibility)
+		result(std::monostate) : base_type() {}
+
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : base_type(kcenon::thread::error(static_cast<error_code>(e.code), e.message)) {}
+
+		// Compatibility methods
+		bool is_ok() const noexcept { return this->has_value(); }
+		bool is_err() const noexcept { return !this->has_value(); }
+		bool is_error() const noexcept { return !this->has_value(); }
+
+		// Static factory methods for compatibility
+		static result<void> ok(std::monostate = std::monostate{}) {
+			return result<void>();
+		}
+
+		static result<void> err(const database::error& e) {
+			return result<void>(e);
+		}
+
+		static result<void> err(database::error&& e) {
+			return result<void>(std::move(e));
+		}
+	};
+
+	// Legacy compatibility aliases (will be deprecated)
+	// Note: [[deprecated]] attribute on using declarations requires C++20
+	// For C++17 compatibility, we omit the attribute here
+	template<typename T>
+	using Result = result<T>;
+
+	using VoidResult = result<void>;
+
+} // namespace database
+
 #else
-	// Fallback: Define minimal Result<T> type if common_system not available
-	#include <variant>
-	#include <string>
-	#include <utility>
+// Fallback implementation without thread_system (for CI and standalone builds)
 
-	namespace database {
-		/// Error information structure
-		struct error_info {
-			int code;
-			std::string message;
-			std::string module;
+namespace database {
+	// Simple error code enum for standalone builds
+	enum class error_code {
+		success = 0,
+		unknown_error,
+		invalid_argument,
+		not_implemented,
+		invalid_state,
+		// Add more as needed
+	};
 
-			// Default constructor
-			error_info(int c = 0, std::string msg = "", std::string mod = "")
-				: code(c), message(std::move(msg)), module(std::move(mod)) {}
+	// Simple error class for standalone builds
+	class error {
+	public:
+		error() : code_(error_code::success), message_("") {}
+		error(error_code code, std::string message)
+			: code_(code), message_(std::move(message)) {}
 
-			// Constructor accepting message only (for compatibility with common_system)
-			explicit error_info(const std::string& msg)
-				: code(-1), message(msg), module("") {}
-		};
+		error_code code() const { return code_; }
+		const std::string& message() const { return message_; }
 
-		/// Result type for database operations
-		template<typename T>
-		class Result {
-		private:
-			std::variant<T, error_info> value_;
+	private:
+		error_code code_;
+		std::string message_;
+	};
 
-		public:
-			// Constructors
-			Result(T&& value) : value_(std::forward<T>(value)) {}
-			Result(const T& value) : value_(value) {}
-			Result(error_info&& error) : value_(std::forward<error_info>(error)) {}
-			Result(const error_info& error) : value_(error) {}
+	// Legacy error_info for compatibility
+	struct error_info {
+		int code;
+		std::string message;
+		std::string module;
 
-			// Static factory methods (for compatibility with common_system)
-			template<typename U = T>
-			static Result<T> ok(U&& value) {
-				return Result<T>(std::forward<U>(value));
-			}
+		error_info(int c = 0, std::string msg = "", std::string mod = "")
+			: code(c), message(std::move(msg)), module(std::move(mod)) {}
 
-			static Result<T> err(const error_info& error) {
-				return Result<T>(error);
-			}
+		explicit error_info(const std::string& msg)
+			: code(-1), message(msg), module("") {}
 
-			static Result<T> err(error_info&& error) {
-				return Result<T>(std::move(error));
-			}
+		// Conversion to error for standalone builds
+		operator error() const {
+			return error(error_code::unknown_error, message);
+		}
+	};
 
-			// Check status
-			bool is_ok() const { return std::holds_alternative<T>(value_); }
-			bool is_err() const { return std::holds_alternative<error_info>(value_); }
-			bool is_error() const { return is_err(); }
+	// Simple result<T> implementation for standalone builds
+	template<typename T>
+	class result {
+	public:
+		using value_type = T;
 
-			// Access value
-			const T& value() const { return std::get<T>(value_); }
-			T& value() { return std::get<T>(value_); }
+		// Success constructor
+		result(T value) : value_(std::move(value)), has_value_(true) {}
 
-			// Access error
-			const error_info& error() const { return std::get<error_info>(value_); }
-			error_info& error() { return std::get<error_info>(value_); }
+		// Error constructor
+		result(const error& err) : error_(err), has_value_(false) {}
+		result(error&& err) : error_(std::move(err)), has_value_(false) {}
 
-			// Bool conversion
-			explicit operator bool() const { return is_ok(); }
-		};
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : error_(e), has_value_(false) {}
 
-		/// VoidResult for operations that don't return a value
-		using VoidResult = Result<std::monostate>;
-	}
+		// Copy/move
+		result(const result&) = default;
+		result(result&&) = default;
+		result& operator=(const result&) = default;
+		result& operator=(result&&) = default;
 
-	// Provide the same types in integrated namespace for compatibility
-	namespace database::integrated {
-		using database::error_info;
-		using database::Result;
-		using database::VoidResult;
-	}
-#endif
+		// Check methods
+		bool has_value() const noexcept { return has_value_; }
+		bool is_ok() const noexcept { return has_value_; }
+		bool is_err() const noexcept { return !has_value_; }
+		bool is_error() const noexcept { return !has_value_; }
+		bool has_error() const noexcept { return !has_value_; }
+
+		// Value access
+		const T& value() const& {
+			if (!has_value_) throw std::runtime_error("Accessing value of error result");
+			return value_;
+		}
+
+		T& value() & {
+			if (!has_value_) throw std::runtime_error("Accessing value of error result");
+			return value_;
+		}
+
+		T&& value() && {
+			if (!has_value_) throw std::runtime_error("Accessing value of error result");
+			return std::move(value_);
+		}
+
+		// Error access
+		const class error& get_error() const {
+			if (has_value_) throw std::runtime_error("Accessing error of success result");
+			return error_;
+		}
+
+		class error& get_error() {
+			if (has_value_) throw std::runtime_error("Accessing error of success result");
+			return error_;
+		}
+
+		// Static factory methods
+		template<typename U = T>
+		static result<T> ok(U&& value) {
+			return result<T>(std::forward<U>(value));
+		}
+
+		static result<T> err(const class error& e) {
+			return result<T>(e);
+		}
+
+		static result<T> err(class error&& e) {
+			return result<T>(std::move(e));
+		}
+
+	private:
+		T value_;
+		class error error_;
+		bool has_value_;
+	};
+
+	// Specialization for void
+	template<>
+	class result<void> {
+	public:
+		using value_type = void;
+
+		// Success constructor
+		result() : has_value_(true) {}
+		result(std::monostate) : has_value_(true) {}
+
+		// Error constructor
+		result(const error& err) : error_(err), has_value_(false) {}
+		result(error&& err) : error_(std::move(err)), has_value_(false) {}
+
+		// Constructor from error_info (for legacy compatibility)
+		result(const error_info& e) : error_(e), has_value_(false) {}
+
+		// Copy/move
+		result(const result&) = default;
+		result(result&&) = default;
+		result& operator=(const result&) = default;
+		result& operator=(result&&) = default;
+
+		// Check methods
+		bool has_value() const noexcept { return has_value_; }
+		bool is_ok() const noexcept { return has_value_; }
+		bool is_err() const noexcept { return !has_value_; }
+		bool is_error() const noexcept { return !has_value_; }
+		bool has_error() const noexcept { return !has_value_; }
+
+		// Error access
+		const class error& get_error() const {
+			if (has_value_) throw std::runtime_error("Accessing error of success result");
+			return error_;
+		}
+
+		class error& get_error() {
+			if (has_value_) throw std::runtime_error("Accessing error of success result");
+			return error_;
+		}
+
+		// Static factory methods
+		static result<void> ok(std::monostate = std::monostate{}) {
+			return result<void>();
+		}
+
+		static result<void> err(const class error& e) {
+			return result<void>(e);
+		}
+
+		static result<void> err(class error&& e) {
+			return result<void>(std::move(e));
+		}
+
+	private:
+		class error error_;
+		bool has_value_;
+	};
+
+	// Legacy compatibility aliases
+	template<typename T>
+	using Result = result<T>;
+
+	using VoidResult = result<void>;
+
+} // namespace database
+
+#endif // BUILD_WITH_COMMON_SYSTEM
+
+// Provide the same types in integrated namespace for compatibility
+namespace database::integrated {
+	using database::result;
+	using database::error_code;
+	using database::error;
+	using database::error_info;
+
+	// Legacy compatibility
+	using database::Result;
+	using database::VoidResult;
+} // namespace database::integrated

@@ -58,7 +58,7 @@ public:
      * @brief Start the server
      * @return true if started successfully, false otherwise
      *
-     * TODO: Integrate network_system::messaging_server
+     * Uses network_system::messaging_server for network communication
      */
     bool start();
 

@@ -353,8 +353,22 @@ database::result<void> remote_database_client::begin_transaction() {
         return database::result<void>::err(response_result.get_error());
     }
 
-    // TODO: Parse transaction_response
-    std::cout << "Begin transaction\n";
+    // Parse transaction_response
+    auto txn_response_result = protocol::protocol_serializer::deserialize_transaction_response(response_result.value());
+    if (txn_response_result.is_err()) {
+        in_transaction_ = false;
+        return database::result<void>::err(txn_response_result.get_error());
+    }
+
+    auto txn_response = txn_response_result.value();
+    if (!txn_response.success) {
+        in_transaction_ = false;
+        return database::result<void>::err(database::error(
+            database::error_code::unknown_error,
+            txn_response.error_message
+        ));
+    }
+
     return database::result<void>::ok();
 #else
     std::cout << "Begin transaction (stub)\n";
@@ -451,10 +465,12 @@ std::future<database::result<core::database_result>> remote_database_client::exe
     auto promise = std::make_shared<std::promise<database::result<core::database_result>>>();
     auto future = promise->get_future();
 
-    // TODO: Implement true async execution
-    // For now, execute synchronously
-    auto result = select_query(query_string);
-    promise->set_value(result);
+    // Execute async using std::async
+    // Note: Network request itself is already asynchronous via resilient_client
+    std::async(std::launch::async, [this, query_string, promise]() {
+        auto result = select_query(query_string);
+        promise->set_value(result);
+    });
 
     return future;
 }

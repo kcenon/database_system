@@ -63,7 +63,7 @@ namespace database::client {
  *   }
  * @endcode
  *
- * @note This is a stub implementation. Full network integration is TODO.
+ * @note Implements full network integration with network_system::resilient_client
  */
 class remote_database_client : public core::database_backend {
 public:

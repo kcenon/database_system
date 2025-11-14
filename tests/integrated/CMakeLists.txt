@@ -137,17 +137,55 @@ add_test(NAME IntegratedUnifiedSystemTest
          COMMAND integrated_unified_system_test)
 
 ##################################################
+# Test 7: Container Protocol Test (Optional)
+##################################################
+
+if(USE_CONTAINER_SYSTEM)
+    add_executable(integrated_container_protocol_test
+        test_container_protocol.cpp
+    )
+
+    target_link_libraries(integrated_container_protocol_test PRIVATE
+        database
+        gtest
+        gtest_main
+    )
+
+    target_compile_definitions(integrated_container_protocol_test PRIVATE
+        USE_CONTAINER_SYSTEM
+    )
+
+    set_target_properties(integrated_container_protocol_test PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedContainerProtocolTest
+             COMMAND integrated_container_protocol_test)
+
+    message(STATUS "Container protocol test configured")
+endif()
+
+##################################################
 # All Integrated Tests Target
 ##################################################
 
-add_custom_target(integrated_tests
-    DEPENDS
-        integrated_configuration_test
-        integrated_logger_adapter_test
-        integrated_monitoring_adapter_test
-        integrated_thread_adapter_test
-        integrated_coordinator_test
-        integrated_unified_system_test
+set(_INTEGRATED_TEST_TARGETS
+    integrated_configuration_test
+    integrated_logger_adapter_test
+    integrated_monitoring_adapter_test
+    integrated_thread_adapter_test
+    integrated_coordinator_test
+    integrated_unified_system_test
 )
 
-message(STATUS "Integrated tests configured (Phases 1-6)")
+if(USE_CONTAINER_SYSTEM)
+    list(APPEND _INTEGRATED_TEST_TARGETS integrated_container_protocol_test)
+endif()
+
+add_custom_target(integrated_tests
+    DEPENDS ${_INTEGRATED_TEST_TARGETS}
+)
+
+message(STATUS "Integrated tests configured (Phases 1-6${USE_CONTAINER_SYSTEM})")

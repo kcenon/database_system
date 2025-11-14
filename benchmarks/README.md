@@ -118,8 +118,9 @@ Measures query builder performance:
 
 **File**: `connection_pool_bench.cpp`
 
-Measures connection pool performance:
+Measures connection pool performance across three versions:
 
+#### Connection Pool v1 (Baseline)
 - Connection pool creation
 - Connection acquisition (single-threaded)
 - Connection acquisition and release cycle
@@ -134,6 +135,33 @@ Measures connection pool performance:
 - Pool creation: < 10ms
 - Health check overhead: < 1ms
 - Concurrent scaling: near-linear up to pool size
+
+#### Connection Pool v2 (Priority-based with typed_thread_pool)
+- Priority-based connection acquisition (HEALTH_CHECK, NORMAL_QUERY, TRANSACTION, CRITICAL)
+- Mixed priority concurrent acquisition
+- High-load scenario (8, 16, 32 threads)
+
+**Target Metrics**:
+- Connection acquisition: < 1μs (from thread_system integration)
+- Priority scheduling: Higher priority requests served first
+- High-load performance: Better than v1 under contention
+
+#### Connection Pool v3 (Adaptive queue with lock-free optimization)
+- Ultra-low latency connection acquisition
+- Adaptive queue strategy (switches between mutex and lock-free)
+- Throughput measurement (16, 32, 64 threads)
+- Priority handling with adaptive queue
+
+**Target Metrics** (from IMPROVEMENT_PLAN.md):
+- Connection acquisition latency: < 100ns (65x improvement over v1)
+- Throughput: > 1M ops/s
+- High-load performance: 4x-7.7x improvement over v2
+- Adaptive queue switching: Automatic based on contention metrics
+
+#### Comparison Benchmarks (v1 vs v2 vs v3)
+- Single-threaded comparison
+- Multi-threaded comparison (16 threads)
+- Demonstrates performance progression across versions
 
 ### 3. Transaction Benchmarks
 

@@ -269,6 +269,52 @@ if(BUILD_INTEGRATED_DATABASE)
 endif()
 
 ##################################################
+# Container Protocol Tests (Phase 1 POC Validation)
+##################################################
+
+if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
+    add_executable(integrated_container_protocol_test
+        integrated/test_container_protocol.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(integrated_container_protocol_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(integrated_container_protocol_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    target_compile_definitions(integrated_container_protocol_test PRIVATE
+        USE_CONTAINER_SYSTEM
+    )
+
+    set_target_properties(integrated_container_protocol_test PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedContainerProtocolTest
+             COMMAND integrated_container_protocol_test)
+
+    gtest_discover_tests(integrated_container_protocol_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+    )
+
+    message(STATUS "Container protocol test configured (Phase 1 POC)")
+endif()
+
+##################################################
 # Test Data Setup
 ##################################################
 

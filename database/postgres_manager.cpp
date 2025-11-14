@@ -312,7 +312,7 @@ namespace database
 		}
 
 		PGresult* result = PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
-		if (!result) {
+		if (result.is_err()) {
 			std::cerr << "PostgreSQL execute failed" << std::endl;
 			return false;
 		}

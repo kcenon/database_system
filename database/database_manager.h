@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Provide common:: namespace for compatibility
 namespace common {
-	using database::VoidResult;
+	using VoidResult = database::result<void>;
 	using database::error_info;
 
 	// Helper functions

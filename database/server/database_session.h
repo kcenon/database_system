@@ -58,7 +58,7 @@ public:
      * @param request Query request
      * @return Query response
      *
-     * TODO: Implement full query execution logic
+     * Supports SELECT, INSERT, UPDATE, DELETE, and DDL operations
      */
     protocol::query_response execute_query(const protocol::query_request& request);
 
@@ -66,7 +66,7 @@ public:
      * @brief Begin a transaction
      * @return Transaction response
      *
-     * TODO: Implement transaction management
+     * Thread-safe transaction state management
      */
     protocol::transaction_response begin_transaction();
 

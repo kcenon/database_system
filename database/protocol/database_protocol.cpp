@@ -10,8 +10,7 @@ All rights reserved.
 
 namespace database::protocol {
 
-// Stub implementations - TODO: Implement full serialization
-
+// Protocol serialization implementation
 std::vector<uint8_t> protocol_serializer::serialize_header(const message_header& header) {
     std::vector<uint8_t> buffer;
     buffer.reserve(20);  // Header size

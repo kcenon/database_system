@@ -163,7 +163,7 @@ void demonstrate_basic_usage() {
         pool.release_connection(conn);
         print_success("Connection returned to pool");
     } else {
-        print_error("Failed to acquire connection: " + result.error().message);
+        print_error("Failed to acquire connection: " + result.error().message());
     }
 
     // Show stats
@@ -399,7 +399,7 @@ void demonstrate_error_handling() {
         auto result3 = pool.acquire_connection().get();
 
         if (result3.is_err()) {
-            print_success("Correctly returned error: " + result3.error().message);
+            print_success("Correctly returned error: " + result3.error().message());
         } else {
             print_error("Expected timeout but got connection");
         }

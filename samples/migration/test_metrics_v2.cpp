@@ -102,7 +102,7 @@ int main() {
                 std::cout << "  ✓ Connection acquired\n";
             } else {
                 std::cout << "  ✗ Failed to acquire connection: "
-                         << result.error().message << "\n";
+                         << result.error().message() << "\n";
             }
         }
 

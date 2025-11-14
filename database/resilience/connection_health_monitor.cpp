@@ -81,7 +81,7 @@ database::result<health_status> connection_health_monitor::check_now() {
         current_status_.status_message = "Backend not initialized";
         current_status_.last_check_time = std::chrono::system_clock::now();
 
-        return database::error(database::error_code::invalid_state, "Backend not initialized");
+        return database::error(-1, "Backend not initialized", "connection_health_monitor");
     }
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -99,7 +99,7 @@ database::result<health_status> connection_health_monitor::check_now() {
         total_queries_++;
 
         current_status_.is_healthy = false;
-        current_status_.status_message = result.get_error().message();
+        current_status_.status_message = result.get_error().message;
     } else {
         consecutive_successes_++;
         consecutive_failures_ = 0;
@@ -204,7 +204,7 @@ void connection_health_monitor::reset_statistics() {
 
 database::result<void> connection_health_monitor::execute_heartbeat() {
     if (!backend_) {
-        return database::error(database::error_code::invalid_state, "Backend is null");
+        return database::error(-1, "Backend is null", "connection_health_monitor");
     }
 
     // Execute simple SELECT query as heartbeat
@@ -212,7 +212,7 @@ database::result<void> connection_health_monitor::execute_heartbeat() {
     auto result = backend_->select_query("SELECT 1");
 
     if (result.is_err()) {
-        return database::error(result.get_error().code(), result.get_error().message());
+        return database::error(result.get_error().code, result.get_error().message, result.get_error().module);
     }
 
     return database::result<void>{};

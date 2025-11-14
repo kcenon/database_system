@@ -63,7 +63,7 @@ database::result<void> resilient_database_connection::initialize(const core::con
     std::lock_guard<std::mutex> lock(mutex_);
 
     if (!backend_) {
-        return database::error(database::error_code::invalid_state, "Backend is null");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Backend is null");
     }
 
     connection_config_ = config;
@@ -73,7 +73,7 @@ database::result<void> resilient_database_connection::initialize(const core::con
 
     if (result.is_err()) {
         set_state(connection_state::failed);
-        last_error_message_ = result.get_error().message();
+        last_error_message_ = result.get_error().message;
         return result;
     }
 
@@ -154,7 +154,7 @@ database::result<void> resilient_database_connection::begin_transaction() {
 database::result<void> resilient_database_connection::commit_transaction() {
     // Don't retry commit - could lead to double commit
     if (!backend_) {
-        return database::error(database::error_code::invalid_state, "Backend is null");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Backend is null");
     }
 
     return backend_->commit_transaction();
@@ -163,7 +163,7 @@ database::result<void> resilient_database_connection::commit_transaction() {
 database::result<void> resilient_database_connection::rollback_transaction() {
     // Don't retry rollback - idempotent operation
     if (!backend_) {
-        return database::error(database::error_code::invalid_state, "Backend is null");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Backend is null");
     }
 
     return backend_->rollback_transaction();
@@ -215,7 +215,7 @@ database::result<void> resilient_database_connection::ensure_connected() {
 
 database::result<health_status> resilient_database_connection::check_health() {
     if (!health_monitor_) {
-        return database::error(database::error_code::invalid_state, "Health monitor not initialized");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Health monitor not initialized");
     }
 
     return health_monitor_->check_now();
@@ -242,7 +242,7 @@ uint32_t resilient_database_connection::get_retry_count() const noexcept {
 
 database::result<void> resilient_database_connection::attempt_reconnect() {
     if (!config_.enable_auto_reconnect) {
-        return database::error(database::error_code::invalid_state, "Auto reconnect disabled");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Auto reconnect disabled");
     }
 
     std::lock_guard<std::mutex> lock(mutex_);
@@ -250,7 +250,7 @@ database::result<void> resilient_database_connection::attempt_reconnect() {
     if (retry_count_ >= config_.max_retries) {
         set_state(connection_state::failed);
         last_error_message_ = "Max retries exceeded";
-        return database::error(database::error_code::unknown_error, "Max retries exceeded");
+        return database::error(static_cast<int>(database::error_code::unknown_error), "Max retries exceeded");
     }
 
     set_state(connection_state::reconnecting);
@@ -268,7 +268,7 @@ database::result<void> resilient_database_connection::attempt_reconnect() {
 
     if (result.is_err()) {
         retry_count_++;
-        last_error_message_ = result.get_error().message();
+        last_error_message_ = result.get_error().message;
         set_state(connection_state::failed);
         return result;
     }
@@ -289,7 +289,7 @@ auto resilient_database_connection::execute_with_retry(Func&& operation) -> decl
     using result_type = decltype(operation());
 
     if (!backend_) {
-        return database::error(database::error_code::invalid_state, "Backend is null");
+        return database::error(static_cast<int>(database::error_code::invalid_state), "Backend is null");
     }
 
     // Don't retry if in transaction
@@ -314,12 +314,12 @@ auto resilient_database_connection::execute_with_retry(Func&& operation) -> decl
 
     // Operation failed - record and attempt reconnect if enabled
     if (health_monitor_) {
-        health_monitor_->record_failure(result.get_error().message());
+        health_monitor_->record_failure(result.get_error().message);
     }
 
     if (!config_.enable_auto_reconnect) {
         std::lock_guard<std::mutex> lock(mutex_);
-        last_error_message_ = result.get_error().message();
+        last_error_message_ = result.get_error().message;
         return result;
     }
 

@@ -23,7 +23,7 @@ database_types remote_database_client::type() const {
 
 database::result<void> remote_database_client::initialize(const core::connection_config& config) {
     if (initialized_.exchange(true)) {
-        return database::result<void>::err(database::error(database::error_code::invalid_argument, "Client already initialized"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::invalid_argument), "Client already initialized"));
     }
 
     config_ = config;
@@ -122,7 +122,7 @@ bool remote_database_client::is_initialized() const {
 
 database::result<uint64_t> remote_database_client::insert_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -158,13 +158,13 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
 #else
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: INSERT not supported";
-    return database::result<uint64_t>::err(database::error(database::error_code::not_implemented, last_error_));
+    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 #endif
 }
 
 database::result<uint64_t> remote_database_client::update_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -198,13 +198,13 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
 #else
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: UPDATE not supported";
-    return database::result<uint64_t>::err(database::error(database::error_code::not_implemented, last_error_));
+    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 #endif
 }
 
 database::result<uint64_t> remote_database_client::delete_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<uint64_t>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -238,13 +238,13 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
 #else
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: DELETE not supported";
-    return database::result<uint64_t>::err(database::error(database::error_code::not_implemented, last_error_));
+    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 #endif
 }
 
 database::result<core::database_result> remote_database_client::select_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<core::database_result>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -288,13 +288,13 @@ database::result<core::database_result> remote_database_client::select_query(con
 #else
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: SELECT not supported";
-    return database::result<core::database_result>::err(database::error(database::error_code::not_implemented, last_error_));
+    return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 #endif
 }
 
 database::result<void> remote_database_client::execute_query(const std::string& query_string) {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -328,17 +328,17 @@ database::result<void> remote_database_client::execute_query(const std::string& 
 #else
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: execute_query not supported";
-    return database::result<void>::err(database::error(database::error_code::not_implemented, last_error_));
+    return database::result<void>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 #endif
 }
 
 database::result<void> remote_database_client::begin_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
     if (in_transaction_.exchange(true)) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "Transaction already in progress"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Transaction already in progress"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -378,11 +378,11 @@ database::result<void> remote_database_client::begin_transaction() {
 
 database::result<void> remote_database_client::commit_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
     if (!in_transaction_.exchange(false)) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "No active transaction"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "No active transaction"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -406,11 +406,11 @@ database::result<void> remote_database_client::commit_transaction() {
 
 database::result<void> remote_database_client::rollback_transaction() {
     if (!is_initialized()) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
     if (!in_transaction_.exchange(false)) {
-        return database::result<void>::err(database::error(database::error_code::unknown_error, "No active transaction"));
+        return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "No active transaction"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -481,7 +481,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     std::chrono::milliseconds timeout
 ) {
     if (!is_initialized()) {
-        return database::result<std::vector<uint8_t>>::err(database::error(database::error_code::unknown_error, "Client not initialized"));
+        return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -545,7 +545,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
 
     return database::result<std::vector<uint8_t>>::ok(std::move(response_data));
 #else
-    return database::result<std::vector<uint8_t>>::err(database::error(database::error_code::not_implemented, "Stub implementation"));
+    return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::not_implemented), "Stub implementation"));
 #endif
 }
 

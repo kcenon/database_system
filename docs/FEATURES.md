@@ -1,0 +1,1288 @@
+# Database System Features
+
+**Last Updated**: 2025-11-15
+**Version**: 3.0
+
+This document provides comprehensive details on all database_system features, backend implementations, and capabilities.
+
+---
+
+## Table of Contents
+
+- [Multi-Backend Support](#multi-backend-support)
+- [ORM Framework](#orm-framework)
+- [Connection Pooling](#connection-pooling)
+- [Query Builders](#query-builders)
+- [Remote Database Access](#remote-database-access)
+- [Resilient Connections](#resilient-connections)
+- [Enterprise Security](#enterprise-security)
+- [Performance Monitoring](#performance-monitoring)
+- [Asynchronous Operations](#asynchronous-operations)
+
+---
+
+## Multi-Backend Support
+
+The database_system provides unified access to multiple database backends with consistent API.
+
+### PostgreSQL Backend
+
+**Status**: ✅ Full Support
+**Implementation**: `postgres_manager.h/cpp`
+
+**Features**:
+- JSONB data type support with advanced queries
+- Array types with efficient storage
+- Common Table Expressions (CTEs) for complex queries
+- Prepared statements with parameter binding
+- Full-text search with tsvector
+- Concurrent index builds
+- Advanced window functions
+- Materialized views
+- Row-level security
+
+**Advanced Capabilities**:
+```cpp
+// JSONB operations
+auto result = db.create_query_builder(database_types::postgres)
+    .select({"id", "data->>'name' as name", "data->'address'->>'city' as city"})
+    .from("users")
+    .where("data @> '{\"active\": true}'::jsonb")
+    .execute(&db);
+
+// Array operations
+auto array_result = db.create_query_builder(database_types::postgres)
+    .insert_into("tags")
+    .values({
+        {"name", database_value{std::string("product1")}},
+        {"tags", database_value{std::string("ARRAY['electronics', 'gadgets', 'new']")}}
+    })
+    .execute(&db);
+
+// CTEs for complex queries
+auto cte_result = db.create_query_builder(database_types::postgres)
+    .raw_sql(R"(
+        WITH sales_summary AS (
+            SELECT
+                product_id,
+                SUM(amount) as total_sales,
+                COUNT(*) as order_count
+            FROM orders
+            WHERE created_at > NOW() - INTERVAL '30 days'
+            GROUP BY product_id
+        )
+        SELECT p.name, s.total_sales, s.order_count
+        FROM products p
+        JOIN sales_summary s ON p.id = s.product_id
+        ORDER BY s.total_sales DESC
+        LIMIT 10
+    )")
+    .execute(&db);
+```
+
+**Configuration Options**:
+- Connection string: `host=localhost port=5432 dbname=mydb user=admin password=secret sslmode=require`
+- SSL/TLS encryption with certificate verification
+- Connection timeout and keepalive settings
+- Statement timeout configuration
+- Work memory and shared buffers tuning
+
+### MySQL Backend
+
+**Status**: ✅ Full Support
+**Implementation**: `mysql/mysql_manager.h/cpp`
+
+**Features**:
+- Full-text search with MATCH AGAINST
+- InnoDB transactions with ACID compliance
+- Prepared statements with placeholders
+- Stored procedures and functions
+- Triggers and events
+- Partitioning support
+- Replication awareness
+- JSON column type (MySQL 5.7+)
+
+**Advanced Capabilities**:
+```cpp
+// Full-text search
+auto fts_result = db.create_query_builder(database_types::mysql)
+    .select({"id", "title", "content", "MATCH(title, content) AGAINST('database' IN NATURAL LANGUAGE MODE) as score"})
+    .from("articles")
+    .where("MATCH(title, content) AGAINST('database' IN NATURAL LANGUAGE MODE)")
+    .order_by("score", sort_order::desc)
+    .execute(&db);
+
+// Transaction with savepoints
+auto tx_result = db.begin_transaction();
+db.execute_command("INSERT INTO accounts (id, balance) VALUES (1, 1000)");
+db.execute_command("SAVEPOINT sp1");
+db.execute_command("UPDATE accounts SET balance = balance - 100 WHERE id = 1");
+// Can rollback to sp1 if needed
+db.commit();
+
+// Stored procedure call
+auto sp_result = db.create_query_builder(database_types::mysql)
+    .raw_sql("CALL calculate_monthly_sales(@result)")
+    .execute(&db);
+```
+
+**Configuration Options**:
+- Connection string: `host=localhost;port=3306;database=mydb;user=admin;password=secret;ssl=1`
+- SSL/TLS encryption
+- Character set (utf8mb4 recommended)
+- Connection pool size
+- Auto-reconnect settings
+- Query cache configuration
+
+### SQLite Backend
+
+**Status**: ✅ Full Support
+**Implementation**: `sqlite/sqlite_manager.h/cpp`
+
+**Features**:
+- WAL (Write-Ahead Logging) mode for concurrency
+- FTS5 full-text search engine
+- In-memory databases for testing
+- Embedded database (no server required)
+- JSON1 extension support
+- Common Table Expressions
+- Window functions
+- Partial indexes
+- Generated columns
+
+**Advanced Capabilities**:
+```cpp
+// WAL mode configuration
+db.execute_command("PRAGMA journal_mode=WAL");
+db.execute_command("PRAGMA synchronous=NORMAL");
+
+// FTS5 full-text search
+db.execute_command(R"(
+    CREATE VIRTUAL TABLE documents_fts USING fts5(
+        title, content, tags,
+        tokenize = 'porter ascii'
+    )
+)");
+
+auto fts_result = db.create_query_builder(database_types::sqlite)
+    .select({"title", "highlight(documents_fts, 1, '<b>', '</b>') as snippet"})
+    .from("documents_fts")
+    .where("documents_fts MATCH 'database AND performance'")
+    .execute(&db);
+
+// In-memory database
+auto mem_db = std::make_shared<sqlite_manager>();
+mem_db->connect(":memory:");
+
+// JSON operations (JSON1 extension)
+auto json_result = db.create_query_builder(database_types::sqlite)
+    .select({"id", "json_extract(data, '$.name') as name", "json_extract(data, '$.age') as age"})
+    .from("users")
+    .where("json_extract(data, '$.active') = 1")
+    .execute(&db);
+```
+
+**Configuration Options**:
+- File path or `:memory:` for in-memory
+- WAL mode for concurrent reads
+- Synchronous mode (FULL, NORMAL, OFF)
+- Cache size and page size
+- Busy timeout for lock contention
+- Foreign keys enforcement
+
+### MongoDB Backend
+
+**Status**: ✅ Full Support
+**Implementation**: `mongodb/mongodb_manager.h/cpp`
+
+**Features**:
+- Document-based storage with BSON
+- Aggregation pipeline framework
+- GridFS for large file storage
+- Sharding and replication support
+- Text search indexes
+- Geospatial queries
+- Change streams for real-time updates
+- Transactions (MongoDB 4.0+)
+- Time series collections (MongoDB 5.0+)
+
+**Advanced Capabilities**:
+```cpp
+// Aggregation pipeline
+auto agg_result = db.create_query_builder(database_types::mongodb)
+    .collection("orders")
+    .aggregate({
+        {"$match", {{"status", database_value{std::string("completed")}}}},
+        {"$group", {
+            {"_id", database_value{std::string("$customer_id")}},
+            {"total_amount", {{"$sum", database_value{std::string("$amount")}}}},
+            {"order_count", {{"$sum", database_value{int64_t(1)}}}}
+        }},
+        {"$sort", {{"total_amount", database_value{int64_t(-1)}}}},
+        {"$limit", database_value{int64_t(10)}}
+    })
+    .execute(&db);
+
+// GridFS for file storage
+auto gridfs = db.get_gridfs_bucket("uploads");
+auto file_id = gridfs->upload_file("document.pdf", file_data);
+auto file_data_retrieved = gridfs->download_file(file_id);
+
+// Text search
+db.execute_command(R"({"createIndexes": "articles", "indexes": [{"key": {"title": "text", "content": "text"}, "name": "text_idx"}]})");
+auto search_result = db.create_query_builder(database_types::mongodb)
+    .collection("articles")
+    .find({{"$text", {{"$search", database_value{std::string("database performance")}}}}})
+    .execute(&db);
+
+// Change streams
+auto stream = db.watch_collection("users");
+stream->on_change([](const change_event& event) {
+    std::cout << "Change detected: " << event.operation_type << std::endl;
+});
+```
+
+**Configuration Options**:
+- Connection string: `mongodb://localhost:27017/mydb?replicaSet=rs0&authSource=admin`
+- Replica set configuration
+- Read preference (primary, secondary, nearest)
+- Write concern levels
+- Read concern levels
+- Connection pool size
+- Server selection timeout
+
+### Redis Backend
+
+**Status**: ✅ Full Support
+**Implementation**: `redis/redis_manager.h/cpp`
+
+**Features**:
+- All data types (Strings, Hashes, Lists, Sets, Sorted Sets)
+- Pub/Sub messaging pattern
+- Transactions with MULTI/EXEC
+- Lua scripting support
+- Pipelining for batch operations
+- Persistence (RDB and AOF)
+- Cluster mode support
+- Streams for event sourcing
+- Geospatial indexes
+
+**Advanced Capabilities**:
+```cpp
+// Hash operations
+auto hash_result = db.create_query_builder(database_types::redis)
+    .hset("user:1000", {
+        {"username", "john_doe"},
+        {"email", "john@example.com"},
+        {"last_login", std::to_string(std::time(nullptr))}
+    })
+    .execute(&db);
+
+// Sorted set with scores
+db.execute_command("ZADD leaderboard 1000 player1 950 player2 1200 player3");
+auto leaderboard = db.create_query_builder(database_types::redis)
+    .zrevrange("leaderboard", 0, 9, true)  // Top 10 with scores
+    .execute(&db);
+
+// Pub/Sub messaging
+auto subscriber = db.create_subscriber();
+subscriber->subscribe("notifications", [](const std::string& channel, const std::string& message) {
+    std::cout << "Received on " << channel << ": " << message << std::endl;
+});
+
+auto publisher = db.create_publisher();
+publisher->publish("notifications", "New message available");
+
+// Lua scripting
+std::string lua_script = R"(
+    local current = redis.call('GET', KEYS[1])
+    if not current then current = '0' end
+    local new_val = tonumber(current) + tonumber(ARGV[1])
+    redis.call('SET', KEYS[1], tostring(new_val))
+    return new_val
+)";
+auto script_result = db.eval_script(lua_script, {"counter:total"}, {"10"});
+
+// Redis Streams
+db.execute_command("XADD events * action purchase product_id 12345 amount 99.99");
+auto stream_result = db.create_query_builder(database_types::redis)
+    .xread("events", "0-0", 100)  // Read 100 messages from beginning
+    .execute(&db);
+```
+
+**Configuration Options**:
+- Connection string: `redis://localhost:6379/0` or `redis://user:password@host:6379/db`
+- SSL/TLS support: `rediss://host:6380`
+- Cluster mode: `redis://node1:6379,node2:6379,node3:6379`
+- Connection pool size
+- Timeout settings
+- Retry strategy
+- Sentinel configuration for high availability
+
+---
+
+## ORM Framework
+
+**Status**: ✅ Full Support (C++17 SFINAE-based)
+**Implementation**: `orm/entity.h`, `orm/entity_manager.h`, `orm/schema_manager.h`
+
+### Entity Definition
+
+Define database entities using C++17 SFINAE-based macros:
+
+```cpp
+#include <database/orm/entity.h>
+
+class User : public entity_base {
+    ENTITY_TABLE("users")
+
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, username, not_null() | unique() | index("idx_username"))
+    ENTITY_FIELD(std::string, email, not_null() | unique())
+    ENTITY_FIELD(std::string, password_hash, not_null())
+    ENTITY_FIELD(std::chrono::system_clock::time_point, created_at, default_now())
+    ENTITY_FIELD(std::chrono::system_clock::time_point, updated_at, on_update_now())
+    ENTITY_FIELD(bool, is_active, default_value(true))
+    ENTITY_FIELD(std::optional<std::string>, profile_image)
+
+    ENTITY_METADATA()
+};
+
+class Post : public entity_base {
+    ENTITY_TABLE("posts")
+
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(int64_t, user_id, foreign_key("users", "id") | not_null())
+    ENTITY_FIELD(std::string, title, not_null() | index("idx_title"))
+    ENTITY_FIELD(std::string, content, not_null())
+    ENTITY_FIELD(std::vector<std::string>, tags, default_value(std::vector<std::string>{}))
+    ENTITY_FIELD(std::chrono::system_clock::time_point, published_at, default_now())
+
+    ENTITY_METADATA()
+};
+```
+
+### Entity Operations
+
+**Create (Insert)**:
+```cpp
+User user;
+user.username = "john_doe";
+user.email = "john@example.com";
+user.password_hash = hash_password("secure_password");
+
+auto create_result = user.save(db);
+if (create_result) {
+    std::cout << "User created with ID: " << user.id << std::endl;
+}
+```
+
+**Read (Query)**:
+```cpp
+// Find by ID
+auto user_result = User::find(db, 12345);
+if (user_result) {
+    std::cout << "Username: " << user_result->username << std::endl;
+}
+
+// Query with conditions
+auto active_users = User::query(db)
+    .where("is_active = ?", true)
+    .where("created_at > ?", one_week_ago)
+    .order_by("username")
+    .limit(100)
+    .execute();
+
+for (const auto& user : active_users) {
+    std::cout << user.username << " - " << user.email << std::endl;
+}
+
+// Complex queries
+auto popular_posts = Post::query(db)
+    .join("users", "posts.user_id = users.id")
+    .where("posts.published_at > ?", one_month_ago)
+    .group_by("posts.id")
+    .having("COUNT(comments.id) > ?", 10)
+    .order_by("COUNT(comments.id)", sort_order::desc)
+    .limit(20)
+    .execute();
+```
+
+**Update**:
+```cpp
+auto user = User::find(db, 12345);
+if (user) {
+    user->email = "newemail@example.com";
+    user->updated_at = std::chrono::system_clock::now();
+
+    auto update_result = user->save(db);
+    if (update_result) {
+        std::cout << "User updated successfully" << std::endl;
+    }
+}
+
+// Bulk update
+auto update_count = User::query(db)
+    .where("last_login < ?", one_year_ago)
+    .update({{"is_active", database_value{false}}});
+std::cout << "Deactivated " << update_count << " inactive users" << std::endl;
+```
+
+**Delete**:
+```cpp
+auto user = User::find(db, 12345);
+if (user) {
+    auto delete_result = user->remove(db);
+    if (delete_result) {
+        std::cout << "User deleted successfully" << std::endl;
+    }
+}
+
+// Bulk delete
+auto delete_count = Post::query(db)
+    .where("published_at < ?", two_years_ago)
+    .remove();
+std::cout << "Deleted " << delete_count << " old posts" << std::endl;
+```
+
+### Relationships
+
+**One-to-Many**:
+```cpp
+class User : public entity_base {
+    ENTITY_TABLE("users")
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, username, not_null())
+
+    ENTITY_RELATIONSHIP(has_many, Post, "user_id")
+    ENTITY_METADATA()
+};
+
+// Access related posts
+auto user = User::find(db, 12345);
+auto posts = user->posts(db);  // Lazy-loaded
+for (const auto& post : posts) {
+    std::cout << post.title << std::endl;
+}
+```
+
+**Many-to-One**:
+```cpp
+class Post : public entity_base {
+    ENTITY_TABLE("posts")
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(int64_t, user_id, foreign_key("users", "id"))
+
+    ENTITY_RELATIONSHIP(belongs_to, User, "user_id")
+    ENTITY_METADATA()
+};
+
+// Access related user
+auto post = Post::find(db, 678);
+auto author = post->user(db);  // Lazy-loaded
+std::cout << "Author: " << author.username << std::endl;
+```
+
+**Many-to-Many**:
+```cpp
+class Tag : public entity_base {
+    ENTITY_TABLE("tags")
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, name, not_null() | unique())
+
+    ENTITY_RELATIONSHIP(many_to_many, Post, "post_tags", "tag_id", "post_id")
+    ENTITY_METADATA()
+};
+
+// Access related posts through junction table
+auto tag = Tag::find(db, 5);
+auto tagged_posts = tag->posts(db);
+```
+
+### Schema Management
+
+**Automatic Schema Generation**:
+```cpp
+#include <database/orm/schema_manager.h>
+
+auto& schema_mgr = schema_manager::instance();
+
+// Generate CREATE TABLE statements
+auto create_sql = schema_mgr.generate_schema<User>();
+std::cout << create_sql << std::endl;
+// Output:
+// CREATE TABLE users (
+//     id BIGSERIAL PRIMARY KEY,
+//     username VARCHAR(255) NOT NULL UNIQUE,
+//     email VARCHAR(255) NOT NULL UNIQUE,
+//     password_hash VARCHAR(255) NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     is_active BOOLEAN DEFAULT TRUE,
+//     profile_image VARCHAR(255)
+// );
+// CREATE INDEX idx_username ON users(username);
+
+// Create all tables
+schema_mgr.create_tables(db, {
+    schema_mgr.generate_schema<User>(),
+    schema_mgr.generate_schema<Post>(),
+    schema_mgr.generate_schema<Tag>()
+});
+```
+
+**Schema Migrations**:
+```cpp
+// Define migration
+migration migration_001("add_user_bio", [](database_manager& db) {
+    return db.execute_command(
+        "ALTER TABLE users ADD COLUMN bio TEXT"
+    );
+});
+
+// Register and run migrations
+schema_mgr.register_migration(migration_001);
+schema_mgr.run_migrations(db);
+
+// Migration history tracking
+auto applied_migrations = schema_mgr.get_applied_migrations(db);
+for (const auto& migration_name : applied_migrations) {
+    std::cout << "Applied: " << migration_name << std::endl;
+}
+```
+
+### Advanced ORM Features
+
+**Eager Loading** (N+1 query prevention):
+```cpp
+auto users_with_posts = User::query(db)
+    .with("posts")  // Eager load posts
+    .with("posts.comments")  // Eager load comments through posts
+    .execute();
+
+// All data loaded in optimized queries (3 queries instead of N+1)
+for (const auto& user : users_with_posts) {
+    std::cout << user.username << " has " << user.posts().size() << " posts" << std::endl;
+    for (const auto& post : user.posts()) {
+        std::cout << "  - " << post.title << " (" << post.comments().size() << " comments)" << std::endl;
+    }
+}
+```
+
+**Scopes** (Reusable query filters):
+```cpp
+class Post : public entity_base {
+    // ... fields ...
+
+    ENTITY_SCOPE(published, [](query_builder& q) {
+        return q.where("published_at IS NOT NULL")
+                .where("published_at <= ?", std::chrono::system_clock::now());
+    })
+
+    ENTITY_SCOPE(popular, [](query_builder& q, int min_views = 1000) {
+        return q.where("view_count >= ?", min_views);
+    })
+
+    ENTITY_METADATA()
+};
+
+// Use scopes
+auto popular_published = Post::query(db)
+    .published()
+    .popular(5000)
+    .order_by("view_count", sort_order::desc)
+    .execute();
+```
+
+**Soft Deletes**:
+```cpp
+class User : public entity_base {
+    ENTITY_TABLE("users")
+    // ... other fields ...
+    ENTITY_FIELD(std::optional<std::chrono::system_clock::time_point>, deleted_at)
+
+    ENTITY_SOFT_DELETE("deleted_at")
+    ENTITY_METADATA()
+};
+
+// Soft delete (sets deleted_at instead of removing row)
+user->remove(db);  // Sets deleted_at = NOW()
+
+// Query only non-deleted
+auto active_users = User::query(db)
+    .execute();  // Automatically filters WHERE deleted_at IS NULL
+
+// Query including deleted
+auto all_users = User::query(db)
+    .with_trashed()
+    .execute();
+
+// Query only deleted
+auto deleted_users = User::query(db)
+    .only_trashed()
+    .execute();
+
+// Restore soft-deleted
+user->restore(db);  // Sets deleted_at = NULL
+```
+
+**Observers** (Lifecycle hooks):
+```cpp
+class User : public entity_base {
+    // ... fields ...
+
+    ENTITY_OBSERVER(before_create, [](User& user) {
+        user.created_at = std::chrono::system_clock::now();
+        user.updated_at = user.created_at;
+    })
+
+    ENTITY_OBSERVER(before_update, [](User& user) {
+        user.updated_at = std::chrono::system_clock::now();
+    })
+
+    ENTITY_OBSERVER(after_delete, [](const User& user) {
+        // Log deletion
+        audit_log("User deleted: " + user.username);
+    })
+
+    ENTITY_METADATA()
+};
+```
+
+---
+
+## Connection Pooling
+
+**Status**: ✅ Production-Ready (v3)
+**Implementation**: `connection_pool.h/cpp`
+
+### Connection Pool v3 Features
+
+**Performance Improvements**:
+- **77ns latency**: 65x faster than v2 (5μs → 77ns)
+- **1.16M+ ops/s**: Throughput with thread_system integration
+- **7.7x performance**: Under high load with adaptive job queue
+- **Priority scheduling**: Connection acquisition with QoS levels
+- **Graceful shutdown**: Cancellation tokens for clean termination
+
+**Architecture**:
+```cpp
+#include <database/connection_pool.h>
+
+// Connection pool configuration
+connection_pool_config config;
+config.min_connections = 10;           // Minimum pool size
+config.max_connections = 100;          // Maximum pool size
+config.acquire_timeout = std::chrono::seconds(5);
+config.idle_timeout = std::chrono::seconds(30);
+config.health_check_interval = std::chrono::seconds(60);
+config.enable_health_checks = true;
+config.connection_string = "host=localhost port=5432 dbname=mydb";
+
+// Create connection pool
+auto& db = database_manager::handle();
+db.create_connection_pool(database_types::postgres, config);
+
+// Acquire connection (RAII-managed)
+auto pool = db.get_connection_pool(database_types::postgres);
+auto connection = pool->acquire_connection();
+
+if (connection) {
+    // Use connection for operations
+    auto result = connection->select_query("SELECT * FROM users");
+
+    // Connection automatically returned to pool when destroyed
+}
+```
+
+### Priority-Based Acquisition
+
+```cpp
+// High-priority connection for critical operations
+auto critical_conn = pool->acquire_connection(connection_priority::high);
+
+// Normal priority (default)
+auto normal_conn = pool->acquire_connection(connection_priority::normal);
+
+// Low priority for background tasks
+auto background_conn = pool->acquire_connection(connection_priority::low);
+```
+
+### Health Monitoring
+
+```cpp
+// Enable automatic health checks
+config.enable_health_checks = true;
+config.health_check_interval = std::chrono::seconds(30);
+
+// Health check query
+config.health_check_query = "SELECT 1";
+
+// Get pool statistics
+auto stats = pool->get_statistics();
+std::cout << "Active connections: " << stats.active_connections << std::endl;
+std::cout << "Available connections: " << stats.available_connections << std::endl;
+std::cout << "Total created: " << stats.total_created << std::endl;
+std::cout << "Total destroyed: " << stats.total_destroyed << std::endl;
+std::cout << "Failed health checks: " << stats.failed_health_checks << std::endl;
+std::cout << "Average acquisition time: " << stats.avg_acquisition_time.count() << "ns" << std::endl;
+
+// Check pool health
+if (pool->is_healthy()) {
+    std::cout << "Pool is healthy" << std::endl;
+}
+```
+
+### Thread-System Integration
+
+```cpp
+#include <thread_system/thread_pool.h>
+
+// Use thread_system for async connection acquisition
+auto thread_pool = std::make_shared<thread_system::thread_pool>(8);
+
+// Submit connection acquisition task
+auto future = thread_pool->submit([&pool]() {
+    auto conn = pool->acquire_connection();
+    if (conn) {
+        return conn->select_query("SELECT * FROM large_table");
+    }
+    return database_result{};
+});
+
+// Do other work...
+
+// Get result when ready
+auto result = future.get();
+```
+
+### Graceful Shutdown
+
+```cpp
+// Create cancellation token
+auto shutdown_token = std::make_shared<cancellation_token>();
+
+// Register signal handler
+std::signal(SIGTERM, [](int) {
+    shutdown_token->cancel();
+});
+
+// Pool respects cancellation
+pool->set_cancellation_token(shutdown_token);
+
+// On shutdown, pool drains gracefully
+pool->shutdown();  // Waits for active connections, rejects new requests
+```
+
+---
+
+## Query Builders
+
+**Status**: ✅ Full Support
+**Implementation**: `query/query_builder.h`, `query/sql_builder.h`, `query/nosql_builder.h`
+
+### Immutable Query Builder
+
+**New in v3**: Thread-safe query construction with functional programming style:
+
+```cpp
+#include <database/query/immutable_query_builder.h>
+
+// Immutable builder (each method returns new instance)
+const auto base_query = immutable_query_builder()
+    .select({"id", "name", "email"})
+    .from("users");
+
+// Branch 1: Active users
+const auto active_users = base_query
+    .where("is_active", "=", database_value{true})
+    .order_by("name");
+
+// Branch 2: Admin users (base_query unchanged)
+const auto admin_users = base_query
+    .where("role", "=", database_value{std::string("admin")})
+    .order_by("created_at", sort_order::desc);
+
+// Thread-safe: No race conditions
+std::thread t1([&]() {
+    auto result1 = active_users.execute(&db);
+});
+
+std::thread t2([&]() {
+    auto result2 = admin_users.execute(&db);
+});
+
+t1.join();
+t2.join();
+```
+
+### SQL Query Builder
+
+**Comprehensive SQL Support**:
+
+```cpp
+#include <database/query/sql_builder.h>
+
+// SELECT with complex conditions
+auto query = db.create_query_builder(database_types::postgres)
+    .select({"u.id", "u.username", "COUNT(p.id) as post_count"})
+    .from("users u")
+    .join("posts p", "u.id = p.user_id", join_type::left)
+    .where("u.is_active", "=", database_value{true})
+    .where("u.created_at", ">", database_value{one_month_ago})
+    .group_by("u.id", "u.username")
+    .having("COUNT(p.id)", ">", database_value{int64_t(5)})
+    .order_by("post_count", sort_order::desc)
+    .limit(20)
+    .offset(0);
+
+auto sql = query.build();
+std::cout << "Generated SQL: " << sql << std::endl;
+
+auto result = query.execute(&db);
+```
+
+**INSERT Operations**:
+```cpp
+// Single insert
+auto insert_query = db.create_query_builder(database_types::postgres)
+    .insert_into("users")
+    .values({
+        {"username", database_value{std::string("john_doe")}},
+        {"email", database_value{std::string("john@example.com")}},
+        {"age", database_value{int64_t(30)}},
+        {"is_active", database_value{true}}
+    });
+
+auto insert_result = insert_query.execute(&db);
+
+// Bulk insert
+auto bulk_insert = db.create_query_builder(database_types::postgres)
+    .insert_into("users")
+    .values_bulk({
+        {
+            {"username", database_value{std::string("user1")}},
+            {"email", database_value{std::string("user1@example.com")}}
+        },
+        {
+            {"username", database_value{std::string("user2")}},
+            {"email", database_value{std::string("user2@example.com")}}
+        }
+    });
+
+auto bulk_result = bulk_insert.execute(&db);
+```
+
+**UPDATE Operations**:
+```cpp
+auto update_query = db.create_query_builder(database_types::postgres)
+    .update("users")
+    .set({
+        {"last_login", database_value{std::to_string(std::time(nullptr))}},
+        {"login_count", database_value{std::string("login_count + 1")}}
+    })
+    .where("id", "=", database_value{int64_t(12345)});
+
+auto update_result = update_query.execute(&db);
+```
+
+**DELETE Operations**:
+```cpp
+auto delete_query = db.create_query_builder(database_types::postgres)
+    .delete_from("sessions")
+    .where("expires_at", "<", database_value{std::to_string(std::time(nullptr))});
+
+auto delete_result = delete_query.execute(&db);
+```
+
+### NoSQL Query Builder
+
+**MongoDB Query Builder**:
+
+```cpp
+#include <database/query/nosql_builder.h>
+
+// Find documents
+auto mongo_query = db.create_query_builder(database_types::mongodb)
+    .collection("users")
+    .find({
+        {"age", {{"$gt", database_value{int64_t(18)}}}},
+        {"status", database_value{std::string("active")}}
+    })
+    .sort("created_at", -1)
+    .limit(100)
+    .skip(0);
+
+auto result = mongo_query.execute(&db);
+
+// Aggregation
+auto agg_query = db.create_query_builder(database_types::mongodb)
+    .collection("orders")
+    .aggregate({
+        {"$match", {{"status", database_value{std::string("completed")}}}},
+        {"$group", {
+            {"_id", database_value{std::string("$customer_id")}},
+            {"total", {{"$sum", database_value{std::string("$amount")}}}}
+        }},
+        {"$sort", {{"total", database_value{int64_t(-1)}}}},
+        {"$limit", database_value{int64_t(10)}}
+    });
+
+// Insert document
+auto insert_doc = db.create_query_builder(database_types::mongodb)
+    .collection("users")
+    .insert_one({
+        {"username", database_value{std::string("john_doe")}},
+        {"email", database_value{std::string("john@example.com")}},
+        {"age", database_value{int64_t(30)}},
+        {"tags", database_value{std::vector<std::string>{"developer", "blogger"}}}
+    });
+
+// Update document
+auto update_doc = db.create_query_builder(database_types::mongodb)
+    .collection("users")
+    .update_one(
+        {{"username", database_value{std::string("john_doe")}}},
+        {{"$set", {{"last_login", database_value{std::to_string(std::time(nullptr))}}}}}
+    );
+```
+
+**Redis Query Builder**:
+
+```cpp
+// String operations
+auto redis_set = db.create_query_builder(database_types::redis)
+    .set("user:1000:name", "John Doe")
+    .execute(&db);
+
+auto redis_get = db.create_query_builder(database_types::redis)
+    .get("user:1000:name")
+    .execute(&db);
+
+// Hash operations
+auto redis_hset = db.create_query_builder(database_types::redis)
+    .hset("user:1000", {
+        {"username", "john_doe"},
+        {"email", "john@example.com"},
+        {"age", "30"}
+    })
+    .execute(&db);
+
+auto redis_hgetall = db.create_query_builder(database_types::redis)
+    .hgetall("user:1000")
+    .execute(&db);
+
+// List operations
+auto redis_lpush = db.create_query_builder(database_types::redis)
+    .lpush("notifications", {"New message", "Friend request"})
+    .execute(&db);
+
+// Set operations
+auto redis_sadd = db.create_query_builder(database_types::redis)
+    .sadd("tags:popular", {"database", "performance", "c++"})
+    .execute(&db);
+
+// Sorted set operations
+auto redis_zadd = db.create_query_builder(database_types::redis)
+    .zadd("leaderboard", {
+        {1000, "player1"},
+        {950, "player2"},
+        {1200, "player3"}
+    })
+    .execute(&db);
+```
+
+---
+
+## Remote Database Access
+
+**Status**: ✅ Production-Ready
+**Implementation**: `remote/database_proxy_server.h`, `remote/remote_database_client.h`
+
+### Database Proxy Server
+
+Network-transparent database service with TLS/SSL encryption:
+
+```cpp
+#include <database/remote/database_proxy_server.h>
+
+// Configure proxy server
+database_proxy_config server_config;
+server_config.listen_address = "0.0.0.0";
+server_config.listen_port = 9090;
+server_config.enable_tls = true;
+server_config.tls_cert_path = "/path/to/cert.pem";
+server_config.tls_key_path = "/path/to/key.pem";
+server_config.max_connections = 1000;
+server_config.connection_timeout = std::chrono::seconds(30);
+
+// Create and start server
+auto proxy_server = std::make_shared<database_proxy_server>(server_config);
+
+// Register database backends
+proxy_server->register_backend("postgres_prod", database_types::postgres,
+    "host=localhost port=5432 dbname=production");
+proxy_server->register_backend("redis_cache", database_types::redis,
+    "redis://localhost:6379/0");
+
+// Start server
+proxy_server->start();
+std::cout << "Database proxy server listening on port " << server_config.listen_port << std::endl;
+
+// Graceful shutdown
+std::signal(SIGTERM, [&](int) {
+    proxy_server->stop();
+});
+```
+
+### Remote Database Client
+
+Transparent remote access compatible with database_backend interface:
+
+```cpp
+#include <database/remote/remote_database_client.h>
+
+// Configure remote client
+remote_database_config client_config;
+client_config.server_address = "db-proxy.example.com";
+client_config.server_port = 9090;
+client_config.enable_tls = true;
+client_config.verify_certificate = true;
+client_config.connection_timeout = std::chrono::seconds(10);
+client_config.auto_reconnect = true;
+client_config.max_retries = 3;
+
+// Create remote client
+auto remote_db = std::make_shared<remote_database_client>(client_config);
+
+// Connect to remote database
+auto connect_result = remote_db->connect("postgres_prod");
+if (!connect_result) {
+    std::cerr << "Failed to connect to remote database" << std::endl;
+    return 1;
+}
+
+// Use like local database (transparent remote access)
+auto result = remote_db->select_query("SELECT * FROM users WHERE id = 12345");
+
+// Query builder works transparently
+auto query = db.create_query_builder(database_types::postgres)
+    .select({"id", "username", "email"})
+    .from("users")
+    .where("is_active", "=", database_value{true})
+    .execute(remote_db.get());
+
+// Performance overhead: <10% compared to local access
+```
+
+### Load Balancing and Failover
+
+```cpp
+// Configure multiple backend servers
+remote_load_balancer_config lb_config;
+lb_config.strategy = load_balance_strategy::round_robin;  // or least_connections, weighted
+lb_config.backends = {
+    {"server1", "db-proxy1.example.com", 9090},
+    {"server2", "db-proxy2.example.com", 9090},
+    {"server3", "db-proxy3.example.com", 9090}
+};
+lb_config.health_check_interval = std::chrono::seconds(30);
+lb_config.failover_timeout = std::chrono::seconds(5);
+
+auto lb_client = std::make_shared<remote_load_balancer>(lb_config);
+
+// Automatic failover on connection failure
+auto result = lb_client->execute_query("SELECT * FROM users");
+// If server1 fails, automatically tries server2, then server3
+```
+
+---
+
+## Resilient Connections
+
+**Status**: ✅ Production-Ready
+**Implementation**: `resilient/resilient_connection.h`
+
+### Automatic Reconnection
+
+Production-grade reliability with exponential backoff:
+
+```cpp
+#include <database/resilient/resilient_connection.h>
+
+// Configure resilient connection
+resilient_connection_config resilient_config;
+resilient_config.max_retries = 5;
+resilient_config.initial_retry_delay = std::chrono::milliseconds(100);
+resilient_config.max_retry_delay = std::chrono::seconds(30);
+resilient_config.backoff_multiplier = 2.0;  // Exponential backoff
+resilient_config.enable_jitter = true;  // Randomize retry delays
+resilient_config.circuit_breaker_threshold = 10;  // Failures before circuit opens
+resilient_config.circuit_breaker_timeout = std::chrono::seconds(60);
+
+// Create resilient connection wrapper
+auto base_connection = std::make_shared<postgres_manager>();
+auto resilient_conn = std::make_shared<resilient_connection>(base_connection, resilient_config);
+
+// Connect with automatic retry
+auto connect_result = resilient_conn->connect("host=localhost port=5432 dbname=mydb");
+// Automatically retries with exponential backoff on failure
+// Recovery time: <1s for transient failures
+
+// Queries automatically retry on connection loss
+auto result = resilient_conn->select_query("SELECT * FROM users");
+// If connection lost, automatically reconnects and retries query
+```
+
+### Health Monitoring
+
+Real-time connection quality scoring:
+
+```cpp
+// Get connection health
+auto health_score = resilient_conn->get_health_score();
+std::cout << "Connection health: " << health_score << "/100" << std::endl;
+
+// Health score based on:
+// - Connection uptime
+// - Query success rate
+// - Response time
+// - Error frequency
+
+// Register health change callback
+resilient_conn->on_health_change([](int old_score, int new_score) {
+    std::cout << "Health changed: " << old_score << " -> " << new_score << std::endl;
+    if (new_score < 50) {
+        alert("Database connection degraded");
+    }
+});
+
+// Get detailed health metrics
+auto health_metrics = resilient_conn->get_health_metrics();
+std::cout << "Uptime: " << health_metrics.uptime.count() << "s" << std::endl;
+std::cout << "Total queries: " << health_metrics.total_queries << std::endl;
+std::cout << "Failed queries: " << health_metrics.failed_queries << std::endl;
+std::cout << "Success rate: " << (health_metrics.success_rate * 100) << "%" << std::endl;
+std::cout << "Avg response time: " << health_metrics.avg_response_time.count() << "ms" << std::endl;
+```
+
+### Circuit Breaker Pattern
+
+Prevents cascade failures:
+
+```cpp
+// Circuit breaker automatically opens after threshold failures
+resilient_config.circuit_breaker_threshold = 5;
+resilient_config.circuit_breaker_timeout = std::chrono::seconds(30);
+
+// After 5 consecutive failures, circuit opens
+// All requests immediately fail for 30 seconds
+// Then circuit enters half-open state (tries one request)
+// If successful, circuit closes; if failed, remains open
+
+// Get circuit state
+auto circuit_state = resilient_conn->get_circuit_state();
+switch (circuit_state) {
+    case circuit_state::closed:
+        std::cout << "Circuit closed (normal operation)" << std::endl;
+        break;
+    case circuit_state::open:
+        std::cout << "Circuit open (failing fast)" << std::endl;
+        break;
+    case circuit_state::half_open:
+        std::cout << "Circuit half-open (testing recovery)" << std::endl;
+        break;
+}
+```
+
+---
+
+## Enterprise Security
+
+**Status**: ✅ Full Support
+**Implementation**: `security/`, see [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) for details
+
+---
+
+## Performance Monitoring
+
+**Status**: ✅ Full Support with monitoring_system integration
+**Implementation**: `monitoring/`, see [BENCHMARKS.md](BENCHMARKS.md) for metrics
+
+---
+
+## Asynchronous Operations
+
+**Status**: ✅ Full Support (C++20 coroutines optional, C++17 std::future fallback)
+**Implementation**: `async/async_operations.h`
+
+### C++20 Coroutines
+
+```cpp
+#include <database/async/async_operations.h>
+
+// Async query with coroutines
+database_awaitable<database_result> fetch_users_async() {
+    auto db = co_await async_db_connect("host=localhost dbname=mydb");
+
+    auto result = co_await db.execute_query_async(
+        "SELECT * FROM users WHERE is_active = true"
+    );
+
+    co_return result;
+}
+
+// Use in async context
+auto users = co_await fetch_users_async();
+```
+
+### C++17 Future-Based Async
+
+```cpp
+// Future-based async operations (C++17 fallback)
+auto future_result = async_db.execute_async([&db]() {
+    return db.select_query("SELECT * FROM large_table");
+});
+
+// Do other work...
+
+// Get result when ready
+auto result = future_result.get();
+```
+
+---
+
+## Technology Stack
+
+### Dependencies
+
+**Required**:
+- C++17 compiler (GCC 7+, Clang 5+, MSVC 2017+)
+- CMake 3.16+
+
+**Optional** (for specific backends):
+- libpqxx (PostgreSQL)
+- libmysql (MySQL)
+- sqlite3 (SQLite)
+- mongo-cxx-driver (MongoDB)
+- hiredis (Redis)
+
+**Optional** (for enhanced features):
+- thread_system (connection pooling v3, async operations)
+- monitoring_system (performance metrics, Prometheus export)
+- logger_system (structured logging)
+
+### CMake Integration
+
+See [Project Structure](PROJECT_STRUCTURE.md) for build configuration.
+
+---
+
+**For comprehensive performance benchmarks**, see [BENCHMARKS.md](BENCHMARKS.md)
+**For production quality details**, see [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md)
+**For project organization**, see [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
+
+---
+
+**Last Updated**: 2025-11-15
+**Maintained by**: KCENON Team

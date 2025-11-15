@@ -1,61 +1,332 @@
 [![CI](https://github.com/kcenon/database_system/actions/workflows/ci.yml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/ci.yml)
 [![Code Coverage](https://github.com/kcenon/database_system/actions/workflows/coverage.yml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/coverage.yml)
 [![Static Analysis](https://github.com/kcenon/database_system/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/static-analysis.yml)
-[![Doxygen](https://github.com/kcenon/database_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/database_system/actions/workflows/build-Doxygen.yaml)
 [![codecov](https://codecov.io/gh/kcenon/database_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/database_system)
 
-# Database System Project
+# Database System
 
 > **Language:** **English** | [한국어](README_KO.md)
 
+---
+
 ## Overview
 
-The Database System Project is a production-ready, enterprise-grade C++17/C++20 database abstraction layer designed to provide unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations (C++20 coroutines optional). Built with a modular, interface-based architecture supporting 10,000+ concurrent connections, it delivers enterprise-grade database performance with maximum flexibility and reliability.
+A production-ready, enterprise-grade C++17/C++20 database abstraction layer providing unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations.
 
-> **🏗️ Modular Architecture**: Comprehensive database abstraction layer with multi-backend support, enterprise security, and real-time monitoring.
+**Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, MySQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
 
-> **✅ Latest Updates (2025-11)**:
-> - **monitoring_system Integration**: Full integration with kcenon/monitoring_system for production-grade metrics collection
-> - **Connection Pool v3**: 65x latency improvement with thread_system integration
-> - **Remote Database Access**: Database Proxy Server and Remote Client for distributed operations
-> - **Resilient Connections**: Automatic reconnection with health monitoring
-> - **Immutable Query Builder**: Thread-safe query construction with functional programming style
-> - All CI/CD pipelines green across platforms
+### Latest Updates (2025-11)
 
-## 🔗 Project Ecosystem & Inter-Dependencies
+- **monitoring_system Integration**: Full integration for production-grade metrics collection
+- **Connection Pool v3**: 65x latency improvement (5μs → 77ns) with thread_system integration
+- **Remote Database Access**: Database Proxy Server and Remote Client for distributed operations
+- **Resilient Connections**: Automatic reconnection with health monitoring (<1s recovery)
+- **Immutable Query Builder**: Thread-safe query construction with functional programming style
+- All CI/CD pipelines green across platforms
 
-This database system is a crucial component of a comprehensive data management and messaging ecosystem:
+---
+
+## Core Features
+
+### Multi-Backend Support
+
+| Database | Status | Key Features | Performance |
+|----------|--------|--------------|-------------|
+| **PostgreSQL** | ✅ Full | JSONB, Arrays, CTEs, FTS | 1.2ms SELECT, 5K TPS |
+| **MySQL** | ✅ Full | Full-text search, Transactions | 1.5ms SELECT, 4.2K TPS |
+| **SQLite** | ✅ Full | WAL mode, FTS5, In-memory | 0.8ms SELECT |
+| **MongoDB** | ✅ Full | Documents, Aggregation, GridFS | 2.1ms insertOne |
+| **Redis** | ✅ Full | All data types, Pub/Sub, Lua | 0.3ms GET/SET |
+
+[📚 Detailed Backend Features →](docs/FEATURES.md)
+
+### Enterprise-Grade Connection Pooling
+
+**Connection Pool v3 Performance**:
+- **77ns** connection acquisition latency (65x faster than v2)
+- **1.16M+ ops/s** throughput with thread_system integration
+- **10,000+ concurrent connections** supported
+- **95%+ pool efficiency** maintained under load
+- Priority-based connection scheduling
+- Automatic health monitoring and recovery
+
+```cpp
+#include <database/connection_pool.h>
+
+connection_pool_config config;
+config.min_connections = 10;
+config.max_connections = 100;
+config.connection_string = "host=localhost port=5432 dbname=mydb";
+
+auto& db = database_manager::handle();
+db.create_connection_pool(database_types::postgres, config);
+
+// RAII-managed connection (automatically returned to pool)
+auto pool = db.get_connection_pool(database_types::postgres);
+auto connection = pool->acquire_connection();
+```
+
+### Type-Safe Query Builders
+
+**Immutable Query Builder** (thread-safe, zero race conditions):
+
+```cpp
+#include <database/query/immutable_query_builder.h>
+
+const auto base_query = immutable_query_builder()
+    .select({"id", "name", "email"})
+    .from("users");
+
+// Branch 1: Active users
+const auto active_users = base_query
+    .where("is_active", "=", database_value{true})
+    .order_by("name");
+
+// Branch 2: Admin users (base_query unchanged)
+const auto admin_users = base_query
+    .where("role", "=", database_value{std::string("admin")})
+    .order_by("created_at", sort_order::desc);
+
+// Thread-safe execution
+auto result1 = active_users.execute(&db);
+auto result2 = admin_users.execute(&db);
+```
+
+**SQL and NoSQL Support**:
+```cpp
+// PostgreSQL
+auto sql_query = db.create_query_builder(database_types::postgres)
+    .select({"u.id", "u.username", "COUNT(p.id) as post_count"})
+    .from("users u")
+    .join("posts p", "u.id = p.user_id", join_type::left)
+    .group_by("u.id", "u.username")
+    .having("COUNT(p.id)", ">", database_value{int64_t(5)})
+    .order_by("post_count", sort_order::desc)
+    .limit(20);
+
+// MongoDB
+auto mongo_query = db.create_query_builder(database_types::mongodb)
+    .collection("users")
+    .aggregate({
+        {"$match", {{"status", database_value{std::string("active")}}}},
+        {"$group", {{"_id", "$department"}, {"total", {{"$sum", "$salary"}}}}}
+    });
+
+// Redis
+auto redis_query = db.create_query_builder(database_types::redis)
+    .hset("user:1000", {{"username", "john"}, {"email", "john@example.com"}});
+```
+
+[📘 Complete Query Builder Guide →](docs/FEATURES.md#query-builders)
+
+### ORM Framework (C++17 SFINAE-based)
+
+```cpp
+#include <database/orm/entity.h>
+
+class User : public entity_base {
+    ENTITY_TABLE("users")
+
+    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
+    ENTITY_FIELD(std::string, username, not_null() | unique())
+    ENTITY_FIELD(std::string, email, not_null() | unique())
+    ENTITY_FIELD(bool, is_active, default_value(true))
+    ENTITY_FIELD(std::chrono::system_clock::time_point, created_at, default_now())
+
+    ENTITY_METADATA()
+};
+
+// Type-safe ORM operations
+auto users = User::query(db)
+    .where("is_active = ?", true)
+    .order_by("username")
+    .limit(10)
+    .execute();
+
+// Automatic schema generation
+entity_manager::instance().create_tables(db);
+```
+
+[🏗️ ORM Framework Guide →](docs/FEATURES.md#orm-framework)
+
+---
+
+## Performance Highlights
+
+### Benchmarks (Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD)
+
+| Metric | Performance | vs. Native | Notes |
+|--------|-------------|-----------|-------|
+| **Connection Acquisition** | 0.1ms | 20x faster | Pooled vs. native |
+| **Connection Pool v3** | 77ns | 65x faster | vs. v2 (5μs) |
+| **Throughput** | 1.16M+ ops/s | 7.7x faster | High load scenario |
+| **Simple SELECT (PostgreSQL)** | 1.2ms | +20% overhead | Type-safe abstraction |
+| **Complex JOIN (PostgreSQL)** | 15ms | +7% overhead | Minimal impact |
+| **Bulk INSERT (1K rows)** | 45ms | +7% overhead | Near-native speed |
+| **Transaction TPS** | 5,000 TPS | +19% faster | PostgreSQL |
+| **Concurrent Connections** | 10,000+ | Stable | 95%+ efficiency |
+
+**Key Insights**:
+- 🚀 **Connection pooling**: 20x faster than native drivers
+- ⚡ **Query overhead**: Minimal (<20%) for type safety and flexibility
+- 📈 **Scalability**: Linear scaling up to 10,000+ concurrent connections
+- 💾 **Memory efficiency**: <50MB baseline, 850MB at 10K connections
+
+[⚡ Complete Benchmarks →](docs/BENCHMARKS.md)
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+)
+- **CMake**: 3.16+
+- **Optional**: Database libraries (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/kcenon/database_system.git
+cd database_system
+
+# Option 1: Using build scripts (recommended)
+./scripts/dependency.sh  # Linux/macOS
+# or
+scripts\dependency.bat   # Windows
+
+./scripts/build.sh       # Build project
+# or
+scripts\build.bat        # Windows
+
+# Option 2: Manual CMake build
+vcpkg install libpqxx libmysql sqlite3 mongo-cxx-driver hiredis
+
+mkdir build && cd build
+cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
+cmake --build .
+
+# Run examples
+./bin/basic_usage
+./bin/connection_pool_demo
+```
+
+### Basic Usage
+
+```cpp
+#include <database/database_manager.h>
+#include <database/connection_pool.h>
+
+int main() {
+    // Initialize database system
+    database_manager& db = database_manager::handle();
+
+    // Configure connection pool
+    connection_pool_config config;
+    config.min_connections = 10;
+    config.max_connections = 100;
+    config.connection_string = "host=localhost port=5432 dbname=mydb user=admin password=secret";
+
+    db.set_mode(database_types::postgres);
+    db.create_connection_pool(database_types::postgres, config);
+
+    // Execute query with type-safe query builder
+    auto result = db.create_query_builder(database_types::postgres)
+        .select({"id", "username", "email"})
+        .from("users")
+        .where("is_active", "=", database_value{true})
+        .order_by("created_at", sort_order::desc)
+        .limit(100)
+        .execute(&db);
+
+    if (result) {
+        for (const auto& row : *result) {
+            std::cout << "User: " << std::get<std::string>(row.at("username")) << std::endl;
+        }
+    }
+
+    return 0;
+}
+```
+
+### Unified Database System (Zero-Config)
+
+```cpp
+#include <database/integrated/unified_database_system.h>
+
+using namespace database::integrated;
+
+int main() {
+    // Zero-config initialization
+    unified_database_system db;
+
+    // Connect and execute
+    auto conn_result = db.connect("host=localhost dbname=mydb user=admin password=secret");
+    if (!conn_result) {
+        std::cerr << "Connection failed: " << conn_result.error() << std::endl;
+        return 1;
+    }
+
+    auto result = db.execute("SELECT * FROM users WHERE age > $1", {25});
+    if (result) {
+        std::cout << "Found " << result->rows.size() << " users" << std::endl;
+    }
+
+    // Built-in health checks and metrics
+    auto health = db.check_health();
+    auto metrics = db.get_metrics();
+    std::cout << "Health: " << (health.status == health_status::healthy ? "OK" : "Degraded") << std::endl;
+    std::cout << "Total queries: " << metrics.total_queries << std::endl;
+
+    return 0;
+}
+```
+
+[🚀 More Examples →](samples/)
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  Application Layer                          │
+│  (Your code using database_system, unified_database_system) │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────────┐
+│              Database Abstraction Layer                     │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │ ORM         │  │ Query Builder│  │ Connection Pool  │   │
+│  │ Framework   │  │ (SQL/NoSQL)  │  │ (v3: 77ns, 1.16M │   │
+│  │             │  │              │  │  ops/s)          │   │
+│  └─────────────┘  └──────────────┘  └──────────────────┘   │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────────┐
+│             Backend Implementations                         │
+│  ┌──────────┐ ┌──────┐ ┌────────┐ ┌─────────┐ ┌────────┐  │
+│  │PostgreSQL│ │MySQL │ │ SQLite │ │ MongoDB │ │ Redis  │  │
+│  └──────────┘ └──────┘ └────────┘ └─────────┘ └────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key Components**:
+- **database_manager**: Singleton manager with connection pooling
+- **connection_pool v3**: Enterprise-grade pooling (77ns, 1.16M+ ops/s)
+- **Query Builders**: Type-safe SQL/NoSQL query construction
+- **ORM Framework**: C++17 SFINAE-based entity system
+- **Backend Adapters**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+
+[🏛️ Architecture Details →](docs/01-ARCHITECTURE.md)
+
+---
+
+## Ecosystem Integration
 
 ### Project Dependencies
-- **[container_system](https://github.com/kcenon/container_system)**: Data serialization for database storage
-  - Integration: Native container serialization for BLOB storage
-  - Benefits: Type-safe data persistence with efficient binary formats
-  - Role: Serialized container storage and retrieval
 
-- **[thread_system](https://github.com/kcenon/thread_system)**: High-performance concurrent execution (optional)
-  - Integration: Async database operations with adaptive thread pool
-  - Benefits: 1.16M+ ops/s throughput, 77ns latency, adaptive queue strategy
-  - Role: Async executor for database operations and connection pooling
-  - Status: Fully integrated with fallback support
-
-### Related Projects
-- **[messaging_system](https://github.com/kcenon/messaging_system)**: Message persistence and queuing
-  - Relationship: Database backend for message persistence and queuing
-  - Synergy: Reliable message delivery with database durability guarantees
-  - Integration: Message archival, replay, and transaction logging
-
-- **[network_system](https://github.com/kcenon/network_system)**: Network-based database operations
-  - Relationship: Remote database access and distributed operations
-  - Benefits: Network-transparent database operations and clustering
-  - Integration: Remote procedure calls and distributed transactions
-
-- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database performance monitoring (optional)
-  - Integration: Production-grade metrics collection with Prometheus export
-  - Benefits: Performance profiling, health checks, real-time observability
-  - Features: Query latency percentiles (P95/P99), connection pool metrics, Prometheus-compatible export
-  - Status: Fully integrated with fallback support
-
-### Integration Architecture
 ```
 ┌─────────────────┐     ┌─────────────────┐
 │container_system │ ──► │database_system  │
@@ -69,745 +340,66 @@ This database system is a crucial component of a comprehensive data management a
          └────────┬───────────────┘
                   ▼
     ┌─────────────────────────┐
-    │  monitoring_system     │
+    │  monitoring_system      │
     └─────────────────────────┘
 ```
 
-### Integration Benefits
-- **Universal data persistence**: Unified storage for all ecosystem components
-- **Performance-optimized**: Enterprise-grade connection pooling and query optimization
-- **Multi-backend flexibility**: Support for SQL and NoSQL databases as needed
-- **Enterprise security**: TLS/SSL encryption, RBAC, and audit logging
-- **Real-time monitoring**: Comprehensive performance metrics and alerting
+**Related Projects**:
+- **[container_system](https://github.com/kcenon/container_system)**: Data serialization for BLOB storage
+- **[thread_system](https://github.com/kcenon/thread_system)**: High-performance concurrent execution (connection pool v3)
+- **[messaging_system](https://github.com/kcenon/messaging_system)**: Message persistence and queuing
+- **[network_system](https://github.com/kcenon/network_system)**: Network-based database operations
+- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Performance monitoring and metrics
 
-> 📖 **[Complete Architecture Guide](docs/ARCHITECTURE.md)**: Comprehensive documentation of the entire ecosystem architecture, dependency relationships, and integration patterns.
-
-## Project Purpose & Mission
-
-This project addresses the fundamental challenge faced by developers worldwide: **making enterprise-grade database access accessible, reliable, and efficient**. Traditional database approaches often lock you into specific vendors, lack comprehensive security features, and provide insufficient monitoring capabilities. Our mission is to provide a comprehensive solution that:
-
-- **Eliminates vendor lock-in** through unified interface supporting multiple database backends
-- **Ensures enterprise security** with TLS/SSL encryption, RBAC, and comprehensive audit logging
-- **Maximizes performance** through intelligent connection pooling and query optimization
-- **Promotes reliability** through automatic failover, health monitoring, and transaction management
-- **Accelerates development** by providing ORM framework, query builders, and async operations
-
-## Core Advantages & Benefits
-
-### 🚀 **Performance Excellence**
-- **Next-Generation Connection Pool v3**: Revolutionary performance improvements
-  - **77ns** connection acquisition latency (65x faster than v2)
-  - **1.16M+ ops/s** throughput with thread_system integration
-  - **7.7x performance** under high load with adaptive job queue
-  - Priority-based connection scheduling
-  - Graceful shutdown with cancellation tokens
-- **Query optimization**: Intelligent query planning and execution optimization
-  - **Immutable Query Builder**: Zero-overhead thread-safe query construction
-  - Compile-time query validation for SQL and NoSQL
-- **Async operations**: C++20 coroutines for non-blocking database operations (optional, C++17 std::future fallback available)
-- **Bulk operations**: Optimized batch processing for high-throughput scenarios
-- **✨ Production-Grade Reliability**:
-  - **Automatic reconnection**: <1s recovery with exponential backoff
-  - **Health monitoring**: Real-time connection quality scoring
-  - **Remote access**: Network-transparent database operations with <10% overhead
-
-### 🛡️ **Production-Grade Reliability**
-- **Multi-backend support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
-- **Automatic failover**: Health monitoring with automatic connection recovery
-- **Transaction management**: ACID compliance with distributed transaction support
-- **Comprehensive error handling**: Graceful degradation and recovery patterns
-
-### 🔧 **Developer Productivity**
-- **ORM framework**: Type-safe entity system with automatic schema management (C++17 SFINAE-based)
-- **Type-safe query builders**: Compile-time query validation for SQL and NoSQL
-- **Intuitive API design**: Clean, self-documenting interfaces reduce learning curve
-- **Mock implementations**: Testing support without requiring actual databases
-
-### 🌐 **Cross-Platform Compatibility**
-- **Universal support**: Works on Windows, Linux, and macOS
-- **Database flexibility**: Support for cloud, on-premise, and embedded databases
-- **Compiler compatibility**: Compatible with GCC, Clang, and MSVC
-- **Container support**: Docker-ready with configuration management
-
-### 📈 **Enterprise-Ready Features**
-- **Security framework**: TLS/SSL encryption, RBAC, and audit logging
-- **Performance monitoring**: Real-time metrics with Prometheus integration
-- **Schema management**: Version-controlled migrations and automatic updates
-- **Distributed operations**: Sharding, replication, and clustering support
-
-## Real-World Impact & Use Cases
-
-### 🎯 **Ideal Applications**
-- **Enterprise web applications**: Multi-tenant applications with complex data models
-- **Financial systems**: High-frequency trading with ACID transaction requirements
-- **IoT platforms**: Time-series data storage with real-time analytics
-- **Content management systems**: Large-scale content storage and retrieval
-- **Gaming platforms**: Player data persistence with real-time leaderboards
-- **E-commerce platforms**: Order processing with inventory management
-
-### 📊 **Performance Benchmarks**
-
-*Benchmarked on Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD storage, Enterprise database configurations*
-
-> **🚀 Architecture Update**: Latest modular architecture with connection pooling and query optimization delivers exceptional performance for database-intensive applications. Enterprise-grade security ensures reliability without performance compromise.
-
-#### Core Performance Metrics (Latest Benchmarks)
-- **Connection Pooling**: 0.1ms average connection acquisition time
-- **Query Performance**:
-  - Simple SELECT operations: 1.2ms (PostgreSQL), 0.8ms (SQLite), 0.3ms (Redis)
-  - Complex JOIN operations: 15ms (PostgreSQL), 12ms (SQLite)
-  - Bulk INSERT (1K records): 45ms (PostgreSQL), 38ms (SQLite), 28ms (Redis)
-- **Concurrent Operations**:
-  - 10,000 concurrent connections: Stable performance
-  - Connection pool utilization: 95%+ efficiency
-  - Transaction throughput: 5,000 TPS (PostgreSQL)
-- **Memory efficiency**: <50MB baseline with intelligent connection management
-
-#### Performance Comparison with Industry Standards
-| Database Operation | Our System | Native Driver | ORM Overhead | Best Use Case |
-|-------------------|------------|---------------|--------------|---------------|
-| 🏆 **Connection Pool** | **0.1ms** | 2-5ms | 0ms | All scenarios (optimized) |
-| 📦 **Simple SELECT** | **1.2ms** | 1.0ms | +20% | OLTP applications |
-| 📦 **Complex JOIN** | **15ms** | 14ms | +7% | Analytical queries |
-| 📦 **Bulk INSERT** | **45ms** | 42ms | +7% | ETL operations |
-| 📦 **NoSQL Ops** | **0.3ms** | 0.2ms | +50% | Caching and real-time |
-
-#### Key Performance Insights
-- 🏃 **Connection pooling**: 20x faster connection acquisition vs. native
-- 🏋️ **Query optimization**: Minimal overhead for complex operations
-- ⏱️ **Type safety**: Zero runtime overhead for query validation
-- 📈 **Scalability**: Linear scaling up to 10,000+ concurrent connections
-
-## Features
-
-### 🎯 Core Capabilities
-- **Multi-Backend Support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis with unified interface
-- **ORM Framework**: Type-safe entity system with automatic schema management (C++17 SFINAE-based)
-- **Connection Pooling v3**: Next-generation connection pool with 65x latency improvement (5μs → 77ns)
-  - Priority-based connection acquisition
-  - Adaptive job queue (7.7x performance under high load)
-  - Thread-system integration for 1.16M+ ops/s throughput
-- **Query Builders**: Type-safe query construction for SQL and NoSQL databases
-  - **NEW: Immutable Query Builder**: Thread-safe, functional-style query construction
-  - Zero race conditions with immutable pattern
-  - Full SQL support (SELECT, WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT, OFFSET)
-- **Remote Database Access**: Network-transparent database operations
-  - **Database Proxy Server**: Remote database service with TLS/SSL encryption
-  - **Remote Database Client**: Transparent remote access with automatic reconnection
-  - Compatible with existing database_backend interface
-- **Resilient Connections**: Production-grade reliability features
-  - Automatic reconnection with exponential backoff (<1s recovery)
-  - Real-time health monitoring and quality scoring
-  - Connection lifecycle management
-- **Performance Monitoring**: Real-time metrics, alerting, and Prometheus integration
-- **Enterprise Security**: TLS/SSL encryption, RBAC, audit logging, and threat detection
-- **Async Operations**: C++20 coroutines (optional), distributed transactions, and real-time streaming
-- **Thread Safety**: Concurrent database operations with proper synchronization
-- **Modern C++**: C++17/C++20 with variants, RAII patterns, and optional coroutines
-- **Production Ready**: Enterprise architecture supporting 10,000+ concurrent connections
-
-### 🗄️ Supported Databases
-
-| Database | Status | Features | Performance | ORM Support | Security |
-|----------|--------|----------|-------------|-------------|----------|
-| PostgreSQL | ✅ Full | JSONB, Arrays, CTEs, Prepared Statements | Excellent | ✅ | TLS/SSL |
-| MySQL | ✅ Full | Full-text search, Transactions, Prepared Statements | Very Good | ✅ | TLS/SSL |
-| SQLite | ✅ Full | WAL mode, FTS5, In-memory databases | Good | ✅ | Encryption |
-| MongoDB | ✅ Full | Documents, Aggregation, GridFS | Very Good | ✅ | TLS/SSL |
-| Redis | ✅ Full | All data types, Pub/Sub, Transactions | Excellent | ✅ | TLS/SSL |
-
-### 📊 Database Types
-
-```cpp
-enum class database_types : uint8_t
-{
-    none = 0,           // No database backend
-    postgres = 1,       // PostgreSQL backend
-    mysql = 2,          // MySQL/MariaDB backend
-    sqlite = 3,         // SQLite backend
-    oracle = 4,         // Oracle backend (future)
-    mongodb = 5,        // MongoDB backend
-    redis = 6           // Redis backend
-};
-```
-
-## Architecture
-
-```
-database_system/
-├── database/                           # Database module
-│   ├── database_base.h                # Abstract base class
-│   ├── database_manager.h             # Singleton manager with pooling
-│   ├── database_types.h               # Type definitions
-│   ├── connection_pool.h              # Connection pooling system
-│   ├── query_builder.h                # Query builder interfaces
-│   ├── postgres_manager.h             # PostgreSQL implementation
-│   ├── backends/                      # Database backends
-│   │   ├── mysql/mysql_manager.h      # MySQL implementation
-│   │   ├── sqlite/sqlite_manager.h    # SQLite implementation
-│   │   ├── mongodb/mongodb_manager.h  # MongoDB implementation
-│   │   └── redis/redis_manager.h      # Redis implementation
-│   └── CMakeLists.txt                 # Module build configuration
-├── samples/                           # Usage examples
-│   ├── basic_usage.cpp                # Basic database operations
-│   ├── postgres_advanced.cpp          # Advanced PostgreSQL features
-│   └── connection_pool_demo.cpp       # Connection pooling demo
-├── tests/                             # Unit tests
-└── CMakeLists.txt                     # Main build configuration
-```
-
-### Data Types
-
-The system uses modern C++ types for database results:
-
-```cpp
-// Database result types for independent operation
-using database_value = std::variant<std::string, int64_t, double, bool, std::monostate>;
-using database_row = std::map<std::string, database_value>;
-using database_result = std::vector<database_row>;
-```
-
-## Technology Stack & Architecture
-
-### 🏗️ **Modern C++ Foundation**
-- **C++20 features**: Concepts, coroutines, `std::variant`, and ranges for enhanced performance
-- **Template metaprogramming**: Type-safe, compile-time database schema validation
-- **Memory management**: Smart pointers and RAII for automatic resource cleanup
-- **Exception safety**: Strong exception safety guarantees throughout
-- **Async programming**: C++20 coroutines for non-blocking database operations
-- **Interface-based design**: Clean abstraction layer supporting multiple database backends
-- **Modular architecture**: Pluggable database backends with consistent API
-
-### 🔄 **Design Patterns Implementation**
-- **Abstract Factory Pattern**: Pluggable database backend creation
-- **Singleton Pattern**: Database manager with global access and resource management
-- **Object Pool Pattern**: Enterprise-grade connection pooling with health monitoring
-- **Builder Pattern**: Type-safe query construction with fluent API
-- **Strategy Pattern**: Configurable database backends and query optimization
-- **Observer Pattern**: Real-time performance monitoring and alerting
-
-## Project Structure
-
-### 📁 **Directory Organization**
-
-```
-database_system/
-├── 📁 include/database/            # Public headers
-│   ├── 📁 core/                    # Core components
-│   │   ├── database_base.h         # Abstract database interface
-│   │   ├── database_manager.h      # Singleton manager with pooling
-│   │   ├── database_types.h        # Type definitions and enums
-│   │   └── connection_pool.h       # Enterprise connection pooling
-│   ├── 📁 backends/                # Database backend implementations
-│   │   ├── postgres_manager.h      # PostgreSQL implementation
-│   │   ├── mysql/mysql_manager.h   # MySQL implementation
-│   │   ├── sqlite/sqlite_manager.h # SQLite implementation
-│   │   ├── mongodb/mongodb_manager.h # MongoDB implementation
-│   │   └── redis/redis_manager.h   # Redis implementation
-│   ├── 📁 query/                   # Query building and execution
-│   │   ├── query_builder.h         # Type-safe query builder
-│   │   ├── sql_builder.h           # SQL-specific query builder
-│   │   ├── nosql_builder.h         # NoSQL query builder
-│   │   └── prepared_statement.h    # Prepared statement support
-│   ├── 📁 orm/                     # Object-Relational Mapping
-│   │   ├── entity.h                # Entity base class and macros
-│   │   ├── entity_manager.h        # Entity lifecycle management
-│   │   ├── schema_manager.h        # Schema generation and migration
-│   │   └── relationship.h          # Entity relationships
-│   ├── 📁 security/                # Enterprise security features
-│   │   ├── secure_connection.h     # TLS/SSL connection management
-│   │   ├── credential_manager.h    # Secure credential storage
-│   │   ├── access_control.h        # Role-based access control
-│   │   └── audit_logger.h          # Security audit logging
-│   ├── 📁 monitoring/              # Performance monitoring
-│   │   ├── performance_monitor.h   # Real-time performance metrics
-│   │   ├── health_monitor.h        # Database health monitoring
-│   │   ├── prometheus_exporter.h   # Prometheus metrics export
-│   │   └── alert_manager.h         # Performance alerting
-│   └── 📁 async/                   # Asynchronous operations
-│       ├── async_operations.h      # C++20 coroutine support
-│       ├── future_operations.h     # Future-based async operations
-│       ├── transaction_coordinator.h # Distributed transactions
-│       └── stream_processor.h      # Real-time data streaming
-├── 📁 src/                         # Implementation files
-│   ├── 📁 core/                    # Core implementations
-│   ├── 📁 backends/                # Backend implementations
-│   ├── 📁 query/                   # Query building implementations
-│   ├── 📁 orm/                     # ORM implementations
-│   ├── 📁 security/                # Security implementations
-│   ├── 📁 monitoring/              # Monitoring implementations
-│   └── 📁 async/                   # Async implementations
-├── 📁 samples/                     # Example applications
-│   ├── basic_usage/                # Basic database operations
-│   ├── postgres_advanced/          # Advanced PostgreSQL features
-│   ├── connection_pool_demo/       # Connection pooling demonstration
-│   ├── orm_examples/               # ORM framework examples
-│   └── enterprise_features/        # Security and monitoring examples
-├── 📁 tests/                       # All tests
-│   ├── 📁 unit/                    # Unit tests
-│   ├── 📁 integration/             # Integration tests
-│   └── 📁 performance/             # Performance benchmarks
-├── 📁 docs/                        # Documentation
-├── 📁 cmake/                       # CMake modules
-├── 📄 CMakeLists.txt               # Build configuration
-└── 📄 vcpkg.json                   # Dependencies
-```
-
-### 📖 **Key Files and Their Purpose**
-
-#### Core Module Files
-- **`database_base.h/cpp`**: Abstract interface for all database backends
-- **`database_manager.h/cpp`**: Singleton manager with connection pooling and lifecycle management
-- **`database_types.h`**: Type definitions, enums, and result structures
-- **`connection_pool.h/cpp`**: Enterprise-grade connection pooling with health monitoring
-
-#### Backend Implementation Files
-- **`postgres_manager.h/cpp`**: PostgreSQL backend with advanced features (JSONB, arrays, CTEs)
-- **`mysql_manager.h/cpp`**: MySQL/MariaDB backend with full-text search and transactions
-- **`sqlite_manager.h/cpp`**: SQLite backend with WAL mode and FTS5 support
-- **`mongodb_manager.h/cpp`**: MongoDB backend with document operations and aggregation
-- **`redis_manager.h/cpp`**: Redis backend with all data types and pub/sub
-
-#### Query and ORM Files
-- **`query_builder.h/cpp`**: Type-safe query builder with compile-time validation
-- **`entity.h/cpp`**: C++20 concepts-based entity system with automatic schema generation
-- **`schema_manager.h/cpp`**: Version-controlled schema migrations and updates
-
-### 🔗 **Module Dependencies**
-
-```
-core (database_base, database_manager, database_types)
-    │
-    ├──> backends (postgres, mysql, sqlite, mongodb, redis)
-    │
-    ├──> query (query_builder, sql_builder, nosql_builder)
-    │
-    ├──> orm (entity, entity_manager, schema_manager)
-    │
-    ├──> security (secure_connection, access_control, audit_logger)
-    │
-    ├──> monitoring (performance_monitor, health_monitor, prometheus_exporter)
-    │
-    └──> async (async_operations, transaction_coordinator, stream_processor)
-
-Optional External Projects:
-- container_system (provides serialization for BLOB storage)
-- messaging_system (uses database for message persistence)
-- monitoring_system (integrates with database performance monitoring)
-```
-
-## 🎯 Unified Database System
-
-The `unified_database_system` provides a zero-config, batteries-included database interface with integrated logging, monitoring, and thread pool management.
-
-### Key Features
-
-- **Zero-Configuration**: Smart defaults allow immediate usage without complex setup
-- **Integrated Adapters**: Seamlessly integrates with logger_system, monitoring_system, and thread_system
-- **Builder Pattern**: Fluent API for custom configuration when needed
-- **Fallback Support**: Works without external dependencies using built-in implementations
-- **Type-Safe**: Result<T> pattern for explicit error handling
-- **Thread-Safe**: Concurrent operations fully supported
-- **Production-Ready**: Comprehensive test coverage with all features verified
-
-### Quick Start with Unified System
-
-```cpp
-#include "integrated/unified_database_system.h"
-
-using namespace database::integrated;
-
-int main() {
-    // Zero-config initialization
-    unified_database_system db;
-
-    // Connect to database
-    auto conn_result = db.connect("host=localhost dbname=mydb user=admin password=secret");
-    if (!conn_result) {
-        std::cerr << "Connection failed: " << conn_result.error() << std::endl;
-        return 1;
-    }
-
-    // Execute query
-    auto result = db.execute("SELECT * FROM users WHERE age > $1", {25});
-    if (result) {
-        std::cout << "Found " << result->rows.size() << " users" << std::endl;
-    }
-
-    // Check health and metrics
-    auto health = db.check_health();
-    auto metrics = db.get_metrics();
-
-    std::cout << "Database is "
-              << (health.status == health_status::healthy ? "healthy" : "unhealthy")
-              << std::endl;
-    std::cout << "Total queries: " << metrics.total_queries << std::endl;
-
-    return 0;
-}
-```
-
-### Advanced Configuration
-
-```cpp
-// Custom configuration with builder pattern
-unified_database_system db = unified_database_system::builder()
-    .with_connection_string("host=localhost dbname=mydb")
-    .with_pool_size(10, 100)  // min, max connections
-    .with_thread_pool(8)       // 8 worker threads
-    .with_log_level(db_log_level::info)
-    .with_monitoring(true)
-    .build();
-```
-
-### Async Operations
-
-```cpp
-// Submit async query
-auto future = db.execute_async("SELECT * FROM large_table");
-
-// Do other work while query executes...
-
-// Wait for result
-auto result = future.get();
-if (result) {
-    process_data(result->rows);
-}
-```
-
-### Example Programs
-
-See `samples/integrated/` for comprehensive usage examples:
-- **`basic_usage.cpp`**: Zero-config database access and simple queries
-- **`async_queries.cpp`**: Asynchronous query execution and concurrency
-- **`monitoring.cpp`**: Health checks, metrics, and performance monitoring
-- **`migration_from_legacy.cpp`**: Migration guide from legacy database_manager API
+[🌐 Ecosystem Integration Guide →](../ECOSYSTEM_INTEGRATION.md)
 
 ---
 
-## Quick Start & Usage Examples
+## Documentation
 
-### 🚀 **Getting Started in 5 Minutes**
+### Getting Started
+- 📖 [Getting Started Guide](docs/README.md)
+- 🔧 [Build Guide](docs/guides/BUILD_GUIDE.md)
+- 🚀 [Quick Start Examples](samples/)
 
-#### Enterprise Database Integration Example
+### Core Documentation
+- 📚 [Detailed Features](docs/FEATURES.md) - Backend details, ORM, query builders
+- ⚡ [Performance Benchmarks](docs/BENCHMARKS.md) - Comprehensive performance data
+- 🏗️ [Project Structure](docs/PROJECT_STRUCTURE.md) - Module organization, build system
+- ✅ [Production Quality](docs/PRODUCTION_QUALITY.md) - Enterprise features, CI/CD, thread safety
 
-```cpp
-#include <database/database_manager.h>
-#include <database/connection_pool.h>
-#include <database/query/query_builder.h>
-#include <database/monitoring/performance_monitor.h>
+### Advanced Topics
+- 🏛️ [Architecture](docs/01-ARCHITECTURE.md) - System design and patterns
+- 📘 [API Reference](docs/02-API_REFERENCE.md) - Complete API documentation
+- 🔐 [Security Guide](docs/advanced/SECURITY.md) - TLS/SSL, RBAC, audit logging
+- 🔄 [Migration Guide](docs/guides/MIGRATION_GUIDE.md) - Upgrading from previous versions
 
-using namespace database;
+### Development
+- 🤝 [Contributing](docs/contributing/CONTRIBUTING.md)
+- 📋 [FAQ](docs/guides/FAQ.md)
+- 🔍 [Troubleshooting](docs/guides/TROUBLESHOOTING.md)
 
-int main() {
-    // 1. Initialize enterprise database system
-    database_manager& db = database_manager::handle();
-    auto& monitor = performance_monitor::instance();
-
-    // 2. Configure connection pool for high-performance operations
-    connection_pool_config pool_config;
-    pool_config.min_connections = 10;
-    pool_config.max_connections = 100;
-    pool_config.acquire_timeout = std::chrono::seconds(5);
-    pool_config.connection_string = "host=localhost port=5432 dbname=enterprise_db user=admin password=secure_password";
-
-    // Set database mode and create connection pool
-    if (!db.set_mode(database_types::postgres)) {
-        std::cerr << "Failed to set database mode" << std::endl;
-        return 1;
-    }
-
-    if (!db.create_connection_pool(database_types::postgres, pool_config)) {
-        std::cerr << "Failed to create connection pool" << std::endl;
-        return 1;
-    }
-
-    // 3. Enable real-time performance monitoring
-    monitor.set_alert_thresholds(0.05, std::chrono::milliseconds(1000));
-    monitor.register_alert_handler([](const performance_alert& alert) {
-        std::cout << "Performance Alert: " << alert.message() << std::endl;
-    });
-
-    auto start_time = std::chrono::high_resolution_clock::now();
-
-    // 4. Create enterprise schema with type-safe query builder
-    auto schema_result = db.create_query_builder(database_types::postgres)
-        .raw_sql(
-            "CREATE TABLE IF NOT EXISTS users ("
-            "id SERIAL PRIMARY KEY, "
-            "username VARCHAR(50) NOT NULL UNIQUE, "
-            "email VARCHAR(100) NOT NULL UNIQUE, "
-            "department VARCHAR(50), "
-            "salary DECIMAL(10,2), "
-            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-            "is_active BOOLEAN DEFAULT TRUE"
-            ")"
-        )
-        .execute(&db);
-
-    if (!schema_result) {
-        std::cerr << "Failed to create schema" << std::endl;
-        return 1;
-    }
-
-    // 5. High-performance bulk data operations
-    std::vector<std::string> departments = {"Engineering", "Sales", "Marketing", "HR", "Finance"};
-    std::vector<std::thread> worker_threads;
-    std::atomic<int> operations_completed{0};
-
-    for (int t = 0; t < 5; ++t) {
-        worker_threads.emplace_back([&db, &departments, &operations_completed, t]() {
-            // Get connection from pool (thread-safe)
-            auto pool = db.get_connection_pool(database_types::postgres);
-            auto connection = pool->acquire_connection();
-
-            if (connection) {
-                for (int i = 0; i < 100; ++i) {
-                    // Use query builder for type-safe operations
-                    auto insert_result = db.create_query_builder(database_types::postgres)
-                        .insert_into("users")
-                        .values({
-                            {"username", database_value{std::string("user_" + std::to_string(t * 100 + i))}},
-                            {"email", database_value{std::string("user" + std::to_string(t * 100 + i) + "@enterprise.com")}},
-                            {"department", database_value{departments[t]}},
-                            {"salary", database_value{50000.0 + (i * 100.0)}},
-                            {"is_active", database_value{true}}
-                        })
-                        .execute(&db);
-
-                    if (insert_result) {
-                        operations_completed.fetch_add(1);
-                    }
-                }
-                // Connection automatically returned to pool
-            }
-        });
-    }
-
-    // Wait for all operations to complete
-    for (auto& thread : worker_threads) {
-        thread.join();
-    }
-
-    // 6. Execute complex analytical queries
-    auto analytics_result = db.create_query_builder(database_types::postgres)
-        .select({"department", "COUNT(*) as employee_count", "AVG(salary) as avg_salary", "MAX(salary) as max_salary"})
-        .from("users")
-        .where("is_active", "=", database_value{true})
-        .group_by("department")
-        .having("COUNT(*)", ">", database_value{int64_t(50)})
-        .order_by("avg_salary", sort_order::desc)
-        .execute(&db);
-
-    if (analytics_result) {
-        std::cout << "\nDepartment Analytics:\n";
-        for (const auto& row : *analytics_result) {
-            std::cout << "Department: " << std::get<std::string>(row.at("department"));
-            std::cout << ", Employees: " << std::get<int64_t>(row.at("employee_count"));
-            std::cout << ", Avg Salary: $" << std::fixed << std::setprecision(2) << std::get<double>(row.at("avg_salary"));
-            std::cout << ", Max Salary: $" << std::get<double>(row.at("max_salary")) << std::endl;
-        }
-    }
-
-    auto end_time = std::chrono::high_resolution_clock::now();
-
-    // 7. Collect comprehensive performance metrics
-    auto performance_summary = monitor.get_performance_summary();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    auto pool_stats = db.get_pool_stats();
-
-    std::cout << "\nPerformance Results:\n";
-    std::cout << "- Total execution time: " << duration.count() << " ms\n";
-    std::cout << "- Operations completed: " << operations_completed.load() << "\n";
-    std::cout << "- Throughput: " << (operations_completed.load() * 1000.0 / duration.count()) << " ops/sec\n";
-    std::cout << "- Queries per second: " << performance_summary.queries_per_second << "\n";
-    std::cout << "- Average query time: " << performance_summary.avg_query_time.count() << " μs\n";
-    std::cout << "- Error rate: " << (performance_summary.error_rate * 100) << "%\n";
-
-    // Connection pool statistics
-    for (const auto& [db_type, stat] : pool_stats) {
-        std::cout << "- Active connections: " << stat.active_connections << "\n";
-        std::cout << "- Available connections: " << stat.available_connections << "\n";
-        std::cout << "- Pool utilization: " << ((double)stat.active_connections / (stat.active_connections + stat.available_connections) * 100) << "%\n";
-    }
-
-    return 0;
-}
-```
-
-> **Performance Tip**: The database system automatically optimizes connection pooling and query execution. Use query builders for type safety, connection pools for scalability, and monitoring for performance insights.
-
-### 🔄 **More Usage Examples**
-
-#### Multi-Database Architecture
-```cpp
-#include <database/database_manager.h>
-#include <database/backends/postgres_manager.h>
-#include <database/backends/redis/redis_manager.h>
-
-using namespace database;
-
-// Configure multiple database backends for different use cases
-database_manager& db = database_manager::handle();
-
-// PostgreSQL for OLTP operations
-connection_pool_config postgres_config;
-postgres_config.connection_string = "host=localhost port=5432 dbname=oltp_db user=admin";
-db.create_connection_pool(database_types::postgres, postgres_config);
-
-// Redis for caching and session management
-connection_pool_config redis_config;
-redis_config.connection_string = "redis://localhost:6379/0";
-db.create_connection_pool(database_types::redis, redis_config);
-
-// User data in PostgreSQL
-auto user_result = db.create_query_builder(database_types::postgres)
-    .select({"id", "username", "email"})
-    .from("users")
-    .where("id", "=", database_value{int64_t(12345)})
-    .execute(&db);
-
-// Cache user session in Redis
-if (user_result && !user_result->empty()) {
-    auto user = user_result->front();
-    auto cache_result = db.create_query_builder(database_types::redis)
-        .hset("user:12345", {
-            {"username", std::get<std::string>(user.at("username"))},
-            {"email", std::get<std::string>(user.at("email"))},
-            {"last_access", std::to_string(std::time(nullptr))}
-        })
-        .execute(&db);
-}
-```
-
-#### Enterprise Security Implementation
-```cpp
-#include <database/security/secure_connection.h>
-#include <database/security/access_control.h>
-#include <database/security/audit_logger.h>
-
-using namespace database;
-
-// Configure enterprise security
-auto& credentials = credential_manager::instance();
-auto& access = access_control::instance();
-
-// Set up secure credentials with TLS encryption
-security_credentials secure_creds;
-secure_creds.username = "app_user";
-secure_creds.password_hash = credentials.hash_password("enterprise_password");
-secure_creds.encryption = encryption_type::tls;
-secure_creds.verify_certificate = true;
-credentials.store_credentials("production_db", secure_creds);
-
-// Role-based access control
-access_control::role read_only_role;
-read_only_role.name = "read_only";
-read_only_role.permissions = access_control::permission::select;
-access.create_role(read_only_role);
-
-access_control::role admin_role;
-admin_role.name = "admin";
-admin_role.permissions =
-    access_control::permission::select |
-    access_control::permission::insert |
-    access_control::permission::update |
-    access_control::permission::delete;
-access.create_role(admin_role);
-
-// Assign roles to users
-access.assign_role_to_user("analyst_user", "read_only");
-access.assign_role_to_user("admin_user", "admin");
-
-// Security audit logging
-AUDIT_LOG_ACCESS("admin_user", "session123", "DELETE", "users", "WHERE id > 1000", true, "");
-```
-
-### 📚 **Comprehensive Sample Collection**
-
-Our samples demonstrate real-world usage patterns and enterprise best practices:
-
-#### **Core Functionality**
-- **[Basic Usage](samples/basic_usage/)**: Database connections and simple operations
-- **[Connection Pooling](samples/connection_pool_demo/)**: Enterprise-grade connection management
-- **[Query Builders](samples/query_examples/)**: Type-safe query construction
-- **[Multi-Backend](samples/multi_database/)**: Using multiple database types together
-
-#### **Advanced Features**
-- **[ORM Framework](samples/orm_examples/)**: Entity mapping and automatic schema generation
-- **[Enterprise Security](samples/enterprise_features/)**: TLS/SSL, RBAC, and audit logging
-- **[Performance Monitoring](samples/monitoring_examples/)**: Real-time metrics and alerting
-- **[Async Operations](samples/async_examples/)**: C++20 coroutines and distributed transactions
-
-#### **Integration Examples**
-- **[Container Integration](samples/container_integration/)**: Serialized container storage
-- **[Messaging Integration](samples/messaging_integration/)**: Message persistence and queuing
-- **[Monitoring Integration](samples/monitoring_integration/)**: Performance metrics integration
-
-### 🛠️ **Build & Integration**
-
-#### Prerequisites
-- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+), C++20 for async coroutines (GCC 10+, Clang 11+, MSVC 2019+)
-- **Build System**: CMake 3.16+
-- **Database Libraries**: Optional (see vcpkg dependencies)
-
-#### Build Steps
-
+**Build API Documentation**:
 ```bash
-# Clone the repository
-git clone https://github.com/kcenon/database_system.git
-cd database_system
-
-# Option 1: Using build scripts (recommended for quick start)
-./scripts/dependency.sh  # Install dependencies (Linux/macOS)
-# or
-scripts\dependency.bat   # Windows Command Prompt
-# or
-.\scripts\dependency.ps1 # Windows PowerShell
-
-./scripts/build.sh       # Build project (Linux/macOS)
-# or
-scripts\build.bat        # Windows Command Prompt
-# or
-.\scripts\build.ps1      # Windows PowerShell
-
-# Option 2: Manual CMake build
-# Install database dependencies via vcpkg (optional)
-vcpkg install libpqxx           # PostgreSQL
-vcpkg install libmysql          # MySQL
-vcpkg install sqlite3           # SQLite
-vcpkg install mongo-cxx-driver  # MongoDB
-vcpkg install hiredis           # Redis
-
-# Build with desired database support
-mkdir build && cd build
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
-cmake --build .
-
-# Run examples
-./bin/basic_usage
-./bin/postgres_advanced
-./bin/connection_pool_demo
-
-# Run tests
-ctest
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target docs
+# Open documents/html/index.html
 ```
 
-#### CMake Integration
+---
+
+## CMake Integration
+
+### As a Subdirectory
 
 ```cmake
-# Using as a subdirectory
 add_subdirectory(database_system)
 target_link_libraries(your_target PRIVATE DatabaseSystem::database)
+```
 
-# Optional: Add container system integration
-add_subdirectory(container_system)
-target_link_libraries(your_target PRIVATE
-    DatabaseSystem::database
-    ContainerSystem::container
-)
+### With FetchContent
 
-# Using with FetchContent
+```cmake
 include(FetchContent)
 FetchContent_Declare(
     database_system
@@ -815,346 +407,11 @@ FetchContent_Declare(
     GIT_TAG main
 )
 FetchContent_MakeAvailable(database_system)
+
+target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 ```
-
-## Documentation
-
-- Module READMEs:
-  - core/README.md
-  - backends/README.md
-  - query/README.md
-- Guides:
-  - docs/USER_GUIDE.md (setup, connections, queries)
-  - docs/API_REFERENCE.md (complete API documentation)
-  - docs/ARCHITECTURE.md (system design and enterprise features)
-
-Build API docs with Doxygen (optional):
-
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --target docs
-# Open documents/html/index.html
-```
-
-## Usage Examples
-
-### Basic Database Operations
-
-### Connection Pooling
-
-```cpp
-#include <database/database_manager.h>
-#include <database/connection_pool.h>
-
-int main() {
-    database_manager& db = database_manager::handle();
-
-    // Configure connection pool
-    connection_pool_config config;
-    config.min_connections = 5;
-    config.max_connections = 20;
-    config.acquire_timeout = std::chrono::seconds(5);
-    config.connection_string = "host=localhost port=5432 dbname=test_db user=admin password=secret";
-
-    // Create connection pool
-    if (!db.create_connection_pool(database_types::postgres, config)) {
-        std::cerr << "Failed to create connection pool" << std::endl;
-        return 1;
-    }
-
-    // Get pool and acquire connection
-    auto pool = db.get_connection_pool(database_types::postgres);
-    auto connection = pool->acquire_connection();
-
-    if (connection) {
-        // Use connection for database operations
-        auto result = connection->select_query("SELECT * FROM users");
-
-        // Connection is automatically returned to pool when goes out of scope
-    }
-
-    // Monitor pool statistics
-    auto stats = db.get_pool_stats();
-    for (const auto& [db_type, stat] : stats) {
-        std::cout << "Active connections: " << stat.active_connections << std::endl;
-        std::cout << "Available connections: " << stat.available_connections << std::endl;
-    }
-
-    return 0;
-}
-```
-
-### Query Builder
-
-```cpp
-#include <database/database_manager.h>
-#include <database/query_builder.h>
-
-int main() {
-    database_manager& db = database_manager::handle();
-
-    // SQL Query Builder
-    auto sql_query = db.create_query_builder(database_types::postgres)
-        .select({"name", "email", "created_at"})
-        .from("users")
-        .where("age", ">", database_value{int64_t(18)})
-        .where("status", "=", database_value{std::string("active")})
-        .order_by("created_at", sort_order::desc)
-        .limit(10);
-
-    std::string query_string = sql_query.build();
-    std::cout << "Generated SQL: " << query_string << std::endl;
-
-    // Execute through database manager
-    auto result = sql_query.execute(&db);
-
-    // MongoDB Query Builder
-    auto mongo_query = db.create_query_builder(database_types::mongodb)
-        .collection("users")
-        .find({{"status", database_value{std::string("active")}}})
-        .sort("created_at", -1)
-        .limit(10);
-
-    std::string mongo_command = mongo_query.build();
-    std::cout << "Generated MongoDB: " << mongo_command << std::endl;
-
-    // Redis Query Builder
-    auto redis_query = db.create_query_builder(database_types::redis)
-        .hget("user:123", "email");
-
-    std::string redis_command = redis_query.build();
-    std::cout << "Generated Redis: " << redis_command << std::endl;
-
-    return 0;
-}
-```
-
-### Working with Results
-
-```cpp
-// INSERT data
-unsigned int inserted = db.insert_query(
-    "INSERT INTO users (username, email) "
-    "VALUES ('john_doe', 'john@example.com')"
-);
-std::cout << "Inserted " << inserted << " rows" << std::endl;
-
-// SELECT data
-database_result users = db.select_query("SELECT * FROM users");
-
-for (const auto& row : users) {
-    for (const auto& [column, value] : row) {
-        std::cout << column << ": ";
-        std::visit([](const auto& v) {
-            using T = std::decay_t<decltype(v)>;
-            if constexpr (std::is_same_v<T, std::monostate>) {
-                std::cout << "NULL";
-            } else {
-                std::cout << v;
-            }
-        }, value);
-        std::cout << " ";
-    }
-    std::cout << std::endl;
-}
-```
-
-## 🏢 Enterprise Features
-
-### ORM Framework
-
-```cpp
-#include <database/orm/entity.h>
-
-// Define entity with C++20 concepts
-class User : public entity_base {
-    ENTITY_TABLE("users")
-    ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
-    ENTITY_FIELD(std::string, username, not_null() | index("idx_username"))
-    ENTITY_FIELD(std::string, email, unique())
-    ENTITY_FIELD(std::chrono::system_clock::time_point, created_at, default_now())
-
-    ENTITY_METADATA()
-};
-
-// Type-safe ORM operations
-auto users = User::query(db)
-    .where("age > 18")
-    .order_by("username")
-    .limit(10)
-    .execute();
-
-// Create tables automatically
-entity_manager::instance().create_tables(db);
-```
-
-### Performance Monitoring
-
-```cpp
-#include <database/monitoring/performance_monitor.h>
-
-// Real-time performance monitoring
-auto& monitor = performance_monitor::instance();
-
-// Configure alerting thresholds
-monitor.set_alert_thresholds(0.05, std::chrono::milliseconds(1000));
-
-// Register alert handler
-monitor.register_alert_handler([](const performance_alert& alert) {
-    std::cout << "Performance Alert: " << alert.message() << std::endl;
-});
-
-// Get performance metrics
-auto summary = monitor.get_performance_summary();
-std::cout << "QPS: " << summary.queries_per_second << std::endl;
-std::cout << "Avg Latency: " << summary.avg_query_time.count() << "μs" << std::endl;
-std::cout << "Error Rate: " << (summary.error_rate * 100) << "%" << std::endl;
-
-// Export to Prometheus
-prometheus_exporter exporter("http://prometheus:9090", 9091);
-exporter.export_metrics(summary);
-```
-
-### Enterprise Security
-
-```cpp
-#include <database/security/secure_connection.h>
-
-// Secure credential management
-auto& credentials = credential_manager::instance();
-security_credentials creds;
-creds.username = "admin";
-creds.password_hash = credentials.hash_password("secure_password");
-creds.encryption = encryption_type::tls;
-creds.verify_certificate = true;
-
-credentials.store_credentials("prod_db", creds);
-
-// Role-based access control
-auto& access = access_control::instance();
-access_control::role admin_role;
-admin_role.name = "admin";
-admin_role.permissions = {
-    access_control::permission::select |
-    access_control::permission::insert |
-    access_control::permission::update |
-    access_control::permission::delete
-};
-
-access.create_role(admin_role);
-access.assign_role_to_user("user123", "admin");
-
-// Security audit logging
-AUDIT_LOG_ACCESS("user123", "session456", "SELECT", "users", "query_hash", true, "");
-```
-
-### Asynchronous Operations
-
-```cpp
-#include <database/async/async_operations.h>
-
-// C++20 coroutine support
-database_awaitable<bool> create_user_async(const std::string& username) {
-    auto db = co_await async_db.connect_coro(connection_string);
-    auto result = co_await db.execute_coro(
-        "INSERT INTO users (username) VALUES ('" + username + "')"
-    );
-    co_return result;
-}
-
-// Future-based async operations
-auto future_result = async_db.execute_async("SELECT * FROM users");
-auto result = future_result.get();
-
-// Distributed transactions
-auto& coordinator = transaction_coordinator::instance();
-auto tx_id = coordinator.begin_distributed_transaction({db1, db2, db3});
-auto commit_result = coordinator.commit_distributed_transaction(tx_id);
-
-// Real-time data streaming
-stream_processor processor(db);
-processor.start_stream(stream_type::postgresql_notify, "user_changes");
-processor.register_event_handler("user_changes", [](const stream_event& event) {
-    std::cout << "Data changed: " << event.payload << std::endl;
-});
-```
-
-## Building
-
-### Prerequisites
-
-- C++20 compatible compiler (GCC 10+, Clang 11+, MSVC 2019+)
-- CMake 3.16+
-- Optional: Database development libraries (see vcpkg section)
 
 ### Build Options
-
-```bash
-# Build with all database support (requires libraries)
-mkdir build && cd build
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
-ninja  # or make
-
-# Build with specific databases only
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
-ninja
-
-# Build without any databases (uses mock implementations)
-cmake .. -DUSE_POSTGRESQL=OFF -DUSE_MYSQL=OFF -DUSE_SQLITE=OFF
-ninja
-
-# Build with samples and tests
-cmake .. -DBUILD_DATABASE_SAMPLES=ON -DUSE_UNIT_TEST=ON
-ninja
-
-# Build with common_system integration (ecosystem interface standardization)
-cmake .. -DBUILD_WITH_COMMON_SYSTEM=ON
-ninja
-
-# Note: DATABASE_USE_COMMON_SYSTEM is deprecated but still supported for backward compatibility
-# Use BUILD_WITH_COMMON_SYSTEM instead for new builds
-```
-
-### vcpkg Dependencies
-
-```bash
-# PostgreSQL support
-vcpkg install libpqxx openssl
-
-# MySQL support
-vcpkg install libmysql
-
-# SQLite support
-vcpkg install sqlite3
-
-# MongoDB support
-vcpkg install mongo-cxx-driver
-
-# Redis support
-vcpkg install hiredis
-```
-
-## Configuration
-
-### Environment Variables
-
-```bash
-# PostgreSQL connection settings
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_NAME=database_system
-export DB_USER=app_user
-export DB_PASSWORD=secure_password
-
-# MongoDB connection settings
-export MONGO_URI="mongodb://localhost:27017/database_system"
-
-# Redis connection settings
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
-```
-
-### CMake Options
 
 | Option | Default | Description |
 |--------|---------|-------------|
@@ -1165,118 +422,63 @@ export REDIS_PORT=6379
 | `USE_REDIS` | OFF | Enable Redis support |
 | `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
 | `USE_UNIT_TEST` | ON | Build unit tests |
-| `BUILD_SHARED_LIBS` | OFF | Build as shared library |
+| `BUILD_WITH_COMMON_SYSTEM` | OFF | Enable common_system integration (Result<T>) |
 
-### Connection Pool Configuration
+[📦 Complete Build Guide →](docs/guides/BUILD_GUIDE.md)
 
-```cpp
-struct connection_pool_config {
-    size_t min_connections = 2;                              // Minimum connections
-    size_t max_connections = 20;                             // Maximum connections
-    std::chrono::milliseconds acquire_timeout{5000};         // Acquisition timeout
-    std::chrono::milliseconds idle_timeout{30000};           // Idle timeout
-    std::chrono::milliseconds health_check_interval{60000};   // Health check interval
-    bool enable_health_checks = true;                        // Enable health checks
-    std::string connection_string;                           // Database connection string
-};
-```
+---
 
-## Enterprise Features
+## Production Quality
 
-### 🏊‍♂️ Connection Pooling
-- **Thread-safe operations** with configurable pool limits
-- **Health monitoring** with automatic connection validation
-- **Statistics and monitoring** for pool performance tracking
-- **Automatic cleanup** of idle and unhealthy connections
+### Build & Testing Infrastructure
 
-### 🔍 Query Builders
-- **Type-safe construction** with compile-time validation
-- **Fluent interface** for intuitive query building
-- **Multi-database support** with automatic dialect handling
-- **Raw query passthrough** when needed for complex operations
+- ✅ **Multi-Platform CI/CD**: Ubuntu, Windows, macOS (GCC, Clang, MSVC)
+- ✅ **Sanitizer Coverage**: ThreadSanitizer, AddressSanitizer, UBSanitizer (all clean)
+- ✅ **Code Coverage**: 87.5% lines, 92.3% functions ([codecov](https://codecov.io/gh/kcenon/database_system))
+- ✅ **Static Analysis**: Clang-tidy, Cppcheck (zero issues)
 
-### 🛡️ Error Handling
-- **Graceful fallbacks** when database libraries are unavailable
-- **Mock implementations** for testing without actual databases
-- **Comprehensive logging** with detailed error information
-- **Exception safety** with RAII resource management
+### Thread Safety & Concurrency
 
-### 📊 Monitoring
-- **Real-time statistics** for connection pool utilization
-- **Performance metrics** for query execution times
-- **Health status** monitoring for all database connections
-- **Resource tracking** for memory and connection usage
+- ✅ **Grade A+**: ThreadSanitizer clean, zero data races
+- ✅ **10,000+ concurrent connections** supported
+- ✅ **95%+ pool efficiency** under high load
+- ✅ **Lock-based coordination** for shared state
+- ✅ **Atomic operations** for statistics
 
-## Testing
+### Resource Management (RAII)
 
-```bash
-# Run all tests
-ctest
+- ✅ **Grade A**: 100% smart pointer usage
+- ✅ **Zero memory leaks**: AddressSanitizer and Valgrind verified
+- ✅ **Automatic cleanup**: All resources RAII-managed
+- ✅ **Exception safety**: Strong exception safety guarantees
 
-# Run specific test suite
-./bin/database_test
+### Error Handling
 
-# Run sample programs
-./bin/basic_usage                # Basic database operations
-./bin/postgres_advanced          # Advanced PostgreSQL features
-./bin/connection_pool_demo       # Connection pooling demonstration
+- ✅ **Result<T> Adapters**: Type-safe error handling for external API
+- ✅ **Error Codes**: -500 to -599 (centralized in common_system)
+- ✅ **Transaction Safety**: Full ACID support with comprehensive error reporting
 
-# Run all samples
-./bin/run_all_samples
-```
+[✅ Complete Production Quality Report →](docs/PRODUCTION_QUALITY.md)
 
-## Performance Benchmarks
+---
 
-| Operation | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
-|-----------|------------|-------|--------|---------|-------|
-| Simple SELECT | 1.2ms | 1.5ms | 0.8ms | 2.1ms | 0.3ms |
-| Complex JOIN | 15ms | 18ms | 12ms | N/A | N/A |
-| Bulk INSERT (1K) | 45ms | 52ms | 38ms | 35ms | 28ms |
-| Connection Pool | 0.1ms | 0.1ms | 0.1ms | 0.2ms | 0.05ms |
+## Performance Baselines
 
-*Benchmarks performed on Intel i7-9750H, 16GB RAM, SSD storage*
+**See [benchmarks/BASELINE.md](benchmarks/BASELINE.md) for detailed baseline metrics**
 
-## Migration Guide
+### Key Metrics
 
-### From Previous Versions
+| Metric | Value | Notes |
+|--------|-------|-------|
+| Connection Pool Acquisition | 0.1ms | 20x faster than native |
+| Connection Pool v3 Latency | 77ns | 65x improvement vs v2 |
+| Throughput (high load) | 1.16M+ ops/s | With thread_system |
+| Transaction TPS (PostgreSQL) | 5,000 TPS | ACID compliant |
+| Simple SELECT (PostgreSQL) | 1.2ms | Minimal overhead |
+| Concurrent Connections | 10,000+ | Stable, 95%+ efficiency |
+| Memory Baseline | <50MB | Efficient resource usage |
 
-1. **Headers**: Include from `database/` subdirectory
-2. **Types**: Use `database_result` with `std::monostate` for NULL
-3. **Namespace**: Use `database` namespace
-4. **Pooling**: Use new connection pool APIs for better performance
-5. **Queries**: Consider using query builders for type safety
-
-```cpp
-// Old way
-#include "database_manager.h"
-using namespace database_module;
-
-// New way
-#include "database/database_manager.h"
-#include "database/connection_pool.h"
-#include "database/query_builder.h"
-using namespace database;
-```
-
-## Development Roadmap
-
-### ✅ Completed Features
-- **Multi-Backend Support**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
-- **Unified Database System**: Zero-config interface with integrated logging, monitoring, and threading
-- **Connection Pooling**: Enterprise-grade pooling with health monitoring and 10K+ concurrent connections
-- **Query Builders**: Comprehensive builders for SQL and NoSQL databases
-- **Thread Safety**: Full thread-safe operations with RAII resource management
-- **Type-Safe Error Handling**: Result<T> pattern throughout the API
-- **Adapter Pattern**: Seamless integration with external systems (logger, monitoring, thread)
-- **Fallback Support**: Zero-dependency operation with production-ready fallback implementations
-- **Testing Infrastructure**: Mock implementations and comprehensive test coverage
-
-### 🔮 Planned Enhancements
-- **ORM Framework**: Enhanced object-relational mapping with entity definitions
-- **Schema Migrations**: Version-controlled database schema management
-- **Advanced Async Operations**: Extended coroutine-based async patterns
-- **Distributed Features**: Sharding, replication, and clustering support
-- **Query Optimization**: Advanced query planning and performance analysis
+---
 
 ## Contributing
 
@@ -1286,210 +488,9 @@ using namespace database;
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Production Quality & Architecture
+[🤝 Contributing Guidelines →](docs/contributing/CONTRIBUTING.md)
 
-### Build & Testing Infrastructure
-
-**Comprehensive Multi-Platform CI/CD**
-- **Sanitizer Coverage**: Automated builds with ThreadSanitizer, AddressSanitizer, and UBSanitizer
-- **Multi-Platform Testing**: Continuous validation across Ubuntu (GCC/Clang), Windows (MSVC), and macOS
-- **Code Coverage**: codecov integration with coverage tracking and reporting
-- **Static Analysis**: Clang-tidy and Cppcheck integration with modernize checks
-- **Automated Testing**: Complete CI/CD pipeline with coverage reports
-
-**Performance Baselines**
-- **Transaction Throughput**: 5,000 TPS (PostgreSQL)
-- **Query Performance**: 1.2 ms average for simple SELECT operations (PostgreSQL)
-- **Connection Pool**: 0.1 ms connection acquisition time (20x faster than native)
-- **Concurrent Connections**: 10,000+ connections with 95%+ pool efficiency
-- **Memory Efficiency**: <50 MB baseline, scales to 850 MB with 10K connections
-
-See [BASELINE.md](BASELINE.md) for comprehensive performance metrics and multi-backend benchmarks.
-
-**Complete Documentation Suite**
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md): System design and ecosystem integration
-- [USER_GUIDE.md](docs/USER_GUIDE.md): Setup, connections, and query guide
-- [API_REFERENCE.md](docs/API_REFERENCE.md): Complete API documentation
-- [CURRENT_STATE.md](docs/CURRENT_STATE.md): Current implementation status
-
-### Thread Safety & Concurrency
-
-**Enterprise-Grade Connection Pooling (100% Complete)**
-- **10,000+ Concurrent Connections**: Thread-safe pool management with adaptive sizing
-- **0.1 ms Acquisition Time**: Ultra-fast connection acquisition (20x faster than native drivers)
-- **Atomic Operations**: Thread-safe pool statistics and health monitoring
-- **ThreadSanitizer Compliance**: Zero data races detected across all test scenarios
-- **95%+ Pool Efficiency**: Optimal connection utilization with health monitoring
-
-**Synchronization Excellence**
-- **Lock-Based Coordination**: Proper mutex usage for shared state management
-- **Health Monitoring**: Automatic connection validation and cleanup
-- **Adaptive Sizing**: Dynamic pool management based on load
-- **Production-Proven**: Stable performance under high concurrent load
-
-### Resource Management (RAII - Grade A)
-
-**Comprehensive RAII Compliance**
-- **100% Smart Pointer Usage**: All resources managed through `std::shared_ptr` and `std::unique_ptr`
-- **AddressSanitizer Validation**: Zero memory leaks detected across all test scenarios
-- **RAII Patterns**: Connection wrappers, query result lifetime management, prepared statement handling
-- **Automatic Cleanup**: Database connections, prepared statements, and query results properly managed
-- **No Manual Memory Management**: Complete elimination of raw pointers in public interfaces
-
-**Memory Efficiency Under Load**
-```bash
-# AddressSanitizer: Clean across all tests
-==12345==ERROR: LeakSanitizer: detected memory leaks
-# Total: 0 leaks
-
-# Memory scaling under load:
-Baseline: <50 MB
-With 10K connections: ~850 MB
-Automatic cleanup: All connections RAII-managed
-```
-
-### Error Handling (Production Ready - 85% Complete)
-
-**Adapter Pattern for Database Compatibility**
-
-The database_system implements a sophisticated adapter layer that provides Result<T> for external APIs while maintaining full compatibility with traditional database driver APIs:
-
-```cpp
-#include <database/adapters/common_system_adapter.h>
-using namespace database::adapters;
-
-// Example 1: Connect with Result<T>
-auto db = std::make_shared<postgres_manager>();
-auto adapter = std::make_shared<common_system_database_adapter>(db);
-
-auto connect_result = adapter->connect("host=localhost dbname=test");
-if (!connect_result) {
-    std::cerr << "Connection failed: " << connect_result.get_error().message
-              << " (code: " << static_cast<int>(connect_result.get_error().code) << ")\n";
-    return -1;
-}
-
-// Example 2: Query execution with Result<T>
-auto query_result = adapter->execute_query("SELECT * FROM users");
-if (!query_result) {
-    std::cerr << "Query failed: " << query_result.get_error().message << "\n";
-} else {
-    for (const auto& row : query_result.value()) {
-        // Process results
-    }
-}
-
-// Example 3: Transaction with Result<T>
-auto begin_result = adapter->begin_transaction();
-if (!begin_result) {
-    std::cerr << "Failed to begin transaction\n";
-    return -1;
-}
-
-auto cmd_result = adapter->execute_command("INSERT INTO users VALUES (1, 'John')");
-if (!cmd_result) {
-    adapter->rollback();
-    return -1;
-}
-
-auto commit_result = adapter->commit();
-if (!commit_result) {
-    std::cerr << "Commit failed: " << commit_result.get_error().message << "\n";
-}
-```
-
-**Adapter Layer Architecture**
-- **`common_system_database_adapter`**: All database operations (`connect`, `disconnect`, `execute_query`, `execute_command`) return `Result<T>`
-- **`common_connection_pool_adapter`**: Connection pool operations with Result<T> error handling
-- **`common_database_factory`**: Factory pattern for creating Result<T>-enabled database instances
-- **Transaction Support**: Full ACID transaction support with Result<T> error reporting
-
-**Design Philosophy: Compatibility and Safety**
-- **Internal Operations**: Traditional database API (bool, direct results) for maximum compatibility
-- **External API**: Result<T> adapters for type-safe error handling at system boundaries
-- **Transaction Safety**: Full ACID support with comprehensive Result<T> error reporting
-- **Connection Pool Integration**: Seamless integration with connection pool error handling
-
-This hybrid approach delivers:
-- **Compatibility**: Works with all standard database drivers (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
-- **Safety**: Type-safe error handling for application code and ecosystem integrations
-- **Performance**: Zero overhead for internal database operations
-- **Reliability**: Enterprise-grade transaction support with comprehensive error handling
-
-**Error Code Integration**
-- **Allocated Range**: `-500` to `-599` in centralized error code registry (common_system)
-- **Categorization**: Connection (-500 to -509), Query execution (-510 to -519), Transaction (-520 to -529), Pool management (-530 to -539), Security (-540 to -549)
-- **Meaningful Messages**: Comprehensive error context for all failure scenarios
-
-**Remaining Optional Enhancements**
-- 📝 **Error Tests**: Add comprehensive adapter error scenario test suite
-- 📝 **Documentation**: Expand Result<T> transaction pattern examples
-- 📝 **Connection Pool**: Enhance pool error reporting with Result<T>
-
-For detailed implementation notes, see [PHASE_3_PREPARATION.md](docs/PHASE_3_PREPARATION.md).
-
-**Future Enhancements**
-- 📝 **Enterprise Features**: ORM framework with type-safe entities, schema migrations, Prometheus integration, enterprise security (TLS/SSL, RBAC, audit logging)
-- 📝 **Advanced Operations**: Async operations with C++20 coroutines (optional), distributed transactions, real-time data streaming, query optimization
-
-For detailed improvement plans and tracking, see the project's [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md).
-
-### Current Architecture Status
-
-The database_system implements a **sophisticated adapter pattern** for maximum compatibility and type safety:
-
-#### Adapter Pattern Implementation
-
-**Design Philosophy**:
-- **Internal Operations**: Traditional database API (bool, direct results) for maximum driver compatibility
-- **External API**: Result<T> adapters for type-safe error handling at system boundaries
-- **Transaction Safety**: Full ACID support with comprehensive Result<T> error reporting
-
-**Example Usage**:
-```cpp
-#include <database/adapters/common_system_adapter.h>
-using namespace database::adapters;
-
-// Connect with Result<T>
-auto db = std::make_shared<postgres_manager>();
-auto adapter = std::make_shared<common_system_database_adapter>(db);
-
-auto connect_result = adapter->connect("host=localhost dbname=test");
-if (!connect_result) {
-    std::cerr << "Connection failed: " << connect_result.get_error().message << "\n";
-    return -1;
-}
-
-// Query execution with Result<T>
-auto query_result = adapter->execute_query("SELECT * FROM users");
-if (!query_result) {
-    std::cerr << "Query failed: " << query_result.get_error().message << "\n";
-}
-
-// Transaction with Result<T>
-auto begin_result = adapter->begin_transaction();
-auto cmd_result = adapter->execute_command("INSERT INTO users VALUES (1, 'John')");
-if (!cmd_result) {
-    adapter->rollback();
-    return -1;
-}
-auto commit_result = adapter->commit();
-```
-
-**Error Code Allocation**: `-500` to `-599` (Centralized in common_system)
-- **-500 to -509**: Connection errors
-- **-510 to -519**: Query execution errors
-- **-520 to -529**: Transaction errors
-- **-530 to -539**: Pool management errors
-- **-540 to -549**: Security errors
-
-**Key Benefits**:
-- **Compatibility**: Works with all standard database drivers (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
-- **Type Safety**: Result<T> error handling for application code and ecosystem integrations
-- **Performance**: Zero overhead for internal database operations
-- **Reliability**: Enterprise-grade transaction support with comprehensive error handling
-
-**Proven Performance**: Supports **10,000+ concurrent connections** with **95%+ pool efficiency** and **0.1ms connection acquisition time** (20x faster than native drivers).
+---
 
 ## License
 
@@ -1497,4 +498,14 @@ BSD 3-Clause License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Database System** - A production-ready C++20 database abstraction layer supporting multiple backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) with enterprise-grade features including ORM, security, monitoring, and async operations.
+## Support & Community
+
+- 💬 [GitHub Discussions](https://github.com/kcenon/database_system/discussions)
+- 🐛 [Issue Tracker](https://github.com/kcenon/database_system/issues)
+- 📧 Contact: [kcenon@example.com](mailto:kcenon@example.com)
+
+---
+
+**Database System** - A production-ready C++17/C++20 database abstraction layer supporting multiple backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) with enterprise-grade features including ORM, security, monitoring, and async operations.
+
+**Maintained by**: KCENON Team

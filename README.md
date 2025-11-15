@@ -502,10 +502,18 @@ BSD 3-Clause License - see [LICENSE](LICENSE) file for details.
 
 - 💬 [GitHub Discussions](https://github.com/kcenon/database_system/discussions)
 - 🐛 [Issue Tracker](https://github.com/kcenon/database_system/issues)
-- 📧 Contact: [kcenon@example.com](mailto:kcenon@example.com)
+- 📧 Contact: kcenon@naver.com
 
 ---
 
-**Database System** - A production-ready C++17/C++20 database abstraction layer supporting multiple backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) with enterprise-grade features including ORM, security, monitoring, and async operations.
+## Acknowledgments
 
-**Maintained by**: KCENON Team
+- Inspired by modern database abstraction patterns and best practices
+- Built with C++17/C++20 features for maximum performance and safety
+- Maintained by kcenon@naver.com
+
+---
+
+<p align="center">
+  Made with ❤️ by 🍀☀🌕🌥 🌊
+</p>

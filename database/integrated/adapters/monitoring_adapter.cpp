@@ -8,6 +8,11 @@
 #include "backends/null_monitoring_backend.h"
 #include "backends/fallback_monitoring_backend.h"
 
+// Include system_monitoring_backend only if monitoring_system is available
+#ifdef HAVE_SYSTEM_MONITORING_BACKEND
+#include "backends/system_monitoring_backend.h"
+#endif
+
 namespace database
 {
 namespace integrated
@@ -26,6 +31,21 @@ std::unique_ptr<backends::monitoring_backend> monitoring_adapter::create_backend
 	switch (backend_type)
 	{
 		case monitoring_backend_type::auto_select:
+			// Prefer system_monitoring_backend if available
+#ifdef HAVE_SYSTEM_MONITORING_BACKEND
+			return std::make_unique<backends::system_monitoring_backend>(config);
+#else
+			return std::make_unique<backends::fallback_monitoring_backend>(config);
+#endif
+
+		case monitoring_backend_type::system:
+#ifdef HAVE_SYSTEM_MONITORING_BACKEND
+			return std::make_unique<backends::system_monitoring_backend>(config);
+#else
+			// Fallback to fallback backend if system backend not available
+			return std::make_unique<backends::fallback_monitoring_backend>(config);
+#endif
+
 		case monitoring_backend_type::fallback:
 			return std::make_unique<backends::fallback_monitoring_backend>(config);
 

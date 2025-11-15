@@ -119,6 +119,7 @@ namespace adapters
 enum class monitoring_backend_type
 {
 	auto_select,  ///< Automatically select best available backend
+	system,       ///< Use monitoring_system (requires HAVE_SYSTEM_MONITORING_BACKEND)
 	fallback,     ///< Use internal metrics storage
 	null          ///< No-op backend (discard all metrics)
 };

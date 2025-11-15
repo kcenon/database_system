@@ -293,20 +293,6 @@ namespace database
 		 */
 		connection_pool_manager() = default;
 
-		/**
-		 * @brief Gets the singleton instance.
-		 * @return Reference to the connection pool manager
-		 *
-		 * @deprecated Use dependency injection with database_context instead:
-		 * @code
-		 * auto context = std::make_shared<database_context>();
-		 * auto pool_mgr = context->get_pool_manager();
-		 * @endcode
-		 *
-		 * @note Will be removed in next major version (2.0.0)
-		 */
-		[[deprecated("Use dependency injection with database_context instead. See Sprint 2 migration guide.")]]
-		static connection_pool_manager& instance();
 
 		/**
 		 * @brief Creates a connection pool for a database type.

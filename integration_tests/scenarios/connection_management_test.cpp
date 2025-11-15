@@ -54,7 +54,7 @@ TEST_F(ConnectionManagementTest, PoolInitializationDefault)
 {
 	ASSERT_TRUE(pool_created_) << "Connection pool should be created successfully";
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr) << "Pool should exist";
 
 	auto stats = pool->get_stats();
@@ -67,7 +67,7 @@ TEST_F(ConnectionManagementTest, PoolInitializationDefault)
 TEST_F(ConnectionManagementTest, PoolInitializationCustomConfig)
 {
 	// Remove existing pool from SetUp() first
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
 
 	// Create pool with custom config
 	connection_pool_config custom_config;
@@ -76,11 +76,11 @@ TEST_F(ConnectionManagementTest, PoolInitializationCustomConfig)
 	custom_config.acquire_timeout = std::chrono::milliseconds(3000);
 	custom_config.connection_string = test_db_path_.string();
 
-	bool created = connection_pool_manager::instance().create_pool(
+	bool created = context_->get_pool_manager()->create_pool(
 		database_types::sqlite, custom_config);
 	ASSERT_TRUE(created) << "Pool with custom config should be created";
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto stats = pool->get_stats();
@@ -92,7 +92,7 @@ TEST_F(ConnectionManagementTest, PoolInitializationCustomConfig)
  */
 TEST_F(ConnectionManagementTest, ConnectionAcquisitionSuccess)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
@@ -106,7 +106,7 @@ TEST_F(ConnectionManagementTest, ConnectionAcquisitionSuccess)
  */
 TEST_F(ConnectionManagementTest, ConnectionReleaseSuccess)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto initial_available = pool->available_connections();
@@ -129,7 +129,7 @@ TEST_F(ConnectionManagementTest, ConnectionReleaseSuccess)
  */
 TEST_F(ConnectionManagementTest, ConnectionPoolingAndReuse)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire and release multiple times
@@ -156,12 +156,12 @@ TEST_F(ConnectionManagementTest, ConnectionTimeoutHandling)
 	config.acquire_timeout = std::chrono::milliseconds(1000);
 	config.connection_string = test_db_path_.string();
 
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
-	bool created = connection_pool_manager::instance().create_pool(
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
+	bool created = context_->get_pool_manager()->create_pool(
 		database_types::sqlite, config);
 	ASSERT_TRUE(created);
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire all connections
@@ -194,10 +194,10 @@ TEST_F(ConnectionManagementTest, MaxConnectionsLimitEnforcement)
 	config.acquire_timeout = std::chrono::milliseconds(500);
 	config.connection_string = test_db_path_.string();
 
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
-	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
+	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Try to acquire more than max
@@ -218,7 +218,7 @@ TEST_F(ConnectionManagementTest, MaxConnectionsLimitEnforcement)
  */
 TEST_F(ConnectionManagementTest, ConnectionHealthChecking)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
@@ -236,7 +236,7 @@ TEST_F(ConnectionManagementTest, ConnectionHealthChecking)
  */
 TEST_F(ConnectionManagementTest, ConcurrentConnectionRequests)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	const int num_threads = 10;
@@ -287,7 +287,7 @@ TEST_F(ConnectionManagementTest, ConnectionStringParsingSQLite)
  */
 TEST_F(ConnectionManagementTest, ConnectionMetadataTracking)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
@@ -308,7 +308,7 @@ TEST_F(ConnectionManagementTest, ConnectionMetadataTracking)
  */
 TEST_F(ConnectionManagementTest, IdleConnectionTimeoutDetection)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();
@@ -328,7 +328,7 @@ TEST_F(ConnectionManagementTest, IdleConnectionTimeoutDetection)
  */
 TEST_F(ConnectionManagementTest, ConnectionPoolStatisticsTracking)
 {
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Perform some operations
@@ -352,10 +352,10 @@ TEST_F(ConnectionManagementTest, ConnectionPoolShutdown)
 	config.max_connections = 5;
 	config.connection_string = test_db_path_.string();
 
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
-	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
+	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire connection before shutdown

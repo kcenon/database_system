@@ -431,12 +431,6 @@ namespace database
 	}
 
 	// connection_pool_manager implementation
-	connection_pool_manager& connection_pool_manager::instance()
-	{
-		static connection_pool_manager instance;
-		return instance;
-	}
-
 	connection_pool_manager::~connection_pool_manager()
 	{
 		shutdown_all();

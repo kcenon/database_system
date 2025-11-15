@@ -60,16 +60,6 @@ namespace database::monitoring
 		metrics_.success = true; // Assume success unless error is set
 	}
 
-	// Legacy constructor using singleton (DEPRECATED)
-	query_timer::query_timer(const std::string& query, database_types db_type)
-		: start_time_(std::chrono::steady_clock::now())
-		, monitor_(nullptr) // Will use singleton in destructor
-	{
-		metrics_.query_hash = std::to_string(std::hash<std::string>{}(query));
-		metrics_.start_time = start_time_;
-		metrics_.db_type = db_type;
-		metrics_.success = true; // Assume success unless error is set
-	}
 
 	query_timer::~query_timer()
 	{

@@ -55,25 +55,6 @@ public:
      */
     connection_leak_detector() = default;
 
-    /**
-     * @brief Singleton instance accessor (DEPRECATED)
-     * @deprecated Use dependency injection via database_context instead.
-     *
-     * Migration guide:
-     * @code
-     * // Old (deprecated):
-     * auto& detector = connection_leak_detector::instance();
-     *
-     * // New (recommended):
-     * auto context = std::make_shared<database_context>();
-     * auto detector = context->get_leak_detector();
-     * @endcode
-     */
-    [[deprecated("Use database_context::get_leak_detector() instead")]]
-    static connection_leak_detector& instance() {
-        static connection_leak_detector detector;
-        return detector;
-    }
 
     void track_acquisition(void* conn_ptr) {
         std::lock_guard<std::mutex> lock(mutex_);

@@ -15,6 +15,7 @@
 
 #include "database/database_manager.h"
 #include "database/database_types.h"
+#include "database/core/database_context.h"
 #include "database/orm/entity.h"
 #include "database/monitoring/performance_monitor.h"
 #include "database/security/secure_connection.h"
@@ -63,7 +64,14 @@ void IntegrationTestUser::initialize_metadata() {
 // Base integration test fixture
 class IntegrationTestBase : public ::testing::Test {
 protected:
+    std::shared_ptr<database_context> context_;
+    std::shared_ptr<database_manager> db_mgr_;
+
     void SetUp() override {
+        // Initialize database context and manager
+        context_ = std::make_shared<database_context>();
+        db_mgr_ = std::make_shared<database_manager>(context_);
+
         // Initialize all Phase 4 components
         setup_performance_monitoring();
         setup_security_framework();
@@ -127,8 +135,9 @@ private:
 
     void cleanup_components() {
         // Reset all components to clean state
-        auto& db = database_manager::handle();
-        db.disconnect();
+        if (db_mgr_) {
+            db_mgr_->disconnect();
+        }
     }
 };
 

@@ -13,6 +13,7 @@
 #include <random>
 #include <variant>
 #include "database/database_manager.h"
+#include "database/core/database_context.h"
 
 using namespace database;
 
@@ -37,24 +38,25 @@ private:
     void demo_single_connection() {
         std::cout << "Testing single database connection..." << std::endl;
 
-        // Get database manager instance (singleton)
-        auto& db_manager = database_manager::handle();
+        // Get database manager instance with dependency injection
+        auto context = std::make_shared<database_context>();
+        auto db_manager = std::make_shared<database_manager>(context);
 
         // Set database type
-        db_manager.set_mode(database_types::postgres);
+        db_manager->set_mode(database_types::postgres);
 
         // Connection string
         std::string connection_string = "host=localhost port=5432 dbname=testdb user=testuser password=testpass";
 
         std::cout << "Attempting to connect..." << std::endl;
-        bool connected = db_manager.connect(connection_string);
+        bool connected = db_manager->connect(connection_string);
 
         if (connected) {
             std::cout << "✓ Successfully connected to database" << std::endl;
             std::cout << "Connection status: Connected" << std::endl;
 
             // Perform a simple query
-            auto result = db_manager.select_query("SELECT 1 as test_value");
+            auto result = db_manager->select_query("SELECT 1 as test_value");
             if (!result.empty()) {
                 std::cout << "✓ Test query executed successfully" << std::endl;
                 std::cout << "Query result: " << result.size() << " rows" << std::endl;
@@ -63,7 +65,7 @@ private:
             }
 
             // Disconnect
-            db_manager.disconnect();
+            db_manager->disconnect();
             std::cout << "✓ Disconnected from database" << std::endl;
 
         } else {
@@ -75,8 +77,8 @@ private:
     void demo_multiple_connections() {
         std::cout << "Testing multiple database operations..." << std::endl;
 
-        // Note: Since database_manager is a singleton, we simulate multiple
-        // connection scenarios by performing multiple operations sequentially
+        // Note: With dependency injection, we can create multiple instances
+        // performing multiple operations sequentially
 
         std::vector<std::string> test_queries = {
             "SELECT 1 as connection_test",
@@ -85,18 +87,19 @@ private:
             "SELECT 42 as answer"
         };
 
-        auto& db_manager = database_manager::handle();
-        db_manager.set_mode(database_types::postgres);
+        auto context = std::make_shared<database_context>();
+        auto db_manager = std::make_shared<database_manager>(context);
+        db_manager->set_mode(database_types::postgres);
 
         std::string connection_string = "host=localhost port=5432 dbname=testdb user=testuser password=testuser";
 
-        if (db_manager.connect(connection_string)) {
+        if (db_manager->connect(connection_string)) {
             std::cout << "✓ Connected to database for multiple operations" << std::endl;
 
             for (size_t i = 0; i < test_queries.size(); ++i) {
                 std::cout << "Executing query " << (i + 1) << "/" << test_queries.size() << "..." << std::endl;
 
-                auto result = db_manager.select_query(test_queries[i]);
+                auto result = db_manager->select_query(test_queries[i]);
                 if (!result.empty()) {
                     std::cout << "  ✓ Query " << (i + 1) << " succeeded: " << result.size() << " rows" << std::endl;
                 } else {
@@ -107,7 +110,7 @@ private:
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
-            db_manager.disconnect();
+            db_manager->disconnect();
             std::cout << "✓ All operations completed, disconnected" << std::endl;
 
         } else {
@@ -137,8 +140,9 @@ private:
 
                 for (int op = 0; op < operations_per_thread; ++op) {
                     try {
-                        // Get database manager (singleton, so needs synchronization in real use)
-                        [[maybe_unused]] auto& db_manager = database_manager::handle();
+                        // Get database manager with dependency injection
+                        auto context = std::make_shared<database_context>();
+                        [[maybe_unused]] auto db_manager = std::make_shared<database_manager>(context);
 
                         // Simulate different operations
                         std::string query = "SELECT " + std::to_string(t * 100 + op) + " as thread_" +

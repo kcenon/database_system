@@ -11,6 +11,7 @@
 
 #include "database/database_manager.h"
 #include "database/database_types.h"
+#include "database/core/database_context.h"
 #include "database/orm/entity.h"
 #include "database/monitoring/performance_monitor.h"
 #include "database/security/secure_connection.h"
@@ -25,81 +26,86 @@ using namespace database::async;
 // Test fixture for database tests
 class DatabaseTest : public ::testing::Test {
 protected:
+    std::shared_ptr<database_context> context_;
+    std::shared_ptr<database_manager> db_mgr_;
+
     void SetUp() override {
-        // Test setup
+        // Test setup with dependency injection
+        context_ = std::make_shared<database_context>();
+        db_mgr_ = std::make_shared<database_manager>(context_);
     }
 
     void TearDown() override {
         // Cleanup
-        auto& db = database_manager::handle();
-        db.disconnect();
+        if (db_mgr_) {
+            db_mgr_->disconnect();
+        }
     }
 };
 
 // Basic database manager tests
-TEST_F(DatabaseTest, DatabaseManagerSingleton) {
-    auto& db1 = database_manager::handle();
-    auto& db2 = database_manager::handle();
+TEST_F(DatabaseTest, DatabaseManagerDependencyInjection) {
+    // Test that dependency injection pattern works correctly
+    auto context1 = std::make_shared<database_context>();
+    auto db1 = std::make_shared<database_manager>(context1);
 
-    // Should be the same instance (singleton)
-    EXPECT_EQ(&db1, &db2);
+    auto context2 = std::make_shared<database_context>();
+    auto db2 = std::make_shared<database_manager>(context2);
+
+    // Should be different instances (no singleton)
+    EXPECT_NE(db1.get(), db2.get());
+    EXPECT_NE(context1.get(), context2.get());
 }
 
 TEST_F(DatabaseTest, DatabaseTypeSettings) {
-    auto& db = database_manager::handle();
-
     // Test setting PostgreSQL
-    EXPECT_TRUE(db.set_mode(database_types::postgres));
-    EXPECT_EQ(db.database_type(), database_types::postgres);
+    EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
+    EXPECT_EQ(db_mgr_->database_type(), database_types::postgres);
 
     // Reset to ensure clean state
-    db.disconnect();
+    db_mgr_->disconnect();
 
     // Test SQLite backend (may be supported)
-    bool sqlite_result = db.set_mode(database_types::sqlite);
+    bool sqlite_result = db_mgr_->set_mode(database_types::sqlite);
     if (sqlite_result) {
         // SQLite is supported
-        EXPECT_EQ(db.database_type(), database_types::sqlite);
-        db.disconnect();
+        EXPECT_EQ(db_mgr_->database_type(), database_types::sqlite);
+        db_mgr_->disconnect();
     } else {
         // SQLite not supported
-        EXPECT_EQ(db.database_type(), database_types::none);
+        EXPECT_EQ(db_mgr_->database_type(), database_types::none);
     }
 
     // Test that MySQL returns appropriate result
-    bool mysql_result = db.set_mode(database_types::mysql);
+    bool mysql_result = db_mgr_->set_mode(database_types::mysql);
     if (!mysql_result) {
-        EXPECT_EQ(db.database_type(), database_types::none);
+        EXPECT_EQ(db_mgr_->database_type(), database_types::none);
     }
 }
 
 TEST_F(DatabaseTest, BasicQueryOperations) {
-    auto& db = database_manager::handle();
-
     // Set database mode
-    EXPECT_TRUE(db.set_mode(database_types::postgres));
+    EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
 
     // Test query creation (should not crash)
-    EXPECT_NO_THROW(db.create_query("SELECT 1"));
+    EXPECT_NO_THROW(db_mgr_->create_query("SELECT 1"));
 
     // Test select query behavior
-    auto result = db.select_query("SELECT 1");
+    auto result = db_mgr_->select_query("SELECT 1");
     // Note: PostgreSQL support may not be compiled, so result may contain error info
     // We just test that it doesn't crash and returns some result
     EXPECT_NO_THROW(result);
 }
 
 TEST_F(DatabaseTest, ConnectionHandling) {
-    auto& db = database_manager::handle();
-
     // Set database mode
-    EXPECT_TRUE(db.set_mode(database_types::postgres));
+    EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
 
     // Test connection with invalid connection string (should fail gracefully)
-    EXPECT_FALSE(db.connect("invalid_connection_string"));
+    EXPECT_FALSE(db_mgr_->connect("invalid_connection_string"));
 
     // Test disconnect (should not crash)
-    EXPECT_NO_THROW(db.disconnect());
+    EXPECT_NO_THROW(db_mgr_->disconnect());
 }
 
 // Test entity for ORM tests
@@ -367,18 +373,24 @@ TEST_F(AsyncOperationsTest, AsyncConceptDemonstration) {
 // Connection Pool Tests
 class ConnectionPoolTest : public ::testing::Test {
 protected:
+    std::shared_ptr<database_context> context_;
+    std::shared_ptr<database_manager> db_mgr_;
+
     void SetUp() override {
-        // Connection pool setup
+        // Connection pool setup with dependency injection
+        context_ = std::make_shared<database_context>();
+        db_mgr_ = std::make_shared<database_manager>(context_);
     }
 
     void TearDown() override {
         // Connection pool cleanup
+        if (db_mgr_) {
+            db_mgr_->disconnect();
+        }
     }
 };
 
 TEST_F(ConnectionPoolTest, PoolConfiguration) {
-    auto& db = database_manager::handle();
-
     connection_pool_config config;
     config.connection_string = "test_connection_string";
     config.min_connections = 5;
@@ -386,35 +398,39 @@ TEST_F(ConnectionPoolTest, PoolConfiguration) {
     config.acquire_timeout = std::chrono::milliseconds(30000);
 
     // This might fail in test environment without actual database, but should not crash
-    EXPECT_NO_THROW(db.create_connection_pool(database_types::postgres, config));
+    EXPECT_NO_THROW(db_mgr_->create_connection_pool(database_types::postgres, config));
 }
 
 TEST_F(ConnectionPoolTest, PoolStatistics) {
-    auto& db = database_manager::handle();
-
     // Get pool statistics (should work even if pool is not active)
-    EXPECT_NO_THROW(db.get_pool_stats());
+    EXPECT_NO_THROW(db_mgr_->get_pool_stats());
 }
 
 // Query Builder Tests
 class QueryBuilderTest : public ::testing::Test {
 protected:
+    std::shared_ptr<database_context> context_;
+    std::shared_ptr<database_manager> db_mgr_;
+
     void SetUp() override {
-        // Query builder setup
+        // Query builder setup with dependency injection
+        context_ = std::make_shared<database_context>();
+        db_mgr_ = std::make_shared<database_manager>(context_);
     }
 
     void TearDown() override {
         // Query builder cleanup
+        if (db_mgr_) {
+            db_mgr_->disconnect();
+        }
     }
 };
 
 TEST_F(QueryBuilderTest, SQLQueryBuilder) {
-    auto& db = database_manager::handle();
-
-    EXPECT_NO_THROW(auto builder = db.create_query_builder(database_types::postgres));
+    EXPECT_NO_THROW(auto builder = db_mgr_->create_query_builder(database_types::postgres));
 
     // Test basic query building methods
-    auto builder = db.create_query_builder(database_types::postgres);
+    auto builder = db_mgr_->create_query_builder(database_types::postgres);
     EXPECT_NO_THROW(builder.select({"id", "name"}));
     EXPECT_NO_THROW(builder.from("users"));
     EXPECT_NO_THROW(builder.where("active", "=", database_value{true}));
@@ -442,8 +458,6 @@ TEST_F(QueryBuilderTest, RedisQueryBuilder) {
 
 // Enhanced database tests with Phase 4 features
 TEST_F(DatabaseTest, PhaseA4DatabaseTypes) {
-    auto& db = database_manager::handle();
-
     // Test all database types
     std::vector<database_types> types = {
         database_types::postgres,
@@ -455,19 +469,17 @@ TEST_F(DatabaseTest, PhaseA4DatabaseTypes) {
 
     for (auto type : types) {
         // Should not crash regardless of whether backend is available
-        EXPECT_NO_THROW(db.set_mode(type));
+        EXPECT_NO_THROW(db_mgr_->set_mode(type));
     }
 }
 
 TEST_F(DatabaseTest, GeneralQueryExecution) {
-    auto& db = database_manager::handle();
-
     // Test general query execution capabilities
-    EXPECT_TRUE(db.set_mode(database_types::postgres));
+    EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
 
     // Test various query types work without crashing
-    EXPECT_NO_THROW(db.create_query("SELECT 1"));
-    EXPECT_NO_THROW(db.select_query("SELECT 1"));
+    EXPECT_NO_THROW(db_mgr_->create_query("SELECT 1"));
+    EXPECT_NO_THROW(db_mgr_->select_query("SELECT 1"));
 }
 
 // Main function for running tests

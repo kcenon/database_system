@@ -207,14 +207,6 @@ namespace database::monitoring
 		query_timer(const std::string& query, database_types db_type,
 		           std::shared_ptr<performance_monitor> monitor);
 
-		/**
-		 * @brief Constructor using singleton (DEPRECATED)
-		 * @param query Query string
-		 * @param db_type Database type
-		 * @deprecated Use constructor with explicit performance_monitor instead
-		 */
-		[[deprecated("Use query_timer(query, db_type, monitor) instead")]]
-		query_timer(const std::string& query, database_types db_type);
 
 		~query_timer();
 

@@ -45,9 +45,7 @@ using namespace database::testing;
  */
 class ErrorHandlingTest : public DatabaseSystemFixture
 {
-protected:
-	std::shared_ptr<database_context> context_;
-	std::shared_ptr<database_manager> db_mgr_;
+	// No additional members needed - using inherited context_ and manager_
 };
 
 /**
@@ -155,10 +153,10 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
 	config.acquire_timeout = std::chrono::milliseconds(500);
 	config.connection_string = test_db_path_.string();  // Use absolute path without URI prefix
 
-	context_->get_pool_manager().remove_pool(database_types::sqlite);
-	context_->get_pool_manager().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
+	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
 
-	auto pool = context_->get_pool_manager().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire all connections
@@ -187,16 +185,16 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
  */
 TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
 {
-	context_ = std::make_shared<database_context>();
-	db_mgr_ = std::make_shared<database_manager>(context_);
-	db_mgr_->set_mode(database_types::sqlite);
+	auto test_context = std::make_shared<database_context>();
+	auto test_mgr = std::make_shared<database_manager>(test_context);
+	test_mgr->set_mode(database_types::sqlite);
 
 	// Try to connect to invalid path
-	bool connected = db_mgr_->connect("/invalid/path/to/database.db");
+	bool connected = test_mgr->connect("/invalid/path/to/database.db");
 
 	// May succeed (SQLite creates files) or fail - both are valid
 	if (connected) {
-		db_mgr_->disconnect();
+		test_mgr->disconnect();
 	}
 
 	SUCCEED() << "Handled invalid database file path";
@@ -207,12 +205,12 @@ TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
  */
 TEST_F(ErrorHandlingTest, QueryOnDisconnectedDatabase)
 {
-	context_ = std::make_shared<database_context>();
-	db_mgr_ = std::make_shared<database_manager>(context_);
-	db_mgr_->disconnect();
+	auto test_context = std::make_shared<database_context>();
+	auto test_mgr = std::make_shared<database_manager>(test_context);
+	test_mgr->disconnect();
 
 	// Try to execute query when disconnected
-	auto result = db_mgr_->select_query("SELECT * FROM users");
+	auto result = test_mgr->select_query("SELECT * FROM users");
 
 	EXPECT_TRUE(result.empty())
 		<< "Query on disconnected database should return empty";
@@ -280,10 +278,10 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 	config.acquire_timeout = std::chrono::milliseconds(1000);
 	config.connection_string = test_db_path_.string();
 
-	context_->get_pool_manager().remove_pool(database_types::sqlite);
-	context_->get_pool_manager().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager()->remove_pool(database_types::sqlite);
+	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
 
-	auto pool = context_->get_pool_manager().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();

@@ -9,6 +9,7 @@ All rights reserved.
 #include "database/connection_pool.h"
 #include "database/database_manager.h"
 #include "database/database_types.h"
+#include "database/core/database_context.h"
 
 #include <thread>
 #include <vector>
@@ -107,8 +108,21 @@ std::unique_ptr<database_base> create_mock_connection() {
 
 class DatabaseThreadSafetyTest : public ::testing::Test {
 protected:
-    void SetUp() override {}
-    void TearDown() override {}
+    std::shared_ptr<database_context> context_;
+    std::shared_ptr<database_manager> db_mgr_;
+
+    void SetUp() override {
+        // Test setup with dependency injection
+        context_ = std::make_shared<database_context>();
+        db_mgr_ = std::make_shared<database_manager>(context_);
+    }
+
+    void TearDown() override {
+        // Cleanup
+        if (db_mgr_) {
+            db_mgr_->disconnect();
+        }
+    }
 };
 
 // Test 1: Concurrent connection pool acquire/release
@@ -319,8 +333,8 @@ TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
     manager.shutdown_all();
 }
 
-// Test 5: Database manager singleton access
-TEST_F(DatabaseThreadSafetyTest, DatabaseManagerSingletonAccess) {
+// Test 5: Database manager dependency injection access
+TEST_F(DatabaseThreadSafetyTest, DatabaseManagerDependencyInjectionAccess) {
     const int num_threads = 20;
     std::atomic<int> errors{0};
     std::vector<std::thread> threads;
@@ -336,10 +350,9 @@ TEST_F(DatabaseThreadSafetyTest, DatabaseManagerSingletonAccess) {
             sync_point.arrive_and_wait();
 
             try {
-                auto& mgr = database_manager::handle();
-
+                // Use injected db_mgr_ from fixture
                 std::lock_guard<std::mutex> lock(managers_mutex);
-                managers[thread_id] = &mgr;
+                managers[thread_id] = db_mgr_.get();
             } catch (...) {
                 ++errors;
             }
@@ -352,7 +365,7 @@ TEST_F(DatabaseThreadSafetyTest, DatabaseManagerSingletonAccess) {
 
     EXPECT_EQ(errors.load(), 0);
 
-    // All pointers should be the same (singleton)
+    // All pointers should be the same (shared instance from fixture)
     for (size_t i = 1; i < managers.size(); ++i) {
         EXPECT_EQ(managers[0], managers[i]);
     }
@@ -361,8 +374,6 @@ TEST_F(DatabaseThreadSafetyTest, DatabaseManagerSingletonAccess) {
 // Test 6: Database manager set_mode concurrent calls
 TEST_F(DatabaseThreadSafetyTest, DatabaseManagerConcurrentSetMode) {
     GTEST_SKIP() << "Skipped: database_manager::set_mode() initializes real database backends which causes SegFault in CI";
-
-    auto& manager = database_manager::handle();
 
     const int num_threads = 15;
     const int mode_changes_per_thread = 100;
@@ -374,7 +385,7 @@ TEST_F(DatabaseThreadSafetyTest, DatabaseManagerConcurrentSetMode) {
             for (int j = 0; j < mode_changes_per_thread; ++j) {
                 try {
                     database_types type = static_cast<database_types>((j % 3) + 1);
-                    manager.set_mode(type);
+                    db_mgr_->set_mode(type);
                 } catch (...) {
                     ++errors;
                 }

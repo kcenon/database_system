@@ -235,15 +235,4 @@ namespace database
 		return query_builder(db_type);
 	}
 
-#pragma region singleton
-	std::unique_ptr<database_manager> database_manager::handle_;
-	std::once_flag database_manager::once_;
-
-	database_manager& database_manager::handle(void)
-	{
-		std::call_once(once_, []() { handle_ = std::make_unique<database_manager>(); });
-
-		return *handle_;
-	}
-#pragma endregion
 }; // namespace database

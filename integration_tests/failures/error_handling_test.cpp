@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtest/gtest.h>
 #include <future>
 #include <atomic>
+#include "database/core/database_context.h"
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 
@@ -44,6 +45,9 @@ using namespace database::testing;
  */
 class ErrorHandlingTest : public DatabaseSystemFixture
 {
+protected:
+	std::shared_ptr<database_context> context_;
+	std::shared_ptr<database_manager> db_mgr_;
 };
 
 /**
@@ -183,15 +187,16 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
  */
 TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
 {
-	auto* mgr = &database_manager::handle();
-	mgr->set_mode(database_types::sqlite);
+	context_ = std::make_shared<database_context>();
+	db_mgr_ = std::make_shared<database_manager>(context_);
+	db_mgr_->set_mode(database_types::sqlite);
 
 	// Try to connect to invalid path
-	bool connected = mgr->connect("/invalid/path/to/database.db");
+	bool connected = db_mgr_->connect("/invalid/path/to/database.db");
 
 	// May succeed (SQLite creates files) or fail - both are valid
 	if (connected) {
-		mgr->disconnect();
+		db_mgr_->disconnect();
 	}
 
 	SUCCEED() << "Handled invalid database file path";
@@ -202,11 +207,12 @@ TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
  */
 TEST_F(ErrorHandlingTest, QueryOnDisconnectedDatabase)
 {
-	auto* mgr = &database_manager::handle();
-	mgr->disconnect();
+	context_ = std::make_shared<database_context>();
+	db_mgr_ = std::make_shared<database_manager>(context_);
+	db_mgr_->disconnect();
 
 	// Try to execute query when disconnected
-	auto result = mgr->select_query("SELECT * FROM users");
+	auto result = db_mgr_->select_query("SELECT * FROM users");
 
 	EXPECT_TRUE(result.empty())
 		<< "Query on disconnected database should return empty";

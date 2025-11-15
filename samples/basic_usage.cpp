@@ -9,19 +9,21 @@
 #include <variant>
 #include "database/database_manager.h"
 #include "database/postgres_manager.h"
+#include "database/core/database_context.h"
 
 using namespace database;
 
 int main() {
     std::cout << "=== Database System - Basic Usage Example ===" << std::endl;
-    
+
     // 1. Database manager creation and configuration
     std::cout << "\n1. Database Manager Setup:" << std::endl;
-    
-    auto& db_manager = database_manager::handle();
+
+    auto context = std::make_shared<database_context>();
+    auto db_manager = std::make_shared<database_manager>(context);
 
     // Set database type
-    db_manager.set_mode(database_types::postgres);
+    db_manager->set_mode(database_types::postgres);
     std::cout << "Database type set to: PostgreSQL" << std::endl;
     
     // Connection string (modify these values for your database)
@@ -35,12 +37,12 @@ int main() {
     std::cout << "\n2. Connection Management:" << std::endl;
     
     std::cout << "Attempting to connect to database..." << std::endl;
-    bool connected = db_manager.connect(connection_string);
-    
+    bool connected = db_manager->connect(connection_string);
+
     if (connected) {
         std::cout << "✓ Successfully connected to database" << std::endl;
         std::cout << "Connection status: Connected" << std::endl;
-        std::cout << "Database type: " << static_cast<int>(db_manager.database_type()) << std::endl;
+        std::cout << "Database type: " << static_cast<int>(db_manager->database_type()) << std::endl;
         
         // 3. Table operations
         std::cout << "\n3. Table Operations:" << std::endl;
@@ -58,7 +60,7 @@ int main() {
         )";
         
         std::cout << "Creating users table..." << std::endl;
-        bool table_created = db_manager.create_query(create_table_sql);
+        bool table_created = db_manager->create_query(create_table_sql);
         if (table_created) {
             std::cout << "✓ Users table created successfully" << std::endl;
         } else {
@@ -76,7 +78,7 @@ int main() {
         };
         
         for (const auto& query : insert_queries) {
-            unsigned int inserted = db_manager.insert_query(query);
+            unsigned int inserted = db_manager->insert_query(query);
             if (inserted > 0) {
                 std::cout << "✓ User inserted successfully" << std::endl;
             } else {
@@ -88,7 +90,7 @@ int main() {
         std::cout << "\n5. Data Selection:" << std::endl;
         
         std::string select_all = "SELECT id, username, email, age, is_active FROM users ORDER BY id";
-        auto all_users = db_manager.select_query(select_all);
+        auto all_users = db_manager->select_query(select_all);
 
         if (!all_users.empty()) {
             std::cout << "✓ All users retrieved (" << all_users.size() << " rows):" << std::endl;
@@ -107,7 +109,7 @@ int main() {
         
         // Select specific user
         std::string select_user = "SELECT username, email, age FROM users WHERE username = 'john_doe'";
-        auto john_data = db_manager.select_query(select_user);
+        auto john_data = db_manager->select_query(select_user);
 
         if (!john_data.empty()) {
             std::cout << "✓ John's data retrieved:" << std::endl;
@@ -124,15 +126,15 @@ int main() {
         
         // 6. Data updates
         std::cout << "\n6. Data Updates:" << std::endl;
-        
+
         std::string update_query = "UPDATE users SET age = 31 WHERE username = 'john_doe'";
-        unsigned int updated = db_manager.update_query(update_query);
-        
+        unsigned int updated = db_manager->update_query(update_query);
+
         if (updated > 0) {
             std::cout << "✓ John's age updated successfully" << std::endl;
-            
+
             // Verify update
-            auto updated_data = db_manager.select_query("SELECT username, age FROM users WHERE username = 'john_doe'");
+            auto updated_data = db_manager->select_query("SELECT username, age FROM users WHERE username = 'john_doe'");
             if (!updated_data.empty()) {
                 std::cout << "Updated data: ";
                 for (const auto& row : updated_data) {
@@ -150,9 +152,9 @@ int main() {
         
         // 7. Data deletion
         std::cout << "\n7. Data Deletion:" << std::endl;
-        
+
         std::string delete_query = "DELETE FROM users WHERE username LIKE 'temp_user%'";
-        unsigned int deleted = db_manager.delete_query(delete_query);
+        unsigned int deleted = db_manager->delete_query(delete_query);
         
         if (deleted > 0) {
             std::cout << "✓ Temporary users deleted successfully" << std::endl;
@@ -178,7 +180,7 @@ int main() {
         // }
         
         // Disconnect
-        db_manager.disconnect();
+        db_manager->disconnect();
         std::cout << "✓ Disconnected from database" << std::endl;
         std::cout << "Connection status: Disconnected" << std::endl;
         

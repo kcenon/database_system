@@ -39,6 +39,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <thread>
 #include <chrono>
 #include "database/database_manager.h"
+#include "database/core/database_context.h"
 #include "database/connection_pool.h"
 #include "database/backends/sqlite/sqlite_manager.h"
 
@@ -67,8 +68,10 @@ namespace database::testing
 			                    std::chrono::steady_clock::now().time_since_epoch().count()) +
 			                 ".db");
 
-			// Initialize database manager
-			manager_ = &database_manager::handle();
+			// Initialize database manager with dependency injection
+			context_ = std::make_shared<database_context>();
+			manager_ptr_ = std::make_shared<database_manager>(context_);
+			manager_ = manager_ptr_.get();
 			manager_->set_mode(database_types::sqlite);
 
 			// Connect to test database - use absolute path without URI prefix
@@ -252,7 +255,9 @@ namespace database::testing
 		}
 
 	protected:
-		database_manager* manager_{nullptr};
+		std::shared_ptr<database_context> context_;
+		std::shared_ptr<database_manager> manager_ptr_;
+		database_manager* manager_{nullptr};  // Raw pointer for backward compatibility
 		std::filesystem::path test_db_path_;
 		bool connected_{false};
 	};

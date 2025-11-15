@@ -13,6 +13,7 @@
 
 #include "database/database_manager.h"
 #include "database/database_types.h"
+#include "database/core/database_context.h"
 #include "database/orm/entity.h"
 #include "database/monitoring/performance_monitor.h"
 #include "database/security/secure_connection.h"
@@ -25,41 +26,45 @@ using namespace database::security;
 using namespace database::async;
 
 // Benchmark database manager operations
-static void BM_DatabaseManagerAccess(benchmark::State& state) {
+static void BM_DatabaseManagerCreation(benchmark::State& state) {
     for (auto _ : state) {
-        auto& db = database_manager::handle();
-        benchmark::DoNotOptimize(&db);
+        auto context = std::make_shared<database_context>();
+        auto db = std::make_shared<database_manager>(context);
+        benchmark::DoNotOptimize(db.get());
     }
 }
-BENCHMARK(BM_DatabaseManagerAccess);
+BENCHMARK(BM_DatabaseManagerCreation);
 
 static void BM_DatabaseTypeSettings(benchmark::State& state) {
-    auto& db = database_manager::handle();
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
     for (auto _ : state) {
-        db.set_mode(database_types::postgres);
-        auto type = db.database_type();
+        db->set_mode(database_types::postgres);
+        auto type = db->database_type();
         benchmark::DoNotOptimize(type);
     }
 }
 BENCHMARK(BM_DatabaseTypeSettings);
 
 static void BM_QueryCreation(benchmark::State& state) {
-    auto& db = database_manager::handle();
-    db.set_mode(database_types::postgres);
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
+    db->set_mode(database_types::postgres);
 
     for (auto _ : state) {
-        bool result = db.create_query("SELECT 1");
+        bool result = db->create_query("SELECT 1");
         benchmark::DoNotOptimize(result);
     }
 }
 BENCHMARK(BM_QueryCreation);
 
 static void BM_SelectQuery(benchmark::State& state) {
-    auto& db = database_manager::handle();
-    db.set_mode(database_types::postgres);
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
+    db->set_mode(database_types::postgres);
 
     for (auto _ : state) {
-        auto result = db.select_query("SELECT 1");
+        auto result = db->select_query("SELECT 1");
         benchmark::DoNotOptimize(result);
     }
 }
@@ -304,7 +309,8 @@ BENCHMARK(BM_ConcurrentAsyncOperations)->Arg(10)->Arg(50)->Arg(100);
 
 // Phase 4: Connection Pool Benchmarks
 static void BM_ConnectionPoolCreation(benchmark::State& state) {
-    auto& db = database_manager::handle();
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
 
     for (auto _ : state) {
         connection_pool_config config;
@@ -314,17 +320,18 @@ static void BM_ConnectionPoolCreation(benchmark::State& state) {
         config.acquire_timeout = std::chrono::milliseconds(30000);
 
         // Note: May fail in test environment, but benchmarks the API call
-        db.create_connection_pool(database_types::postgres, config);
+        db->create_connection_pool(database_types::postgres, config);
         benchmark::DoNotOptimize(&config);
     }
 }
 BENCHMARK(BM_ConnectionPoolCreation);
 
 static void BM_ConnectionPoolStats(benchmark::State& state) {
-    auto& db = database_manager::handle();
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
 
     for (auto _ : state) {
-        auto stats = db.get_pool_stats();
+        auto stats = db->get_pool_stats();
         benchmark::DoNotOptimize(stats);
     }
 }
@@ -332,18 +339,20 @@ BENCHMARK(BM_ConnectionPoolStats);
 
 // Phase 4: Query Builder Benchmarks
 static void BM_SQLQueryBuilderCreation(benchmark::State& state) {
-    auto& db = database_manager::handle();
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
 
     for (auto _ : state) {
-        auto builder = db.create_query_builder(database_types::postgres);
+        auto builder = db->create_query_builder(database_types::postgres);
         benchmark::DoNotOptimize(&builder);
     }
 }
 BENCHMARK(BM_SQLQueryBuilderCreation);
 
 static void BM_SQLQueryBuilding(benchmark::State& state) {
-    auto& db = database_manager::handle();
-    auto builder = db.create_query_builder(database_types::postgres);
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
+    auto builder = db->create_query_builder(database_types::postgres);
 
     for (auto _ : state) {
         builder.select({"id", "name", "email"})
@@ -358,7 +367,8 @@ BENCHMARK(BM_SQLQueryBuilding);
 // Comprehensive system benchmark
 static void BM_IntegratedSystemPerformance(benchmark::State& state) {
     // Setup all Phase 4 systems
-    auto& db = database_manager::handle();
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
     auto& monitor = performance_monitor::instance();
 
     // Configure systems using actual API

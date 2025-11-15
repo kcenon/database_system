@@ -277,42 +277,5 @@ namespace database
 		std::shared_ptr<database_context> context_; ///< Dependency injection context
 		std::shared_ptr<connection_pool_manager> pool_manager_; ///< Cached pool manager for performance
 
-#pragma region singleton
-	public:
-		/**
-		 * @brief Provides access to the single @c database_manager instance.
-		 *
-		 * @deprecated This singleton pattern is deprecated. Use dependency injection instead:
-		 * @code
-		 * auto context = std::make_shared<database_context>();
-		 * auto db_mgr = std::make_shared<database_manager>(context);
-		 * @endcode
-		 *
-		 * This static method returns a reference to the singleton instance,
-		 * ensuring that only one instance of @c database_manager exists
-		 * throughout the application.
-		 *
-		 * @return A reference to the singleton @c database_manager instance.
-		 *
-		 * @note Will be removed in next major version (2.0.0)
-		 */
-		[[deprecated("Use dependency injection with database_context instead. See Sprint 2 migration guide.")]]
-		static database_manager& handle(void);
-
-	private:
-		/**
-		 * @brief A unique pointer holding the singleton instance of
-		 *        @c database_manager.
-		 * @deprecated Part of deprecated singleton pattern
-		 */
-		static std::unique_ptr<database_manager> handle_;
-
-		/**
-		 * @brief A flag used to ensure the singleton instance is created
-		 *        only once in a thread-safe manner.
-		 * @deprecated Part of deprecated singleton pattern
-		 */
-		static std::once_flag once_;
-#pragma endregion
 	};
 } // namespace database

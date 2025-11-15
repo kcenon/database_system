@@ -81,12 +81,6 @@ namespace database::monitoring
 		metrics_.error_message = error;
 	}
 
-	// performance_monitor implementation
-	performance_monitor& performance_monitor::instance()
-	{
-		static performance_monitor instance;
-		return instance;
-	}
 
 	performance_monitor::performance_monitor()
 	{

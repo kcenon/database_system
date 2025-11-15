@@ -40,16 +40,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace database
 {
-	database_manager::database_manager()
-		: connected_(false)
-		, database_(nullptr)
-		, context_(std::make_shared<database_context>())
-		, pool_manager_(context_->get_pool_manager())
-	{
-		// Default constructor creates a default context for backward compatibility
-		// Cache pool_manager for performance (avoids repeated context lookups)
-	}
-
 	database_manager::database_manager(std::shared_ptr<database_context> context)
 		: connected_(false)
 		, database_(nullptr)

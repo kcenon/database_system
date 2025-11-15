@@ -276,9 +276,8 @@ namespace database
 	 * @class connection_pool_manager
 	 * @brief Manages multiple connection pools for different database types.
 	 *
-	 * @note As of Sprint 2 (Task 2.3), this class has been refactored to support
-	 * dependency injection. The singleton API is deprecated and will be removed
-	 * in a future version.
+	 * @note As of Sprint 2 (Task 2.3), this class uses dependency injection pattern.
+	 * Access via database_context::get_pool_manager().
 	 */
 	class connection_pool_manager
 	{

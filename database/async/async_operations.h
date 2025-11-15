@@ -279,17 +279,11 @@ namespace database::async
 	 * @class transaction_coordinator
 	 * @brief Distributed transaction coordination.
 	 *
-	 * @note This class now uses dependency injection pattern instead of singleton.
+	 * @note This class uses dependency injection pattern.
 	 * Access via database_context::get_transaction_coordinator() (Sprint 3, Task 3.1).
 	 *
-	 * @deprecated Use database_context::get_transaction_coordinator() instead of instance()
-	 *
-	 * Migration example:
+	 * @example
 	 * @code
-	 * // Old (deprecated)
-	 * auto& txn_coord = transaction_coordinator::instance();
-	 *
-	 * // New (recommended)
 	 * auto context = std::make_shared<database_context>();
 	 * auto txn_coord = context->get_transaction_coordinator();
 	 * @endcode

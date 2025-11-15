@@ -69,25 +69,14 @@ namespace database
 	 * a @c database_base instance and exposes methods such as @c connect,
 	 * @c disconnect, @c create_query, @c insert_query, etc.
 	 *
-	 * @note As of Sprint 2, this class has been refactored to use dependency
-	 * injection instead of singleton pattern. The singleton API is deprecated
-	 * and will be removed in a future version.
+	 * @note As of Sprint 2, this class uses dependency injection pattern.
+	 * Access via constructor with database_context parameter.
 	 */
 	class database_manager
 	{
 	public:
 		/**
-		 * @brief Default constructor.
-		 *
-		 * @deprecated Use database_manager(std::shared_ptr<database_context>) instead.
-		 * This constructor creates a default context internally for backward compatibility.
-		 *
-		 * Initializes the manager with no active database connection.
-		 */
-		database_manager();
-
-		/**
-		 * @brief DI constructor - Recommended for new code.
+		 * @brief Constructor with dependency injection.
 		 *
 		 * @param context Dependency injection context containing shared components
 		 *

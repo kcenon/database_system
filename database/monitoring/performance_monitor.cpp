@@ -67,12 +67,12 @@ namespace database::monitoring
 		metrics_.execution_time = std::chrono::duration_cast<std::chrono::microseconds>(
 			metrics_.end_time - metrics_.start_time);
 
-		// Use injected monitor if available, otherwise fall back to singleton (deprecated)
+		// Use injected monitor if available
 		if (monitor_) {
 			monitor_->record_query_metrics(metrics_);
-		} else {
-			performance_monitor::instance().record_query_metrics(metrics_);
 		}
+		// Note: If monitor is not injected, metrics are not recorded.
+		// Always use query_timer with a performance_monitor instance.
 	}
 
 	void query_timer::set_error(const std::string& error)

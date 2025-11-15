@@ -228,7 +228,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolStatsAccess) {
 TEST_F(DatabaseThreadSafetyTest, ConnectionPoolManagerConcurrentCreation) {
     GTEST_SKIP() << "Skipped: connection_pool_manager uses real database backends (PostgreSQL/MySQL) which are not available in CI";
 
-    auto& manager = context_->get_pool_manager();
+    auto manager = context_->get_pool_manager();
 
     const int num_threads = 10;
     std::atomic<int> successful_creates{0};
@@ -250,7 +250,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolManagerConcurrentCreation) {
                 // Each thread tries to create pool for different database type
                 database_types db_type = static_cast<database_types>((thread_id % 3) + 1);
 
-                if (manager.create_pool(db_type, config)) {
+                if (manager->create_pool(db_type, config)) {
                     ++successful_creates;
                 }
             } catch (...) {
@@ -266,21 +266,21 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolManagerConcurrentCreation) {
     EXPECT_EQ(errors.load(), 0);
     EXPECT_GT(successful_creates.load(), 0);
 
-    manager.shutdown_all();
+    manager->shutdown_all();
 }
 
 // Test 4: Connection pool manager get/remove race
 TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
     GTEST_SKIP() << "Skipped: connection_pool_manager uses real database backends which are not available in CI";
 
-    auto& manager = context_->get_pool_manager();
+    auto manager = context_->get_pool_manager();
 
     connection_pool_config config;
     config.min_connections = 2;
     config.max_connections = 5;
     config.connection_string = "test_race_db";
 
-    manager.create_pool(database_types::mysql, config);
+    manager->create_pool(database_types::mysql, config);
 
     const int num_getter_threads = 8;
     const int num_remover_threads = 2;
@@ -295,7 +295,7 @@ TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
         threads.emplace_back([&]() {
             while (running.load()) {
                 try {
-                    auto pool = manager.get_pool(database_types::mysql);
+                    auto pool = manager->get_pool(database_types::mysql);
                     if (pool) {
                         ++gets;
                     }
@@ -312,9 +312,9 @@ TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
         threads.emplace_back([&]() {
             std::this_thread::sleep_for(50ms);
             try {
-                manager.remove_pool(database_types::mysql);
+                manager->remove_pool(database_types::mysql);
                 std::this_thread::sleep_for(20ms);
-                manager.create_pool(database_types::mysql, config);
+                manager->create_pool(database_types::mysql, config);
             } catch (...) {
                 ++errors;
             }
@@ -330,7 +330,7 @@ TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
 
     EXPECT_EQ(errors.load(), 0);
 
-    manager.shutdown_all();
+    manager->shutdown_all();
 }
 
 // Test 5: Database manager dependency injection access

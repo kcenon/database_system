@@ -15,6 +15,7 @@ The Database System Project is a production-ready, enterprise-grade C++17/C++20 
 > **🏗️ Modular Architecture**: Comprehensive database abstraction layer with multi-backend support, enterprise security, and real-time monitoring.
 
 > **✅ Latest Updates (2025-11)**:
+> - **monitoring_system Integration**: Full integration with kcenon/monitoring_system for production-grade metrics collection
 > - **Connection Pool v3**: 65x latency improvement with thread_system integration
 > - **Remote Database Access**: Database Proxy Server and Remote Client for distributed operations
 > - **Resilient Connections**: Automatic reconnection with health monitoring
@@ -48,10 +49,11 @@ This database system is a crucial component of a comprehensive data management a
   - Benefits: Network-transparent database operations and clustering
   - Integration: Remote procedure calls and distributed transactions
 
-- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database performance monitoring
-  - Usage: Real-time database performance metrics and alerting
-  - Benefits: Comprehensive observability and performance optimization
-  - Reference: Database health monitoring and performance analysis
+- **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database performance monitoring (optional)
+  - Integration: Production-grade metrics collection with Prometheus export
+  - Benefits: Performance profiling, health checks, real-time observability
+  - Features: Query latency percentiles (P95/P99), connection pool metrics, Prometheus-compatible export
+  - Status: Fully integrated with fallback support
 
 ### Integration Architecture
 ```

@@ -7,6 +7,11 @@
 
 ---
 
+> **📖 User Documentation**: For user-friendly performance documentation and analysis,
+> see [`docs/performance/BASELINE.md`](../docs/performance/BASELINE.md)
+
+---
+
 ## Overview
 
 This document records baseline performance metrics for the database_system. These metrics serve as reference points for detecting performance regressions during development.

@@ -140,20 +140,22 @@ BENCHMARK(BM_ORMEntityManager);
 
 // Phase 4: Performance Monitoring Benchmarks
 static void BM_PerformanceMonitorConfiguration(benchmark::State& state) {
-    auto& monitor = performance_monitor::instance();
+    auto context = std::make_shared<database_context>();
+    auto monitor = context->get_performance_monitor();
 
     for (auto _ : state) {
         // Mock configuration using actual API
-        monitor.set_metrics_retention_period(std::chrono::minutes(60));
-        monitor.set_alert_thresholds(0.05, std::chrono::microseconds(1000000));
-        benchmark::DoNotOptimize(&monitor);
+        monitor->set_metrics_retention_period(std::chrono::minutes(60));
+        monitor->set_alert_thresholds(0.05, std::chrono::microseconds(1000000));
+        benchmark::DoNotOptimize(monitor.get());
     }
 }
 BENCHMARK(BM_PerformanceMonitorConfiguration);
 
 static void BM_QueryMetricsRecording(benchmark::State& state) {
-    auto& monitor = performance_monitor::instance();
-    monitor.set_metrics_retention_period(std::chrono::minutes(60));
+    auto context = std::make_shared<database_context>();
+    auto monitor = context->get_performance_monitor();
+    monitor->set_metrics_retention_period(std::chrono::minutes(60));
 
     query_metrics metrics;
     metrics.query_hash = "SELECT_benchmark";
@@ -165,14 +167,15 @@ static void BM_QueryMetricsRecording(benchmark::State& state) {
     metrics.end_time = metrics.start_time + metrics.execution_time;
 
     for (auto _ : state) {
-        monitor.record_query_metrics(metrics);
+        monitor->record_query_metrics(metrics);
     }
 }
 BENCHMARK(BM_QueryMetricsRecording);
 
 static void BM_ConnectionMetricsRecording(benchmark::State& state) {
-    auto& monitor = performance_monitor::instance();
-    monitor.set_metrics_retention_period(std::chrono::minutes(60));
+    auto context = std::make_shared<database_context>();
+    auto monitor = context->get_performance_monitor();
+    monitor->set_metrics_retention_period(std::chrono::minutes(60));
 
     connection_metrics metrics;
     metrics.total_connections.store(20);
@@ -180,13 +183,14 @@ static void BM_ConnectionMetricsRecording(benchmark::State& state) {
     metrics.idle_connections.store(10);
 
     for (auto _ : state) {
-        monitor.record_connection_metrics(database_types::postgres, metrics);
+        monitor->record_connection_metrics(database_types::postgres, metrics);
     }
 }
 BENCHMARK(BM_ConnectionMetricsRecording);
 
 static void BM_SystemMetricsAccess(benchmark::State& state) {
-    auto& monitor = performance_monitor::instance();
+    auto context = std::make_shared<database_context>();
+    auto monitor = context->get_performance_monitor();
 
     for (auto _ : state) {
         // Mock system metrics access
@@ -369,11 +373,11 @@ static void BM_IntegratedSystemPerformance(benchmark::State& state) {
     // Setup all Phase 4 systems
     auto context = std::make_shared<database_context>();
     auto db = std::make_shared<database_manager>(context);
-    auto& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     // Configure systems using actual API
-    monitor.set_metrics_retention_period(std::chrono::minutes(60));
-    monitor.set_alert_thresholds(0.05, std::chrono::microseconds(1000000));
+    monitor->set_metrics_retention_period(std::chrono::minutes(60));
+    monitor->set_alert_thresholds(0.05, std::chrono::microseconds(1000000));
 
     // Mock security setup
     struct MockSecurity {

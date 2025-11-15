@@ -13,16 +13,17 @@
 #include <memory>
 #include <random>
 #include "database/database_manager.h"
+#include "database/core/database_context.h"
 #include "database/monitoring/performance_monitor.h"
 
 using namespace database;
 using namespace database::monitoring;
 
-void demonstrate_basic_metrics() {
+void demonstrate_basic_metrics(std::shared_ptr<database_context> context) {
     std::cout << "=== Basic Performance Metrics Demonstration ===\n";
 
-    // Initialize performance monitor
-    performance_monitor& monitor = performance_monitor::instance();
+    // Initialize performance monitor via dependency injection
+    auto monitor = context->get_performance_monitor();
 
     // Configure monitoring settings
     monitoring_config config;
@@ -32,7 +33,7 @@ void demonstrate_basic_metrics() {
     config.alert_threshold_cpu = 80.0;
     config.alert_threshold_memory = 85.0;
 
-    monitor.configure(config);
+    monitor->configure(config);
     std::cout << "Performance monitoring configured with:\n";
     std::cout << "  - Query tracking: enabled\n";
     std::cout << "  - Connection tracking: enabled\n";
@@ -41,7 +42,7 @@ void demonstrate_basic_metrics() {
     std::cout << "  - Memory alert threshold: 85%\n";
 
     // Get current system metrics
-    const auto& system_metrics = monitor.get_system_metrics();
+    const auto& system_metrics = monitor->get_system_metrics();
     std::cout << "\nCurrent System Metrics:\n";
     std::cout << "  CPU Usage: " << system_metrics.cpu_usage_percent << "%\n";
     std::cout << "  Memory Usage: " << system_metrics.memory_usage_percent << "%\n";
@@ -49,10 +50,10 @@ void demonstrate_basic_metrics() {
     std::cout << "  Network I/O: " << system_metrics.network_io_bytes_per_sec << " bytes/sec\n";
 }
 
-void demonstrate_query_metrics() {
+void demonstrate_query_metrics(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Query Performance Tracking ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     // Simulate various database queries with different performance characteristics
     std::random_device rd;
@@ -84,7 +85,7 @@ void demonstrate_query_metrics() {
         metrics.rows_affected = success ? (i * 3 + 1) : 0;
         metrics.timestamp = start_time;
 
-        monitor.record_query_execution(metrics);
+        monitor->record_query_execution(metrics);
 
         std::cout << "  Query " << (i+1) << " (" << query_type << "): "
                   << execution_time.count() << "ms, "
@@ -93,7 +94,7 @@ void demonstrate_query_metrics() {
 
     // Display aggregated query statistics
     std::cout << "\nQuery Performance Summary:\n";
-    const auto& query_stats = monitor.get_query_statistics();
+    const auto& query_stats = monitor->get_query_statistics();
 
     std::cout << "  Total Queries: " << query_stats.total_queries << "\n";
     std::cout << "  Successful Queries: " << query_stats.successful_queries << "\n";
@@ -105,10 +106,10 @@ void demonstrate_query_metrics() {
     std::cout << "  Slow Queries Detected: " << query_stats.slow_queries_count << "\n";
 }
 
-void demonstrate_connection_pool_metrics() {
+void demonstrate_connection_pool_metrics(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Connection Pool Performance Monitoring ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     // Simulate connection pool activity
     std::cout << "Simulating connection pool operations...\n";
@@ -132,7 +133,7 @@ void demonstrate_connection_pool_metrics() {
         metrics.average_wait_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         metrics.peak_connections.store(std::max(static_cast<size_t>(20), metrics.active_connections.load()));
 
-        monitor.record_connection_metrics(metrics);
+        monitor->record_connection_metrics(metrics);
 
         std::cout << "  Pool State " << (i+1) << ": "
                   << metrics.active_connections.load() << "/"
@@ -142,7 +143,7 @@ void demonstrate_connection_pool_metrics() {
 
     // Display connection pool statistics
     std::cout << "\nConnection Pool Performance Summary:\n";
-    const auto& pool_stats = monitor.get_connection_pool_statistics();
+    const auto& pool_stats = monitor->get_connection_pool_statistics();
 
     std::cout << "  Pool Utilization: " << pool_stats.utilization_percentage << "%\n";
     std::cout << "  Average Wait Time: " << pool_stats.average_wait_time.count() << "ms\n";
@@ -151,10 +152,10 @@ void demonstrate_connection_pool_metrics() {
     std::cout << "  Pool Efficiency Score: " << pool_stats.efficiency_score << "/100\n";
 }
 
-void demonstrate_real_time_monitoring() {
+void demonstrate_real_time_monitoring(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Real-Time Performance Monitoring ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     std::cout << "Starting real-time monitoring (5 seconds)...\n";
 
@@ -166,8 +167,8 @@ void demonstrate_real_time_monitoring() {
         update_count++;
 
         // Get real-time metrics
-        const auto& system_metrics = monitor.get_system_metrics();
-        const auto& alerts = monitor.get_active_alerts();
+        const auto& system_metrics = monitor->get_system_metrics();
+        const auto& alerts = monitor->get_active_alerts();
 
         std::cout << "\n[" << update_count << "s] Real-time Status:\n";
         std::cout << "  CPU: " << system_metrics.cpu_usage_percent << "%, "
@@ -186,15 +187,15 @@ void demonstrate_real_time_monitoring() {
     }
 }
 
-void demonstrate_performance_analysis() {
+void demonstrate_performance_analysis(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Performance Analysis and Reporting ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     // Generate performance report
     std::cout << "Generating comprehensive performance report...\n";
 
-    const auto& report = monitor.generate_performance_report();
+    const auto& report = monitor->generate_performance_report();
 
     std::cout << "\n📊 Performance Report Summary:\n";
     std::cout << "  Report Period: " << report.report_period_minutes << " minutes\n";
@@ -214,26 +215,26 @@ void demonstrate_performance_analysis() {
     }
 }
 
-void demonstrate_metrics_export() {
+void demonstrate_metrics_export(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Metrics Export for External Monitoring ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     std::cout << "Exporting metrics in various formats...\n";
 
     // Export Prometheus metrics
     std::cout << "\n--- Prometheus Metrics Format ---\n";
-    const auto prometheus_metrics = monitor.export_prometheus_metrics();
+    const auto prometheus_metrics = monitor->export_prometheus_metrics();
     std::cout << prometheus_metrics.substr(0, 300) << "...\n";
 
     // Export JSON metrics
     std::cout << "\n--- JSON Metrics Format ---\n";
-    const auto json_metrics = monitor.export_json_metrics();
+    const auto json_metrics = monitor->export_json_metrics();
     std::cout << json_metrics.substr(0, 200) << "...\n";
 
     // Export CSV metrics for analysis
     std::cout << "\n--- CSV Export for Analysis ---\n";
-    const auto csv_data = monitor.export_csv_metrics();
+    const auto csv_data = monitor->export_csv_metrics();
     std::cout << "CSV data exported: " << csv_data.size() << " bytes\n";
     std::cout << "First few lines:\n";
     auto first_newline = csv_data.find('\n', csv_data.find('\n') + 1);
@@ -246,10 +247,10 @@ void demonstrate_metrics_export() {
     std::cout << "  • Third-party APM solutions\n";
 }
 
-void demonstrate_alerting_system() {
+void demonstrate_alerting_system(std::shared_ptr<database_context> context) {
     std::cout << "\n=== Alerting and Notification System ===\n";
 
-    performance_monitor& monitor = performance_monitor::instance();
+    auto monitor = context->get_performance_monitor();
 
     // Configure alert rules
     alert_rule cpu_rule;
@@ -266,8 +267,8 @@ void demonstrate_alerting_system() {
     memory_rule.severity = alert_severity::critical;
     memory_rule.message = "Critical memory usage level";
 
-    monitor.add_alert_rule(cpu_rule);
-    monitor.add_alert_rule(memory_rule);
+    monitor->add_alert_rule(cpu_rule);
+    monitor->add_alert_rule(memory_rule);
 
     std::cout << "Configured alert rules:\n";
     std::cout << "  • CPU usage > 75% (Warning)\n";
@@ -292,13 +293,16 @@ int main() {
     std::cout << "capabilities for database operations and system resources.\n";
 
     try {
-        demonstrate_basic_metrics();
-        demonstrate_query_metrics();
-        demonstrate_connection_pool_metrics();
-        demonstrate_real_time_monitoring();
-        demonstrate_performance_analysis();
-        demonstrate_metrics_export();
-        demonstrate_alerting_system();
+        // Initialize database context with dependency injection
+        auto context = std::make_shared<database_context>();
+
+        demonstrate_basic_metrics(context);
+        demonstrate_query_metrics(context);
+        demonstrate_connection_pool_metrics(context);
+        demonstrate_real_time_monitoring(context);
+        demonstrate_performance_analysis(context);
+        demonstrate_metrics_export(context);
+        demonstrate_alerting_system(context);
 
         std::cout << "\n=== Performance Monitoring Features Summary ===\n";
         std::cout << "✓ Real-time system and database metrics collection\n";
@@ -311,8 +315,9 @@ int main() {
         std::cout << "✓ Integration with external monitoring systems\n";
 
         std::cout << "\nFor production deployment:\n";
-        std::cout << "  performance_monitor::instance().configure(your_config);\n";
-        std::cout << "  performance_monitor::instance().start_monitoring();\n";
+        std::cout << "  auto context = std::make_shared<database_context>();\n";
+        std::cout << "  auto monitor = context->get_performance_monitor();\n";
+        std::cout << "  monitor->configure(your_config);\n";
         std::cout << "  // Metrics are automatically collected during database operations\n";
 
     } catch (const std::exception& e) {

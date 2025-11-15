@@ -66,6 +66,7 @@ class IntegrationTestBase : public ::testing::Test {
 protected:
     std::shared_ptr<database_context> context_;
     std::shared_ptr<database_manager> db_mgr_;
+    std::shared_ptr<performance_monitor> monitor_;
 
     void SetUp() override {
         // Initialize database context and manager
@@ -86,13 +87,13 @@ protected:
 
 private:
     void setup_performance_monitoring() {
-        auto& monitor = performance_monitor::instance();
+        monitor_ = context_->get_performance_monitor();
         monitoring_config config;
         config.enable_query_tracking = true;
         config.enable_connection_tracking = true;
         config.enable_data_access_logging = true;
         config.slow_query_threshold = std::chrono::milliseconds(100);
-        monitor.configure(config);
+        monitor_->configure(config);
     }
 
     void setup_security_framework() {
@@ -201,7 +202,6 @@ class PerformanceAsyncIntegrationTest : public IntegrationTestBase {
 };
 
 TEST_F(PerformanceAsyncIntegrationTest, MonitoredAsyncOperations) {
-    auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
 
     // Submit multiple async operations while monitoring performance
@@ -258,7 +258,6 @@ class SecurityMonitoringIntegrationTest : public IntegrationTestBase {
 TEST_F(SecurityMonitoringIntegrationTest, MonitoredSecurityEvents) {
     auto& rbac = rbac_manager::instance();
     auto& logger = context_->get_audit_logger();
-    auto& monitor = performance_monitor::instance();
 
     // Create users with different permission levels
     std::vector<std::tuple<std::string, std::string, std::string>> test_users = {
@@ -332,7 +331,6 @@ class FullSystemIntegrationTest : public IntegrationTestBase {
 TEST_F(FullSystemIntegrationTest, CompleteWorkflow) {
     auto& rbac = rbac_manager::instance();
     auto& logger = context_->get_audit_logger();
-    auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
     auto& entity_mgr = context_->get_entity_manager();
 
@@ -419,7 +417,6 @@ class ErrorHandlingIntegrationTest : public IntegrationTestBase {
 TEST_F(ErrorHandlingIntegrationTest, FailureRecoveryWorkflow) {
     auto& rbac = rbac_manager::instance();
     auto& logger = context_->get_audit_logger();
-    auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
 
     // Create user without sufficient permissions
@@ -483,7 +480,6 @@ class ConcurrentOperationsIntegrationTest : public IntegrationTestBase {
 TEST_F(ConcurrentOperationsIntegrationTest, ConcurrentSecureOperations) {
     auto& rbac = rbac_manager::instance();
     auto& logger = context_->get_audit_logger();
-    auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
 
     // Create multiple concurrent users

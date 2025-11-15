@@ -232,24 +232,6 @@ namespace database::monitoring
 		 */
 		performance_monitor();
 
-		/**
-		 * @brief Singleton instance accessor (DEPRECATED)
-		 * @deprecated Use dependency injection via database_context instead.
-		 *
-		 * Migration guide:
-		 * @code
-		 * // Old (deprecated):
-		 * auto& monitor = performance_monitor::instance();
-		 *
-		 * // New (recommended):
-		 * auto context = std::make_shared<database_context>();
-		 * auto monitor = context->get_performance_monitor();
-		 * @endcode
-		 *
-		 * @since Sprint 2 (will be removed in future version)
-		 */
-		[[deprecated("Use database_context::get_performance_monitor() instead")]]
-		static performance_monitor& instance();
 
 		~performance_monitor();
 

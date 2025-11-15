@@ -13,6 +13,7 @@
 #include <vector>
 #include "database/database_manager.h"
 #include "database/security/secure_connection.h"
+#include "database/core/database_context.h"
 
 using namespace database;
 using namespace database::security;
@@ -188,10 +189,8 @@ void demonstrate_rbac_system() {
     std::cout << "  Can Carol read data? " << (can_carol_select_data ? "✅ YES" : "❌ NO") << "\n";
 }
 
-void demonstrate_audit_logging() {
+void demonstrate_audit_logging(std::shared_ptr<security::audit_logger> audit_log) {
     std::cout << "\n=== Comprehensive Audit Logging ===\n";
-
-    audit_logger& logger = audit_logger::instance();
 
     // Configure audit logging
     audit_config config;
@@ -203,7 +202,7 @@ void demonstrate_audit_logging() {
     config.log_format = audit_format::json;
     config.retention_days = 365;
 
-    logger.configure(config);
+    audit_log->configure(config);
     std::cout << "Audit logging configured with comprehensive event tracking.\n";
 
     // Simulate various security events
@@ -219,7 +218,7 @@ void demonstrate_audit_logging() {
     auth_success.client_ip = "192.168.1.100";
     auth_success.session_id = "sess_abc123def456";
 
-    logger.log_event(auth_success);
+    audit_log->log_event(auth_success);
     std::cout << "  🔐 Authentication success logged for alice.smith\n";
 
     // Authorization events
@@ -232,7 +231,7 @@ void demonstrate_audit_logging() {
     auth_denied.client_ip = "192.168.1.101";
     auth_denied.resource_accessed = "user_management_system";
 
-    logger.log_event(auth_denied);
+    audit_log->log_event(auth_denied);
     std::cout << "  🚫 Authorization failure logged for bob.jones\n";
 
     // Data access events
@@ -246,7 +245,7 @@ void demonstrate_audit_logging() {
     data_access.query_executed = "SELECT customer_id, email FROM customer_data WHERE status = 'active'";
     data_access.rows_affected = 1247;
 
-    logger.log_event(data_access);
+    audit_log->log_event(data_access);
     std::cout << "  📊 Data access logged for carol.wilson (1247 rows)\n";
 
     // Schema modification events
@@ -259,21 +258,21 @@ void demonstrate_audit_logging() {
     schema_change.resource_accessed = "user_preferences";
     schema_change.query_executed = "CREATE TABLE user_preferences (id SERIAL PRIMARY KEY, user_id INT, preferences JSONB)";
 
-    logger.log_event(schema_change);
+    audit_log->log_event(schema_change);
     std::cout << "  🔧 Schema modification logged for alice.smith\n";
 
     // Demonstrate audit trail queries
     std::cout << "\nAudit trail analysis:\n";
-    auto recent_events = logger.get_events_by_timeframe(
+    auto recent_events = audit_log->get_events_by_timeframe(
         std::chrono::system_clock::now() - std::chrono::hours(1),
         std::chrono::system_clock::now()
     );
     std::cout << "  📋 Recent events (last hour): " << recent_events.size() << "\n";
 
-    auto user_events = logger.get_events_by_user("alice.smith");
+    auto user_events = audit_log->get_events_by_user("alice.smith");
     std::cout << "  👤 Events for alice.smith: " << user_events.size() << "\n";
 
-    auto failed_events = logger.get_failed_events();
+    auto failed_events = audit_log->get_failed_events();
     std::cout << "  ❌ Failed security events: " << failed_events.size() << "\n";
 }
 
@@ -399,10 +398,14 @@ int main() {
     std::cout << "encryption, authentication, authorization, and threat detection.\n";
 
     try {
+        // Create database context and get audit logger
+        auto context = std::make_shared<database_context>();
+        auto audit_log = context->get_audit_logger();
+
         demonstrate_secure_connections();
         demonstrate_credential_management();
         demonstrate_rbac_system();
-        demonstrate_audit_logging();
+        demonstrate_audit_logging(audit_log);
         demonstrate_threat_detection();
         demonstrate_session_management();
 

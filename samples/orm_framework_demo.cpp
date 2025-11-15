@@ -12,6 +12,7 @@
 #include <memory>
 #include "database/database_manager.h"
 #include "database/orm/entity.h"
+#include "database/core/database_context.h"
 
 using namespace database;
 using namespace database::orm;
@@ -135,18 +136,18 @@ void demonstrate_entity_definition() {
     }
 }
 
-void demonstrate_schema_management() {
+void demonstrate_schema_management(std::shared_ptr<entity_manager> entity_mgr) {
     std::cout << "\n=== Schema Management Demonstration ===" << std::endl;
 
     try {
         // Register entities with the manager
         std::cout << "Registering entities..." << std::endl;
-        entity_manager::instance().register_entity<User>();
-        entity_manager::instance().register_entity<Product>();
+        entity_mgr->register_entity<User>();
+        entity_mgr->register_entity<Product>();
 
         // Get metadata for registered entities
-        const auto& user_metadata = entity_manager::instance().get_metadata<User>();
-        const auto& product_metadata = entity_manager::instance().get_metadata<Product>();
+        const auto& user_metadata = entity_mgr->get_metadata<User>();
+        const auto& product_metadata = entity_mgr->get_metadata<Product>();
 
         std::cout << "Registered entities:" << std::endl;
         std::cout << "  - " << user_metadata.table_name() << std::endl;
@@ -161,9 +162,9 @@ void demonstrate_schema_management() {
 
         // In a real application, you would:
         // auto db = get_database_connection();
-        // entity_manager::instance().create_tables(db);
+        // entity_mgr->create_tables(db);
 
-        std::cout << "\nNote: In production, call entity_manager::instance().create_tables(db) to create actual tables." << std::endl;
+        std::cout << "\nNote: In production, call entity_mgr->create_tables(db) to create actual tables." << std::endl;
 
     } catch (const std::exception& e) {
         std::cout << "Error in schema management: " << e.what() << std::endl;
@@ -200,7 +201,7 @@ void demonstrate_type_safety() {
     std::cout << std::endl;
 }
 
-void demonstrate_entity_queries() {
+void demonstrate_entity_queries(std::shared_ptr<entity_manager> entity_mgr) {
     std::cout << "\n=== Entity Query Demonstration ===" << std::endl;
 
     try {
@@ -211,21 +212,21 @@ void demonstrate_entity_queries() {
         // Example query building (conceptual)
         std::cout << "\nExample query operations:" << std::endl;
         std::cout << "1. Find active users:" << std::endl;
-        std::cout << "   auto users = entity_manager::instance().query<User>(db)" << std::endl;
+        std::cout << "   auto users = entity_mgr->query<User>(db)" << std::endl;
         std::cout << "                  .where(\"is_active = true\")" << std::endl;
         std::cout << "                  .order_by(\"username\")" << std::endl;
         std::cout << "                  .execute();" << std::endl;
 
         std::cout << "\n2. Find products by price range:" << std::endl;
-        std::cout << "   auto products = entity_manager::instance().query<Product>(db)" << std::endl;
+        std::cout << "   auto products = entity_mgr->query<Product>(db)" << std::endl;
         std::cout << "                     .where(\"price >= 10.0 AND price <= 100.0\")" << std::endl;
         std::cout << "                     .where(\"is_available = true\")" << std::endl;
         std::cout << "                     .limit(10)" << std::endl;
         std::cout << "                     .execute();" << std::endl;
 
         std::cout << "\n3. Aggregation queries:" << std::endl;
-        std::cout << "   auto count = entity_manager::instance().query<User>(db).count();" << std::endl;
-        std::cout << "   auto avg_price = entity_manager::instance().query<Product>(db).avg(\"price\");" << std::endl;
+        std::cout << "   auto count = entity_mgr->query<User>(db).count();" << std::endl;
+        std::cout << "   auto avg_price = entity_mgr->query<Product>(db).avg(\"price\");" << std::endl;
 
     } catch (const std::exception& e) {
         std::cout << "Error in query demonstration: " << e.what() << std::endl;
@@ -270,10 +271,14 @@ int main() {
     std::cout << "with type-safe entity definitions and automatic schema management." << std::endl;
 
     try {
+        // Create database context and entity manager
+        auto context = std::make_shared<database_context>();
+        auto entity_mgr = context->get_entity_manager();
+
         demonstrate_entity_definition();
-        demonstrate_schema_management();
+        demonstrate_schema_management(entity_mgr);
         demonstrate_type_safety();
-        demonstrate_entity_queries();
+        demonstrate_entity_queries(entity_mgr);
         demonstrate_entity_lifecycle();
 
         std::cout << "\n=== ORM Framework Features Summary ===" << std::endl;
@@ -286,8 +291,8 @@ int main() {
         std::cout << "✓ Query builder integration" << std::endl;
 
         std::cout << "\nFor complete functionality, connect to a database and use:" << std::endl;
-        std::cout << "  entity_manager::instance().create_tables(db);" << std::endl;
-        std::cout << "  auto results = entity_manager::instance().query<EntityType>(db)...execute();" << std::endl;
+        std::cout << "  entity_mgr->create_tables(db);" << std::endl;
+        std::cout << "  auto results = entity_mgr->query<EntityType>(db)...execute();" << std::endl;
 
     } catch (const std::exception& e) {
         std::cout << "Error: " << e.what() << std::endl;

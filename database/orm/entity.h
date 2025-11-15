@@ -284,12 +284,6 @@ namespace database::orm
 		 */
 		entity_manager() = default;
 
-		/**
-		 * @deprecated Use database_context::get_entity_manager() instead
-		 * This method will be removed in the next major version.
-		 */
-		[[deprecated("Use database_context::get_entity_manager() instead. See migration guide in class documentation.")]]
-		static entity_manager& instance();
 
 		template<typename EntityType>
 		std::enable_if_t<is_entity_v<EntityType>> register_entity();

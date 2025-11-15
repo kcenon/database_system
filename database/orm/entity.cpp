@@ -180,12 +180,6 @@ namespace database::orm
 	}
 
 	// entity_manager implementation
-	entity_manager& entity_manager::instance()
-	{
-		static entity_manager instance;
-		return instance;
-	}
-
 	bool entity_manager::create_tables(std::shared_ptr<database_base> db)
 	{
 		if (!db) {

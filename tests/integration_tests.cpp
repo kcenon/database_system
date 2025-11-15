@@ -97,7 +97,7 @@ private:
 
     void setup_security_framework() {
         auto& rbac = rbac_manager::instance();
-        auto& logger = audit_logger::instance();
+        auto& logger = context_->get_audit_logger();
 
         // Create test roles
         rbac_role admin_role("admin");
@@ -129,7 +129,7 @@ private:
     }
 
     void setup_orm_framework() {
-        entity_manager& mgr = entity_manager::instance();
+        entity_manager& mgr = context_->get_entity_manager();
         mgr.register_entity<IntegrationTestUser>();
     }
 
@@ -157,7 +157,7 @@ protected:
 
 TEST_F(ORMSecurityIntegrationTest, SecureEntityOperations) {
     auto& rbac = rbac_manager::instance();
-    auto& logger = audit_logger::instance();
+    auto& logger = context_->get_audit_logger();
 
     // Test entity creation with permission check
     std::string user_id = "integration.user";
@@ -257,7 +257,7 @@ class SecurityMonitoringIntegrationTest : public IntegrationTestBase {
 
 TEST_F(SecurityMonitoringIntegrationTest, MonitoredSecurityEvents) {
     auto& rbac = rbac_manager::instance();
-    auto& logger = audit_logger::instance();
+    auto& logger = context_->get_audit_logger();
     auto& monitor = performance_monitor::instance();
 
     // Create users with different permission levels
@@ -331,10 +331,10 @@ class FullSystemIntegrationTest : public IntegrationTestBase {
 
 TEST_F(FullSystemIntegrationTest, CompleteWorkflow) {
     auto& rbac = rbac_manager::instance();
-    auto& logger = audit_logger::instance();
+    auto& logger = context_->get_audit_logger();
     auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
-    auto& entity_mgr = entity_manager::instance();
+    auto& entity_mgr = context_->get_entity_manager();
 
     // Create a complete user management workflow
     std::string admin_user = "system.admin";
@@ -418,7 +418,7 @@ class ErrorHandlingIntegrationTest : public IntegrationTestBase {
 
 TEST_F(ErrorHandlingIntegrationTest, FailureRecoveryWorkflow) {
     auto& rbac = rbac_manager::instance();
-    auto& logger = audit_logger::instance();
+    auto& logger = context_->get_audit_logger();
     auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
 
@@ -482,7 +482,7 @@ class ConcurrentOperationsIntegrationTest : public IntegrationTestBase {
 
 TEST_F(ConcurrentOperationsIntegrationTest, ConcurrentSecureOperations) {
     auto& rbac = rbac_manager::instance();
-    auto& logger = audit_logger::instance();
+    auto& logger = context_->get_audit_logger();
     auto& monitor = performance_monitor::instance();
     auto& executor = async_executor::instance();
 

@@ -65,6 +65,15 @@ if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
     set(HAVE_SYSTEM_LOGGER_BACKEND ON)
 endif()
 
+# Conditionally add system_monitoring_backend if monitoring_system is available
+if(USE_MONITORING_SYSTEM AND monitoring_system_FOUND)
+    list(APPEND INTEGRATED_DB_SOURCES
+        adapters/backends/system_monitoring_backend.cpp
+    )
+    # Define compile flag so monitoring_adapter can use it
+    set(HAVE_SYSTEM_MONITORING_BACKEND ON)
+endif()
+
 ##################################################
 # Create Library Target
 ##################################################
@@ -167,9 +176,13 @@ if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
 endif()
 
 # Monitoring system integration
-# NOTE: No longer need USE_MONITORING_SYSTEM compile definition with backend pattern
-# Backend selection happens at runtime
-if(USE_MONITORING_SYSTEM)
+# Add compile definition when system_monitoring_backend is built
+if(USE_MONITORING_SYSTEM AND monitoring_system_FOUND)
+    if(INTEGRATED_DB_SOURCES)
+        target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC HAVE_SYSTEM_MONITORING_BACKEND)
+    else()
+        target_compile_definitions(${INTEGRATED_DB_TARGET} INTERFACE HAVE_SYSTEM_MONITORING_BACKEND)
+    endif()
     message(STATUS "Integrated DB: monitoring_system backend available (runtime selection)")
 endif()
 

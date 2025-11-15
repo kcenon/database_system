@@ -95,7 +95,7 @@ namespace database::testing
 			}
 
 			// Shutdown all connection pools
-			connection_pool_manager::instance().shutdown_all();
+			context_->get_pool_manager()->shutdown_all();
 
 			// Give time for cleanup
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -143,7 +143,7 @@ namespace database::testing
 		 */
 		std::shared_ptr<connection_wrapper> GetConnection()
 		{
-			auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+			auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 			if (!pool) {
 				return nullptr;
 			}
@@ -286,6 +286,9 @@ namespace database::testing
 			                    std::chrono::steady_clock::now().time_since_epoch().count()) +
 			                 ".db");
 
+			// Initialize database context with dependency injection
+			context_ = std::make_shared<database_context>();
+
 			// Create connection pool (NOT database_manager to avoid conflicts)
 			connection_pool_config config;
 			config.min_connections = 2;
@@ -296,7 +299,7 @@ namespace database::testing
 			config.enable_health_checks = true;
 			config.connection_string = test_db_path_.string();
 
-			pool_created_ = connection_pool_manager::instance().create_pool(
+			pool_created_ = context_->get_pool_manager()->create_pool(
 				database_types::sqlite, config);
 
 			if (!pool_created_) {
@@ -304,7 +307,7 @@ namespace database::testing
 				GTEST_SKIP() << "Failed to create SQLite connection pool";
 			} else {
 				// Create test tables using a connection from the pool
-				auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+				auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
 				if (pool) {
 					auto conn_result = pool->acquire_connection();
 					if (conn_result.is_ok() && conn_result.value()->get()) {
@@ -335,10 +338,10 @@ namespace database::testing
 		void TearDown() override
 		{
 			// Shutdown connection pool
-			connection_pool_manager::instance().shutdown_all();
+			context_->get_pool_manager()->shutdown_all();
 
 			// Remove the pool to allow fresh creation in next test
-			connection_pool_manager::instance().remove_pool(database_types::sqlite);
+			context_->get_pool_manager()->remove_pool(database_types::sqlite);
 
 			// Give time for cleanup
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -356,6 +359,7 @@ namespace database::testing
 		}
 
 	protected:
+		std::shared_ptr<database_context> context_;
 		std::filesystem::path test_db_path_;
 		bool pool_created_{false};
 	};

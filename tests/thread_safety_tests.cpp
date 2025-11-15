@@ -228,7 +228,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolStatsAccess) {
 TEST_F(DatabaseThreadSafetyTest, ConnectionPoolManagerConcurrentCreation) {
     GTEST_SKIP() << "Skipped: connection_pool_manager uses real database backends (PostgreSQL/MySQL) which are not available in CI";
 
-    auto& manager = connection_pool_manager::instance();
+    auto& manager = context_->get_pool_manager();
 
     const int num_threads = 10;
     std::atomic<int> successful_creates{0};
@@ -273,7 +273,7 @@ TEST_F(DatabaseThreadSafetyTest, ConnectionPoolManagerConcurrentCreation) {
 TEST_F(DatabaseThreadSafetyTest, PoolManagerGetRemoveRace) {
     GTEST_SKIP() << "Skipped: connection_pool_manager uses real database backends which are not available in CI";
 
-    auto& manager = connection_pool_manager::instance();
+    auto& manager = context_->get_pool_manager();
 
     connection_pool_config config;
     config.min_connections = 2;

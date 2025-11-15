@@ -155,10 +155,10 @@ TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
 	config.acquire_timeout = std::chrono::milliseconds(500);
 	config.connection_string = test_db_path_.string();  // Use absolute path without URI prefix
 
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
-	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager().remove_pool(database_types::sqlite);
+	context_->get_pool_manager().create_pool(database_types::sqlite, config);
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	// Acquire all connections
@@ -280,10 +280,10 @@ TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
 	config.acquire_timeout = std::chrono::milliseconds(1000);
 	config.connection_string = test_db_path_.string();
 
-	connection_pool_manager::instance().remove_pool(database_types::sqlite);
-	connection_pool_manager::instance().create_pool(database_types::sqlite, config);
+	context_->get_pool_manager().remove_pool(database_types::sqlite);
+	context_->get_pool_manager().create_pool(database_types::sqlite, config);
 
-	auto pool = connection_pool_manager::instance().get_pool(database_types::sqlite);
+	auto pool = context_->get_pool_manager().get_pool(database_types::sqlite);
 	ASSERT_NE(pool, nullptr);
 
 	auto conn_result = pool->acquire_connection();

@@ -138,13 +138,6 @@ namespace database::security
 		 */
 		credential_manager() = default;
 
-		/**
-		 * @deprecated Use database_context::get_credential_manager() instead
-		 * This method will be removed in the next major version.
-		 */
-		[[deprecated("Use database_context::get_credential_manager() instead. See migration guide in class documentation.")]]
-		static credential_manager& instance();
-
 		// Credential management
 		bool store_credentials(const std::string& connection_id, const security_credentials& credentials);
 		std::optional<security_credentials> get_credentials(const std::string& connection_id) const;
@@ -416,13 +409,6 @@ namespace database::security
 		 */
 		security_monitor() = default;
 
-		/**
-		 * @deprecated Use database_context::get_security_monitor() instead
-		 * This method will be removed in the next major version.
-		 */
-		[[deprecated("Use database_context::get_security_monitor() instead. See migration guide in class documentation.")]]
-		static security_monitor& instance();
-
 		// Threat detection
 		void analyze_query_patterns(const std::string& user_id, const std::string& query);
 		void detect_brute_force_attempts(const std::string& client_ip);
@@ -476,13 +462,6 @@ namespace database::security
 		 * @brief Default constructor - used by database_context
 		 */
 		encryption_manager() = default;
-
-		/**
-		 * @deprecated Use database_context::get_encryption_manager() instead
-		 * This method will be removed in the next major version.
-		 */
-		[[deprecated("Use database_context::get_encryption_manager() instead. See migration guide in class documentation.")]]
-		static encryption_manager& instance();
 
 		// Data encryption
 		std::string encrypt_field_data(const std::string& data, const std::string& field_name) const;

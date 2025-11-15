@@ -322,13 +322,6 @@ namespace database::async
 		 */
 		transaction_coordinator() = default;
 
-		/**
-		 * @deprecated Use database_context::get_transaction_coordinator() instead
-		 * This method will be removed in the next major version.
-		 */
-		[[deprecated("Use database_context::get_transaction_coordinator() instead. See migration guide in class documentation.")]]
-		static transaction_coordinator& instance();
-
 		// Transaction management
 		std::string begin_distributed_transaction(const std::vector<std::shared_ptr<database_base>>& participants);
 		async_result<bool> commit_distributed_transaction(const std::string& transaction_id);

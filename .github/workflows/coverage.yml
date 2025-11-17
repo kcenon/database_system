@@ -29,6 +29,7 @@ jobs:
           -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
           -DCMAKE_C_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \

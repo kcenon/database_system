@@ -147,14 +147,17 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (REQUIRED for distributed features)
+# network_system integration (strongly recommended for distributed features)
 message(STATUS "Searching for network_system...")
 find_system_dependency(network_system)
 
 if(network_system_FOUND)
     message(STATUS "network_system integration enabled")
 else()
-    message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. Please build network_system first.")
+    message(WARNING "network_system not found - remote database features will be disabled. "
+                    "network_system is STRONGLY RECOMMENDED for database_system v2.0+. "
+                    "Install network_system or set USE_NETWORK_SYSTEM=OFF to suppress this warning.")
+    set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
 endif()
 
 ##################################################

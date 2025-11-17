@@ -34,7 +34,7 @@
 #include <stdexcept>
 
 // Result<T> header for database_system
-// Provides unified error handling with conditional thread_system integration
+// Provides unified error handling with conditional common_system integration
 
 #ifdef BUILD_WITH_COMMON_SYSTEM
 // Include common_system's error handling when available
@@ -184,7 +184,7 @@ namespace database {
 } // namespace database
 
 #else
-// Fallback implementation without thread_system (for CI and standalone builds)
+// Fallback implementation without common_system (for CI and standalone builds)
 
 namespace database {
 	// Simple error code enum for standalone builds
@@ -194,7 +194,9 @@ namespace database {
 		invalid_argument,
 		not_implemented,
 		invalid_state,
-		// Add more as needed
+		connection_failed,
+		query_failed,
+		timeout
 	};
 
 	// Simple error_info struct for standalone builds (compatible with common_system)

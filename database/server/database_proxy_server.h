@@ -15,11 +15,9 @@ All rights reserved.
 #include "../connection_pool.h"
 #include "../protocol/database_protocol.h"
 
-// network_system integration
-#ifdef BUILD_WITH_COMMON_SYSTEM
+// network_system integration (required)
 #include <network_system/core/messaging_server.h>
 #include <network_system/session/messaging_session.h>
-#endif
 
 namespace database::server {
 
@@ -85,11 +83,7 @@ private:
      * @param network_session network_system messaging session
      */
     void handle_client_connect(
-#ifdef BUILD_WITH_COMMON_SYSTEM
         std::shared_ptr<network_system::session::messaging_session> network_session
-#else
-        const std::string& session_id
-#endif
     );
 
     /**
@@ -104,11 +98,7 @@ private:
      * @param data Message data
      */
     void handle_message(
-#ifdef BUILD_WITH_COMMON_SYSTEM
         std::shared_ptr<network_system::session::messaging_session> network_session,
-#else
-        const std::string& session_id,
-#endif
         const std::vector<uint8_t>& data
     );
 
@@ -126,10 +116,8 @@ private:
     uint16_t port_;
     std::shared_ptr<connection_pool_manager> db_pool_;
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     std::shared_ptr<network_system::core::messaging_server> network_server_;
     std::unordered_map<std::string, std::shared_ptr<network_system::session::messaging_session>> network_sessions_;
-#endif
 
     mutable std::mutex sessions_mutex_;
     std::unordered_map<std::string, std::shared_ptr<database_session>> sessions_;

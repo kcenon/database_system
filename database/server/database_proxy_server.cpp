@@ -16,9 +16,7 @@ database_proxy_server::database_proxy_server(uint16_t port, std::shared_ptr<conn
     , running_(false)
     , next_session_id_(1)
 {
-#ifdef BUILD_WITH_COMMON_SYSTEM
     network_server_ = std::make_shared<network_system::core::messaging_server>("database_proxy_server");
-#endif
 }
 
 database_proxy_server::~database_proxy_server() {
@@ -30,7 +28,6 @@ bool database_proxy_server::start() {
         return false;  // Already running
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Initialize network_system::messaging_server
     network_server_->set_connection_callback(
         [this](auto session) {
@@ -68,7 +65,6 @@ bool database_proxy_server::start() {
 #else
     std::cout << "Database proxy server started on port " << port_ << " (stub implementation)\n";
     return true;
-#endif
 }
 
 void database_proxy_server::stop() {
@@ -76,7 +72,6 @@ void database_proxy_server::stop() {
         return;  // Not running
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Stop all network sessions
     {
         std::lock_guard<std::mutex> lock(sessions_mutex_);
@@ -93,7 +88,6 @@ void database_proxy_server::stop() {
             std::cerr << "Failed to stop network server: " << result.error().message << "\n";
         }
     }
-#endif
 
     // Close all database sessions
     {
@@ -113,13 +107,10 @@ size_t database_proxy_server::get_active_session_count() const {
 }
 
 void database_proxy_server::handle_client_connect(
-#ifdef BUILD_WITH_COMMON_SYSTEM
     std::shared_ptr<network_system::session::messaging_session> network_session
 #else
     const std::string& session_id
-#endif
 ) {
-#ifdef BUILD_WITH_COMMON_SYSTEM
     std::string session_id = "session_" + std::to_string(next_session_id_.fetch_add(1));
 
     {
@@ -134,15 +125,12 @@ void database_proxy_server::handle_client_connect(
 #else
     // Stub implementation
     std::cout << "Client connected: " << session_id << " (stub)\n";
-#endif
 }
 
 void database_proxy_server::handle_client_disconnect(const std::string& session_id) {
     std::lock_guard<std::mutex> lock(sessions_mutex_);
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     network_sessions_.erase(session_id);
-#endif
 
     auto it = sessions_.find(session_id);
     if (it != sessions_.end()) {
@@ -154,14 +142,11 @@ void database_proxy_server::handle_client_disconnect(const std::string& session_
 }
 
 void database_proxy_server::handle_message(
-#ifdef BUILD_WITH_COMMON_SYSTEM
     std::shared_ptr<network_system::session::messaging_session> network_session,
 #else
     const std::string& session_id,
-#endif
     const std::vector<uint8_t>& data
 ) {
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Deserialize message header
     auto header_result = protocol::protocol_serializer::deserialize_header(data);
     if (!header_result.has_value()) {
@@ -299,7 +284,6 @@ void database_proxy_server::handle_message(
 #else
     // Stub implementation
     std::cout << "Received " << data.size() << " bytes from " << session_id << " (stub)\n";
-#endif
 }
 
 std::vector<uint8_t> database_proxy_server::process_query_request(

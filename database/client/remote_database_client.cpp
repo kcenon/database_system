@@ -28,7 +28,6 @@ database::result<void> remote_database_client::initialize(const core::connection
 
     config_ = config;
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     try {
         // Create resilient_client with auto-reconnect
         network_client_ = std::make_shared<network_system::utils::resilient_client>(
@@ -79,7 +78,6 @@ database::result<void> remote_database_client::initialize(const core::connection
     std::cout << "Remote database client connecting to " << config.host << ":" << config.port
               << " (stub implementation)\n";
     return database::result<void>::ok();
-#endif
 }
 
 database::result<void> remote_database_client::shutdown() {
@@ -87,7 +85,6 @@ database::result<void> remote_database_client::shutdown() {
         return database::result<void>::ok();  // Already shut down
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Cancel all pending requests
     {
         std::lock_guard<std::mutex> lock(requests_mutex_);
@@ -111,7 +108,6 @@ database::result<void> remote_database_client::shutdown() {
     }
 
     std::cout << "Remote database client disconnected\n";
-#endif
 
     return database::result<void>::ok();
 }
@@ -125,7 +121,6 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
         return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Create query request
     protocol::query_request request;
     request.operation = protocol::query_operation::INSERT;
@@ -159,7 +154,6 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: INSERT not supported";
     return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
-#endif
 }
 
 database::result<uint64_t> remote_database_client::update_query(const std::string& query_string) {
@@ -167,7 +161,6 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
         return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::query_request request;
     request.operation = protocol::query_operation::UPDATE;
     request.query_string = query_string;
@@ -199,7 +192,6 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: UPDATE not supported";
     return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
-#endif
 }
 
 database::result<uint64_t> remote_database_client::delete_query(const std::string& query_string) {
@@ -207,7 +199,6 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
         return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::query_request request;
     request.operation = protocol::query_operation::DELETE;
     request.query_string = query_string;
@@ -239,7 +230,6 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: DELETE not supported";
     return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
-#endif
 }
 
 database::result<core::database_result> remote_database_client::select_query(const std::string& query_string) {
@@ -247,7 +237,6 @@ database::result<core::database_result> remote_database_client::select_query(con
         return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::query_request request;
     request.operation = protocol::query_operation::SELECT;
     request.query_string = query_string;
@@ -289,7 +278,6 @@ database::result<core::database_result> remote_database_client::select_query(con
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: SELECT not supported";
     return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
-#endif
 }
 
 database::result<void> remote_database_client::execute_query(const std::string& query_string) {
@@ -297,7 +285,6 @@ database::result<void> remote_database_client::execute_query(const std::string& 
         return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::query_request request;
     request.operation = protocol::query_operation::OTHER;
     request.query_string = query_string;
@@ -329,7 +316,6 @@ database::result<void> remote_database_client::execute_query(const std::string& 
     std::lock_guard<std::mutex> lock(error_mutex_);
     last_error_ = "Stub implementation: execute_query not supported";
     return database::result<void>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
-#endif
 }
 
 database::result<void> remote_database_client::begin_transaction() {
@@ -341,7 +327,6 @@ database::result<void> remote_database_client::begin_transaction() {
         return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Transaction already in progress"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::transaction_request request;
     request.operation = protocol::message_type::BEGIN_TRANSACTION;
 
@@ -373,7 +358,6 @@ database::result<void> remote_database_client::begin_transaction() {
 #else
     std::cout << "Begin transaction (stub)\n";
     return database::result<void>::ok();
-#endif
 }
 
 database::result<void> remote_database_client::commit_transaction() {
@@ -385,7 +369,6 @@ database::result<void> remote_database_client::commit_transaction() {
         return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "No active transaction"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::transaction_request request;
     request.operation = protocol::message_type::COMMIT_TRANSACTION;
 
@@ -401,7 +384,6 @@ database::result<void> remote_database_client::commit_transaction() {
 #else
     std::cout << "Commit transaction (stub)\n";
     return database::result<void>::ok();
-#endif
 }
 
 database::result<void> remote_database_client::rollback_transaction() {
@@ -413,7 +395,6 @@ database::result<void> remote_database_client::rollback_transaction() {
         return database::result<void>::err(database::error(static_cast<int>(database::error_code::unknown_error), "No active transaction"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     protocol::transaction_request request;
     request.operation = protocol::message_type::ROLLBACK_TRANSACTION;
 
@@ -429,7 +410,6 @@ database::result<void> remote_database_client::rollback_transaction() {
 #else
     std::cout << "Rollback transaction (stub)\n";
     return database::result<void>::ok();
-#endif
 }
 
 bool remote_database_client::in_transaction() const {
@@ -450,11 +430,9 @@ std::map<std::string, std::string> remote_database_client::connection_info() con
     info["initialized"] = is_initialized() ? "true" : "false";
     info["in_transaction"] = in_transaction() ? "true" : "false";
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     if (network_client_) {
         info["connected"] = network_client_->is_connected() ? "true" : "false";
     }
-#endif
 
     return info;
 }
@@ -484,7 +462,6 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
         return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::unknown_error), "Client not initialized"));
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Generate request ID
     uint64_t req_id = next_request_id();
 
@@ -546,11 +523,9 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     return database::result<std::vector<uint8_t>>::ok(std::move(response_data));
 #else
     return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::not_implemented), "Stub implementation"));
-#endif
 }
 
 void remote_database_client::handle_response(const std::vector<uint8_t>& message_data) {
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Deserialize message header
     auto header_result = protocol::protocol_serializer::deserialize_header(message_data);
     if (!header_result.has_value()) {
@@ -578,7 +553,6 @@ void remote_database_client::handle_response(const std::vector<uint8_t>& message
     }
 #else
     std::cout << "Received response: " << message_data.size() << " bytes (stub)\n";
-#endif
 }
 
 uint64_t remote_database_client::next_request_id() {

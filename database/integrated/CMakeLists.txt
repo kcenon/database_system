@@ -89,7 +89,7 @@ if(INTEGRATED_DB_SOURCES)
     )
 
     # Add common_system include path if available
-    if(BUILD_WITH_COMMON_SYSTEM)
+    if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
         find_system_dependency_include(common_system)
         if(common_system_INCLUDE_DIR)
             target_include_directories(${INTEGRATED_DB_TARGET}
@@ -145,8 +145,8 @@ endif()
 # Compiler Definitions
 ##################################################
 
-# Common system integration (almost always enabled)
-if(BUILD_WITH_COMMON_SYSTEM)
+# Common system integration (only when actually found)
+if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
     if(TARGET ${INTEGRATED_DB_TARGET})
         if(INTEGRATED_DB_SOURCES)
             target_compile_definitions(${INTEGRATED_DB_TARGET} PUBLIC USE_COMMON_SYSTEM)
@@ -155,6 +155,8 @@ if(BUILD_WITH_COMMON_SYSTEM)
         endif()
     endif()
     message(STATUS "Integrated DB: common_system integration enabled")
+else()
+    message(STATUS "Integrated DB: common_system not available - using fallback implementation")
 endif()
 
 # Thread system integration
@@ -203,8 +205,8 @@ endif()
 
 # Link external systems (if found)
 
-# common_system (optional - only link if target exists)
-if(BUILD_WITH_COMMON_SYSTEM AND TARGET common_system)
+# common_system (optional - only link if found and target exists)
+if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND AND TARGET common_system)
     if(INTEGRATED_DB_SOURCES)
         target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC common_system)
     else()
@@ -212,7 +214,7 @@ if(BUILD_WITH_COMMON_SYSTEM AND TARGET common_system)
     endif()
     message(STATUS "Integrated DB: Linked with common_system")
 else()
-    message(STATUS "Integrated DB: common_system not available - compilation definitions only")
+    message(STATUS "Integrated DB: common_system not available - using fallback implementation")
 endif()
 
 # thread_system

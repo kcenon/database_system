@@ -181,7 +181,6 @@ namespace database
 		return result;
 	}
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
 	common::VoidResult database_manager::connect_result(const std::string& connect_string)
 	{
 		if (connect(connect_string))
@@ -211,7 +210,6 @@ namespace database
 		return common::VoidResult(
 			common::error_info{-1, "Failed to prepare database query", "database_system"});
 	}
-#endif
 
 	// Connection pool methods moved to header as inline functions for performance
 

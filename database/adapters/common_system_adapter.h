@@ -14,12 +14,10 @@ All rights reserved.
 #include <variant>
 #include <future>
 
-// Check if common_system is available
-#ifdef BUILD_WITH_COMMON_SYSTEM
+// common_system integration (required)
 #include <kcenon/common/patterns/result.h>
 #include <kcenon/common/interfaces/database_interface.h>
 #include <kcenon/common/adapters/typed_adapter.h>
-#endif
 
 #include "../database_base.h"
 #include "../database_manager.h"
@@ -27,8 +25,6 @@ All rights reserved.
 
 namespace database {
 namespace adapters {
-
-#ifdef BUILD_WITH_COMMON_SYSTEM
 
 /**
  * @brief Result type conversions between database and common_system
@@ -262,8 +258,6 @@ public:
         return nullptr; // Placeholder
     }
 };
-
-#endif // BUILD_WITH_COMMON_SYSTEM
 
 } // namespace adapters
 } // namespace database

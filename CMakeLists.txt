@@ -156,17 +156,17 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (strongly recommended for distributed features)
+# network_system integration (REQUIRED for database_system v2.0+)
 message(STATUS "Searching for network_system...")
 find_system_dependency(network_system)
 
 if(network_system_FOUND)
     message(STATUS "network_system integration enabled")
+    set(USE_NETWORK_SYSTEM ON CACHE BOOL "network_system integration" FORCE)
 else()
-    message(WARNING "network_system not found - remote database features will be disabled. "
-                    "network_system is STRONGLY RECOMMENDED for database_system v2.0+. "
-                    "Install network_system or set USE_NETWORK_SYSTEM=OFF to suppress this warning.")
-    set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+    message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. "
+                        "Please build network_system first (Tier 2 dependency). "
+                        "See BUILD_ORDER.md for correct build sequence.")
 endif()
 
 ##################################################
@@ -252,6 +252,7 @@ message(STATUS "    - thread_system: ${USE_THREAD_SYSTEM}")
 message(STATUS "    - logger_system: ${USE_LOGGER_SYSTEM}")
 message(STATUS "    - monitoring_system: ${USE_MONITORING_SYSTEM}")
 message(STATUS "    - container_system: ${USE_CONTAINER_SYSTEM}")
+message(STATUS "    - network_system: ${USE_NETWORK_SYSTEM} (REQUIRED)")
 message(STATUS "    - Integrated database system: ${BUILD_INTEGRATED_DATABASE}")
 message(STATUS "  Build:")
 message(STATUS "    - Build samples: ${BUILD_DATABASE_SAMPLES}")

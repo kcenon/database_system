@@ -9,8 +9,8 @@ cmake_minimum_required(VERSION 3.16)
 
 # Project definition
 project(database_system
-    VERSION 1.0.0
-    DESCRIPTION "Advanced C++17 Database System with Multi-Backend Support (C++20 for async features)"
+    VERSION 2.0.0
+    DESCRIPTION "Advanced Distributed C++17/20 Database System with Full Network Integration"
     LANGUAGES CXX
 )
 
@@ -51,15 +51,17 @@ option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
 option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
-option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" ON)
 option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
 option(USE_LOGGER_SYSTEM "Enable logger_system integration for advanced logging" ON)
 option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)
 option(USE_CONTAINER_SYSTEM "Enable container_system integration for high-performance serialization" ON)
-option(USE_NETWORK_SYSTEM "Enable network_system integration for remote database access" ON)
 option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter pattern" ON)
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
+
+# Required integrations (no longer optional)
+set(BUILD_WITH_COMMON_SYSTEM ON)  # Always required
+set(USE_NETWORK_SYSTEM ON)  # Now required for distributed features
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)
@@ -145,17 +147,14 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (optional)
-if(USE_NETWORK_SYSTEM)
-    message(STATUS "Searching for network_system...")
-    find_system_dependency(network_system)
+# network_system integration (REQUIRED for distributed features)
+message(STATUS "Searching for network_system...")
+find_system_dependency(network_system)
 
-    if(network_system_FOUND)
-        message(STATUS "network_system integration enabled")
-    else()
-        message(WARNING "network_system not found - integration disabled. Install network_system or set USE_NETWORK_SYSTEM=OFF to suppress this warning.")
-        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
-    endif()
+if(network_system_FOUND)
+    message(STATUS "network_system integration enabled")
+else()
+    message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. Please build network_system first.")
 endif()
 
 ##################################################

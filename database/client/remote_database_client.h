@@ -17,11 +17,9 @@ All rights reserved.
 #include "../core/database_backend.h"
 #include "../protocol/database_protocol.h"
 
-// network_system integration
-#ifdef BUILD_WITH_COMMON_SYSTEM
+// network_system integration (required)
 #include <network_system/utils/resilient_client.h>
 #include <network_system/core/messaging_client.h>
-#endif
 
 namespace database::client {
 
@@ -215,10 +213,8 @@ private:
      */
     uint64_t next_request_id();
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
     // Network layer (network_system integration)
     std::shared_ptr<network_system::utils::resilient_client> network_client_;
-#endif
 
     // Request/response tracking
     struct pending_response {

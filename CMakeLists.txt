@@ -59,10 +59,6 @@ option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter 
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
 
-# Required integrations (no longer optional)
-set(BUILD_WITH_COMMON_SYSTEM ON)  # Always required
-set(USE_NETWORK_SYSTEM ON)  # Now required for distributed features
-
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)
     if(BUILD_INTEGRATION_TESTS)

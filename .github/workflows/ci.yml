@@ -77,6 +77,7 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
@@ -88,6 +89,7 @@ jobs:
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
           -DBUILD_WITH_COMMON_SYSTEM=OFF `
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
@@ -160,6 +162,7 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \

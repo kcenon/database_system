@@ -33,10 +33,46 @@ jobs:
             triplet: x64-windows
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        path: database_system
+
+    - name: Checkout common_system (Tier 0)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+
+    - name: Checkout thread_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/thread_system
+        path: thread_system
+
+    - name: Checkout container_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/container_system
+        path: container_system
+
+    - name: Checkout logger_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/logger_system
+        path: logger_system
+
+    - name: Checkout monitoring_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/monitoring_system
+        path: monitoring_system
+
+    - name: Checkout network_system (Tier 2)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/network_system
+        path: network_system
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -71,38 +107,122 @@ jobs:
       if: matrix.compiler == 'msvc'
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Configure CMake (Unix)
+    - name: Build Tier 0 - common_system (Unix)
       if: runner.os != 'Windows'
       run: |
+        cd common_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 0 - common_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd common_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Build Tier 1 - thread_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd thread_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 1 - thread_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd thread_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Build Tier 1 - container_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd container_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 1 - container_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd container_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Build Tier 1 - logger_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd logger_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 1 - logger_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd logger_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Build Tier 1 - monitoring_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd monitoring_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 1 - monitoring_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd monitoring_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Build Tier 2 - network_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd network_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config $BUILD_TYPE
+
+    - name: Build Tier 2 - network_system (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd network_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+        cmake --build build --config Debug
+
+    - name: Configure CMake - database_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd database_system
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF
 
-    - name: Configure CMake (Windows)
+    - name: Configure CMake - database_system (Windows)
       if: runner.os == 'Windows'
       run: |
+        cd database_system
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
-          -DBUILD_WITH_COMMON_SYSTEM=OFF `
-          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
           -DUSE_POSTGRESQL=OFF
 
-    - name: Build
-      run: cmake --build build --config Debug --parallel
+    - name: Build database_system
+      run: |
+        cd database_system
+        cmake --build build --config Debug --parallel
 
     - name: Test (Unix)
       if: runner.os != 'Windows'
       timeout-minutes: 5
       run: |
-        cd build
+        cd database_system/build
         # Run tests with timeout to prevent hanging
         ctest -C $BUILD_TYPE --output-on-failure --timeout 30 || true
 
@@ -111,7 +231,7 @@ jobs:
       timeout-minutes: 5
       shell: pwsh
       run: |
-        cd build
+        cd database_system/build
         # Run tests with timeout to prevent hanging
         ctest -C Debug --output-on-failure --timeout 30
         exit 0
@@ -122,8 +242,8 @@ jobs:
       with:
         name: build-${{ matrix.os }}-${{ matrix.compiler }}-logs
         path: |
-          build/CMakeFiles/*.log
-          build/Testing/Temporary/
+          database_system/build/CMakeFiles/*.log
+          database_system/build/Testing/Temporary/
 
   # Phase 0: Allow failures, just collect data
   sanitizers:

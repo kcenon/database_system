@@ -25,10 +25,46 @@ jobs:
             cxx: clang++
 
     steps:
-    - name: Checkout repository
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        path: database_system
+
+    - name: Checkout common_system (Tier 0)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+
+    - name: Checkout thread_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/thread_system
+        path: thread_system
+
+    - name: Checkout container_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/container_system
+        path: container_system
+
+    - name: Checkout logger_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/logger_system
+        path: logger_system
+
+    - name: Checkout monitoring_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/monitoring_system
+        path: monitoring_system
+
+    - name: Checkout network_system (Tier 2)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/network_system
+        path: network_system
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -57,30 +93,66 @@ jobs:
         echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
         echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
 
+    - name: Build Tier 0 - common_system
+      run: |
+        cd common_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - thread_system
+      run: |
+        cd thread_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - container_system
+      run: |
+        cd container_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - logger_system
+      run: |
+        cd logger_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - monitoring_system
+      run: |
+        cd monitoring_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 2 - network_system
+      run: |
+        cd network_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
     - name: Configure CMake
       run: |
+        cd database_system
         cmake -B build \
           -G Ninja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DUSE_UNIT_TEST=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=ON \
           -DUSE_SQLITE=ON \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
 
     - name: Build integration tests
       run: |
+        cd database_system
         cmake --build build --target database_integration_tests -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
 
     - name: Run integration tests
-      working-directory: build
+      working-directory: database_system/build
       run: |
         ./bin/database_integration_tests --gtest_output=xml:integration_test_results.xml
 
     - name: Generate coverage report
       if: matrix.build_type == 'Debug'
-      working-directory: build
+      working-directory: database_system/build
       run: |
         # Ubuntu 22.04 lcov 1.14 only supports --ignore-errors: source
         lcov --capture --directory . --output-file coverage.info --ignore-errors source --rc lcov_branch_coverage=0 2>/dev/null || \

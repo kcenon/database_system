@@ -267,22 +267,93 @@ jobs:
             env: "UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=0"
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        path: database_system
+
+    - name: Checkout common_system (Tier 0)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+
+    - name: Checkout thread_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/thread_system
+        path: thread_system
+
+    - name: Checkout container_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/container_system
+        path: container_system
+
+    - name: Checkout logger_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/logger_system
+        path: logger_system
+
+    - name: Checkout monitoring_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/monitoring_system
+        path: monitoring_system
+
+    - name: Checkout network_system (Tier 2)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/network_system
+        path: network_system
 
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev pkg-config
 
+    - name: Build Tier 0 - common_system
+      run: |
+        cd common_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - thread_system
+      run: |
+        cd thread_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - container_system
+      run: |
+        cd container_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - logger_system
+      run: |
+        cd logger_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - monitoring_system
+      run: |
+        cd monitoring_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 2 - network_system
+      run: |
+        cd network_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
     - name: Configure CMake with ${{ matrix.sanitizer.name }}
       run: |
+        cd database_system
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
@@ -295,12 +366,14 @@ jobs:
           -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.sanitizer.flags }}"
 
     - name: Build with ${{ matrix.sanitizer.name }}
-      run: cmake --build build --config Debug --parallel
+      run: |
+        cd database_system
+        cmake --build build --config Debug --parallel
 
     - name: Run tests with ${{ matrix.sanitizer.name }}
       timeout-minutes: 10
       run: |
-        cd build
+        cd database_system/build
         export ${{ matrix.sanitizer.env }}
         # Run with timeout to prevent hanging
         ctest -C Debug --output-on-failure --timeout 60 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
@@ -311,6 +384,6 @@ jobs:
       with:
         name: sanitizer-${{ matrix.sanitizer.name }}-logs
         path: |
-          build/Testing/
-          build/**/*.log
+          database_system/build/Testing/
+          database_system/build/**/*.log
         retention-days: 7

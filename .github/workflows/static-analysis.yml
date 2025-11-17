@@ -12,18 +12,91 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        path: database_system
+
+    - name: Checkout common_system (Tier 0)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+
+    - name: Checkout thread_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/thread_system
+        path: thread_system
+
+    - name: Checkout container_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/container_system
+        path: container_system
+
+    - name: Checkout logger_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/logger_system
+        path: logger_system
+
+    - name: Checkout monitoring_system (Tier 1)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/monitoring_system
+        path: monitoring_system
+
+    - name: Checkout network_system (Tier 2)
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/network_system
+        path: network_system
 
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
 
+    - name: Build Tier 0 - common_system
+      run: |
+        cd common_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - thread_system
+      run: |
+        cd thread_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - container_system
+      run: |
+        cd container_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - logger_system
+      run: |
+        cd logger_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 1 - monitoring_system
+      run: |
+        cd monitoring_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
+    - name: Build Tier 2 - network_system
+      run: |
+        cd network_system
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake --build build
+
     - name: Configure CMake
       run: |
+        cd database_system
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
@@ -31,8 +104,6 @@ jobs:
           -DCMAKE_C_COMPILER=clang \
           -DUSE_UNIT_TEST=OFF \
           -DBUILD_DATABASE_SAMPLES=OFF \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
-          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_POSTGRESQL=OFF \
           -DUSE_MYSQL=OFF \
           -DUSE_SQLITE=OFF
@@ -40,6 +111,7 @@ jobs:
     - name: Run clang-tidy
       continue-on-error: true  # Phase 0: Allow failures, collect baseline
       run: |
+        cd database_system
         # Find all C++ source and header files in database directory
         find database -name "*.h" -o -name "*.hpp" | while read file; do
           echo "Analyzing: $file"
@@ -49,6 +121,7 @@ jobs:
     - name: Count warnings by category
       if: always()
       run: |
+        cd database_system
         echo "## Clang-Tidy Warning Summary" > clang-tidy-summary.md
         echo "" >> clang-tidy-summary.md
         echo "Phase 0 Baseline - $(date +%Y-%m-%d)" >> clang-tidy-summary.md
@@ -77,15 +150,15 @@ jobs:
       with:
         name: clang-tidy-baseline
         path: |
-          clang-tidy-results.txt
-          clang-tidy-summary.md
+          database_system/clang-tidy-results.txt
+          database_system/clang-tidy-summary.md
         retention-days: 90  # Keep baseline for reference
 
     - name: Add summary to job
       if: always()
       run: |
-        if [ -f clang-tidy-summary.md ]; then
-          cat clang-tidy-summary.md >> $GITHUB_STEP_SUMMARY
+        if [ -f database_system/clang-tidy-summary.md ]; then
+          cat database_system/clang-tidy-summary.md >> $GITHUB_STEP_SUMMARY
         fi
 
   cppcheck:
@@ -93,10 +166,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        path: database_system
 
     - name: Install cppcheck
       run: |
@@ -106,6 +179,7 @@ jobs:
     - name: Run cppcheck
       continue-on-error: true  # Phase 0: Allow failures, collect baseline
       run: |
+        cd database_system
         cppcheck --enable=all \
           --std=c++20 \
           --suppress=missingIncludeSystem \
@@ -120,6 +194,7 @@ jobs:
     - name: Generate cppcheck report
       if: always()
       run: |
+        cd database_system
         echo "## Cppcheck Analysis Summary" > cppcheck-summary.md
         echo "" >> cppcheck-summary.md
         echo "Phase 0 Baseline - $(date +%Y-%m-%d)" >> cppcheck-summary.md
@@ -142,13 +217,13 @@ jobs:
       with:
         name: cppcheck-baseline
         path: |
-          cppcheck-results.xml
-          cppcheck-summary.md
+          database_system/cppcheck-results.xml
+          database_system/cppcheck-summary.md
         retention-days: 90
 
     - name: Add summary to job
       if: always()
       run: |
-        if [ -f cppcheck-summary.md ]; then
-          cat cppcheck-summary.md >> $GITHUB_STEP_SUMMARY
+        if [ -f database_system/cppcheck-summary.md ]; then
+          cat database_system/cppcheck-summary.md >> $GITHUB_STEP_SUMMARY
         fi

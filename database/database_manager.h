@@ -242,7 +242,6 @@ namespace database
 		 */
 		query_builder create_query_builder(database_types db_type);
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
 		/**
 		 * @brief Result-based wrapper for connect().
 		 */
@@ -257,7 +256,6 @@ namespace database
 		 * @brief Result-based wrapper for create_query().
 		 */
 		common::VoidResult create_query_result(const std::string& query_string);
-#endif
 
 	private:
 		bool connected_; ///< Indicates whether a database connection is active.

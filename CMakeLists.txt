@@ -95,6 +95,19 @@ include(FindSystemDependency)
 # Find required packages
 find_package(Threads REQUIRED)
 
+# common_system integration (strongly recommended for Result<T> pattern)
+message(STATUS "Searching for common_system...")
+find_system_dependency(common_system)
+
+if(common_system_FOUND)
+    message(STATUS "common_system integration enabled")
+else()
+    message(WARNING "common_system not found - using fallback Result<T> implementation. "
+                    "common_system is STRONGLY RECOMMENDED for database_system v2.0+. "
+                    "Install common_system or set BUILD_WITH_COMMON_SYSTEM=OFF to suppress this warning.")
+    set(BUILD_WITH_COMMON_SYSTEM OFF CACHE BOOL "common_system not found" FORCE)
+endif()
+
 # thread_system integration (optional)
 if(USE_THREAD_SYSTEM)
     message(STATUS "Searching for thread_system...")

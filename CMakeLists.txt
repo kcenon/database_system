@@ -156,7 +156,7 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (STRONGLY RECOMMENDED for distributed features)
+# network_system integration (REQUIRED for v2.0+)
 message(STATUS "Searching for network_system...")
 find_system_dependency(network_system)
 
@@ -164,13 +164,13 @@ if(network_system_FOUND)
     message(STATUS "network_system integration enabled")
     set(USE_NETWORK_SYSTEM ON CACHE BOOL "network_system integration" FORCE)
 else()
-    message(WARNING "network_system not found - distributed database features will be limited. "
-                    "network_system is STRONGLY RECOMMENDED for database_system v2.0+ distributed features. "
-                    "Distributed features (Cluster Manager, Gateway, Replication) are header-only and require "
-                    "network_system at runtime. "
-                    "Please build network_system first (Tier 2 dependency) for production use. "
-                    "See BUILD_ORDER.md for correct build sequence.")
-    set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+    message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. "
+                        "Distributed features (Cluster Manager, Gateway, Replication) depend on network_system. "
+                        "Please build network_system first (Tier 2 dependency). "
+                        "See BUILD_ORDER.md for correct build sequence:\n"
+                        "  1. Build Tier 0: common_system\n"
+                        "  2. Build Tier 1: thread_system, container_system, logger_system, monitoring_system\n"
+                        "  3. Build Tier 2: network_system -> database_system")
 endif()
 
 ##################################################

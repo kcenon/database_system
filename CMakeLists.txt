@@ -156,7 +156,9 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (STRONGLY RECOMMENDED for distributed features)
+# network_system integration (REQUIRED for v2.0+ in production)
+option(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM "Allow building without network_system (CI/testing only)" OFF)
+
 message(STATUS "Searching for network_system...")
 find_system_dependency(network_system)
 
@@ -164,13 +166,21 @@ if(network_system_FOUND)
     message(STATUS "network_system integration enabled")
     set(USE_NETWORK_SYSTEM ON CACHE BOOL "network_system integration" FORCE)
 else()
-    message(WARNING "network_system not found - distributed database features will be limited. "
-                    "network_system is STRONGLY RECOMMENDED for database_system v2.0+ distributed features. "
-                    "Distributed features (Cluster Manager, Gateway, Replication) are header-only and require "
-                    "network_system at runtime. "
-                    "Please build network_system first (Tier 2 dependency) for production use. "
-                    "See BUILD_ORDER.md for correct build sequence.")
-    set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+    if(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM)
+        message(WARNING "network_system not found - building without distributed features. "
+                        "This is ONLY for CI/testing. Production builds REQUIRE network_system. "
+                        "Distributed features (Cluster Manager, Gateway, Replication) will be unavailable.")
+        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+    else()
+        message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. "
+                            "Distributed features (Cluster Manager, Gateway, Replication) depend on network_system. "
+                            "Please build network_system first (Tier 2 dependency). "
+                            "See BUILD_ORDER.md for correct build sequence:\n"
+                            "  1. Build Tier 0: common_system\n"
+                            "  2. Build Tier 1: thread_system, container_system, logger_system, monitoring_system\n"
+                            "  3. Build Tier 2: network_system -> database_system\n"
+                            "\nFor CI/testing only: Use -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON to bypass this requirement.")
+    endif()
 endif()
 
 ##################################################

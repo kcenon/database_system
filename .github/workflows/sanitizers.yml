@@ -56,6 +56,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DBUILD_WITH_COMMON_SYSTEM=OFF \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF

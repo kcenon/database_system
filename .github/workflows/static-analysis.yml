@@ -73,7 +73,7 @@ jobs:
     - name: Build Tier 1 - container_system
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 1 - logger_system
@@ -91,7 +91,7 @@ jobs:
     - name: Build Tier 2 - network_system
       run: |
         cd network_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SAMPLES=OFF
         cmake --build build
 
     - name: Configure CMake

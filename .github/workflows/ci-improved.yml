@@ -257,7 +257,7 @@ jobs:
           -DBUILD_INTEGRATED_DATABASE=ON \
           -DUSE_POSTGRESQL=ON \
           -DUSE_UNIT_TEST=ON \
-          -DBUILD_DATABASE_SAMPLES=ON \
+          -DBUILD_DATABASE_SAMPLES=OFF \
           -DDATABASE_BUILD_INTEGRATION_TESTS=ON
 
     - name: Configure WITH all dependencies (Windows)
@@ -275,7 +275,7 @@ jobs:
           -DUSE_NETWORK_SYSTEM=ON `
           -DUSE_POSTGRESQL=OFF `
           -DUSE_UNIT_TEST=ON `
-          -DBUILD_DATABASE_SAMPLES=ON
+          -DBUILD_DATABASE_SAMPLES=OFF
 
     - name: Build
       run: cmake --build build --config Debug --parallel

@@ -139,14 +139,14 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config $BUILD_TYPE
 
     - name: Build Tier 1 - container_system (Windows)
       if: runner.os == 'Windows'
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config Debug
 
     - name: Build Tier 1 - logger_system (Unix)
@@ -328,7 +328,7 @@ jobs:
     - name: Build Tier 1 - container_system
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 1 - logger_system

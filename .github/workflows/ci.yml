@@ -80,6 +80,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev pkg-config libfmt-dev
 
+    - name: Detect C++ standard from database_system
+      run: |
+        CXX_STD=$(grep "set(CMAKE_CXX_STANDARD" database_system/CMakeLists.txt | head -1 | grep -o '[0-9]\+')
+        echo "CXX_STANDARD=${CXX_STD}" >> $GITHUB_ENV
+        echo "Detected C++ standard: ${CXX_STD}"
+
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
@@ -139,14 +145,14 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_STANDARD=${{ env.CXX_STANDARD }} -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config $BUILD_TYPE
 
     - name: Build Tier 1 - container_system (Windows)
       if: runner.os == 'Windows'
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=${{ env.CXX_STANDARD }} -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config Debug
 
     - name: Build Tier 1 - logger_system (Unix)
@@ -313,6 +319,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev pkg-config libfmt-dev
 
+    - name: Detect C++ standard from database_system (sanitizers)
+      run: |
+        CXX_STD=$(grep "set(CMAKE_CXX_STANDARD" database_system/CMakeLists.txt | head -1 | grep -o '[0-9]\+')
+        echo "CXX_STANDARD=${CXX_STD}" >> $GITHUB_ENV
+        echo "Detected C++ standard: ${CXX_STD}"
+
     - name: Build Tier 0 - common_system
       run: |
         cd common_system
@@ -328,7 +340,7 @@ jobs:
     - name: Build Tier 1 - container_system
       run: |
         cd container_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=17 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=${{ env.CXX_STANDARD }} -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 1 - logger_system

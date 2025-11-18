@@ -76,6 +76,7 @@ jobs:
           ninja-build \
           libgtest-dev \
           libsqlite3-dev \
+          libfmt-dev \
           lcov
 
     - name: Install dependencies (macOS)
@@ -86,6 +87,7 @@ jobs:
           ninja \
           googletest \
           sqlite3 \
+          fmt \
           lcov
 
     - name: Set up environment

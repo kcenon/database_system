@@ -62,9 +62,6 @@ bool database_proxy_server::start() {
 
     std::cout << "Database proxy server started on port " << port_ << "\n";
     return true;
-#else
-    std::cout << "Database proxy server started on port " << port_ << " (stub implementation)\n";
-    return true;
 }
 
 void database_proxy_server::stop() {
@@ -108,8 +105,6 @@ size_t database_proxy_server::get_active_session_count() const {
 
 void database_proxy_server::handle_client_connect(
     std::shared_ptr<network_system::session::messaging_session> network_session
-#else
-    const std::string& session_id
 ) {
     std::string session_id = "session_" + std::to_string(next_session_id_.fetch_add(1));
 
@@ -122,9 +117,6 @@ void database_proxy_server::handle_client_connect(
 
     // Start the network session
     network_session->start_session();
-#else
-    // Stub implementation
-    std::cout << "Client connected: " << session_id << " (stub)\n";
 }
 
 void database_proxy_server::handle_client_disconnect(const std::string& session_id) {
@@ -143,8 +135,6 @@ void database_proxy_server::handle_client_disconnect(const std::string& session_
 
 void database_proxy_server::handle_message(
     std::shared_ptr<network_system::session::messaging_session> network_session,
-#else
-    const std::string& session_id,
     const std::vector<uint8_t>& data
 ) {
     // Deserialize message header
@@ -281,9 +271,6 @@ void database_proxy_server::handle_message(
     if (!response.empty()) {
         network_session->send_packet(std::move(response));
     }
-#else
-    // Stub implementation
-    std::cout << "Received " << data.size() << " bytes from " << session_id << " (stub)\n";
 }
 
 std::vector<uint8_t> database_proxy_server::process_query_request(

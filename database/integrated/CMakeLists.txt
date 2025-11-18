@@ -229,16 +229,31 @@ endif()
 
 # logger_system
 if(USE_LOGGER_SYSTEM)
-    # Try to find logger_system library
-    if(TARGET logger_system)
+    # Try to find logger_system target (unified build uses LoggerSystem, standalone uses logger_system)
+    set(_LOGGER_TARGET_FOUND FALSE)
+
+    # Check for LoggerSystem target (unified build)
+    if(TARGET LoggerSystem)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC LoggerSystem)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE LoggerSystem)
+        endif()
+        message(STATUS "Integrated DB: Linked with LoggerSystem target (unified build)")
+        set(_LOGGER_TARGET_FOUND TRUE)
+    # Check for logger_system target (standalone build)
+    elseif(TARGET logger_system)
         if(INTEGRATED_DB_SOURCES)
             target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC logger_system)
         else()
             target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE logger_system)
         endif()
         message(STATUS "Integrated DB: Linked with logger_system target")
-    else()
-        # Try to link directly with LoggerSystem library
+        set(_LOGGER_TARGET_FOUND TRUE)
+    endif()
+
+    # Fallback: Try to link directly with LoggerSystem library
+    if(NOT _LOGGER_TARGET_FOUND)
         find_system_dependency_library(logger_system)
         set(_LOGGER_LIB_PATHS ${logger_system_LIBRARY_DIR})
 
@@ -268,16 +283,31 @@ endif()
 
 # monitoring_system
 if(USE_MONITORING_SYSTEM)
-    # Try to find monitoring_system library
-    if(TARGET monitoring_system)
+    # Try to find monitoring_system target (unified build uses MonitoringSystem, standalone uses monitoring_system)
+    set(_MONITORING_TARGET_FOUND FALSE)
+
+    # Check for MonitoringSystem target (unified build)
+    if(TARGET MonitoringSystem)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC MonitoringSystem)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE MonitoringSystem)
+        endif()
+        message(STATUS "Integrated DB: Linked with MonitoringSystem target (unified build)")
+        set(_MONITORING_TARGET_FOUND TRUE)
+    # Check for monitoring_system target (standalone build)
+    elseif(TARGET monitoring_system)
         if(INTEGRATED_DB_SOURCES)
             target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system)
         else()
             target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system)
         endif()
         message(STATUS "Integrated DB: Linked with monitoring_system target")
-    else()
-        # Try to link directly with monitoring_system library
+        set(_MONITORING_TARGET_FOUND TRUE)
+    endif()
+
+    # Fallback: Try to link directly with monitoring_system library
+    if(NOT _MONITORING_TARGET_FOUND)
         find_system_dependency_library(monitoring_system)
         set(_MONITORING_LIB_PATHS ${monitoring_system_LIBRARY_DIR})
 

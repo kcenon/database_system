@@ -60,7 +60,7 @@ database::result<void> remote_database_client::initialize(const core::connection
         if (result.is_err()) {
             initialized_ = false;
             return database::result<void>::err(database::error(
-                database::error_code::unknown_error,
+                static_cast<int>(database::error_code::unknown_error),
                 "Failed to connect to database server: " + result.error().message
             ));
         }
@@ -70,14 +70,10 @@ database::result<void> remote_database_client::initialize(const core::connection
     } catch (const std::exception& e) {
         initialized_ = false;
         return database::result<void>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             std::string("Exception during initialization: ") + e.what()
         ));
     }
-#else
-    std::cout << "Remote database client connecting to " << config.host << ":" << config.port
-              << " (stub implementation)\n";
-    return database::result<void>::ok();
 }
 
 database::result<void> remote_database_client::shutdown() {
@@ -137,23 +133,19 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to deserialize query response"
         ));
     }
 
     if (!query_response.value().success) {
         return database::result<uint64_t>::err(database::error(
-            static_cast<database::error_code>(query_response.value().error_code),
+            query_response.value().error_code,
             query_response.value().error_message
         ));
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: INSERT not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<uint64_t> remote_database_client::update_query(const std::string& query_string) {
@@ -175,23 +167,19 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to deserialize query response"
         ));
     }
 
     if (!query_response.value().success) {
         return database::result<uint64_t>::err(database::error(
-            static_cast<database::error_code>(query_response.value().error_code),
+            query_response.value().error_code,
             query_response.value().error_message
         ));
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: UPDATE not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<uint64_t> remote_database_client::delete_query(const std::string& query_string) {
@@ -213,23 +201,19 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<uint64_t>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to deserialize query response"
         ));
     }
 
     if (!query_response.value().success) {
         return database::result<uint64_t>::err(database::error(
-            static_cast<database::error_code>(query_response.value().error_code),
+            query_response.value().error_code,
             query_response.value().error_message
         ));
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: DELETE not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<core::database_result> remote_database_client::select_query(const std::string& query_string) {
@@ -251,14 +235,14 @@ database::result<core::database_result> remote_database_client::select_query(con
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<core::database_result>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to deserialize query response"
         ));
     }
 
     if (!query_response.value().success) {
         return database::result<core::database_result>::err(database::error(
-            static_cast<database::error_code>(query_response.value().error_code),
+            query_response.value().error_code,
             query_response.value().error_message
         ));
     }
@@ -274,10 +258,6 @@ database::result<core::database_result> remote_database_client::select_query(con
     }
 
     return database::result<core::database_result>::ok(std::move(result));
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: SELECT not supported";
-    return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<void> remote_database_client::execute_query(const std::string& query_string) {
@@ -299,23 +279,19 @@ database::result<void> remote_database_client::execute_query(const std::string& 
     auto query_response = protocol::protocol_serializer::deserialize_query_response(response_result.value());
     if (!query_response.has_value()) {
         return database::result<void>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to deserialize query response"
         ));
     }
 
     if (!query_response.value().success) {
         return database::result<void>::err(database::error(
-            static_cast<database::error_code>(query_response.value().error_code),
+            query_response.value().error_code,
             query_response.value().error_message
         ));
     }
 
     return database::result<void>::ok();
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: execute_query not supported";
-    return database::result<void>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<void> remote_database_client::begin_transaction() {
@@ -349,14 +325,11 @@ database::result<void> remote_database_client::begin_transaction() {
     if (!txn_response.success) {
         in_transaction_ = false;
         return database::result<void>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             txn_response.error_message
         ));
     }
 
-    return database::result<void>::ok();
-#else
-    std::cout << "Begin transaction (stub)\n";
     return database::result<void>::ok();
 }
 
@@ -381,9 +354,6 @@ database::result<void> remote_database_client::commit_transaction() {
 
     std::cout << "Commit transaction\n";
     return database::result<void>::ok();
-#else
-    std::cout << "Commit transaction (stub)\n";
-    return database::result<void>::ok();
 }
 
 database::result<void> remote_database_client::rollback_transaction() {
@@ -406,9 +376,6 @@ database::result<void> remote_database_client::rollback_transaction() {
     }
 
     std::cout << "Rollback transaction\n";
-    return database::result<void>::ok();
-#else
-    std::cout << "Rollback transaction (stub)\n";
     return database::result<void>::ok();
 }
 
@@ -493,7 +460,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
         pending_responses_.erase(req_id);
 
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Failed to send request: " + send_result.error().message
         ));
     }
@@ -506,7 +473,7 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
         pending_responses_.erase(req_id);
 
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Request timeout"
         ));
     }
@@ -515,14 +482,12 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     auto response_data = response_future.get();
     if (response_data.empty()) {
         return database::result<std::vector<uint8_t>>::err(database::error(
-            database::error_code::unknown_error,
+            static_cast<int>(database::error_code::unknown_error),
             "Empty response received"
         ));
     }
 
     return database::result<std::vector<uint8_t>>::ok(std::move(response_data));
-#else
-    return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::not_implemented), "Stub implementation"));
 }
 
 void remote_database_client::handle_response(const std::vector<uint8_t>& message_data) {
@@ -551,8 +516,6 @@ void remote_database_client::handle_response(const std::vector<uint8_t>& message
         }
         pending_responses_.erase(it);
     }
-#else
-    std::cout << "Received response: " << message_data.size() << " bytes (stub)\n";
 }
 
 uint64_t remote_database_client::next_request_id() {

@@ -189,36 +189,21 @@ target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
 # thread_system integration (optional)
 if(USE_THREAD_SYSTEM)
-    # Try to find thread_system
-    find_system_dependency_include(thread_system)
-    set(_DATABASE_THREAD_INCLUDE_PATHS ${thread_system_INCLUDE_DIR})
+    # Include unified build helper if available
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        is_unified_build(_IS_UNIFIED)
+    else()
+        set(_IS_UNIFIED FALSE)
+    endif()
 
-    set(_FOUND_THREAD_INCLUDE FALSE)
-    foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
-        if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
-            message(STATUS "Database: Found thread_system headers at: ${_path}")
-            target_include_directories(${PROJECT_NAME} PUBLIC
-                $<BUILD_INTERFACE:${_path}>
-            )
-            set(_FOUND_THREAD_INCLUDE TRUE)
-            break()
-        endif()
-    endforeach()
+    set(_DATABASE_HAS_THREAD FALSE)
 
-    if(_FOUND_THREAD_INCLUDE)
+    if(_IS_UNIFIED AND TARGET ThreadSystem)
+        # Unified build: Link ThreadSystem target directly
+        target_link_libraries(${PROJECT_NAME} PRIVATE ThreadSystem)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_THREAD_SYSTEM)
-        message(STATUS "Database: thread_system integration enabled")
-
-        # Store thread_system source directory for typed_pool implementation
-        set(_THREAD_SYSTEM_SOURCE "")
-        foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
-            if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
-                # Get parent directory (remove /include)
-                get_filename_component(_THREAD_SYSTEM_SOURCE "${_path}" DIRECTORY)
-                message(STATUS "Database: thread_system source directory: ${_THREAD_SYSTEM_SOURCE}")
-                break()
-            endif()
-        endforeach()
+        message(STATUS "Database: Linked ThreadSystem target (unified build)")
 
         # thread_system requires fmt
         find_package(fmt CONFIG REQUIRED)
@@ -229,150 +214,270 @@ if(USE_THREAD_SYSTEM)
             message(FATAL_ERROR "Database: fmt library not found - required by thread_system")
         endif()
 
-        # Add thread_system src directory to include paths for instantiation file
-        if(_THREAD_SYSTEM_SOURCE AND EXISTS "${_THREAD_SYSTEM_SOURCE}/src/impl/typed_pool")
-            message(STATUS "Database: Configured typed_pool instantiation for connection_priority")
-
-            # Add thread_system src directory so we can #include "impl/typed_pool/*.cpp"
-            target_include_directories(${PROJECT_NAME} PRIVATE
-                ${_THREAD_SYSTEM_SOURCE}/src
-            )
-        else()
-            message(WARNING "Database: typed_pool implementation not found - connection_pool_v2 may have linking issues")
+        # Get thread_system source directory for typed_pool implementation
+        get_target_property(_THREAD_INCLUDES ThreadSystem INTERFACE_INCLUDE_DIRECTORIES)
+        if(_THREAD_INCLUDES)
+            foreach(_inc ${_THREAD_INCLUDES})
+                if(_inc MATCHES "thread_system")
+                    get_filename_component(_THREAD_SYSTEM_SOURCE "${_inc}" DIRECTORY)
+                    if(EXISTS "${_THREAD_SYSTEM_SOURCE}/src/impl/typed_pool")
+                        message(STATUS "Database: Configured typed_pool instantiation for connection_priority")
+                        target_include_directories(${PROJECT_NAME} PRIVATE ${_THREAD_SYSTEM_SOURCE}/src)
+                    endif()
+                    break()
+                endif()
+            endforeach()
         endif()
 
-        # Try to link thread_system library if built
-        set(_THREAD_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
-            "/home/$ENV{USER}/Sources/thread_system/build/lib"
-        )
+        set(_DATABASE_HAS_THREAD TRUE)
 
-        foreach(_lib_path ${_THREAD_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found thread_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to thread_system libraries if they exist
-                # Note: thread_system is mostly header-only, so this is optional
+    else()
+        # Standalone build: Use find_system_dependency
+        find_system_dependency_include(thread_system)
+        set(_DATABASE_THREAD_INCLUDE_PATHS ${thread_system_INCLUDE_DIR})
+
+        set(_FOUND_THREAD_INCLUDE FALSE)
+        foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
+            if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
+                message(STATUS "Database: Found thread_system headers at: ${_path}")
+                target_include_directories(${PROJECT_NAME} PUBLIC
+                    $<BUILD_INTERFACE:${_path}>
+                )
+                set(_FOUND_THREAD_INCLUDE TRUE)
                 break()
             endif()
         endforeach()
-    else()
-        message(WARNING "Database: thread_system headers not found - integration disabled")
-        set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not found" FORCE)
+
+        if(_FOUND_THREAD_INCLUDE)
+            target_compile_definitions(${PROJECT_NAME} PUBLIC USE_THREAD_SYSTEM)
+            message(STATUS "Database: thread_system integration enabled (standalone build)")
+
+            # Store thread_system source directory for typed_pool implementation
+            set(_THREAD_SYSTEM_SOURCE "")
+            foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
+                if(EXISTS "${_path}/kcenon/thread/core/thread_pool.h")
+                    # Get parent directory (remove /include)
+                    get_filename_component(_THREAD_SYSTEM_SOURCE "${_path}" DIRECTORY)
+                    message(STATUS "Database: thread_system source directory: ${_THREAD_SYSTEM_SOURCE}")
+                    break()
+                endif()
+            endforeach()
+
+            # thread_system requires fmt
+            find_package(fmt CONFIG REQUIRED)
+            if(fmt_FOUND)
+                target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
+                message(STATUS "Database: fmt library found (required by thread_system)")
+            else()
+                message(FATAL_ERROR "Database: fmt library not found - required by thread_system")
+            endif()
+
+            # Add thread_system src directory to include paths for instantiation file
+            if(_THREAD_SYSTEM_SOURCE AND EXISTS "${_THREAD_SYSTEM_SOURCE}/src/impl/typed_pool")
+                message(STATUS "Database: Configured typed_pool instantiation for connection_priority")
+
+                # Add thread_system src directory so we can #include "impl/typed_pool/*.cpp"
+                target_include_directories(${PROJECT_NAME} PRIVATE
+                    ${_THREAD_SYSTEM_SOURCE}/src
+                )
+            else()
+                message(WARNING "Database: typed_pool implementation not found - connection_pool_v2 may have linking issues")
+            endif()
+
+            # Try to link thread_system library if built
+            set(_THREAD_LIB_PATHS
+                "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+                "/home/$ENV{USER}/Sources/thread_system/build/lib"
+            )
+
+            foreach(_lib_path ${_THREAD_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found thread_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to thread_system libraries if they exist
+                    # Note: thread_system is mostly header-only, so this is optional
+                    break()
+                endif()
+            endforeach()
+
+            set(_DATABASE_HAS_THREAD TRUE)
+        else()
+            message(WARNING "Database: thread_system headers not found - integration disabled")
+            set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not found" FORCE)
+        endif()
+    endif()
+
+    if(NOT _DATABASE_HAS_THREAD)
+        set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not available" FORCE)
     endif()
 endif()
 
 # container_system integration (optional)
 if(USE_CONTAINER_SYSTEM)
-    # Try to find container_system source directory first
-    find_system_dependency(container_system)
-
-    if(container_system_FOUND AND container_system_SOURCE_DIR)
-        # Container headers are in the source directory root
-        set(_DATABASE_CONTAINER_INCLUDE_PATHS
-            "${container_system_SOURCE_DIR}"
-            "${container_system_SOURCE_DIR}/include"
-        )
+    # Include unified build helper if available
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        is_unified_build(_IS_UNIFIED)
     else()
-        # Fallback to include search
-        find_system_dependency_include(container_system)
-        set(_DATABASE_CONTAINER_INCLUDE_PATHS ${container_system_INCLUDE_DIR})
+        set(_IS_UNIFIED FALSE)
     endif()
 
-    set(_FOUND_CONTAINER_INCLUDE FALSE)
-    foreach(_path ${_DATABASE_CONTAINER_INCLUDE_PATHS})
-        if(EXISTS "${_path}/core/container.h")
-            message(STATUS "Database: Found container_system headers at: ${_path}")
-            target_include_directories(${PROJECT_NAME} PUBLIC
-                $<BUILD_INTERFACE:${_path}>
-            )
-            set(_FOUND_CONTAINER_INCLUDE TRUE)
-            break()
-        endif()
-    endforeach()
+    set(_DATABASE_HAS_CONTAINER FALSE)
 
-    if(_FOUND_CONTAINER_INCLUDE)
+    if(_IS_UNIFIED AND TARGET ContainerSystem)
+        # Unified build: Link ContainerSystem target directly
+        target_link_libraries(${PROJECT_NAME} PRIVATE ContainerSystem)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)
-        message(STATUS "Database: container_system integration enabled")
+        message(STATUS "Database: Linked ContainerSystem target (unified build)")
+        set(_DATABASE_HAS_CONTAINER TRUE)
 
-        # Try to link container_system library if built
-        set(_CONTAINER_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/container_system/build/lib"
-            "/home/$ENV{USER}/Sources/container_system/build/lib"
-        )
+    else()
+        # Standalone build: Use find_system_dependency
+        find_system_dependency(container_system)
 
-        foreach(_lib_path ${_CONTAINER_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found container_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to container_system library if it exists
-                if(EXISTS "${_lib_path}/libcontainer.a" OR EXISTS "${_lib_path}/libcontainer.dylib")
-                    target_link_libraries(${PROJECT_NAME} PUBLIC container)
-                    message(STATUS "Database: Linked container_system library")
-                endif()
+        if(container_system_FOUND AND container_system_SOURCE_DIR)
+            # Container headers are in the source directory root
+            set(_DATABASE_CONTAINER_INCLUDE_PATHS
+                "${container_system_SOURCE_DIR}"
+                "${container_system_SOURCE_DIR}/include"
+            )
+        else()
+            # Fallback to include search
+            find_system_dependency_include(container_system)
+            set(_DATABASE_CONTAINER_INCLUDE_PATHS ${container_system_INCLUDE_DIR})
+        endif()
+
+        set(_FOUND_CONTAINER_INCLUDE FALSE)
+        foreach(_path ${_DATABASE_CONTAINER_INCLUDE_PATHS})
+            if(EXISTS "${_path}/core/container.h")
+                message(STATUS "Database: Found container_system headers at: ${_path}")
+                target_include_directories(${PROJECT_NAME} PUBLIC
+                    $<BUILD_INTERFACE:${_path}>
+                )
+                set(_FOUND_CONTAINER_INCLUDE TRUE)
                 break()
             endif()
         endforeach()
-    else()
-        message(WARNING "Database: container_system headers not found - integration disabled")
-        set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not found" FORCE)
+
+        if(_FOUND_CONTAINER_INCLUDE)
+            target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)
+            message(STATUS "Database: container_system integration enabled (standalone build)")
+
+            # Try to link container_system library if built
+            set(_CONTAINER_LIB_PATHS
+                "/Users/$ENV{USER}/Sources/container_system/build/lib"
+                "/home/$ENV{USER}/Sources/container_system/build/lib"
+            )
+
+            foreach(_lib_path ${_CONTAINER_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found container_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to container_system library if it exists
+                    if(EXISTS "${_lib_path}/libcontainer.a" OR EXISTS "${_lib_path}/libcontainer.dylib")
+                        target_link_libraries(${PROJECT_NAME} PUBLIC container)
+                        message(STATUS "Database: Linked container_system library")
+                    endif()
+                    break()
+                endif()
+            endforeach()
+
+            set(_DATABASE_HAS_CONTAINER TRUE)
+        else()
+            message(WARNING "Database: container_system headers not found - integration disabled")
+            set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not found" FORCE)
+        endif()
+    endif()
+
+    if(NOT _DATABASE_HAS_CONTAINER)
+        set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not available" FORCE)
     endif()
 endif()
 
 # network_system integration (optional)
 if(USE_NETWORK_SYSTEM)
-    # Try to find network_system source directory first
-    find_system_dependency(network_system)
-
-    if(network_system_FOUND AND network_system_SOURCE_DIR)
-        # Network headers are in the source directory root
-        set(_DATABASE_NETWORK_INCLUDE_PATHS
-            "${network_system_SOURCE_DIR}"
-            "${network_system_SOURCE_DIR}/include"
-        )
+    # Include unified build helper if available
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/UnifiedBuildHelper.cmake")
+        is_unified_build(_IS_UNIFIED)
     else()
-        # Fallback to include search
-        find_system_dependency_include(network_system)
-        set(_DATABASE_NETWORK_INCLUDE_PATHS ${network_system_INCLUDE_DIR})
+        set(_IS_UNIFIED FALSE)
     endif()
 
-    set(_FOUND_NETWORK_INCLUDE FALSE)
-    foreach(_path ${_DATABASE_NETWORK_INCLUDE_PATHS})
-        if(EXISTS "${_path}/network_system/core/messaging_server.h" OR EXISTS "${_path}/core/messaging_server.h")
-            message(STATUS "Database: Found network_system headers at: ${_path}")
-            target_include_directories(${PROJECT_NAME} PUBLIC
-                $<BUILD_INTERFACE:${_path}>
-            )
-            set(_FOUND_NETWORK_INCLUDE TRUE)
-            break()
-        endif()
-    endforeach()
+    set(_DATABASE_HAS_NETWORK FALSE)
 
-    if(_FOUND_NETWORK_INCLUDE)
+    if(_IS_UNIFIED AND TARGET NetworkSystem)
+        # Unified build: Link NetworkSystem target directly
+        # This automatically propagates all INTERFACE dependencies:
+        # - ASIO include paths
+        # - thread_system, logger_system, monitoring_system, container_system
+        # - All compile definitions and flags
+        target_link_libraries(${PROJECT_NAME} PRIVATE NetworkSystem)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
-        message(STATUS "Database: network_system integration enabled")
+        message(STATUS "Database: Linked NetworkSystem target (unified build)")
+        message(STATUS "Database: All INTERFACE dependencies automatically propagated")
+        set(_DATABASE_HAS_NETWORK TRUE)
 
-        # Try to link network_system library if built
-        set(_NETWORK_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/network_system/build/lib"
-            "/home/$ENV{USER}/Sources/network_system/build/lib"
-        )
+    else()
+        # Standalone build: Use find_system_dependency
+        find_system_dependency(network_system)
 
-        foreach(_lib_path ${_NETWORK_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found network_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to network_system library if it exists
-                if(EXISTS "${_lib_path}/libnetwork.a" OR EXISTS "${_lib_path}/libnetwork.dylib")
-                    target_link_libraries(${PROJECT_NAME} PUBLIC network)
-                    message(STATUS "Database: Linked network_system library")
-                endif()
+        if(network_system_FOUND AND network_system_SOURCE_DIR)
+            # Network headers are in the source directory root
+            set(_DATABASE_NETWORK_INCLUDE_PATHS
+                "${network_system_SOURCE_DIR}"
+                "${network_system_SOURCE_DIR}/include"
+            )
+        else()
+            # Fallback to include search
+            find_system_dependency_include(network_system)
+            set(_DATABASE_NETWORK_INCLUDE_PATHS ${network_system_INCLUDE_DIR})
+        endif()
+
+        set(_FOUND_NETWORK_INCLUDE FALSE)
+        foreach(_path ${_DATABASE_NETWORK_INCLUDE_PATHS})
+            if(EXISTS "${_path}/network_system/core/messaging_server.h" OR EXISTS "${_path}/core/messaging_server.h")
+                message(STATUS "Database: Found network_system headers at: ${_path}")
+                target_include_directories(${PROJECT_NAME} PUBLIC
+                    $<BUILD_INTERFACE:${_path}>
+                )
+                set(_FOUND_NETWORK_INCLUDE TRUE)
                 break()
             endif()
         endforeach()
-    else()
-        message(WARNING "Database: network_system headers not found - integration disabled")
-        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+
+        if(_FOUND_NETWORK_INCLUDE)
+            target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
+            message(STATUS "Database: network_system integration enabled (standalone build)")
+
+            # Try to link network_system library if built
+            set(_NETWORK_LIB_PATHS
+                "/Users/$ENV{USER}/Sources/network_system/build/lib"
+                "/home/$ENV{USER}/Sources/network_system/build/lib"
+            )
+
+            foreach(_lib_path ${_NETWORK_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found network_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to network_system library if it exists
+                    if(EXISTS "${_lib_path}/libnetwork.a" OR EXISTS "${_lib_path}/libnetwork.dylib")
+                        target_link_libraries(${PROJECT_NAME} PUBLIC network)
+                        message(STATUS "Database: Linked network_system library")
+                    endif()
+                    break()
+                endif()
+            endforeach()
+
+            set(_DATABASE_HAS_NETWORK TRUE)
+        else()
+            message(WARNING "Database: network_system headers not found - integration disabled")
+            set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
+        endif()
+    endif()
+
+    if(NOT _DATABASE_HAS_NETWORK)
+        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not available" FORCE)
     endif()
 endif()
 

@@ -131,14 +131,14 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         cd thread_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config $BUILD_TYPE
 
     - name: Build Tier 1 - thread_system (Windows)
       if: runner.os == 'Windows'
       run: |
         cd thread_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config Debug
 
     - name: Build Tier 1 - container_system (Unix)
@@ -159,28 +159,28 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         cd logger_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config $BUILD_TYPE
 
     - name: Build Tier 1 - logger_system (Windows)
       if: runner.os == 'Windows'
       run: |
         cd logger_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config Debug
 
     - name: Build Tier 1 - monitoring_system (Unix)
       if: runner.os != 'Windows'
       run: |
         cd monitoring_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config $BUILD_TYPE
 
     - name: Build Tier 1 - monitoring_system (Windows)
       if: runner.os == 'Windows'
       run: |
         cd monitoring_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build --config Debug
 
     - name: Build Tier 2 - network_system (Unix)
@@ -334,7 +334,7 @@ jobs:
     - name: Build Tier 1 - thread_system
       run: |
         cd thread_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 1 - container_system
@@ -346,13 +346,13 @@ jobs:
     - name: Build Tier 1 - logger_system
       run: |
         cd logger_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 1 - monitoring_system
       run: |
         cd monitoring_system
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
         cmake --build build
 
     - name: Build Tier 2 - network_system

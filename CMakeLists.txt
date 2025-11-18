@@ -20,6 +20,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Unified build: Get ASIO path from NetworkSystem target if available
+if(TARGET NetworkSystem AND NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    get_target_property(_network_includes NetworkSystem INTERFACE_INCLUDE_DIRECTORIES)
+    if(_network_includes)
+        # Extract ASIO include directory from NetworkSystem's interface includes
+        foreach(_inc ${_network_includes})
+            if(_inc MATCHES "asio")
+                set(ASIO_INCLUDE_DIR "${_inc}" CACHE STRING "ASIO from NetworkSystem" FORCE)
+                include_directories(SYSTEM ${_inc})
+                message(STATUS "Database: Using ASIO from NetworkSystem: ${_inc}")
+                break()
+            endif()
+        endforeach()
+    endif()
+endif()
+
 # Detect C++20 coroutine support (optional feature)
 include(CheckCXXSourceCompiles)
 check_cxx_source_compiles("

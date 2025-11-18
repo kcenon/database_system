@@ -201,7 +201,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-13 g++-13 clang \
+        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 clang \
           libgtest-dev libgmock-dev libpq-dev pkg-config
 
     - name: Install system dependencies (macOS)
@@ -212,8 +212,8 @@ jobs:
     - name: Set up compiler (GCC)
       if: matrix.compiler == 'gcc'
       run: |
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
         echo "CC=gcc" >> $GITHUB_ENV
         echo "CXX=g++" >> $GITHUB_ENV
 

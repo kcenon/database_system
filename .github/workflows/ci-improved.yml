@@ -88,43 +88,6 @@ jobs:
       with:
         submodules: false  # Don't use submodules for dependencies
 
-    - name: Cache vcpkg packages
-      uses: actions/cache@v3
-      with:
-        path: |
-          ${{ github.workspace }}/vcpkg
-          ~/.cache/vcpkg
-        key: vcpkg-${{ matrix.vcpkg_triplet }}-database-${{ hashFiles('**/vcpkg.json') }}
-        restore-keys: |
-          vcpkg-${{ matrix.vcpkg_triplet }}-database-
-
-    - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: '2023.11.20'
-        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-
-    - name: Create vcpkg.json for dependencies
-      run: |
-        cat > vcpkg.json << 'EOF'
-        {
-          "name": "database-system",
-          "version": "2.0.0",
-          "dependencies": [
-            "fmt",
-            "asio",
-            "openssl",
-            "lz4",
-            "zlib",
-            "gtest",
-            "libpqxx",
-            "libpq"
-          ]
-        }
-        EOF
-
-    - name: Install dependencies via vcpkg
-      run: vcpkg install --triplet ${{ matrix.vcpkg_triplet }}
 
     # Build all required system dependencies
     - name: Build system dependencies
@@ -246,7 +209,6 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
           -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
           -DBUILD_WITH_COMMON_SYSTEM=ON \
           -DUSE_THREAD_SYSTEM=ON \
@@ -265,7 +227,6 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake `
           -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DUSE_THREAD_SYSTEM=ON `

@@ -31,8 +31,13 @@ build_system() {
   # Checkout specific branch if provided
   if [ -n "$branch" ] && [ "$branch" != "main" ]; then
     echo "Checking out branch: $branch"
-    git fetch origin "$branch" || true
-    git checkout "$branch" || echo "Warning: Could not checkout $branch, using default branch"
+    git fetch origin "$branch:$branch" 2>/dev/null || \
+    git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch" 2>/dev/null || \
+    echo "Warning: Could not fetch branch $branch"
+
+    git checkout "$branch" 2>/dev/null || \
+    git checkout -b "$branch" "origin/$branch" 2>/dev/null || \
+    echo "Warning: Could not checkout $branch, using default branch"
   fi
 
   # Common CMake arguments
@@ -75,7 +80,8 @@ fi
 build_system "thread_system" "thread_system" "main" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
-  -DBUILD_INTEGRATION_TESTS=OFF
+  -DTHREAD_BUILD_UNIT_TESTS=OFF \
+  -DTHREAD_BUILD_INTEGRATION_TESTS=OFF
 
 # Verify thread_system installation
 if [ ! -d "$INSTALL_PREFIX/include/kcenon/thread" ]; then

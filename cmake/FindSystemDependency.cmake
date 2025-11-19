@@ -25,6 +25,32 @@ function(find_system_dependency NAME)
     set(_SOURCE_PATHS)
     set(_CONFIG_HINTS)
 
+    # Derive alternative package names (PascalCase, uppercase)
+    set(_PACKAGE_NAMES ${NAME})
+
+    string(TOUPPER "${NAME}" _NAME_UPPER)
+    if(NOT _NAME_UPPER STREQUAL "${NAME}")
+        list(APPEND _PACKAGE_NAMES "${_NAME_UPPER}")
+    endif()
+
+    string(REPLACE "_" ";" _NAME_PARTS "${NAME}")
+    set(_NAME_PASCAL "")
+    foreach(_part ${_NAME_PARTS})
+        if(_part STREQUAL "")
+            continue()
+        endif()
+
+        string(SUBSTRING "${_part}" 0 1 _first_char)
+        string(SUBSTRING "${_part}" 1 -1 _rest_chars)
+        string(TOUPPER "${_first_char}" _first_char)
+        string(TOLOWER "${_rest_chars}" _rest_chars)
+        string(APPEND _NAME_PASCAL "${_first_char}${_rest_chars}")
+    endforeach()
+    if(NOT _NAME_PASCAL STREQUAL "" AND NOT _NAME_PASCAL STREQUAL "${NAME}")
+        list(APPEND _PACKAGE_NAMES "${_NAME_PASCAL}")
+    endif()
+    list(REMOVE_DUPLICATES _PACKAGE_NAMES)
+
     # 1. Environment variable (highest priority)
     if(DEFINED ENV{${NAME}_ROOT} AND NOT "$ENV{${NAME}_ROOT}" STREQUAL "")
         list(APPEND _SOURCE_PATHS "$ENV{${NAME}_ROOT}")
@@ -64,18 +90,27 @@ function(find_system_dependency NAME)
     endforeach()
 
     # Try CONFIG mode using explicit hints (install prefixes)
+    set(_PATH_SUFFIXES "")
     set(_PATH_SUFFIXES
         ""
-        "${NAME}"
         "cmake"
-        "lib/cmake/${NAME}"
-        "lib/${NAME}/cmake"
-        "share/${NAME}/cmake"
     )
+
+    foreach(_pkg ${_PACKAGE_NAMES})
+        list(APPEND _PATH_SUFFIXES
+            "${_pkg}"
+            "cmake/${_pkg}"
+            "${_pkg}/cmake"
+            "lib/cmake/${_pkg}"
+            "lib/${_pkg}/cmake"
+            "share/${_pkg}/cmake"
+        )
+    endforeach()
 
     list(REMOVE_DUPLICATES _CONFIG_HINTS)
     if(_CONFIG_HINTS)
         find_package(${NAME} CONFIG QUIET
+            NAMES ${_PACKAGE_NAMES}
             HINTS ${_CONFIG_HINTS}
             PATH_SUFFIXES ${_PATH_SUFFIXES}
             NO_DEFAULT_PATH
@@ -88,7 +123,9 @@ function(find_system_dependency NAME)
     endif()
 
     # Fallback: default CONFIG search on system
-    find_package(${NAME} CONFIG QUIET)
+    find_package(${NAME} CONFIG QUIET
+        NAMES ${_PACKAGE_NAMES}
+    )
     if(${NAME}_FOUND)
         message(STATUS "Found ${NAME} via CONFIG mode")
         set(${NAME}_FOUND TRUE PARENT_SCOPE)

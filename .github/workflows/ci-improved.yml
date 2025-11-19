@@ -114,11 +114,19 @@ jobs:
           cd common_system
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
+
+          # Verify installation
+          if [ ! -d "${{ github.workspace }}/deps/install/include/kcenon/common" ]; then
+            echo "ERROR: common_system installation failed"
+            ls -la ${{ github.workspace }}/deps/install/include || true
+            exit 1
+          fi
           cd ..
         fi
 
@@ -129,13 +137,21 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF \
             -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build --target ThreadSystem
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
+
+          # Verify installation
+          if [ ! -d "${{ github.workspace }}/deps/install/include/kcenon/thread" ]; then
+            echo "ERROR: thread_system installation failed"
+            ls -la ${{ github.workspace }}/deps/install/include/kcenon || true
+            exit 1
+          fi
           cd ..
         fi
 
@@ -146,6 +162,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -153,7 +170,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DLOGGER_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -164,6 +181,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -171,7 +189,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -182,12 +200,13 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -198,6 +217,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_WITH_LOGGER_SYSTEM=ON \
@@ -208,7 +228,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -390,7 +410,8 @@ jobs:
       if: runner.os == 'Windows'
       shell: powershell
       run: |
-        vcpkg install fmt:x64-windows
+        & "$env:VCPKG_INSTALLATION_ROOT\vcpkg.exe" install fmt:x64-windows
+        Write-Host "fmt package installed successfully"
 
     - name: Set up compiler (Clang - macOS)
       if: matrix.compiler == 'clang' && runner.os == 'macOS'
@@ -415,11 +436,19 @@ jobs:
           cd common_system
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
+
+          # Verify installation
+          if [ ! -d "${{ github.workspace }}/deps/install/include/kcenon/common" ]; then
+            echo "ERROR: common_system installation failed"
+            ls -la ${{ github.workspace }}/deps/install/include || true
+            exit 1
+          fi
           cd ..
         fi
 
@@ -430,13 +459,21 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF \
             -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build --target ThreadSystem
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
+
+          # Verify installation
+          if [ ! -d "${{ github.workspace }}/deps/install/include/kcenon/thread" ]; then
+            echo "ERROR: thread_system installation failed"
+            ls -la ${{ github.workspace }}/deps/install/include/kcenon || true
+            exit 1
+          fi
           cd ..
         fi
 
@@ -447,6 +484,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -454,7 +492,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DLOGGER_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -465,6 +503,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -472,7 +511,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -483,12 +522,13 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
             -DBUILD_SAMPLES=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -499,6 +539,7 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_WITH_LOGGER_SYSTEM=ON \
@@ -509,7 +550,7 @@ jobs:
             -DBUILD_SAMPLES=OFF \
             -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build
-          cmake --install build --prefix ${{ github.workspace }}/deps/install
+          cmake --install build
           cd ..
         fi
 
@@ -560,6 +601,7 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
           -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install `
           -DBUILD_WITH_COMMON_SYSTEM=ON `
           -DUSE_THREAD_SYSTEM=ON `

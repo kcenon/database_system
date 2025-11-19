@@ -214,6 +214,17 @@ jobs:
 
       continue-on-error: true  # Allow to proceed even if some repos don't exist
 
+    - name: Set dependency environment variables
+      shell: bash
+      run: |
+        # Set *_ROOT environment variables so find_system_dependency can locate installed dependencies
+        echo "common_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "thread_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "logger_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "monitoring_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "container_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "network_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+
     # Configure with ALL dependencies (production configuration)
     - name: Configure WITH all dependencies (Unix)
       if: runner.os != 'Windows'
@@ -486,6 +497,17 @@ jobs:
         fi
 
       continue-on-error: true  # Allow to proceed even if some repos don't exist
+
+    - name: Set dependency environment variables
+      shell: bash
+      run: |
+        # Set *_ROOT environment variables so find_system_dependency can locate installed dependencies
+        echo "common_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "thread_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "logger_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "monitoring_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "container_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
+        echo "network_system_ROOT=${{ github.workspace }}/deps/install" >> $GITHUB_ENV
 
     # Configure with all dependencies (NO PostgreSQL for cross-platform)
     - name: Configure WITH all dependencies (macOS)

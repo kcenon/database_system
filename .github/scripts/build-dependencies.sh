@@ -101,8 +101,8 @@ build_system "monitoring_system" "monitoring_system" "fix/cmake-install-paths" \
   -DBUILD_WITH_THREAD_SYSTEM=ON \
   -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
 
-# Build Tier 1: container_system
-build_system "container_system" "container_system" "main" \
+# Build Tier 1: container_system (using fix branch until PR #57 is merged)
+build_system "container_system" "container_system" "fix/add-gnuinstalldirs" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON

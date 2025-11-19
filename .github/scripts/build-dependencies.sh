@@ -41,6 +41,8 @@ build_system() {
     -G Ninja
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"
+    -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX"
+    -DCMAKE_CXX_FLAGS="-I$INSTALL_PREFIX/include"
     -DBUILD_TESTS=OFF
     -DBUILD_EXAMPLES=OFF
     -DBUILD_SAMPLES=OFF
@@ -71,7 +73,6 @@ fi
 
 # Build Tier 1: thread_system
 build_system "thread_system" "thread_system" "main" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
   -DBUILD_INTEGRATION_TESTS=OFF
@@ -85,7 +86,6 @@ fi
 
 # Build Tier 1: logger_system
 build_system "logger_system" "logger_system" "main" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
@@ -94,7 +94,6 @@ build_system "logger_system" "logger_system" "main" \
 
 # Build Tier 1: monitoring_system (using fix branch until PR #76 is merged)
 build_system "monitoring_system" "monitoring_system" "fix/cmake-install-paths" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
@@ -103,13 +102,11 @@ build_system "monitoring_system" "monitoring_system" "fix/cmake-install-paths" \
 
 # Build Tier 1: container_system (using fix branch until PR #57 is merged)
 build_system "container_system" "container_system" "fix/add-gnuinstalldirs" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON
 
 # Build Tier 2: network_system
 build_system "network_system" "network_system" "main" \
-  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \
   -Dlogger_system_DIR="$INSTALL_PREFIX/lib/cmake/logger_system" \

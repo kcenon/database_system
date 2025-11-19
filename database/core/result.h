@@ -134,14 +134,14 @@ namespace database {
 		using base_type::base_type;
 
 		// Default constructor for success
-		result() : base_type() {}
+		result() : base_type(base_type::ok(std::monostate{})) {}
 
 		// Constructor from base type
 		result(const base_type& other) : base_type(other) {}
 		result(base_type&& other) : base_type(std::move(other)) {}
 
 		// Constructor from std::monostate (for legacy compatibility)
-		result(std::monostate) : base_type() {}
+		result(std::monostate) : base_type(base_type::ok(std::monostate{})) {}
 
 		// Constructor from error_info (for legacy compatibility)
 		result(const error_info& e) : base_type(kcenon::common::error_info(e.code, e.message, e.module)) {}

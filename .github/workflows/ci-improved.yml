@@ -112,7 +112,8 @@ jobs:
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build --target ThreadSystem
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -129,7 +130,8 @@ jobs:
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DLOGGER_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -146,7 +148,8 @@ jobs:
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -182,7 +185,8 @@ jobs:
             -DBUILD_WITH_CONTAINER_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -391,7 +395,8 @@ jobs:
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build --target ThreadSystem
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -408,7 +413,8 @@ jobs:
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DLOGGER_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -425,7 +431,8 @@ jobs:
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..
@@ -461,7 +468,8 @@ jobs:
             -DBUILD_WITH_CONTAINER_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
-            -DBUILD_SAMPLES=OFF
+            -DBUILD_SAMPLES=OFF \
+            -DBUILD_INTEGRATION_TESTS=OFF
           cmake --build build
           cmake --install build --prefix ${{ github.workspace }}/deps/install
           cd ..

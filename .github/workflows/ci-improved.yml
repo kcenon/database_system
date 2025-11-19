@@ -80,6 +80,26 @@ jobs:
       with:
         submodules: false  # Don't use submodules for dependencies
 
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 clang \
+          libgtest-dev libgmock-dev libpq-dev pkg-config
+
+    - name: Set up compiler (GCC)
+      if: matrix.compiler == 'gcc'
+      run: |
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+        echo "CC=gcc" >> $GITHUB_ENV
+        echo "CXX=g++" >> $GITHUB_ENV
+
+    - name: Set up compiler (Clang)
+      if: matrix.compiler == 'clang' && runner.os == 'Linux'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
 
     # Build all required system dependencies
     - name: Build system dependencies
@@ -193,36 +213,6 @@ jobs:
         fi
 
       continue-on-error: true  # Allow to proceed even if some repos don't exist
-
-    - name: Install system dependencies (Ubuntu)
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-12 g++-12 clang \
-          libgtest-dev libgmock-dev libpq-dev pkg-config
-
-    - name: Install system dependencies (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        brew install ninja googletest postgresql@15
-
-    - name: Set up compiler (GCC)
-      if: matrix.compiler == 'gcc'
-      run: |
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
-        echo "CC=gcc" >> $GITHUB_ENV
-        echo "CXX=g++" >> $GITHUB_ENV
-
-    - name: Set up compiler (Clang)
-      if: matrix.compiler == 'clang' && runner.os == 'Linux'
-      run: |
-        echo "CC=clang" >> $GITHUB_ENV
-        echo "CXX=clang++" >> $GITHUB_ENV
-
-    - name: Set up compiler (MSVC)
-      if: matrix.compiler == 'msvc'
-      uses: ilammy/msvc-dev-cmd@v1
 
     # Configure with ALL dependencies (production configuration)
     - name: Configure WITH all dependencies (Unix)
@@ -363,6 +353,26 @@ jobs:
       with:
         submodules: false  # Don't use submodules for dependencies
 
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install ninja googletest postgresql@15
+
+    - name: Install system dependencies (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        choco install ninja -y
+
+    - name: Set up compiler (Clang - macOS)
+      if: matrix.compiler == 'clang' && runner.os == 'macOS'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Set up compiler (MSVC)
+      if: matrix.compiler == 'msvc'
+      uses: ilammy/msvc-dev-cmd@v1
 
     # Build all required system dependencies
     - name: Build system dependencies
@@ -476,21 +486,6 @@ jobs:
         fi
 
       continue-on-error: true  # Allow to proceed even if some repos don't exist
-
-    - name: Install system dependencies (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        brew install ninja googletest postgresql@15
-
-    - name: Set up compiler (Clang - macOS)
-      if: matrix.compiler == 'clang' && runner.os == 'macOS'
-      run: |
-        echo "CC=clang" >> $GITHUB_ENV
-        echo "CXX=clang++" >> $GITHUB_ENV
-
-    - name: Set up compiler (MSVC)
-      if: matrix.compiler == 'msvc'
-      uses: ilammy/msvc-dev-cmd@v1
 
     # Configure with all dependencies (NO PostgreSQL for cross-platform)
     - name: Configure WITH all dependencies (macOS)

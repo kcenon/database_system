@@ -85,7 +85,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build gcc-12 g++-12 clang \
-          libgtest-dev libgmock-dev libpq-dev pkg-config
+          libgtest-dev libgmock-dev libpq-dev pkg-config libfmt-dev
 
     - name: Set up compiler (GCC)
       if: matrix.compiler == 'gcc'
@@ -212,7 +212,18 @@ jobs:
           cd ..
         fi
 
-      continue-on-error: true  # Allow to proceed even if some repos don't exist
+    - name: Verify installed dependencies
+      shell: bash
+      run: |
+        echo "Verifying installed dependencies..."
+        ls -la ${{ github.workspace }}/deps/install/include || echo "No include directory"
+        ls -la ${{ github.workspace }}/deps/install/lib || echo "No lib directory"
+
+        # Check for critical headers
+        if [ ! -d "${{ github.workspace }}/deps/install/include" ]; then
+          echo "ERROR: Dependencies installation failed - no include directory found"
+          exit 1
+        fi
 
     - name: Set dependency environment variables
       shell: bash
@@ -367,13 +378,19 @@ jobs:
     - name: Install system dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest postgresql@15
+        brew install ninja googletest postgresql@15 fmt
 
     - name: Install system dependencies (Windows)
       if: runner.os == 'Windows'
       shell: powershell
       run: |
         choco install ninja -y
+
+    - name: Install vcpkg dependencies (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        vcpkg install fmt:x64-windows
 
     - name: Set up compiler (Clang - macOS)
       if: matrix.compiler == 'clang' && runner.os == 'macOS'
@@ -496,7 +513,18 @@ jobs:
           cd ..
         fi
 
-      continue-on-error: true  # Allow to proceed even if some repos don't exist
+    - name: Verify installed dependencies
+      shell: bash
+      run: |
+        echo "Verifying installed dependencies..."
+        ls -la ${{ github.workspace }}/deps/install/include || echo "No include directory"
+        ls -la ${{ github.workspace }}/deps/install/lib || echo "No lib directory"
+
+        # Check for critical headers
+        if [ ! -d "${{ github.workspace }}/deps/install/include" ]; then
+          echo "ERROR: Dependencies installation failed - no include directory found"
+          exit 1
+        fi
 
     - name: Set dependency environment variables
       shell: bash

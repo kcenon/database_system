@@ -80,7 +80,7 @@ fi
 build_system "thread_system" "thread_system" "main" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
-  -DTHREAD_BUILD_UNIT_TESTS=OFF \
+  -DBUILD_THREADSYSTEM_AS_SUBMODULE=ON \
   -DTHREAD_BUILD_INTEGRATION_TESTS=OFF
 
 # Verify thread_system installation

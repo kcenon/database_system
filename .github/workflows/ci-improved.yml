@@ -139,6 +139,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
@@ -166,6 +167,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
             -Dthread_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/thread_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -187,6 +189,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
             -Dthread_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/thread_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -207,6 +210,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
@@ -229,6 +233,7 @@ jobs:
             -Dlogger_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/logger_system \
             -Dmonitoring_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/monitoring_system \
             -Dcontainer_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/container_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_WITH_LOGGER_SYSTEM=ON \
@@ -472,6 +477,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
@@ -499,6 +505,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
             -Dthread_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/thread_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -520,6 +527,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
             -Dthread_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/thread_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
@@ -540,6 +548,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/deps/install \
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deps/install \
             -Dcommon_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/common_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_TESTS=OFF \
             -DBUILD_EXAMPLES=OFF \
@@ -562,6 +571,7 @@ jobs:
             -Dlogger_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/logger_system \
             -Dmonitoring_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/monitoring_system \
             -Dcontainer_system_DIR=${{ github.workspace }}/deps/install/lib/cmake/container_system \
+            -DCMAKE_CXX_FLAGS="-I${{ github.workspace }}/deps/install/include" \
             -DBUILD_WITH_COMMON_SYSTEM=ON \
             -DBUILD_WITH_THREAD_SYSTEM=ON \
             -DBUILD_WITH_LOGGER_SYSTEM=ON \

@@ -89,8 +89,32 @@ function(find_system_dependency NAME)
         endif()
     endforeach()
 
+    # Generate package name variations for find_package NAMES
+    # Supports both snake_case (network_system) and PascalCase (NetworkSystem)
+    set(_PACKAGE_NAMES ${NAME})
+
+    # Convert snake_case to PascalCase (e.g., network_system -> NetworkSystem)
+    string(REPLACE "_" ";" _NAME_PARTS "${NAME}")
+    set(_PASCAL_NAME "")
+    foreach(_part ${_NAME_PARTS})
+        string(SUBSTRING "${_part}" 0 1 _first_char)
+        string(TOUPPER "${_first_char}" _first_upper)
+        string(SUBSTRING "${_part}" 1 -1 _rest)
+        string(APPEND _PASCAL_NAME "${_first_upper}${_rest}")
+    endforeach()
+    if(NOT _PASCAL_NAME STREQUAL NAME)
+        list(APPEND _PACKAGE_NAMES "${_PASCAL_NAME}")
+    endif()
+
+    # Also try all uppercase (e.g., NETWORK_SYSTEM)
+    string(TOUPPER "${NAME}" _NAME_UPPER)
+    if(NOT _NAME_UPPER STREQUAL NAME)
+        list(APPEND _PACKAGE_NAMES "${_NAME_UPPER}")
+    endif()
+
+    list(REMOVE_DUPLICATES _PACKAGE_NAMES)
+
     # Try CONFIG mode using explicit hints (install prefixes)
-    set(_PATH_SUFFIXES "")
     set(_PATH_SUFFIXES
         ""
         "cmake"
@@ -141,24 +165,38 @@ function(find_system_dependency_include NAME)
     # Build list of include search paths
     set(_INCLUDE_PATHS)
 
-    # 1. Environment variable
+    # 1. Environment variable (supports both source and install trees)
     if(DEFINED ENV{${NAME}_ROOT})
-        list(APPEND _INCLUDE_PATHS "$ENV{${NAME}_ROOT}/include")
+        list(APPEND _INCLUDE_PATHS
+            "$ENV{${NAME}_ROOT}/include"
+            "$ENV{${NAME}_ROOT}/build/include"
+        )
     endif()
 
     # 2. Platform-specific standard locations
     if(APPLE)
-        list(APPEND _INCLUDE_PATHS "/Users/$ENV{USER}/Sources/${NAME}/include")
+        list(APPEND _INCLUDE_PATHS
+            "/Users/$ENV{USER}/Sources/${NAME}/include"
+            "/Users/$ENV{USER}/Sources/${NAME}/build/include"
+        )
     elseif(UNIX)
-        list(APPEND _INCLUDE_PATHS "/home/$ENV{USER}/Sources/${NAME}/include")
+        list(APPEND _INCLUDE_PATHS
+            "/home/$ENV{USER}/Sources/${NAME}/include"
+            "/home/$ENV{USER}/Sources/${NAME}/build/include"
+        )
     elseif(WIN32)
-        list(APPEND _INCLUDE_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/include")
+        list(APPEND _INCLUDE_PATHS
+            "C:/Users/$ENV{USERNAME}/Sources/${NAME}/include"
+            "C:/Users/$ENV{USERNAME}/Sources/${NAME}/build/include"
+        )
     endif()
 
-    # 3. Relative paths
+    # 3. Relative paths (supports both source and install trees)
     list(APPEND _INCLUDE_PATHS
         "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build/include"
     )
 
     # Try to find include directory

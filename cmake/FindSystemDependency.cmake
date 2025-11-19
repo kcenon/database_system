@@ -17,35 +17,43 @@
 
 function(find_system_dependency NAME)
     # Check if already found
-    if(${NAME}_FOUND)
+    if(DEFINED ${NAME}_FOUND AND ${NAME}_FOUND)
         return()
     endif()
 
-    # Build list of search paths
-    set(_SEARCH_PATHS)
+    # Build list of potential source locations
+    set(_SOURCE_PATHS)
+    set(_CONFIG_HINTS)
 
     # 1. Environment variable (highest priority)
-    if(DEFINED ENV{${NAME}_ROOT})
-        list(APPEND _SEARCH_PATHS "$ENV{${NAME}_ROOT}")
+    if(DEFINED ENV{${NAME}_ROOT} AND NOT "$ENV{${NAME}_ROOT}" STREQUAL "")
+        list(APPEND _SOURCE_PATHS "$ENV{${NAME}_ROOT}")
+        list(APPEND _CONFIG_HINTS "$ENV{${NAME}_ROOT}")
     endif()
 
     # 2. Platform-specific standard locations
     if(APPLE)
-        list(APPEND _SEARCH_PATHS "/Users/$ENV{USER}/Sources/${NAME}")
+        list(APPEND _SOURCE_PATHS "/Users/$ENV{USER}/Sources/${NAME}")
     elseif(UNIX)
-        list(APPEND _SEARCH_PATHS "/home/$ENV{USER}/Sources/${NAME}")
+        list(APPEND _SOURCE_PATHS "/home/$ENV{USER}/Sources/${NAME}")
     elseif(WIN32)
-        list(APPEND _SEARCH_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}")
+        list(APPEND _SOURCE_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}")
     endif()
 
     # 3. Relative paths (sibling directories)
-    list(APPEND _SEARCH_PATHS
+    list(APPEND _SOURCE_PATHS
         "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
     )
 
+    list(REMOVE_DUPLICATES _SOURCE_PATHS)
+
     # Try to find source directory
-    foreach(_path ${_SEARCH_PATHS})
+    foreach(_path ${_SOURCE_PATHS})
+        if(_path STREQUAL "")
+            continue()
+        endif()
+
         if(EXISTS "${_path}/CMakeLists.txt")
             message(STATUS "Found ${NAME} source at: ${_path}")
             set(${NAME}_DIR "${_path}/build" CACHE PATH "${NAME} build directory" FORCE)
@@ -55,7 +63,31 @@ function(find_system_dependency NAME)
         endif()
     endforeach()
 
-    # Try CONFIG mode if not found in source paths
+    # Try CONFIG mode using explicit hints (install prefixes)
+    set(_PATH_SUFFIXES
+        ""
+        "${NAME}"
+        "cmake"
+        "lib/cmake/${NAME}"
+        "lib/${NAME}/cmake"
+        "share/${NAME}/cmake"
+    )
+
+    list(REMOVE_DUPLICATES _CONFIG_HINTS)
+    if(_CONFIG_HINTS)
+        find_package(${NAME} CONFIG QUIET
+            HINTS ${_CONFIG_HINTS}
+            PATH_SUFFIXES ${_PATH_SUFFIXES}
+            NO_DEFAULT_PATH
+        )
+        if(${NAME}_FOUND)
+            message(STATUS "Found ${NAME} via configured hint paths")
+            set(${NAME}_FOUND TRUE PARENT_SCOPE)
+            return()
+        endif()
+    endif()
+
+    # Fallback: default CONFIG search on system
     find_package(${NAME} CONFIG QUIET)
     if(${NAME}_FOUND)
         message(STATUS "Found ${NAME} via CONFIG mode")
@@ -113,18 +145,25 @@ function(find_system_dependency_library NAME)
     if(DEFINED ENV{${NAME}_ROOT})
         list(APPEND _LIB_PATHS "$ENV{${NAME}_ROOT}/build/lib")
         list(APPEND _LIB_PATHS "$ENV{${NAME}_ROOT}/build")
+        list(APPEND _LIB_PATHS "$ENV{${NAME}_ROOT}/lib")
+        list(APPEND _LIB_PATHS "$ENV{${NAME}_ROOT}/lib64")
     endif()
 
     # 2. Platform-specific standard locations
     if(APPLE)
         list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/build/lib")
         list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/build")
+        list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/lib")
+        list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/lib64")
     elseif(UNIX)
         list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/build/lib")
         list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/build")
+        list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/lib")
+        list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/lib64")
     elseif(WIN32)
         list(APPEND _LIB_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/build/lib")
         list(APPEND _LIB_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/build")
+        list(APPEND _LIB_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/lib")
     endif()
 
     # Try to find library directory

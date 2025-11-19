@@ -11,7 +11,8 @@ cd deps
 build_system() {
   local name=$1
   local repo=$2
-  shift 2
+  local branch=$3
+  shift 3
   local cmake_args=("$@")
 
   echo ""
@@ -26,6 +27,13 @@ build_system() {
   fi
 
   cd "$repo"
+
+  # Checkout specific branch if provided
+  if [ -n "$branch" ] && [ "$branch" != "main" ]; then
+    echo "Checking out branch: $branch"
+    git fetch origin "$branch" || true
+    git checkout "$branch" || echo "Warning: Could not checkout $branch, using default branch"
+  fi
 
   # Common CMake arguments
   local common_args=(
@@ -52,7 +60,7 @@ build_system() {
 }
 
 # Build Tier 0: common_system
-build_system "common_system" "common_system"
+build_system "common_system" "common_system" "main"
 
 # Verify common_system installation
 if [ ! -d "$INSTALL_PREFIX/include/kcenon/common" ]; then
@@ -62,7 +70,7 @@ if [ ! -d "$INSTALL_PREFIX/include/kcenon/common" ]; then
 fi
 
 # Build Tier 1: thread_system
-build_system "thread_system" "thread_system" \
+build_system "thread_system" "thread_system" "main" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON \
@@ -76,7 +84,7 @@ if [ ! -d "$INSTALL_PREFIX/include/kcenon/thread" ]; then
 fi
 
 # Build Tier 1: logger_system
-build_system "logger_system" "logger_system" \
+build_system "logger_system" "logger_system" "main" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \
@@ -84,8 +92,8 @@ build_system "logger_system" "logger_system" \
   -DBUILD_WITH_THREAD_SYSTEM=ON \
   -DLOGGER_BUILD_INTEGRATION_TESTS=OFF
 
-# Build Tier 1: monitoring_system
-build_system "monitoring_system" "monitoring_system" \
+# Build Tier 1: monitoring_system (using fix branch until PR #76 is merged)
+build_system "monitoring_system" "monitoring_system" "fix/cmake-install-paths" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \
@@ -94,13 +102,13 @@ build_system "monitoring_system" "monitoring_system" \
   -DMONITORING_BUILD_INTEGRATION_TESTS=OFF
 
 # Build Tier 1: container_system
-build_system "container_system" "container_system" \
+build_system "container_system" "container_system" "main" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -DBUILD_WITH_COMMON_SYSTEM=ON
 
 # Build Tier 2: network_system
-build_system "network_system" "network_system" \
+build_system "network_system" "network_system" "main" \
   -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
   -Dcommon_system_DIR="$INSTALL_PREFIX/lib/cmake/common_system" \
   -Dthread_system_DIR="$INSTALL_PREFIX/lib/cmake/thread_system" \

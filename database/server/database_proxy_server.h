@@ -16,8 +16,8 @@ All rights reserved.
 #include "../protocol/database_protocol.h"
 
 // network_system integration (required)
-#include <network_system/core/messaging_server.h>
-#include <network_system/session/messaging_session.h>
+#include <kcenon/network/core/messaging_server.h>
+#include <kcenon/network/session/messaging_session.h>
 
 namespace database::server {
 

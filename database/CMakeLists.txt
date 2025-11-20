@@ -12,6 +12,20 @@ project(database
     LANGUAGES CXX
 )
 
+# Include custom modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/database_system/cmake")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/FindSystemDependency.cmake")
+    include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/FindSystemDependency.cmake)
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/cmake/FindSystemDependency.cmake")
+    include(${CMAKE_SOURCE_DIR}/cmake/FindSystemDependency.cmake)
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/database_system/cmake/FindSystemDependency.cmake")
+    include(${CMAKE_SOURCE_DIR}/database_system/cmake/FindSystemDependency.cmake)
+else()
+    message(WARNING "FindSystemDependency.cmake not found - some features may not work")
+endif()
+
 ##################################################
 # Source Files Configuration
 ##################################################
@@ -98,8 +112,11 @@ if(USE_THREAD_SYSTEM)
     )
 endif()
 
-# P0-3 and P0-4: Database Proxy Server and Remote Client (added conditionally with network_system)
-if(USE_NETWORK_SYSTEM)
+# Enable experimental remote gateway components
+option(ENABLE_REMOTE_DATABASE_GATEWAY "Build remote proxy server/client components" OFF)
+
+# P0-3 and P0-4: Database Proxy Server and Remote Client (added conditionally)
+if(USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
     list(APPEND SOURCE_FILES
         # P0-3 Sources (Database Proxy Server)
         ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
@@ -108,6 +125,8 @@ if(USE_NETWORK_SYSTEM)
         # P0-4 Sources (Remote Database Client)
         ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
     )
+else()
+    message(STATUS "Remote database gateway disabled (ENABLE_REMOTE_DATABASE_GATEWAY=OFF)")
 endif()
 
 ##################################################
@@ -139,18 +158,33 @@ endif()
 
 if(BUILD_WITH_COMMON_SYSTEM)
     message(STATUS "Database: Enabling common_system integration")
-    find_system_dependency_include(common_system)
+    set(_DATABASE_COMMON_TARGET "")
+    if(DEFINED common_system_TARGET AND common_system_TARGET AND TARGET ${common_system_TARGET})
+        set(_DATABASE_COMMON_TARGET ${common_system_TARGET})
+    elseif(TARGET common_system)
+        set(_DATABASE_COMMON_TARGET common_system)
+    elseif(TARGET kcenon::common)
+        set(_DATABASE_COMMON_TARGET kcenon::common)
+    endif()
 
-    if(common_system_INCLUDE_DIR)
-        message(STATUS "Found common_system at: ${common_system_INCLUDE_DIR}")
-        target_include_directories(${PROJECT_NAME} PUBLIC
-            $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
-        )
+    if(_DATABASE_COMMON_TARGET)
+        target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_COMMON_TARGET})
         target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
-        message(STATUS "Database: common_system integration enabled")
+        message(STATUS "Database: common_system integration enabled via target ${_DATABASE_COMMON_TARGET}")
     else()
-        message(WARNING "common_system not found - integration disabled. Install common_system or set BUILD_WITH_COMMON_SYSTEM=OFF to suppress this warning.")
-        set(BUILD_WITH_COMMON_SYSTEM OFF CACHE BOOL "common_system not found" FORCE)
+        find_system_dependency_include(common_system)
+
+        if(common_system_INCLUDE_DIR)
+            message(STATUS "Found common_system at: ${common_system_INCLUDE_DIR}")
+            target_include_directories(${PROJECT_NAME} PUBLIC
+                $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
+            )
+            target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
+            message(STATUS "Database: common_system integration enabled")
+        else()
+            message(WARNING "common_system not found - integration disabled. Install common_system or set BUILD_WITH_COMMON_SYSTEM=OFF to suppress this warning.")
+            set(BUILD_WITH_COMMON_SYSTEM OFF CACHE BOOL "common_system not found" FORCE)
+        endif()
     endif()
 endif()
 
@@ -192,6 +226,16 @@ if(USE_THREAD_SYSTEM)
     # Try to find thread_system
     find_system_dependency_include(thread_system)
     set(_DATABASE_THREAD_INCLUDE_PATHS ${thread_system_INCLUDE_DIR})
+    set(_DATABASE_THREAD_TARGET "")
+    if(DEFINED thread_system_TARGET AND thread_system_TARGET AND TARGET ${thread_system_TARGET})
+        set(_DATABASE_THREAD_TARGET ${thread_system_TARGET})
+    elseif(TARGET ThreadSystem)
+        set(_DATABASE_THREAD_TARGET ThreadSystem)
+    elseif(TARGET utilities)
+        set(_DATABASE_THREAD_TARGET utilities)
+    elseif(TARGET thread_system::thread_system)
+        set(_DATABASE_THREAD_TARGET thread_system::thread_system)
+    endif()
 
     set(_FOUND_THREAD_INCLUDE FALSE)
     foreach(_path ${_DATABASE_THREAD_INCLUDE_PATHS})
@@ -241,21 +285,37 @@ if(USE_THREAD_SYSTEM)
             message(WARNING "Database: typed_pool implementation not found - connection_pool_v2 may have linking issues")
         endif()
 
-        # Try to link thread_system library if built
-        set(_THREAD_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
-            "/home/$ENV{USER}/Sources/thread_system/build/lib"
-        )
+        # Link thread_system library if available
+        # First check for super-build targets
+        if(_DATABASE_THREAD_TARGET)
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_THREAD_TARGET})
+            message(STATUS "Database: Linked to ${_DATABASE_THREAD_TARGET} target")
+        else()
+            # Try to find thread_system library paths
+            set(_THREAD_LIB_PATHS)
 
-        foreach(_lib_path ${_THREAD_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found thread_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to thread_system libraries if they exist
-                # Note: thread_system is mostly header-only, so this is optional
-                break()
+            # Use environment variable if set
+            if(DEFINED ENV{THREAD_SYSTEM_ROOT})
+                list(APPEND _THREAD_LIB_PATHS "$ENV{THREAD_SYSTEM_ROOT}/build/lib")
             endif()
-        endforeach()
+
+            # Standard paths
+            list(APPEND _THREAD_LIB_PATHS
+                "${CMAKE_SOURCE_DIR}/thread_system/build/lib"
+                "${CMAKE_SOURCE_DIR}/../thread_system/build/lib"
+                "../thread_system/build/lib"
+            )
+
+            foreach(_lib_path ${_THREAD_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found thread_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to thread_system libraries if they exist
+                    # Note: thread_system is mostly header-only, so this is optional
+                    break()
+                endif()
+            endforeach()
+        endif()
     else()
         message(WARNING "Database: thread_system headers not found - integration disabled")
         set(USE_THREAD_SYSTEM OFF CACHE BOOL "thread_system not found" FORCE)
@@ -278,6 +338,14 @@ if(USE_CONTAINER_SYSTEM)
         find_system_dependency_include(container_system)
         set(_DATABASE_CONTAINER_INCLUDE_PATHS ${container_system_INCLUDE_DIR})
     endif()
+    set(_DATABASE_CONTAINER_TARGET "")
+    if(DEFINED container_system_TARGET AND container_system_TARGET AND TARGET ${container_system_TARGET})
+        set(_DATABASE_CONTAINER_TARGET ${container_system_TARGET})
+    elseif(TARGET ContainerSystem::container)
+        set(_DATABASE_CONTAINER_TARGET ContainerSystem::container)
+    elseif(TARGET container_system)
+        set(_DATABASE_CONTAINER_TARGET container_system)
+    endif()
 
     set(_FOUND_CONTAINER_INCLUDE FALSE)
     foreach(_path ${_DATABASE_CONTAINER_INCLUDE_PATHS})
@@ -295,24 +363,40 @@ if(USE_CONTAINER_SYSTEM)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)
         message(STATUS "Database: container_system integration enabled")
 
-        # Try to link container_system library if built
-        set(_CONTAINER_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/container_system/build/lib"
-            "/home/$ENV{USER}/Sources/container_system/build/lib"
-        )
+        # Link container_system library if available
+        # First check for super-build targets
+        if(_DATABASE_CONTAINER_TARGET)
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_CONTAINER_TARGET})
+            message(STATUS "Database: Linked to ${_DATABASE_CONTAINER_TARGET} target")
+        else()
+            # Try to find container_system library paths
+            set(_CONTAINER_LIB_PATHS)
 
-        foreach(_lib_path ${_CONTAINER_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found container_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to container_system library if it exists
-                if(EXISTS "${_lib_path}/libcontainer.a" OR EXISTS "${_lib_path}/libcontainer.dylib")
-                    target_link_libraries(${PROJECT_NAME} PUBLIC container)
-                    message(STATUS "Database: Linked container_system library")
-                endif()
-                break()
+            # Use environment variable if set
+            if(DEFINED ENV{CONTAINER_SYSTEM_ROOT})
+                list(APPEND _CONTAINER_LIB_PATHS "$ENV{CONTAINER_SYSTEM_ROOT}/build/lib")
             endif()
-        endforeach()
+
+            # Standard paths
+            list(APPEND _CONTAINER_LIB_PATHS
+                "${CMAKE_SOURCE_DIR}/container_system/build/lib"
+                "${CMAKE_SOURCE_DIR}/../container_system/build/lib"
+                "../container_system/build/lib"
+            )
+
+            foreach(_lib_path ${_CONTAINER_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found container_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to container_system library if it exists
+                    if(EXISTS "${_lib_path}/libcontainer.a" OR EXISTS "${_lib_path}/libcontainer.dylib")
+                        target_link_libraries(${PROJECT_NAME} PUBLIC container)
+                        message(STATUS "Database: Linked container_system library")
+                    endif()
+                    break()
+                endif()
+            endforeach()
+        endif()
     else()
         message(WARNING "Database: container_system headers not found - integration disabled")
         set(USE_CONTAINER_SYSTEM OFF CACHE BOOL "container_system not found" FORCE)
@@ -335,6 +419,14 @@ if(USE_NETWORK_SYSTEM)
         find_system_dependency_include(network_system)
         set(_DATABASE_NETWORK_INCLUDE_PATHS ${network_system_INCLUDE_DIR})
     endif()
+    set(_DATABASE_NETWORK_TARGET "")
+    if(DEFINED network_system_TARGET AND network_system_TARGET AND TARGET ${network_system_TARGET})
+        set(_DATABASE_NETWORK_TARGET ${network_system_TARGET})
+    elseif(TARGET NetworkSystem)
+        set(_DATABASE_NETWORK_TARGET NetworkSystem)
+    elseif(TARGET network_system)
+        set(_DATABASE_NETWORK_TARGET network_system)
+    endif()
 
     set(_FOUND_NETWORK_INCLUDE FALSE)
     foreach(_path ${_DATABASE_NETWORK_INCLUDE_PATHS})
@@ -352,24 +444,40 @@ if(USE_NETWORK_SYSTEM)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
         message(STATUS "Database: network_system integration enabled")
 
-        # Try to link network_system library if built
-        set(_NETWORK_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/network_system/build/lib"
-            "/home/$ENV{USER}/Sources/network_system/build/lib"
-        )
+        # Link network_system library if available
+        # First check for super-build targets
+        if(_DATABASE_NETWORK_TARGET)
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_NETWORK_TARGET})
+            message(STATUS "Database: Linked to ${_DATABASE_NETWORK_TARGET} target")
+        else()
+            # Try to find network_system library paths
+            set(_NETWORK_LIB_PATHS)
 
-        foreach(_lib_path ${_NETWORK_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                message(STATUS "Database: Found network_system library path: ${_lib_path}")
-                target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
-                # Link to network_system library if it exists
-                if(EXISTS "${_lib_path}/libnetwork.a" OR EXISTS "${_lib_path}/libnetwork.dylib")
-                    target_link_libraries(${PROJECT_NAME} PUBLIC network)
-                    message(STATUS "Database: Linked network_system library")
-                endif()
-                break()
+            # Use environment variable if set
+            if(DEFINED ENV{NETWORK_SYSTEM_ROOT})
+                list(APPEND _NETWORK_LIB_PATHS "$ENV{NETWORK_SYSTEM_ROOT}/build/lib")
             endif()
-        endforeach()
+
+            # Standard paths
+            list(APPEND _NETWORK_LIB_PATHS
+                "${CMAKE_SOURCE_DIR}/network_system/build/lib"
+                "${CMAKE_SOURCE_DIR}/../network_system/build/lib"
+                "../network_system/build/lib"
+            )
+
+            foreach(_lib_path ${_NETWORK_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    message(STATUS "Database: Found network_system library path: ${_lib_path}")
+                    target_link_directories(${PROJECT_NAME} PUBLIC ${_lib_path})
+                    # Link to network_system library if it exists
+                    if(EXISTS "${_lib_path}/libnetwork.a" OR EXISTS "${_lib_path}/libnetwork.dylib")
+                        target_link_libraries(${PROJECT_NAME} PUBLIC network)
+                        message(STATUS "Database: Linked network_system library")
+                    endif()
+                    break()
+                endif()
+            endforeach()
+        endif()
     else()
         message(WARNING "Database: network_system headers not found - integration disabled")
         set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)

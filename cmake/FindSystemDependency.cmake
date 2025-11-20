@@ -21,6 +21,36 @@ function(find_system_dependency NAME)
         return()
     endif()
 
+    # First check for existing CMake targets (super-build case)
+    # Map system names to possible target names
+    set(POSSIBLE_TARGETS ${NAME})
+
+    if(${NAME} STREQUAL "thread_system")
+        list(APPEND POSSIBLE_TARGETS ThreadSystem utilities thread_system)
+    elseif(${NAME} STREQUAL "logger_system")
+        list(APPEND POSSIBLE_TARGETS LoggerSystem logger logger_system)
+    elseif(${NAME} STREQUAL "container_system")
+        list(APPEND POSSIBLE_TARGETS ContainerSystem::container container_system container)
+    elseif(${NAME} STREQUAL "monitoring_system")
+        list(APPEND POSSIBLE_TARGETS monitoring_system MonitoringSystem)
+    elseif(${NAME} STREQUAL "network_system")
+        list(APPEND POSSIBLE_TARGETS NetworkSystem network_system network)
+    elseif(${NAME} STREQUAL "database_system")
+        list(APPEND POSSIBLE_TARGETS database_system DatabaseSystem database)
+    elseif(${NAME} STREQUAL "common_system")
+        list(APPEND POSSIBLE_TARGETS common_system CommonSystem common)
+    endif()
+
+    # Check for existing targets
+    foreach(target ${POSSIBLE_TARGETS})
+        if(TARGET ${target})
+            message(STATUS "Found ${NAME} as existing target: ${target}")
+            set(${NAME}_FOUND TRUE PARENT_SCOPE)
+            set(${NAME}_TARGET ${target} PARENT_SCOPE)
+            return()
+        endif()
+    endforeach()
+
     # Build list of search paths
     set(_SEARCH_PATHS)
 
@@ -29,19 +59,12 @@ function(find_system_dependency NAME)
         list(APPEND _SEARCH_PATHS "$ENV{${NAME}_ROOT}")
     endif()
 
-    # 2. Platform-specific standard locations
-    if(APPLE)
-        list(APPEND _SEARCH_PATHS "/Users/$ENV{USER}/Sources/${NAME}")
-    elseif(UNIX)
-        list(APPEND _SEARCH_PATHS "/home/$ENV{USER}/Sources/${NAME}")
-    elseif(WIN32)
-        list(APPEND _SEARCH_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}")
-    endif()
-
-    # 3. Relative paths (sibling directories)
+    # 2. Standard paths (no hardcoded user directories)
     list(APPEND _SEARCH_PATHS
         "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
+        "${CMAKE_SOURCE_DIR}/${NAME}"
+        "${CMAKE_SOURCE_DIR}/../${NAME}"
     )
 
     # Try to find source directory
@@ -64,6 +87,7 @@ function(find_system_dependency NAME)
     endif()
 
     # Not found
+    message(STATUS "${NAME} not found")
     set(${NAME}_FOUND FALSE PARENT_SCOPE)
 endfunction()
 
@@ -75,21 +99,19 @@ function(find_system_dependency_include NAME)
     # 1. Environment variable
     if(DEFINED ENV{${NAME}_ROOT})
         list(APPEND _INCLUDE_PATHS "$ENV{${NAME}_ROOT}/include")
+        list(APPEND _INCLUDE_PATHS "$ENV{${NAME}_ROOT}")
     endif()
 
-    # 2. Platform-specific standard locations
-    if(APPLE)
-        list(APPEND _INCLUDE_PATHS "/Users/$ENV{USER}/Sources/${NAME}/include")
-    elseif(UNIX)
-        list(APPEND _INCLUDE_PATHS "/home/$ENV{USER}/Sources/${NAME}/include")
-    elseif(WIN32)
-        list(APPEND _INCLUDE_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/include")
-    endif()
-
-    # 3. Relative paths
+    # 2. Standard paths (no hardcoded user directories)
     list(APPEND _INCLUDE_PATHS
         "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/include"
+        "${CMAKE_SOURCE_DIR}/${NAME}/include"
+        "${CMAKE_SOURCE_DIR}/../${NAME}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
+        "${CMAKE_SOURCE_DIR}/${NAME}"
+        "${CMAKE_SOURCE_DIR}/../${NAME}"
     )
 
     # Try to find include directory
@@ -115,17 +137,17 @@ function(find_system_dependency_library NAME)
         list(APPEND _LIB_PATHS "$ENV{${NAME}_ROOT}/build")
     endif()
 
-    # 2. Platform-specific standard locations
-    if(APPLE)
-        list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/build/lib")
-        list(APPEND _LIB_PATHS "/Users/$ENV{USER}/Sources/${NAME}/build")
-    elseif(UNIX)
-        list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/build/lib")
-        list(APPEND _LIB_PATHS "/home/$ENV{USER}/Sources/${NAME}/build")
-    elseif(WIN32)
-        list(APPEND _LIB_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/build/lib")
-        list(APPEND _LIB_PATHS "C:/Users/$ENV{USERNAME}/Sources/${NAME}/build")
-    endif()
+    # 2. Standard relative paths (no hardcoded user directories)
+    list(APPEND _LIB_PATHS
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build/lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build/lib"
+        "${CMAKE_SOURCE_DIR}/${NAME}/build/lib"
+        "${CMAKE_SOURCE_DIR}/../${NAME}/build/lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build"
+        "${CMAKE_SOURCE_DIR}/${NAME}/build"
+        "${CMAKE_SOURCE_DIR}/../${NAME}/build"
+    )
 
     # Try to find library directory
     foreach(_path ${_LIB_PATHS})

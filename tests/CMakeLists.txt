@@ -63,6 +63,7 @@ if(GTest_FOUND OR gtest_FOUND)
     gtest_discover_tests(database_unit_tests
         PROPERTIES
             TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
     )
 else()
     message(WARNING "GTest not found - unit tests will not be built")
@@ -144,6 +145,7 @@ if(GTest_FOUND OR gtest_FOUND)
     gtest_discover_tests(database_thread_safety_test
         PROPERTIES
             TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
     )
 endif()
 
@@ -309,6 +311,7 @@ if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
     gtest_discover_tests(integrated_container_protocol_test
         PROPERTIES
             TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
     )
 
     message(STATUS "Container protocol test configured (Phase 1 POC)")

@@ -405,7 +405,7 @@ static void BM_IntegratedSystemPerformance(benchmark::State& state) {
             metrics.db_type = database_types::postgres;
             metrics.start_time = std::chrono::steady_clock::now();
             metrics.end_time = metrics.start_time + metrics.execution_time;
-            monitor.record_query_metrics(metrics);
+            monitor->record_query_metrics(metrics);
 
             return can_access && user.is_active;
         });

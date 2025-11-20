@@ -162,9 +162,11 @@ option(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM "Allow building without network_system
 message(STATUS "Searching for network_system...")
 find_system_dependency(network_system)
 
-if(network_system_FOUND)
+# Check for target existence as well
+if(network_system_FOUND OR TARGET NetworkSystem OR TARGET network_system)
     message(STATUS "network_system integration enabled")
     set(USE_NETWORK_SYSTEM ON CACHE BOOL "network_system integration" FORCE)
+    set(network_system_FOUND TRUE)  # Ensure this is set
 else()
     if(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM)
         message(WARNING "network_system not found - building without distributed features. "

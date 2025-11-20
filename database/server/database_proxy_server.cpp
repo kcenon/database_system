@@ -6,11 +6,14 @@ All rights reserved.
 *****************************************************************************/
 
 #include "database_proxy_server.h"
+
 #include <iostream>
 
 namespace database::server {
 
-database_proxy_server::database_proxy_server(uint16_t port, std::shared_ptr<connection_pool_manager> db_pool)
+database_proxy_server::database_proxy_server(
+    uint16_t port,
+    std::shared_ptr<connection_pool_manager> db_pool)
     : port_(port)
     , db_pool_(std::move(db_pool))
     , running_(false)
@@ -25,13 +28,12 @@ database_proxy_server::~database_proxy_server() {
 
 bool database_proxy_server::start() {
     if (running_.exchange(true)) {
-        return false;  // Already running
+        return false;
     }
 
-    // Initialize network_system::messaging_server
     network_server_->set_connection_callback(
-        [this](auto session) {
-            handle_client_connect(session);
+        [this](std::shared_ptr<network_system::session::messaging_session> session) {
+            handle_client_connect(std::move(session));
         }
     );
 
@@ -42,8 +44,8 @@ bool database_proxy_server::start() {
     );
 
     network_server_->set_receive_callback(
-        [this](auto session, const auto& data) {
-            handle_message(session, data);
+        [this](std::shared_ptr<network_system::session::messaging_session> session, const auto& data) {
+            handle_message(std::move(session), data);
         }
     );
 
@@ -62,17 +64,13 @@ bool database_proxy_server::start() {
 
     std::cout << "Database proxy server started on port " << port_ << "\n";
     return true;
-#else
-    std::cout << "Database proxy server started on port " << port_ << " (stub implementation)\n";
-    return true;
 }
 
 void database_proxy_server::stop() {
     if (!running_.exchange(false)) {
-        return;  // Not running
+        return;
     }
 
-    // Stop all network sessions
     {
         std::lock_guard<std::mutex> lock(sessions_mutex_);
         for (auto& [id, session] : network_sessions_) {
@@ -81,7 +79,6 @@ void database_proxy_server::stop() {
         network_sessions_.clear();
     }
 
-    // Stop network server
     if (network_server_) {
         auto result = network_server_->stop_server();
         if (result.is_err()) {
@@ -89,7 +86,6 @@ void database_proxy_server::stop() {
         }
     }
 
-    // Close all database sessions
     {
         std::lock_guard<std::mutex> lock(sessions_mutex_);
         for (auto& [id, session] : sessions_) {
@@ -108,8 +104,6 @@ size_t database_proxy_server::get_active_session_count() const {
 
 void database_proxy_server::handle_client_connect(
     std::shared_ptr<network_system::session::messaging_session> network_session
-#else
-    const std::string& session_id
 ) {
     std::string session_id = "session_" + std::to_string(next_session_id_.fetch_add(1));
 
@@ -119,12 +113,7 @@ void database_proxy_server::handle_client_connect(
     }
 
     std::cout << "Client connected: " << session_id << "\n";
-
-    // Start the network session
     network_session->start_session();
-#else
-    // Stub implementation
-    std::cout << "Client connected: " << session_id << " (stub)\n";
 }
 
 void database_proxy_server::handle_client_disconnect(const std::string& session_id) {
@@ -143,16 +132,12 @@ void database_proxy_server::handle_client_disconnect(const std::string& session_
 
 void database_proxy_server::handle_message(
     std::shared_ptr<network_system::session::messaging_session> network_session,
-#else
-    const std::string& session_id,
     const std::vector<uint8_t>& data
 ) {
-    // Deserialize message header
     auto header_result = protocol::protocol_serializer::deserialize_header(data);
     if (!header_result.has_value()) {
         std::cerr << "Failed to deserialize message header\n";
 
-        // Send error response
         protocol::error_response err;
         err.error_code = -1;
         err.error_message = "Invalid message header";
@@ -163,18 +148,14 @@ void database_proxy_server::handle_message(
     }
 
     const auto& header = header_result.value();
-
-    // Validate header
     if (!header.is_valid()) {
         std::cerr << "Invalid message header magic or version\n";
         return;
     }
 
-    // Extract payload (skip header bytes)
     constexpr size_t header_size = sizeof(protocol::message_header);
     std::vector<uint8_t> payload(data.begin() + header_size, data.end());
 
-    // Route based on message type
     std::vector<uint8_t> response;
 
     switch (header.type) {
@@ -186,7 +167,6 @@ void database_proxy_server::handle_message(
         case protocol::message_type::COMMIT_TRANSACTION:
         case protocol::message_type::ROLLBACK_TRANSACTION:
             {
-                // Deserialize transaction request
                 auto txn_request_result = protocol::protocol_serializer::deserialize_transaction_request(payload);
 
                 protocol::transaction_response txn_response;
@@ -195,7 +175,6 @@ void database_proxy_server::handle_message(
                     txn_response.success = false;
                     txn_response.error_message = "Failed to deserialize transaction request";
                 } else {
-                    // Get connection from pool
                     auto pool = db_pool_->get_pool(database_types::sqlite);
                     if (!pool) {
                         txn_response.success = false;
@@ -208,16 +187,13 @@ void database_proxy_server::handle_message(
                         } else {
                             auto conn_wrapper = conn_result.value();
                             auto db_conn = std::shared_ptr<database_base>(conn_wrapper->get(), [conn_wrapper](database_base*) {
-                                // Keep conn_wrapper alive, do not delete the raw pointer
                             });
 
-                            // Create temporary session
                             auto temp_session = std::make_shared<database_session>(
                                 "txn_temp_" + std::to_string(header.request_id),
                                 db_conn
                             );
 
-                            // Execute transaction command
                             try {
                                 switch (header.type) {
                                     case protocol::message_type::BEGIN_TRANSACTION:
@@ -242,7 +218,6 @@ void database_proxy_server::handle_message(
                     }
                 }
 
-                // Serialize transaction response with header
                 auto txn_response_bytes = protocol::protocol_serializer::serialize(txn_response);
 
                 protocol::message_header txn_response_header;
@@ -253,12 +228,11 @@ void database_proxy_server::handle_message(
                 auto txn_header_bytes = protocol::protocol_serializer::serialize_header(txn_response_header);
                 txn_header_bytes.insert(txn_header_bytes.end(), txn_response_bytes.begin(), txn_response_bytes.end());
 
-                response = txn_header_bytes;
+                response = std::move(txn_header_bytes);
             }
             break;
 
         case protocol::message_type::PING:
-            // Simple PONG response
             {
                 protocol::message_header pong_header = header;
                 pong_header.type = protocol::message_type::PONG;
@@ -277,20 +251,15 @@ void database_proxy_server::handle_message(
             break;
     }
 
-    // Send response
     if (!response.empty()) {
         network_session->send_packet(std::move(response));
     }
-#else
-    // Stub implementation
-    std::cout << "Received " << data.size() << " bytes from " << session_id << " (stub)\n";
 }
 
 std::vector<uint8_t> database_proxy_server::process_query_request(
     const protocol::message_header& header,
     const std::vector<uint8_t>& payload
 ) {
-    // Deserialize query request
     auto request_result = protocol::protocol_serializer::deserialize_query_request(payload);
     if (!request_result.has_value()) {
         protocol::error_response err;
@@ -303,16 +272,12 @@ std::vector<uint8_t> database_proxy_server::process_query_request(
 
     protocol::query_response response;
 
-    // Get connection from pool
-    // For now, use SQLite as default. In production, this would be determined by
-    // client configuration or connection request
     auto pool = db_pool_->get_pool(database_types::sqlite);
     if (!pool) {
         response.success = false;
         response.error_message = "No connection pool available for requested database type";
         response.error_code = -4;
     } else {
-        // Acquire connection from pool
         auto conn_result = pool->acquire_connection();
         if (!conn_result.is_ok()) {
             response.success = false;
@@ -321,16 +286,13 @@ std::vector<uint8_t> database_proxy_server::process_query_request(
         } else {
             auto conn_wrapper = conn_result.value();
             auto db_conn = std::shared_ptr<database_base>(conn_wrapper->get(), [conn_wrapper](database_base*) {
-                // Keep conn_wrapper alive, do not delete the raw pointer
             });
 
-            // Create temporary session for this request
             auto temp_session = std::make_shared<database_session>(
                 "temp_" + std::to_string(header.request_id),
                 db_conn
             );
 
-            // Execute query through session
             try {
                 response = temp_session->execute_query(request);
             } catch (const std::exception& e) {
@@ -338,12 +300,9 @@ std::vector<uint8_t> database_proxy_server::process_query_request(
                 response.error_message = std::string("Exception during query execution: ") + e.what();
                 response.error_code = -6;
             }
-
-            // Session and connection will be automatically released
         }
     }
 
-    // Serialize response with header
     auto response_bytes = protocol::protocol_serializer::serialize(response);
 
     protocol::message_header response_header;
@@ -352,8 +311,6 @@ std::vector<uint8_t> database_proxy_server::process_query_request(
     response_header.payload_size = static_cast<uint32_t>(response_bytes.size());
 
     auto header_bytes = protocol::protocol_serializer::serialize_header(response_header);
-
-    // Combine header + payload
     header_bytes.insert(header_bytes.end(), response_bytes.begin(), response_bytes.end());
 
     return header_bytes;

@@ -18,8 +18,8 @@ All rights reserved.
 #include "../protocol/database_protocol.h"
 
 // network_system integration (required)
-#include <network_system/utils/resilient_client.h>
-#include <network_system/core/messaging_client.h>
+#include <kcenon/network/utils/resilient_client.h>
+#include <kcenon/network/core/messaging_client.h>
 
 namespace database::client {
 

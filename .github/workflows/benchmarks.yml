@@ -61,7 +61,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DDATABASE_BUILD_BENCHMARKS=ON \
           -DUSE_UNIT_TEST=OFF \
-          -DBUILD_DATABASE_SAMPLES=OFF
+          -DBUILD_DATABASE_SAMPLES=OFF \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON
 
     - name: Build benchmarks
       run: cmake --build build --config ${{ matrix.build_type }} --target database_benchmarks -j

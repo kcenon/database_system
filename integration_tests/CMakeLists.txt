@@ -91,6 +91,7 @@ gtest_discover_tests(database_integration_tests
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PROPERTIES
         LABELS "integration"
+    DISCOVERY_TIMEOUT 60
 )
 
 # Add custom target to run only integration tests

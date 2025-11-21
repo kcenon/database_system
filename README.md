@@ -149,6 +149,11 @@ entity_manager::instance().create_tables(db);
 
 [🏗️ ORM Framework Guide →](docs/FEATURES.md#orm-framework)
 
+### Result Types
+- Database-specific APIs expose `database::result<T>` / `database::result<void>` wrappers defined in `database/core/result.h`.
+- These wrappers delegate to `common::Result` while keeping `.get_error()` for backward compatibility; consult `database/database/core/result.h` when integrating with other modules to understand the available helpers.
+- When sharing samples outside the database_system repo, show both `result.is_err()` and `result.error()` usage so readers know how to convert to `common::error_info`.
+
 ---
 
 ## Performance Highlights

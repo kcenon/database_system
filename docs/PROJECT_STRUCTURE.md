@@ -778,7 +778,7 @@ auto adapter = std::make_shared<common_system_database_adapter>(db);
 
 auto result = adapter->connect("host=localhost dbname=mydb");
 if (!result) {
-    std::cerr << "Error: " << result.get_error().message << std::endl;
+    std::cerr << "Error: " << result.error().message << std::endl;
     return -1;
 }
 ```

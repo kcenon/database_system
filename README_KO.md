@@ -168,6 +168,11 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 - **Modern C++**: C++20 concept, coroutine, variant, RAII 패턴
 - **프로덕션 준비**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처
 
+### Result 타입 안내
+- 퍼블릭 API는 `database/core/result.h`에 정의된 `database::result<T>` / `database::result<void>` 래퍼를 사용합니다.
+- 이 래퍼는 내부적으로 `common::Result`를 기반으로 하되, 기존 코드 호환성을 위해 `.get_error()`도 유지합니다. 다른 시스템과 문서를 공유할 때는 `result.is_err()`와 `result.error()` 접근법을 함께 소개해 주세요.
+- 여러 시스템을 연결할 때는 `common::error_info` 변환 기능을 사용해 오류 코드와 모듈 이름을 그대로 전달하면 모듈 경계에서의 진단이 쉬워집니다.
+
 ### 🗄️ 지원 Database
 
 | Database | 상태 | 기능 | 성능 | ORM 지원 | 보안 |
@@ -1219,15 +1224,15 @@ auto adapter = std::make_shared<common_system_database_adapter>(db);
 
 auto connect_result = adapter->connect("host=localhost dbname=test");
 if (!connect_result) {
-    std::cerr << "Connection failed: " << connect_result.get_error().message
-              << " (code: " << static_cast<int>(connect_result.get_error().code) << ")\n";
+    std::cerr << "Connection failed: " << connect_result.error().message
+              << " (code: " << static_cast<int>(connect_result.error().code) << ")\n";
     return -1;
 }
 
 // Example 2: Query execution with Result<T>
 auto query_result = adapter->execute_query("SELECT * FROM users");
 if (!query_result) {
-    std::cerr << "Query failed: " << query_result.get_error().message << "\n";
+    std::cerr << "Query failed: " << query_result.error().message << "\n";
 } else {
     for (const auto& row : query_result.value()) {
         // Process results
@@ -1249,7 +1254,7 @@ if (!cmd_result) {
 
 auto commit_result = adapter->commit();
 if (!commit_result) {
-    std::cerr << "Commit failed: " << commit_result.get_error().message << "\n";
+    std::cerr << "Commit failed: " << commit_result.error().message << "\n";
 }
 ```
 
@@ -1321,14 +1326,14 @@ auto adapter = std::make_shared<common_system_database_adapter>(db);
 
 auto connect_result = adapter->connect("host=localhost dbname=test");
 if (!connect_result) {
-    std::cerr << "Connection failed: " << connect_result.get_error().message << "\n";
+    std::cerr << "Connection failed: " << connect_result.error().message << "\n";
     return -1;
 }
 
 // Query execution with Result<T>
 auto query_result = adapter->execute_query("SELECT * FROM users");
 if (!query_result) {
-    std::cerr << "Query failed: " << query_result.get_error().message << "\n";
+    std::cerr << "Query failed: " << query_result.error().message << "\n";
 }
 
 // Transaction with Result<T>

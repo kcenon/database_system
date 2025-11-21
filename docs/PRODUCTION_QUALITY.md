@@ -552,7 +552,7 @@ auto adapter = std::make_shared<common_system_database_adapter>(db);
 // Connect with Result<T>
 auto connect_result = adapter->connect("host=localhost dbname=mydb");
 if (!connect_result) {
-    const auto& error = connect_result.get_error();
+    const auto& error = connect_result.error();
     std::cerr << "Connection failed: " << error.message
               << " (code: " << static_cast<int>(error.code) << ")"
               << std::endl;
@@ -572,13 +572,13 @@ auto insert_result = adapter->execute_command(
 
 if (!insert_result) {
     adapter->rollback();
-    std::cerr << "Insert failed: " << insert_result.get_error().message << std::endl;
+    std::cerr << "Insert failed: " << insert_result.error().message << std::endl;
     return -1;
 }
 
 auto commit_result = adapter->commit();
 if (!commit_result) {
-    std::cerr << "Commit failed: " << commit_result.get_error().message << std::endl;
+    std::cerr << "Commit failed: " << commit_result.error().message << std::endl;
     return -1;
 }
 ```

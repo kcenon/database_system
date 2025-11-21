@@ -708,15 +708,15 @@ auto adapter = std::make_shared<common_system_database_adapter>(db);
 // Type-safe error handling
 auto connect_result = adapter->connect("host=localhost dbname=test");
 if (!connect_result) {
-    std::cerr << "Connection failed: " << connect_result.get_error().message
-              << " (code: " << static_cast<int>(connect_result.get_error().code) << ")\n";
+    std::cerr << "Connection failed: " << connect_result.error().message
+              << " (code: " << static_cast<int>(connect_result.error().code) << ")\n";
     return -1;
 }
 
 // Query execution with error propagation
 auto query_result = adapter->execute_query("SELECT * FROM users");
 if (!query_result) {
-    std::cerr << "Query failed: " << query_result.get_error().message << "\n";
+    std::cerr << "Query failed: " << query_result.error().message << "\n";
     // Handle gracefully
 } else {
     for (const auto& row : query_result.value()) {
@@ -739,7 +739,7 @@ if (!cmd_result) {
 
 auto commit_result = adapter->commit();
 if (!commit_result) {
-    std::cerr << "Commit failed: " << commit_result.get_error().message << "\n";
+    std::cerr << "Commit failed: " << commit_result.error().message << "\n";
 }
 ```
 

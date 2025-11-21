@@ -145,7 +145,7 @@ endif()
 # Compiler Definitions
 ##################################################
 
-# Common system integration (only when actually found)
+# Common system integration (Mandatory)
 if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
     if(TARGET ${INTEGRATED_DB_TARGET})
         if(INTEGRATED_DB_SOURCES)
@@ -155,8 +155,6 @@ if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
         endif()
     endif()
     message(STATUS "Integrated DB: common_system integration enabled")
-else()
-    message(STATUS "Integrated DB: common_system not available - using fallback implementation")
 endif()
 
 # Thread system integration
@@ -205,7 +203,7 @@ endif()
 
 # Link external systems (if found)
 
-# common_system (optional - only link if found and target exists)
+# common_system (Mandatory)
 if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND AND TARGET common_system)
     if(INTEGRATED_DB_SOURCES)
         target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC common_system)
@@ -213,8 +211,6 @@ if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND AND TARGET common_system)
         target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE common_system)
     endif()
     message(STATUS "Integrated DB: Linked with common_system")
-else()
-    message(STATUS "Integrated DB: common_system not available - using fallback implementation")
 endif()
 
 # thread_system

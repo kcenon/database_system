@@ -129,9 +129,6 @@ namespace database {
 		using base_type = kcenon::common::VoidResult;
 		using value_type = void;
 
-		// Inherit constructors
-		using base_type::base_type;
-
 		// Default constructor for success
 		result() : base_type(base_type::ok(std::monostate{})) {}
 
@@ -139,10 +136,11 @@ namespace database {
 		result(const base_type& other) : base_type(other) {}
 		result(base_type&& other) : base_type(std::move(other)) {}
 
-		// Constructor from std::monostate (for legacy compatibility)
-		result(std::monostate) : base_type(base_type::ok(std::monostate{})) {}
+		// Constructor from error (for error case)
+		result(const kcenon::common::error_info& e) : base_type(e) {}
+		result(kcenon::common::error_info&& e) : base_type(std::move(e)) {}
 
-		// Constructor from error_info (for legacy compatibility)
+		// Constructor from database::error_info (for legacy compatibility)
 		result(const error_info& e) : base_type(kcenon::common::error_info(e.code, e.message, e.module)) {}
 
 		// Compatibility methods

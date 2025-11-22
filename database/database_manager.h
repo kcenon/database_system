@@ -50,11 +50,11 @@ namespace common {
 
 	// Helper functions
 	inline VoidResult ok() {
-		return VoidResult(std::monostate{});
+		return VoidResult::ok();
 	}
 
 	inline VoidResult error(error_info err) {
-		return VoidResult(std::move(err));
+		return VoidResult::err(std::move(err));
 	}
 }
 

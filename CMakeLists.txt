@@ -95,6 +95,12 @@ find_package(Threads REQUIRED)
 message(STATUS "Searching for common_system...")
 find_system_dependency(common_system)
 
+# Fallback: check for TARGET directly (unified build case where PARENT_SCOPE may not propagate)
+if(NOT common_system_FOUND AND TARGET common_system)
+    message(STATUS "Found common_system as existing target (unified build)")
+    set(common_system_FOUND TRUE)
+endif()
+
 if(common_system_FOUND)
     message(STATUS "common_system integration enabled")
     set(BUILD_WITH_COMMON_SYSTEM ON)

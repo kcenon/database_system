@@ -44,6 +44,13 @@ jobs:
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
 
+    - name: Build and install common_system
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        sudo cmake --install build --prefix /usr/local
+
     - name: Configure CMake with ${{ matrix.sanitizer }} sanitizer
       run: |
         cd database_system
@@ -55,7 +62,6 @@ jobs:
           -DCMAKE_C_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=OFF \

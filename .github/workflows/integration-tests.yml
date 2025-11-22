@@ -25,10 +25,17 @@ jobs:
             cxx: clang++
 
     steps:
-    - name: Checkout repository
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Checkout common_system
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -57,6 +64,14 @@ jobs:
         echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
         echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
 
+    - name: Build and install common_system
+      shell: bash
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        sudo cmake --install build --prefix /usr/local
+
     - name: Configure CMake
       run: |
         cmake -B build \
@@ -65,7 +80,6 @@ jobs:
           -DUSE_UNIT_TEST=ON \
           -DDATABASE_BUILD_INTEGRATION_TESTS=ON \
           -DUSE_SQLITE=ON \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
 

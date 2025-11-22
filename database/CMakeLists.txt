@@ -116,7 +116,7 @@ set(SOURCE_FILES
 )
 
 # Add container-based protocol serialization if container_system is available
-if(USE_CONTAINER_SYSTEM AND _FOUND_CONTAINER_INCLUDE)
+if(USE_CONTAINER_SYSTEM AND (container_system_FOUND OR TARGET container_system OR TARGET ContainerSystem::container OR _FOUND_CONTAINER_INCLUDE))
     list(APPEND SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol_container.cpp
     )

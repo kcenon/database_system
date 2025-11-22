@@ -221,7 +221,7 @@ public:
         }
 
         active_ = false;
-        return std::monostate{};
+        return VoidResult::ok();
     }
 
     VoidResult rollback() override {
@@ -234,7 +234,7 @@ public:
         }
 
         active_ = false;
-        return std::monostate{};
+        return VoidResult::ok();
     }
 
     bool is_active() const override {
@@ -337,14 +337,14 @@ public:
             );
         }
 
-        return std::monostate{};
+        return VoidResult::ok();
     }
 
     VoidResult disconnect() {
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return std::monostate{};
+            return VoidResult::ok();
         }
 
         // Close connection pool
@@ -369,7 +369,7 @@ public:
             );
         }
 
-        return std::monostate{};
+        return VoidResult::ok();
     }
 
     bool is_connected() const {

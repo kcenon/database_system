@@ -33,10 +33,34 @@ jobs:
             triplet: x64-windows
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Checkout common_system
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and install common_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        sudo cmake --install build --prefix /usr/local
+
+    - name: Build and install common_system (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -76,7 +100,6 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \
@@ -88,7 +111,7 @@ jobs:
       run: |
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Debug `
-          -DBUILD_WITH_COMMON_SYSTEM=OFF `
+          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/common_system_install" `
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
@@ -147,21 +170,34 @@ jobs:
             env: "UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=0"
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Checkout common_system
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev pkg-config
 
+    - name: Build and install common_system
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        sudo cmake --install build --prefix /usr/local
+
     - name: Configure CMake with ${{ matrix.sanitizer.name }}
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DBUILD_WITH_COMMON_SYSTEM=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
           -DBUILD_DATABASE_SAMPLES=ON \

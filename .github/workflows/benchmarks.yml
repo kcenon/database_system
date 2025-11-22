@@ -33,10 +33,17 @@ jobs:
         build_type: [Release]
 
     steps:
-    - name: Checkout code
+    - name: Checkout database_system
       uses: actions/checkout@v4
       with:
         fetch-depth: 0  # Full history for comparison
+
+    - name: Checkout common_system
+      uses: actions/checkout@v4
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -53,6 +60,18 @@ jobs:
       run: |
         echo "CC=clang" >> $GITHUB_ENV
         echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Build and install common_system
+      shell: bash
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          cmake --install build --prefix "C:/Program Files/common_system"
+        else
+          sudo cmake --install build --prefix /usr/local
+        fi
 
     - name: Configure CMake
       run: |

@@ -110,6 +110,90 @@ else()
 endif()
 
 ##################################################
+# MySQL Backend Tests (DB-001)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(mysql_manager_test
+        mysql_manager_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(mysql_manager_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(mysql_manager_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(mysql_manager_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME MySQLManagerTests COMMAND mysql_manager_test)
+
+    gtest_discover_tests(mysql_manager_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "MySQL manager tests configured (DB-001)")
+endif()
+
+##################################################
+# SQLite Backend Tests (DB-001)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(sqlite_manager_test
+        sqlite_manager_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(sqlite_manager_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(sqlite_manager_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(sqlite_manager_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME SQLiteManagerTests COMMAND sqlite_manager_test)
+
+    gtest_discover_tests(sqlite_manager_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "SQLite manager tests configured (DB-001)")
+endif()
+
+##################################################
 # Thread Safety Tests (Phase 1 - Task 1.5)
 ##################################################
 

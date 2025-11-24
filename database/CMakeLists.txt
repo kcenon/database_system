@@ -143,6 +143,8 @@ if(USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
         ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
         # P0-4 Sources (Remote Database Client)
         ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
+        # Database Gateway
+        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/database_gateway.cpp
     )
 else()
     message(STATUS "Remote database gateway disabled (ENABLE_REMOTE_DATABASE_GATEWAY=OFF)")

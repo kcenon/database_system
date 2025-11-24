@@ -58,6 +58,65 @@ option(USE_CONTAINER_SYSTEM "Enable container_system integration for high-perfor
 option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter pattern" ON)
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
+option(ENABLE_COVERAGE "Enable code coverage reporting" OFF)
+
+# Coverage Configuration (DB-006)
+if(ENABLE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        message(STATUS "Code coverage enabled")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage -O0 -g")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
+
+        # Find coverage tools
+        find_program(GCOV_PATH gcov)
+        find_program(GCOVR_PATH gcovr)
+
+        if(NOT GCOV_PATH)
+            message(WARNING "gcov not found - coverage reports may not work")
+        endif()
+
+        if(GCOVR_PATH)
+            # Coverage report generation target
+            add_custom_target(coverage
+                COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/coverage
+                COMMAND ${GCOVR_PATH}
+                    --root ${CMAKE_SOURCE_DIR}
+                    --exclude '.*tests/.*'
+                    --exclude '.*third_party/.*'
+                    --exclude '.*samples/.*'
+                    --exclude '.*benchmarks/.*'
+                    --html --html-details
+                    --output ${CMAKE_BINARY_DIR}/coverage/index.html
+                    --xml ${CMAKE_BINARY_DIR}/coverage/coverage.xml
+                    --print-summary
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                COMMENT "Generating code coverage report..."
+            )
+
+            # Coverage threshold check target (80% line coverage)
+            add_custom_target(coverage-check
+                COMMAND ${GCOVR_PATH}
+                    --root ${CMAKE_SOURCE_DIR}
+                    --exclude '.*tests/.*'
+                    --exclude '.*third_party/.*'
+                    --exclude '.*samples/.*'
+                    --exclude '.*benchmarks/.*'
+                    --fail-under-line 80
+                    --print-summary
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                COMMENT "Checking coverage threshold (80% line coverage required)..."
+            )
+
+            message(STATUS "Coverage targets available: 'coverage', 'coverage-check'")
+        else()
+            message(WARNING "gcovr not found - install with 'pip install gcovr'")
+        endif()
+    else()
+        message(WARNING "Code coverage only supported with GCC/Clang")
+        set(ENABLE_COVERAGE OFF CACHE BOOL "Coverage not supported" FORCE)
+    endif()
+endif()
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)

@@ -2,7 +2,7 @@
 
 **Category**: CI
 **Priority**: MEDIUM
-**Status**: TODO
+**Status**: DONE
 **Est. Duration**: 2-3 days
 **Dependencies**: None
 **Assignee**: TBD

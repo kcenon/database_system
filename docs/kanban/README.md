@@ -16,8 +16,8 @@ This folder contains tickets for tracking improvement work on the Database Syste
 | FEATURE | 3 | 0 | 0 | 3 |
 | DOC | 3 | 0 | 0 | 3 |
 | REFACTOR | 2 | 0 | 0 | 2 |
-| CI | 2 | 1 | 0 | 1 |
-| **Total** | **15** | **6** | **0** | **9** |
+| CI | 2 | 2 | 0 | 0 |
+| **Total** | **15** | **7** | **0** | **8** |
 
 ---
 
@@ -83,7 +83,7 @@ Automate coverage and performance regression detection.
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
 | [DB-006](DB-006-coverage.md) | Set Test Coverage Threshold (80%) | MEDIUM | 2-3d | - | DONE |
-| [DB-007](DB-007-benchmark.md) | Establish Performance Benchmark Baseline | MEDIUM | 3-5d | - | TODO |
+| [DB-007](DB-007-benchmark.md) | Establish Performance Benchmark Baseline | MEDIUM | 3-5d | - | DONE |
 
 ---
 

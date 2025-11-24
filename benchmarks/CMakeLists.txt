@@ -16,6 +16,7 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
     message(STATUS "Google Benchmark found. Building database_system benchmarks...")
 
     add_executable(database_benchmarks
+        connection_pool_bench.cpp
         query_execution_bench.cpp
         transaction_bench.cpp
         main_bench.cpp

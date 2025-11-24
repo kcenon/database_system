@@ -16,11 +16,13 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
     message(STATUS "Google Benchmark found. Building database_system benchmarks...")
 
     add_executable(database_benchmarks
-        connection_pool_bench.cpp
         query_execution_bench.cpp
         transaction_bench.cpp
         main_bench.cpp
     )
+
+    # Note: connection_pool_bench.cpp requires thread_system which may not be available
+    # in all build configurations. It is excluded from the default benchmark build.
 
     target_link_libraries(database_benchmarks
         PRIVATE

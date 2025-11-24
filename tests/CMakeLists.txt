@@ -397,6 +397,154 @@ if(BUILD_INTEGRATED_DATABASE)
 endif()
 
 ##################################################
+# Query Builder Tests (DB-002)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    # SQL Query Builder Tests
+    add_executable(sql_query_builder_test
+        sql_query_builder_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(sql_query_builder_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(sql_query_builder_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(sql_query_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME SQLQueryBuilderTests COMMAND sql_query_builder_test)
+
+    gtest_discover_tests(sql_query_builder_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    # MongoDB Query Builder Tests
+    add_executable(mongodb_query_builder_test
+        mongodb_query_builder_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(mongodb_query_builder_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(mongodb_query_builder_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(mongodb_query_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME MongoDBQueryBuilderTests COMMAND mongodb_query_builder_test)
+
+    gtest_discover_tests(mongodb_query_builder_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    # Redis Query Builder Tests
+    add_executable(redis_query_builder_test
+        redis_query_builder_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(redis_query_builder_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(redis_query_builder_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(redis_query_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME RedisQueryBuilderTests COMMAND redis_query_builder_test)
+
+    gtest_discover_tests(redis_query_builder_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    # Universal Query Builder Tests
+    add_executable(universal_query_builder_test
+        universal_query_builder_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(universal_query_builder_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(universal_query_builder_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(universal_query_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME UniversalQueryBuilderTests COMMAND universal_query_builder_test)
+
+    gtest_discover_tests(universal_query_builder_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Query builder tests configured (DB-002)")
+endif()
+
+##################################################
 # Container Protocol Tests (Phase 1 POC Validation)
 ##################################################
 

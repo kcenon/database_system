@@ -2,7 +2,7 @@
 
 **Category**: TEST
 **Priority**: HIGH
-**Status**: TODO
+**Status**: DONE
 **Est. Duration**: 5-7 days
 **Dependencies**: None
 **Assignee**: TBD

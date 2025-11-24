@@ -2,7 +2,7 @@
 
 **Category**: DOC
 **Priority**: MEDIUM
-**Status**: TODO
+**Status**: DONE
 **Est. Duration**: 3-4 days
 **Dependencies**: DB-004 (Gateway), DB-005 (Replication)
 **Assignee**: TBD

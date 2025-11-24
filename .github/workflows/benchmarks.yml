@@ -19,6 +19,11 @@ on:
         required: false
         default: 'false'
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   benchmark:
     name: Run Performance Benchmarks
@@ -116,33 +121,44 @@ jobs:
            benchmarks/baselines/baseline_${{ matrix.os }}_$(date +%Y%m%d).json
 
     - name: Compare with baseline (if exists)
+      id: comparison
       if: hashFiles('benchmarks/baselines/baseline_${{ matrix.os }}_*.json') != ''
       run: |
         echo "Comparing with baseline..."
-        # Install compare.py from Google Benchmark tools
-        pip3 install --user scipy
 
         # Find latest baseline
-        BASELINE=$(ls -t benchmarks/baselines/baseline_${{ matrix.os }}_*.json | head -1)
+        BASELINE=$(ls -t benchmarks/baselines/baseline_${{ matrix.os }}_*.json 2>/dev/null | head -1)
 
         if [ -f "$BASELINE" ]; then
           echo "Baseline: $BASELINE"
           echo "Current: build/bin/benchmark_results_${{ matrix.os }}.json"
 
-          # Download compare.py
-          curl -O https://raw.githubusercontent.com/google/benchmark/main/tools/compare.py
-          chmod +x compare.py
-
-          # Run comparison
-          python3 compare.py \
+          # Run comparison using our custom script
+          python3 scripts/compare_benchmarks.py \
             "$BASELINE" \
-            build/bin/benchmark_results_${{ matrix.os }}.json
+            build/bin/benchmark_results_${{ matrix.os }}.json \
+            --threshold 10 \
+            --output comparison_${{ matrix.os }}.md \
+            --format markdown || echo "regression_detected=true" >> $GITHUB_OUTPUT
+
+          cat comparison_${{ matrix.os }}.md
+        else
+          echo "No baseline found, skipping comparison"
         fi
 
+    - name: Upload comparison report
+      if: hashFiles('comparison_${{ matrix.os }}.md') != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: comparison-report-${{ matrix.os }}
+        path: comparison_${{ matrix.os }}.md
+        retention-days: 30
+
     - name: Check for performance regression
+      if: steps.comparison.outputs.regression_detected == 'true'
       run: |
-        echo "Performance regression detection: TBD"
-        echo "Will be implemented in Phase 1 with baseline establishment"
+        echo "::warning::Performance regression detected in benchmarks"
+        echo "Please review the comparison report for details"
 
   report:
     name: Generate Benchmark Report
@@ -174,7 +190,70 @@ jobs:
           fi
         done
 
+        # Include comparison reports if available
+        for dir in comparison-report-*; do
+          if [ -d "$dir" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Comparison Report: ${dir#comparison-report-}" >> $GITHUB_STEP_SUMMARY
+            for report in "$dir"/*.md; do
+              if [ -f "$report" ]; then
+                cat "$report" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+          fi
+        done
+
+        echo "" >> $GITHUB_STEP_SUMMARY
         echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
         echo "- Review benchmark results" >> $GITHUB_STEP_SUMMARY
         echo "- Document baseline in docs/BASELINE.md" >> $GITHUB_STEP_SUMMARY
-        echo "- Set performance targets for Phase 1" >> $GITHUB_STEP_SUMMARY
+
+    - name: Comment on PR with benchmark results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          let body = '## Benchmark Results\n\n';
+
+          // Check for comparison reports
+          const dirs = fs.readdirSync('.').filter(d => d.startsWith('comparison-report-'));
+          if (dirs.length > 0) {
+            for (const dir of dirs) {
+              const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+              for (const file of files) {
+                const content = fs.readFileSync(`${dir}/${file}`, 'utf8');
+                body += `### ${dir.replace('comparison-report-', '')}\n\n`;
+                body += content + '\n\n';
+              }
+            }
+          } else {
+            body += 'No comparison reports available. Baseline may not be established yet.\n';
+          }
+
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number
+          });
+
+          const botComment = comments.find(c =>
+            c.user.type === 'Bot' && c.body.includes('## Benchmark Results')
+          );
+
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: body
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+          }

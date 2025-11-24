@@ -21,6 +21,9 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
         main_bench.cpp
     )
 
+    # Note: connection_pool_bench.cpp requires thread_system which may not be available
+    # in all build configurations. It is excluded from the default benchmark build.
+
     target_link_libraries(database_benchmarks
         PRIVATE
             database

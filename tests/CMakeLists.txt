@@ -833,3 +833,47 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/test_data
          DESTINATION ${CMAKE_BINARY_DIR}/bin)
 endif()
+
+##################################################
+# Gateway Tests (DB-004)
+##################################################
+
+if((GTest_FOUND OR gtest_FOUND) AND USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
+    add_executable(gateway_test
+        gateway_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(gateway_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            GTest::gmock
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(gateway_test PRIVATE
+            database
+            gtest
+            gtest_main
+            gmock
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(gateway_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME GatewayTests COMMAND gateway_test)
+
+    gtest_discover_tests(gateway_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Gateway tests configured (DB-004)")
+endif()

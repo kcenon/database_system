@@ -18,9 +18,7 @@ All rights reserved.
 #include "../server/database_proxy_server.h"
 #include "../distributed/cluster_manager.h"
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-#include <logger_system/logger.h>
-#endif
+// Logging/monitoring integration disabled - requires proper CMake setup
 
 namespace database::gateway {
 
@@ -316,9 +314,7 @@ private:
 
     // Audit logging
     audit_config audit_config_;
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    std::shared_ptr<logger_system::logger> audit_logger_;
-#endif
+    // Note: Audit logger disabled - requires proper CMake setup
 
     // Authentication (simplified)
     mutable std::mutex auth_mutex_;

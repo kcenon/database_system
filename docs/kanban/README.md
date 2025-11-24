@@ -14,10 +14,10 @@ This folder contains tickets for tracking improvement work on the Database Syste
 |----------|-------|------|-------------|---------|
 | TEST | 5 | 5 | 0 | 0 |
 | FEATURE | 3 | 2 | 0 | 1 |
-| DOC | 3 | 1 | 0 | 2 |
+| DOC | 3 | 2 | 0 | 1 |
 | REFACTOR | 2 | 0 | 0 | 2 |
 | CI | 2 | 2 | 0 | 0 |
-| **Total** | **15** | **10** | **0** | **5** |
+| **Total** | **15** | **11** | **0** | **4** |
 
 ---
 
@@ -60,7 +60,7 @@ Write API documentation and tuning guides.
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
 | [DB-010](DB-010-api-docs.md) | Gateway & Replication API Documentation | MEDIUM | 3-4d | DB-004, DB-005 | DONE |
-| [DB-013](DB-013-tuning-guide.md) | Backend-specific Performance Tuning Guide | LOW | 3-4d | - | TODO |
+| [DB-013](DB-013-tuning-guide.md) | Backend-specific Performance Tuning Guide | LOW | 3-4d | - | DONE |
 | [DB-015](DB-015-korean-docs.md) | Update Korean Documentation | LOW | 4-5d | - | TODO |
 
 ---

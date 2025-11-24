@@ -12,12 +12,12 @@ This folder contains tickets for tracking improvement work on the Database Syste
 
 | Category | Total | Done | In Progress | Pending |
 |----------|-------|------|-------------|---------|
-| TEST | 5 | 0 | 0 | 5 |
+| TEST | 5 | 3 | 0 | 2 |
 | FEATURE | 3 | 0 | 0 | 3 |
 | DOC | 3 | 0 | 0 | 3 |
 | REFACTOR | 2 | 0 | 0 | 2 |
-| CI | 2 | 0 | 0 | 2 |
-| **Total** | **15** | **0** | **0** | **15** |
+| CI | 2 | 1 | 0 | 1 |
+| **Total** | **15** | **4** | **0** | **11** |
 
 ---
 
@@ -29,9 +29,9 @@ Improve test coverage from 65% to 85%.
 
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [DB-001](DB-001-backend-tests.md) | Complete MySQL & SQLite Backend Tests | HIGH | 5-7d | - | TODO |
-| [DB-002](DB-002-orm-tests.md) | ORM Advanced Feature Tests | HIGH | 5-7d | - | TODO |
-| [DB-003](DB-003-resilience-tests.md) | Resilience Module Integration Tests | HIGH | 4-5d | - | TODO |
+| [DB-001](DB-001-backend-tests.md) | Complete MySQL & SQLite Backend Tests | HIGH | 5-7d | - | DONE |
+| [DB-002](DB-002-orm-tests.md) | ORM Advanced Feature Tests | HIGH | 5-7d | - | DONE |
+| [DB-003](DB-003-resilience-tests.md) | Resilience Module Integration Tests | HIGH | 4-5d | - | DONE |
 | [DB-008](DB-008-security-tests.md) | Security Module Integration Tests | MEDIUM | 4-5d | - | TODO |
 | [DB-009](DB-009-async-stress.md) | Async Operation Stress Tests | MEDIUM | 3-4d | - | TODO |
 
@@ -82,7 +82,7 @@ Automate coverage and performance regression detection.
 
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [DB-006](DB-006-coverage.md) | Set Test Coverage Threshold (80%) | MEDIUM | 2-3d | - | TODO |
+| [DB-006](DB-006-coverage.md) | Set Test Coverage Threshold (80%) | MEDIUM | 2-3d | - | DONE |
 | [DB-007](DB-007-benchmark.md) | Establish Performance Benchmark Baseline | MEDIUM | 3-5d | - | TODO |
 
 ---

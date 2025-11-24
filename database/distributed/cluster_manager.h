@@ -17,9 +17,7 @@ All rights reserved.
 #include "../core/result.h"
 #include "../client/remote_database_client.h"
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-#include <monitoring_system/performance_monitor.h>
-#endif
+// Logging/monitoring integration disabled - requires proper CMake setup
 
 namespace database::distributed {
 
@@ -291,10 +289,7 @@ private:
     std::atomic<bool> health_monitoring_active_{false};
     std::thread health_monitoring_thread_;
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    // Performance monitoring
-    std::shared_ptr<monitoring_system::performance_monitor> metrics_;
-#endif
+    // Note: Logging/monitoring integration disabled - requires proper CMake setup
 };
 
 } // namespace database::distributed

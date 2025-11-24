@@ -74,10 +74,6 @@ database::result<void> remote_database_client::initialize(const core::connection
             std::string("Exception during initialization: ") + e.what()
         ));
     }
-#else
-    std::cout << "Remote database client connecting to " << config.host << ":" << config.port
-              << " (stub implementation)\n";
-    return database::result<void>::ok();
 }
 
 database::result<void> remote_database_client::shutdown() {
@@ -150,10 +146,6 @@ database::result<uint64_t> remote_database_client::insert_query(const std::strin
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: INSERT not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<uint64_t> remote_database_client::update_query(const std::string& query_string) {
@@ -188,10 +180,6 @@ database::result<uint64_t> remote_database_client::update_query(const std::strin
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: UPDATE not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<uint64_t> remote_database_client::delete_query(const std::string& query_string) {
@@ -226,10 +214,6 @@ database::result<uint64_t> remote_database_client::delete_query(const std::strin
     }
 
     return database::result<uint64_t>::ok(query_response.value().affected_rows);
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: DELETE not supported";
-    return database::result<uint64_t>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<core::database_result> remote_database_client::select_query(const std::string& query_string) {
@@ -274,10 +258,6 @@ database::result<core::database_result> remote_database_client::select_query(con
     }
 
     return database::result<core::database_result>::ok(std::move(result));
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: SELECT not supported";
-    return database::result<core::database_result>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<void> remote_database_client::execute_query(const std::string& query_string) {
@@ -312,10 +292,6 @@ database::result<void> remote_database_client::execute_query(const std::string& 
     }
 
     return database::result<void>::ok();
-#else
-    std::lock_guard<std::mutex> lock(error_mutex_);
-    last_error_ = "Stub implementation: execute_query not supported";
-    return database::result<void>::err(database::error(static_cast<int>(database::error_code::not_implemented), last_error_));
 }
 
 database::result<void> remote_database_client::begin_transaction() {
@@ -355,9 +331,6 @@ database::result<void> remote_database_client::begin_transaction() {
     }
 
     return database::result<void>::ok();
-#else
-    std::cout << "Begin transaction (stub)\n";
-    return database::result<void>::ok();
 }
 
 database::result<void> remote_database_client::commit_transaction() {
@@ -381,9 +354,6 @@ database::result<void> remote_database_client::commit_transaction() {
 
     std::cout << "Commit transaction\n";
     return database::result<void>::ok();
-#else
-    std::cout << "Commit transaction (stub)\n";
-    return database::result<void>::ok();
 }
 
 database::result<void> remote_database_client::rollback_transaction() {
@@ -406,9 +376,6 @@ database::result<void> remote_database_client::rollback_transaction() {
     }
 
     std::cout << "Rollback transaction\n";
-    return database::result<void>::ok();
-#else
-    std::cout << "Rollback transaction (stub)\n";
     return database::result<void>::ok();
 }
 
@@ -445,7 +412,7 @@ std::future<database::result<core::database_result>> remote_database_client::exe
 
     // Execute async using std::async
     // Note: Network request itself is already asynchronous via resilient_client
-    std::async(std::launch::async, [this, query_string, promise]() {
+    (void)std::async(std::launch::async, [this, query_string, promise]() {
         auto result = select_query(query_string);
         promise->set_value(result);
     });
@@ -521,8 +488,6 @@ database::result<std::vector<uint8_t>> remote_database_client::send_request(
     }
 
     return database::result<std::vector<uint8_t>>::ok(std::move(response_data));
-#else
-    return database::result<std::vector<uint8_t>>::err(database::error(static_cast<int>(database::error_code::not_implemented), "Stub implementation"));
 }
 
 void remote_database_client::handle_response(const std::vector<uint8_t>& message_data) {
@@ -551,8 +516,6 @@ void remote_database_client::handle_response(const std::vector<uint8_t>& message
         }
         pending_responses_.erase(it);
     }
-#else
-    std::cout << "Received response: " << message_data.size() << " bytes (stub)\n";
 }
 
 uint64_t remote_database_client::next_request_id() {

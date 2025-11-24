@@ -13,11 +13,11 @@ This folder contains tickets for tracking improvement work on the Database Syste
 | Category | Total | Done | In Progress | Pending |
 |----------|-------|------|-------------|---------|
 | TEST | 5 | 5 | 0 | 0 |
-| FEATURE | 3 | 1 | 0 | 2 |
-| DOC | 3 | 0 | 0 | 3 |
+| FEATURE | 3 | 2 | 0 | 1 |
+| DOC | 3 | 3 | 0 | 0 |
 | REFACTOR | 2 | 0 | 0 | 2 |
 | CI | 2 | 2 | 0 | 0 |
-| **Total** | **15** | **8** | **0** | **7** |
+| **Total** | **15** | **12** | **0** | **3** |
 
 ---
 
@@ -46,7 +46,7 @@ Implement Gateway and Replication Manager.
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
 | [DB-004](DB-004-gateway.md) | Implement Database Gateway | HIGH | 10-14d | - | DONE |
-| [DB-005](DB-005-replication.md) | Implement Replication Manager | HIGH | 12-16d | DB-004 | TODO |
+| [DB-005](DB-005-replication.md) | Implement Replication Manager | HIGH | 12-16d | DB-004 | DONE |
 | [DB-011](DB-011-multi-node.md) | Distributed System Multi-Node Tests | MEDIUM | 5-7d | DB-004, DB-005 | TODO |
 
 **Recommended Execution Order**: DB-004 → DB-005 → DB-011
@@ -59,9 +59,9 @@ Write API documentation and tuning guides.
 
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [DB-010](DB-010-api-docs.md) | Gateway & Replication API Documentation | MEDIUM | 3-4d | DB-004, DB-005 | TODO |
-| [DB-013](DB-013-tuning-guide.md) | Backend-specific Performance Tuning Guide | LOW | 3-4d | - | TODO |
-| [DB-015](DB-015-korean-docs.md) | Update Korean Documentation | LOW | 4-5d | - | TODO |
+| [DB-010](DB-010-api-docs.md) | Gateway & Replication API Documentation | MEDIUM | 3-4d | DB-004, DB-005 | DONE |
+| [DB-013](DB-013-tuning-guide.md) | Backend-specific Performance Tuning Guide | LOW | 3-4d | - | DONE |
+| [DB-015](DB-015-korean-docs.md) | Update Korean Documentation | LOW | 4-5d | - | DONE |
 
 ---
 

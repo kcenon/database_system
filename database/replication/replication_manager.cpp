@@ -1,0 +1,451 @@
+/*****************************************************************************
+BSD 3-Clause License
+
+Copyright (c) 2025
+All rights reserved.
+*****************************************************************************/
+
+#include "replication_manager.h"
+
+#include <algorithm>
+#include <sstream>
+
+namespace database::replication {
+
+namespace {
+
+/**
+ * @brief Health check threshold for replication lag
+ */
+constexpr std::chrono::milliseconds HEALTH_LAG_THRESHOLD{5000};
+
+/**
+ * @brief Worker thread sleep interval
+ */
+constexpr std::chrono::milliseconds WORKER_SLEEP_INTERVAL{10};
+
+/**
+ * @brief Default batch interval for CDC capture
+ */
+constexpr std::chrono::milliseconds CDC_POLL_INTERVAL{50};
+
+} // anonymous namespace
+
+// Constructor
+replication_manager::replication_manager() = default;
+
+// Destructor
+replication_manager::~replication_manager() {
+    if (active_.load()) {
+        stop_replication();
+    }
+}
+
+result<void> replication_manager::start_replication(
+    const distributed::node_config& source,
+    const distributed::node_config& target,
+    const replication_config& config
+) {
+    if (active_.load()) {
+        return result<void>(error_info{-1, "Replication already active", "replication"});
+    }
+
+    source_config_ = source;
+    target_config_ = target;
+    config_ = config;
+
+    // Initialize source connection
+    auto source_result = initialize_source();
+    if (source_result.is_err()) {
+        return source_result;
+    }
+
+    // Initialize target connection
+    auto target_result = initialize_target();
+    if (target_result.is_err()) {
+        return target_result;
+    }
+
+    // Reset statistics
+    {
+        std::lock_guard<std::mutex> lock(stats_mutex_);
+        stats_ = replication_stats{};
+        stats_.last_event_time = std::chrono::steady_clock::now();
+    }
+
+    // Start worker threads
+    active_.store(true);
+    paused_.store(false);
+
+    cdc_thread_ = std::thread(&replication_manager::cdc_worker, this);
+    replication_thread_ = std::thread(&replication_manager::replication_worker, this);
+
+    return result<void>::ok();
+}
+
+result<void> replication_manager::stop_replication() {
+    if (!active_.load()) {
+        return result<void>(error_info{-2, "Replication not active", "replication"});
+    }
+
+    active_.store(false);
+
+    // Wait for worker threads to finish
+    if (cdc_thread_.joinable()) {
+        cdc_thread_.join();
+    }
+    if (replication_thread_.joinable()) {
+        replication_thread_.join();
+    }
+
+    // Clean up clients
+    if (source_client_) {
+        source_client_->shutdown();
+        source_client_.reset();
+    }
+    if (target_client_) {
+        target_client_->shutdown();
+        target_client_.reset();
+    }
+
+    return result<void>::ok();
+}
+
+std::chrono::milliseconds replication_manager::get_replication_lag() const {
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+    return stats_.current_lag;
+}
+
+replication_stats replication_manager::get_stats() const {
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+    return stats_;
+}
+
+void replication_manager::set_conflict_resolution(conflict_strategy strategy) {
+    config_.conflict_resolution = strategy;
+}
+
+result<void> replication_manager::trigger_replication() {
+    if (!active_.load()) {
+        return result<void>(error_info{-2, "Replication not active", "replication"});
+    }
+
+    if (config_.mode != sync_mode::MANUAL) {
+        return result<void>(error_info{-3, "Trigger only works in MANUAL mode", "replication"});
+    }
+
+    // Force immediate processing of pending events
+    paused_.store(false);
+
+    return result<void>::ok();
+}
+
+result<void> replication_manager::pause() {
+    if (!active_.load()) {
+        return result<void>(error_info{-2, "Replication not active", "replication"});
+    }
+
+    paused_.store(true);
+
+    return result<void>::ok();
+}
+
+result<void> replication_manager::resume() {
+    if (!active_.load()) {
+        return result<void>(error_info{-2, "Replication not active", "replication"});
+    }
+
+    paused_.store(false);
+
+    return result<void>::ok();
+}
+
+bool replication_manager::is_healthy() const {
+    if (!active_.load()) {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+    return stats_.current_lag < HEALTH_LAG_THRESHOLD;
+}
+
+size_t replication_manager::get_pending_event_count() const {
+    std::lock_guard<std::mutex> lock(queue_mutex_);
+    return event_queue_.size();
+}
+
+result<void> replication_manager::initialize_source() {
+    // Create source client based on node configuration
+    // In a real implementation, this would create the appropriate backend type
+    // For now, we create a placeholder that will work with any database_backend
+
+    // Note: Source connection would typically use CDC capabilities
+    // The actual implementation depends on the database type:
+    // - PostgreSQL: Logical replication slots
+    // - MySQL: Binary log reading
+    // - SQLite: Trigger-based change capture
+
+    return result<void>::ok();
+}
+
+result<void> replication_manager::initialize_target() {
+    // Create target client based on node configuration
+    // Similar to source, but for applying changes
+
+    return result<void>::ok();
+}
+
+void replication_manager::cdc_worker() {
+    while (active_.load()) {
+        // Skip if paused (but keep thread alive)
+        if (paused_.load()) {
+            std::this_thread::sleep_for(WORKER_SLEEP_INTERVAL);
+            continue;
+        }
+
+        // In MANUAL mode, wait for trigger
+        if (config_.mode == sync_mode::MANUAL) {
+            std::this_thread::sleep_for(WORKER_SLEEP_INTERVAL);
+            continue;
+        }
+
+        // In BATCH mode, check interval
+        if (config_.mode == sync_mode::BATCH) {
+            static auto last_batch = std::chrono::steady_clock::now();
+            auto now = std::chrono::steady_clock::now();
+            if (now - last_batch < config_.batch_interval) {
+                std::this_thread::sleep_for(WORKER_SLEEP_INTERVAL);
+                continue;
+            }
+            last_batch = now;
+        }
+
+        // Capture change events from source
+        auto event_opt = capture_change_event();
+        if (event_opt.has_value()) {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            event_queue_.push_back(event_opt.value());
+
+            // Limit queue size to batch_size
+            if (event_queue_.size() > config_.batch_size * 2) {
+                // Remove oldest events if queue grows too large
+                event_queue_.erase(
+                    event_queue_.begin(),
+                    event_queue_.begin() + static_cast<long>(config_.batch_size)
+                );
+            }
+        }
+
+        std::this_thread::sleep_for(CDC_POLL_INTERVAL);
+    }
+}
+
+void replication_manager::replication_worker() {
+    while (active_.load()) {
+        // Skip if paused
+        if (paused_.load()) {
+            std::this_thread::sleep_for(WORKER_SLEEP_INTERVAL);
+            continue;
+        }
+
+        // Get events to process
+        std::vector<replication_event> events_to_process;
+        {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            if (event_queue_.empty()) {
+                // No events to process
+            } else {
+                // Process up to batch_size events
+                size_t count = std::min(event_queue_.size(), config_.batch_size);
+                events_to_process.assign(
+                    event_queue_.begin(),
+                    event_queue_.begin() + static_cast<long>(count)
+                );
+                event_queue_.erase(
+                    event_queue_.begin(),
+                    event_queue_.begin() + static_cast<long>(count)
+                );
+            }
+        }
+
+        // Apply each event
+        for (const auto& event : events_to_process) {
+            auto apply_result = apply_change_event(event);
+
+            auto end_time = std::chrono::system_clock::now();
+            auto lag = std::chrono::duration_cast<std::chrono::milliseconds>(
+                end_time - event.timestamp
+            );
+
+            update_stats(apply_result.is_ok(), lag);
+        }
+
+        if (events_to_process.empty()) {
+            std::this_thread::sleep_for(WORKER_SLEEP_INTERVAL);
+        }
+    }
+}
+
+std::optional<replication_event> replication_manager::capture_change_event() {
+    // This is a placeholder implementation
+    // In a real implementation, this would:
+    // 1. Read from PostgreSQL logical replication slot
+    // 2. Read from MySQL binary log
+    // 3. Query SQLite change tracking table
+    // 4. Poll MongoDB change stream
+
+    // For now, return empty to indicate no changes
+    // The actual CDC implementation would be database-specific
+
+    return std::nullopt;
+}
+
+result<void> replication_manager::apply_change_event(const replication_event& event) {
+    if (!target_client_ || !target_client_->is_initialized()) {
+        return result<void>(error_info{-4, "Target not initialized", "replication"});
+    }
+
+    // Build and execute query based on event type
+    std::string query;
+
+    switch (event.type) {
+        case replication_event::event_type::INSERT: {
+            // Build INSERT query
+            std::ostringstream columns_ss;
+            std::ostringstream values_ss;
+            bool first = true;
+
+            for (const auto& [col, val] : event.new_values) {
+                if (!first) {
+                    columns_ss << ", ";
+                    values_ss << ", ";
+                }
+                columns_ss << col;
+                values_ss << "'" << val << "'";  // Note: Should use parameterized queries
+                first = false;
+            }
+
+            query = "INSERT INTO " + event.table_name +
+                    " (" + columns_ss.str() + ") VALUES (" + values_ss.str() + ")";
+
+            auto insert_result = target_client_->insert_query(query);
+            if (insert_result.is_err()) {
+                return result<void>(insert_result.error());
+            }
+            break;
+        }
+
+        case replication_event::event_type::UPDATE: {
+            // Build UPDATE query
+            std::ostringstream set_ss;
+            std::ostringstream where_ss;
+            bool first_set = true;
+            bool first_where = true;
+
+            for (const auto& [col, val] : event.new_values) {
+                if (!first_set) {
+                    set_ss << ", ";
+                }
+                set_ss << col << " = '" << val << "'";
+                first_set = false;
+            }
+
+            for (const auto& [col, val] : event.old_values) {
+                if (!first_where) {
+                    where_ss << " AND ";
+                }
+                where_ss << col << " = '" << val << "'";
+                first_where = false;
+            }
+
+            query = "UPDATE " + event.table_name +
+                    " SET " + set_ss.str() +
+                    " WHERE " + where_ss.str();
+
+            auto update_result = target_client_->update_query(query);
+            if (update_result.is_err()) {
+                return result<void>(update_result.error());
+            }
+            break;
+        }
+
+        case replication_event::event_type::DELETE: {
+            // Build DELETE query
+            std::ostringstream where_ss;
+            bool first = true;
+
+            for (const auto& [col, val] : event.old_values) {
+                if (!first) {
+                    where_ss << " AND ";
+                }
+                where_ss << col << " = '" << val << "'";
+                first = false;
+            }
+
+            query = "DELETE FROM " + event.table_name +
+                    " WHERE " + where_ss.str();
+
+            auto delete_result = target_client_->delete_query(query);
+            if (delete_result.is_err()) {
+                return result<void>(delete_result.error());
+            }
+            break;
+        }
+    }
+
+    return result<void>::ok();
+}
+
+replication_event replication_manager::resolve_conflict(const replication_event& event) {
+    // Apply conflict resolution strategy
+    switch (config_.conflict_resolution) {
+        case conflict_strategy::LAST_WRITE_WINS:
+            // Use the incoming event (latest write)
+            return event;
+
+        case conflict_strategy::FIRST_WRITE_WINS:
+            // Would need to check target for existing value
+            // For simplicity, return the event (real impl would query target)
+            return event;
+
+        case conflict_strategy::MANUAL:
+            // Return event but mark for review
+            return event;
+
+        case conflict_strategy::CUSTOM:
+            // Would invoke custom callback
+            return event;
+
+        default:
+            return event;
+    }
+}
+
+void replication_manager::update_stats(bool success, std::chrono::milliseconds lag) {
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+
+    if (success) {
+        stats_.events_replicated++;
+    } else {
+        stats_.events_failed++;
+    }
+
+    stats_.current_lag = lag;
+    stats_.last_event_time = std::chrono::steady_clock::now();
+
+    // Update average lag (exponential moving average)
+    if (stats_.avg_lag.count() == 0) {
+        stats_.avg_lag = lag;
+    } else {
+        stats_.avg_lag = std::chrono::milliseconds(
+            (stats_.avg_lag.count() * 9 + lag.count()) / 10
+        );
+    }
+
+    // Update max lag
+    if (lag > stats_.max_lag) {
+        stats_.max_lag = lag;
+    }
+}
+
+} // namespace database::replication

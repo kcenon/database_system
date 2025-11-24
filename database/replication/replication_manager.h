@@ -19,10 +19,7 @@ All rights reserved.
 #include "../core/result.h"
 #include "../distributed/cluster_manager.h"
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-#include <logger_system/logger.h>
-#include <monitoring_system/performance_monitor.h>
-#endif
+// Logging/monitoring integration removed - requires proper CMake setup
 
 namespace database::replication {
 
@@ -319,11 +316,7 @@ private:
     mutable std::mutex stats_mutex_;
     replication_stats stats_;
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    // Logging and monitoring
-    std::shared_ptr<logger_system::logger> logger_;
-    std::shared_ptr<monitoring_system::performance_monitor> metrics_;
-#endif
+    // Note: Logging/monitoring integration removed - requires proper CMake setup
 };
 
 } // namespace database::replication

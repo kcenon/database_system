@@ -592,6 +592,119 @@ if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
 endif()
 
 ##################################################
+# Security Tests (DB-008)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    # SQL Injection Prevention Tests
+    add_executable(sql_injection_test
+        security/sql_injection_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(sql_injection_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(sql_injection_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(sql_injection_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME SQLInjectionTests COMMAND sql_injection_test)
+
+    gtest_discover_tests(sql_injection_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    # Credential Security Tests
+    add_executable(credential_test
+        security/credential_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(credential_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(credential_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(credential_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME CredentialSecurityTests COMMAND credential_test)
+
+    gtest_discover_tests(credential_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    # Data Masking Tests
+    add_executable(data_masking_test
+        security/data_masking_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(data_masking_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(data_masking_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(data_masking_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME DataMaskingTests COMMAND data_masking_test)
+
+    gtest_discover_tests(data_masking_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Security tests configured (DB-008)")
+endif()
+
+##################################################
 # Test Data Setup
 ##################################################
 

@@ -106,6 +106,29 @@ jobs:
           build/coverage_html/
         retention-days: 7
 
+    - name: Check coverage threshold (80%)
+      id: coverage-check
+      run: |
+        if [ -f build/coverage_filtered.info ]; then
+          # Extract line coverage percentage
+          COVERAGE=$(lcov --summary build/coverage_filtered.info 2>&1 | grep "lines" | grep -oP '\d+\.\d+%' | head -1 | tr -d '%')
+          echo "Line coverage: ${COVERAGE}%"
+          echo "coverage=${COVERAGE}" >> $GITHUB_OUTPUT
+
+          # Check if coverage meets threshold (80%)
+          if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+            echo "Coverage check PASSED: ${COVERAGE}% >= 80%"
+            echo "status=passed" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Coverage check FAILED: ${COVERAGE}% < 80%"
+            echo "status=failed" >> $GITHUB_OUTPUT
+            # Don't fail the build yet - just warn
+          fi
+        else
+          echo "status=skipped" >> $GITHUB_OUTPUT
+          echo "::warning::Coverage data not available"
+        fi
+
     - name: Coverage summary
       if: always()
       run: |
@@ -114,8 +137,15 @@ jobs:
         if [ -f build/coverage_filtered.info ]; then
           echo "Coverage data collected successfully." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Phase 0 Target: Establish baseline coverage" >> $GITHUB_STEP_SUMMARY
-          echo "Phase 5 Target: 80%+ coverage" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Line Coverage | ${{ steps.coverage-check.outputs.coverage }}% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Threshold | 80% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Status | ${{ steps.coverage-check.outputs.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.coverage-check.outputs.status }}" = "failed" ]; then
+            echo "**Warning:** Coverage is below the 80% threshold." >> $GITHUB_STEP_SUMMARY
+          fi
         else
           echo "No coverage data generated." >> $GITHUB_STEP_SUMMARY
         fi

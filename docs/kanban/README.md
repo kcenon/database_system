@@ -13,11 +13,11 @@ This folder contains tickets for tracking improvement work on the Database Syste
 | Category | Total | Done | In Progress | Pending |
 |----------|-------|------|-------------|---------|
 | TEST | 5 | 5 | 0 | 0 |
-| FEATURE | 3 | 2 | 0 | 1 |
+| FEATURE | 3 | 3 | 0 | 0 |
 | DOC | 3 | 3 | 0 | 0 |
 | REFACTOR | 2 | 0 | 0 | 2 |
 | CI | 2 | 2 | 0 | 0 |
-| **Total** | **15** | **12** | **0** | **3** |
+| **Total** | **15** | **13** | **0** | **2** |
 
 ---
 
@@ -47,7 +47,7 @@ Implement Gateway and Replication Manager.
 |----|-------|----------|---------------|--------------|--------|
 | [DB-004](DB-004-gateway.md) | Implement Database Gateway | HIGH | 10-14d | - | DONE |
 | [DB-005](DB-005-replication.md) | Implement Replication Manager | HIGH | 12-16d | DB-004 | DONE |
-| [DB-011](DB-011-multi-node.md) | Distributed System Multi-Node Tests | MEDIUM | 5-7d | DB-004, DB-005 | TODO |
+| [DB-011](DB-011-multi-node.md) | Distributed System Multi-Node Tests | MEDIUM | 5-7d | DB-004, DB-005 | DONE |
 
 **Recommended Execution Order**: DB-004 → DB-005 → DB-011
 

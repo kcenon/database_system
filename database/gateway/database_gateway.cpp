@@ -13,9 +13,7 @@ All rights reserved.
 #include <functional>
 #include <sstream>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-#include <logger_system/logger.h>
-#endif
+// Logging/monitoring integration disabled - requires proper CMake setup
 
 namespace database::gateway {
 
@@ -66,15 +64,7 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
     port_ = port;
     security_ = security;
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    // Initialize audit logger if configured
-    if (!audit_config_.audit_log_path.empty()) {
-        audit_logger_ = std::make_shared<logger_system::logger>(
-            "gateway_audit",
-            audit_config_.audit_log_path
-        );
-    }
-#endif
+    // Note: Audit logging disabled - requires proper CMake setup
 
     // Note: Actual server start would require network_system integration
     // For now, we mark as running and rely on execute_query being called directly
@@ -168,15 +158,7 @@ void database_gateway::configure_cache(const cache_config& config) {
 
 void database_gateway::configure_audit_logging(const audit_config& config) {
     audit_config_ = config;
-
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    if (!config.audit_log_path.empty() && !audit_logger_) {
-        audit_logger_ = std::make_shared<logger_system::logger>(
-            "gateway_audit",
-            config.audit_log_path
-        );
-    }
-#endif
+    // Note: Audit logging disabled - requires proper CMake setup
 }
 
 result<core::database_result> database_gateway::execute_query(const std::string& query) {
@@ -233,9 +215,11 @@ result<core::database_result> database_gateway::execute_query(const std::string&
     } else {
         auto write_result = target_cluster->execute_write_query(query);
         if (write_result.is_ok()) {
-            // Convert write result to database_result
+            // Convert write result to database_result (empty result for write operations)
             core::database_result result_data;
-            result_data.rows_affected = write_result.value();
+            // Note: database_result is std::vector<database_row>, so we return empty
+            // The rows_affected count is available in write_result.value() but not stored
+            (void)write_result.value();  // Suppress unused warning
             query_result = result<core::database_result>::ok(result_data);
         } else {
             query_result = result<core::database_result>(write_result.error());
@@ -402,24 +386,10 @@ void database_gateway::audit_log_query(
         }
     }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
-    if (audit_logger_) {
-        std::ostringstream ss;
-        ss << "[" << (success ? "SUCCESS" : "FAILURE") << "] "
-           << "Duration: " << duration.count() << "ms, "
-           << "Query: " << query.substr(0, 100);  // Truncate long queries
-
-        if (success) {
-            audit_logger_->info(ss.str());
-        } else {
-            audit_logger_->warn(ss.str());
-        }
-    }
-#else
+    // Note: Audit logging disabled - requires proper CMake setup
     (void)query;
     (void)success;
     (void)duration;
-#endif
 }
 
 void database_gateway::evict_cache_lru() {

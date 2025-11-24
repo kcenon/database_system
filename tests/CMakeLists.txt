@@ -877,3 +877,47 @@ if((GTest_FOUND OR gtest_FOUND) AND USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABAS
 
     message(STATUS "Gateway tests configured (DB-004)")
 endif()
+
+##################################################
+# Replication Manager Tests (DB-005)
+##################################################
+
+if((GTest_FOUND OR gtest_FOUND) AND USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
+    add_executable(replication_test
+        replication_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(replication_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            GTest::gmock
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(replication_test PRIVATE
+            database
+            gtest
+            gtest_main
+            gmock
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(replication_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME ReplicationManagerTests COMMAND replication_test)
+
+    gtest_discover_tests(replication_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Replication manager tests configured (DB-005)")
+endif()

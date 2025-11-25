@@ -15,9 +15,9 @@ This folder contains tickets for tracking improvement work on the Database Syste
 | TEST | 5 | 5 | 0 | 0 |
 | FEATURE | 3 | 3 | 0 | 0 |
 | DOC | 3 | 3 | 0 | 0 |
-| REFACTOR | 2 | 1 | 0 | 1 |
+| REFACTOR | 2 | 2 | 0 | 0 |
 | CI | 2 | 2 | 0 | 0 |
-| **Total** | **15** | **14** | **0** | **1** |
+| **Total** | **15** | **15** | **0** | **0** |
 
 ---
 
@@ -72,7 +72,7 @@ Reduce complexity and improve test infrastructure.
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
 | [DB-012](DB-012-complexity.md) | Reduce query_builder.cpp Complexity | LOW | 5-7d | - | DONE |
-| [DB-014](DB-014-mock-framework.md) | Add Mock Object Framework | LOW | 3-4d | - | TODO |
+| [DB-014](DB-014-mock-framework.md) | Add Mock Object Framework | LOW | 3-4d | - | DONE |
 
 ---
 

@@ -13,6 +13,32 @@ endif()
 find_package(benchmark QUIET)
 
 ##################################################
+# Mock Framework Library (DB-014)
+##################################################
+
+add_library(database_mocks STATIC
+    mocks/mock_database.cpp
+    mocks/mock_expectations.cpp
+)
+
+target_include_directories(database_mocks PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+)
+
+target_link_libraries(database_mocks PUBLIC
+    database
+    Threads::Threads
+)
+
+set_target_properties(database_mocks PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED ON
+)
+
+message(STATUS "Mock framework library configured (DB-014)")
+
+##################################################
 # Unit Tests
 ##################################################
 

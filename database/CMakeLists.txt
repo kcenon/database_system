@@ -60,6 +60,7 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/join_builder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
@@ -97,6 +98,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/join_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
     # Phase 4 Sources

@@ -19,6 +19,34 @@ mock_database::mock_database()
 {
 }
 
+mock_database::mock_database(mock_database&& other) noexcept
+    : db_type_(other.db_type_)
+    , connected_(other.connected_)
+    , connect_result_(other.connect_result_)
+    , connection_string_(std::move(other.connection_string_))
+    , default_result_(std::move(other.default_result_))
+    , default_rows_affected_(other.default_rows_affected_)
+    , expectations_(std::move(other.expectations_))
+    , executed_queries_(std::move(other.executed_queries_))
+{
+    other.connected_ = false;
+}
+
+mock_database& mock_database::operator=(mock_database&& other) noexcept {
+    if (this != &other) {
+        db_type_ = other.db_type_;
+        connected_ = other.connected_;
+        connect_result_ = other.connect_result_;
+        connection_string_ = std::move(other.connection_string_);
+        default_result_ = std::move(other.default_result_);
+        default_rows_affected_ = other.default_rows_affected_;
+        expectations_ = std::move(other.expectations_);
+        executed_queries_ = std::move(other.executed_queries_);
+        other.connected_ = false;
+    }
+    return *this;
+}
+
 database_types mock_database::database_type() {
     return db_type_;
 }

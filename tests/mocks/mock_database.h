@@ -46,6 +46,14 @@ public:
     mock_database();
     ~mock_database() override = default;
 
+    // Non-copyable due to mutex
+    mock_database(const mock_database&) = delete;
+    mock_database& operator=(const mock_database&) = delete;
+
+    // Movable
+    mock_database(mock_database&& other) noexcept;
+    mock_database& operator=(mock_database&& other) noexcept;
+
     // database_base interface implementation
     database_types database_type() override;
     bool connect(const std::string& connect_string) override;

@@ -8,6 +8,7 @@ All rights reserved.
 #pragma once
 
 #include "../database_types.h"
+#include "../database_base.h"
 #include <string>
 #include <vector>
 

@@ -49,15 +49,14 @@ std::string value_formatter::format(const database_value& value) const {
 
 std::string value_formatter::escape_string(const std::string& str) const {
     switch (db_type_) {
-        case database_types::PostgreSQL:
+        case database_types::postgres:
             return escape_postgresql_string(str);
-        case database_types::MySQL:
-        case database_types::MariaDB:
+        case database_types::mysql:
             return escape_mysql_string(str);
-        case database_types::SQLite:
+        case database_types::sqlite:
             return escape_sqlite_string(str);
-        case database_types::MongoDB:
-        case database_types::Redis:
+        case database_types::mongodb:
+        case database_types::redis:
             // NoSQL databases handle escaping differently
             return str;
         default:
@@ -67,15 +66,14 @@ std::string value_formatter::escape_string(const std::string& str) const {
 
 std::string value_formatter::escape_identifier(const std::string& identifier) const {
     switch (db_type_) {
-        case database_types::PostgreSQL:
+        case database_types::postgres:
             return "\"" + identifier + "\"";
-        case database_types::MySQL:
-        case database_types::MariaDB:
+        case database_types::mysql:
             return "`" + identifier + "`";
-        case database_types::SQLite:
+        case database_types::sqlite:
             return "\"" + identifier + "\"";
-        case database_types::MongoDB:
-        case database_types::Redis:
+        case database_types::mongodb:
+        case database_types::redis:
             return identifier;  // NoSQL doesn't quote identifiers
         default:
             return "\"" + identifier + "\"";
@@ -88,15 +86,14 @@ std::string value_formatter::null_literal() const {
 
 std::string value_formatter::bool_literal(bool val) const {
     switch (db_type_) {
-        case database_types::PostgreSQL:
-        case database_types::SQLite:
+        case database_types::postgres:
+        case database_types::sqlite:
             return val ? "TRUE" : "FALSE";
-        case database_types::MySQL:
-        case database_types::MariaDB:
+        case database_types::mysql:
             return val ? "1" : "0";
-        case database_types::MongoDB:
+        case database_types::mongodb:
             return val ? "true" : "false";
-        case database_types::Redis:
+        case database_types::redis:
             return val ? "1" : "0";
         default:
             return val ? "1" : "0";
@@ -134,7 +131,7 @@ std::string value_formatter::format_bool(bool val) const {
 
 std::string value_formatter::format_blob(const std::vector<uint8_t>& data) const {
     switch (db_type_) {
-        case database_types::PostgreSQL: {
+        case database_types::postgres: {
             // PostgreSQL hex format: '\x...'
             std::ostringstream oss;
             oss << "'\\x";
@@ -145,8 +142,7 @@ std::string value_formatter::format_blob(const std::vector<uint8_t>& data) const
             oss << "'";
             return oss.str();
         }
-        case database_types::MySQL:
-        case database_types::MariaDB: {
+        case database_types::mysql: {
             // MySQL hex format: X'...'
             std::ostringstream oss;
             oss << "X'";
@@ -157,7 +153,7 @@ std::string value_formatter::format_blob(const std::vector<uint8_t>& data) const
             oss << "'";
             return oss.str();
         }
-        case database_types::SQLite: {
+        case database_types::sqlite: {
             // SQLite hex format: X'...'
             std::ostringstream oss;
             oss << "X'";

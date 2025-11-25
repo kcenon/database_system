@@ -13,12 +13,11 @@ namespace database::query {
 // Factory method
 std::unique_ptr<sql_dialect> sql_dialect::create(database_types type) {
     switch (type) {
-        case database_types::PostgreSQL:
+        case database_types::postgres:
             return std::make_unique<postgresql_dialect>();
-        case database_types::MySQL:
-        case database_types::MariaDB:
+        case database_types::mysql:
             return std::make_unique<mysql_dialect>();
-        case database_types::SQLite:
+        case database_types::sqlite:
             return std::make_unique<sqlite_dialect>();
         default:
             throw std::invalid_argument("Unsupported database type for SQL dialect");

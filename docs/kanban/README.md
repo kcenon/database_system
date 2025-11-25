@@ -13,11 +13,11 @@ This folder contains tickets for tracking improvement work on the Database Syste
 | Category | Total | Done | In Progress | Pending |
 |----------|-------|------|-------------|---------|
 | TEST | 5 | 5 | 0 | 0 |
-| FEATURE | 3 | 2 | 0 | 1 |
+| FEATURE | 3 | 3 | 0 | 0 |
 | DOC | 3 | 3 | 0 | 0 |
-| REFACTOR | 2 | 0 | 0 | 2 |
+| REFACTOR | 2 | 0 | 1 | 1 |
 | CI | 2 | 2 | 0 | 0 |
-| **Total** | **15** | **12** | **0** | **3** |
+| **Total** | **15** | **13** | **1** | **1** |
 
 ---
 
@@ -47,7 +47,7 @@ Implement Gateway and Replication Manager.
 |----|-------|----------|---------------|--------------|--------|
 | [DB-004](DB-004-gateway.md) | Implement Database Gateway | HIGH | 10-14d | - | DONE |
 | [DB-005](DB-005-replication.md) | Implement Replication Manager | HIGH | 12-16d | DB-004 | DONE |
-| [DB-011](DB-011-multi-node.md) | Distributed System Multi-Node Tests | MEDIUM | 5-7d | DB-004, DB-005 | TODO |
+| [DB-011](DB-011-multi-node.md) | Distributed System Multi-Node Tests | MEDIUM | 5-7d | DB-004, DB-005 | DONE |
 
 **Recommended Execution Order**: DB-004 → DB-005 → DB-011
 
@@ -71,7 +71,7 @@ Reduce complexity and improve test infrastructure.
 
 | ID | Title | Priority | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [DB-012](DB-012-complexity.md) | Reduce query_builder.cpp Complexity | LOW | 5-7d | - | TODO |
+| [DB-012](DB-012-complexity.md) | Reduce query_builder.cpp Complexity | LOW | 5-7d | - | IN_PROGRESS |
 | [DB-014](DB-014-mock-framework.md) | Add Mock Object Framework | LOW | 3-4d | - | TODO |
 
 ---

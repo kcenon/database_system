@@ -41,7 +41,7 @@ jobs:
 
       - name: Start test cluster
         run: |
-          docker-compose -f docker-compose.distributed-test.yml up -d
+          docker compose -f docker-compose.distributed-test.yml up -d
           echo "Waiting for services to be ready..."
           sleep 30
 
@@ -72,7 +72,7 @@ jobs:
       - name: Collect Docker logs
         if: failure()
         run: |
-          docker-compose -f docker-compose.distributed-test.yml logs > distributed-test-logs.txt
+          docker compose -f docker-compose.distributed-test.yml logs > distributed-test-logs.txt
           docker ps -a
 
       - name: Upload Docker logs
@@ -96,7 +96,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          docker-compose -f docker-compose.distributed-test.yml down -v
+          docker compose -f docker-compose.distributed-test.yml down -v
           docker system prune -f
 
   chaos-engineering:
@@ -129,7 +129,7 @@ jobs:
 
       - name: Start test cluster with Toxiproxy
         run: |
-          docker-compose -f docker-compose.distributed-test.yml up -d
+          docker compose -f docker-compose.distributed-test.yml up -d
           ./scripts/wait-for-services.sh
 
       - name: Configure CMake
@@ -154,7 +154,7 @@ jobs:
       - name: Collect logs
         if: always()
         run: |
-          docker-compose -f docker-compose.distributed-test.yml logs > chaos-test-logs.txt
+          docker compose -f docker-compose.distributed-test.yml logs > chaos-test-logs.txt
 
       - name: Upload logs
         if: always()
@@ -167,7 +167,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          docker-compose -f docker-compose.distributed-test.yml down -v
+          docker compose -f docker-compose.distributed-test.yml down -v
           docker system prune -f
 
   performance-benchmarks:
@@ -200,7 +200,7 @@ jobs:
 
       - name: Start test cluster
         run: |
-          docker-compose -f docker-compose.distributed-test.yml up -d
+          docker compose -f docker-compose.distributed-test.yml up -d
           ./scripts/wait-for-services.sh
 
       - name: Configure CMake
@@ -242,5 +242,5 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          docker-compose -f docker-compose.distributed-test.yml down -v
+          docker compose -f docker-compose.distributed-test.yml down -v
           docker system prune -f

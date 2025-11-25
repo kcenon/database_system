@@ -71,7 +71,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_TESTING=ON \
-            -DBUILD_SHARED_LIBS=OFF
+            -DBUILD_SHARED_LIBS=OFF \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON
 
       - name: Build project
         run: cmake --build build --parallel $(nproc)
@@ -167,7 +168,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_CHAOS_TESTS=ON \
-            -DENABLE_TESTING=ON
+            -DENABLE_TESTING=ON \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON
 
       - name: Build project
         run: cmake --build build --parallel $(nproc)
@@ -252,7 +254,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_BENCHMARKS=ON \
-            -DENABLE_TESTING=ON
+            -DENABLE_TESTING=ON \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON
 
       - name: Build project
         run: cmake --build build --parallel $(nproc)

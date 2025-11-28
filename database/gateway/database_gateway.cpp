@@ -12,6 +12,7 @@ All rights reserved.
 #include <fstream>
 #include <functional>
 #include <sstream>
+#include <variant>
 
 namespace database::gateway {
 
@@ -62,12 +63,52 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
     port_ = port;
     security_ = security;
 
-    // Note: Audit logging disabled - requires proper CMake setup
+    // Create and configure network server
+    network_server_ = std::make_shared<network_system::core::messaging_server>("database_gateway");
 
-    // Note: Actual server start would require network_system integration
-    // For now, we mark as running and rely on execute_query being called directly
+    // Set up connection callback
+    network_server_->set_connection_callback(
+        [this](std::shared_ptr<network_system::session::messaging_session> session) {
+            handle_client_connect(std::move(session));
+        }
+    );
+
+    // Set up disconnection callback
+    network_server_->set_disconnection_callback(
+        [this](const std::string& session_id) {
+            handle_client_disconnect(session_id);
+        }
+    );
+
+    // Set up message receive callback
+    network_server_->set_receive_callback(
+        [this](std::shared_ptr<network_system::session::messaging_session> session,
+               const std::vector<uint8_t>& data) {
+            handle_message(std::move(session), data);
+        }
+    );
+
+    // Set up error callback
+    network_server_->set_error_callback(
+        [](std::shared_ptr<network_system::session::messaging_session> /* session */,
+           std::error_code ec) {
+            // Log error but don't crash
+            (void)ec;  // Error handling could be expanded
+        }
+    );
+
+    // Start the network server
+    auto start_result = network_server_->start_server(port);
+    if (start_result.is_err()) {
+        network_server_.reset();
+        return result<void>(error_info{
+            -10,
+            "Failed to start network server: " + start_result.error().message,
+            "gateway"
+        });
+    }
+
     running_.store(true);
-
     return result<void>::ok();
 }
 
@@ -75,6 +116,12 @@ void database_gateway::stop() {
     if (!running_.load()) return;
 
     running_.store(false);
+
+    // Stop network server
+    if (network_server_) {
+        network_server_->stop_server();
+        network_server_.reset();
+    }
 
     if (server_) {
         server_->stop();
@@ -464,6 +511,177 @@ void database_gateway::evict_cache_lru() {
     if (oldest_it != query_cache_.end()) {
         query_cache_.erase(oldest_it);
     }
+}
+
+void database_gateway::handle_client_connect(
+    std::shared_ptr<network_system::session::messaging_session> session
+) {
+    if (!session) return;
+
+    // Generate session ID and start the session
+    std::string session_id = "gw_session_" + std::to_string(next_session_id_.fetch_add(1));
+    session->start_session();
+}
+
+void database_gateway::handle_client_disconnect(const std::string& /* session_id */) {
+    // Clean up any session-specific resources if needed
+    // Currently, the gateway is stateless per-request
+}
+
+void database_gateway::handle_message(
+    std::shared_ptr<network_system::session::messaging_session> session,
+    const std::vector<uint8_t>& data
+) {
+    if (!session || data.empty()) return;
+
+    // Deserialize message header
+    auto header_result = protocol::protocol_serializer::deserialize_header(data);
+    if (!header_result.is_ok()) {
+        protocol::error_response err;
+        err.error_code = -1;
+        err.error_message = "Invalid message header";
+        auto error_bytes = protocol::protocol_serializer::serialize(err);
+        session->send_packet(std::move(error_bytes));
+        return;
+    }
+
+    const auto& header = header_result.value();
+    if (!header.is_valid()) {
+        protocol::error_response err;
+        err.error_code = -2;
+        err.error_message = "Invalid message header magic or version";
+        auto error_bytes = protocol::protocol_serializer::serialize(err);
+        session->send_packet(std::move(error_bytes));
+        return;
+    }
+
+    // Extract payload (skip header)
+    constexpr size_t header_size = sizeof(protocol::message_header);
+    std::vector<uint8_t> payload;
+    if (data.size() > header_size) {
+        payload.assign(data.begin() + header_size, data.end());
+    }
+
+    std::vector<uint8_t> response;
+
+    switch (header.type) {
+        case protocol::message_type::QUERY_REQUEST:
+            response = process_network_query(header, payload);
+            break;
+
+        case protocol::message_type::PING: {
+            protocol::message_header pong_header = header;
+            pong_header.type = protocol::message_type::PONG;
+            pong_header.payload_size = 0;
+            response = protocol::protocol_serializer::serialize_header(pong_header);
+            break;
+        }
+
+        default: {
+            protocol::error_response err;
+            err.error_code = -3;
+            err.error_message = "Unsupported message type for gateway";
+            response = protocol::protocol_serializer::serialize(err);
+            break;
+        }
+    }
+
+    if (!response.empty()) {
+        session->send_packet(std::move(response));
+    }
+}
+
+std::vector<uint8_t> database_gateway::process_network_query(
+    const protocol::message_header& header,
+    const std::vector<uint8_t>& payload
+) {
+    // Deserialize query request
+    auto request_result = protocol::protocol_serializer::deserialize_query_request(payload);
+    if (!request_result.is_ok()) {
+        protocol::error_response err;
+        err.error_code = -4;
+        err.error_message = "Failed to deserialize query request";
+        return protocol::protocol_serializer::serialize(err);
+    }
+
+    const auto& request = request_result.value();
+
+    // Execute query through gateway routing
+    auto query_result = execute_query(request.query_string);
+
+    // Build response
+    protocol::query_response response;
+    if (query_result.is_ok()) {
+        response = convert_to_protocol_response(query_result.value());
+        response.success = true;
+    } else {
+        response.success = false;
+        response.error_code = query_result.error().code;
+        response.error_message = query_result.error().message;
+    }
+
+    // Serialize response
+    auto response_bytes = protocol::protocol_serializer::serialize(response);
+
+    // Build response header
+    protocol::message_header response_header;
+    response_header.type = protocol::message_type::QUERY_RESPONSE;
+    response_header.request_id = header.request_id;
+    response_header.payload_size = static_cast<uint32_t>(response_bytes.size());
+
+    auto header_bytes = protocol::protocol_serializer::serialize_header(response_header);
+    header_bytes.insert(header_bytes.end(), response_bytes.begin(), response_bytes.end());
+
+    return header_bytes;
+}
+
+protocol::query_response database_gateway::convert_to_protocol_response(
+    const core::database_result& db_result
+) {
+    protocol::query_response response;
+    response.success = true;
+    response.affected_rows = 0;
+    response.last_insert_id = 0;
+
+    // Helper lambda to convert database_value (variant) to string
+    auto value_to_string = [](const core::database_value& val) -> std::string {
+        return std::visit([](auto&& arg) -> std::string {
+            using T = std::decay_t<decltype(arg)>;
+            if constexpr (std::is_same_v<T, std::string>) {
+                return arg;
+            } else if constexpr (std::is_same_v<T, int64_t>) {
+                return std::to_string(arg);
+            } else if constexpr (std::is_same_v<T, double>) {
+                return std::to_string(arg);
+            } else if constexpr (std::is_same_v<T, bool>) {
+                return arg ? "true" : "false";
+            } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+                return "null";
+            } else {
+                return "";
+            }
+        }, val);
+    };
+
+    // Convert database_result (vector<database_row>) to protocol format
+    for (const auto& row : db_result) {
+        std::map<std::string, std::string> row_map;
+        for (const auto& [key, value] : row) {
+            // Convert database_value to string representation
+            row_map[key] = value_to_string(value);
+        }
+        response.rows.push_back(row_map);
+
+        // Collect column names from first row
+        if (response.column_names.empty()) {
+            for (const auto& [key, value] : row) {
+                (void)value;  // Suppress unused warning
+                response.column_names.push_back(key);
+            }
+        }
+    }
+
+    return response;
 }
 
 } // namespace database::gateway

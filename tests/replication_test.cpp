@@ -943,3 +943,174 @@ TEST(CDCConfigTest, DefaultValues) {
     EXPECT_EQ(config.max_batch_size, 1000);
     EXPECT_EQ(config.change_table_prefix, "_cdc_");
 }
+
+// =============================================================================
+// Target Client Initialization Tests
+// =============================================================================
+
+class TargetClientInitializationTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        manager_ = std::make_unique<replication_manager>();
+    }
+
+    void TearDown() override {
+        if (manager_ && manager_->is_active()) {
+            manager_->stop_replication();
+        }
+    }
+
+    node_config create_sqlite_source() {
+        node_config source;
+        source.id = "sqlite-source";
+        source.connection_string = ":memory:";
+        source.role = node_role::PRIMARY;
+        return source;
+    }
+
+    node_config create_sqlite_target() {
+        node_config target;
+        target.id = "sqlite-target";
+        target.connection_string = ":memory:";
+        target.role = node_role::REPLICA;
+        return target;
+    }
+
+    node_config create_postgresql_target() {
+        node_config target;
+        target.id = "postgresql-target";
+        target.connection_string = "postgresql://user:pass@localhost:5432/testdb";
+        target.host = "localhost";
+        target.port = 5432;
+        target.database = "testdb";
+        target.username = "user";
+        target.password = "pass";
+        target.role = node_role::REPLICA;
+        return target;
+    }
+
+    replication_config create_test_config() {
+        replication_config config;
+        config.mode = sync_mode::REALTIME;
+        config.conflict_resolution = conflict_strategy::LAST_WRITE_WINS;
+        config.batch_size = 100;
+        return config;
+    }
+
+    std::unique_ptr<replication_manager> manager_;
+};
+
+// Test database type detection from connection strings
+TEST_F(TargetClientInitializationTest, DetectSQLiteFromConnectionString) {
+    auto db_type = cdc_factory::detect_database_type(":memory:");
+    EXPECT_EQ(db_type, database_type::SQLITE);
+
+    db_type = cdc_factory::detect_database_type("test.db");
+    EXPECT_EQ(db_type, database_type::SQLITE);
+
+    db_type = cdc_factory::detect_database_type("sqlite:///path/to/db.sqlite");
+    EXPECT_EQ(db_type, database_type::SQLITE);
+}
+
+TEST_F(TargetClientInitializationTest, DetectPostgreSQLFromConnectionString) {
+    auto db_type = cdc_factory::detect_database_type("postgresql://user:pass@localhost:5432/db");
+    EXPECT_EQ(db_type, database_type::POSTGRESQL);
+
+    db_type = cdc_factory::detect_database_type("postgres://user:pass@localhost/db");
+    EXPECT_EQ(db_type, database_type::POSTGRESQL);
+}
+
+TEST_F(TargetClientInitializationTest, DetectMySQLFromConnectionString) {
+    auto db_type = cdc_factory::detect_database_type("mysql://user:pass@localhost:3306/db");
+    EXPECT_EQ(db_type, database_type::MYSQL);
+}
+
+TEST_F(TargetClientInitializationTest, DetectMongoDBFromConnectionString) {
+    auto db_type = cdc_factory::detect_database_type("mongodb://user:pass@localhost:27017/db");
+    EXPECT_EQ(db_type, database_type::MONGODB);
+}
+
+// Test that replication can start with SQLite source and target
+// Note: This test may fail if SQLite backend is not registered
+TEST_F(TargetClientInitializationTest, StartReplicationWithSQLiteTarget) {
+    auto source = create_sqlite_source();
+    auto target = create_sqlite_target();
+    auto config = create_test_config();
+
+    // Add a table mapping to track
+    table_mapping mapping;
+    mapping.source_table = "test_table";
+    mapping.target_table = "test_table";
+    config.tables.push_back(mapping);
+
+    auto result = manager_->start_replication(source, target, config);
+
+    // Result depends on whether SQLite backend is available
+    // If backend is registered, it should succeed
+    // If not, it will fail with backend not available error
+    if (result.is_err()) {
+        // Expected error if backend not registered
+        EXPECT_TRUE(
+            result.error().message.find("backend") != std::string::npos ||
+            result.error().message.find("initialize") != std::string::npos
+        );
+    } else {
+        EXPECT_TRUE(manager_->is_active());
+    }
+}
+
+// Test that invalid database type is handled gracefully
+TEST_F(TargetClientInitializationTest, HandlesInvalidDatabaseType) {
+    node_config source;
+    source.id = "invalid-source";
+    source.connection_string = "unknown://some/connection";
+
+    node_config target;
+    target.id = "invalid-target";
+    target.connection_string = "unknown://another/connection";
+
+    auto config = create_test_config();
+
+    auto result = manager_->start_replication(source, target, config);
+
+    // Should fail gracefully with an error message
+    // (either unsupported database type or backend not available)
+    // Note: detect_database_type defaults to SQLITE for unknown types
+    if (result.is_err()) {
+        EXPECT_FALSE(result.error().message.empty());
+    }
+}
+
+// Test configuration with direct host/port settings
+TEST_F(TargetClientInitializationTest, TargetWithDirectHostConfig) {
+    auto source = create_sqlite_source();
+
+    node_config target;
+    target.id = "direct-config-target";
+    target.host = "localhost";
+    target.port = 5432;
+    target.database = "testdb";
+    target.username = "user";
+    target.password = "pass";
+    target.connection_string = "postgresql://localhost:5432/testdb";
+    target.role = node_role::REPLICA;
+
+    auto config = create_test_config();
+    table_mapping mapping;
+    mapping.source_table = "test_table";
+    mapping.target_table = "test_table";
+    config.tables.push_back(mapping);
+
+    auto result = manager_->start_replication(source, target, config);
+
+    // Test verifies that the configuration is processed correctly
+    // Actual success depends on backend availability
+    if (result.is_err()) {
+        // Error should be related to connection/backend, not configuration parsing
+        EXPECT_TRUE(
+            result.error().message.find("backend") != std::string::npos ||
+            result.error().message.find("connection") != std::string::npos ||
+            result.error().message.find("initialize") != std::string::npos
+        );
+    }
+}

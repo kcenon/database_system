@@ -7,6 +7,7 @@ All rights reserved.
 
 #include "replication_manager.h"
 #include "safe_query_builder.h"
+#include "cdc/cdc_factory.h"
 
 #include <algorithm>
 #include <sstream>
@@ -99,6 +100,12 @@ result<void> replication_manager::stop_replication() {
         replication_thread_.join();
     }
 
+    // Stop CDC strategy
+    if (cdc_strategy_) {
+        cdc_strategy_->stop();
+        cdc_strategy_.reset();
+    }
+
     // Clean up clients
     if (source_client_) {
         source_client_->shutdown();
@@ -176,17 +183,40 @@ size_t replication_manager::get_pending_event_count() const {
 }
 
 result<void> replication_manager::initialize_source() {
-    // Create source client based on node configuration
-    // In a real implementation, this would create the appropriate backend type
-    // For now, we create a placeholder that will work with any database_backend
+    // Create CDC strategy based on source configuration
+    // Detect database type from connection string
+    cdc_strategy_ = cdc::cdc_factory::create_from_connection_string(
+        source_config_.connection_string
+    );
 
-    // Note: Source connection would typically use CDC capabilities
-    // The actual implementation depends on the database type:
-    // - PostgreSQL: Logical replication slots
-    // - MySQL: Binary log reading
-    // - SQLite: Trigger-based change capture
+    if (!cdc_strategy_) {
+        return result<void>(error_info{
+            -10,
+            "Unsupported database type for CDC: " + source_config_.connection_string,
+            "replication"
+        });
+    }
 
-    return result<void>::ok();
+    // Build list of tables to track
+    std::vector<std::string> tracked_tables;
+    for (const auto& mapping : config_.tables) {
+        tracked_tables.push_back(mapping.source_table);
+    }
+
+    // Initialize CDC
+    cdc::cdc_config cdc_config;
+    cdc_config.connection_string = source_config_.connection_string;
+    cdc_config.tracked_tables = tracked_tables;
+    cdc_config.capture_old_values = true;
+    cdc_config.max_batch_size = config_.batch_size;
+
+    auto init_result = cdc_strategy_->initialize(cdc_config);
+    if (init_result.is_err()) {
+        return init_result;
+    }
+
+    // Start CDC capture
+    return cdc_strategy_->start();
 }
 
 result<void> replication_manager::initialize_target() {
@@ -288,17 +318,12 @@ void replication_manager::replication_worker() {
 }
 
 std::optional<replication_event> replication_manager::capture_change_event() {
-    // This is a placeholder implementation
-    // In a real implementation, this would:
-    // 1. Read from PostgreSQL logical replication slot
-    // 2. Read from MySQL binary log
-    // 3. Query SQLite change tracking table
-    // 4. Poll MongoDB change stream
+    // Use CDC strategy to capture changes
+    if (!cdc_strategy_ || !cdc_strategy_->is_active()) {
+        return std::nullopt;
+    }
 
-    // For now, return empty to indicate no changes
-    // The actual CDC implementation would be database-specific
-
-    return std::nullopt;
+    return cdc_strategy_->capture_next_event();
 }
 
 result<void> replication_manager::apply_change_event(const replication_event& event) {

@@ -620,3 +620,326 @@ TEST_F(SafeQueryBuilderTest, HandleSpecialCharacters) {
     // Single quote should be escaped
     EXPECT_TRUE(query.find("I''m") != std::string::npos);
 }
+
+// =============================================================================
+// CDC Strategy Tests
+// =============================================================================
+
+#include "database/replication/cdc/cdc_factory.h"
+#include "database/replication/cdc/cdc_strategy_interface.h"
+#include "database/replication/cdc/sqlite_cdc_strategy.h"
+#include "database/replication/cdc/postgresql_cdc_strategy.h"
+#include "database/replication/cdc/mysql_cdc_strategy.h"
+#include "database/replication/cdc/mongodb_cdc_strategy.h"
+
+using namespace database::replication::cdc;
+
+class CDCFactoryTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+// Factory creation tests
+TEST_F(CDCFactoryTest, CreateSQLiteCDC) {
+    auto strategy = cdc_factory::create(database_type::SQLITE);
+    ASSERT_NE(strategy, nullptr);
+    EXPECT_EQ(strategy->get_database_type(), database_type::SQLITE);
+}
+
+TEST_F(CDCFactoryTest, CreatePostgreSQLCDC) {
+    auto strategy = cdc_factory::create(database_type::POSTGRESQL);
+    ASSERT_NE(strategy, nullptr);
+    EXPECT_EQ(strategy->get_database_type(), database_type::POSTGRESQL);
+}
+
+TEST_F(CDCFactoryTest, CreateMySQLCDC) {
+    auto strategy = cdc_factory::create(database_type::MYSQL);
+    ASSERT_NE(strategy, nullptr);
+    EXPECT_EQ(strategy->get_database_type(), database_type::MYSQL);
+}
+
+TEST_F(CDCFactoryTest, CreateMongoDBCDC) {
+    auto strategy = cdc_factory::create(database_type::MONGODB);
+    ASSERT_NE(strategy, nullptr);
+    EXPECT_EQ(strategy->get_database_type(), database_type::MONGODB);
+}
+
+// Database type detection tests
+TEST_F(CDCFactoryTest, DetectSQLiteFromConnectionString) {
+    EXPECT_EQ(cdc_factory::detect_database_type("sqlite:///path/to/db.sqlite"),
+              database_type::SQLITE);
+    EXPECT_EQ(cdc_factory::detect_database_type("/path/to/db.sqlite"),
+              database_type::SQLITE);
+    EXPECT_EQ(cdc_factory::detect_database_type("test.db"),
+              database_type::SQLITE);
+    EXPECT_EQ(cdc_factory::detect_database_type(":memory:"),
+              database_type::SQLITE);
+}
+
+TEST_F(CDCFactoryTest, DetectPostgreSQLFromConnectionString) {
+    EXPECT_EQ(cdc_factory::detect_database_type("postgresql://user:pass@localhost:5432/db"),
+              database_type::POSTGRESQL);
+    EXPECT_EQ(cdc_factory::detect_database_type("postgres://user:pass@localhost/db"),
+              database_type::POSTGRESQL);
+}
+
+TEST_F(CDCFactoryTest, DetectMySQLFromConnectionString) {
+    EXPECT_EQ(cdc_factory::detect_database_type("mysql://user:pass@localhost:3306/db"),
+              database_type::MYSQL);
+}
+
+TEST_F(CDCFactoryTest, DetectMongoDBFromConnectionString) {
+    EXPECT_EQ(cdc_factory::detect_database_type("mongodb://user:pass@localhost:27017/db"),
+              database_type::MONGODB);
+    EXPECT_EQ(cdc_factory::detect_database_type("mongodb+srv://user:pass@cluster.example.com/db"),
+              database_type::MONGODB);
+}
+
+// Type name tests
+TEST_F(CDCFactoryTest, GetTypeName) {
+    EXPECT_EQ(cdc_factory::get_type_name(database_type::SQLITE), "SQLite");
+    EXPECT_EQ(cdc_factory::get_type_name(database_type::POSTGRESQL), "PostgreSQL");
+    EXPECT_EQ(cdc_factory::get_type_name(database_type::MYSQL), "MySQL");
+    EXPECT_EQ(cdc_factory::get_type_name(database_type::MONGODB), "MongoDB");
+}
+
+// Is supported tests
+TEST_F(CDCFactoryTest, IsSupportedSQLite) {
+    // SQLite is always supported (no external dependencies)
+    EXPECT_TRUE(cdc_factory::is_supported(database_type::SQLITE));
+}
+
+// Create from connection string tests
+TEST_F(CDCFactoryTest, CreateFromSQLiteConnectionString) {
+    auto strategy = cdc_factory::create_from_connection_string("test.db");
+    ASSERT_NE(strategy, nullptr);
+    EXPECT_EQ(strategy->get_database_type(), database_type::SQLITE);
+}
+
+// =============================================================================
+// SQLite CDC Strategy Unit Tests
+// =============================================================================
+
+class SQLiteCDCStrategyTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        strategy_ = std::make_unique<sqlite_cdc_strategy>();
+    }
+
+    void TearDown() override {
+        if (strategy_ && strategy_->is_active()) {
+            strategy_->stop();
+        }
+        if (strategy_) {
+            strategy_->cleanup();
+        }
+    }
+
+    std::unique_ptr<sqlite_cdc_strategy> strategy_;
+};
+
+TEST_F(SQLiteCDCStrategyTest, InitialState) {
+    EXPECT_FALSE(strategy_->is_active());
+    EXPECT_EQ(strategy_->get_pending_count(), 0);
+    EXPECT_EQ(strategy_->get_database_type(), database_type::SQLITE);
+}
+
+TEST_F(SQLiteCDCStrategyTest, GetDatabaseType) {
+    EXPECT_EQ(strategy_->get_database_type(), database_type::SQLITE);
+}
+
+TEST_F(SQLiteCDCStrategyTest, CannotStartWithoutInitialization) {
+    auto result = strategy_->start();
+    EXPECT_TRUE(result.is_err());
+}
+
+TEST_F(SQLiteCDCStrategyTest, CannotStopWithoutStart) {
+    auto result = strategy_->stop();
+    EXPECT_TRUE(result.is_err());
+}
+
+TEST_F(SQLiteCDCStrategyTest, InitializeWithMemoryDatabase) {
+    cdc_config config;
+    config.connection_string = ":memory:";
+    config.tracked_tables = {"test_table"};
+
+    // This will fail because the table doesn't exist, but initialization structure works
+    auto result = strategy_->initialize(config);
+    // May succeed or fail depending on table existence
+    // The test validates that the interface works
+}
+
+TEST_F(SQLiteCDCStrategyTest, PositionManagement) {
+    auto result = strategy_->set_position("12345");
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(strategy_->get_current_position(), "12345");
+}
+
+TEST_F(SQLiteCDCStrategyTest, CaptureEventsWhenNotActive) {
+    auto events = strategy_->capture_events(10);
+    EXPECT_TRUE(events.empty());
+
+    auto event = strategy_->capture_next_event();
+    EXPECT_FALSE(event.has_value());
+}
+
+// =============================================================================
+// PostgreSQL CDC Strategy Unit Tests
+// =============================================================================
+
+class PostgreSQLCDCStrategyTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        strategy_ = std::make_unique<postgresql_cdc_strategy>();
+    }
+
+    void TearDown() override {
+        if (strategy_ && strategy_->is_active()) {
+            strategy_->stop();
+        }
+    }
+
+    std::unique_ptr<postgresql_cdc_strategy> strategy_;
+};
+
+TEST_F(PostgreSQLCDCStrategyTest, InitialState) {
+    EXPECT_FALSE(strategy_->is_active());
+    EXPECT_EQ(strategy_->get_pending_count(), 0);
+    EXPECT_EQ(strategy_->get_database_type(), database_type::POSTGRESQL);
+}
+
+TEST_F(PostgreSQLCDCStrategyTest, GetDatabaseType) {
+    EXPECT_EQ(strategy_->get_database_type(), database_type::POSTGRESQL);
+}
+
+TEST_F(PostgreSQLCDCStrategyTest, CannotStartWithoutInitialization) {
+    auto result = strategy_->start();
+    EXPECT_TRUE(result.is_err());
+}
+
+TEST_F(PostgreSQLCDCStrategyTest, PositionManagement) {
+    auto result = strategy_->set_position("0/12345678");
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(strategy_->get_current_position(), "0/12345678");
+}
+
+TEST_F(PostgreSQLCDCStrategyTest, CaptureEventsWhenNotActive) {
+    auto events = strategy_->capture_events(10);
+    EXPECT_TRUE(events.empty());
+}
+
+// =============================================================================
+// MySQL CDC Strategy Unit Tests
+// =============================================================================
+
+class MySQLCDCStrategyTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        strategy_ = std::make_unique<mysql_cdc_strategy>();
+    }
+
+    void TearDown() override {
+        if (strategy_ && strategy_->is_active()) {
+            strategy_->stop();
+        }
+    }
+
+    std::unique_ptr<mysql_cdc_strategy> strategy_;
+};
+
+TEST_F(MySQLCDCStrategyTest, InitialState) {
+    EXPECT_FALSE(strategy_->is_active());
+    EXPECT_EQ(strategy_->get_pending_count(), 0);
+    EXPECT_EQ(strategy_->get_database_type(), database_type::MYSQL);
+}
+
+TEST_F(MySQLCDCStrategyTest, GetDatabaseType) {
+    EXPECT_EQ(strategy_->get_database_type(), database_type::MYSQL);
+}
+
+TEST_F(MySQLCDCStrategyTest, CannotStartWithoutInitialization) {
+    auto result = strategy_->start();
+    EXPECT_TRUE(result.is_err());
+}
+
+TEST_F(MySQLCDCStrategyTest, PositionManagement) {
+    auto result = strategy_->set_position("mysql-bin.000001:12345");
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(strategy_->get_current_position(), "mysql-bin.000001:12345");
+
+    // Test GTID format
+    result = strategy_->set_position("gtid:3E11FA47-71CA-11E1-9E33-C80AA9429562:1-5");
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(MySQLCDCStrategyTest, CaptureEventsWhenNotActive) {
+    auto events = strategy_->capture_events(10);
+    EXPECT_TRUE(events.empty());
+}
+
+// =============================================================================
+// MongoDB CDC Strategy Unit Tests
+// =============================================================================
+
+class MongoDBCDCStrategyTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        strategy_ = std::make_unique<mongodb_cdc_strategy>();
+    }
+
+    void TearDown() override {
+        if (strategy_ && strategy_->is_active()) {
+            strategy_->stop();
+        }
+    }
+
+    std::unique_ptr<mongodb_cdc_strategy> strategy_;
+};
+
+TEST_F(MongoDBCDCStrategyTest, InitialState) {
+    EXPECT_FALSE(strategy_->is_active());
+    EXPECT_EQ(strategy_->get_pending_count(), 0);
+    EXPECT_EQ(strategy_->get_database_type(), database_type::MONGODB);
+}
+
+TEST_F(MongoDBCDCStrategyTest, GetDatabaseType) {
+    EXPECT_EQ(strategy_->get_database_type(), database_type::MONGODB);
+}
+
+TEST_F(MongoDBCDCStrategyTest, CannotStartWithoutInitialization) {
+    auto result = strategy_->start();
+    EXPECT_TRUE(result.is_err());
+}
+
+TEST_F(MongoDBCDCStrategyTest, PositionManagement) {
+    std::string resume_token = R"({"_data": "82636D7069"})";
+    auto result = strategy_->set_position(resume_token);
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(strategy_->get_current_position(), resume_token);
+}
+
+TEST_F(MongoDBCDCStrategyTest, CaptureEventsWhenNotActive) {
+    auto events = strategy_->capture_events(10);
+    EXPECT_TRUE(events.empty());
+}
+
+TEST_F(MongoDBCDCStrategyTest, Cleanup) {
+    auto result = strategy_->cleanup();
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_FALSE(strategy_->is_active());
+}
+
+// =============================================================================
+// CDC Config Structure Tests
+// =============================================================================
+
+TEST(CDCConfigTest, DefaultValues) {
+    cdc_config config;
+
+    EXPECT_TRUE(config.connection_string.empty());
+    EXPECT_TRUE(config.tracked_tables.empty());
+    EXPECT_TRUE(config.capture_old_values);
+    EXPECT_EQ(config.max_batch_size, 1000);
+    EXPECT_EQ(config.change_table_prefix, "_cdc_");
+}

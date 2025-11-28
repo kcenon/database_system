@@ -153,6 +153,12 @@ if(USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
         ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
         # Database Gateway
         ${CMAKE_CURRENT_SOURCE_DIR}/gateway/database_gateway.cpp
+        # Gateway Audit Logger
+        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/audit_logger.cpp
+        # Gateway Authentication Backends
+        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/local_auth_backend.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/ldap_auth_backend.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/oauth_auth_backend.cpp
         # DB-005 Replication Manager
         ${CMAKE_CURRENT_SOURCE_DIR}/replication/replication_manager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/replication/safe_query_builder.cpp

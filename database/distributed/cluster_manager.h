@@ -55,6 +55,9 @@ struct node_config {
     std::string username;
     std::string password;
     bool use_tls{false};
+
+    // Direct connection string (for local databases like SQLite)
+    std::string connection_string;     ///< Direct connection string (e.g., "/path/to/db.sqlite")
 };
 
 /**

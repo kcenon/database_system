@@ -18,6 +18,7 @@ All rights reserved.
 #include "../core/database_backend.h"
 #include "../core/result.h"
 #include "../distributed/cluster_manager.h"
+#include "cdc/cdc_strategy_interface.h"
 
 // Logging/monitoring integration removed - requires proper CMake setup
 
@@ -315,6 +316,9 @@ private:
     // Statistics
     mutable std::mutex stats_mutex_;
     replication_stats stats_;
+
+    // CDC strategy for capturing source changes
+    std::unique_ptr<cdc::cdc_strategy_interface> cdc_strategy_;
 
     // Note: Logging/monitoring integration removed - requires proper CMake setup
 };

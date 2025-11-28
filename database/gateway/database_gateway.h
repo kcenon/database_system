@@ -24,6 +24,10 @@ All rights reserved.
 #include <kcenon/network/core/messaging_server.h>
 #include <kcenon/network/session/messaging_session.h>
 
+// Logging/monitoring integration
+#include "../integrated/adapters/logger_adapter.h"
+#include "../integrated/adapters/monitoring_adapter.h"
+
 namespace database::gateway {
 
 /**
@@ -70,6 +74,25 @@ struct audit_config {
     size_t max_file_size_mb{100};               ///< Max file size before rotation
     size_t max_files{10};                       ///< Max rotated files to keep
     bool async_write{true};                     ///< Use async writing for performance
+};
+
+/**
+ * @brief Gateway observability configuration
+ *
+ * Configures logging and monitoring integration for the gateway.
+ */
+struct gateway_observability_config {
+    /// Enable integrated logging
+    bool enable_logging{true};
+
+    /// Enable integrated monitoring
+    bool enable_monitoring{true};
+
+    /// Logger configuration
+    integrated::db_logger_config logger_config;
+
+    /// Monitoring configuration
+    integrated::db_monitoring_config monitoring_config;
 };
 
 /**
@@ -210,6 +233,13 @@ public:
      * @param config Audit logging configuration
      */
     void configure_audit_logging(const audit_config& config);
+
+    /**
+     * @brief Configure observability (logging and monitoring)
+     * @param config Observability configuration
+     * @return result::ok() on success, error on failure
+     */
+    result<void> configure_observability(const gateway_observability_config& config);
 
     /**
      * @brief Execute query through gateway
@@ -376,6 +406,11 @@ private:
     mutable std::mutex auth_mutex_;
     std::unordered_map<std::string, std::string> users_; // username -> password hash
     std::unordered_map<std::string, std::vector<std::string>> permissions_; // username -> permissions
+
+    // Observability (logging and monitoring integration)
+    gateway_observability_config observability_config_;
+    std::unique_ptr<integrated::adapters::logger_adapter> logger_;
+    std::unique_ptr<integrated::adapters::monitoring_adapter> monitor_;
 };
 
 } // namespace database::gateway

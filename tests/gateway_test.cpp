@@ -652,3 +652,103 @@ TEST_F(DatabaseGatewayTest, AuditLoggingEnabled) {
     // Cleanup
     std::filesystem::remove_all(temp_dir);
 }
+
+// =============================================================================
+// Gateway Observability Integration Tests
+// =============================================================================
+
+TEST_F(DatabaseGatewayTest, ConfigureObservability) {
+    gateway_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = true;
+
+    // Configure logger
+    config.logger_config.enable_query_logging = true;
+    config.logger_config.log_slow_queries = true;
+    config.logger_config.slow_query_threshold = std::chrono::milliseconds(100);
+    config.logger_config.min_log_level = integrated::db_log_level::debug;
+
+    // Configure monitoring
+    config.monitoring_config.enable_metrics = true;
+    config.monitoring_config.enable_health_checks = true;
+
+    auto result = gateway_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(DatabaseGatewayTest, ObservabilityWithLoggingOnly) {
+    gateway_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = false;
+    config.logger_config.min_log_level = integrated::db_log_level::info;
+
+    auto result = gateway_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(DatabaseGatewayTest, ObservabilityWithMonitoringOnly) {
+    gateway_observability_config config;
+    config.enable_logging = false;
+    config.enable_monitoring = true;
+    config.monitoring_config.enable_metrics = true;
+
+    auto result = gateway_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(DatabaseGatewayTest, ObservabilityBothDisabled) {
+    gateway_observability_config config;
+    config.enable_logging = false;
+    config.enable_monitoring = false;
+
+    auto result = gateway_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(DatabaseGatewayTest, ObservabilityReconfiguration) {
+    // First configuration
+    gateway_observability_config config1;
+    config1.enable_logging = true;
+    config1.enable_monitoring = false;
+
+    auto result1 = gateway_->configure_observability(config1);
+    EXPECT_TRUE(result1.is_ok());
+
+    // Reconfigure with different settings
+    gateway_observability_config config2;
+    config2.enable_logging = true;
+    config2.enable_monitoring = true;
+
+    auto result2 = gateway_->configure_observability(config2);
+    EXPECT_TRUE(result2.is_ok());
+}
+
+TEST_F(DatabaseGatewayTest, ObservabilityWithFileLogging) {
+    std::filesystem::path temp_dir = std::filesystem::temp_directory_path() / "gateway_observability_test";
+    std::filesystem::create_directories(temp_dir);
+
+    gateway_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = false;
+    config.logger_config.enable_file_logging = true;
+    config.logger_config.log_directory = temp_dir.string();
+    config.logger_config.enable_query_logging = true;
+
+    auto result = gateway_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+
+    // Start gateway and execute a query to generate logs
+    security_config security;
+    gateway_->start(5002, security);
+
+    auto cluster = std::make_shared<cluster_manager>();
+    gateway_->register_cluster("test-cluster", cluster);
+
+    // Execute query (will fail but should log)
+    gateway_->execute_query("SELECT * FROM test");
+
+    gateway_->stop();
+
+    // Cleanup
+    std::filesystem::remove_all(temp_dir);
+}

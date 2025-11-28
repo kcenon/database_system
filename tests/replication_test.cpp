@@ -1114,3 +1114,114 @@ TEST_F(TargetClientInitializationTest, TargetWithDirectHostConfig) {
         );
     }
 }
+
+// =============================================================================
+// Replication Observability Integration Tests
+// =============================================================================
+
+TEST_F(ReplicationManagerTest, ConfigureObservability) {
+    replication_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = true;
+
+    // Configure logger
+    config.logger_config.enable_query_logging = true;
+    config.logger_config.log_slow_queries = true;
+    config.logger_config.slow_query_threshold = std::chrono::milliseconds(100);
+    config.logger_config.min_log_level = integrated::db_log_level::debug;
+
+    // Configure monitoring
+    config.monitoring_config.enable_metrics = true;
+    config.monitoring_config.enable_health_checks = true;
+
+    auto result = manager_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityWithLoggingOnly) {
+    replication_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = false;
+    config.logger_config.min_log_level = integrated::db_log_level::info;
+
+    auto result = manager_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityWithMonitoringOnly) {
+    replication_observability_config config;
+    config.enable_logging = false;
+    config.enable_monitoring = true;
+    config.monitoring_config.enable_metrics = true;
+
+    auto result = manager_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityBothDisabled) {
+    replication_observability_config config;
+    config.enable_logging = false;
+    config.enable_monitoring = false;
+
+    auto result = manager_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityReconfiguration) {
+    // First configuration
+    replication_observability_config config1;
+    config1.enable_logging = true;
+    config1.enable_monitoring = false;
+
+    auto result1 = manager_->configure_observability(config1);
+    EXPECT_TRUE(result1.is_ok());
+
+    // Reconfigure with different settings
+    replication_observability_config config2;
+    config2.enable_logging = true;
+    config2.enable_monitoring = true;
+
+    auto result2 = manager_->configure_observability(config2);
+    EXPECT_TRUE(result2.is_ok());
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityWithFileLogging) {
+    std::filesystem::path temp_dir = std::filesystem::temp_directory_path() / "replication_observability_test";
+    std::filesystem::create_directories(temp_dir);
+
+    replication_observability_config config;
+    config.enable_logging = true;
+    config.enable_monitoring = false;
+    config.logger_config.enable_file_logging = true;
+    config.logger_config.log_directory = temp_dir.string();
+    config.logger_config.enable_query_logging = true;
+
+    auto result = manager_->configure_observability(config);
+    EXPECT_TRUE(result.is_ok());
+
+    // Cleanup
+    std::filesystem::remove_all(temp_dir);
+}
+
+TEST_F(ReplicationManagerTest, ObservabilityLogsReplicationEvents) {
+    // Configure observability first
+    replication_observability_config obs_config;
+    obs_config.enable_logging = true;
+    obs_config.enable_monitoring = true;
+    obs_config.logger_config.min_log_level = integrated::db_log_level::debug;
+
+    auto obs_result = manager_->configure_observability(obs_config);
+    EXPECT_TRUE(obs_result.is_ok());
+
+    // Start replication (will generate log entries)
+    auto source = create_test_source();
+    auto target = create_test_target();
+    auto config = create_test_config();
+
+    auto start_result = manager_->start_replication(source, target, config);
+    EXPECT_TRUE(start_result.is_ok());
+
+    // Stop replication (will log final statistics)
+    auto stop_result = manager_->stop_replication();
+    EXPECT_TRUE(stop_result.is_ok());
+}

@@ -6,6 +6,7 @@ All rights reserved.
 *****************************************************************************/
 
 #include "replication_manager.h"
+#include "safe_query_builder.h"
 
 #include <algorithm>
 #include <sstream>
@@ -305,92 +306,57 @@ result<void> replication_manager::apply_change_event(const replication_event& ev
         return result<void>(error_info{-4, "Target not initialized", "replication"});
     }
 
-    // Build and execute query based on event type
+    // Build and execute query based on event type using safe_query_builder
+    // to prevent SQL injection attacks
     std::string query;
 
-    switch (event.type) {
-        case replication_event::event_type::INSERT: {
-            // Build INSERT query
-            std::ostringstream columns_ss;
-            std::ostringstream values_ss;
-            bool first = true;
+    try {
+        switch (event.type) {
+            case replication_event::event_type::INSERT: {
+                // Build safe INSERT query with escaped values
+                query = safe_query_builder::build_insert(
+                    event.table_name,
+                    event.new_values
+                );
 
-            for (const auto& [col, val] : event.new_values) {
-                if (!first) {
-                    columns_ss << ", ";
-                    values_ss << ", ";
+                auto insert_result = target_client_->insert_query(query);
+                if (insert_result.is_err()) {
+                    return result<void>(insert_result.error());
                 }
-                columns_ss << col;
-                values_ss << "'" << val << "'";  // Note: Should use parameterized queries
-                first = false;
+                break;
             }
 
-            query = "INSERT INTO " + event.table_name +
-                    " (" + columns_ss.str() + ") VALUES (" + values_ss.str() + ")";
+            case replication_event::event_type::UPDATE: {
+                // Build safe UPDATE query with escaped values
+                query = safe_query_builder::build_update(
+                    event.table_name,
+                    event.new_values,
+                    event.old_values
+                );
 
-            auto insert_result = target_client_->insert_query(query);
-            if (insert_result.is_err()) {
-                return result<void>(insert_result.error());
+                auto update_result = target_client_->update_query(query);
+                if (update_result.is_err()) {
+                    return result<void>(update_result.error());
+                }
+                break;
             }
-            break;
+
+            case replication_event::event_type::DELETE: {
+                // Build safe DELETE query with escaped values
+                query = safe_query_builder::build_delete(
+                    event.table_name,
+                    event.old_values
+                );
+
+                auto delete_result = target_client_->delete_query(query);
+                if (delete_result.is_err()) {
+                    return result<void>(delete_result.error());
+                }
+                break;
+            }
         }
-
-        case replication_event::event_type::UPDATE: {
-            // Build UPDATE query
-            std::ostringstream set_ss;
-            std::ostringstream where_ss;
-            bool first_set = true;
-            bool first_where = true;
-
-            for (const auto& [col, val] : event.new_values) {
-                if (!first_set) {
-                    set_ss << ", ";
-                }
-                set_ss << col << " = '" << val << "'";
-                first_set = false;
-            }
-
-            for (const auto& [col, val] : event.old_values) {
-                if (!first_where) {
-                    where_ss << " AND ";
-                }
-                where_ss << col << " = '" << val << "'";
-                first_where = false;
-            }
-
-            query = "UPDATE " + event.table_name +
-                    " SET " + set_ss.str() +
-                    " WHERE " + where_ss.str();
-
-            auto update_result = target_client_->update_query(query);
-            if (update_result.is_err()) {
-                return result<void>(update_result.error());
-            }
-            break;
-        }
-
-        case replication_event::event_type::DELETE: {
-            // Build DELETE query
-            std::ostringstream where_ss;
-            bool first = true;
-
-            for (const auto& [col, val] : event.old_values) {
-                if (!first) {
-                    where_ss << " AND ";
-                }
-                where_ss << col << " = '" << val << "'";
-                first = false;
-            }
-
-            query = "DELETE FROM " + event.table_name +
-                    " WHERE " + where_ss.str();
-
-            auto delete_result = target_client_->delete_query(query);
-            if (delete_result.is_err()) {
-                return result<void>(delete_result.error());
-            }
-            break;
-        }
+    } catch (const std::invalid_argument& e) {
+        return result<void>(error_info{-5, e.what(), "replication"});
     }
 
     return result<void>::ok();

@@ -20,7 +20,9 @@ All rights reserved.
 #include "../distributed/cluster_manager.h"
 #include "cdc/cdc_strategy_interface.h"
 
-// Logging/monitoring integration removed - requires proper CMake setup
+// Logging/monitoring integration
+#include "../integrated/adapters/logger_adapter.h"
+#include "../integrated/adapters/monitoring_adapter.h"
 
 namespace database::replication {
 
@@ -63,6 +65,25 @@ struct replication_config {
     std::chrono::seconds batch_interval{60};    ///< Batch interval (for BATCH mode)
     size_t batch_size{1000};                    ///< Max records per batch
     bool bidirectional{false};                  ///< Enable bidirectional replication
+};
+
+/**
+ * @brief Replication observability configuration
+ *
+ * Configures logging and monitoring integration for the replication manager.
+ */
+struct replication_observability_config {
+    /// Enable integrated logging
+    bool enable_logging{true};
+
+    /// Enable integrated monitoring
+    bool enable_monitoring{true};
+
+    /// Logger configuration
+    integrated::db_logger_config logger_config;
+
+    /// Monitoring configuration
+    integrated::db_monitoring_config monitoring_config;
 };
 
 /**
@@ -242,6 +263,13 @@ public:
      */
     size_t get_pending_event_count() const;
 
+    /**
+     * @brief Configure observability (logging and monitoring)
+     * @param config Observability configuration
+     * @return result::ok() on success, error on failure
+     */
+    result<void> configure_observability(const replication_observability_config& config);
+
 private:
     /**
      * @brief Initialize source connection and CDC
@@ -320,7 +348,10 @@ private:
     // CDC strategy for capturing source changes
     std::unique_ptr<cdc::cdc_strategy_interface> cdc_strategy_;
 
-    // Note: Logging/monitoring integration removed - requires proper CMake setup
+    // Observability (logging and monitoring integration)
+    replication_observability_config observability_config_;
+    std::unique_ptr<integrated::adapters::logger_adapter> logger_;
+    std::unique_ptr<integrated::adapters::monitoring_adapter> monitor_;
 };
 
 } // namespace database::replication

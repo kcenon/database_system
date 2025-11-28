@@ -53,6 +53,11 @@ result<void> replication_manager::start_replication(
         return result<void>(error_info{-1, "Replication already active", "replication"});
     }
 
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info,
+            "Starting replication from " + source.id + " to " + target.id);
+    }
+
     source_config_ = source;
     target_config_ = target;
     config_ = config;
@@ -60,12 +65,18 @@ result<void> replication_manager::start_replication(
     // Initialize source connection
     auto source_result = initialize_source();
     if (source_result.is_err()) {
+        if (logger_) {
+            logger_->log_error("initialize_source", source_result.error().message, "");
+        }
         return source_result;
     }
 
     // Initialize target connection
     auto target_result = initialize_target();
     if (target_result.is_err()) {
+        if (logger_) {
+            logger_->log_error("initialize_target", target_result.error().message, "");
+        }
         return target_result;
     }
 
@@ -83,12 +94,22 @@ result<void> replication_manager::start_replication(
     cdc_thread_ = std::thread(&replication_manager::cdc_worker, this);
     replication_thread_ = std::thread(&replication_manager::replication_worker, this);
 
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info,
+            "Replication started successfully with " +
+            std::to_string(config.tables.size()) + " table(s)");
+    }
+
     return result<void>::ok();
 }
 
 result<void> replication_manager::stop_replication() {
     if (!active_.load()) {
         return result<void>(error_info{-2, "Replication not active", "replication"});
+    }
+
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info, "Stopping replication...");
     }
 
     active_.store(false);
@@ -115,6 +136,26 @@ result<void> replication_manager::stop_replication() {
     if (target_client_) {
         target_client_->shutdown();
         target_client_.reset();
+    }
+
+    // Log final statistics
+    if (logger_) {
+        std::lock_guard<std::mutex> lock(stats_mutex_);
+        logger_->log(integrated::db_log_level::info,
+            "Replication stopped. Events replicated: " +
+            std::to_string(stats_.events_replicated) +
+            ", Failed: " + std::to_string(stats_.events_failed) +
+            ", Conflicts: " + std::to_string(stats_.conflicts_resolved));
+    }
+
+    // Shutdown observability adapters
+    if (monitor_) {
+        monitor_->shutdown();
+        monitor_.reset();
+    }
+    if (logger_) {
+        logger_->shutdown();
+        logger_.reset();
     }
 
     return result<void>::ok();
@@ -181,6 +222,60 @@ bool replication_manager::is_healthy() const {
 size_t replication_manager::get_pending_event_count() const {
     std::lock_guard<std::mutex> lock(queue_mutex_);
     return event_queue_.size();
+}
+
+result<void> replication_manager::configure_observability(
+    const replication_observability_config& config
+) {
+    observability_config_ = config;
+
+    // Shutdown existing adapters if any
+    if (logger_) {
+        logger_->shutdown();
+        logger_.reset();
+    }
+    if (monitor_) {
+        monitor_->shutdown();
+        monitor_.reset();
+    }
+
+    // Initialize logger adapter if enabled
+    if (config.enable_logging) {
+        logger_ = std::make_unique<integrated::adapters::logger_adapter>(
+            config.logger_config,
+            integrated::adapters::logger_backend_type::auto_select
+        );
+        auto init_result = logger_->initialize();
+        if (!init_result.is_ok()) {
+            return result<void>(error_info{
+                -20,
+                "Failed to initialize replication logger: " + init_result.get_error().message,
+                "replication"
+            });
+        }
+        logger_->log(integrated::db_log_level::info, "Replication logger initialized");
+    }
+
+    // Initialize monitoring adapter if enabled
+    if (config.enable_monitoring) {
+        monitor_ = std::make_unique<integrated::adapters::monitoring_adapter>(
+            config.monitoring_config,
+            integrated::adapters::monitoring_backend_type::auto_select
+        );
+        auto init_result = monitor_->initialize();
+        if (!init_result.is_ok()) {
+            return result<void>(error_info{
+                -21,
+                "Failed to initialize replication monitoring: " + init_result.get_error().message,
+                "replication"
+            });
+        }
+        if (logger_) {
+            logger_->log(integrated::db_log_level::info, "Replication monitoring initialized");
+        }
+    }
+
+    return result<void>::ok();
 }
 
 result<void> replication_manager::initialize_source() {
@@ -386,12 +481,31 @@ void replication_manager::replication_worker() {
 
         // Apply each event
         for (const auto& event : events_to_process) {
+            auto apply_start = std::chrono::steady_clock::now();
             auto apply_result = apply_change_event(event);
+            auto apply_end = std::chrono::steady_clock::now();
 
             auto end_time = std::chrono::system_clock::now();
             auto lag = std::chrono::duration_cast<std::chrono::milliseconds>(
                 end_time - event.timestamp
             );
+
+            // Record metrics
+            if (monitor_) {
+                auto apply_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                    apply_end - apply_start
+                );
+                monitor_->record_query_execution(apply_duration, apply_result.is_ok());
+                monitor_->record_metric("replication_lag_ms",
+                    static_cast<double>(lag.count()));
+            }
+
+            // Log event processing result
+            if (!apply_result.is_ok() && logger_) {
+                logger_->log_error("apply_change_event",
+                    apply_result.error().message,
+                    std::to_string(apply_result.error().code));
+            }
 
             update_stats(apply_result.is_ok(), lag);
         }

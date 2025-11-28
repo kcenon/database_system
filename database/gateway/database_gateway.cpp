@@ -88,12 +88,15 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
         }
     );
 
-    // Set up error callback
+    // Set up error callback with logging
     network_server_->set_error_callback(
-        [](std::shared_ptr<network_system::session::messaging_session> /* session */,
-           std::error_code ec) {
-            // Log error but don't crash
-            (void)ec;  // Error handling could be expanded
+        [this](std::shared_ptr<network_system::session::messaging_session> /* session */,
+               std::error_code ec) {
+            // Log error using integrated logger
+            if (logger_) {
+                logger_->log_error("network_error", ec.message(),
+                    std::to_string(ec.value()));
+            }
         }
     );
 
@@ -101,6 +104,10 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
     auto start_result = network_server_->start_server(port);
     if (start_result.is_err()) {
         network_server_.reset();
+        if (logger_) {
+            logger_->log_error("start", "Failed to start network server: " +
+                start_result.error().message, "");
+        }
         return result<void>(error_info{
             -10,
             "Failed to start network server: " + start_result.error().message,
@@ -109,11 +116,23 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
     }
 
     running_.store(true);
+
+    // Log successful start
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info,
+            "Gateway started on port " + std::to_string(port));
+    }
+
     return result<void>::ok();
 }
 
 void database_gateway::stop() {
     if (!running_.load()) return;
+
+    // Log shutdown start
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info, "Gateway stopping...");
+    }
 
     running_.store(false);
 
@@ -132,6 +151,18 @@ void database_gateway::stop() {
     if (audit_logger_) {
         audit_logger_->stop();
         audit_logger_.reset();
+    }
+
+    // Shutdown observability adapters
+    if (monitor_) {
+        monitor_->shutdown();
+        monitor_.reset();
+    }
+
+    if (logger_) {
+        logger_->log(integrated::db_log_level::info, "Gateway stopped");
+        logger_->shutdown();
+        logger_.reset();
     }
 }
 
@@ -230,12 +261,71 @@ void database_gateway::configure_audit_logging(const audit_config& config) {
     }
 }
 
+result<void> database_gateway::configure_observability(const gateway_observability_config& config) {
+    observability_config_ = config;
+
+    // Shutdown existing adapters if any
+    if (logger_) {
+        logger_->shutdown();
+        logger_.reset();
+    }
+    if (monitor_) {
+        monitor_->shutdown();
+        monitor_.reset();
+    }
+
+    // Initialize logger adapter if enabled
+    if (config.enable_logging) {
+        logger_ = std::make_unique<integrated::adapters::logger_adapter>(
+            config.logger_config,
+            integrated::adapters::logger_backend_type::auto_select
+        );
+        auto init_result = logger_->initialize();
+        if (!init_result.is_ok()) {
+            return result<void>(error_info{
+                -20,
+                "Failed to initialize gateway logger: " + init_result.get_error().message,
+                "gateway"
+            });
+        }
+        logger_->log(integrated::db_log_level::info, "Gateway logger initialized");
+    }
+
+    // Initialize monitoring adapter if enabled
+    if (config.enable_monitoring) {
+        monitor_ = std::make_unique<integrated::adapters::monitoring_adapter>(
+            config.monitoring_config,
+            integrated::adapters::monitoring_backend_type::auto_select
+        );
+        auto init_result = monitor_->initialize();
+        if (!init_result.is_ok()) {
+            return result<void>(error_info{
+                -21,
+                "Failed to initialize gateway monitoring: " + init_result.get_error().message,
+                "gateway"
+            });
+        }
+        if (logger_) {
+            logger_->log(integrated::db_log_level::info, "Gateway monitoring initialized");
+        }
+    }
+
+    return result<void>::ok();
+}
+
 result<core::database_result> database_gateway::execute_query(const std::string& query) {
     auto start_time = std::chrono::steady_clock::now();
     bool success = false;
     core::database_result final_result;
     std::string target_cluster_id;
     std::string error_msg;
+
+    // Log query start if logging is enabled
+    if (logger_ && observability_config_.logger_config.enable_query_logging) {
+        logger_->log(integrated::db_log_level::debug,
+            "Gateway executing query: " + query.substr(0, 100) +
+            (query.length() > 100 ? "..." : ""));
+    }
 
     // Check cache first (for SELECT queries only)
     if (cache_config_.enabled && is_cacheable(query)) {
@@ -246,10 +336,21 @@ result<core::database_result> database_gateway::execute_query(const std::string&
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
                 end_time - start_time
             );
+
+            // Record cache hit metric
+            if (monitor_) {
+                monitor_->record_metric("gateway_cache_hits", 1.0);
+            }
+
             audit_log_query(query, true, duration, "cache", "");
             return result<core::database_result>::ok(cached.value());
         }
         cache_misses_.fetch_add(1);
+
+        // Record cache miss metric
+        if (monitor_) {
+            monitor_->record_metric("gateway_cache_misses", 1.0);
+        }
     }
 
     // Route query to appropriate cluster
@@ -318,10 +419,33 @@ result<core::database_result> database_gateway::execute_query(const std::string&
 
     if (!success) {
         error_msg = query_result.error().message;
+
+        // Log error
+        if (logger_) {
+            logger_->log_error("execute_query", error_msg,
+                std::to_string(query_result.error().code));
+        }
     }
 
     if (success && cache_config_.enabled && is_cacheable(query)) {
         cache_result(query, query_result.value());
+    }
+
+    // Record query execution metrics
+    if (monitor_) {
+        auto duration_us = std::chrono::duration_cast<std::chrono::microseconds>(
+            end_time - start_time
+        );
+        monitor_->record_query_execution(duration_us, success);
+    }
+
+    // Log query completion with duration
+    if (logger_) {
+        logger_->log_query(
+            success ? integrated::db_log_level::info : integrated::db_log_level::error,
+            query,
+            std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time)
+        );
     }
 
     audit_log_query(query, success, duration, target_cluster_id, error_msg);

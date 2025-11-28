@@ -13,8 +13,6 @@ All rights reserved.
 #include <functional>
 #include <sstream>
 
-// Logging/monitoring integration disabled - requires proper CMake setup
-
 namespace database::gateway {
 
 namespace {
@@ -81,6 +79,12 @@ void database_gateway::stop() {
     if (server_) {
         server_->stop();
         server_.reset();
+    }
+
+    // Stop audit logger
+    if (audit_logger_) {
+        audit_logger_->stop();
+        audit_logger_.reset();
     }
 }
 
@@ -158,13 +162,33 @@ void database_gateway::configure_cache(const cache_config& config) {
 
 void database_gateway::configure_audit_logging(const audit_config& config) {
     audit_config_ = config;
-    // Note: Audit logging disabled - requires proper CMake setup
+
+    // Stop existing audit logger if any
+    if (audit_logger_) {
+        audit_logger_->stop();
+        audit_logger_.reset();
+    }
+
+    // Create and start new audit logger if enabled
+    if (config.enabled && !config.audit_log_path.empty()) {
+        audit_logger_config logger_config;
+        logger_config.log_path = config.audit_log_path;
+        logger_config.format = config.format;
+        logger_config.max_file_size_mb = config.max_file_size_mb;
+        logger_config.max_files = config.max_files;
+        logger_config.async_write = config.async_write;
+
+        audit_logger_ = std::make_unique<audit_logger>(logger_config);
+        audit_logger_->start();
+    }
 }
 
 result<core::database_result> database_gateway::execute_query(const std::string& query) {
     auto start_time = std::chrono::steady_clock::now();
     bool success = false;
     core::database_result final_result;
+    std::string target_cluster_id;
+    std::string error_msg;
 
     // Check cache first (for SELECT queries only)
     if (cache_config_.enabled && is_cacheable(query)) {
@@ -175,7 +199,7 @@ result<core::database_result> database_gateway::execute_query(const std::string&
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
                 end_time - start_time
             );
-            audit_log_query(query, true, duration);
+            audit_log_query(query, true, duration, "cache", "");
             return result<core::database_result>::ok(cached.value());
         }
         cache_misses_.fetch_add(1);
@@ -183,6 +207,7 @@ result<core::database_result> database_gateway::execute_query(const std::string&
 
     // Route query to appropriate cluster
     std::string cluster_id = route_query(query);
+    target_cluster_id = cluster_id;
 
     std::shared_ptr<distributed::cluster_manager> target_cluster;
     {
@@ -191,14 +216,25 @@ result<core::database_result> database_gateway::execute_query(const std::string&
         if (cluster_id.empty()) {
             // Use first cluster if no routing rule matches
             if (clusters_.empty()) {
+                auto end_time = std::chrono::steady_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    end_time - start_time
+                );
+                audit_log_query(query, false, duration, "", "No clusters registered");
                 return result<core::database_result>(
                     error_info{-5, "No clusters registered", "gateway"}
                 );
             }
             target_cluster = clusters_.begin()->second;
+            target_cluster_id = clusters_.begin()->first;
         } else {
             auto it = clusters_.find(cluster_id);
             if (it == clusters_.end()) {
+                auto end_time = std::chrono::steady_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    end_time - start_time
+                );
+                audit_log_query(query, false, duration, cluster_id, "Cluster not found");
                 return result<core::database_result>(
                     error_info{-5, "Cluster not found: " + cluster_id, "gateway"}
                 );
@@ -233,11 +269,15 @@ result<core::database_result> database_gateway::execute_query(const std::string&
 
     success = query_result.is_ok();
 
+    if (!success) {
+        error_msg = query_result.error().message;
+    }
+
     if (success && cache_config_.enabled && is_cacheable(query)) {
         cache_result(query, query_result.value());
     }
 
-    audit_log_query(query, success, duration);
+    audit_log_query(query, success, duration, target_cluster_id, error_msg);
 
     return query_result;
 }
@@ -374,8 +414,15 @@ void database_gateway::cache_result(
 void database_gateway::audit_log_query(
     const std::string& query,
     bool success,
-    std::chrono::milliseconds duration
+    std::chrono::milliseconds duration,
+    const std::string& target_cluster,
+    const std::string& error_msg
 ) {
+    // Check if audit logging is enabled
+    if (!audit_config_.enabled || !audit_logger_) {
+        return;
+    }
+
     // Check if we should log this query
     if (!audit_config_.log_all_queries) {
         if (!success && !audit_config_.log_failed_queries) {
@@ -386,10 +433,20 @@ void database_gateway::audit_log_query(
         }
     }
 
-    // Note: Audit logging disabled - requires proper CMake setup
-    (void)query;
-    (void)success;
-    (void)duration;
+    // Create audit entry
+    audit_entry entry;
+    entry.timestamp = std::chrono::system_clock::now();
+    entry.user = "";  // TODO: Add user context when auth is integrated
+    entry.session_id = "";  // TODO: Add session context
+    entry.client_ip = "";  // TODO: Add client IP when network is integrated
+    entry.operation = is_select_query(query) ? "SELECT" : "WRITE";
+    entry.query_hash = hash_query(query);
+    entry.target_cluster = target_cluster;
+    entry.success = success;
+    entry.latency = duration;
+    entry.error_message = error_msg;
+
+    audit_logger_->log(entry);
 }
 
 void database_gateway::evict_cache_lru() {

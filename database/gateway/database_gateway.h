@@ -17,8 +17,7 @@ All rights reserved.
 #include "../core/result.h"
 #include "../server/database_proxy_server.h"
 #include "../distributed/cluster_manager.h"
-
-// Logging/monitoring integration disabled - requires proper CMake setup
+#include "audit_logger.h"
 
 namespace database::gateway {
 
@@ -57,10 +56,15 @@ struct cache_config {
  * @brief Audit logging configuration
  */
 struct audit_config {
+    bool enabled{false};                        ///< Enable audit logging
     bool log_all_queries{false};                ///< Log all queries
     uint32_t log_slow_queries_ms{1000};         ///< Log queries slower than this (ms)
     bool log_failed_queries{true};              ///< Log failed queries
     std::string audit_log_path;                 ///< Audit log file path
+    audit_format format{audit_format::JSON};    ///< Log format (JSON or CSV)
+    size_t max_file_size_mb{100};               ///< Max file size before rotation
+    size_t max_files{10};                       ///< Max rotated files to keep
+    bool async_write{true};                     ///< Use async writing for performance
 };
 
 /**
@@ -282,9 +286,13 @@ private:
      * @param query SQL query
      * @param success Query success status
      * @param duration Query execution duration
+     * @param target_cluster Target cluster ID
+     * @param error_msg Error message (if failed)
      */
     void audit_log_query(const std::string& query, bool success,
-                         std::chrono::milliseconds duration);
+                         std::chrono::milliseconds duration,
+                         const std::string& target_cluster = "",
+                         const std::string& error_msg = "");
 
     /**
      * @brief Evict oldest cache entries (LRU)
@@ -314,7 +322,7 @@ private:
 
     // Audit logging
     audit_config audit_config_;
-    // Note: Audit logger disabled - requires proper CMake setup
+    std::unique_ptr<audit_logger> audit_logger_;
 
     // Authentication (simplified)
     mutable std::mutex auth_mutex_;

@@ -17,7 +17,12 @@ All rights reserved.
 #include "../core/result.h"
 #include "../server/database_proxy_server.h"
 #include "../distributed/cluster_manager.h"
+#include "../protocol/database_protocol.h"
 #include "audit_logger.h"
+
+// network_system integration for gateway server
+#include <kcenon/network/core/messaging_server.h>
+#include <kcenon/network/session/messaging_session.h>
 
 namespace database::gateway {
 
@@ -299,11 +304,54 @@ private:
      */
     void evict_cache_lru();
 
+    // Network server handlers
+    /**
+     * @brief Handle client connection
+     * @param session Network session
+     */
+    void handle_client_connect(
+        std::shared_ptr<network_system::session::messaging_session> session);
+
+    /**
+     * @brief Handle client disconnection
+     * @param session_id Session ID
+     */
+    void handle_client_disconnect(const std::string& session_id);
+
+    /**
+     * @brief Handle incoming message from network
+     * @param session Network session
+     * @param data Message data
+     */
+    void handle_message(
+        std::shared_ptr<network_system::session::messaging_session> session,
+        const std::vector<uint8_t>& data);
+
+    /**
+     * @brief Process query request from network
+     * @param header Message header
+     * @param payload Request payload
+     * @return Response bytes
+     */
+    std::vector<uint8_t> process_network_query(
+        const protocol::message_header& header,
+        const std::vector<uint8_t>& payload);
+
+    /**
+     * @brief Convert database_result to protocol::query_response
+     * @param db_result Database result
+     * @return Protocol query response
+     */
+    protocol::query_response convert_to_protocol_response(
+        const core::database_result& db_result);
+
     // Server state
     std::shared_ptr<server::database_proxy_server> server_;
+    std::shared_ptr<network_system::core::messaging_server> network_server_;
     std::atomic<bool> running_{false};
     uint16_t port_{0};
     security_config security_;
+    std::atomic<uint64_t> next_session_id_{1};
 
     // Cluster management
     mutable std::mutex clusters_mutex_;

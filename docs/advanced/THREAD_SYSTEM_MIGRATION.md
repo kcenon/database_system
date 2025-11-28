@@ -396,4 +396,4 @@ For questions or issues:
 
 **Status**: Phase 1 Complete ✅
 **Last Updated**: 2025-11-03
-**Maintainer**: database_system team
+**Maintainer**: kcenon@naver.com

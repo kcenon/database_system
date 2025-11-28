@@ -1285,4 +1285,4 @@ See [Project Structure](PROJECT_STRUCTURE.md) for build configuration.
 ---
 
 **Last Updated**: 2025-11-15
-**Maintained by**: KCENON Team
+**Maintained by**: kcenon@naver.com

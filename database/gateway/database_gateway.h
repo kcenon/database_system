@@ -19,6 +19,7 @@ All rights reserved.
 #include "../distributed/cluster_manager.h"
 #include "../protocol/database_protocol.h"
 #include "audit_logger.h"
+#include "auth/auth_backend_factory.h"
 
 // network_system integration for gateway server
 #include <kcenon/network/core/messaging_server.h>
@@ -39,6 +40,15 @@ struct security_config {
     std::string key_file;                       ///< TLS private key file path
     bool require_auth{false};                   ///< Require authentication
     std::string auth_backend_type{"local"};     ///< Authentication backend (local, ldap, oauth)
+
+    /// Local authentication configuration (used when auth_backend_type == "local")
+    auth::local_config local_auth_config;
+
+    /// LDAP authentication configuration (used when auth_backend_type == "ldap")
+    auth::ldap_config ldap_auth_config;
+
+    /// OAuth authentication configuration (used when auth_backend_type == "oauth")
+    auth::oauth_config oauth_auth_config;
 };
 
 /**
@@ -263,12 +273,46 @@ public:
     result<void> authenticate(const std::string& username, const std::string& password);
 
     /**
+     * @brief Authenticate with credentials (advanced)
+     * @param credentials Authentication credentials
+     * @return Authentication result with user info and token
+     */
+    result<auth::auth_result> authenticate(const auth::auth_credentials& credentials);
+
+    /**
+     * @brief Validate an access token
+     * @param token Access token to validate
+     * @return Authentication result if valid
+     */
+    result<auth::auth_result> validate_token(const std::string& token);
+
+    /**
+     * @brief Refresh an expired token (for OAuth)
+     * @param refresh_token Refresh token
+     * @return New authentication result
+     */
+    result<auth::auth_result> refresh_token(const std::string& refresh_token);
+
+    /**
      * @brief Check if user has required permission
      * @param username Username
      * @param permission Required permission
      * @return true if authorized
      */
     bool is_authorized(const std::string& username, const std::string& permission) const;
+
+    /**
+     * @brief Get authentication manager for advanced configuration
+     * @return Pointer to auth manager
+     */
+    auth::auth_manager* get_auth_manager() { return &auth_manager_; }
+
+    /**
+     * @brief Add an authentication backend
+     * @param backend Authentication backend
+     * @param primary Set as primary backend
+     */
+    void add_auth_backend(std::unique_ptr<auth::auth_backend_interface> backend, bool primary = false);
 
     /**
      * @brief Get cache hit rate
@@ -402,10 +446,11 @@ private:
     audit_config audit_config_;
     std::unique_ptr<audit_logger> audit_logger_;
 
-    // Authentication (simplified)
+    // Authentication
+    auth::auth_manager auth_manager_;
     mutable std::mutex auth_mutex_;
-    std::unordered_map<std::string, std::string> users_; // username -> password hash
-    std::unordered_map<std::string, std::vector<std::string>> permissions_; // username -> permissions
+    std::unordered_map<std::string, std::string> users_; // username -> password hash (legacy)
+    std::unordered_map<std::string, std::vector<std::string>> permissions_; // username -> permissions (legacy)
 
     // Observability (logging and monitoring integration)
     gateway_observability_config observability_config_;

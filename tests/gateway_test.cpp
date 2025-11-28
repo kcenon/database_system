@@ -752,3 +752,363 @@ TEST_F(DatabaseGatewayTest, ObservabilityWithFileLogging) {
     // Cleanup
     std::filesystem::remove_all(temp_dir);
 }
+
+// =============================================================================
+// Authentication Backend Tests
+// =============================================================================
+
+/**
+ * @brief Test fixture for authentication backends
+ */
+class AuthBackendTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+/**
+ * @brief Test local authentication backend initialization
+ */
+TEST_F(AuthBackendTest, LocalAuthBackendInitialization) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 6;
+    config.require_uppercase = false;
+    config.require_lowercase = false;
+    config.require_digit = false;
+    config.require_special = false;
+
+    auto backend = auth::auth_backend_factory::create(config);
+    ASSERT_NE(backend, nullptr);
+    EXPECT_EQ(backend->type(), auth::auth_backend_type::local);
+    EXPECT_EQ(backend->name(), "test_local");
+
+    auto init_result = backend->initialize();
+    EXPECT_TRUE(init_result.is_ok());
+    EXPECT_TRUE(backend->is_healthy());
+
+    backend->shutdown();
+    EXPECT_FALSE(backend->is_healthy());
+}
+
+/**
+ * @brief Test local authentication with valid credentials
+ */
+TEST_F(AuthBackendTest, LocalAuthValidCredentials) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 6;
+    config.require_uppercase = false;
+    config.require_lowercase = false;
+    config.require_digit = false;
+
+    auto backend = std::make_unique<auth::local_auth_backend>(config);
+    ASSERT_TRUE(backend->initialize().is_ok());
+
+    // Add a test user
+    auto add_result = backend->add_user("testuser", "password123", {"admin"}, {"read", "write"});
+    EXPECT_TRUE(add_result.is_ok());
+
+    // Authenticate with valid credentials
+    auth::auth_credentials creds;
+    creds.username = "testuser";
+    creds.password = "password123";
+
+    auto auth_result = backend->authenticate(creds);
+    EXPECT_TRUE(auth_result.is_ok());
+    EXPECT_EQ(auth_result.value().username, "testuser");
+    EXPECT_FALSE(auth_result.value().access_token.empty());
+
+    // Validate the token
+    auto validate_result = backend->validate_token(auth_result.value().access_token);
+    EXPECT_TRUE(validate_result.is_ok());
+    EXPECT_EQ(validate_result.value().username, "testuser");
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test local authentication with invalid credentials
+ */
+TEST_F(AuthBackendTest, LocalAuthInvalidCredentials) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 6;
+    config.require_uppercase = false;
+    config.require_lowercase = false;
+    config.require_digit = false;
+
+    auto backend = std::make_unique<auth::local_auth_backend>(config);
+    ASSERT_TRUE(backend->initialize().is_ok());
+
+    // Add a test user
+    backend->add_user("testuser", "password123");
+
+    // Authenticate with wrong password
+    auth::auth_credentials creds;
+    creds.username = "testuser";
+    creds.password = "wrongpassword";
+
+    auto auth_result = backend->authenticate(creds);
+    EXPECT_TRUE(auth_result.is_err());
+
+    // Authenticate with non-existent user
+    creds.username = "nonexistent";
+    creds.password = "password123";
+
+    auth_result = backend->authenticate(creds);
+    EXPECT_TRUE(auth_result.is_err());
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test password policy enforcement
+ */
+TEST_F(AuthBackendTest, LocalAuthPasswordPolicy) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 8;
+    config.require_uppercase = true;
+    config.require_lowercase = true;
+    config.require_digit = true;
+
+    auto backend = std::make_unique<auth::local_auth_backend>(config);
+    ASSERT_TRUE(backend->initialize().is_ok());
+
+    // Try to add user with weak password (too short)
+    auto result = backend->add_user("user1", "short");
+    EXPECT_TRUE(result.is_err());
+
+    // Try to add user without uppercase
+    result = backend->add_user("user1", "password1");
+    EXPECT_TRUE(result.is_err());
+
+    // Try to add user without digit
+    result = backend->add_user("user1", "Password");
+    EXPECT_TRUE(result.is_err());
+
+    // Add user with valid password
+    result = backend->add_user("user1", "Password1");
+    EXPECT_TRUE(result.is_ok());
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test account lockout after failed attempts
+ */
+TEST_F(AuthBackendTest, LocalAuthAccountLockout) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 6;
+    config.require_uppercase = false;
+    config.require_lowercase = false;
+    config.require_digit = false;
+    config.max_failed_attempts = 3;
+    config.lockout_duration = std::chrono::seconds(60);
+
+    auto backend = std::make_unique<auth::local_auth_backend>(config);
+    ASSERT_TRUE(backend->initialize().is_ok());
+
+    // Add a test user
+    backend->add_user("testuser", "password123");
+
+    auth::auth_credentials creds;
+    creds.username = "testuser";
+    creds.password = "wrongpassword";
+
+    // Fail 3 times to trigger lockout
+    for (int i = 0; i < 3; ++i) {
+        auto result = backend->authenticate(creds);
+        EXPECT_TRUE(result.is_err());
+    }
+
+    // Even correct password should fail now due to lockout
+    creds.password = "password123";
+    auto result = backend->authenticate(creds);
+    EXPECT_TRUE(result.is_err());
+
+    // Unlock the user
+    backend->unlock_user("testuser");
+
+    // Should work now
+    result = backend->authenticate(creds);
+    EXPECT_TRUE(result.is_ok());
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test permission management
+ */
+TEST_F(AuthBackendTest, LocalAuthPermissions) {
+    auth::local_config config;
+    config.name = "test_local";
+    config.min_password_length = 6;
+    config.require_uppercase = false;
+    config.require_lowercase = false;
+    config.require_digit = false;
+
+    auto backend = std::make_unique<auth::local_auth_backend>(config);
+    ASSERT_TRUE(backend->initialize().is_ok());
+
+    // Add user with initial permissions
+    backend->add_user("testuser", "password123", {}, {"read"});
+
+    // Authenticate to get user_id
+    auth::auth_credentials creds;
+    creds.username = "testuser";
+    creds.password = "password123";
+    auto auth_result = backend->authenticate(creds);
+    ASSERT_TRUE(auth_result.is_ok());
+
+    std::string user_id = auth_result.value().user_id;
+
+    // Check initial permission
+    EXPECT_TRUE(backend->has_permission(user_id, "read"));
+    EXPECT_FALSE(backend->has_permission(user_id, "write"));
+
+    // Grant new permission
+    backend->grant_permission("testuser", "write");
+    EXPECT_TRUE(backend->has_permission(user_id, "write"));
+
+    // Revoke permission
+    backend->revoke_permission("testuser", "read");
+    EXPECT_FALSE(backend->has_permission(user_id, "read"));
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test LDAP backend initialization
+ */
+TEST_F(AuthBackendTest, LdapAuthBackendInitialization) {
+    auth::ldap_config config;
+    config.name = "test_ldap";
+    config.server_url = "ldap://localhost:389";
+    config.base_dn = "dc=example,dc=com";
+    config.user_search_filter = "(uid={0})";
+
+    auto backend = auth::auth_backend_factory::create(config);
+    ASSERT_NE(backend, nullptr);
+    EXPECT_EQ(backend->type(), auth::auth_backend_type::ldap);
+    EXPECT_EQ(backend->name(), "test_ldap");
+
+    auto init_result = backend->initialize();
+    EXPECT_TRUE(init_result.is_ok());
+    EXPECT_TRUE(backend->is_healthy());
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test OAuth backend initialization
+ */
+TEST_F(AuthBackendTest, OAuthBackendInitialization) {
+    auth::oauth_config config;
+    config.name = "test_oauth";
+    config.client_id = "test-client-id";
+    config.client_secret = "test-secret";
+    config.issuer = "https://auth.example.com";
+    config.token_url = "https://auth.example.com/token";
+
+    auto backend = auth::auth_backend_factory::create(config);
+    ASSERT_NE(backend, nullptr);
+    EXPECT_EQ(backend->type(), auth::auth_backend_type::oauth);
+    EXPECT_EQ(backend->name(), "test_oauth");
+
+    auto init_result = backend->initialize();
+    EXPECT_TRUE(init_result.is_ok());
+    EXPECT_TRUE(backend->is_healthy());
+
+    backend->shutdown();
+}
+
+/**
+ * @brief Test auth manager with multiple backends
+ */
+TEST_F(AuthBackendTest, AuthManagerMultipleBackends) {
+    auth::auth_manager manager;
+
+    // Add local backend
+    auth::local_config local_config;
+    local_config.name = "local";
+    local_config.min_password_length = 6;
+    local_config.require_uppercase = false;
+    local_config.require_lowercase = false;
+    local_config.require_digit = false;
+
+    auto local_backend = std::make_unique<auth::local_auth_backend>(local_config);
+    local_backend->initialize();
+    local_backend->add_user("localuser", "password123", {}, {"local_perm"});
+    manager.add_backend(std::move(local_backend), true);
+
+    // Add LDAP backend as secondary
+    auth::ldap_config ldap_config;
+    ldap_config.name = "ldap";
+    ldap_config.server_url = "ldap://localhost:389";
+    ldap_config.base_dn = "dc=example,dc=com";
+
+    auto ldap_backend = std::make_unique<auth::ldap_auth_backend>(ldap_config);
+    ldap_backend->initialize();
+    manager.add_backend(std::move(ldap_backend), false);
+
+    EXPECT_EQ(manager.backend_count(), 2);
+    EXPECT_TRUE(manager.is_healthy());
+
+    // Authenticate through local backend
+    auth::auth_credentials creds;
+    creds.username = "localuser";
+    creds.password = "password123";
+
+    auto result = manager.authenticate(creds);
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_EQ(result.value().username, "localuser");
+
+    // Check permissions
+    EXPECT_TRUE(manager.has_permission(result.value().user_id, "local_perm"));
+
+    manager.shutdown();
+}
+
+/**
+ * @brief Test gateway with authentication enabled
+ */
+TEST_F(AuthBackendTest, GatewayWithAuthentication) {
+    database_gateway gateway;
+
+    // Configure security with local auth
+    security_config security;
+    security.require_auth = true;
+    security.auth_backend_type = "local";
+    security.local_auth_config.name = "gateway_local";
+    security.local_auth_config.min_password_length = 6;
+    security.local_auth_config.require_uppercase = false;
+    security.local_auth_config.require_lowercase = false;
+    security.local_auth_config.require_digit = false;
+
+    auto start_result = gateway.start(5010, security);
+    EXPECT_TRUE(start_result.is_ok());
+
+    // Add a user through the auth manager
+    auto* auth_mgr = gateway.get_auth_manager();
+    ASSERT_NE(auth_mgr, nullptr);
+    EXPECT_GT(auth_mgr->backend_count(), 0);
+
+    auto* backend = dynamic_cast<auth::local_auth_backend*>(auth_mgr->get_backend(0));
+    ASSERT_NE(backend, nullptr);
+
+    auto add_result = backend->add_user("gwuser", "password123");
+    EXPECT_TRUE(add_result.is_ok());
+
+    // Authenticate through gateway
+    auto auth_result = gateway.authenticate("gwuser", "password123");
+    EXPECT_TRUE(auth_result.is_ok());
+
+    // Fail with wrong password
+    auth_result = gateway.authenticate("gwuser", "wrongpass");
+    EXPECT_TRUE(auth_result.is_err());
+
+    gateway.stop();
+}

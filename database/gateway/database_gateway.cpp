@@ -63,6 +63,37 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
     port_ = port;
     security_ = security;
 
+    // Initialize authentication backend if required
+    if (security.require_auth) {
+        std::unique_ptr<auth::auth_backend_interface> backend;
+
+        if (security.auth_backend_type == "ldap") {
+            backend = auth::auth_backend_factory::create(security.ldap_auth_config);
+        } else if (security.auth_backend_type == "oauth") {
+            backend = auth::auth_backend_factory::create(security.oauth_auth_config);
+        } else {
+            // Default to local auth
+            backend = auth::auth_backend_factory::create(security.local_auth_config);
+        }
+
+        if (backend) {
+            auto init_result = backend->initialize();
+            if (init_result.is_err()) {
+                return result<void>(error_info{
+                    -8,
+                    "Failed to initialize auth backend: " + init_result.error().message,
+                    "gateway"
+                });
+            }
+            auth_manager_.add_backend(std::move(backend), true);
+
+            if (logger_) {
+                logger_->log(integrated::db_log_level::info,
+                    "Authentication backend initialized: " + security.auth_backend_type);
+            }
+        }
+    }
+
     // Create and configure network server
     network_server_ = std::make_shared<network_system::core::messaging_server>("database_gateway");
 
@@ -152,6 +183,9 @@ void database_gateway::stop() {
         audit_logger_->stop();
         audit_logger_.reset();
     }
+
+    // Shutdown authentication manager
+    auth_manager_.shutdown();
 
     // Shutdown observability adapters
     if (monitor_) {
@@ -457,6 +491,20 @@ result<void> database_gateway::authenticate(
     const std::string& username,
     const std::string& password
 ) {
+    // Try new authentication system first
+    if (auth_manager_.backend_count() > 0) {
+        auth::auth_credentials creds;
+        creds.username = username;
+        creds.password = password;
+
+        auto auth_result = auth_manager_.authenticate(creds);
+        if (auth_result.is_ok()) {
+            return result<void>::ok();
+        }
+        return result<void>(error_info{-6, "Authentication failed: " + auth_result.error().message, "gateway"});
+    }
+
+    // Legacy fallback: use simple username/password map
     std::lock_guard<std::mutex> lock(auth_mutex_);
 
     auto it = users_.find(username);
@@ -472,10 +520,65 @@ result<void> database_gateway::authenticate(
     return result<void>::ok();
 }
 
+result<auth::auth_result> database_gateway::authenticate(
+    const auth::auth_credentials& credentials
+) {
+    if (auth_manager_.backend_count() == 0) {
+        return result<auth::auth_result>(error_info{
+            -7, "No authentication backend configured", "gateway"
+        });
+    }
+
+    return auth_manager_.authenticate(credentials);
+}
+
+result<auth::auth_result> database_gateway::validate_token(const std::string& token) {
+    if (auth_manager_.backend_count() == 0) {
+        return result<auth::auth_result>(error_info{
+            -7, "No authentication backend configured", "gateway"
+        });
+    }
+
+    return auth_manager_.validate_token(token);
+}
+
+result<auth::auth_result> database_gateway::refresh_token(const std::string& refresh_token) {
+    if (auth_manager_.backend_count() == 0) {
+        return result<auth::auth_result>(error_info{
+            -7, "No authentication backend configured", "gateway"
+        });
+    }
+
+    // Find OAuth backend and refresh
+    for (size_t i = 0; i < auth_manager_.backend_count(); ++i) {
+        auto* backend = auth_manager_.get_backend(i);
+        if (backend && backend->type() == auth::auth_backend_type::oauth) {
+            return backend->refresh_token(refresh_token);
+        }
+    }
+
+    return result<auth::auth_result>(error_info{
+        -8, "No OAuth backend configured for token refresh", "gateway"
+    });
+}
+
+void database_gateway::add_auth_backend(
+    std::unique_ptr<auth::auth_backend_interface> backend,
+    bool primary
+) {
+    auth_manager_.add_backend(std::move(backend), primary);
+}
+
 bool database_gateway::is_authorized(
     const std::string& username,
     const std::string& permission
 ) const {
+    // Try new authentication system first
+    if (auth_manager_.backend_count() > 0) {
+        return auth_manager_.has_permission(username, permission);
+    }
+
+    // Legacy fallback
     std::lock_guard<std::mutex> lock(auth_mutex_);
 
     auto it = permissions_.find(username);

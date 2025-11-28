@@ -73,7 +73,7 @@ common::VoidResult system_monitoring_backend::initialize()
 		if (!init_result.is_ok())
 		{
 			return make_error("Failed to initialize monitoring_system: " +
-							  std::string(init_result.get_error().message));
+							  std::string(init_result.error().message));
 		}
 
 		start_time_ = std::chrono::steady_clock::now();

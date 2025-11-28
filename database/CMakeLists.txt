@@ -155,6 +155,12 @@ if(USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
         ${CMAKE_CURRENT_SOURCE_DIR}/gateway/database_gateway.cpp
         # DB-005 Replication Manager
         ${CMAKE_CURRENT_SOURCE_DIR}/replication/replication_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/replication/safe_query_builder.cpp
+        # CDC Strategies
+        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/sqlite_cdc_strategy.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/postgresql_cdc_strategy.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/mysql_cdc_strategy.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/mongodb_cdc_strategy.cpp
     )
 else()
     message(STATUS "Remote database gateway disabled (ENABLE_REMOTE_DATABASE_GATEWAY=OFF)")

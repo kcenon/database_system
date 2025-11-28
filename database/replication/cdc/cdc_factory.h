@@ -9,6 +9,9 @@ All rights reserved.
 
 #include "cdc_strategy_interface.h"
 #include "sqlite_cdc_strategy.h"
+#include "postgresql_cdc_strategy.h"
+#include "mysql_cdc_strategy.h"
+#include "mongodb_cdc_strategy.h"
 
 #include <memory>
 #include <string>
@@ -88,16 +91,13 @@ inline std::unique_ptr<cdc_strategy_interface> cdc_factory::create(database_type
             return std::make_unique<sqlite_cdc_strategy>();
 
         case database_type::POSTGRESQL:
-            // TODO: Implement PostgreSQL CDC strategy using logical replication
-            return nullptr;
+            return std::make_unique<postgresql_cdc_strategy>();
 
         case database_type::MYSQL:
-            // TODO: Implement MySQL CDC strategy using binary log
-            return nullptr;
+            return std::make_unique<mysql_cdc_strategy>();
 
         case database_type::MONGODB:
-            // TODO: Implement MongoDB CDC strategy using change streams
-            return nullptr;
+            return std::make_unique<mongodb_cdc_strategy>();
 
         default:
             return nullptr;
@@ -150,10 +150,25 @@ inline bool cdc_factory::is_supported(database_type type) {
             return true;
 
         case database_type::POSTGRESQL:
-        case database_type::MYSQL:
-        case database_type::MONGODB:
-            // Not yet implemented
+#ifdef USE_POSTGRESQL
+            return true;
+#else
             return false;
+#endif
+
+        case database_type::MYSQL:
+#ifdef USE_MYSQL
+            return true;
+#else
+            return false;
+#endif
+
+        case database_type::MONGODB:
+#ifdef USE_MONGODB
+            return true;
+#else
+            return false;
+#endif
 
         default:
             return false;

@@ -8,6 +8,7 @@ All rights reserved.
 #include "replication_manager.h"
 #include "safe_query_builder.h"
 #include "cdc/cdc_factory.h"
+#include "../core/backend_registry.h"
 
 #include <algorithm>
 #include <sstream>
@@ -220,8 +221,92 @@ result<void> replication_manager::initialize_source() {
 }
 
 result<void> replication_manager::initialize_target() {
-    // Create target client based on node configuration
-    // Similar to source, but for applying changes
+    // Detect database type from target connection string
+    auto db_type = cdc::cdc_factory::detect_database_type(
+        target_config_.connection_string
+    );
+
+    // Map CDC database_type to backend registry name
+    std::string backend_name;
+    switch (db_type) {
+        case cdc::database_type::SQLITE:
+            backend_name = "sqlite";
+            break;
+        case cdc::database_type::POSTGRESQL:
+            backend_name = "postgresql";
+            break;
+        case cdc::database_type::MYSQL:
+            backend_name = "mysql";
+            break;
+        case cdc::database_type::MONGODB:
+            backend_name = "mongodb";
+            break;
+        default:
+            return result<void>(error_info{
+                -11,
+                "Unsupported target database type",
+                "replication"
+            });
+    }
+
+    // Check if backend is available
+    if (!core::backend_registry::instance().has_backend(backend_name)) {
+        return result<void>(error_info{
+            -12,
+            "Target backend not available: " + backend_name +
+                ". Ensure the backend is compiled and registered.",
+            "replication"
+        });
+    }
+
+    // Create target backend instance
+    target_client_ = core::backend_registry::instance().create(backend_name);
+    if (!target_client_) {
+        return result<void>(error_info{
+            -13,
+            "Failed to create target backend: " + backend_name,
+            "replication"
+        });
+    }
+
+    // Build connection configuration
+    core::connection_config conn_config;
+
+    // Try parsing as key=value format first
+    conn_config = core::connection_config::from_string(target_config_.connection_string);
+
+    // If parsing didn't set host, use node_config fields directly
+    if (conn_config.host.empty() && !target_config_.host.empty()) {
+        conn_config.host = target_config_.host;
+        conn_config.port = target_config_.port;
+        conn_config.database = target_config_.database;
+        conn_config.username = target_config_.username;
+        conn_config.password = target_config_.password;
+    }
+
+    // For SQLite, store the connection string (file path) in database field
+    if (db_type == cdc::database_type::SQLITE && conn_config.database.empty()) {
+        // Extract file path from connection string
+        std::string path = target_config_.connection_string;
+        if (path.find("sqlite://") == 0) {
+            path = path.substr(9);  // Remove "sqlite://" prefix
+        } else if (path.find("sqlite:") == 0) {
+            path = path.substr(7);  // Remove "sqlite:" prefix
+        }
+        conn_config.database = path;
+    }
+
+    // Initialize target client connection
+    auto init_result = target_client_->initialize(conn_config);
+    if (init_result.is_err()) {
+        target_client_.reset();
+        return result<void>(error_info{
+            -14,
+            "Failed to initialize target database connection: " +
+                init_result.error().message,
+            "replication"
+        });
+    }
 
     return result<void>::ok();
 }

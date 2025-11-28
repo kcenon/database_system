@@ -5,12 +5,13 @@
 
 /**
  * @file replication_test.cpp
- * @brief Unit tests for replication_manager
+ * @brief Unit tests for replication_manager and safe_query_builder
  */
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "database/replication/replication_manager.h"
+#include "database/replication/safe_query_builder.h"
 #include "database/distributed/cluster_manager.h"
 #include <memory>
 #include <thread>
@@ -395,4 +396,227 @@ TEST_F(ReplicationManagerTest, DestructorCleansUpActiveReplication) {
 
     // If we reach here without hanging, cleanup worked
     EXPECT_TRUE(true);
+}
+
+// =============================================================================
+// Safe Query Builder Tests - SQL Injection Prevention
+// =============================================================================
+
+class SafeQueryBuilderTest : public ::testing::Test {
+protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+// Value escaping tests
+TEST_F(SafeQueryBuilderTest, EscapeSingleQuotes) {
+    std::string input = "O'Brien";
+    std::string expected = "O''Brien";
+    EXPECT_EQ(safe_query_builder::escape_value(input), expected);
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeMultipleSingleQuotes) {
+    std::string input = "It's a 'test' value";
+    std::string expected = "It''s a ''test'' value";
+    EXPECT_EQ(safe_query_builder::escape_value(input), expected);
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeBackslashes) {
+    std::string input = "path\\to\\file";
+    std::string expected = "path\\\\to\\\\file";
+    EXPECT_EQ(safe_query_builder::escape_value(input), expected);
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeSQLInjectionAttempt) {
+    std::string input = "'; DROP TABLE users; --";
+    std::string escaped = safe_query_builder::escape_value(input);
+    // The escaped string should have doubled quotes
+    EXPECT_EQ(escaped, "''; DROP TABLE users; --");
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeComplexSQLInjection) {
+    std::string input = "1' OR '1'='1";
+    std::string escaped = safe_query_builder::escape_value(input);
+    EXPECT_EQ(escaped, "1'' OR ''1''=''1");
+}
+
+TEST_F(SafeQueryBuilderTest, HandleEmptyString) {
+    std::string input = "";
+    EXPECT_EQ(safe_query_builder::escape_value(input), "");
+}
+
+TEST_F(SafeQueryBuilderTest, HandleNormalString) {
+    std::string input = "normal_value_123";
+    EXPECT_EQ(safe_query_builder::escape_value(input), "normal_value_123");
+}
+
+// Identifier validation tests
+TEST_F(SafeQueryBuilderTest, ValidIdentifier) {
+    EXPECT_TRUE(safe_query_builder::is_valid_identifier("users"));
+    EXPECT_TRUE(safe_query_builder::is_valid_identifier("user_name"));
+    EXPECT_TRUE(safe_query_builder::is_valid_identifier("User123"));
+    EXPECT_TRUE(safe_query_builder::is_valid_identifier("_private_table"));
+    EXPECT_TRUE(safe_query_builder::is_valid_identifier("schema.table"));
+}
+
+TEST_F(SafeQueryBuilderTest, InvalidIdentifier) {
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier(""));
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier("123users"));  // starts with number
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier("user-name"));  // contains hyphen
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier("user name"));  // contains space
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier("user;name"));  // contains semicolon
+    EXPECT_FALSE(safe_query_builder::is_valid_identifier("user'name"));  // contains quote
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeIdentifier) {
+    EXPECT_EQ(safe_query_builder::escape_identifier("users"), "\"users\"");
+    EXPECT_EQ(safe_query_builder::escape_identifier("user_name"), "\"user_name\"");
+}
+
+TEST_F(SafeQueryBuilderTest, EscapeIdentifierThrowsOnInvalid) {
+    EXPECT_THROW(safe_query_builder::escape_identifier("user;DROP"), std::invalid_argument);
+    EXPECT_THROW(safe_query_builder::escape_identifier(""), std::invalid_argument);
+}
+
+// INSERT query building tests
+TEST_F(SafeQueryBuilderTest, BuildInsertQuery) {
+    std::unordered_map<std::string, std::string> values = {
+        {"name", "John"},
+        {"age", "30"}
+    };
+
+    std::string query = safe_query_builder::build_insert("users", values);
+
+    // Query should contain escaped table and column names
+    EXPECT_TRUE(query.find("\"users\"") != std::string::npos);
+    EXPECT_TRUE(query.find("INSERT INTO") != std::string::npos);
+    EXPECT_TRUE(query.find("VALUES") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildInsertWithSQLInjectionValue) {
+    std::unordered_map<std::string, std::string> values = {
+        {"name", "'; DROP TABLE users; --"}
+    };
+
+    std::string query = safe_query_builder::build_insert("users", values);
+
+    // The dangerous value should be escaped
+    EXPECT_TRUE(query.find("''") != std::string::npos);
+    // The query should NOT contain unescaped DROP TABLE
+    EXPECT_FALSE(query.find("'; DROP") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildInsertThrowsOnEmptyTable) {
+    std::unordered_map<std::string, std::string> values = {{"name", "John"}};
+    EXPECT_THROW(safe_query_builder::build_insert("", values), std::invalid_argument);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildInsertThrowsOnEmptyValues) {
+    std::unordered_map<std::string, std::string> values;
+    EXPECT_THROW(safe_query_builder::build_insert("users", values), std::invalid_argument);
+}
+
+// UPDATE query building tests
+TEST_F(SafeQueryBuilderTest, BuildUpdateQuery) {
+    std::unordered_map<std::string, std::string> new_values = {{"name", "Jane"}};
+    std::unordered_map<std::string, std::string> where_values = {{"id", "1"}};
+
+    std::string query = safe_query_builder::build_update("users", new_values, where_values);
+
+    EXPECT_TRUE(query.find("UPDATE") != std::string::npos);
+    EXPECT_TRUE(query.find("SET") != std::string::npos);
+    EXPECT_TRUE(query.find("WHERE") != std::string::npos);
+    EXPECT_TRUE(query.find("\"users\"") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildUpdateWithSQLInjection) {
+    std::unordered_map<std::string, std::string> new_values = {
+        {"name", "evil'; UPDATE users SET admin='true' WHERE '1'='1"}
+    };
+    std::unordered_map<std::string, std::string> where_values = {{"id", "1"}};
+
+    std::string query = safe_query_builder::build_update("users", new_values, where_values);
+
+    // Escaped quotes should be present
+    EXPECT_TRUE(query.find("''") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildUpdateThrowsOnEmptyWhere) {
+    std::unordered_map<std::string, std::string> new_values = {{"name", "Jane"}};
+    std::unordered_map<std::string, std::string> where_values;
+
+    // Should throw to prevent accidental mass updates
+    EXPECT_THROW(
+        safe_query_builder::build_update("users", new_values, where_values),
+        std::invalid_argument
+    );
+}
+
+// DELETE query building tests
+TEST_F(SafeQueryBuilderTest, BuildDeleteQuery) {
+    std::unordered_map<std::string, std::string> where_values = {{"id", "1"}};
+
+    std::string query = safe_query_builder::build_delete("users", where_values);
+
+    EXPECT_TRUE(query.find("DELETE FROM") != std::string::npos);
+    EXPECT_TRUE(query.find("WHERE") != std::string::npos);
+    EXPECT_TRUE(query.find("\"users\"") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildDeleteWithSQLInjection) {
+    std::unordered_map<std::string, std::string> where_values = {
+        {"id", "1' OR '1'='1"}
+    };
+
+    std::string query = safe_query_builder::build_delete("users", where_values);
+
+    // Escaped quotes should be present
+    EXPECT_TRUE(query.find("''") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, BuildDeleteThrowsOnEmptyWhere) {
+    std::unordered_map<std::string, std::string> where_values;
+
+    // Should throw to prevent accidental mass deletes
+    EXPECT_THROW(
+        safe_query_builder::build_delete("users", where_values),
+        std::invalid_argument
+    );
+}
+
+// Real-world SQL injection prevention tests
+TEST_F(SafeQueryBuilderTest, PreventClassicSQLInjection) {
+    // Classic SQL injection: '; DROP TABLE users; --
+    std::unordered_map<std::string, std::string> values = {
+        {"username", "admin"},
+        {"password", "' OR '1'='1' --"}
+    };
+
+    std::string query = safe_query_builder::build_insert("auth_log", values);
+
+    // The query should be safe - no unescaped injection
+    EXPECT_TRUE(query.find("''''") != std::string::npos ||
+                query.find("''1''") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, PreventUnionBasedInjection) {
+    std::unordered_map<std::string, std::string> values = {
+        {"search", "' UNION SELECT * FROM passwords --"}
+    };
+
+    std::string query = safe_query_builder::build_insert("search_log", values);
+
+    // Single quotes in the injection should be doubled
+    EXPECT_TRUE(query.find("'' UNION") != std::string::npos);
+}
+
+TEST_F(SafeQueryBuilderTest, HandleSpecialCharacters) {
+    std::unordered_map<std::string, std::string> values = {
+        {"bio", "Hello! I'm a developer. Use \"quotes\" & <tags>."}
+    };
+
+    std::string query = safe_query_builder::build_insert("profiles", values);
+
+    // Single quote should be escaped
+    EXPECT_TRUE(query.find("I''m") != std::string::npos);
 }

@@ -673,4 +673,4 @@ See [BENCHMARKS.md](BENCHMARKS.md) for comprehensive performance data.
 ---
 
 **Last Updated**: 2025-11-15
-**Maintained by**: KCENON Team
+**Maintained by**: kcenon@naver.com

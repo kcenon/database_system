@@ -648,4 +648,4 @@ exporter.register_metric("db_queries_total", metric_type::counter);
 ---
 
 **Last Updated**: 2025-11-15
-**Maintained by**: KCENON Team
+**Maintained by**: kcenon@naver.com

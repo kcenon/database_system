@@ -10,12 +10,12 @@ cmake_minimum_required(VERSION 3.16)
 # Project definition
 project(database_system
     VERSION 2.0.0
-    DESCRIPTION "Advanced Distributed C++17/20 Database System with Full Network Integration"
+    DESCRIPTION "Advanced Distributed C++20 Database System with Full Network Integration"
     LANGUAGES CXX
 )
 
 # C++ Standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

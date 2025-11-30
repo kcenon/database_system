@@ -3,8 +3,22 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################
 # Database System CMakeLists.txt
 #
+# Tier 5: Application Layer
 # Independent database system with multi-backend support
 # Provides database abstraction and PostgreSQL implementation.
+#
+# Dependency Chain:
+#   database_system (Tier 5)
+#     ├── network_system (Tier 4) [REQUIRED]
+#     │     ├── logger_system (Tier 2) [REQUIRED]
+#     │     │     └── thread_system (Tier 1) [REQUIRED]
+#     │     │           └── common_system (Tier 0) [REQUIRED]
+#     │     └── container_system (Tier 1) [OPTIONAL]
+#     ├── common_system (Tier 0) [REQUIRED]
+#     ├── thread_system (Tier 1) [OPTIONAL]
+#     ├── logger_system (Tier 2) [OPTIONAL]
+#     ├── monitoring_system (Tier 3) [OPTIONAL]
+#     └── container_system (Tier 1) [OPTIONAL]
 ##################################################
 
 # Project definition
@@ -320,26 +334,83 @@ endif()
 # Summary
 ##################################################
 
-message(STATUS "Database System configured:")
-message(STATUS "  Version: ${PROJECT_VERSION}")
-message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
-message(STATUS "  Features:")
-message(STATUS "    - PostgreSQL support: ${USE_POSTGRESQL}")
-message(STATUS "    - MySQL support: ${USE_MYSQL}")
-message(STATUS "    - SQLite support: ${USE_SQLITE}")
-message(STATUS "  Integration:")
-message(STATUS "    - common_system: ${BUILD_WITH_COMMON_SYSTEM}")
-message(STATUS "    - thread_system: ${USE_THREAD_SYSTEM}")
-message(STATUS "    - logger_system: ${USE_LOGGER_SYSTEM}")
-message(STATUS "    - monitoring_system: ${USE_MONITORING_SYSTEM}")
-message(STATUS "    - container_system: ${USE_CONTAINER_SYSTEM}")
-message(STATUS "    - network_system: ${USE_NETWORK_SYSTEM} (STRONGLY RECOMMENDED)")
-message(STATUS "    - Integrated database system: ${BUILD_INTEGRATED_DATABASE}")
-message(STATUS "  Build:")
-message(STATUS "    - Build samples: ${BUILD_DATABASE_SAMPLES}")
-message(STATUS "    - Build tests: ${USE_UNIT_TEST}")
-message(STATUS "    - Build integration tests: ${DATABASE_BUILD_INTEGRATION_TESTS}")
-message(STATUS "  Output directories:")
-message(STATUS "    - Runtime: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "    - Library: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-message(STATUS "    - Archive: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+message(STATUS "")
+message(STATUS "========================================")
+message(STATUS "Database System Build Configuration:")
+message(STATUS "========================================")
+message(STATUS "")
+message(STATUS "Version: ${PROJECT_VERSION}")
+message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "")
+message(STATUS "Dependency Chain (Tier 5):")
+message(STATUS "  database_system")
+message(STATUS "    ├── common_system (Tier 0): ${BUILD_WITH_COMMON_SYSTEM} [REQUIRED]")
+message(STATUS "    ├── network_system (Tier 4): ${USE_NETWORK_SYSTEM} [REQUIRED]")
+message(STATUS "    ├── thread_system (Tier 1): ${USE_THREAD_SYSTEM} [OPTIONAL]")
+message(STATUS "    ├── logger_system (Tier 2): ${USE_LOGGER_SYSTEM} [OPTIONAL]")
+message(STATUS "    ├── monitoring_system (Tier 3): ${USE_MONITORING_SYSTEM} [OPTIONAL]")
+message(STATUS "    └── container_system (Tier 1): ${USE_CONTAINER_SYSTEM} [OPTIONAL]")
+message(STATUS "")
+
+# Dependency chain verification
+message(STATUS "Required Dependencies:")
+if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
+    message(STATUS "  ✓ common_system (Tier 0) - Result<T> pattern")
+else()
+    message(FATAL_ERROR "  ✗ common_system - REQUIRED but not found!")
+endif()
+
+if(USE_NETWORK_SYSTEM AND network_system_FOUND)
+    message(STATUS "  ✓ network_system (Tier 4) - Distributed features")
+elseif(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM)
+    message(STATUS "  ⚠ network_system (Tier 4) - BYPASSED (CI/testing only)")
+else()
+    message(FATAL_ERROR "  ✗ network_system - REQUIRED but not found!")
+endif()
+
+message(STATUS "")
+message(STATUS "Optional Dependencies:")
+
+if(USE_THREAD_SYSTEM AND thread_system_FOUND)
+    message(STATUS "  ✓ thread_system (Tier 1)")
+else()
+    message(STATUS "  ○ thread_system (Tier 1) - not loaded")
+endif()
+
+if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
+    message(STATUS "  ✓ logger_system (Tier 2)")
+else()
+    message(STATUS "  ○ logger_system (Tier 2) - not loaded")
+endif()
+
+if(USE_MONITORING_SYSTEM AND monitoring_system_FOUND)
+    message(STATUS "  ✓ monitoring_system (Tier 3)")
+else()
+    message(STATUS "  ○ monitoring_system (Tier 3) - not loaded")
+endif()
+
+if(USE_CONTAINER_SYSTEM AND container_system_FOUND)
+    message(STATUS "  ✓ container_system (Tier 1)")
+else()
+    message(STATUS "  ○ container_system (Tier 1) - not loaded")
+endif()
+
+message(STATUS "")
+message(STATUS "Database Features:")
+message(STATUS "  PostgreSQL support: ${USE_POSTGRESQL}")
+message(STATUS "  MySQL support: ${USE_MYSQL}")
+message(STATUS "  SQLite support: ${USE_SQLITE}")
+message(STATUS "  Integrated database: ${BUILD_INTEGRATED_DATABASE}")
+message(STATUS "")
+message(STATUS "Build Options:")
+message(STATUS "  Build samples: ${BUILD_DATABASE_SAMPLES}")
+message(STATUS "  Build tests: ${USE_UNIT_TEST}")
+message(STATUS "  Build integration tests: ${DATABASE_BUILD_INTEGRATION_TESTS}")
+message(STATUS "  Build benchmarks: ${DATABASE_BUILD_BENCHMARKS}")
+message(STATUS "  Code coverage: ${ENABLE_COVERAGE}")
+message(STATUS "")
+message(STATUS "Output Directories:")
+message(STATUS "  Runtime: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "  Library: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+message(STATUS "  Archive: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+message(STATUS "========================================")

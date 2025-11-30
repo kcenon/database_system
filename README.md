@@ -11,7 +11,7 @@
 
 ## Overview
 
-A production-ready, enterprise-grade C++17/C++20 database abstraction layer providing unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations.
+A production-ready, enterprise-grade C++20 database abstraction layer providing unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations.
 
 **Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, MySQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
 
@@ -119,7 +119,7 @@ auto redis_query = db.create_query_builder(database_types::redis)
 
 [📘 Complete Query Builder Guide →](docs/FEATURES.md#query-builders)
 
-### ORM Framework (C++17 SFINAE-based)
+### ORM Framework (C++20 Concepts-based)
 
 ```cpp
 #include <database/orm/entity.h>
@@ -185,8 +185,8 @@ entity_manager::instance().create_tables(db);
 
 ### Prerequisites
 
-- **Compiler**: C++17 capable (GCC 7+, Clang 5+, MSVC 2017+)
-- **CMake**: 3.16+
+- **Compiler**: C++20 capable (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
+- **CMake**: 3.20+
 - **Optional**: Database libraries (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
 
 ### Installation
@@ -514,7 +514,7 @@ BSD 3-Clause License - see [LICENSE](LICENSE) file for details.
 ## Acknowledgments
 
 - Inspired by modern database abstraction patterns and best practices
-- Built with C++17/C++20 features for maximum performance and safety
+- Built with C++20 features (GCC 11+, Clang 14+, MSVC 2022+) for maximum performance and safety
 - Maintained by kcenon@naver.com
 
 ---

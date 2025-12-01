@@ -225,8 +225,15 @@ endif()
 
 # logger_system
 if(USE_LOGGER_SYSTEM)
-    # Try to find logger_system library
-    if(TARGET logger_system)
+    # Prefer existing targets from unified build
+    if(TARGET LoggerSystem)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC LoggerSystem)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE LoggerSystem)
+        endif()
+        message(STATUS "Integrated DB: Linked with LoggerSystem target")
+    elseif(TARGET logger_system)
         if(INTEGRATED_DB_SOURCES)
             target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC logger_system)
         else()

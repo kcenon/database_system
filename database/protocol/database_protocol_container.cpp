@@ -10,7 +10,6 @@ All rights reserved.
 #include "database_protocol_container.h"
 #include <core/container.h>
 #include <core/value_types.h>
-#include <container/core/optimized_value.h>
 
 namespace database::protocol {
 

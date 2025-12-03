@@ -59,21 +59,37 @@ if(USE_THREAD_SYSTEM)
             Threads::Threads
         )
 
-        # Link thread_system libraries
-        set(_THREAD_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
-            "/home/$ENV{USER}/Sources/thread_system/build/lib"
-        )
-
-        foreach(_lib_path ${_THREAD_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
-                target_link_libraries(${SAMPLE_NAME} PRIVATE
-                    ThreadSystem
-                )
+        # Link thread_system: prefer CMake targets from unified build
+        set(_THREAD_LINKED FALSE)
+        foreach(_thread_target ThreadSystem thread_system)
+            if(TARGET ${_thread_target})
+                target_link_libraries(${SAMPLE_NAME} PRIVATE ${_thread_target})
+                set(_THREAD_LINKED TRUE)
                 break()
             endif()
         endforeach()
+
+        # Fallback to library paths for standalone builds
+        if(NOT _THREAD_LINKED)
+            set(_THREAD_LIB_PATHS
+                "${CMAKE_SOURCE_DIR}/../thread_system/build/lib"
+                "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+                "/home/$ENV{USER}/Sources/thread_system/build/lib"
+            )
+
+            foreach(_lib_path ${_THREAD_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
+                    target_link_libraries(${SAMPLE_NAME} PRIVATE ThreadSystem)
+                    set(_THREAD_LINKED TRUE)
+                    break()
+                endif()
+            endforeach()
+        endif()
+
+        if(NOT _THREAD_LINKED)
+            message(WARNING "thread_system not found for ${SAMPLE_NAME} - sample may not link correctly")
+        endif()
 
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${SAMPLE_NAME} PRIVATE

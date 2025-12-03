@@ -20,14 +20,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(Threads REQUIRED)
 
-# vcpkg integration for fmt
-find_package(fmt CONFIG QUIET)
-if(NOT fmt_FOUND)
-    message(WARNING "fmt library not found - samples will use basic iostream")
-    # Define USE_IOSTREAM when fmt is not available
-    add_compile_definitions(USE_IOSTREAM)
-endif()
-
 ##################################################
 # Sample Programs Configuration
 ##################################################
@@ -83,13 +75,6 @@ if(USE_THREAD_SYSTEM)
             endif()
         endforeach()
 
-        # thread_system requires fmt
-        if(fmt_FOUND)
-            target_link_libraries(${SAMPLE_NAME} PRIVATE fmt::fmt)
-        else()
-            message(WARNING "fmt not found - ${SAMPLE_NAME} requires fmt for thread_system")
-        endif()
-
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${SAMPLE_NAME} PRIVATE
                 -Wall -Wextra -Wpedantic -Wno-unused-parameter
@@ -142,13 +127,6 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
         Threads::Threads
     )
 
-    # Link fmt only if available
-    if(fmt_FOUND)
-        target_link_libraries(database_${SAMPLE} PRIVATE fmt::fmt)
-    else()
-        target_compile_definitions(database_${SAMPLE} PRIVATE USE_IOSTREAM)
-    endif()
-    
     # Compiler-specific options
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(database_${SAMPLE} PRIVATE
@@ -221,4 +199,4 @@ endif()
 message(STATUS "Database System Samples configured:")
 message(STATUS "  Sample programs: ${SAMPLE_PROGRAMS}")
 message(STATUS "  Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "  Dependencies: database, fmt (optional), Threads")
+message(STATUS "  Dependencies: database, Threads")

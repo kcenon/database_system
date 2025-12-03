@@ -310,9 +310,6 @@ if(USE_THREAD_SYSTEM)
                 endif()
             endforeach()
 
-            find_package(fmt CONFIG REQUIRED)
-            target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
-
             if(_THREAD_SYSTEM_SOURCE AND EXISTS "${_THREAD_SYSTEM_SOURCE}/src/impl/typed_pool")
                 target_include_directories(${PROJECT_NAME} PRIVATE
                     ${_THREAD_SYSTEM_SOURCE}/src

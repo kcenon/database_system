@@ -20,14 +20,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(Threads REQUIRED)
 
-# vcpkg integration for fmt
-find_package(fmt CONFIG QUIET)
-if(NOT fmt_FOUND)
-    message(WARNING "fmt library not found - samples will use basic iostream")
-    # Define USE_IOSTREAM when fmt is not available
-    add_compile_definitions(USE_IOSTREAM)
-endif()
-
 ##################################################
 # Sample Programs Configuration
 ##################################################
@@ -67,27 +59,36 @@ if(USE_THREAD_SYSTEM)
             Threads::Threads
         )
 
-        # Link thread_system libraries
-        set(_THREAD_LIB_PATHS
-            "/Users/$ENV{USER}/Sources/thread_system/build/lib"
-            "/home/$ENV{USER}/Sources/thread_system/build/lib"
-        )
-
-        foreach(_lib_path ${_THREAD_LIB_PATHS})
-            if(EXISTS "${_lib_path}")
-                target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
-                target_link_libraries(${SAMPLE_NAME} PRIVATE
-                    ThreadSystem
-                )
+        # Link thread_system: prefer CMake targets from unified build
+        set(_THREAD_LINKED FALSE)
+        foreach(_thread_target ThreadSystem thread_system)
+            if(TARGET ${_thread_target})
+                target_link_libraries(${SAMPLE_NAME} PRIVATE ${_thread_target})
+                set(_THREAD_LINKED TRUE)
                 break()
             endif()
         endforeach()
 
-        # thread_system requires fmt
-        if(fmt_FOUND)
-            target_link_libraries(${SAMPLE_NAME} PRIVATE fmt::fmt)
-        else()
-            message(WARNING "fmt not found - ${SAMPLE_NAME} requires fmt for thread_system")
+        # Fallback to library paths for standalone builds
+        if(NOT _THREAD_LINKED)
+            set(_THREAD_LIB_PATHS
+                "${CMAKE_SOURCE_DIR}/../thread_system/build/lib"
+                "/Users/$ENV{USER}/Sources/thread_system/build/lib"
+                "/home/$ENV{USER}/Sources/thread_system/build/lib"
+            )
+
+            foreach(_lib_path ${_THREAD_LIB_PATHS})
+                if(EXISTS "${_lib_path}")
+                    target_link_directories(${SAMPLE_NAME} PRIVATE ${_lib_path})
+                    target_link_libraries(${SAMPLE_NAME} PRIVATE ThreadSystem)
+                    set(_THREAD_LINKED TRUE)
+                    break()
+                endif()
+            endforeach()
+        endif()
+
+        if(NOT _THREAD_LINKED)
+            message(WARNING "thread_system not found for ${SAMPLE_NAME} - sample may not link correctly")
         endif()
 
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -142,13 +143,6 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
         Threads::Threads
     )
 
-    # Link fmt only if available
-    if(fmt_FOUND)
-        target_link_libraries(database_${SAMPLE} PRIVATE fmt::fmt)
-    else()
-        target_compile_definitions(database_${SAMPLE} PRIVATE USE_IOSTREAM)
-    endif()
-    
     # Compiler-specific options
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(database_${SAMPLE} PRIVATE
@@ -221,4 +215,4 @@ endif()
 message(STATUS "Database System Samples configured:")
 message(STATUS "  Sample programs: ${SAMPLE_PROGRAMS}")
 message(STATUS "  Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "  Dependencies: database, fmt (optional), Threads")
+message(STATUS "  Dependencies: database, Threads")

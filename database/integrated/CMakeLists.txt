@@ -190,17 +190,6 @@ endif()
 # Dependencies
 ##################################################
 
-# fmt library (required by thread_system headers)
-find_package(fmt QUIET)
-if(fmt_FOUND)
-    if(INTEGRATED_DB_SOURCES)
-        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC fmt::fmt)
-    else()
-        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE fmt::fmt)
-    endif()
-    message(STATUS "Integrated DB: Linked with fmt library")
-endif()
-
 # Link external systems (if found)
 
 # common_system (Mandatory)

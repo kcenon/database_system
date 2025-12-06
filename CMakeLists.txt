@@ -10,13 +10,10 @@ cmake_minimum_required(VERSION 3.16)
 # Dependency Chain:
 #   database_system (Tier 5)
 #     ├── network_system (Tier 4) [REQUIRED]
-#     │     ├── logger_system (Tier 2) [REQUIRED]
-#     │     │     └── thread_system (Tier 1) [REQUIRED]
-#     │     │           └── common_system (Tier 0) [REQUIRED]
-#     │     └── container_system (Tier 1) [OPTIONAL]
-#     ├── common_system (Tier 0) [REQUIRED]
+#     │     └── thread_system (Tier 1) [REQUIRED]
+#     │           └── common_system (Tier 0) [REQUIRED]
+#     ├── common_system (Tier 0) [REQUIRED] - ILogger, GlobalLoggerRegistry, LOG_* macros
 #     ├── thread_system (Tier 1) [OPTIONAL]
-#     ├── logger_system (Tier 2) [OPTIONAL]
 #     ├── monitoring_system (Tier 3) [OPTIONAL]
 #     └── container_system (Tier 1) [OPTIONAL]
 ##################################################
@@ -66,7 +63,6 @@ option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(BUILD_DATABASE "Build database module" ON)
 option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
-option(USE_LOGGER_SYSTEM "Enable logger_system integration for advanced logging" ON)
 option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)
 option(USE_CONTAINER_SYSTEM "Enable container_system integration for high-performance serialization" ON)
 option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter pattern" ON)
@@ -196,19 +192,6 @@ if(USE_THREAD_SYSTEM)
     endif()
 endif()
 
-# logger_system integration (optional)
-if(USE_LOGGER_SYSTEM)
-    message(STATUS "Searching for logger_system...")
-    find_system_dependency(logger_system)
-
-    if(logger_system_FOUND)
-        message(STATUS "logger_system integration enabled")
-    else()
-        message(WARNING "logger_system not found - integration disabled. Install logger_system or set USE_LOGGER_SYSTEM=OFF to suppress this warning.")
-        set(USE_LOGGER_SYSTEM OFF CACHE BOOL "logger_system not found" FORCE)
-    endif()
-endif()
-
 # monitoring_system integration (optional)
 if(USE_MONITORING_SYSTEM)
     message(STATUS "Searching for monitoring_system...")
@@ -258,7 +241,7 @@ else()
                             "Please build network_system first (Tier 2 dependency). "
                             "See BUILD_ORDER.md for correct build sequence:\n"
                             "  1. Build Tier 0: common_system\n"
-                            "  2. Build Tier 1: thread_system, container_system, logger_system, monitoring_system\n"
+                            "  2. Build Tier 1: thread_system, container_system, monitoring_system\n"
                             "  3. Build Tier 2: network_system -> database_system\n"
                             "\nFor CI/testing only: Use -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON to bypass this requirement.")
     endif()
@@ -344,10 +327,9 @@ message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
 message(STATUS "")
 message(STATUS "Dependency Chain (Tier 5):")
 message(STATUS "  database_system")
-message(STATUS "    ├── common_system (Tier 0): ${BUILD_WITH_COMMON_SYSTEM} [REQUIRED]")
+message(STATUS "    ├── common_system (Tier 0): ${BUILD_WITH_COMMON_SYSTEM} [REQUIRED] - ILogger, LOG_* macros")
 message(STATUS "    ├── network_system (Tier 4): ${USE_NETWORK_SYSTEM} [REQUIRED]")
 message(STATUS "    ├── thread_system (Tier 1): ${USE_THREAD_SYSTEM} [OPTIONAL]")
-message(STATUS "    ├── logger_system (Tier 2): ${USE_LOGGER_SYSTEM} [OPTIONAL]")
 message(STATUS "    ├── monitoring_system (Tier 3): ${USE_MONITORING_SYSTEM} [OPTIONAL]")
 message(STATUS "    └── container_system (Tier 1): ${USE_CONTAINER_SYSTEM} [OPTIONAL]")
 message(STATUS "")
@@ -375,12 +357,6 @@ if(USE_THREAD_SYSTEM AND thread_system_FOUND)
     message(STATUS "  ✓ thread_system (Tier 1)")
 else()
     message(STATUS "  ○ thread_system (Tier 1) - not loaded")
-endif()
-
-if(USE_LOGGER_SYSTEM AND logger_system_FOUND)
-    message(STATUS "  ✓ logger_system (Tier 2)")
-else()
-    message(STATUS "  ○ logger_system (Tier 2) - not loaded")
 endif()
 
 if(USE_MONITORING_SYSTEM AND monitoring_system_FOUND)

@@ -30,14 +30,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @file system_logger_backend.h
- * @brief Logger backend using kcenon/logger_system
+ * @file common_logger_backend.h
+ * @brief Logger backend using common_system's ILogger and GlobalLoggerRegistry
  *
- * Uses the logger_system library for advanced logging features:
- * - Asynchronous logging
- * - Multiple writers (console, file, etc.)
- * - Structured log levels
- * - High performance
+ * Uses the common_system library for logging through the ILogger interface:
+ * - Unified logging interface via GlobalLoggerRegistry
+ * - LOG_* macros for convenient logging
+ * - Runtime-bound logger implementations
+ * - Thread-safe operation
  */
 
 #pragma once
@@ -46,33 +46,8 @@
 
 #include <memory>
 
-// Forward declarations to avoid header dependency when logger_system is unavailable
-namespace kcenon
-{
-namespace logger
-{
-	class logger;
-}
-}
-
-// Import log_level from logger_system (conditionally)
-// Note: We can't forward-declare this because logger.h has a using declaration
-#if __has_include(<kcenon/logger/interfaces/logger_types.h>)
-#include <kcenon/logger/interfaces/logger_types.h>
-#else
-// Fallback: Define minimal logger_system namespace for compilation
-namespace logger_system
-{
-	enum class log_level
-	{
-		trace,
-		debug,
-		information,
-		warning,
-		error,
-		fatal
-	};
-}
+#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <kcenon/common/interfaces/logger_interface.h>
 #endif
 
 namespace database
@@ -85,28 +60,28 @@ namespace backends
 {
 
 /**
- * @class system_logger_backend
- * @brief Logger backend using logger_system library
+ * @class common_logger_backend
+ * @brief Logger backend using common_system's ILogger interface
  *
- * This backend uses the kcenon/logger_system for production-grade logging.
- * Requires logger_system to be available at compile time.
+ * This backend uses the kcenon/common_system for logging through
+ * the GlobalLoggerRegistry and ILogger interface.
  */
-class system_logger_backend : public logger_backend
+class common_logger_backend : public logger_backend
 {
 public:
 	/**
-	 * @brief Construct system logger backend
+	 * @brief Construct common logger backend
 	 * @param config Logger configuration
 	 */
-	explicit system_logger_backend(const db_logger_config& config);
+	explicit common_logger_backend(const db_logger_config& config);
 
-	~system_logger_backend() override;
+	~common_logger_backend() override;
 
-	// Non-copyable, non-movable (holds unique logger instance)
-	system_logger_backend(const system_logger_backend&) = delete;
-	system_logger_backend& operator=(const system_logger_backend&) = delete;
-	system_logger_backend(system_logger_backend&&) = delete;
-	system_logger_backend& operator=(system_logger_backend&&) = delete;
+	// Non-copyable, non-movable
+	common_logger_backend(const common_logger_backend&) = delete;
+	common_logger_backend& operator=(const common_logger_backend&) = delete;
+	common_logger_backend(common_logger_backend&&) = delete;
+	common_logger_backend& operator=(common_logger_backend&&) = delete;
 
 	common::VoidResult initialize() override;
 	common::VoidResult shutdown() override;
@@ -115,14 +90,15 @@ public:
 	void flush() override;
 
 private:
+#ifdef BUILD_WITH_COMMON_SYSTEM
 	/**
-	 * @brief Convert db_log_level to logger_system's log_level
+	 * @brief Convert db_log_level to common_system's log_level
 	 */
-	static logger_system::log_level convert_log_level(db_log_level level);
+	static kcenon::common::interfaces::log_level convert_log_level(db_log_level level);
+#endif
 
 	const db_logger_config& config_;
 	bool initialized_;
-	std::unique_ptr<kcenon::logger::logger> logger_;
 };
 
 } // namespace backends

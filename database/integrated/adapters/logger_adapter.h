@@ -37,8 +37,8 @@
  * using the backend pattern for runtime polymorphism.
  *
  * Available backends:
- * - system_logger_backend: Uses kcenon/logger_system for advanced logging (default)
- * - fallback_logger_backend: Uses std::cout + std::ofstream (when logger_system unavailable)
+ * - common_logger_backend: Uses common_system's ILogger and GlobalLoggerRegistry (default)
+ * - fallback_logger_backend: Uses std::cout + std::ofstream (when common_system unavailable)
  * - null_logger_backend: No-op backend for disabling logging
  *
  * Features:
@@ -118,7 +118,7 @@ namespace adapters
 enum class logger_backend_type
 {
 	auto_select,  ///< Automatically select best available backend
-	system,       ///< Use logger_system (fails if unavailable)
+	system,       ///< Use common_system ILogger (fails if unavailable)
 	fallback,     ///< Use std::cout + std::ofstream
 	null          ///< No-op backend (discard all logs)
 };

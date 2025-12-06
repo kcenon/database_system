@@ -33,7 +33,7 @@
  * @file fallback_logger_backend.h
  * @brief Fallback logger backend using std::cout and std::ofstream
  *
- * Used when logger_system is not available. Provides basic logging
+ * Used when common_system logging is not available. Provides basic logging
  * functionality using standard C++ streams.
  *
  * Features:
@@ -63,7 +63,7 @@ namespace backends
  * @class fallback_logger_backend
  * @brief Basic logger backend using standard C++ streams
  *
- * This backend provides simple logging when logger_system is unavailable.
+ * This backend provides simple logging when common_system logging is unavailable.
  * Uses std::cout for console output and std::ofstream for file output.
  */
 class fallback_logger_backend : public logger_backend

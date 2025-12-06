@@ -312,14 +312,11 @@ struct unified_db_config
 	db_monitoring_config monitoring;
 
 	// Integration flags (compile-time configurable via CMake)
-	/// Enable common_system integration (Result pattern, etc.)
+	/// Enable common_system integration (Result pattern, ILogger, LOG_* macros)
 	bool enable_common_system_integration{ true };
 
 	/// Enable thread_system integration (typed thread pools)
 	bool enable_thread_system_integration{ true };
-
-	/// Enable logger_system integration
-	bool enable_logger_system_integration{ true };
 
 	/// Enable monitoring_system integration
 	bool enable_monitoring_system_integration{ true };

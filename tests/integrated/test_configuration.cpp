@@ -73,7 +73,6 @@ void test_default_values()
 	// Integration flags
 	assert(config.enable_common_system_integration == true);
 	assert(config.enable_thread_system_integration == true);
-	assert(config.enable_logger_system_integration == true);
 	assert(config.enable_monitoring_system_integration == true);
 
 	std::cout << "  ✓ All default values correct\n";

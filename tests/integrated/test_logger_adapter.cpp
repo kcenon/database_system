@@ -7,7 +7,7 @@
  * @file test_logger_adapter.cpp
  * @brief Unit tests for logger_adapter
  *
- * Tests both logger_system integration and fallback modes.
+ * Tests both common_system logging integration and fallback modes.
  */
 
 #include "../../database/integrated/adapters/logger_adapter.h"
@@ -491,7 +491,7 @@ int main()
 {
 	std::cout << "=== Running Logger Adapter Tests ===\n";
 	std::cout << "\nMode: Backend pattern with runtime selection\n";
-	std::cout << "Backend will be auto-selected (system_logger -> fallback_logger)\n";
+	std::cout << "Backend will be auto-selected (common_logger -> fallback_logger)\n";
 
 	// Run all tests
 	test_initialization();

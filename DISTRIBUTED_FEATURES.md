@@ -44,10 +44,10 @@ cd /Users/raphaelshin/Sources/common_system
 ./build.sh --clean
 
 # 2. Build framework layer (Tier 1) - parallel
+# Note: logger_system is no longer required; logging uses common_system ILogger
 cd /Users/raphaelshin/Sources
 (cd thread_system && ./build.sh --clean) &
 (cd container_system && ./build.sh --clean) &
-(cd logger_system && ./build.sh --clean) &
 (cd monitoring_system && ./build.sh --clean) &
 wait
 

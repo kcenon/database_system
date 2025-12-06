@@ -29,7 +29,7 @@ Database System is a C++20 multi-backend database abstraction layer providing un
 1. **Multi-Backend Abstraction**: Single unified interface for all database types
 2. **Type Safety**: C++20 concepts and template metaprogramming for compile-time validation
 3. **Performance**: Enterprise-grade connection pooling (10,000+ concurrent connections)
-4. **Integration**: Seamless integration with common_system, thread_system, and logger_system
+4. **Integration**: Seamless integration with common_system (including ILogger and LOG_* macros) and thread_system
 5. **Modularity**: Pluggable backends with consistent API surface
 
 ### Architectural Layers
@@ -566,27 +566,23 @@ public:
 };
 ```
 
-### Integration with logger_system
+### Integration with common_system Logging
 
-Comprehensive query logging and audit trails:
+Comprehensive query logging using common_system's ILogger and LOG_* macros:
 
 ```cpp
-#include <kcenon/logger/core/logger.h>
+#include <kcenon/common/logging/log_macros.h>
 
 class logging_database_manager : public database_manager {
-private:
-    std::shared_ptr<kcenon::logger::logger> logger_;
-
 public:
     bool execute_query(const std::string& query) override {
-        logger_->log(log_level::debug, std::format("Executing: {}", query));
+        LOG_DEBUG("Executing: {}", query);
         auto start = std::chrono::steady_clock::now();
 
         bool result = base_->execute_query(query);
 
         auto duration = std::chrono::steady_clock::now() - start;
-        logger_->log(log_level::info,
-            std::format("Query completed in {}ms", duration.count()));
+        LOG_INFO("Query completed in {}ms", duration.count());
 
         return result;
     }
@@ -888,7 +884,7 @@ The Database System architecture provides a robust, performant, and flexible fou
 2. **High Performance**: 10,000+ concurrent connections with 0.1ms acquisition time
 3. **Type Safety**: C++20 concepts for compile-time validation
 4. **Enterprise Features**: ORM, security, monitoring, and async operations
-5. **Ecosystem Integration**: Seamless integration with common_system, thread_system, and logger_system
+5. **Ecosystem Integration**: Seamless integration with common_system (including ILogger and LOG_* macros) and thread_system
 
 This architecture supports diverse use cases from embedded applications to distributed enterprise systems while maintaining code quality, performance, and security standards.
 

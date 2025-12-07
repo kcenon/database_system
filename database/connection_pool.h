@@ -46,11 +46,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Use unified Result<T> implementation
 #include "core/result.h"
 
-// Forward declaration for logger_adapter (full include in .cpp)
-namespace database::integrated::adapters {
-	class logger_adapter;
-}
-
 namespace database
 {
 	/**
@@ -229,20 +224,6 @@ namespace database
 		 */
 		void health_check();
 
-		/**
-		 * @brief Sets the logger adapter for structured logging.
-		 * @param logger Shared pointer to logger adapter (can be nullptr to disable logging)
-		 *
-		 * When set, the pool will use structured logging for:
-		 * - Pool initialization events
-		 * - Connection creation/release events
-		 * - Maintenance thread operations
-		 * - Error conditions
-		 *
-		 * Thread Safety: This method is thread-safe.
-		 */
-		void set_logger(std::shared_ptr<integrated::adapters::logger_adapter> logger);
-
 	private:
 		/**
 		 * @brief Creates a new database connection.
@@ -289,10 +270,6 @@ namespace database
 
 		std::atomic<size_t> active_count_;
 		std::atomic<size_t> total_created_;
-
-		// Logger for structured logging (optional)
-		mutable std::mutex logger_mutex_;
-		std::shared_ptr<integrated::adapters::logger_adapter> logger_;
 	};
 
 	/**
@@ -353,17 +330,6 @@ namespace database
 		 */
 		~connection_pool_manager();
 
-		/**
-		 * @brief Sets the logger adapter for structured logging.
-		 * @param logger Shared pointer to logger adapter (can be nullptr to disable logging)
-		 *
-		 * When set, the manager will use structured logging and propagate
-		 * the logger to all managed pools.
-		 *
-		 * Thread Safety: This method is thread-safe.
-		 */
-		void set_logger(std::shared_ptr<integrated::adapters::logger_adapter> logger);
-
 	private:
 		/**
 		 * @brief Creates a connection factory for a database type.
@@ -377,9 +343,6 @@ namespace database
 
 		mutable std::mutex pools_mutex_;
 		std::map<database_types, std::shared_ptr<connection_pool>> pools_;
-
-		// Logger for structured logging (optional)
-		std::shared_ptr<integrated::adapters::logger_adapter> logger_;
 	};
 
 } // namespace database

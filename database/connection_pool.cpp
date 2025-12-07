@@ -31,14 +31,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "connection_pool.h"
-#include "integrated/adapters/logger_adapter.h"
 #include "postgres_manager.h"
 #include "backends/mysql/mysql_manager.h"
 #include "backends/sqlite/sqlite_manager.h"
 #include "backends/mongodb/mongodb_manager.h"
 #include "backends/redis/redis_manager.h"
 #include <algorithm>
+#include <iostream>
 #include <sstream>
+
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on integrated_database
+// to avoid circular dependencies.
+#define POOL_LOG_ERROR(context, message) \
+	std::cerr << "[ConnectionPool:" << context << "] Error: " << message << std::endl
+#define POOL_LOG_WARNING(context, message) \
+	std::cerr << "[ConnectionPool:" << context << "] Warning: " << message << std::endl
+#define POOL_LOG_INFO(context, message) \
+	std::cout << "[ConnectionPool:" << context << "] Info: " << message << std::endl
+#define POOL_LOG_DEBUG(context, message) \
+	std::cout << "[ConnectionPool:" << context << "] Debug: " << message << std::endl
 
 namespace database
 {
@@ -130,12 +143,10 @@ namespace database
 			for (size_t i = 0; i < config_.min_connections; ++i) {
 				auto connection = create_connection();
 				if (!connection) {
-					std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-					if (logger_) {
-						std::ostringstream details;
-						details << "index=" << i << ", min_connections=" << config_.min_connections;
-						logger_->log_error("initialize", "Failed to create initial connection", details.str());
-					}
+					std::ostringstream details;
+					details << "Failed to create initial connection (index=" << i
+							<< ", min_connections=" << config_.min_connections << ")";
+					POOL_LOG_ERROR("initialize", details.str());
 					return false;
 				}
 
@@ -149,10 +160,9 @@ namespace database
 
 			// Log successful initialization
 			{
-				std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-				if (logger_) {
-					logger_->log_pool_event("initialized", 0, stats_.available_connections);
-				}
+				std::ostringstream msg;
+				msg << "Pool initialized (active=0, available=" << stats_.available_connections << ")";
+				POOL_LOG_INFO("initialize", msg.str());
 			}
 
 			// Start maintenance thread
@@ -160,10 +170,7 @@ namespace database
 
 			return true;
 		} catch (const std::exception& e) {
-			std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-			if (logger_) {
-				logger_->log_error("initialize", std::string("Connection pool initialization failed: ") + e.what());
-			}
+			POOL_LOG_ERROR("initialize", std::string("Connection pool initialization failed: ") + e.what());
 			return false;
 		}
 	}
@@ -340,13 +347,7 @@ namespace database
 				try {
 					auto type = connection->database_type();
 					if (type != database_types::none) {
-						// Log successful connection creation
-						{
-							std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-							if (logger_) {
-								logger_->log_connection_event("created", "Connection validated successfully");
-							}
-						}
+						POOL_LOG_DEBUG("create_connection", "Connection validated successfully");
 						return connection;
 					}
 				} catch (const std::exception&) {
@@ -354,23 +355,14 @@ namespace database
 				}
 			}
 		} catch (const std::exception& e) {
-			std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-			if (logger_) {
-				logger_->log_error("create_connection", std::string("Failed to create connection: ") + e.what());
-			}
+			POOL_LOG_ERROR("create_connection", std::string("Failed to create connection: ") + e.what());
 		}
 		return nullptr;
 	}
 
 	void connection_pool::maintenance_thread()
 	{
-		// Log maintenance thread start
-		{
-			std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-			if (logger_) {
-				logger_->log(integrated::db_log_level::debug, "Maintenance thread started");
-			}
-		}
+		POOL_LOG_DEBUG("maintenance_thread", "Maintenance thread started");
 
 		while (!shutdown_requested_) {
 			std::unique_lock<std::mutex> lock(maintenance_mutex_);
@@ -391,20 +383,11 @@ namespace database
 				}
 				cleanup_idle_connections();
 			} catch (const std::exception& e) {
-				std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-				if (logger_) {
-					logger_->log_error("maintenance_thread", std::string("Maintenance thread error: ") + e.what());
-				}
+				POOL_LOG_ERROR("maintenance_thread", std::string("Maintenance thread error: ") + e.what());
 			}
 		}
 
-		// Log maintenance thread stop
-		{
-			std::lock_guard<std::mutex> logger_lock(logger_mutex_);
-			if (logger_) {
-				logger_->log(integrated::db_log_level::debug, "Maintenance thread stopped");
-			}
-		}
+		POOL_LOG_DEBUG("maintenance_thread", "Maintenance thread stopped");
 	}
 
 	void connection_pool::health_check()
@@ -475,12 +458,6 @@ namespace database
 		available_connections_ = std::move(retained_connections);
 	}
 
-	void connection_pool::set_logger(std::shared_ptr<integrated::adapters::logger_adapter> logger)
-	{
-		std::lock_guard<std::mutex> lock(logger_mutex_);
-		logger_ = std::move(logger);
-	}
-
 	// connection_pool_manager implementation
 	connection_pool_manager::~connection_pool_manager()
 	{
@@ -492,42 +469,31 @@ namespace database
 		std::lock_guard<std::mutex> lock(pools_mutex_);
 
 		if (pools_.find(db_type) != pools_.end()) {
-			if (logger_) {
-				logger_->log_error("create_pool", "Pool for database type already exists");
-			}
+			POOL_LOG_ERROR("create_pool", "Pool for database type already exists");
 			return false;
 		}
 
 		auto factory = create_factory(db_type, config.connection_string);
 		if (!factory) {
-			if (logger_) {
-				logger_->log_error("create_pool", "Failed to create connection factory for database type");
-			}
+			POOL_LOG_ERROR("create_pool", "Failed to create connection factory for database type");
 			return false;
 		}
 
 		auto pool = std::make_shared<connection_pool>(db_type, config, factory);
 
-		// Propagate logger to the new pool
-		if (logger_) {
-			pool->set_logger(logger_);
-		}
-
 		if (!pool->initialize()) {
-			if (logger_) {
-				logger_->log_error("create_pool", "Failed to initialize connection pool");
-			}
+			POOL_LOG_ERROR("create_pool", "Failed to initialize connection pool");
 			return false;
 		}
 
 		pools_[db_type] = pool;
 
 		// Log successful pool creation
-		if (logger_) {
+		{
 			std::ostringstream details;
-			details << "min_connections=" << config.min_connections
-					<< ", max_connections=" << config.max_connections;
-			logger_->log_connection_event("pool_created", details.str());
+			details << "Pool created (min_connections=" << config.min_connections
+					<< ", max_connections=" << config.max_connections << ")";
+			POOL_LOG_INFO("create_pool", details.str());
 		}
 
 		return true;
@@ -623,17 +589,6 @@ namespace database
 
 			default:
 				return nullptr;
-		}
-	}
-
-	void connection_pool_manager::set_logger(std::shared_ptr<integrated::adapters::logger_adapter> logger)
-	{
-		std::lock_guard<std::mutex> lock(pools_mutex_);
-		logger_ = std::move(logger);
-
-		// Propagate logger to all existing pools
-		for (auto& pair : pools_) {
-			pair.second->set_logger(logger_);
 		}
 	}
 

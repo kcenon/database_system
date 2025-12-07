@@ -9,7 +9,7 @@ on:
 jobs:
   clang-tidy:
     name: Clang-Tidy Analysis
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout database_system
@@ -27,12 +27,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang clang-tidy libgtest-dev libgmock-dev
+        # Use Clang 18 and clang-tidy-18 for full C++20 std::format support
+        sudo apt-get install -y cmake ninja-build clang-18 clang-tidy-18 libgtest-dev libgmock-dev
 
     - name: Build and install common_system
       run: |
         cd common_system
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+          -DCMAKE_C_COMPILER=clang-18 -DCMAKE_CXX_COMPILER=clang++-18
         cmake --build build --config Release
         sudo cmake --install build --prefix /usr/local
 
@@ -41,8 +43,8 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-          -DCMAKE_CXX_COMPILER=clang++ \
-          -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++-18 \
+          -DCMAKE_C_COMPILER=clang-18 \
           -DUSE_UNIT_TEST=OFF \
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
@@ -54,9 +56,10 @@ jobs:
       continue-on-error: true  # Phase 0: Allow failures, collect baseline
       run: |
         # Find all C++ source and header files in database directory
+        # Use clang-tidy-18 for full C++20 std::format support
         find database -name "*.h" -o -name "*.hpp" | while read file; do
           echo "Analyzing: $file"
-          clang-tidy "$file" -p=build -- -std=c++20 || true
+          clang-tidy-18 "$file" -p=build -- -std=c++20 || true
         done > clang-tidy-results.txt 2>&1
 
     - name: Count warnings by category
@@ -103,7 +106,7 @@ jobs:
 
   cppcheck:
     name: Cppcheck Analysis
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout code

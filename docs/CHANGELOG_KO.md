@@ -24,6 +24,27 @@
 
 ---
 
+## [Unreleased] - 2025-12-08
+
+### 🔧 **변경됨**
+
+#### **📝 Redis 백엔드 로깅 통합 (Issue #208)**
+- **logger_adapter 통합**: `redis_manager.cpp`의 모든 `std::cout`/`std::cerr` 호출을 `logger_adapter`로 교체
+  - 다른 데이터베이스 백엔드와 일관된 통합 로깅 인터페이스
+  - `log_error()`를 사용한 작업 컨텍스트가 포함된 적절한 오류 로깅
+  - Redis 미컴파일 빌드에 대한 경고 수준 로깅
+  - `<iostream>` 헤더 의존성 제거
+
+- **헤더 구성**: 헤더 충돌을 피하기 위한 전방 선언 사용
+  - `logger_adapter` 및 `db_logger_config` 멤버에 `std::unique_ptr` 사용
+  - `database_manager.h`와의 순환 의존성 방지
+
+**변경된 파일:**
+- `database/backends/redis/redis_manager.h` - 전방 선언과 함께 logger_adapter 멤버 추가
+- `database/backends/redis/redis_manager.cpp` - 30개 이상의 로깅 호출을 logger_adapter로 교체
+
+---
+
 ## 🚀 최신 릴리스 - "안정성 & 성능"
 
 ### 🎯 **릴리스 하이라이트**

@@ -619,7 +619,11 @@ endif()
 ##################################################
 
 if(BUILD_INTEGRATED_DATABASE)
+    # Build integrated_database as a separate module
+    # Note: integrated_database depends on database, NOT the reverse
+    # This avoids circular dependency issues with static linking
     add_subdirectory(integrated)
+
     message(STATUS "Building integrated database system with adapter pattern")
 endif()
 

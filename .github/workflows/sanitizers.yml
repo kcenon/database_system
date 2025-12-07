@@ -16,7 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04]
+        # Ubuntu 24.04 with Clang 18 for full C++20 std::format support
+        os: [ubuntu-24.04]
         sanitizer: [thread, address, undefined]
         build_type: [Debug]
 
@@ -37,17 +38,20 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang libgtest-dev libfmt-dev libpq-dev
+        # Use Clang 18 for full C++20 std::format support
+        sudo apt-get install -y cmake ninja-build clang-18 libgtest-dev libfmt-dev libpq-dev
 
     - name: Set up compiler
       run: |
-        echo "CC=clang" >> $GITHUB_ENV
-        echo "CXX=clang++" >> $GITHUB_ENV
+        # Use Clang 18 for full C++20 std::format support
+        echo "CC=clang-18" >> $GITHUB_ENV
+        echo "CXX=clang++-18" >> $GITHUB_ENV
 
     - name: Build and install common_system
       run: |
         cd common_system
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+          -DCMAKE_C_COMPILER=clang-18 -DCMAKE_CXX_COMPILER=clang++-18
         cmake --build build --config Release
         sudo cmake --install build --prefix /usr/local
 
@@ -58,6 +62,8 @@ jobs:
         cmake -B build -S . \
           -GNinja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_C_COMPILER=clang-18 \
+          -DCMAKE_CXX_COMPILER=clang++-18 \
           -DCMAKE_CXX_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_C_FLAGS="${SANITIZER_FLAGS}" \
           -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
@@ -94,7 +100,7 @@ jobs:
   sanitizer-summary:
     name: Sanitizer Test Summary
     needs: sanitizer-tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: always()
 
     steps:

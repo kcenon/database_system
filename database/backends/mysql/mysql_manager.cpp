@@ -40,6 +40,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <stdexcept>
 
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on integrated_database
+// to avoid circular dependencies.
+#define MYSQL_LOG_ERROR(context, message) \
+	std::cerr << "[MySQL:" << context << "] Error: " << message << std::endl
+#define MYSQL_LOG_WARNING(message) \
+	std::cerr << "[MySQL] Warning: " << message << std::endl
+#define MYSQL_LOG_INFO(message) \
+	std::cout << "[MySQL] Info: " << message << std::endl
+
 namespace database
 {
 	mysql_manager::mysql_manager(void) : connection_(nullptr) {}
@@ -62,14 +73,14 @@ namespace database
 			std::string host, database, user, password;
 			unsigned int port;
 			if (!parse_connection_string(connect_string, host, port, database, user, password)) {
-				std::cerr << "MySQL connection string parsing failed" << std::endl;
+				MYSQL_LOG_ERROR("connect", "Connection string parsing failed");
 				return false;
 			}
 
 			// Initialize MySQL connection
 			MYSQL* mysql = mysql_init(nullptr);
 			if (!mysql) {
-				std::cerr << "MySQL initialization failed" << std::endl;
+				MYSQL_LOG_ERROR("connect", "MySQL library initialization failed");
 				return false;
 			}
 
@@ -84,17 +95,17 @@ namespace database
 											 0);
 
 			if (!connection_) {
-				std::cerr << "MySQL connection failed: " << mysql_error(mysql) << std::endl;
+				MYSQL_LOG_ERROR("connect", std::string("Connection failed: ") + mysql_error(mysql));
 				mysql_close(mysql);
 				return false;
 			}
 
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "MySQL connection error: " << e.what() << std::endl;
+			MYSQL_LOG_ERROR("connect", std::string("Connection error: ") + e.what());
 		}
 #else
-		std::cerr << "MySQL support not compiled. Connection: " << connect_string.substr(0, 20) << "..." << std::endl;
+		MYSQL_LOG_WARNING("MySQL support not compiled. Connection: " + connect_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -107,15 +118,15 @@ namespace database
 			MYSQL* mysql = static_cast<MYSQL*>(connection_);
 			int result = mysql_query(mysql, query_string.c_str());
 			if (result != 0) {
-				std::cerr << "MySQL query execution error: " << mysql_error(mysql) << std::endl;
+				MYSQL_LOG_ERROR("create_query", std::string("Query execution error: ") + mysql_error(mysql));
 				return false;
 			}
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Query execution error: " << e.what() << std::endl;
+			MYSQL_LOG_ERROR("create_query", std::string("Query execution error: ") + e.what());
 		}
 #else
-		std::cerr << "MySQL support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		MYSQL_LOG_WARNING("MySQL support not compiled. Query: " + query_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -145,7 +156,7 @@ namespace database
 
 			// Execute query
 			if (mysql_query(mysql, query_string.c_str()) != 0) {
-				std::cerr << "MySQL select query failed: " << mysql_error(mysql) << std::endl;
+				MYSQL_LOG_ERROR("select_query", std::string("Query failed: ") + mysql_error(mysql));
 				return result;
 			}
 
@@ -156,7 +167,7 @@ namespace database
 					// Query was not a SELECT
 					return result;
 				} else {
-					std::cerr << "MySQL result retrieval failed: " << mysql_error(mysql) << std::endl;
+					MYSQL_LOG_ERROR("select_query", std::string("Result retrieval failed: ") + mysql_error(mysql));
 					return result;
 				}
 			}
@@ -206,10 +217,10 @@ namespace database
 
 			mysql_free_result(res);
 		} catch (const std::exception& e) {
-			std::cerr << "Select query error: " << e.what() << std::endl;
+			MYSQL_LOG_ERROR("select_query", std::string("Query error: ") + e.what());
 		}
 #else
-		std::cerr << "MySQL support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		MYSQL_LOG_WARNING("MySQL support not compiled. Query: " + query_string.substr(0, 20) + "...");
 		// Mock data for testing
 		if (query_string.find("SELECT") != std::string::npos) {
 			database_row mock_row;
@@ -225,19 +236,19 @@ namespace database
 	{
 #ifdef USE_MYSQL
 		if (!connection_) {
-			std::cerr << "No active MySQL connection" << std::endl;
+			MYSQL_LOG_ERROR("execute_query", "No active MySQL connection");
 			return false;
 		}
 
 		if (mysql_query(static_cast<MYSQL*>(connection_), query_string.c_str()) != 0) {
-			std::cerr << "MySQL execute error: " << mysql_error(static_cast<MYSQL*>(connection_)) << std::endl;
+			MYSQL_LOG_ERROR("execute_query", std::string("Execute error: ") + mysql_error(static_cast<MYSQL*>(connection_)));
 			return false;
 		}
 
 		return true;
 #else
 		// Mock execution
-		std::cout << "MySQL support not compiled. Mock execute: " << query_string << std::endl;
+		MYSQL_LOG_INFO("MySQL support not compiled. Mock execute: " + query_string);
 		return true;
 #endif
 	}
@@ -266,7 +277,7 @@ namespace database
 			}
 			return mysql_store_result(mysql);
 		} catch (const std::exception& e) {
-			std::cerr << "Query result error: " << e.what() << std::endl;
+			MYSQL_LOG_ERROR("query_result", std::string("Query result error: ") + e.what());
 		}
 #endif
 		return nullptr;
@@ -279,15 +290,15 @@ namespace database
 		try {
 			MYSQL* mysql = static_cast<MYSQL*>(connection_);
 			if (mysql_query(mysql, query_string.c_str()) != 0) {
-				std::cerr << "MySQL modification query failed: " << mysql_error(mysql) << std::endl;
+				MYSQL_LOG_ERROR("execute_modification_query", std::string("Modification query failed: ") + mysql_error(mysql));
 				return 0;
 			}
 			return static_cast<unsigned int>(mysql_affected_rows(mysql));
 		} catch (const std::exception& e) {
-			std::cerr << "Modification query error: " << e.what() << std::endl;
+			MYSQL_LOG_ERROR("execute_modification_query", std::string("Modification query error: ") + e.what());
 		}
 #else
-		std::cerr << "MySQL support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		MYSQL_LOG_WARNING("MySQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
 #endif
 		return 0;
 	}

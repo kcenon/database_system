@@ -28,6 +28,23 @@
 
 ### 🔧 **Changed**
 
+#### **📝 PostgreSQL Backend Logging Integration (Issue #209)**
+- **Logging Macro Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `postgres_manager.cpp` with logging helper macros
+  - Consistent logging format: `[PostgreSQL:context] Level: message`
+  - `POSTGRES_LOG_ERROR()` for error conditions with function context
+  - `POSTGRES_LOG_WARNING()` for warning conditions (e.g., PostgreSQL not compiled)
+  - `POSTGRES_LOG_INFO()` for informational messages (e.g., mock execution)
+
+- **Architecture Alignment**: Follows the same pattern as `redis_manager` to avoid circular dependencies
+  - No direct dependency on `integrated_database` module
+  - Logging macros provide uniform interface across all backends
+  - For structured logging with `logger_adapter`, use `integrated_database` module
+
+**Changed Files:**
+- `database/postgres_manager.cpp` - Replaced 22 logging calls with logging macros
+
+---
+
 #### **📝 Redis Backend Logging Integration (Issue #208)**
 - **logger_adapter Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `redis_manager.cpp` with `logger_adapter`
   - Unified logging interface consistent with other database backends

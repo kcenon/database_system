@@ -9,7 +9,7 @@ on:
 jobs:
   coverage:
     name: Coverage Analysis
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout database_system
@@ -27,12 +27,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libgmock-dev lcov pkg-config
+        # Use GCC 13 for full C++20 std::format support
+        sudo apt-get install -y cmake ninja-build g++-13 libgtest-dev libgmock-dev lcov pkg-config
 
     - name: Build and install common_system
       run: |
         cd common_system
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+          -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13
         cmake --build build --config Release
         sudo cmake --install build --prefix /usr/local
 
@@ -40,6 +42,8 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER=gcc-13 \
+          -DCMAKE_CXX_COMPILER=g++-13 \
           -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
           -DCMAKE_C_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \

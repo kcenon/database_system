@@ -24,7 +24,26 @@
 
 ---
 
-## [Unreleased] - 2025-11-15
+## [Unreleased] - 2025-12-08
+
+### 🔧 **Changed**
+
+#### **📝 Redis Backend Logging Integration (Issue #208)**
+- **logger_adapter Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `redis_manager.cpp` with `logger_adapter`
+  - Unified logging interface consistent with other database backends
+  - Proper error logging with operation context using `log_error()`
+  - Warning-level logging for non-compiled Redis builds
+  - Removed dependency on `<iostream>` header
+
+- **Header Organization**: Used forward declarations to avoid header conflicts
+  - `std::unique_ptr` for `logger_adapter` and `db_logger_config` members
+  - Prevents circular dependencies with `database_manager.h`
+
+**Changed Files:**
+- `database/backends/redis/redis_manager.h` - Added logger_adapter member with forward declarations
+- `database/backends/redis/redis_manager.cpp` - Replaced 30+ logging calls with logger_adapter
+
+---
 
 ### 🚀 **Added**
 

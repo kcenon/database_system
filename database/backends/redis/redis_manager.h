@@ -36,16 +36,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <mutex>
 
-#ifdef BUILD_INTEGRATED_DATABASE
-// Forward declarations to avoid header conflicts
-namespace database::integrated {
-	struct db_logger_config;
-namespace adapters {
-	class logger_adapter;
-} // namespace adapters
-} // namespace database::integrated
-#endif
-
 namespace database
 {
 	/**
@@ -328,12 +318,5 @@ namespace database
 		std::string host_;      ///< Redis host
 		int port_;              ///< Redis port
 		int database_;          ///< Redis database number
-
-#ifdef BUILD_INTEGRATED_DATABASE
-		/// Logger configuration for Redis operations
-		std::unique_ptr<integrated::db_logger_config> logger_config_;
-		/// Logger adapter for consistent logging across database backends
-		std::unique_ptr<integrated::adapters::logger_adapter> logger_;
-#endif
 	};
 } // namespace database

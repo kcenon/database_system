@@ -619,16 +619,12 @@ endif()
 ##################################################
 
 if(BUILD_INTEGRATED_DATABASE)
-    # Add compile definition for conditional logger_adapter usage in redis_manager
-    target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_INTEGRATED_DATABASE)
-
+    # Build integrated_database as a separate module
+    # Note: integrated_database depends on database, NOT the reverse
+    # This avoids circular dependency issues with static linking
     add_subdirectory(integrated)
 
-    # Link integrated_database to database for logger_adapter support
-    target_link_libraries(${PROJECT_NAME} PUBLIC integrated_database)
-
     message(STATUS "Building integrated database system with adapter pattern")
-    message(STATUS "  Logger adapter enabled for Redis backend")
 endif()
 
 ##################################################

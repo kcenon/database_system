@@ -32,11 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "redis_manager.h"
 
-#ifdef BUILD_INTEGRATED_DATABASE
-#include "../../integrated/adapters/logger_adapter.h"
-#include "../../integrated/core/configuration.h"
-#endif
-
 #ifdef USE_REDIS
 #include <hiredis/hiredis.h>
 #endif
@@ -46,22 +41,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdexcept>
 #include <regex>
 
-// Logging helper macros for conditional compilation
-#ifdef BUILD_INTEGRATED_DATABASE
-#define REDIS_LOG_ERROR(context, message) \
-	if (logger_) logger_->log_error(context, message)
-#define REDIS_LOG_WARNING(message) \
-	if (logger_) logger_->log(integrated::db_log_level::warning, message)
-#define REDIS_LOG_INFO(message) \
-	if (logger_) logger_->log(integrated::db_log_level::info, message)
-#else
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on integrated_database
+// to avoid circular dependencies.
 #define REDIS_LOG_ERROR(context, message) \
 	std::cerr << "[Redis:" << context << "] Error: " << message << std::endl
 #define REDIS_LOG_WARNING(message) \
 	std::cerr << "[Redis] Warning: " << message << std::endl
 #define REDIS_LOG_INFO(message) \
 	std::cout << "[Redis] Info: " << message << std::endl
-#endif
 
 namespace database
 {
@@ -70,14 +59,7 @@ namespace database
 		, host_("localhost")
 		, port_(6379)
 		, database_(0)
-#ifdef BUILD_INTEGRATED_DATABASE
-		, logger_config_(std::make_unique<integrated::db_logger_config>())
-		, logger_(std::make_unique<integrated::adapters::logger_adapter>(*logger_config_))
-#endif
 	{
-#ifdef BUILD_INTEGRATED_DATABASE
-		logger_->initialize();
-#endif
 	}
 
 	redis_manager::~redis_manager(void)

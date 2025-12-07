@@ -31,19 +31,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
 #include "redis_manager.h"
+#include "../../integrated/adapters/logger_adapter.h"
+#include "../../integrated/core/configuration.h"
 
 #ifdef USE_REDIS
 #include <hiredis/hiredis.h>
 #endif
 
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <regex>
 
 namespace database
 {
-	redis_manager::redis_manager(void) : context_(nullptr), host_("localhost"), port_(6379), database_(0) {}
+	redis_manager::redis_manager(void)
+		: context_(nullptr)
+		, host_("localhost")
+		, port_(6379)
+		, database_(0)
+		, logger_config_(std::make_unique<integrated::db_logger_config>())
+		, logger_(std::make_unique<integrated::adapters::logger_adapter>(*logger_config_))
+	{
+		logger_->initialize();
+	}
 
 	redis_manager::~redis_manager(void)
 	{
@@ -63,7 +73,7 @@ namespace database
 			// Parse connection string
 			std::string password;
 			if (!parse_connection_string(connect_string, host_, port_, password, database_)) {
-				std::cerr << "Redis connection string parsing failed" << std::endl;
+				logger_->log_error("connect", "Redis connection string parsing failed");
 				return false;
 			}
 
@@ -71,10 +81,10 @@ namespace database
 			redisContext* ctx = redisConnect(host_.c_str(), port_);
 			if (ctx == nullptr || ctx->err) {
 				if (ctx) {
-					std::cerr << "Redis connection error: " << ctx->errstr << std::endl;
+					logger_->log_error("connect", std::string("Redis connection error: ") + ctx->errstr);
 					redisFree(ctx);
 				} else {
-					std::cerr << "Redis connection allocation error" << std::endl;
+					logger_->log_error("connect", "Redis connection allocation error");
 				}
 				return false;
 			}
@@ -85,7 +95,7 @@ namespace database
 			if (!password.empty()) {
 				redisReply* reply = static_cast<redisReply*>(redisCommand(ctx, "AUTH %s", password.c_str()));
 				if (reply == nullptr || reply->type == REDIS_REPLY_ERROR) {
-					std::cerr << "Redis authentication failed" << std::endl;
+					logger_->log_error("connect", "Redis authentication failed");
 					if (reply) freeReplyObject(reply);
 					redisFree(ctx);
 					context_ = nullptr;
@@ -98,7 +108,7 @@ namespace database
 			if (database_ > 0) {
 				redisReply* reply = static_cast<redisReply*>(redisCommand(ctx, "SELECT %d", database_));
 				if (reply == nullptr || reply->type == REDIS_REPLY_ERROR) {
-					std::cerr << "Redis database selection failed" << std::endl;
+					logger_->log_error("connect", "Redis database selection failed");
 					if (reply) freeReplyObject(reply);
 					redisFree(ctx);
 					context_ = nullptr;
@@ -110,7 +120,7 @@ namespace database
 			// Test connection with PING
 			redisReply* ping_reply = static_cast<redisReply*>(redisCommand(ctx, "PING"));
 			if (ping_reply == nullptr || ping_reply->type == REDIS_REPLY_ERROR) {
-				std::cerr << "Redis PING failed" << std::endl;
+				logger_->log_error("connect", "Redis PING failed");
 				if (ping_reply) freeReplyObject(ping_reply);
 				redisFree(ctx);
 				context_ = nullptr;
@@ -120,10 +130,11 @@ namespace database
 
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis connection error: " << e.what() << std::endl;
+			logger_->log_error("connect", std::string("Redis connection error: ") + e.what());
 		}
 #else
-		std::cerr << "Redis support not compiled. Connection: " << connect_string.substr(0, 20) << "..." << std::endl;
+		logger_->log(integrated::db_log_level::warning,
+			"Redis support not compiled. Connection: " + connect_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -139,7 +150,7 @@ namespace database
 
 			if (reply == nullptr || reply->type == REDIS_REPLY_ERROR) {
 				if (reply) {
-					std::cerr << "Redis command error: " << reply->str << std::endl;
+					logger_->log_error("create_query", std::string("Redis command error: ") + reply->str);
 					freeReplyObject(reply);
 				}
 				return false;
@@ -148,10 +159,11 @@ namespace database
 			freeReplyObject(reply);
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis create query error: " << e.what() << std::endl;
+			logger_->log_error("create_query", std::string("Redis create query error: ") + e.what());
 		}
 #else
-		std::cerr << "Redis support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		logger_->log(integrated::db_log_level::warning,
+			"Redis support not compiled. Query: " + query_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -180,10 +192,11 @@ namespace database
 			freeReplyObject(reply);
 			return success ? 1 : 0;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis insert error: " << e.what() << std::endl;
+			logger_->log_error("insert_query", std::string("Redis insert error: ") + e.what());
 		}
 #else
-		std::cerr << "Redis support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		logger_->log(integrated::db_log_level::warning,
+			"Redis support not compiled. Query: " + query_string.substr(0, 20) + "...");
 #endif
 		return 0;
 	}
@@ -216,10 +229,11 @@ namespace database
 			freeReplyObject(reply);
 			return deleted_count;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis delete error: " << e.what() << std::endl;
+			logger_->log_error("delete_query", std::string("Redis delete error: ") + e.what());
 		}
 #else
-		std::cerr << "Redis support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		logger_->log(integrated::db_log_level::warning,
+			"Redis support not compiled. Query: " + query_string.substr(0, 20) + "...");
 #endif
 		return 0;
 	}
@@ -254,10 +268,11 @@ namespace database
 
 			if (reply) freeReplyObject(reply);
 		} catch (const std::exception& e) {
-			std::cerr << "Redis select error: " << e.what() << std::endl;
+			logger_->log_error("select_query", std::string("Redis select error: ") + e.what());
 		}
 #else
-		std::cerr << "Redis support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		logger_->log(integrated::db_log_level::warning,
+			"Redis support not compiled. Query: " + query_string.substr(0, 20) + "...");
 		// Mock data for testing
 		if (!query_string.empty()) {
 			database_row mock_row;
@@ -273,7 +288,7 @@ namespace database
 	{
 #ifdef USE_REDIS
 		if (!context_) {
-			std::cerr << "No active Redis connection" << std::endl;
+			logger_->log_error("execute_query", "No active Redis connection");
 			return false;
 		}
 
@@ -283,24 +298,25 @@ namespace database
 			redisReply* reply = static_cast<redisReply*>(redisCommand(ctx, "%s", query_string.c_str()));
 
 			if (reply == nullptr) {
-				std::cerr << "Redis command failed: " << ctx->errstr << std::endl;
+				logger_->log_error("execute_query", std::string("Redis command failed: ") + ctx->errstr);
 				return false;
 			}
 
 			bool success = true;
 			if (reply->type == REDIS_REPLY_ERROR) {
-				std::cerr << "Redis execute error: " << reply->str << std::endl;
+				logger_->log_error("execute_query", std::string("Redis execute error: ") + reply->str);
 				success = false;
 			}
 
 			freeReplyObject(reply);
 			return success;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis execute error: " << e.what() << std::endl;
+			logger_->log_error("execute_query", std::string("Redis execute error: ") + e.what());
 		}
 #else
 		// Mock execution for non-Redis builds
-		std::cout << "Redis support not compiled. Mock execute: " << query_string << std::endl;
+		logger_->log(integrated::db_log_level::info,
+			"Redis support not compiled. Mock execute: " + query_string);
 		return true;
 #endif
 		return false;
@@ -365,7 +381,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return exists;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis exists error: " << e.what() << std::endl;
+			logger_->log_error("exists_key", std::string("Redis exists error: ") + e.what());
 		}
 #endif
 		return false;
@@ -388,7 +404,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return success;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis expire error: " << e.what() << std::endl;
+			logger_->log_error("expire_key", std::string("Redis expire error: ") + e.what());
 		}
 #endif
 		return false;
@@ -411,7 +427,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return length;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis LPUSH error: " << e.what() << std::endl;
+			logger_->log_error("list_push_left", std::string("Redis LPUSH error: ") + e.what());
 		}
 #endif
 		return 0;
@@ -434,7 +450,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return length;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis RPUSH error: " << e.what() << std::endl;
+			logger_->log_error("list_push_right", std::string("Redis RPUSH error: ") + e.what());
 		}
 #endif
 		return 0;
@@ -457,7 +473,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return value;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis LPOP error: " << e.what() << std::endl;
+			logger_->log_error("list_pop_left", std::string("Redis LPOP error: ") + e.what());
 		}
 #endif
 		return "";
@@ -480,7 +496,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return value;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis RPOP error: " << e.what() << std::endl;
+			logger_->log_error("list_pop_right", std::string("Redis RPOP error: ") + e.what());
 		}
 #endif
 		return "";
@@ -503,7 +519,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return success;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis HSET error: " << e.what() << std::endl;
+			logger_->log_error("hash_set", std::string("Redis HSET error: ") + e.what());
 		}
 #endif
 		return false;
@@ -526,7 +542,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return value;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis HGET error: " << e.what() << std::endl;
+			logger_->log_error("hash_get", std::string("Redis HGET error: ") + e.what());
 		}
 #endif
 		return "";
@@ -549,7 +565,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return added;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis SADD error: " << e.what() << std::endl;
+			logger_->log_error("set_add", std::string("Redis SADD error: ") + e.what());
 		}
 #endif
 		return false;
@@ -572,7 +588,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return removed;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis SREM error: " << e.what() << std::endl;
+			logger_->log_error("set_remove", std::string("Redis SREM error: ") + e.what());
 		}
 #endif
 		return false;
@@ -595,7 +611,7 @@ namespace database
 			if (reply) freeReplyObject(reply);
 			return is_member;
 		} catch (const std::exception& e) {
-			std::cerr << "Redis SISMEMBER error: " << e.what() << std::endl;
+			logger_->log_error("set_is_member", std::string("Redis SISMEMBER error: ") + e.what());
 		}
 #endif
 		return false;
@@ -666,7 +682,8 @@ namespace database
 			case REDIS_REPLY_STATUS:
 				return std::string(redis_reply->str);
 			case REDIS_REPLY_ERROR:
-				std::cerr << "Redis error: " << redis_reply->str << std::endl;
+				logger_->log_error("redis_reply_to_database_value",
+					std::string("Redis error: ") + redis_reply->str);
 				return nullptr;
 			default:
 				return std::string("UNKNOWN_TYPE");

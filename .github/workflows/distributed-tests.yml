@@ -13,7 +13,8 @@ on:
 jobs:
   distributed-tests:
     name: Multi-Node Distributed Tests
-    runs-on: ubuntu-latest
+    # Ubuntu 24.04 for full C++20 std::format support with GCC 13
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
 
     steps:
@@ -29,22 +30,14 @@ jobs:
           path: common_system
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and install common_system
-        run: |
-          cd common_system
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
-          cmake --build build --config Release
-          sudo cmake --install build --prefix /usr/local
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Install dependencies
         run: |
           sudo apt-get update
+          # Use GCC 13 for full C++20 std::format support
           sudo apt-get install -y \
             cmake \
             ninja-build \
+            g++-13 \
             libpq-dev \
             libmysqlclient-dev \
             libsqlite3-dev \
@@ -52,6 +45,18 @@ jobs:
             libgtest-dev \
             libgmock-dev \
             nlohmann-json3-dev
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          # Use GCC 13 for full C++20 std::format support
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+            -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Start test cluster
         run: |
@@ -69,6 +74,8 @@ jobs:
           cmake -B build \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc-13 \
+            -DCMAKE_CXX_COMPILER=g++-13 \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_TESTING=ON \
             -DBUILD_SHARED_LIBS=OFF \
@@ -116,7 +123,8 @@ jobs:
 
   chaos-engineering:
     name: Chaos Engineering Tests
-    runs-on: ubuntu-latest
+    # Ubuntu 24.04 for full C++20 std::format support with GCC 13
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     # Only run on schedule or manual trigger
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -134,27 +142,31 @@ jobs:
           path: common_system
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and install common_system
-        run: |
-          cd common_system
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
-          cmake --build build --config Release
-          sudo cmake --install build --prefix /usr/local
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Install dependencies
         run: |
           sudo apt-get update
+          # Use GCC 13 for full C++20 std::format support
           sudo apt-get install -y \
             cmake \
             ninja-build \
+            g++-13 \
             libpq-dev \
             libmysqlclient-dev \
             libsqlite3-dev \
             libcurl4-openssl-dev \
             libgtest-dev
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          # Use GCC 13 for full C++20 std::format support
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+            -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Start test cluster with Toxiproxy
         run: |
@@ -166,6 +178,8 @@ jobs:
           cmake -B build \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc-13 \
+            -DCMAKE_CXX_COMPILER=g++-13 \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_CHAOS_TESTS=ON \
             -DENABLE_TESTING=ON \
@@ -202,7 +216,8 @@ jobs:
 
   performance-benchmarks:
     name: Distributed Performance Benchmarks
-    runs-on: ubuntu-latest
+    # Ubuntu 24.04 for full C++20 std::format support with GCC 13
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     # Only run on schedule
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -220,27 +235,31 @@ jobs:
           path: common_system
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and install common_system
-        run: |
-          cd common_system
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
-          cmake --build build --config Release
-          sudo cmake --install build --prefix /usr/local
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Install dependencies
         run: |
           sudo apt-get update
+          # Use GCC 13 for full C++20 std::format support
           sudo apt-get install -y \
             cmake \
             ninja-build \
+            g++-13 \
             libpq-dev \
             libmysqlclient-dev \
             libsqlite3-dev \
             libcurl4-openssl-dev \
             libgtest-dev
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          # Use GCC 13 for full C++20 std::format support
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+            -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Start test cluster
         run: |
@@ -252,6 +271,8 @@ jobs:
           cmake -B build \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc-13 \
+            -DCMAKE_CXX_COMPILER=g++-13 \
             -DENABLE_DISTRIBUTED_TESTS=ON \
             -DENABLE_BENCHMARKS=ON \
             -DENABLE_TESTING=ON \

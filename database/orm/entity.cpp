@@ -35,6 +35,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <algorithm>
 #include <iostream>
 
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on integrated_database
+// to avoid circular dependencies.
+#define ORM_LOG_ERROR(context, message) \
+	std::cerr << "[ORM:" << context << "] Error: " << message << std::endl
+#define ORM_LOG_WARNING(message) \
+	std::cerr << "[ORM] Warning: " << message << std::endl
+#define ORM_LOG_INFO(message) \
+	std::cout << "[ORM] Info: " << message << std::endl
+
 namespace database::orm
 {
 	// field_metadata implementation
@@ -183,7 +194,7 @@ namespace database::orm
 	bool entity_manager::create_tables(std::shared_ptr<database_base> db)
 	{
 		if (!db) {
-			std::cerr << "Database connection is null" << std::endl;
+			ORM_LOG_ERROR("create_tables", "Database connection is null");
 			return false;
 		}
 
@@ -192,20 +203,20 @@ namespace database::orm
 				// Create table
 				std::string create_sql = metadata->create_table_sql();
 				if (!db->execute_query(create_sql)) {
-					std::cerr << "Failed to create table: " << name << std::endl;
+					ORM_LOG_ERROR("create_tables", "Failed to create table: " + name);
 					return false;
 				}
 
 				// Create indexes
 				std::string index_sql = metadata->create_indexes_sql();
 				if (!index_sql.empty() && !db->execute_query(index_sql)) {
-					std::cerr << "Failed to create indexes for table: " << name << std::endl;
+					ORM_LOG_ERROR("create_tables", "Failed to create indexes for table: " + name);
 					return false;
 				}
 			}
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Exception during table creation: " << e.what() << std::endl;
+			ORM_LOG_ERROR("create_tables", std::string("Exception during table creation: ") + e.what());
 			return false;
 		}
 	}
@@ -213,7 +224,7 @@ namespace database::orm
 	bool entity_manager::drop_tables(std::shared_ptr<database_base> db)
 	{
 		if (!db) {
-			std::cerr << "Database connection is null" << std::endl;
+			ORM_LOG_ERROR("drop_tables", "Database connection is null");
 			return false;
 		}
 
@@ -221,13 +232,13 @@ namespace database::orm
 			for (const auto& [name, metadata] : metadata_cache_) {
 				std::string drop_sql = "DROP TABLE IF EXISTS " + metadata->table_name();
 				if (!db->execute_query(drop_sql)) {
-					std::cerr << "Failed to drop table: " << name << std::endl;
+					ORM_LOG_ERROR("drop_tables", "Failed to drop table: " + name);
 					return false;
 				}
 			}
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Exception during table dropping: " << e.what() << std::endl;
+			ORM_LOG_ERROR("drop_tables", std::string("Exception during table dropping: ") + e.what());
 			return false;
 		}
 	}
@@ -235,7 +246,7 @@ namespace database::orm
 	bool entity_manager::sync_schema(std::shared_ptr<database_base> db)
 	{
 		if (!db) {
-			std::cerr << "Database connection is null" << std::endl;
+			ORM_LOG_ERROR("sync_schema", "Database connection is null");
 			return false;
 		}
 
@@ -243,18 +254,18 @@ namespace database::orm
 			// For now, just recreate all tables
 			// In a real implementation, this would do schema diffing
 			if (!drop_tables(db)) {
-				std::cerr << "Failed to drop existing tables" << std::endl;
+				ORM_LOG_ERROR("sync_schema", "Failed to drop existing tables");
 				return false;
 			}
 
 			if (!create_tables(db)) {
-				std::cerr << "Failed to create new tables" << std::endl;
+				ORM_LOG_ERROR("sync_schema", "Failed to create new tables");
 				return false;
 			}
 
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Exception during schema sync: " << e.what() << std::endl;
+			ORM_LOG_ERROR("sync_schema", std::string("Exception during schema sync: ") + e.what());
 			return false;
 		}
 	}

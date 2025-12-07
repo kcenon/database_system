@@ -28,6 +28,23 @@
 
 ### 🔧 **변경됨**
 
+#### **📝 ORM Entity 로깅 통합 (Issue #211)**
+- **로깅 매크로 통합**: `orm/entity.cpp`의 모든 `std::cerr` 호출을 로깅 헬퍼 매크로로 교체
+  - 일관된 로그 형식: `[ORM:context] Error: message`
+  - 함수 컨텍스트가 포함된 `ORM_LOG_ERROR()` 오류 조건용
+  - `ORM_LOG_WARNING()` 경고 조건용
+  - `ORM_LOG_INFO()` 정보 메시지용
+
+- **아키텍처 정렬**: 순환 의존성을 피하기 위해 `mysql_manager`, `postgres_manager`, `redis_manager`와 동일한 패턴 적용
+  - `integrated_database` 모듈에 대한 직접 의존성 없음
+  - 로깅 매크로가 ORM 모듈에서 균일한 인터페이스 제공
+  - `logger_adapter`를 사용한 구조화된 로깅이 필요하면 `integrated_database` 모듈 사용
+
+**변경된 파일:**
+- `database/orm/entity.cpp` - 11개의 로깅 호출을 로깅 매크로로 교체
+
+---
+
 #### **📝 MySQL 백엔드 로깅 통합 (Issue #210)**
 - **로깅 매크로 통합**: `mysql_manager.cpp`의 모든 `std::cout`/`std::cerr` 호출을 로깅 헬퍼 매크로로 교체
   - 일관된 로그 형식: `[MySQL:context] Level: message`

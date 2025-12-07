@@ -28,6 +28,23 @@
 
 ### 🔧 **Changed**
 
+#### **📝 ORM Entity Logging Integration (Issue #211)**
+- **Logging Macro Integration**: Replaced all direct `std::cerr` calls in `orm/entity.cpp` with logging helper macros
+  - Consistent logging format: `[ORM:context] Error: message`
+  - `ORM_LOG_ERROR()` for error conditions with function context
+  - `ORM_LOG_WARNING()` for warning conditions
+  - `ORM_LOG_INFO()` for informational messages
+
+- **Architecture Alignment**: Follows the same pattern as `mysql_manager`, `postgres_manager`, and `redis_manager` to avoid circular dependencies
+  - No direct dependency on `integrated_database` module
+  - Logging macros provide uniform interface across ORM module
+  - For structured logging with `logger_adapter`, use `integrated_database` module
+
+**Changed Files:**
+- `database/orm/entity.cpp` - Replaced 11 logging calls with logging macros
+
+---
+
 #### **📝 MySQL Backend Logging Integration (Issue #210)**
 - **Logging Macro Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `mysql_manager.cpp` with logging helper macros
   - Consistent logging format: `[MySQL:context] Level: message`

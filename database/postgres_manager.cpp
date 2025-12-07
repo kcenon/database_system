@@ -42,6 +42,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <stdexcept>
 
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on integrated_database
+// to avoid circular dependencies.
+#define POSTGRES_LOG_ERROR(context, message) \
+	std::cerr << "[PostgreSQL:" << context << "] Error: " << message << std::endl
+#define POSTGRES_LOG_WARNING(message) \
+	std::cerr << "[PostgreSQL] Warning: " << message << std::endl
+#define POSTGRES_LOG_INFO(message) \
+	std::cout << "[PostgreSQL] Info: " << message << std::endl
+
 namespace database
 {
 	postgres_manager::postgres_manager(void) : connection_(nullptr) {}
@@ -66,7 +77,7 @@ namespace database
 				return true;
 			}
 		} catch (const std::exception& e) {
-			std::cerr << "PostgreSQL connection error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("connect", std::string("Connection error: ") + e.what());
 		}
 #elif defined(HAVE_LIBPQ)
 		try {
@@ -77,10 +88,10 @@ namespace database
 			PQfinish(static_cast<PGconn*>(connection_));
 			connection_ = nullptr;
 		} catch (const std::exception& e) {
-			std::cerr << "PostgreSQL connection error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("connect", std::string("Connection error: ") + e.what());
 		}
 #else
-		std::cerr << "PostgreSQL support not compiled. Connection: " << connect_string.substr(0, 20) << "..." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Connection: " + connect_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -96,7 +107,7 @@ namespace database
 			txn.commit();
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Query execution error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("create_query", std::string("Query execution error: ") + e.what());
 		}
 #elif defined(HAVE_LIBPQ)
 		if (!connection_) return false;
@@ -107,10 +118,10 @@ namespace database
 			PQclear(result);
 			return success;
 		} catch (const std::exception& e) {
-			std::cerr << "Query execution error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("create_query", std::string("Query execution error: ") + e.what());
 		}
 #else
-		std::cerr << "PostgreSQL support not compiled. Query: " << query_string.substr(0, 20) << "..." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Query: " + query_string.substr(0, 20) + "...");
 #endif
 		return false;
 	}
@@ -126,7 +137,7 @@ namespace database
 			txn.commit();
 			return static_cast<unsigned int>(result.affected_rows());
 		} catch (const std::exception& e) {
-			std::cerr << "Modification query error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("execute_modification_query", std::string("Modification query error: ") + e.what());
 		}
 #elif defined(HAVE_LIBPQ)
 		if (!connection_) return 0;
@@ -144,10 +155,10 @@ namespace database
 			PQclear(result);
 			return count;
 		} catch (const std::exception& e) {
-			std::cerr << "Modification query error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("execute_modification_query", std::string("Modification query error: ") + e.what());
 		}
 #else
-		std::cerr << "PostgreSQL support not compiled. Modification query: " << query_string.substr(0, 20) << "..." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
 #endif
 		return 0;
 	}
@@ -203,7 +214,7 @@ namespace database
 				result.push_back(std::move(db_row));
 			}
 		} catch (const std::exception& e) {
-			std::cerr << "Select query error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("select_query", std::string("Select query error: ") + e.what());
 		}
 #elif defined(HAVE_LIBPQ)
 		if (!connection_) return result;
@@ -243,10 +254,10 @@ namespace database
 			}
 			PQclear(pg_result);
 		} catch (const std::exception& e) {
-			std::cerr << "Select query error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("select_query", std::string("Select query error: ") + e.what());
 		}
 #else
-		std::cerr << "PostgreSQL support not compiled. Select query: " << query_string.substr(0, 20) << "..." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 		// Return empty result with mock data for testing
 		if (query_string.find("SELECT") != std::string::npos) {
 			database_row mock_row;
@@ -269,7 +280,7 @@ namespace database
 			connection_ = nullptr;
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Disconnect error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("disconnect", std::string("Disconnect error: ") + e.what());
 		}
 #elif defined(HAVE_LIBPQ)
 		try {
@@ -277,12 +288,12 @@ namespace database
 			connection_ = nullptr;
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "Disconnect error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("disconnect", std::string("Disconnect error: ") + e.what());
 		}
 #else
 		// Mock disconnect
 		connection_ = nullptr;
-		std::cerr << "PostgreSQL support not compiled. Mock disconnect." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Mock disconnect.");
 		return true;
 #endif
 		return false;
@@ -293,7 +304,7 @@ namespace database
 #ifdef USE_POSTGRESQL
 		try {
 			if (!connection_) {
-				std::cerr << "No active PostgreSQL connection" << std::endl;
+				POSTGRES_LOG_ERROR("execute_query", "No active PostgreSQL connection");
 				return false;
 			}
 
@@ -302,18 +313,18 @@ namespace database
 			txn.commit();
 			return true;
 		} catch (const std::exception& e) {
-			std::cerr << "PostgreSQL execute error: " << e.what() << std::endl;
+			POSTGRES_LOG_ERROR("execute_query", std::string("Execute error: ") + e.what());
 			return false;
 		}
 #elif defined(HAVE_LIBPQ)
 		if (!connection_) {
-			std::cerr << "No active PostgreSQL connection" << std::endl;
+			POSTGRES_LOG_ERROR("execute_query", "No active PostgreSQL connection");
 			return false;
 		}
 
 		PGresult* result = PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
-		if (result.is_err()) {
-			std::cerr << "PostgreSQL execute failed" << std::endl;
+		if (result == nullptr) {
+			POSTGRES_LOG_ERROR("execute_query", "PostgreSQL execute failed");
 			return false;
 		}
 
@@ -321,14 +332,14 @@ namespace database
 		bool success = (status == PGRES_COMMAND_OK) || (status == PGRES_TUPLES_OK);
 
 		if (!success) {
-			std::cerr << "PostgreSQL execute error: " << PQerrorMessage(static_cast<PGconn*>(connection_)) << std::endl;
+			POSTGRES_LOG_ERROR("execute_query", std::string("Execute error: ") + PQerrorMessage(static_cast<PGconn*>(connection_)));
 		}
 
 		PQclear(result);
 		return success;
 #else
 		// Mock execution
-		std::cout << "PostgreSQL support not compiled. Mock execute: " << query_string << std::endl;
+		POSTGRES_LOG_INFO("PostgreSQL support not compiled. Mock execute: " + query_string);
 		return true;
 #endif
 	}
@@ -342,8 +353,8 @@ namespace database
 		if (!connection_) return nullptr;
 		return PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
 #else
-		std::cerr << "PostgreSQL support not compiled. Query result: " << query_string.substr(0, 20) << "..." << std::endl;
+		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Query result: " + query_string.substr(0, 20) + "...");
 		return nullptr;
 #endif
 	}
-}; // namespace database
+} // namespace database

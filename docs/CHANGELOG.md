@@ -28,6 +28,23 @@
 
 ### 🔧 **Changed**
 
+#### **📝 MySQL Backend Logging Integration (Issue #210)**
+- **Logging Macro Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `mysql_manager.cpp` with logging helper macros
+  - Consistent logging format: `[MySQL:context] Level: message`
+  - `MYSQL_LOG_ERROR()` for error conditions with function context
+  - `MYSQL_LOG_WARNING()` for warning conditions (e.g., MySQL not compiled)
+  - `MYSQL_LOG_INFO()` for informational messages (e.g., mock execution)
+
+- **Architecture Alignment**: Follows the same pattern as `postgres_manager` to avoid circular dependencies
+  - No direct dependency on `integrated_database` module
+  - Logging macros provide uniform interface across all backends
+  - For structured logging with `logger_adapter`, use `integrated_database` module
+
+**Changed Files:**
+- `database/backends/mysql/mysql_manager.cpp` - Replaced 19 logging calls with logging macros
+
+---
+
 #### **📝 PostgreSQL Backend Logging Integration (Issue #209)**
 - **Logging Macro Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `postgres_manager.cpp` with logging helper macros
   - Consistent logging format: `[PostgreSQL:context] Level: message`

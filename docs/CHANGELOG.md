@@ -28,6 +28,30 @@
 
 ### 🔧 **Changed**
 
+#### **📝 Connection Pool Logging Integration (Issue #212)**
+- **Logger Adapter Integration**: Replaced all direct `std::cerr` calls in `connection_pool.cpp` with structured `logger_adapter`
+  - `log_error()` for error conditions with operation context
+  - `log_pool_event()` for pool state changes (initialized, resized)
+  - `log_connection_event()` for connection lifecycle events (created, pool_created)
+  - `log()` for debug information (maintenance thread start/stop)
+
+- **Architecture**:
+  - Added `set_logger()` method to `connection_pool` and `connection_pool_manager` for dependency injection
+  - Logger is optional - pools work without logging for backward compatibility
+  - Logger is automatically propagated from manager to individual pools
+  - Forward declaration used in header to avoid namespace conflicts
+
+- **Pool State Information**: Logs now include pool state details:
+  - Connection indices during initialization failures
+  - Min/max connection counts during pool creation
+  - Active and idle connection counts for pool events
+
+**Changed Files:**
+- `database/connection_pool.h` - Added logger_adapter forward declaration, set_logger() methods, and logger_ members
+- `database/connection_pool.cpp` - Replaced 7 std::cerr calls with logger_adapter methods
+
+---
+
 #### **📝 ORM Entity Logging Integration (Issue #211)**
 - **Logging Macro Integration**: Replaced all direct `std::cerr` calls in `orm/entity.cpp` with logging helper macros
   - Consistent logging format: `[ORM:context] Error: message`

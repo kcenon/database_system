@@ -28,6 +28,30 @@
 
 ### 🔧 **변경됨**
 
+#### **📝 커넥션 풀 로깅 통합 (Issue #212)**
+- **Logger Adapter 통합**: `connection_pool.cpp`의 모든 `std::cerr` 호출을 구조화된 `logger_adapter`로 교체
+  - 작업 컨텍스트가 포함된 `log_error()` 오류 조건용
+  - 풀 상태 변경용 `log_pool_event()` (initialized, resized)
+  - 커넥션 라이프사이클 이벤트용 `log_connection_event()` (created, pool_created)
+  - 디버그 정보용 `log()` (유지보수 스레드 시작/종료)
+
+- **아키텍처**:
+  - 의존성 주입을 위한 `set_logger()` 메서드를 `connection_pool`과 `connection_pool_manager`에 추가
+  - 로거는 선택 사항 - 하위 호환성을 위해 로깅 없이도 풀 작동
+  - 매니저에서 개별 풀로 로거 자동 전파
+  - 네임스페이스 충돌 방지를 위한 전방 선언 사용
+
+- **풀 상태 정보**: 로그에 풀 상태 세부 정보 포함:
+  - 초기화 실패 시 커넥션 인덱스
+  - 풀 생성 시 최소/최대 커넥션 수
+  - 풀 이벤트에 대한 활성 및 유휴 커넥션 수
+
+**변경된 파일:**
+- `database/connection_pool.h` - logger_adapter 전방 선언, set_logger() 메서드, logger_ 멤버 추가
+- `database/connection_pool.cpp` - 7개의 std::cerr 호출을 logger_adapter 메서드로 교체
+
+---
+
 #### **📝 ORM Entity 로깅 통합 (Issue #211)**
 - **로깅 매크로 통합**: `orm/entity.cpp`의 모든 `std::cerr` 호출을 로깅 헬퍼 매크로로 교체
   - 일관된 로그 형식: `[ORM:context] Error: message`

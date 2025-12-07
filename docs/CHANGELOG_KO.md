@@ -28,6 +28,23 @@
 
 ### 🔧 **변경됨**
 
+#### **📝 PostgreSQL 백엔드 로깅 통합 (Issue #209)**
+- **로깅 매크로 통합**: `postgres_manager.cpp`의 모든 `std::cout`/`std::cerr` 호출을 로깅 헬퍼 매크로로 교체
+  - 일관된 로그 형식: `[PostgreSQL:context] Level: message`
+  - 함수 컨텍스트가 포함된 `POSTGRES_LOG_ERROR()` 오류 조건용
+  - `POSTGRES_LOG_WARNING()` 경고 조건용 (예: PostgreSQL 미컴파일)
+  - `POSTGRES_LOG_INFO()` 정보 메시지용 (예: mock 실행)
+
+- **아키텍처 정렬**: 순환 의존성을 피하기 위해 `redis_manager`와 동일한 패턴 적용
+  - `integrated_database` 모듈에 대한 직접 의존성 없음
+  - 로깅 매크로가 모든 백엔드에서 균일한 인터페이스 제공
+  - `logger_adapter`를 사용한 구조화된 로깅이 필요하면 `integrated_database` 모듈 사용
+
+**변경된 파일:**
+- `database/postgres_manager.cpp` - 22개의 로깅 호출을 로깅 매크로로 교체
+
+---
+
 #### **📝 Redis 백엔드 로깅 통합 (Issue #208)**
 - **logger_adapter 통합**: `redis_manager.cpp`의 모든 `std::cout`/`std::cerr` 호출을 `logger_adapter`로 교체
   - 다른 데이터베이스 백엔드와 일관된 통합 로깅 인터페이스

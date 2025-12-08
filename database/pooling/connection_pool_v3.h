@@ -47,8 +47,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <kcenon/thread/core/cancellation_token.h>
 #include <kcenon/thread/core/error_handling.h>
 
-// Adaptive queue implementation (from thread_system src directory)
-#include "impl/typed_pool/adaptive_typed_job_queue.h"
+// Adaptive queue implementation (from thread_system)
+#include <kcenon/thread/impl/typed_pool/adaptive_typed_job_queue.h>
 
 namespace database::pooling {
 

@@ -32,336 +32,331 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
+#include "database/backends/sqlite/sqlite_manager.h"
+#include "database/connection_pool.h"
+#include "database/core/database_context.h"
+#include "database/database_manager.h"
+#include <chrono>
+#include <filesystem>
 #include <gtest/gtest.h>
 #include <memory>
 #include <string>
-#include <filesystem>
 #include <thread>
-#include <chrono>
-#include "database/database_manager.h"
-#include "database/core/database_context.h"
-#include "database/connection_pool.h"
-#include "database/backends/sqlite/sqlite_manager.h"
 
-namespace database::testing
-{
-	/**
-	 * @class DatabaseSystemFixture
-	 * @brief Base test fixture for database system integration tests.
-	 *
-	 * Provides common setup and teardown functionality for database tests,
-	 * including test database initialization and cleanup.
-	 */
-	class DatabaseSystemFixture : public ::testing::Test
-	{
-	protected:
-		void SetUp() override
-		{
+namespace database::testing {
+/**
+ * @class DatabaseSystemFixture
+ * @brief Base test fixture for database system integration tests.
+ *
+ * Provides common setup and teardown functionality for database tests,
+ * including test database initialization and cleanup.
+ */
+class DatabaseSystemFixture : public ::testing::Test {
+protected:
+  void SetUp() override {
 #ifndef USE_SQLITE
-			GTEST_SKIP() << "SQLite support not compiled. "
-			             << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
+    GTEST_SKIP()
+        << "SQLite support not compiled. "
+        << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
 #endif
 
-			// Create unique test database file
-			test_db_path_ = std::filesystem::temp_directory_path() /
-			                ("test_db_" + std::to_string(
-			                    std::chrono::steady_clock::now().time_since_epoch().count()) +
-			                 ".db");
+    // Create unique test database file
+    test_db_path_ =
+        std::filesystem::temp_directory_path() /
+        ("test_db_" +
+         std::to_string(
+             std::chrono::steady_clock::now().time_since_epoch().count()) +
+         ".db");
 
-			// Initialize database manager with dependency injection
-			context_ = std::make_shared<database_context>();
-			manager_ptr_ = std::make_shared<database_manager>(context_);
-			manager_ = manager_ptr_.get();
-			manager_->set_mode(database_types::sqlite);
+    // Initialize database manager with dependency injection
+    context_ = std::make_shared<database_context>();
+    manager_ptr_ = std::make_shared<database_manager>(context_);
+    manager_ = manager_ptr_.get();
+    manager_->set_mode(database_types::sqlite);
 
-			// Connect to test database - use absolute path without URI prefix
-			connected_ = manager_->connect(test_db_path_.string());
+    // Connect to test database - use absolute path without URI prefix
+    connected_ = manager_->connect(test_db_path_.string());
 
-			if (connected_) {
-				// Create test tables
-				CreateTestTables();
-			} else {
-				std::cerr << "Failed to connect to test database: " << test_db_path_ << std::endl;
-				GTEST_SKIP() << "Failed to connect to SQLite test database";
-			}
-		}
+    if (connected_) {
+      // Create test tables
+      CreateTestTables();
+    } else {
+      std::cerr << "Failed to connect to test database: " << test_db_path_
+                << std::endl;
+      GTEST_SKIP() << "Failed to connect to SQLite test database";
+    }
+  }
 
-		void TearDown() override
-		{
-			// Disconnect from database
-			if (connected_) {
-				manager_->disconnect();
-				connected_ = false;
-			}
+  void TearDown() override {
+    // Disconnect from database
+    if (connected_) {
+      manager_->disconnect();
+      connected_ = false;
+    }
 
-			// Shutdown all connection pools
-			context_->get_pool_manager()->shutdown_all();
+    // Shutdown all connection pools
+    context_->get_pool_manager()->shutdown_all();
 
-			// Give time for cleanup
-			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    // Yield to allow cleanup to complete
+    std::this_thread::yield();
 
-			// Clean up test database file
-			if (std::filesystem::exists(test_db_path_)) {
-				std::error_code ec;
-				std::filesystem::remove(test_db_path_, ec);
-				// Retry if file is still locked
-				if (std::filesystem::exists(test_db_path_)) {
-					std::this_thread::sleep_for(std::chrono::milliseconds(100));
-					std::filesystem::remove(test_db_path_, ec);
-				}
-			}
-		}
+    // Clean up test database file
+    if (std::filesystem::exists(test_db_path_)) {
+      std::error_code ec;
+      std::filesystem::remove(test_db_path_, ec);
+      // Retry if file is still locked
+      if (std::filesystem::exists(test_db_path_)) {
+        std::this_thread::yield();
+        std::filesystem::remove(test_db_path_, ec);
+      }
+    }
+  }
 
-		/**
-		 * @brief Creates standard test tables.
-		 */
-		virtual void CreateTestTables()
-		{
-			manager_->create_query(
-				"CREATE TABLE IF NOT EXISTS users ("
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				"name TEXT NOT NULL, "
-				"email TEXT UNIQUE NOT NULL, "
-				"age INTEGER, "
-				"created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
-				")"
-			);
+  /**
+   * @brief Creates standard test tables.
+   */
+  virtual void CreateTestTables() {
+    manager_->create_query("CREATE TABLE IF NOT EXISTS users ("
+                           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                           "name TEXT NOT NULL, "
+                           "email TEXT UNIQUE NOT NULL, "
+                           "age INTEGER, "
+                           "created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
+                           ")");
 
-			manager_->create_query(
-				"CREATE TABLE IF NOT EXISTS products ("
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				"name TEXT NOT NULL, "
-				"price REAL NOT NULL, "
-				"stock INTEGER DEFAULT 0"
-				")"
-			);
-		}
+    manager_->create_query("CREATE TABLE IF NOT EXISTS products ("
+                           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                           "name TEXT NOT NULL, "
+                           "price REAL NOT NULL, "
+                           "stock INTEGER DEFAULT 0"
+                           ")");
+  }
 
-		/**
-		 * @brief Gets a connection from the pool.
-		 * @return Shared pointer to connection wrapper
-		 */
-		std::shared_ptr<connection_wrapper> GetConnection()
-		{
-			auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
-			if (!pool) {
-				return nullptr;
-			}
-			auto conn_result = pool->acquire_connection();
-			if (conn_result.is_err()) {
-				return nullptr;
-			}
-			return conn_result.value();
-		}
+  /**
+   * @brief Gets a connection from the pool.
+   * @return Shared pointer to connection wrapper
+   */
+  std::shared_ptr<connection_wrapper> GetConnection() {
+    auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
+    if (!pool) {
+      return nullptr;
+    }
+    auto conn_result = pool->acquire_connection();
+    if (conn_result.is_err()) {
+      return nullptr;
+    }
+    return conn_result.value();
+  }
 
-		/**
-		 * @brief Executes a query and returns result.
-		 * @param query SQL query to execute
-		 * @return Query result
-		 */
-		database_result ExecuteQuery(const std::string& query)
-		{
-			return manager_->select_query(query);
-		}
+  /**
+   * @brief Executes a query and returns result.
+   * @param query SQL query to execute
+   * @return Query result
+   */
+  database_result ExecuteQuery(const std::string &query) {
+    return manager_->select_query(query);
+  }
 
-		/**
-		 * @brief Creates a test table with custom schema.
-		 * @param table_name Name of the table
-		 * @param schema Table schema SQL
-		 * @return true if successful
-		 */
-		bool CreateTestTable(const std::string& table_name, const std::string& schema)
-		{
-			std::string query = "CREATE TABLE IF NOT EXISTS " + table_name + " (" + schema + ")";
-			return manager_->create_query(query);
-		}
+  /**
+   * @brief Creates a test table with custom schema.
+   * @param table_name Name of the table
+   * @param schema Table schema SQL
+   * @return true if successful
+   */
+  bool CreateTestTable(const std::string &table_name,
+                       const std::string &schema) {
+    std::string query =
+        "CREATE TABLE IF NOT EXISTS " + table_name + " (" + schema + ")";
+    return manager_->create_query(query);
+  }
 
-		/**
-		 * @brief Drops a test table.
-		 * @param table_name Name of the table to drop
-		 * @return true if successful
-		 */
-		bool DropTestTable(const std::string& table_name)
-		{
-			std::string query = "DROP TABLE IF EXISTS " + table_name;
-			return manager_->create_query(query);
-		}
+  /**
+   * @brief Drops a test table.
+   * @param table_name Name of the table to drop
+   * @return true if successful
+   */
+  bool DropTestTable(const std::string &table_name) {
+    std::string query = "DROP TABLE IF EXISTS " + table_name;
+    return manager_->create_query(query);
+  }
 
-		/**
-		 * @brief Inserts test data into users table.
-		 * @param count Number of users to insert
-		 * @return Number of rows inserted
-		 */
-		size_t InsertTestUsers(size_t count)
-		{
-			size_t inserted = 0;
-			for (size_t i = 0; i < count; ++i) {
-				std::string query = "INSERT INTO users (name, email, age) VALUES ("
-				                   "'User" + std::to_string(i) + "', "
-				                   "'user" + std::to_string(i) + "@test.com', "
-				                   + std::to_string(20 + (i % 50)) + ")";
-				if (manager_->insert_query(query) > 0) {
-					++inserted;
-				}
-			}
-			return inserted;
-		}
+  /**
+   * @brief Inserts test data into users table.
+   * @param count Number of users to insert
+   * @return Number of rows inserted
+   */
+  size_t InsertTestUsers(size_t count) {
+    size_t inserted = 0;
+    for (size_t i = 0; i < count; ++i) {
+      std::string query = "INSERT INTO users (name, email, age) VALUES ("
+                          "'User" +
+                          std::to_string(i) +
+                          "', "
+                          "'user" +
+                          std::to_string(i) + "@test.com', " +
+                          std::to_string(20 + (i % 50)) + ")";
+      if (manager_->insert_query(query) > 0) {
+        ++inserted;
+      }
+    }
+    return inserted;
+  }
 
-		/**
-		 * @brief Verifies row count in a table.
-		 * @param table_name Table name
-		 * @param expected_count Expected row count
-		 * @return true if count matches
-		 */
-		bool VerifyRowCount(const std::string& table_name, size_t expected_count)
-		{
-			auto result = ExecuteQuery("SELECT COUNT(*) as cnt FROM " + table_name);
-			if (result.empty()) {
-				return false;
-			}
+  /**
+   * @brief Verifies row count in a table.
+   * @param table_name Table name
+   * @param expected_count Expected row count
+   * @return true if count matches
+   */
+  bool VerifyRowCount(const std::string &table_name, size_t expected_count) {
+    auto result = ExecuteQuery("SELECT COUNT(*) as cnt FROM " + table_name);
+    if (result.empty()) {
+      return false;
+    }
 
-			auto it = result[0].find("cnt");
-			if (it == result[0].end()) {
-				return false;
-			}
+    auto it = result[0].find("cnt");
+    if (it == result[0].end()) {
+      return false;
+    }
 
-			// Extract value from variant
-			try {
-				// Try int64_t first (most common for COUNT)
-				if (std::holds_alternative<int64_t>(it->second)) {
-					return static_cast<size_t>(std::get<int64_t>(it->second)) == expected_count;
-				}
-				// Try string (some databases return count as string)
-				if (std::holds_alternative<std::string>(it->second)) {
-					return std::stoul(std::get<std::string>(it->second)) == expected_count;
-				}
-				// Try double
-				if (std::holds_alternative<double>(it->second)) {
-					return static_cast<size_t>(std::get<double>(it->second)) == expected_count;
-				}
-			} catch (...) {
-				return false;
-			}
-			return false;
-		}
+    // Extract value from variant
+    try {
+      // Try int64_t first (most common for COUNT)
+      if (std::holds_alternative<int64_t>(it->second)) {
+        return static_cast<size_t>(std::get<int64_t>(it->second)) ==
+               expected_count;
+      }
+      // Try string (some databases return count as string)
+      if (std::holds_alternative<std::string>(it->second)) {
+        return std::stoul(std::get<std::string>(it->second)) == expected_count;
+      }
+      // Try double
+      if (std::holds_alternative<double>(it->second)) {
+        return static_cast<size_t>(std::get<double>(it->second)) ==
+               expected_count;
+      }
+    } catch (...) {
+      return false;
+    }
+    return false;
+  }
 
-		/**
-		 * @brief Clears all data from a table.
-		 * @param table_name Table name
-		 */
-		void ClearTable(const std::string& table_name)
-		{
-			manager_->delete_query("DELETE FROM " + table_name);
-		}
+  /**
+   * @brief Clears all data from a table.
+   * @param table_name Table name
+   */
+  void ClearTable(const std::string &table_name) {
+    manager_->delete_query("DELETE FROM " + table_name);
+  }
 
-	protected:
-		std::shared_ptr<database_context> context_;
-		std::shared_ptr<database_manager> manager_ptr_;
-		database_manager* manager_{nullptr};  // Raw pointer for backward compatibility
-		std::filesystem::path test_db_path_;
-		bool connected_{false};
-	};
+protected:
+  std::shared_ptr<database_context> context_;
+  std::shared_ptr<database_manager> manager_ptr_;
+  database_manager *manager_{nullptr}; // Raw pointer for backward compatibility
+  std::filesystem::path test_db_path_;
+  bool connected_{false};
+};
 
-	/**
-	 * @class ConnectionPoolFixture
-	 * @brief Test fixture with connection pool support.
-	 *
-	 * NOTE: This fixture does NOT call DatabaseSystemFixture::SetUp() to avoid
-	 * conflicts between database_manager singleton and connection pool.
-	 * Use connection pool directly instead of database_manager.
-	 */
-	class ConnectionPoolFixture : public ::testing::Test
-	{
-	protected:
-		void SetUp() override
-		{
+/**
+ * @class ConnectionPoolFixture
+ * @brief Test fixture with connection pool support.
+ *
+ * NOTE: This fixture does NOT call DatabaseSystemFixture::SetUp() to avoid
+ * conflicts between database_manager singleton and connection pool.
+ * Use connection pool directly instead of database_manager.
+ */
+class ConnectionPoolFixture : public ::testing::Test {
+protected:
+  void SetUp() override {
 #ifndef USE_SQLITE
-			GTEST_SKIP() << "SQLite support not compiled. "
-			             << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
+    GTEST_SKIP()
+        << "SQLite support not compiled. "
+        << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
 #endif
 
-			// Create unique test database file
-			test_db_path_ = std::filesystem::temp_directory_path() /
-			                ("test_db_pool_" + std::to_string(
-			                    std::chrono::steady_clock::now().time_since_epoch().count()) +
-			                 ".db");
+    // Create unique test database file
+    test_db_path_ =
+        std::filesystem::temp_directory_path() /
+        ("test_db_pool_" +
+         std::to_string(
+             std::chrono::steady_clock::now().time_since_epoch().count()) +
+         ".db");
 
-			// Initialize database context with dependency injection
-			context_ = std::make_shared<database_context>();
+    // Initialize database context with dependency injection
+    context_ = std::make_shared<database_context>();
 
-			// Create connection pool (NOT database_manager to avoid conflicts)
-			connection_pool_config config;
-			config.min_connections = 2;
-			config.max_connections = 10;
-			config.acquire_timeout = std::chrono::milliseconds(500);  // Shorter timeout for faster failures
-			config.idle_timeout = std::chrono::milliseconds(30000);
-			config.health_check_interval = std::chrono::milliseconds(60000);
-			config.enable_health_checks = true;
-			config.connection_string = test_db_path_.string();
+    // Create connection pool (NOT database_manager to avoid conflicts)
+    connection_pool_config config;
+    config.min_connections = 2;
+    config.max_connections = 10;
+    config.acquire_timeout =
+        std::chrono::milliseconds(500); // Shorter timeout for faster failures
+    config.idle_timeout = std::chrono::milliseconds(30000);
+    config.health_check_interval = std::chrono::milliseconds(60000);
+    config.enable_health_checks = true;
+    config.connection_string = test_db_path_.string();
 
-			pool_created_ = context_->get_pool_manager()->create_pool(
-				database_types::sqlite, config);
+    pool_created_ = context_->get_pool_manager()->create_pool(
+        database_types::sqlite, config);
 
-			if (!pool_created_) {
-				std::cerr << "Failed to create connection pool for: " << test_db_path_ << std::endl;
-				GTEST_SKIP() << "Failed to create SQLite connection pool";
-			} else {
-				// Create test tables using a connection from the pool
-				auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
-				if (pool) {
-					auto conn_result = pool->acquire_connection();
-					if (conn_result.is_ok() && conn_result.value()->get()) {
-						auto conn = conn_result.value();
-						conn->get()->create_query(
-							"CREATE TABLE IF NOT EXISTS users ("
-							"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-							"name TEXT NOT NULL, "
-							"email TEXT UNIQUE NOT NULL, "
-							"age INTEGER, "
-							"created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
-							")"
-						);
-						conn->get()->create_query(
-							"CREATE TABLE IF NOT EXISTS products ("
-							"id INTEGER PRIMARY KEY AUTOINCREMENT, "
-							"name TEXT NOT NULL, "
-							"price REAL NOT NULL, "
-							"stock INTEGER DEFAULT 0"
-							")"
-						);
-						pool->release_connection(conn);
-					}
-				}
-			}
-		}
+    if (!pool_created_) {
+      std::cerr << "Failed to create connection pool for: " << test_db_path_
+                << std::endl;
+      GTEST_SKIP() << "Failed to create SQLite connection pool";
+    } else {
+      // Create test tables using a connection from the pool
+      auto pool =
+          context_->get_pool_manager()->get_pool(database_types::sqlite);
+      if (pool) {
+        auto conn_result = pool->acquire_connection();
+        if (conn_result.is_ok() && conn_result.value()->get()) {
+          auto conn = conn_result.value();
+          conn->get()->create_query(
+              "CREATE TABLE IF NOT EXISTS users ("
+              "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "name TEXT NOT NULL, "
+              "email TEXT UNIQUE NOT NULL, "
+              "age INTEGER, "
+              "created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
+              ")");
+          conn->get()->create_query("CREATE TABLE IF NOT EXISTS products ("
+                                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                                    "name TEXT NOT NULL, "
+                                    "price REAL NOT NULL, "
+                                    "stock INTEGER DEFAULT 0"
+                                    ")");
+          pool->release_connection(conn);
+        }
+      }
+    }
+  }
 
-		void TearDown() override
-		{
-			// Shutdown connection pool
-			context_->get_pool_manager()->shutdown_all();
+  void TearDown() override {
+    // Shutdown connection pool
+    context_->get_pool_manager()->shutdown_all();
 
-			// Remove the pool to allow fresh creation in next test
-			context_->get_pool_manager()->remove_pool(database_types::sqlite);
+    // Remove the pool to allow fresh creation in next test
+    context_->get_pool_manager()->remove_pool(database_types::sqlite);
 
-			// Give time for cleanup
-			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    // Yield to allow cleanup to complete
+    std::this_thread::yield();
 
-			// Clean up test database file
-			if (std::filesystem::exists(test_db_path_)) {
-				std::error_code ec;
-				std::filesystem::remove(test_db_path_, ec);
-				// Retry if file is still locked
-				if (std::filesystem::exists(test_db_path_)) {
-					std::this_thread::sleep_for(std::chrono::milliseconds(100));
-					std::filesystem::remove(test_db_path_, ec);
-				}
-			}
-		}
+    // Clean up test database file
+    if (std::filesystem::exists(test_db_path_)) {
+      std::error_code ec;
+      std::filesystem::remove(test_db_path_, ec);
+      // Retry if file is still locked
+      if (std::filesystem::exists(test_db_path_)) {
+        std::this_thread::yield();
+        std::filesystem::remove(test_db_path_, ec);
+      }
+    }
+  }
 
-	protected:
-		std::shared_ptr<database_context> context_;
-		std::filesystem::path test_db_path_;
-		bool pool_created_{false};
-	};
+protected:
+  std::shared_ptr<database_context> context_;
+  std::filesystem::path test_db_path_;
+  bool pool_created_{false};
+};
 
 } // namespace database::testing

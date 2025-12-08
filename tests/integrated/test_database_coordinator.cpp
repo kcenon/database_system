@@ -214,7 +214,8 @@ TEST(statistics) {
 
   // Initialize
   coordinator.initialize();
-  std::this_thread::yield();
+  // Need actual time to pass for uptime measurement test
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
   // Get stats after initialization
   auto stats_after = coordinator.get_stats();

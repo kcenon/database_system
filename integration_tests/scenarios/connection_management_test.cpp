@@ -302,9 +302,10 @@ TEST_F(ConnectionManagementTest, IdleConnectionTimeoutDetection) {
   ASSERT_TRUE(conn_result.is_ok());
   auto conn = conn_result.value();
 
-  // Check with very short timeout
+  // Check with very short timeout - need actual time to pass for timeout
+  // detection
   auto short_timeout = std::chrono::milliseconds(1);
-  std::this_thread::yield();
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
   EXPECT_TRUE(conn->is_idle_timeout_exceeded(short_timeout))
       << "Should detect idle timeout";

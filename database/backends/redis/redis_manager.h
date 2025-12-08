@@ -33,9 +33,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../../database_base.h"
+#include <functional>
 #include <mutex>
 
 namespace database {
+
+/**
+ * @brief Log levels for Redis operations.
+ */
+enum class redis_log_level { debug, info, warning, error };
+
+/**
+ * @brief Callback type for custom logging.
+ *
+ * This allows integration with external logging systems (e.g., logger_adapter)
+ * without creating compile-time dependencies.
+ *
+ * @param level The log level
+ * @param context The operation context (e.g., "connect", "execute_query")
+ * @param message The log message
+ */
+using redis_logger_callback = std::function<void(
+    redis_log_level, const std::string &, const std::string &)>;
+
 /**
  * @class redis_manager
  * @brief Manages Redis database operations.
@@ -266,6 +286,18 @@ public:
    */
   bool set_is_member(const std::string &key, const std::string &member);
 
+  /**
+   * @brief Sets a custom logger callback for Redis operations.
+   *
+   * This allows integration with external logging systems (e.g.,
+   * logger_adapter) without creating compile-time dependencies. When set, all
+   * logging calls will be routed through this callback instead of
+   * std::cerr/std::cout.
+   *
+   * @param callback Logger function that receives (level, context, message)
+   */
+  void set_logger(redis_logger_callback callback);
+
 private:
   /**
    * @brief Parses Redis connection string.
@@ -311,10 +343,11 @@ private:
                          std::string &value);
 
 private:
-  void *context_;          ///< Pointer to Redis context
-  std::mutex redis_mutex_; ///< Mutex for thread safety
-  std::string host_;       ///< Redis host
-  int port_;               ///< Redis port
-  int database_;           ///< Redis database number
+  void *context_;                         ///< Pointer to Redis context
+  std::mutex redis_mutex_;                ///< Mutex for thread safety
+  std::string host_;                      ///< Redis host
+  int port_;                              ///< Redis port
+  int database_;                          ///< Redis database number
+  redis_logger_callback logger_callback_; ///< Optional custom logger callback
 };
 } // namespace database

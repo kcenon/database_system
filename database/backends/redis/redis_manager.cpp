@@ -41,50 +41,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <stdexcept>
 
-// Include logger_adapter for optional structured logging
-#include "../../integrated/adapters/logger_adapter.h"
-#include "../../integrated/core/configuration.h"
-
-// Logging helper macros - uses logger_adapter when available, falls back to
-// std::cerr/cout These macros require 'this' pointer to access logger_ member
+// Logging helper macros - using std::cerr/cout for consistent behavior
+// Note: For structured logging, use integrated_database module which provides
+// logger_adapter. The database module itself should not depend on
+// integrated_database to avoid circular dependencies.
 #define REDIS_LOG_ERROR(context, message)                                      \
-  do {                                                                         \
-    if (logger_) {                                                             \
-      logger_->log_error(context, message);                                    \
-    } else {                                                                   \
-      std::cerr << "[Redis:" << context << "] Error: " << message              \
-                << std::endl;                                                  \
-    }                                                                          \
-  } while (0)
+  std::cerr << "[Redis:" << context << "] Error: " << message << std::endl
 #define REDIS_LOG_WARNING(message)                                             \
-  do {                                                                         \
-    if (logger_) {                                                             \
-      logger_->log(integrated::db_log_level::warning,                          \
-                   std::string("[Redis] Warning: ") + (message));              \
-    } else {                                                                   \
-      std::cerr << "[Redis] Warning: " << message << std::endl;                \
-    }                                                                          \
-  } while (0)
+  std::cerr << "[Redis] Warning: " << message << std::endl
 #define REDIS_LOG_INFO(message)                                                \
-  do {                                                                         \
-    if (logger_) {                                                             \
-      logger_->log(integrated::db_log_level::info,                             \
-                   std::string("[Redis] Info: ") + (message));                 \
-    } else {                                                                   \
-      std::cout << "[Redis] Info: " << message << std::endl;                   \
-    }                                                                          \
-  } while (0)
+  std::cout << "[Redis] Info: " << message << std::endl
 
 namespace database {
 redis_manager::redis_manager(void)
     : context_(nullptr), host_("localhost"), port_(6379), database_(0) {}
 
 redis_manager::~redis_manager(void) { disconnect(); }
-
-void redis_manager::set_logger(
-    std::shared_ptr<integrated::adapters::logger_adapter> logger) {
-  logger_ = std::move(logger);
-}
 
 database_types redis_manager::database_type(void) {
   return database_types::redis;

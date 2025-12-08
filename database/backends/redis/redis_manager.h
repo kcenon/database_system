@@ -33,13 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../../database_base.h"
-#include <memory>
 #include <mutex>
-
-// Forward declaration for optional logger integration
-namespace database::integrated::adapters {
-class logger_adapter;
-}
 
 namespace database {
 /**
@@ -61,16 +55,6 @@ public:
    * @brief Destructor.
    */
   virtual ~redis_manager(void);
-
-  /**
-   * @brief Set optional logger adapter for structured logging.
-   *
-   * When set, logging will use the logger_adapter instead of
-   * std::cout/std::cerr. If not set, falls back to console output.
-   *
-   * @param logger Shared pointer to logger_adapter instance
-   */
-  void set_logger(std::shared_ptr<integrated::adapters::logger_adapter> logger);
 
   /**
    * @brief Returns the specific type of the database.
@@ -332,7 +316,5 @@ private:
   std::string host_;       ///< Redis host
   int port_;               ///< Redis port
   int database_;           ///< Redis database number
-  std::shared_ptr<integrated::adapters::logger_adapter>
-      logger_; ///< Optional logger adapter
 };
 } // namespace database

@@ -78,6 +78,7 @@
 #pragma once
 
 #include "../core/configuration.h"
+#include "../../core/concepts.h"
 
 #include <chrono>
 #include <cstddef>
@@ -176,19 +177,30 @@ public:
 	 * @brief Execute a task (fire-and-forget)
 	 * @param task Task to execute
 	 * @return Ok on successful submission
+	 *
+	 * Uses VoidTask concept for type validation.
 	 */
+	template<concepts::VoidTask Task>
+	common::VoidResult execute(Task&& task);
+
+	// Legacy overload for backward compatibility
 	common::VoidResult execute(std::function<void()> task);
 
 	/**
 	 * @brief Submit a task and get a future
 	 *
-	 * @tparam F Function type
+	 * @tparam F Function type - constrained by SubmittableTask concept
 	 * @tparam Args Argument types
 	 * @param f Function to execute
 	 * @param args Arguments to pass to function
 	 * @return Future containing the result
+	 *
+	 * Uses SubmittableTask concept for compile-time validation:
+	 * - Ensures F is invocable with Args...
+	 * - Ensures F is move-constructible for async storage
 	 */
 	template <typename F, typename... Args>
+		requires concepts::SubmittableTask<F, Args...>
 	auto submit(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>;
 
 	// ═══════════════════════════════════════════════════════════════
@@ -244,6 +256,7 @@ private:
 // ═══════════════════════════════════════════════════════════════
 
 template <typename F, typename... Args>
+	requires concepts::SubmittableTask<F, Args...>
 auto thread_adapter::submit(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
 {
 	using return_type = std::invoke_result_t<F, Args...>;

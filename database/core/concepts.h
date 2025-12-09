@@ -81,9 +81,6 @@
 #include <string>
 #include <future>
 
-// Include common_system concepts
-#include <kcenon/common/concepts/concepts.h>
-
 // Forward declarations
 namespace database {
 class database_base;
@@ -96,18 +93,63 @@ struct database_row;
 namespace database::concepts {
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Re-export common_system concepts for convenience
+// Callable Concepts (adapted from common_system for database_system)
 // ═══════════════════════════════════════════════════════════════════════════
 
-using kcenon::common::concepts::Invocable;
-using kcenon::common::concepts::VoidCallable;
-using kcenon::common::concepts::ReturnsResult;
-using kcenon::common::concepts::Predicate;
-using kcenon::common::concepts::NoexceptCallable;
-using kcenon::common::concepts::DelayedCallable;
-using kcenon::common::concepts::AsyncCallable;
-using kcenon::common::concepts::JobLike;
-using kcenon::common::concepts::ExecutorLike;
+/**
+ * @concept Invocable
+ * @brief A callable type that can be invoked with given arguments.
+ */
+template<typename F, typename... Args>
+concept Invocable = std::invocable<F, Args...>;
+
+/**
+ * @concept VoidCallable
+ * @brief A callable type that returns void when invoked.
+ */
+template<typename F, typename... Args>
+concept VoidCallable = Invocable<F, Args...> &&
+    std::is_void_v<std::invoke_result_t<F, Args...>>;
+
+/**
+ * @concept ReturnsResult
+ * @brief A callable type that returns a value convertible to the specified type.
+ */
+template<typename F, typename R, typename... Args>
+concept ReturnsResult = Invocable<F, Args...> &&
+    std::convertible_to<std::invoke_result_t<F, Args...>, R>;
+
+/**
+ * @concept Predicate
+ * @brief A callable type that returns a boolean value.
+ */
+template<typename F, typename... Args>
+concept Predicate = Invocable<F, Args...> &&
+    std::convertible_to<std::invoke_result_t<F, Args...>, bool>;
+
+/**
+ * @concept NoexceptCallable
+ * @brief A callable type that is marked noexcept.
+ */
+template<typename F, typename... Args>
+concept NoexceptCallable = Invocable<F, Args...> &&
+    std::is_nothrow_invocable_v<F, Args...>;
+
+/**
+ * @concept DelayedCallable
+ * @brief A callable suitable for delayed execution.
+ */
+template<typename F>
+concept DelayedCallable = VoidCallable<F> &&
+    std::move_constructible<std::decay_t<F>>;
+
+/**
+ * @concept AsyncCallable
+ * @brief A callable suitable for async execution.
+ */
+template<typename F, typename R>
+concept AsyncCallable = Invocable<F> &&
+    std::same_as<std::invoke_result_t<F>, R>;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Database-Specific Callable Concepts

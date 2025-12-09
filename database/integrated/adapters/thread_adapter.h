@@ -177,13 +177,7 @@ public:
 	 * @brief Execute a task (fire-and-forget)
 	 * @param task Task to execute
 	 * @return Ok on successful submission
-	 *
-	 * Uses VoidTask concept for type validation.
 	 */
-	template<concepts::VoidTask Task>
-	common::VoidResult execute(Task&& task);
-
-	// Legacy overload for backward compatibility
 	common::VoidResult execute(std::function<void()> task);
 
 	/**

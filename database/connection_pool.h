@@ -192,22 +192,13 @@ namespace database
 	{
 	public:
 		/**
-		 * @brief Constructs a connection pool with concept-constrained factory.
-		 * @tparam Factory Connection factory type - constrained by ConnectionFactory concept
+		 * @brief Constructs a connection pool.
 		 * @param db_type Database type for this pool
 		 * @param config Pool configuration
 		 * @param factory Function to create new database connections
-		 */
-		template<concepts::ConnectionFactory Factory>
-		connection_pool(database_types db_type,
-						const connection_pool_config& config,
-						Factory&& factory);
-
-		/**
-		 * @brief Constructs a connection pool (legacy overload).
-		 * @param db_type Database type for this pool
-		 * @param config Pool configuration
-		 * @param factory Function to create new database connections
+		 *
+		 * Factory should be a callable returning std::unique_ptr<database_base>.
+		 * ConnectionFactory concept is used for compile-time validation of the factory type.
 		 */
 		connection_pool(database_types db_type,
 						const connection_pool_config& config,

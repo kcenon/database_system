@@ -24,7 +24,42 @@
 
 ---
 
-## [Unreleased] - 2025-12-08
+## [Unreleased] - 2025-12-09
+
+### ✨ **Added**
+
+#### **🔧 C++20 Concepts Integration (Issue #230)**
+- **New concepts.h Header**: Added `database/core/concepts.h` with C++20 concept definitions for compile-time type validation
+  - Callable concepts: `Invocable`, `VoidCallable`, `ReturnsResult`, `Predicate`, `NoexceptCallable`
+  - Database concepts: `QueryCallback`, `ErrorHandler`, `ConnectionFactory`, `BackendFactory`
+  - Stream concepts: `StreamEventHandler`, `StreamEventFilter`
+  - Transaction concepts: `TransactionAction`, `CompensationAction`
+  - Task concepts: `SubmittableTask`, `VoidTask`
+
+- **Concept Constraints Applied**:
+  - `async_executor::submit()` - `SubmittableTask` concept constraint
+  - `async_executor_v2::submit()` - `SubmittableTask` concept constraint
+  - `thread_adapter::submit()` - `SubmittableTask` concept constraint
+  - `async_result::then()` - `VoidCallable` concept (templated overload)
+  - `async_result::on_error()` - `ErrorHandler` concept (templated overload)
+  - `stream_processor::register_event_handler()` - `StreamEventHandler` concept
+  - `stream_processor::add_event_filter()` - `StreamEventFilter` concept
+  - `saga_builder::add_step()` - `TransactionAction`/`CompensationAction` concepts
+
+- **Benefits**:
+  - Clearer compile-time error messages for invalid callable types
+  - Self-documenting code with explicit type requirements
+  - Better IDE support with accurate auto-completion
+  - Legacy `std::function` overloads preserved for backward compatibility
+
+**Changed Files:**
+- `database/core/concepts.h` (new file)
+- `database/async/async_operations.h`
+- `database/async_v2/async_executor_v2.h`
+- `database/integrated/adapters/thread_adapter.h`
+- `database/connection_pool.h`
+
+---
 
 ### 🔧 **Changed**
 

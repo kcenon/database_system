@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "../database_types.h"
 #include "../database_base.h"
+#include "../core/concepts.h"
 #include <future>
 #include <memory>
 #ifdef HAS_COROUTINES
@@ -79,6 +80,14 @@ namespace database::async
 		std::future_status wait_for(std::chrono::milliseconds timeout) const;
 
 		// Callback support - thread-safe
+		// Uses C++20 concepts for type safety
+		template<concepts::VoidCallable<T> Callback>
+		void then(Callback&& callback);
+
+		template<concepts::ErrorHandler Handler>
+		void on_error(Handler&& error_handler);
+
+		// Legacy overloads for backward compatibility
 		void then(std::function<void(T)> callback);
 		void on_error(std::function<void(const std::exception&)> error_handler);
 
@@ -198,8 +207,9 @@ namespace database::async
 		async_executor(size_t thread_count = std::thread::hardware_concurrency());
 		~async_executor();
 
-		// Task submission
+		// Task submission with C++20 concepts
 		template<typename F, typename... Args>
+			requires concepts::SubmittableTask<F, Args...>
 		auto submit(F&& func, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>;
 
 		// Executor management
@@ -252,12 +262,23 @@ namespace database::async
 		bool stop_stream(const std::string& channel);
 		void stop_all_streams();
 
-		// Event handling - thread-safe
+		// Event handling - thread-safe with C++20 concepts
+		template<concepts::StreamEventHandler<stream_event> Handler>
+		void register_event_handler(const std::string& channel, Handler&& handler);
+
+		template<concepts::StreamEventHandler<stream_event> Handler>
+		void register_global_handler(Handler&& handler);
+
+		// Legacy overloads for backward compatibility
 		void register_event_handler(const std::string& channel,
 		                           std::function<void(const stream_event&)> handler);
 		void register_global_handler(std::function<void(const stream_event&)> handler);
 
-		// Filter support - thread-safe
+		// Filter support - thread-safe with C++20 concepts
+		template<concepts::StreamEventFilter<stream_event> Filter>
+		void add_event_filter(const std::string& channel, Filter&& filter);
+
+		// Legacy overload for backward compatibility
 		void add_event_filter(const std::string& channel,
 		                     std::function<bool(const stream_event&)> filter);
 
@@ -351,7 +372,11 @@ namespace database::async
 	public:
 		saga_builder(transaction_coordinator& coordinator);
 
-		// Saga step definition
+		// Saga step definition with C++20 concepts
+		template<concepts::TransactionAction Action, concepts::CompensationAction Compensation>
+		saga_builder& add_step(Action&& action, Compensation&& compensation);
+
+		// Legacy overload for backward compatibility
 		saga_builder& add_step(std::function<async_result<bool>()> action,
 		                      std::function<async_result<bool>()> compensation);
 
@@ -391,6 +416,7 @@ namespace database::async
 
 	// Template implementation for async_executor
 	template<typename F, typename... Args>
+		requires concepts::SubmittableTask<F, Args...>
 	auto async_executor::submit(F&& func, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
 	{
 		using return_type = std::invoke_result_t<F, Args...>;

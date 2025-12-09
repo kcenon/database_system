@@ -24,7 +24,42 @@
 
 ---
 
-## [Unreleased] - 2025-12-08
+## [Unreleased] - 2025-12-09
+
+### ✨ **추가됨**
+
+#### **🔧 C++20 Concepts 통합 (Issue #230)**
+- **새로운 concepts.h 헤더**: 컴파일 타임 타입 검증을 위한 C++20 concept 정의가 담긴 `database/core/concepts.h` 추가
+  - 호출 가능 concept: `Invocable`, `VoidCallable`, `ReturnsResult`, `Predicate`, `NoexceptCallable`
+  - 데이터베이스 concept: `QueryCallback`, `ErrorHandler`, `ConnectionFactory`, `BackendFactory`
+  - 스트림 concept: `StreamEventHandler`, `StreamEventFilter`
+  - 트랜잭션 concept: `TransactionAction`, `CompensationAction`
+  - 태스크 concept: `SubmittableTask`, `VoidTask`
+
+- **Concept 제약 조건 적용**:
+  - `async_executor::submit()` - `SubmittableTask` concept 제약
+  - `async_executor_v2::submit()` - `SubmittableTask` concept 제약
+  - `thread_adapter::submit()` - `SubmittableTask` concept 제약
+  - `async_result::then()` - `VoidCallable` concept (템플릿 오버로드)
+  - `async_result::on_error()` - `ErrorHandler` concept (템플릿 오버로드)
+  - `stream_processor::register_event_handler()` - `StreamEventHandler` concept
+  - `stream_processor::add_event_filter()` - `StreamEventFilter` concept
+  - `saga_builder::add_step()` - `TransactionAction`/`CompensationAction` concept
+
+- **장점**:
+  - 잘못된 호출 가능 타입에 대한 명확한 컴파일 타임 오류 메시지
+  - 명시적 타입 요구사항으로 자체 문서화된 코드
+  - 정확한 자동 완성 기능으로 향상된 IDE 지원
+  - 하위 호환성을 위한 기존 `std::function` 오버로드 유지
+
+**변경된 파일:**
+- `database/core/concepts.h` (신규 파일)
+- `database/async/async_operations.h`
+- `database/async_v2/async_executor_v2.h`
+- `database/integrated/adapters/thread_adapter.h`
+- `database/connection_pool.h`
+
+---
 
 ### 🔧 **변경됨**
 

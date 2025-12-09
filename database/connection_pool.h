@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "database_base.h"
 #include "database_types.h"
+#include "core/concepts.h"
 #include <memory>
 #include <queue>
 #include <mutex>
@@ -195,6 +196,9 @@ namespace database
 		 * @param db_type Database type for this pool
 		 * @param config Pool configuration
 		 * @param factory Function to create new database connections
+		 *
+		 * Factory should be a callable returning std::unique_ptr<database_base>.
+		 * ConnectionFactory concept is used for compile-time validation of the factory type.
 		 */
 		connection_pool(database_types db_type,
 						const connection_pool_config& config,

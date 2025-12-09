@@ -70,19 +70,21 @@
 ---
 
 #### **📝 MySQL Backend Logging Integration (Issue #210)**
-- **Logging Macro Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `mysql_manager.cpp` with logging helper macros
+- **Callback-Based Logger Integration**: Replaced all direct `std::cout`/`std::cerr` calls in `mysql_manager.cpp` with callback-based logging
+  - Added `mysql_log_level` enum (debug, info, warning, error)
+  - Added `mysql_logger_callback` type for runtime logging injection
+  - Added `set_logger()` method for integrating external logging systems
+  - Logging macros check for callback and fallback to std::cerr/cout
   - Consistent logging format: `[MySQL:context] Level: message`
-  - `MYSQL_LOG_ERROR()` for error conditions with function context
-  - `MYSQL_LOG_WARNING()` for warning conditions (e.g., MySQL not compiled)
-  - `MYSQL_LOG_INFO()` for informational messages (e.g., mock execution)
 
-- **Architecture Alignment**: Follows the same pattern as `postgres_manager` to avoid circular dependencies
+- **Architecture Alignment**: Follows the same callback pattern as `redis_manager`
   - No direct dependency on `integrated_database` module
-  - Logging macros provide uniform interface across all backends
-  - For structured logging with `logger_adapter`, use `integrated_database` module
+  - Runtime callback injection avoids circular dependencies
+  - For structured logging, inject `logger_adapter` via `set_logger()`
 
 **Changed Files:**
-- `database/backends/mysql/mysql_manager.cpp` - Replaced 19 logging calls with logging macros
+- `database/backends/mysql/mysql_manager.h` - Added log level enum, callback type, set_logger() method, logger_callback_ member
+- `database/backends/mysql/mysql_manager.cpp` - Replaced 19 logging calls with callback-based macros
 
 ---
 

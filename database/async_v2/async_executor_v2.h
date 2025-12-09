@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../adapters/thread_pool_adapter.h"
+#include "../core/concepts.h"
 #include <future>
 #include <functional>
 #include <memory>
@@ -195,11 +196,16 @@ public:
 
     /**
      * @brief Submits a task for asynchronous execution
-     * @tparam F Callable type (lambda, function, functor)
+     * @tparam F Callable type (lambda, function, functor) - constrained by SubmittableTask concept
      * @tparam Args Argument types
      * @param func The callable to execute
      * @param args Arguments to pass to the callable
      * @return std::future with the result of the callable
+     *
+     * ### C++20 Concepts
+     * Uses SubmittableTask concept for compile-time validation:
+     * - Ensures F is invocable with Args...
+     * - Ensures F is move-constructible for async storage
      *
      * ### Performance
      * - thread_system: 77ns average latency
@@ -215,6 +221,7 @@ public:
      * @endcode
      */
     template<typename F, typename... Args>
+        requires concepts::SubmittableTask<F, Args...>
     auto submit(F&& func, Args&&... args)
         -> std::future<std::invoke_result_t<F, Args...>>
     {

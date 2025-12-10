@@ -15,6 +15,7 @@
 - [보안 프레임워크](#보안-프레임워크)
 - [비동기 작업](#비동기-작업)
 - [데이터베이스 타입](#데이터베이스-타입)
+- [C++20 Concepts](#c20-concepts)
 - [에러 처리](#에러-처리)
 - [예제](#예제)
 
@@ -518,6 +519,198 @@ std::visit([](const auto& value) {
 }, str_val);
 ```
 
+## C++20 Concepts
+
+database_system은 컴파일 타임 타입 검증을 위한 C++20 concepts를 제공하여, 더 명확한 오류 메시지, 자체 문서화 코드, 더 나은 IDE 지원을 제공합니다.
+
+### 개요
+
+**헤더**: `#include <database/core/concepts.h>`
+**네임스페이스**: `database::concepts`
+
+### Concepts 사용의 이점
+
+- **더 명확한 오류 메시지**: 템플릿 오류가 수백 줄의 SFINAE 실패 대신 concept 위반으로 표시됨
+- **자체 문서화 코드**: Concepts가 타입 요구사항을 명시적으로 표현
+- **더 나은 IDE 지원**: 더 정확한 자동 완성 및 타입 힌트
+- **코드 단순화**: `std::enable_if` 보일러플레이트 제거
+
+### 호출 가능 Concepts
+
+| Concept | 설명 | 시그니처 |
+|---------|------|----------|
+| `Invocable<F, Args...>` | 주어진 인자로 호출 가능 | `F(Args...)` |
+| `VoidCallable<F, Args...>` | void를 반환하는 호출 가능 | `void F(Args...)` |
+| `ReturnsResult<F, R, Args...>` | R 타입을 반환하는 호출 가능 | `R F(Args...)` |
+| `Predicate<F, Args...>` | bool을 반환하는 호출 가능 | `bool F(Args...)` |
+| `NoexceptCallable<F, Args...>` | noexcept로 표시된 호출 가능 | `noexcept F(Args...)` |
+| `DelayedCallable<F>` | 지연 실행을 위한 호출 가능 | `void F()` + 이동 생성 가능 |
+| `AsyncCallable<F, R>` | 비동기 실행을 위한 호출 가능 | `R F()` |
+
+### 데이터베이스 전용 Concepts
+
+| Concept | 설명 | 시그니처 |
+|---------|------|----------|
+| `QueryCallback<F, ResultType>` | 쿼리 결과 처리 | `void F(ResultType)` |
+| `ErrorHandler<F>` | 데이터베이스 오류 처리 | `void F(const std::exception&)` |
+| `ConnectionFactory<F>` | 데이터베이스 연결 생성 | `std::unique_ptr<database_base> F()` |
+| `BackendFactory<F>` | 데이터베이스 백엔드 생성 | `std::unique_ptr<database_backend> F()` |
+
+### 스트림 Concepts
+
+| Concept | 설명 | 시그니처 |
+|---------|------|----------|
+| `StreamEventHandler<F, EventType>` | 스트림 이벤트 처리 | `void F(const EventType&)` |
+| `StreamEventFilter<F, EventType>` | 스트림 이벤트 필터링 | `bool F(const EventType&)` |
+
+### 트랜잭션 Concepts
+
+| Concept | 설명 | 용도 |
+|---------|------|------|
+| `TransactionAction<F>` | 트랜잭션 액션 | Saga 패턴 정방향 액션 |
+| `CompensationAction<F>` | 보상 (롤백) 액션 | Saga 패턴 롤백 액션 |
+
+### 태스크 실행 Concepts
+
+| Concept | 설명 | 용도 |
+|---------|------|------|
+| `SubmittableTask<F, Args...>` | 비동기 executor 제출용 호출 가능 | `async_executor.submit()` |
+| `VoidTask<F, Args...>` | Fire-and-forget 호출 가능 | 백그라운드 태스크 |
+
+### 풀 Concepts
+
+| Concept | 설명 | 요구사항 |
+|---------|------|----------|
+| `PooledResource<T>` | 풀에서 관리되는 리소스 | 클래스 타입, 기본 생성 가능 |
+| `ConnectionWrapper<T>` | 데이터베이스 연결 래퍼 | `get()`이 `database_base*` 반환, `is_valid()`가 bool 반환 |
+
+### 사용 예제
+
+#### 타입 안전 비동기 태스크 제출
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// 타입 안전 태스크 제출을 위한 concept 제약 함수
+template<SubmittableTask<int> F>
+auto submit_computation(async_executor& executor, F&& func) {
+    return executor.submit(std::forward<F>(func));
+}
+
+// 사용법
+auto future = submit_computation(executor, []() { return 42; });
+```
+
+#### 쿼리 콜백 등록
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// 타입 안전 쿼리 콜백 등록
+template<QueryCallback<database_result> F>
+void on_query_complete(F&& callback) {
+    query_callbacks_.push_back(std::forward<F>(callback));
+}
+
+// 사용법
+on_query_complete([](const database_result& result) {
+    std::cout << "쿼리가 " << result.size() << " 행을 반환했습니다" << std::endl;
+});
+```
+
+#### Concept 제약이 있는 에러 핸들러
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// 컴파일 타임 타입 검증이 있는 에러 핸들러 설정
+template<ErrorHandler F>
+void set_error_handler(F&& handler) {
+    error_handler_ = std::forward<F>(handler);
+}
+
+// 사용법
+set_error_handler([](const std::exception& e) {
+    std::cerr << "데이터베이스 오류: " << e.what() << std::endl;
+});
+```
+
+#### 스트림 이벤트 처리
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// concept 제약이 있는 이벤트 핸들러 등록
+template<StreamEventHandler<stream_event> F>
+void register_handler(const std::string& channel, F&& handler) {
+    handlers_[channel] = std::forward<F>(handler);
+}
+
+// concept 제약이 있는 이벤트 필터 등록
+template<StreamEventFilter<stream_event> F>
+void add_filter(const std::string& channel, F&& filter) {
+    filters_[channel] = std::forward<F>(filter);
+}
+
+// 사용법
+register_handler("user_updates", [](const stream_event& event) {
+    process_user_update(event);
+});
+
+add_filter("user_updates", [](const stream_event& event) {
+    return event.type == "INSERT" || event.type == "UPDATE";
+});
+```
+
+#### 트랜잭션 Concepts를 사용한 Saga 패턴
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// concept 제약이 있는 saga 단계 추가
+template<TransactionAction A, CompensationAction C>
+void add_saga_step(A&& action, C&& compensation) {
+    steps_.emplace_back(
+        std::forward<A>(action),
+        std::forward<C>(compensation)
+    );
+}
+
+// 사용법
+saga_builder builder;
+builder.add_step(
+    []() { /* 주문 생성 */ },
+    []() { /* 주문 취소 */ }
+);
+builder.add_step(
+    []() { /* 재고 예약 */ },
+    []() { /* 재고 해제 */ }
+);
+```
+
+### Concept 제약이 있는 API 메서드
+
+다음 메서드들은 이제 C++20 concept 제약을 가집니다:
+
+| 클래스 | 메서드 | Concept 제약 |
+|--------|--------|--------------|
+| `async_executor` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `async_executor_v2` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `thread_adapter` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `async_result<T>` | `then()` | `concepts::VoidCallable<T>` |
+| `async_result<T>` | `on_error()` | `concepts::ErrorHandler` |
+| `stream_processor` | `register_event_handler()` | `concepts::StreamEventHandler<stream_event>` |
+| `stream_processor` | `register_global_handler()` | `concepts::StreamEventHandler<stream_event>` |
+| `stream_processor` | `add_event_filter()` | `concepts::StreamEventFilter<stream_event>` |
+| `saga_builder` | `add_step()` | `concepts::TransactionAction`, `concepts::CompensationAction` |
+
+**참고:** 기존 `std::function` 오버로드는 하위 호환성을 위해 유지됩니다.
+
 ## 에러 처리
 
 ### 예외 안전성
@@ -779,4 +972,4 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 
 ---
 
-*Last Updated: 2025-10-20*
+*Last Updated: 2025-12-09*

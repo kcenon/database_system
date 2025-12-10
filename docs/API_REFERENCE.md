@@ -15,6 +15,7 @@ Complete API reference for the Database System C++20 library with multi-backend 
 - [Security Framework](#security-framework)
 - [Async Operations](#async-operations)
 - [Database Types](#database-types)
+- [C++20 Concepts](#c20-concepts)
 - [Error Handling](#error-handling)
 - [Examples](#examples)
 
@@ -518,6 +519,198 @@ std::visit([](const auto& value) {
 }, str_val);
 ```
 
+## C++20 Concepts
+
+The database_system provides C++20 concepts for compile-time type validation, offering clearer error messages, self-documenting code, and better IDE support.
+
+### Overview
+
+**Header**: `#include <database/core/concepts.h>`
+**Namespace**: `database::concepts`
+
+### Benefits of Using Concepts
+
+- **Clearer error messages**: Template errors are displayed as concept violations instead of hundreds of lines of SFINAE failures
+- **Self-documenting code**: Concepts express type requirements explicitly
+- **Better IDE support**: More accurate auto-completion and type hints
+- **Code simplification**: Eliminates `std::enable_if` boilerplate
+
+### Callable Concepts
+
+| Concept | Description | Signature |
+|---------|-------------|-----------|
+| `Invocable<F, Args...>` | Callable with given arguments | `F(Args...)` |
+| `VoidCallable<F, Args...>` | Callable returning void | `void F(Args...)` |
+| `ReturnsResult<F, R, Args...>` | Callable returning type R | `R F(Args...)` |
+| `Predicate<F, Args...>` | Callable returning bool | `bool F(Args...)` |
+| `NoexceptCallable<F, Args...>` | Callable marked noexcept | `noexcept F(Args...)` |
+| `DelayedCallable<F>` | Callable for delayed execution | `void F()` + move constructible |
+| `AsyncCallable<F, R>` | Callable for async execution | `R F()` |
+
+### Database-Specific Concepts
+
+| Concept | Description | Signature |
+|---------|-------------|-----------|
+| `QueryCallback<F, ResultType>` | Handles query results | `void F(ResultType)` |
+| `ErrorHandler<F>` | Handles database errors | `void F(const std::exception&)` |
+| `ConnectionFactory<F>` | Creates database connections | `std::unique_ptr<database_base> F()` |
+| `BackendFactory<F>` | Creates database backends | `std::unique_ptr<database_backend> F()` |
+
+### Stream Concepts
+
+| Concept | Description | Signature |
+|---------|-------------|-----------|
+| `StreamEventHandler<F, EventType>` | Handles stream events | `void F(const EventType&)` |
+| `StreamEventFilter<F, EventType>` | Filters stream events | `bool F(const EventType&)` |
+
+### Transaction Concepts
+
+| Concept | Description | Usage |
+|---------|-------------|-------|
+| `TransactionAction<F>` | Transaction action | Saga pattern forward actions |
+| `CompensationAction<F>` | Compensation (rollback) action | Saga pattern rollback actions |
+
+### Task Execution Concepts
+
+| Concept | Description | Usage |
+|---------|-------------|-------|
+| `SubmittableTask<F, Args...>` | Callable for async executor submission | `async_executor.submit()` |
+| `VoidTask<F, Args...>` | Fire-and-forget callable | Background tasks |
+
+### Pool Concepts
+
+| Concept | Description | Requirements |
+|---------|-------------|--------------|
+| `PooledResource<T>` | Resource managed by a pool | Class type, default constructible |
+| `ConnectionWrapper<T>` | Wraps a database connection | `get()` returns `database_base*`, `is_valid()` returns bool |
+
+### Usage Examples
+
+#### Type-Safe Async Task Submission
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept-constrained function for type-safe task submission
+template<SubmittableTask<int> F>
+auto submit_computation(async_executor& executor, F&& func) {
+    return executor.submit(std::forward<F>(func));
+}
+
+// Usage
+auto future = submit_computation(executor, []() { return 42; });
+```
+
+#### Query Callback Registration
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Register a type-safe query callback
+template<QueryCallback<database_result> F>
+void on_query_complete(F&& callback) {
+    query_callbacks_.push_back(std::forward<F>(callback));
+}
+
+// Usage
+on_query_complete([](const database_result& result) {
+    std::cout << "Query returned " << result.size() << " rows" << std::endl;
+});
+```
+
+#### Error Handler with Concept Constraint
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Set an error handler with compile-time type validation
+template<ErrorHandler F>
+void set_error_handler(F&& handler) {
+    error_handler_ = std::forward<F>(handler);
+}
+
+// Usage
+set_error_handler([](const std::exception& e) {
+    std::cerr << "Database error: " << e.what() << std::endl;
+});
+```
+
+#### Stream Event Processing
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Register event handler with concept constraint
+template<StreamEventHandler<stream_event> F>
+void register_handler(const std::string& channel, F&& handler) {
+    handlers_[channel] = std::forward<F>(handler);
+}
+
+// Register event filter with concept constraint
+template<StreamEventFilter<stream_event> F>
+void add_filter(const std::string& channel, F&& filter) {
+    filters_[channel] = std::forward<F>(filter);
+}
+
+// Usage
+register_handler("user_updates", [](const stream_event& event) {
+    process_user_update(event);
+});
+
+add_filter("user_updates", [](const stream_event& event) {
+    return event.type == "INSERT" || event.type == "UPDATE";
+});
+```
+
+#### Saga Pattern with Transaction Concepts
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Add saga step with concept constraints
+template<TransactionAction A, CompensationAction C>
+void add_saga_step(A&& action, C&& compensation) {
+    steps_.emplace_back(
+        std::forward<A>(action),
+        std::forward<C>(compensation)
+    );
+}
+
+// Usage
+saga_builder builder;
+builder.add_step(
+    []() { /* Create order */ },
+    []() { /* Cancel order */ }
+);
+builder.add_step(
+    []() { /* Reserve inventory */ },
+    []() { /* Release inventory */ }
+);
+```
+
+### API Methods with Concept Constraints
+
+The following methods now have C++20 concept constraints:
+
+| Class | Method | Concept Constraint |
+|-------|--------|-------------------|
+| `async_executor` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `async_executor_v2` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `thread_adapter` | `submit()` | `requires concepts::SubmittableTask<F, Args...>` |
+| `async_result<T>` | `then()` | `concepts::VoidCallable<T>` |
+| `async_result<T>` | `on_error()` | `concepts::ErrorHandler` |
+| `stream_processor` | `register_event_handler()` | `concepts::StreamEventHandler<stream_event>` |
+| `stream_processor` | `register_global_handler()` | `concepts::StreamEventHandler<stream_event>` |
+| `stream_processor` | `add_event_filter()` | `concepts::StreamEventFilter<stream_event>` |
+| `saga_builder` | `add_step()` | `concepts::TransactionAction`, `concepts::CompensationAction` |
+
+**Note:** Legacy `std::function` overloads are maintained for backward compatibility.
+
 ## Error Handling
 
 ### Exception Safety
@@ -778,4 +971,4 @@ auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 For the latest API updates and changes, see the [CHANGELOG](../CHANGELOG.md).
 ---
 
-*Last Updated: 2025-10-20*
+*Last Updated: 2025-12-09*

@@ -2,8 +2,8 @@
 
 **언어:** [English](FEATURES.md) | **한국어**
 
-**최종 업데이트**: 2025-11-28
-**버전**: 3.0
+**최종 업데이트**: 2025-12-09
+**버전**: 3.1
 
 이 문서는 database_system의 모든 기능, 백엔드 구현 및 기능에 대한 포괄적인 세부 정보를 제공합니다.
 
@@ -552,6 +552,89 @@ if (result) {
 }
 ```
 
+### C++20 Concepts 통합
+
+비동기 작업은 이제 컴파일 타임 타입 검증을 위해 C++20 concepts를 활용합니다:
+
+**헤더**: `#include <database/core/concepts.h>`
+
+**사용 가능한 Concepts**:
+
+| Concept | 설명 | 사용 사례 |
+|---------|------|----------|
+| `SubmittableTask<F, Args...>` | 비동기 executor용 태스크 호출 가능 | `async_executor.submit()` |
+| `VoidCallable<F, Args...>` | void를 반환하는 콜백 | 완료 핸들러 |
+| `ErrorHandler<F>` | 예외 핸들러 호출 가능 | `on_error()` 콜백 |
+| `QueryCallback<F, ResultType>` | 쿼리 결과 핸들러 | `on_query_complete()` |
+| `StreamEventHandler<F, EventType>` | 스트림 이벤트 프로세서 | 실시간 데이터 핸들러 |
+| `StreamEventFilter<F, EventType>` | 이벤트 필터링 프레디케이트 | 이벤트 필터링 |
+| `TransactionAction<F>` | Saga 정방향 액션 | 분산 트랜잭션 |
+| `CompensationAction<F>` | Saga 롤백 액션 | 보상 로직 |
+
+**타입 안전 비동기 태스크 제출**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept 제약이 있는 태스크 제출
+template<SubmittableTask<database_result> F>
+auto submit_query_task(async_executor& executor, F&& func) {
+    return executor.submit(std::forward<F>(func));
+}
+
+// 사용법 - 컴파일러가 컴파일 타임에 호출 가능 시그니처를 검증
+auto future = submit_query_task(executor, [&db]() {
+    return db.select_query("SELECT * FROM users");
+});
+```
+
+**타입 안전 에러 처리**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept 제약이 있는 에러 핸들러 등록
+template<ErrorHandler F>
+void set_error_handler(F&& handler) {
+    error_handler_ = std::forward<F>(handler);
+}
+
+// 사용법 - 컴파일러가 예외 핸들러 시그니처를 검증
+set_error_handler([](const std::exception& e) {
+    log_error("데이터베이스 오류: " + std::string(e.what()));
+});
+```
+
+**Concepts를 사용한 Saga 패턴**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept 제약이 있는 saga 단계 추가
+template<TransactionAction A, CompensationAction C>
+void add_saga_step(A&& action, C&& compensation) {
+    steps_.emplace_back(
+        std::forward<A>(action),
+        std::forward<C>(compensation)
+    );
+}
+
+// 사용법
+saga_builder.add_step(
+    []() { /* 주문 생성 */ },
+    []() { /* 주문 취소 */ }
+);
+```
+
+**장점**:
+- **더 명확한 오류 메시지**: 템플릿 오류가 concept 위반으로 표시됨
+- **자체 문서화 코드**: 타입 요구사항이 명시적으로 표현됨
+- **더 나은 IDE 지원**: 개선된 자동 완성 및 타입 힌트
+- **하위 호환**: 기존 `std::function` 오버로드 유지
+
 ### 배치 작업
 
 ```cpp
@@ -593,8 +676,8 @@ std::cout << "삽입됨: " << batch_result.inserted_count << " 행" << std::endl
 
 ---
 
-**최종 업데이트**: 2025-11-28
-**버전**: 3.0
+**최종 업데이트**: 2025-12-09
+**버전**: 3.1
 
 ---
 

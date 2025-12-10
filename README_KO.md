@@ -14,7 +14,7 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 > **🏗️ 모듈식 아키텍처**: 다중 백엔드 지원, 엔터프라이즈 보안, 실시간 모니터링을 갖춘 포괄적인 database abstraction layer.
 
-> **✅ 최신 업데이트**: 강화된 ORM framework, connection pooling, 성능 모니터링, 엔터프라이즈 보안 기능, 비동기 작업. 모든 플랫폼에서 CI/CD pipeline 정상 작동.
+> **✅ 최신 업데이트 (2025-12)**: C++20 Concepts 통합 (`SubmittableTask`, `ErrorHandler`, `QueryCallback`, `StreamEventHandler` 등)으로 비동기 작업에 대한 컴파일 타임 타입 검증, 더 명확한 오류 메시지, 더 나은 IDE 지원 제공. 기존 `std::function` API와 하위 호환. 모든 플랫폼에서 CI/CD pipeline 정상 작동.
 
 ## 🔗 프로젝트 생태계 및 상호 의존성
 

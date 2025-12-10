@@ -1,6 +1,6 @@
 # Database System Features
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2025-12-09
 **Version**: 3.0
 
 This document provides comprehensive details on all database_system features, backend implementations, and capabilities.
@@ -1236,6 +1236,89 @@ database_awaitable<database_result> fetch_users_async() {
 auto users = co_await fetch_users_async();
 ```
 
+### C++20 Concepts Integration
+
+The async operations now leverage C++20 concepts for compile-time type validation:
+
+**Header**: `#include <database/core/concepts.h>`
+
+**Available Concepts**:
+
+| Concept | Description | Use Case |
+|---------|-------------|----------|
+| `SubmittableTask<F, Args...>` | Task callable for async executor | `async_executor.submit()` |
+| `VoidCallable<F, Args...>` | Callback returning void | Completion handlers |
+| `ErrorHandler<F>` | Exception handler callable | `on_error()` callbacks |
+| `QueryCallback<F, ResultType>` | Query result handler | `on_query_complete()` |
+| `StreamEventHandler<F, EventType>` | Stream event processor | Real-time data handlers |
+| `StreamEventFilter<F, EventType>` | Event filtering predicate | Event filtering |
+| `TransactionAction<F>` | Saga forward action | Distributed transactions |
+| `CompensationAction<F>` | Saga rollback action | Compensation logic |
+
+**Type-Safe Async Task Submission**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept-constrained task submission
+template<SubmittableTask<database_result> F>
+auto submit_query_task(async_executor& executor, F&& func) {
+    return executor.submit(std::forward<F>(func));
+}
+
+// Usage - compiler validates callable signature at compile time
+auto future = submit_query_task(executor, [&db]() {
+    return db.select_query("SELECT * FROM users");
+});
+```
+
+**Type-Safe Error Handling**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Concept-constrained error handler registration
+template<ErrorHandler F>
+void set_error_handler(F&& handler) {
+    error_handler_ = std::forward<F>(handler);
+}
+
+// Usage - compiler validates exception handler signature
+set_error_handler([](const std::exception& e) {
+    log_error("Database error: " + std::string(e.what()));
+});
+```
+
+**Saga Pattern with Concepts**:
+
+```cpp
+#include <database/core/concepts.h>
+using namespace database::concepts;
+
+// Add saga step with concept constraints
+template<TransactionAction A, CompensationAction C>
+void add_saga_step(A&& action, C&& compensation) {
+    steps_.emplace_back(
+        std::forward<A>(action),
+        std::forward<C>(compensation)
+    );
+}
+
+// Usage
+saga_builder.add_step(
+    []() { /* Create order */ },
+    []() { /* Cancel order */ }
+);
+```
+
+**Benefits**:
+- **Clearer error messages**: Template errors shown as concept violations
+- **Self-documenting code**: Type requirements expressed explicitly
+- **Better IDE support**: Improved auto-completion and type hints
+- **Backward compatible**: Legacy `std::function` overloads maintained
+
 ### C++17 Future-Based Async
 
 ```cpp
@@ -1284,5 +1367,5 @@ See [Project Structure](PROJECT_STRUCTURE.md) for build configuration.
 
 ---
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2025-12-09
 **Maintained by**: kcenon@naver.com

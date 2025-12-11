@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # Project definition
 project(database_system
-    VERSION 1.0.0
+    VERSION 0.1.0.0
     DESCRIPTION "Advanced Distributed C++20 Database System with Full Network Integration"
     LANGUAGES CXX
 )

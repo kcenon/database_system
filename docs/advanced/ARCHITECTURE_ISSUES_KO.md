@@ -2,7 +2,7 @@
 
 > **Language:** [English](ARCHITECTURE_ISSUES.md) | **한국어**
 
-**문서 버전**: 1.0
+**문서 버전**: 0.1.0
 **날짜**: 2025-10-05
 **시스템**: database_system
 **상태**: 이슈 추적 문서

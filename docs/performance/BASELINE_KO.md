@@ -3,7 +3,7 @@
 
 [English](BASELINE.md) | **한국어**
 
-**버전**: 1.0.0
+**버전**: 0.1.0.0
 **날짜**: 2025-10-09
 **단계**: Phase 0 - Foundation
 **상태**: Baseline Established

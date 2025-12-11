@@ -1,6 +1,6 @@
 # thread_system Migration Guide
 
-> **Version**: 1.0.0
+> **Version**: 0.1.0.0
 > **Date**: 2025-11-03
 > **Branch**: `feature/thread-system-integration`
 

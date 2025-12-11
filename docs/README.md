@@ -2,7 +2,7 @@
 
 > **Language:** **English** | [한국어](README_KO.md)
 
-**Version:** 1.0
+**Version:** 0.1.0
 **Last Updated:** 2025-11-11
 **Status:** Comprehensive
 
@@ -248,7 +248,7 @@ For contributors and maintainers:
 ## Project Information
 
 ### Current Status
-- **Version**: 1.0 (Phase 3 C++17 Migration Complete)
+- **Version**: 0.1.0 (Phase 3 C++17 Migration Complete)
 - **C++ Standard**: C++17 (C++20 for async/coroutines)
 - **License**: BSD 3-Clause
 - **Test Status**: 22/23 passing (95.7%)

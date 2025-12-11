@@ -1,6 +1,6 @@
 # Database System Architecture
 
-> **Version:** 1.0.0
+> **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English
 
@@ -891,5 +891,5 @@ This architecture supports diverse use cases from embedded applications to distr
 ---
 
 **Last Updated**: 2025-10-22
-**Version**: 1.0.0
+**Version**: 0.1.0.0
 **Maintainer**: kcenon@naver.com

@@ -1,6 +1,6 @@
 # Database System - Frequently Asked Questions
 
-**Version:** 1.0
+**Version:** 0.1.0
 **Last Updated:** 2025-11-11
 **Status:** Stable
 

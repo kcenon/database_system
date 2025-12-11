@@ -6,7 +6,7 @@
 
 This comprehensive guide describes how to integrate database_system with other modules in the ecosystem. Database System provides a unified abstraction layer for multiple database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) that seamlessly integrates with other system components.
 
-**Version:** 1.0.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-10-22
 **Architecture**: Multi-Backend Database Abstraction Layer
 
@@ -1087,4 +1087,4 @@ make
 
 **Last Updated**: 2025-10-22
 **Maintainer**: kcenon@naver.com
-**Version**: 1.0.0
+**Version**: 0.1.0.0

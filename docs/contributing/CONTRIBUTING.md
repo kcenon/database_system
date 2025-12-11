@@ -1,6 +1,6 @@
 # Contributing to Database System
 
-**Version:** 1.0.0
+**Version:** 0.1.0.0
 **Last Updated:** 2025-11-11
 
 Thank you for your interest in contributing to Database System! This guide will help you get started.

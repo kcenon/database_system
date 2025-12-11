@@ -1,6 +1,6 @@
 # Database System - Best Practices Guide
 
-> **Version:** 1.0
+> **Version:** 0.1.0
 > **Last Updated:** 2025-11-11
 
 A comprehensive guide covering production-ready patterns, performance optimization, security, and thread safety for the Database System.

@@ -1,6 +1,6 @@
 # Database System Project Structure
 
-> **Version:** 1.0.0
+> **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English
 
@@ -652,5 +652,5 @@ The Database System follows a clear, modular structure that promotes:
 ---
 
 **Last Updated**: 2025-10-22
-**Version**: 1.0.0
+**Version**: 0.1.0.0
 **Maintainer**: kcenon@naver.com

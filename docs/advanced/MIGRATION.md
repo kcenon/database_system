@@ -1,6 +1,6 @@
 # Database System Migration Guide
 
-> **Version:** 1.0.0
+> **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English
 
@@ -849,5 +849,5 @@ Database migrations are critical operations that require careful planning, testi
 ---
 
 **Last Updated**: 2025-10-22
-**Version**: 1.0.0
+**Version**: 0.1.0.0
 **Maintainer**: kcenon@naver.com

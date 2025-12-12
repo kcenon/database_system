@@ -3,7 +3,7 @@
 > **Version:** 0.1.0
 > **Last Updated:** 2025-11-11
 
-A comprehensive guide covering production-ready patterns, performance optimization, security, and thread safety for the Database System.
+A comprehensive guide covering recommended patterns, performance optimization, security, and thread safety for the Database System.
 
 ## Table of Contents
 

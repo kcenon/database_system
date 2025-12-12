@@ -392,7 +392,7 @@ option(ENABLE_REDIS "Enable Redis support" OFF)
 
 ---
 
-This architecture provides a solid foundation for enterprise database applications with modern C++ features, comprehensive security, and production-ready performance monitoring.
+This architecture provides a solid foundation for database applications with modern C++ features, comprehensive security, and performance monitoring.
 
 ---
 

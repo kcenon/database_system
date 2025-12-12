@@ -30,7 +30,7 @@ This directory contains comprehensive demonstration programs showcasing the capa
 **Key Learning Points**:
 - PostgreSQL-specific data types and operations
 - Advanced query patterns and optimization
-- Production-ready connection management
+- Robust connection management
 
 #### `connection_pool_demo.cpp`
 **Purpose**: Enterprise-grade connection pooling demonstration

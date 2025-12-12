@@ -815,7 +815,7 @@ git push origin --delete feature/your-feature-name
 
 ### Branch Strategy
 
-- `main` - Stable, production-ready code
+- `main` - Stable code
 - `develop` - Integration branch for next release (if used)
 - `feature/*` - New features
 - `fix/*` - Bug fixes

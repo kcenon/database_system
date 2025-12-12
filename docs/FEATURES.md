@@ -653,7 +653,7 @@ class User : public entity_base {
 
 ## Connection Pooling
 
-**Status**: ✅ Production-Ready (v3)
+**Status**: ✅ Well-Tested (v3)
 **Implementation**: `connection_pool.h/cpp`
 
 ### Connection Pool v3 Features
@@ -996,7 +996,7 @@ auto redis_zadd = db.create_query_builder(database_types::redis)
 
 ## Remote Database Access
 
-**Status**: ✅ Production-Ready
+**Status**: ✅ Well-Tested
 **Implementation**: `remote/database_proxy_server.h`, `remote/remote_database_client.h`
 
 ### Database Proxy Server
@@ -1100,7 +1100,7 @@ auto result = lb_client->execute_query("SELECT * FROM users");
 
 ## Resilient Connections
 
-**Status**: ✅ Production-Ready
+**Status**: ✅ Well-Tested
 **Implementation**: `resilient/resilient_connection.h`
 
 ### Automatic Reconnection

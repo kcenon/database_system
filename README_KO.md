@@ -87,7 +87,7 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 - **비동기 작업**: non-blocking database 작업을 위한 C++20 coroutine
 - **대량 작업**: 높은 처리량 시나리오를 위한 최적화된 배치 처리
 
-### 🛡️ **프로덕션급 안정성**
+### 🛡️ **고품질 안정성**
 - **다중 백엔드 지원**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
 - **자동 failover**: 자동 연결 복구를 통한 상태 모니터링
 - **트랜잭션 관리**: 분산 트랜잭션 지원을 통한 ACID 준수
@@ -166,7 +166,7 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 - **비동기 작업**: C++20 coroutine, 분산 트랜잭션, 실시간 스트리밍
 - **Thread 안전성**: 적절한 동기화를 통한 동시 database 작업
 - **Modern C++**: C++20 concept, coroutine, variant, RAII 패턴
-- **프로덕션 준비**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처
+- **개발 중**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처
 
 ### Result 타입 안내
 - 퍼블릭 API는 `database/core/result.h`에 정의된 `database::result<T>` / `database::result<void>` 래퍼를 사용합니다.
@@ -1208,7 +1208,7 @@ With 10K connections: ~850 MB
 Automatic cleanup: All connections RAII-managed
 ```
 
-### 오류 처리 (프로덕션 준비 - 85% 완료)
+### 오류 처리 (개발 중 - 85% 완료)
 
 **Database 호환성을 위한 Adapter Pattern**
 

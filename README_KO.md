@@ -16,6 +16,66 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 > **✅ 최신 업데이트 (2025-12)**: C++20 Concepts 통합 (`SubmittableTask`, `ErrorHandler`, `QueryCallback`, `StreamEventHandler` 등)으로 비동기 작업에 대한 컴파일 타임 타입 검증, 더 명확한 오류 메시지, 더 나은 IDE 지원 제공. 기존 `std::function` API와 하위 호환. 모든 플랫폼에서 CI/CD pipeline 정상 작동.
 
+---
+
+## 요구사항
+
+| 의존성 | 버전 | 필수 | 설명 |
+|--------|------|------|------|
+| C++20 컴파일러 | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | 예 | C++20 기능 필요 |
+| CMake | 3.20+ | 예 | 빌드 시스템 |
+| [common_system](https://github.com/kcenon/common_system) | latest | 예 | 공통 인터페이스 및 Result<T> |
+| [thread_system](https://github.com/kcenon/thread_system) | latest | 예 | 스레드 풀 및 비동기 작업 |
+| [logger_system](https://github.com/kcenon/logger_system) | latest | 예 | 로깅 인프라 |
+| [container_system](https://github.com/kcenon/container_system) | latest | 예 | 데이터 컨테이너 작업 |
+| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | 예 | 성능 모니터링 |
+
+### 데이터베이스 백엔드 (최소 하나 필요)
+
+| 백엔드 | 버전 | 선택적 패키지 |
+|--------|------|--------------|
+| PostgreSQL | 12+ | `libpq-dev` |
+| MySQL | 8.0+ | `libmysqlclient-dev` |
+| SQLite | 3.35+ | `libsqlite3-dev` |
+| MongoDB | 5.0+ | `libmongoc-dev` |
+| Redis | 6.0+ | `libhiredis-dev` |
+
+### 의존성 구조
+
+```
+database_system
+├── common_system (필수)
+├── thread_system (필수)
+│   └── common_system
+├── logger_system (필수)
+│   └── common_system
+├── container_system (필수)
+│   └── common_system
+└── monitoring_system (필수)
+    └── common_system, thread_system
+```
+
+### 의존성과 함께 빌드
+
+```bash
+# 모든 의존성 클론
+git clone https://github.com/kcenon/common_system.git
+git clone https://github.com/kcenon/thread_system.git
+git clone https://github.com/kcenon/logger_system.git
+git clone https://github.com/kcenon/container_system.git
+git clone https://github.com/kcenon/monitoring_system.git
+git clone https://github.com/kcenon/database_system.git
+
+# database_system 빌드
+cd database_system
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_POSTGRESQL=ON
+cmake --build build
+```
+
+📖 **[Quick Start Guide →](docs/guides/QUICK_START.md)** | **[빠른 시작 가이드 →](docs/guides/QUICK_START_KO.md)**
+
+---
+
 ## 🔗 프로젝트 생태계 및 상호 의존성
 
 이 database system은 포괄적인 데이터 관리 및 메시징 생태계의 핵심 구성 요소입니다:

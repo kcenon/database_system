@@ -33,6 +33,64 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 ---
 
+## Requirements
+
+| Dependency | Version | Required | Description |
+|------------|---------|----------|-------------|
+| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required |
+| CMake | 3.20+ | Yes | Build system |
+| [common_system](https://github.com/kcenon/common_system) | latest | Yes | Common interfaces and Result<T> |
+| [thread_system](https://github.com/kcenon/thread_system) | latest | Yes | Thread pool and async operations |
+| [logger_system](https://github.com/kcenon/logger_system) | latest | Yes | Logging infrastructure |
+| [container_system](https://github.com/kcenon/container_system) | latest | Yes | Data container operations |
+| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | Yes | Performance monitoring |
+
+### Database Backends (at least one required)
+
+| Backend | Version | Optional Package |
+|---------|---------|------------------|
+| PostgreSQL | 12+ | `libpq-dev` |
+| MySQL | 8.0+ | `libmysqlclient-dev` |
+| SQLite | 3.35+ | `libsqlite3-dev` |
+| MongoDB | 5.0+ | `libmongoc-dev` |
+| Redis | 6.0+ | `libhiredis-dev` |
+
+### Dependency Flow
+
+```
+database_system
+├── common_system (required)
+├── thread_system (required)
+│   └── common_system
+├── logger_system (required)
+│   └── common_system
+├── container_system (required)
+│   └── common_system
+└── monitoring_system (required)
+    └── common_system, thread_system
+```
+
+### Building with Dependencies
+
+```bash
+# Clone all dependencies
+git clone https://github.com/kcenon/common_system.git
+git clone https://github.com/kcenon/thread_system.git
+git clone https://github.com/kcenon/logger_system.git
+git clone https://github.com/kcenon/container_system.git
+git clone https://github.com/kcenon/monitoring_system.git
+git clone https://github.com/kcenon/database_system.git
+
+# Build database_system
+cd database_system
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_POSTGRESQL=ON
+cmake --build build
+```
+
+📖 **[Quick Start Guide →](docs/guides/QUICK_START.md)** | **[빠른 시작 가이드 →](docs/guides/QUICK_START_KO.md)**
+
+---
+
 ## Core Features
 
 ### Multi-Backend Support

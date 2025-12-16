@@ -62,7 +62,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #include <kcenon/thread/core/job.h>
     #include <kcenon/thread/interfaces/thread_context.h>
     #include <kcenon/thread/interfaces/monitoring_interface.h>
-    #include <kcenon/thread/interfaces/logger_interface.h>
+    // Note: Using common_system interfaces instead of deprecated thread_system interfaces
+    #include <kcenon/common/interfaces/logger_interface.h>
 
     namespace database::async {
         /**
@@ -102,19 +103,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         /**
          * @brief Type alias for logger interface
+         * @note Uses unified common_system interface instead of deprecated thread_system interface
          */
-        using logger_interface_type = kcenon::thread::logger_interface;
+        using logger_interface_type = kcenon::common::interfaces::ILogger;
 
         /**
          * @brief Type alias for Result<T> pattern
+         * @note Uses unified common::Result<T> instead of deprecated thread_system result
          */
         template<typename T>
-        using result_type = kcenon::thread::result_t<T>;
+        using result_type = kcenon::common::Result<T>;
 
         /**
          * @brief Type alias for result_void
+         * @note Uses unified common::VoidResult instead of deprecated thread_system result
          */
-        using result_void_type = kcenon::thread::result_void;
+        using result_void_type = kcenon::common::VoidResult;
 
         /**
          * @brief Compile-time flag indicating thread_system is in use

@@ -82,17 +82,17 @@ connection_pool_v2::connection_pool_v2(
         );
 
         auto add_result = scheduler_pool_->enqueue(std::move(worker));
-        if (add_result.has_error()) {
+        if (add_result.is_err()) {
             throw std::runtime_error("Failed to add scheduler worker: " +
-                                   add_result.get_error().message());
+                                   add_result.error().message);
         }
     }
 
     // Start scheduler pool after adding workers
     auto result = scheduler_pool_->start();
-    if (result.has_error()) {
+    if (result.is_err()) {
         throw std::runtime_error("Failed to start connection_pool_v2 scheduler: " +
-                               result.get_error().message());
+                               result.error().message);
     }
 #endif
 }
@@ -159,16 +159,16 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
 
     // Submit to scheduler
     auto enqueue_result = scheduler_pool_->enqueue(std::move(job));
-    if (enqueue_result.has_error()) {
+    if (enqueue_result.is_err()) {
         // Failed to enqueue - return immediate error
         if (metrics_) {
             metrics_->update_queued(-1);
             metrics_->record_acquisition_with_priority(priority, 0, false);
         }
 
-        promise->set_value(error_info{
+        promise->set_value(kcenon::common::error_info{
             -598,
-            "Failed to enqueue connection request: " + enqueue_result.get_error().message(),
+            "Failed to enqueue connection request: " + enqueue_result.error().message,
             "connection_pool_v2"
         });
     }
@@ -214,7 +214,7 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
             metrics_->record_acquisition(0, false);
         }
 
-        promise->set_value(error_info{
+        promise->set_value(kcenon::common::error_info{
             -597,
             std::string("Exception in acquire_connection: ") + e.what(),
             "connection_pool_v2"
@@ -247,10 +247,10 @@ void connection_pool_v2::schedule_health_check() {
 
     // Submit to scheduler (will be processed with HEALTH_CHECK priority)
     auto result = scheduler_pool_->enqueue(std::move(job));
-    if (result.has_error()) {
+    if (result.is_err()) {
         // Log error but don't throw - health checks are non-critical
         // In production, this would go to a logger
-        // std::cerr << "Failed to schedule health check: " << result.get_error().message() << "\n";
+        // std::cerr << "Failed to schedule health check: " << result.error().message << "\n";
     }
 #else
     // Fallback: Direct synchronous health check

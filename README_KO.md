@@ -229,9 +229,35 @@ cmake --build build
 - **개발 중**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처
 
 ### Result 타입 안내
-- 퍼블릭 API는 `database/core/result.h`에 정의된 `database::result<T>` / `database::result<void>` 래퍼를 사용합니다.
-- 이 래퍼는 내부적으로 `common::Result`를 기반으로 하되, 기존 코드 호환성을 위해 `.get_error()`도 유지합니다. 다른 시스템과 문서를 공유할 때는 `result.is_err()`와 `result.error()` 접근법을 함께 소개해 주세요.
-- 여러 시스템을 연결할 때는 `common::error_info` 변환 기능을 사용해 오류 코드와 모듈 이름을 그대로 전달하면 모듈 경계에서의 진단이 쉬워집니다.
+
+**마이그레이션 공지**: `database::result<T>` 래퍼는 `common::Result<T>`로 **deprecated** 되었습니다.
+
+- **새 코드**는 common_system의 `common::Result<T>` / `common::VoidResult`를 직접 사용해야 합니다
+- `database::result<T>`를 사용하는 **레거시 코드**는 계속 작동하지만 deprecation 경고가 발생합니다
+- 내부 모듈(pooling, async)은 `common::Result<T>` 및 `common::VoidResult`를 사용하도록 마이그레이션되었습니다
+
+**마이그레이션 가이드**:
+```cpp
+// 이전 API (deprecated)
+database::result<int> old_result = some_operation();
+if (old_result.has_value()) {
+    int value = old_result.value();
+}
+if (old_result.is_error()) {
+    auto error = old_result.get_error();
+}
+
+// 새 API (권장)
+common::Result<int> new_result = some_operation();
+if (new_result.is_ok()) {
+    int value = new_result.value();
+}
+if (new_result.is_err()) {
+    auto error = new_result.error();  // common::error_info 반환
+}
+```
+
+자세한 마이그레이션 정보는 `database/core/result.h`를 참조하세요.
 
 ### 🗄️ 지원 Database
 

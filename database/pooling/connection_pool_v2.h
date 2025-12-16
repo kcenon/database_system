@@ -118,7 +118,7 @@ public:
         , callback_(std::move(callback))
     {}
 
-    kcenon::thread::result_void do_work() override {
+    kcenon::common::VoidResult do_work() override {
         try {
             // Acquire connection from the underlying pool
             auto result = pool_ref_->acquire_connection();
@@ -128,16 +128,17 @@ public:
                 callback_(std::move(result));
             }
 
-            return kcenon::thread::result_void{};
+            return kcenon::common::ok();
         } catch (const std::exception& e) {
             // On exception, invoke callback with error
             if (callback_) {
-                callback_(error_info{-599, std::string("Exception in connection request: ") + e.what(), "connection_pool_v2"});
+                callback_(kcenon::common::error_info{-599, std::string("Exception in connection request: ") + e.what(), "connection_pool_v2"});
             }
 
-            return kcenon::thread::error{
-                kcenon::thread::error_code::job_execution_failed,
-                std::string("Exception in connection_request_job: ") + e.what()
+            return kcenon::common::error_info{
+                static_cast<int>(kcenon::thread::error_code::job_execution_failed),
+                std::string("Exception in connection_request_job: ") + e.what(),
+                "connection_pool_v2"
             };
         }
     }
@@ -159,14 +160,15 @@ public:
         , pool_ref_(std::move(pool_ref))
     {}
 
-    kcenon::thread::result_void do_work() override {
+    kcenon::common::VoidResult do_work() override {
         try {
             pool_ref_->health_check();
-            return kcenon::thread::result_void{};
+            return kcenon::common::ok();
         } catch (const std::exception& e) {
-            return kcenon::thread::error{
-                kcenon::thread::error_code::job_execution_failed,
-                std::string("Exception in health_check_job: ") + e.what()
+            return kcenon::common::error_info{
+                static_cast<int>(kcenon::thread::error_code::job_execution_failed),
+                std::string("Exception in health_check_job: ") + e.what(),
+                "connection_pool_v2"
             };
         }
     }

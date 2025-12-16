@@ -215,9 +215,35 @@ entity_manager::instance().create_tables(db);
 [🏗️ ORM Framework Guide →](docs/FEATURES.md#orm-framework)
 
 ### Result Types
-- Database-specific APIs expose `database::result<T>` / `database::result<void>` wrappers defined in `database/core/result.h`.
-- These wrappers delegate to `common::Result` while keeping `.get_error()` for backward compatibility; consult `database/database/core/result.h` when integrating with other modules to understand the available helpers.
-- When sharing samples outside the database_system repo, show both `result.is_err()` and `result.error()` usage so readers know how to convert to `common::error_info`.
+
+**Migration Notice**: The `database::result<T>` wrapper is **deprecated** in favor of `common::Result<T>`.
+
+- **New code** should use `common::Result<T>` / `common::VoidResult` directly from common_system
+- **Legacy code** using `database::result<T>` will continue to work but will emit deprecation warnings
+- Internal modules (pooling, async) have been migrated to use `common::Result<T>` and `common::VoidResult`
+
+**Migration Guide**:
+```cpp
+// Old API (deprecated)
+database::result<int> old_result = some_operation();
+if (old_result.has_value()) {
+    int value = old_result.value();
+}
+if (old_result.is_error()) {
+    auto error = old_result.get_error();
+}
+
+// New API (recommended)
+common::Result<int> new_result = some_operation();
+if (new_result.is_ok()) {
+    int value = new_result.value();
+}
+if (new_result.is_err()) {
+    auto error = new_result.error();  // Returns common::error_info
+}
+```
+
+For detailed migration information, see `database/core/result.h`.
 
 ---
 

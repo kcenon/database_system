@@ -62,21 +62,23 @@ public:
     explicit lambda_job(std::function<void()> func, const std::string& name = "lambda_job")
         : job(name), func_(std::move(func)) {}
 
-    kcenon::thread::result_void do_work() override {
+    kcenon::common::VoidResult do_work() override {
         try {
             if (func_) {
                 func_();
             }
-            return kcenon::thread::result_void{};  // Success
+            return kcenon::common::ok();  // Success
         } catch (const std::exception& e) {
-            return kcenon::thread::error{
-                kcenon::thread::error_code::job_execution_failed,
-                std::string("Exception in lambda_job: ") + e.what()
+            return kcenon::common::error_info{
+                static_cast<int>(kcenon::thread::error_code::job_execution_failed),
+                std::string("Exception in lambda_job: ") + e.what(),
+                "async_executor_v2"
             };
         } catch (...) {
-            return kcenon::thread::error{
-                kcenon::thread::error_code::job_execution_failed,
-                "Unknown exception in lambda_job"
+            return kcenon::common::error_info{
+                static_cast<int>(kcenon::thread::error_code::job_execution_failed),
+                "Unknown exception in lambda_job",
+                "async_executor_v2"
             };
         }
     }
@@ -153,17 +155,17 @@ public:
             worker->set_job_queue(job_queue);
 
             auto add_result = pool_->enqueue(std::move(worker));
-            if (add_result.has_error()) {
+            if (add_result.is_err()) {
                 throw std::runtime_error("Failed to add worker: " +
-                                       add_result.get_error().message());
+                                       add_result.error().message);
             }
         }
 
         // Start thread pool
         auto result = pool_->start();
-        if (result.has_error()) {
+        if (result.is_err()) {
             throw std::runtime_error("Failed to start async executor: " +
-                                   result.get_error().message());
+                                   result.error().message);
         }
     }
 #else
@@ -243,9 +245,9 @@ public:
 
         // Submit to thread pool
         auto result = pool_->enqueue(std::move(job));
-        if (result.has_error()) {
+        if (result.is_err()) {
             throw std::runtime_error("Failed to enqueue job: " +
-                                   result.get_error().message());
+                                   result.error().message);
         }
 
         return future;

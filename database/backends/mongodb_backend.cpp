@@ -30,6 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "mongodb_backend.h"
+#include "../core/result.h"
 
 #include <sstream>
 #include <variant>
@@ -59,7 +60,7 @@ database_types mongodb_backend::type() const
 	return database_types::mongodb;
 }
 
-database::result<void> mongodb_backend::initialize(const core::connection_config& config)
+kcenon::common::VoidResult mongodb_backend::initialize(const core::connection_config& config)
 {
 	if (initialized_) {
 		return kcenon::common::error_info{
@@ -86,7 +87,7 @@ database::result<void> mongodb_backend::initialize(const core::connection_config
 	return kcenon::common::ok();
 }
 
-database::result<void> mongodb_backend::shutdown()
+kcenon::common::VoidResult mongodb_backend::shutdown()
 {
 	if (!initialized_) {
 		return kcenon::common::ok(); // Already shutdown
@@ -116,7 +117,7 @@ bool mongodb_backend::is_initialized() const
 	return initialized_;
 }
 
-database::result<uint64_t> mongodb_backend::insert_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> mongodb_backend::insert_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -132,7 +133,7 @@ database::result<uint64_t> mongodb_backend::insert_query(const std::string& quer
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> mongodb_backend::update_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> mongodb_backend::update_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -148,7 +149,7 @@ database::result<uint64_t> mongodb_backend::update_query(const std::string& quer
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> mongodb_backend::delete_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -164,7 +165,7 @@ database::result<uint64_t> mongodb_backend::delete_query(const std::string& quer
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<database_result> mongodb_backend::select_query(const std::string& query_string)
+kcenon::common::Result<database_result> mongodb_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -180,7 +181,7 @@ database::result<database_result> mongodb_backend::select_query(const std::strin
 	return result;
 }
 
-database::result<void> mongodb_backend::execute_query(const std::string& query_string)
+kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -204,7 +205,7 @@ database::result<void> mongodb_backend::execute_query(const std::string& query_s
 	return kcenon::common::ok();
 }
 
-database::result<void> mongodb_backend::begin_transaction()
+kcenon::common::VoidResult mongodb_backend::begin_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -232,7 +233,7 @@ database::result<void> mongodb_backend::begin_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> mongodb_backend::commit_transaction()
+kcenon::common::VoidResult mongodb_backend::commit_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -257,7 +258,7 @@ database::result<void> mongodb_backend::commit_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> mongodb_backend::rollback_transaction()
+kcenon::common::VoidResult mongodb_backend::rollback_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";

@@ -24,7 +24,30 @@
 
 ---
 
-## [Unreleased] - 2025-12-09
+## [Unreleased] - 2025-12-17
+
+### 🔒 **Security**
+
+#### **OpenSSL 3.x Migration (Issue #238)**
+- **Migrated from OpenSSL 1.1.1 to OpenSSL 3.x**: OpenSSL 1.1.1 reached End-of-Life in September 2023
+  - Updated `vcpkg.json` to require OpenSSL >= 3.0.0 for PostgreSQL feature
+  - Modified `database/CMakeLists.txt` to prefer OpenSSL 3.x with fallback to 1.1.1
+  - Added deprecation warning when OpenSSL 1.1.1 is detected during CMake configuration
+  - Display OpenSSL version in CMake configuration output for transparency
+
+- **Benefits**:
+  - Continued security patches and vulnerability fixes
+  - Compliance with security frameworks requiring supported crypto libraries
+  - Modern TLS features and performance improvements
+
+- **Migration Notes**:
+  - Existing installations using OpenSSL 1.1.1 will continue to work with a deprecation warning
+  - Upgrade to OpenSSL 3.x recommended for production environments
+  - No API changes required - migration is transparent to application code
+
+---
+
+## [Previous] - 2025-12-09
 
 ### ✨ **Added**
 

@@ -218,21 +218,19 @@ Application → Authentication → Authorization → Audit → Encryption
 
 **Async Architecture:**
 ```
-std::future → C++20 Coroutines → Distributed Transactions → Stream Processing
+std::future → C++20 Coroutines → Stream Processing
 ```
 
 **Components:**
 - `async_executor`: Thread pool for async operations
 - `async_database`: Async wrapper for database operations
 - `database_awaitable`: C++20 coroutine support
-- `transaction_coordinator`: Distributed transaction management
 - `stream_processor`: Real-time data streaming
 
 **Concurrency Patterns:**
 - **Actor Model**: Message-passing for async operations
 - **Future/Promise**: Async result handling
 - **Coroutines**: Modern async programming
-- **Two-Phase Commit**: Distributed transaction consistency
 
 ## Design Principles
 
@@ -254,7 +252,7 @@ std::future → C++20 Coroutines → Distributed Transactions → Stream Process
 - **Layered Architecture**: Clear separation of concerns
 - **Plugin Architecture**: Extensible database backends
 - **Event-Driven Architecture**: Async operations and monitoring
-- **Microservices Ready**: Distributed transaction support
+- **Microservices Ready**: Lightweight DAL for service integration
 
 ## Thread Safety
 
@@ -280,8 +278,7 @@ std::future → C++20 Coroutines → Distributed Transactions → Stream Process
 
 ## Interop with Other Modules
 
-- With `network_system`: typical flow is (receive) → container decode → DB op → encode → send.
-- With `container_system`: use containers for typed serialization between app/network and DB layers when applicable.
+- With `container_system`: use containers for typed serialization between app and DB layers when applicable.
 - Security audit logging is thread-safe
 
 ## Error Handling
@@ -324,7 +321,7 @@ try {
 ## Scalability
 
 ### Horizontal Scaling
-- **Distributed transactions** across multiple databases
+- **Multi-backend support** with unified interface
 - **Connection pooling** per database instance
 - **Async operations** for non-blocking I/O
 

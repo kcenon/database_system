@@ -379,6 +379,25 @@ if(USE_CONTAINER_SYSTEM)
 
             if(_DATABASE_CONTAINER_TARGET)
                 target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_CONTAINER_TARGET})
+                message(STATUS "Database: Linked container_system via target: ${_DATABASE_CONTAINER_TARGET}")
+            else()
+                # Fallback: find and link library file directly when no target exists
+                find_system_dependency_library(container_system)
+                if(container_system_LIBRARY_DIR)
+                    find_library(_CONTAINER_LIB
+                        NAMES container_system
+                        PATHS "${container_system_LIBRARY_DIR}"
+                        NO_DEFAULT_PATH
+                    )
+                    if(_CONTAINER_LIB)
+                        target_link_libraries(${PROJECT_NAME} PUBLIC ${_CONTAINER_LIB})
+                        message(STATUS "Database: Linked container_system library directly: ${_CONTAINER_LIB}")
+                    else()
+                        message(WARNING "Database: container_system library file not found in ${container_system_LIBRARY_DIR}")
+                    endif()
+                else()
+                    message(WARNING "Database: container_system library directory not found - linking may fail")
+                endif()
             endif()
         else()
             message(WARNING "Database: container_system headers not found - integration disabled")

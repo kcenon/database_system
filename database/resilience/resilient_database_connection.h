@@ -41,7 +41,6 @@
 #pragma once
 
 #include "../core/database_backend.h"
-#include "../core/result.h"
 #include "connection_health_monitor.h"
 #include <memory>
 #include <chrono>
@@ -140,13 +139,13 @@ public:
      * @param config Connection configuration
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> initialize(const core::connection_config& config) override;
+    kcenon::common::VoidResult initialize(const core::connection_config& config) override;
 
     /**
      * @brief Shutdown connection gracefully
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> shutdown() override;
+    kcenon::common::VoidResult shutdown() override;
 
     /**
      * @brief Check if connection is active and healthy
@@ -159,53 +158,53 @@ public:
      * @param query_string SQL INSERT statement
      * @return Number of rows inserted, or error
      */
-    database::result<uint64_t> insert_query(const std::string& query_string) override;
+    kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
     /**
      * @brief Execute UPDATE with automatic reconnection
      * @param query_string SQL UPDATE statement
      * @return Number of rows updated, or error
      */
-    database::result<uint64_t> update_query(const std::string& query_string) override;
+    kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
 
     /**
      * @brief Execute DELETE with automatic reconnection
      * @param query_string SQL DELETE statement
      * @return Number of rows deleted, or error
      */
-    database::result<uint64_t> delete_query(const std::string& query_string) override;
+    kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
     /**
      * @brief Execute SELECT with automatic reconnection
      * @param query_string SQL SELECT statement
      * @return Query results, or error
      */
-    database::result<core::database_result> select_query(const std::string& query_string) override;
+    kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
     /**
      * @brief Execute general query with automatic reconnection
      * @param query_string SQL statement
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> execute_query(const std::string& query_string) override;
+    kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
     /**
      * @brief Begin transaction (requires stable connection)
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> begin_transaction() override;
+    kcenon::common::VoidResult begin_transaction() override;
 
     /**
      * @brief Commit transaction
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> commit_transaction() override;
+    kcenon::common::VoidResult commit_transaction() override;
 
     /**
      * @brief Rollback transaction
      * @return result<void>::ok() on success, error on failure
      */
-    database::result<void> rollback_transaction() override;
+    kcenon::common::VoidResult rollback_transaction() override;
 
     /**
      * @brief Check if in transaction
@@ -229,13 +228,13 @@ public:
      * @brief Ensure connection is established (with retry)
      * @return result<void>::ok() if connected, error otherwise
      */
-    database::result<void> ensure_connected();
+    kcenon::common::VoidResult ensure_connected();
 
     /**
      * @brief Check connection health status
      * @return Health status information
      */
-    database::result<health_status> check_health();
+    kcenon::common::Result<health_status> check_health();
 
     /**
      * @brief Start automatic health monitoring
@@ -265,7 +264,7 @@ private:
      * @brief Attempt to reconnect with exponential backoff
      * @return result<void>::ok() on successful reconnection
      */
-    database::result<void> attempt_reconnect();
+    kcenon::common::VoidResult attempt_reconnect();
 
     /**
      * @brief Execute query operation with automatic retry

@@ -40,7 +40,6 @@
 #pragma once
 
 #include "../core/database_backend.h"
-#include "../core/result.h"
 #include <chrono>
 #include <atomic>
 #include <memory>
@@ -155,7 +154,7 @@ public:
      * @brief Perform immediate health check
      * @return Current health status
      */
-    database::result<health_status> check_now();
+    kcenon::common::Result<health_status> check_now();
 
     /**
      * @brief Get current health status (cached)
@@ -204,7 +203,7 @@ private:
      * @brief Execute heartbeat query to check connectivity
      * @return result<void>::ok() if heartbeat successful
      */
-    database::result<void> execute_heartbeat();
+    kcenon::common::VoidResult execute_heartbeat();
 
     /**
      * @brief Calculate health score from current metrics

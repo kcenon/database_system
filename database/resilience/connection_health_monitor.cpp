@@ -30,6 +30,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "connection_health_monitor.h"
+#include "../core/result.h"
+
 #include <algorithm>
 #include <numeric>
 #include <thread>
@@ -73,7 +75,7 @@ void connection_health_monitor::stop_monitoring() {
     }
 }
 
-database::result<health_status> connection_health_monitor::check_now() {
+kcenon::common::Result<health_status> connection_health_monitor::check_now() {
     if (!backend_ || !backend_->is_initialized()) {
         std::lock_guard<std::mutex> lock(mutex_);
         current_status_.is_healthy = false;
@@ -202,7 +204,7 @@ void connection_health_monitor::reset_statistics() {
     connection_start_time_ = std::chrono::system_clock::now();
 }
 
-database::result<void> connection_health_monitor::execute_heartbeat() {
+kcenon::common::VoidResult connection_health_monitor::execute_heartbeat() {
     if (!backend_) {
         return kcenon::common::error_info{-1, "Backend is null", "connection_health_monitor"};
     }

@@ -30,6 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "mysql_backend.h"
+#include "../core/result.h"
 
 #include <sstream>
 #include <iomanip>

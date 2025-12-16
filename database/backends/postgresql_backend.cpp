@@ -30,6 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "postgresql_backend.h"
+#include "../core/result.h"
 
 #include <sstream>
 #include <iomanip>

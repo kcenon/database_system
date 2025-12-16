@@ -30,6 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "sqlite_backend.h"
+#include "../core/result.h"
 
 #include <variant>
 

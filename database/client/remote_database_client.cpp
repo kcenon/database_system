@@ -21,9 +21,10 @@ database_types remote_database_client::type() const {
 database::result<void>
 remote_database_client::initialize(const core::connection_config &config) {
   if (initialized_.exchange(true)) {
-    return database::result<void>::err(database::error(
+    return kcenon::common::error_info{
         static_cast<int>(database::error_code::invalid_argument),
-        "Client already initialized"));
+        "Client already initialized",
+        "remote_database_client"};
   }
 
   config_ = config;
@@ -61,27 +62,29 @@ remote_database_client::initialize(const core::connection_config &config) {
     auto result = network_client_->connect();
     if (result.is_err()) {
       initialized_ = false;
-      return database::result<void>::err(database::error(
-          database::error_code::unknown_error,
-          "Failed to connect to database server: " + result.error().message));
+      return kcenon::common::error_info{
+          static_cast<int>(database::error_code::unknown_error),
+          "Failed to connect to database server: " + result.error().message,
+          "remote_database_client"};
     }
 
     if (logger_) {
       logger_->log_connection_event(
           "connected", config.host + ":" + std::to_string(config.port));
     }
-    return database::result<void>::ok();
+    return kcenon::common::ok();
   } catch (const std::exception &e) {
     initialized_ = false;
-    return database::result<void>::err(database::error(
-        database::error_code::unknown_error,
-        std::string("Exception during initialization: ") + e.what()));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        std::string("Exception during initialization: ") + e.what(),
+        "remote_database_client"};
   }
 }
 
 database::result<void> remote_database_client::shutdown() {
   if (!initialized_.exchange(false)) {
-    return database::result<void>::ok(); // Already shut down
+    return kcenon::common::ok(); // Already shut down
   }
 
   // Cancel all pending requests
@@ -112,7 +115,7 @@ database::result<void> remote_database_client::shutdown() {
     logger_->log_connection_event("disconnected", "graceful shutdown");
   }
 
-  return database::result<void>::ok();
+  return kcenon::common::ok();
 }
 
 bool remote_database_client::is_initialized() const {
@@ -122,9 +125,10 @@ bool remote_database_client::is_initialized() const {
 database::result<uint64_t>
 remote_database_client::insert_query(const std::string &query_string) {
   if (!is_initialized()) {
-    return database::result<uint64_t>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   // Create query request
@@ -136,35 +140,38 @@ remote_database_client::insert_query(const std::string &query_string) {
   auto response_result =
       send_request(protocol::message_type::QUERY_REQUEST, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<uint64_t>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   // Deserialize response
   auto query_response =
       protocol::protocol_serializer::deserialize_query_response(
           response_result.value());
-  if (!query_response.has_value()) {
-    return database::result<uint64_t>::err(
-        database::error(database::error_code::unknown_error,
-                        "Failed to deserialize query response"));
+  if (query_response.is_err()) {
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to deserialize query response",
+        "remote_database_client"};
   }
 
   if (!query_response.value().success) {
-    return database::result<uint64_t>::err(database::error(
-        static_cast<database::error_code>(query_response.value().error_code),
-        query_response.value().error_message));
+    return kcenon::common::error_info{
+        query_response.value().error_code,
+        query_response.value().error_message,
+        "remote_database_client"};
   }
 
-  return database::result<uint64_t>::ok(query_response.value().affected_rows);
+  return query_response.value().affected_rows;
 }
 
 database::result<uint64_t>
 remote_database_client::update_query(const std::string &query_string) {
   if (!is_initialized()) {
-    return database::result<uint64_t>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   protocol::query_request request;
@@ -175,34 +182,37 @@ remote_database_client::update_query(const std::string &query_string) {
   auto response_result =
       send_request(protocol::message_type::QUERY_REQUEST, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<uint64_t>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   auto query_response =
       protocol::protocol_serializer::deserialize_query_response(
           response_result.value());
-  if (!query_response.has_value()) {
-    return database::result<uint64_t>::err(
-        database::error(database::error_code::unknown_error,
-                        "Failed to deserialize query response"));
+  if (query_response.is_err()) {
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to deserialize query response",
+        "remote_database_client"};
   }
 
   if (!query_response.value().success) {
-    return database::result<uint64_t>::err(database::error(
-        static_cast<database::error_code>(query_response.value().error_code),
-        query_response.value().error_message));
+    return kcenon::common::error_info{
+        query_response.value().error_code,
+        query_response.value().error_message,
+        "remote_database_client"};
   }
 
-  return database::result<uint64_t>::ok(query_response.value().affected_rows);
+  return query_response.value().affected_rows;
 }
 
 database::result<uint64_t>
 remote_database_client::delete_query(const std::string &query_string) {
   if (!is_initialized()) {
-    return database::result<uint64_t>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   protocol::query_request request;
@@ -213,34 +223,37 @@ remote_database_client::delete_query(const std::string &query_string) {
   auto response_result =
       send_request(protocol::message_type::QUERY_REQUEST, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<uint64_t>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   auto query_response =
       protocol::protocol_serializer::deserialize_query_response(
           response_result.value());
-  if (!query_response.has_value()) {
-    return database::result<uint64_t>::err(
-        database::error(database::error_code::unknown_error,
-                        "Failed to deserialize query response"));
+  if (query_response.is_err()) {
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to deserialize query response",
+        "remote_database_client"};
   }
 
   if (!query_response.value().success) {
-    return database::result<uint64_t>::err(database::error(
-        static_cast<database::error_code>(query_response.value().error_code),
-        query_response.value().error_message));
+    return kcenon::common::error_info{
+        query_response.value().error_code,
+        query_response.value().error_message,
+        "remote_database_client"};
   }
 
-  return database::result<uint64_t>::ok(query_response.value().affected_rows);
+  return query_response.value().affected_rows;
 }
 
 database::result<core::database_result>
 remote_database_client::select_query(const std::string &query_string) {
   if (!is_initialized()) {
-    return database::result<core::database_result>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   protocol::query_request request;
@@ -251,24 +264,25 @@ remote_database_client::select_query(const std::string &query_string) {
   auto response_result =
       send_request(protocol::message_type::QUERY_REQUEST, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<core::database_result>::err(
-        response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   auto query_response =
       protocol::protocol_serializer::deserialize_query_response(
           response_result.value());
-  if (!query_response.has_value()) {
-    return database::result<core::database_result>::err(
-        database::error(database::error_code::unknown_error,
-                        "Failed to deserialize query response"));
+  if (query_response.is_err()) {
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to deserialize query response",
+        "remote_database_client"};
   }
 
   if (!query_response.value().success) {
-    return database::result<core::database_result>::err(database::error(
-        static_cast<database::error_code>(query_response.value().error_code),
-        query_response.value().error_message));
+    return kcenon::common::error_info{
+        query_response.value().error_code,
+        query_response.value().error_message,
+        "remote_database_client"};
   }
 
   // Convert protocol rows to database_result
@@ -281,15 +295,16 @@ remote_database_client::select_query(const std::string &query_string) {
     result.push_back(row);
   }
 
-  return database::result<core::database_result>::ok(std::move(result));
+  return result;
 }
 
 database::result<void>
 remote_database_client::execute_query(const std::string &query_string) {
   if (!is_initialized()) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   protocol::query_request request;
@@ -300,39 +315,43 @@ remote_database_client::execute_query(const std::string &query_string) {
   auto response_result =
       send_request(protocol::message_type::QUERY_REQUEST, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<void>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   auto query_response =
       protocol::protocol_serializer::deserialize_query_response(
           response_result.value());
-  if (!query_response.has_value()) {
-    return database::result<void>::err(
-        database::error(database::error_code::unknown_error,
-                        "Failed to deserialize query response"));
+  if (query_response.is_err()) {
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to deserialize query response",
+        "remote_database_client"};
   }
 
   if (!query_response.value().success) {
-    return database::result<void>::err(database::error(
-        static_cast<database::error_code>(query_response.value().error_code),
-        query_response.value().error_message));
+    return kcenon::common::error_info{
+        query_response.value().error_code,
+        query_response.value().error_message,
+        "remote_database_client"};
   }
 
-  return database::result<void>::ok();
+  return kcenon::common::ok();
 }
 
 database::result<void> remote_database_client::begin_transaction() {
   if (!is_initialized()) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   if (in_transaction_.exchange(true)) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Transaction already in progress"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Transaction already in progress",
+        "remote_database_client"};
   }
 
   protocol::transaction_request request;
@@ -342,9 +361,9 @@ database::result<void> remote_database_client::begin_transaction() {
   auto response_result =
       send_request(protocol::message_type::BEGIN_TRANSACTION, payload);
 
-  if (!response_result.has_value()) {
+  if (response_result.is_err()) {
     in_transaction_ = false;
-    return database::result<void>::err(response_result.get_error());
+    return response_result.error();
   }
 
   // Parse transaction_response
@@ -353,30 +372,34 @@ database::result<void> remote_database_client::begin_transaction() {
           response_result.value());
   if (txn_response_result.is_err()) {
     in_transaction_ = false;
-    return database::result<void>::err(txn_response_result.get_error());
+    return txn_response_result.error();
   }
 
   auto txn_response = txn_response_result.value();
   if (!txn_response.success) {
     in_transaction_ = false;
-    return database::result<void>::err(database::error(
-        database::error_code::unknown_error, txn_response.error_message));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        txn_response.error_message,
+        "remote_database_client"};
   }
 
-  return database::result<void>::ok();
+  return kcenon::common::ok();
 }
 
 database::result<void> remote_database_client::commit_transaction() {
   if (!is_initialized()) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   if (!in_transaction_.exchange(false)) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "No active transaction"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "No active transaction",
+        "remote_database_client"};
   }
 
   protocol::transaction_request request;
@@ -386,27 +409,29 @@ database::result<void> remote_database_client::commit_transaction() {
   auto response_result =
       send_request(protocol::message_type::COMMIT_TRANSACTION, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<void>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   if (logger_) {
     logger_->log_transaction("commit", true, "");
   }
-  return database::result<void>::ok();
+  return kcenon::common::ok();
 }
 
 database::result<void> remote_database_client::rollback_transaction() {
   if (!is_initialized()) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   if (!in_transaction_.exchange(false)) {
-    return database::result<void>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "No active transaction"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "No active transaction",
+        "remote_database_client"};
   }
 
   protocol::transaction_request request;
@@ -416,14 +441,14 @@ database::result<void> remote_database_client::rollback_transaction() {
   auto response_result =
       send_request(protocol::message_type::ROLLBACK_TRANSACTION, payload);
 
-  if (!response_result.has_value()) {
-    return database::result<void>::err(response_result.get_error());
+  if (response_result.is_err()) {
+    return response_result.error();
   }
 
   if (logger_) {
     logger_->log_transaction("rollback", true, "");
   }
-  return database::result<void>::ok();
+  return kcenon::common::ok();
 }
 
 bool remote_database_client::in_transaction() const {
@@ -473,9 +498,10 @@ remote_database_client::send_request(protocol::message_type request_type,
                                      const std::vector<uint8_t> &payload,
                                      std::chrono::milliseconds timeout) {
   if (!is_initialized()) {
-    return database::result<std::vector<uint8_t>>::err(
-        database::error(static_cast<int>(database::error_code::unknown_error),
-                        "Client not initialized"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Client not initialized",
+        "remote_database_client"};
   }
 
   // Generate request ID
@@ -508,9 +534,10 @@ remote_database_client::send_request(protocol::message_type request_type,
     std::lock_guard<std::mutex> lock(requests_mutex_);
     pending_responses_.erase(req_id);
 
-    return database::result<std::vector<uint8_t>>::err(database::error(
-        database::error_code::unknown_error,
-        "Failed to send request: " + send_result.error().message));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Failed to send request: " + send_result.error().message,
+        "remote_database_client"};
   }
 
   // Wait for response with timeout
@@ -520,18 +547,22 @@ remote_database_client::send_request(protocol::message_type request_type,
     std::lock_guard<std::mutex> lock(requests_mutex_);
     pending_responses_.erase(req_id);
 
-    return database::result<std::vector<uint8_t>>::err(database::error(
-        database::error_code::unknown_error, "Request timeout"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Request timeout",
+        "remote_database_client"};
   }
 
   // Get response
   auto response_data = response_future.get();
   if (response_data.empty()) {
-    return database::result<std::vector<uint8_t>>::err(database::error(
-        database::error_code::unknown_error, "Empty response received"));
+    return kcenon::common::error_info{
+        static_cast<int>(database::error_code::unknown_error),
+        "Empty response received",
+        "remote_database_client"};
   }
 
-  return database::result<std::vector<uint8_t>>::ok(std::move(response_data));
+  return response_data;
 }
 
 void remote_database_client::handle_response(
@@ -539,7 +570,7 @@ void remote_database_client::handle_response(
   // Deserialize message header
   auto header_result =
       protocol::protocol_serializer::deserialize_header(message_data);
-  if (!header_result.has_value()) {
+  if (header_result.is_err()) {
     if (logger_) {
       logger_->log_error("handle_response",
                          "Failed to deserialize response header", "");

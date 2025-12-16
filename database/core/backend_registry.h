@@ -69,7 +69,6 @@
 #pragma once
 
 #include "database_backend.h"
-#include "result.h"
 
 #include <string>
 #include <memory>
@@ -116,7 +115,7 @@ public:
 	 * @brief Register a backend factory function
 	 * @param name Backend name (e.g., "postgresql", "mysql")
 	 * @param factory Factory function that creates backend instances
-	 * @return database::result<void>::ok() on success, error if name already registered
+	 * @return VoidResult::ok() on success, error if name already registered
 	 *
 	 * Thread Safety: This method is thread-safe
 	 *
@@ -128,16 +127,16 @@ public:
 	 *   );
 	 * @endcode
 	 */
-	database::result<void> register_backend(const std::string& name, backend_factory_fn factory);
+	kcenon::common::VoidResult register_backend(const std::string& name, backend_factory_fn factory);
 
 	/**
 	 * @brief Unregister a backend (for testing or dynamic unloading)
 	 * @param name Backend name to unregister
-	 * @return database::result<void>::ok() on success, error if not found
+	 * @return VoidResult::ok() on success, error if not found
 	 *
 	 * Thread Safety: This method is thread-safe
 	 */
-	database::result<void> unregister_backend(const std::string& name);
+	kcenon::common::VoidResult unregister_backend(const std::string& name);
 
 	/**
 	 * @brief Create a backend instance by name

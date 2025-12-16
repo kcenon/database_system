@@ -59,7 +59,7 @@ database_types redis_backend::type() const
 	return database_types::redis;
 }
 
-database::result<void> redis_backend::initialize(const core::connection_config& config)
+kcenon::common::VoidResult redis_backend::initialize(const core::connection_config& config)
 {
 	if (initialized_) {
 		return kcenon::common::error_info{
@@ -86,7 +86,7 @@ database::result<void> redis_backend::initialize(const core::connection_config& 
 	return kcenon::common::ok();
 }
 
-database::result<void> redis_backend::shutdown()
+kcenon::common::VoidResult redis_backend::shutdown()
 {
 	if (!initialized_) {
 		return kcenon::common::ok(); // Already shutdown
@@ -116,7 +116,7 @@ bool redis_backend::is_initialized() const
 	return initialized_;
 }
 
-database::result<uint64_t> redis_backend::insert_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> redis_backend::insert_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -132,7 +132,7 @@ database::result<uint64_t> redis_backend::insert_query(const std::string& query_
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> redis_backend::update_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> redis_backend::update_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -148,7 +148,7 @@ database::result<uint64_t> redis_backend::update_query(const std::string& query_
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> redis_backend::delete_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -164,7 +164,7 @@ database::result<uint64_t> redis_backend::delete_query(const std::string& query_
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<database_result> redis_backend::select_query(const std::string& query_string)
+kcenon::common::Result<database_result> redis_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -180,7 +180,7 @@ database::result<database_result> redis_backend::select_query(const std::string&
 	return result;
 }
 
-database::result<void> redis_backend::execute_query(const std::string& query_string)
+kcenon::common::VoidResult redis_backend::execute_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -204,7 +204,7 @@ database::result<void> redis_backend::execute_query(const std::string& query_str
 	return kcenon::common::ok();
 }
 
-database::result<void> redis_backend::begin_transaction()
+kcenon::common::VoidResult redis_backend::begin_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -239,7 +239,7 @@ database::result<void> redis_backend::begin_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> redis_backend::commit_transaction()
+kcenon::common::VoidResult redis_backend::commit_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -274,7 +274,7 @@ database::result<void> redis_backend::commit_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> redis_backend::rollback_transaction()
+kcenon::common::VoidResult redis_backend::rollback_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";

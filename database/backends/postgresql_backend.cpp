@@ -60,7 +60,7 @@ database_types postgresql_backend::type() const
 	return database_types::postgres;
 }
 
-database::result<void> postgresql_backend::initialize(const core::connection_config& config)
+kcenon::common::VoidResult postgresql_backend::initialize(const core::connection_config& config)
 {
 	if (initialized_) {
 		return kcenon::common::error_info{
@@ -87,7 +87,7 @@ database::result<void> postgresql_backend::initialize(const core::connection_con
 	return kcenon::common::ok();
 }
 
-database::result<void> postgresql_backend::shutdown()
+kcenon::common::VoidResult postgresql_backend::shutdown()
 {
 	if (!initialized_) {
 		return kcenon::common::ok(); // Already shutdown
@@ -117,7 +117,7 @@ bool postgresql_backend::is_initialized() const
 	return initialized_;
 }
 
-database::result<uint64_t> postgresql_backend::insert_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> postgresql_backend::insert_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -133,7 +133,7 @@ database::result<uint64_t> postgresql_backend::insert_query(const std::string& q
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> postgresql_backend::update_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> postgresql_backend::update_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -149,7 +149,7 @@ database::result<uint64_t> postgresql_backend::update_query(const std::string& q
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<uint64_t> postgresql_backend::delete_query(const std::string& query_string)
+kcenon::common::Result<uint64_t> postgresql_backend::delete_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -165,7 +165,7 @@ database::result<uint64_t> postgresql_backend::delete_query(const std::string& q
 	return static_cast<uint64_t>(affected);
 }
 
-database::result<database_result> postgresql_backend::select_query(const std::string& query_string)
+kcenon::common::Result<database_result> postgresql_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -181,7 +181,7 @@ database::result<database_result> postgresql_backend::select_query(const std::st
 	return result;
 }
 
-database::result<void> postgresql_backend::execute_query(const std::string& query_string)
+kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -205,7 +205,7 @@ database::result<void> postgresql_backend::execute_query(const std::string& quer
 	return kcenon::common::ok();
 }
 
-database::result<void> postgresql_backend::begin_transaction()
+kcenon::common::VoidResult postgresql_backend::begin_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -239,7 +239,7 @@ database::result<void> postgresql_backend::begin_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> postgresql_backend::commit_transaction()
+kcenon::common::VoidResult postgresql_backend::commit_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -273,7 +273,7 @@ database::result<void> postgresql_backend::commit_transaction()
 	return kcenon::common::ok();
 }
 
-database::result<void> postgresql_backend::rollback_transaction()
+kcenon::common::VoidResult postgresql_backend::rollback_transaction()
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";

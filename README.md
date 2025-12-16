@@ -26,7 +26,6 @@ A modern C++20 database abstraction layer providing unified access to multiple d
   - Backward compatible with existing `std::function` APIs
 - **monitoring_system Integration**: Full integration for production-grade metrics collection
 - **Connection Pool v3**: 65x latency improvement (5μs → 77ns) with thread_system integration
-- **Remote Database Access**: Database Proxy Server and Remote Client for distributed operations
 - **Resilient Connections**: Automatic reconnection with health monitoring (<1s recovery)
 - **Immutable Query Builder**: Thread-safe query construction with functional programming style
 - All CI/CD pipelines green across platforms
@@ -422,15 +421,15 @@ int main() {
 
 ```
 ┌─────────────────┐     ┌─────────────────┐
-│container_system │ ──► │database_system  │
-└─────────────────┘     └─────────┬───────┘
-         │                        │ provides storage for
-         │                        ▼
-┌─────────▼───────┐     ┌─────────────────┐
-│messaging_system │ ◄──► │ network_system  │
+│ common_system   │ ──► │database_system  │
 └─────────────────┘     └─────────────────┘
-         │                        │
-         └────────┬───────────────┘
+         ▲                       │
+         │                       ▼
+┌─────────────────┐     ┌─────────────────┐
+│ thread_system   │ ──► │container_system │
+└─────────────────┘     └─────────────────┘
+         ▲                       │
+         └───────────────────────┘
                   ▼
     ┌─────────────────────────┐
     │  monitoring_system      │
@@ -438,10 +437,9 @@ int main() {
 ```
 
 **Related Projects**:
-- **[container_system](https://github.com/kcenon/container_system)**: Data serialization for BLOB storage
+- **[common_system](https://github.com/kcenon/common_system)**: Common interfaces and Result<T> pattern
 - **[thread_system](https://github.com/kcenon/thread_system)**: High-performance concurrent execution (connection pool v3)
-- **[messaging_system](https://github.com/kcenon/messaging_system)**: Message persistence and queuing
-- **[network_system](https://github.com/kcenon/network_system)**: Network-based database operations
+- **[container_system](https://github.com/kcenon/container_system)**: Data serialization for BLOB storage
 - **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Performance monitoring and metrics
 
 [🌐 Ecosystem Integration Guide →](../ECOSYSTEM_INTEGRATION.md)

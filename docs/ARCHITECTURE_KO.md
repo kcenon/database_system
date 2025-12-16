@@ -218,14 +218,13 @@ Application → Authentication → Authorization → Audit → Encryption
 
 **Async 아키텍처:**
 ```
-std::future → C++20 Coroutines → Distributed Transactions → Stream Processing
+std::future → C++20 Coroutines → Stream Processing
 ```
 
 **컴포넌트:**
 - `async_executor`: 비동기 작업을 위한 스레드 풀
 - `async_database`: 데이터베이스 작업을 위한 비동기 래퍼
 - `database_awaitable`: C++20 코루틴 지원
-- `transaction_coordinator`: 분산 트랜잭션 관리
 - `stream_processor`: 실시간 데이터 스트리밍
 
 **동시성 패턴:**
@@ -280,8 +279,7 @@ std::future → C++20 Coroutines → Distributed Transactions → Stream Process
 
 ## 다른 모듈과의 상호 운용성
 
-- `network_system`과 함께: 일반적인 흐름은 (receive) → container decode → DB op → encode → send
-- `container_system`과 함께: 해당되는 경우 app/network와 DB 레이어 간의 타입 직렬화를 위해 컨테이너 사용
+- `container_system`과 함께: 해당되는 경우 app과 DB 레이어 간의 타입 직렬화를 위해 컨테이너 사용
 - 보안 감사 로깅은 스레드 안전
 
 ## 에러 처리
@@ -324,7 +322,7 @@ try {
 ## 확장성
 
 ### 수평 확장
-- 여러 데이터베이스에 걸친 **Distributed transactions**
+- 통합 인터페이스를 통한 **멀티 백엔드 지원**
 - 데이터베이스 인스턴스당 **Connection pooling**
 - 논블로킹 I/O를 위한 **Async operations**
 

@@ -87,16 +87,6 @@ cmake --build build
   - 역할: 직렬화된 container 저장 및 검색
 
 ### 관련 프로젝트
-- **[messaging_system](https://github.com/kcenon/messaging_system)**: 메시지 영속성 및 큐잉
-  - 관계: 메시지 영속성 및 큐잉을 위한 database 백엔드
-  - 시너지: database 내구성 보장을 통한 안정적인 메시지 전달
-  - 통합: 메시지 아카이빙, 재생, 트랜잭션 로깅
-
-- **[network_system](https://github.com/kcenon/network_system)**: 네트워크 기반 database 작업
-  - 관계: 원격 database 접근 및 분산 작업
-  - 이점: 네트워크 투명 database 작업 및 클러스터링
-  - 통합: 원격 프로시저 호출 및 분산 트랜잭션
-
 - **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Database 성능 모니터링
   - 사용: 실시간 database 성능 메트릭 및 알림
   - 이점: 포괄적인 관찰 가능성 및 성능 최적화
@@ -105,18 +95,18 @@ cmake --build build
 ### 통합 아키텍처
 ```
 ┌─────────────────┐     ┌─────────────────┐
-│container_system │ ──► │database_system  │
-└─────────────────┘     └─────────┬───────┘
-         │                        │ provides storage for
-         │                        ▼
-┌─────────▼───────┐     ┌─────────────────┐
-│messaging_system │ ◄──► │ network_system  │
+│ common_system   │ ──► │database_system  │
 └─────────────────┘     └─────────────────┘
-         │                        │
-         └────────┬───────────────┘
+         ▲                       │
+         │                       ▼
+┌─────────────────┐     ┌─────────────────┐
+│ thread_system   │ ──► │container_system │
+└─────────────────┘     └─────────────────┘
+         ▲                       │
+         └───────────────────────┘
                   ▼
     ┌─────────────────────────┐
-    │  monitoring_system     │
+    │  monitoring_system      │
     └─────────────────────────┘
 ```
 
@@ -150,7 +140,7 @@ cmake --build build
 ### 🛡️ **고품질 안정성**
 - **다중 백엔드 지원**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
 - **자동 failover**: 자동 연결 복구를 통한 상태 모니터링
-- **트랜잭션 관리**: 분산 트랜잭션 지원을 통한 ACID 준수
+- **트랜잭션 관리**: ACID 준수
 - **포괄적인 오류 처리**: 우아한 성능 저하 및 복구 패턴
 
 ### 🔧 **개발자 생산성**
@@ -169,7 +159,6 @@ cmake --build build
 - **보안 framework**: TLS/SSL 암호화, RBAC, 감사 로깅
 - **성능 모니터링**: Prometheus 통합을 통한 실시간 메트릭
 - **스키마 관리**: 버전 관리 마이그레이션 및 자동 업데이트
-- **분산 작업**: 샤딩, 복제, 클러스터링 지원
 
 ## 실제 영향 및 사용 사례
 
@@ -223,7 +212,7 @@ cmake --build build
 - **Query Builder**: SQL 및 NoSQL database를 위한 타입 안전 쿼리 구성
 - **성능 모니터링**: 실시간 메트릭, 알림, Prometheus 통합
 - **엔터프라이즈 보안**: TLS/SSL 암호화, RBAC, 감사 로깅, 위협 탐지
-- **비동기 작업**: C++20 coroutine, 분산 트랜잭션, 실시간 스트리밍
+- **비동기 작업**: C++20 coroutine, 실시간 스트리밍
 - **Thread 안전성**: 적절한 동기화를 통한 동시 database 작업
 - **Modern C++**: C++20 concept, coroutine, variant, RAII 패턴
 - **개발 중**: 10,000개 이상의 동시 연결을 지원하는 엔터프라이즈 아키텍처

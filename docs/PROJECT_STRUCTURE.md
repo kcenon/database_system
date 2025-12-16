@@ -30,7 +30,6 @@ database_system/
 │   ├── security/                  # Enterprise security
 │   ├── monitoring/                # Performance monitoring
 │   ├── async/                     # Asynchronous operations
-│   ├── remote/                    # Remote database access
 │   ├── resilient/                 # Resilient connections
 │   ├── integrated/                # Unified database system
 │   └── adapters/                  # System adapters
@@ -42,7 +41,6 @@ database_system/
 │   ├── security/                  # Security implementations
 │   ├── monitoring/                # Monitoring implementations
 │   ├── async/                     # Async implementations
-│   ├── remote/                    # Remote implementations
 │   ├── resilient/                 # Resilient implementations
 │   ├── integrated/                # Unified system implementations
 │   └── adapters/                  # Adapter implementations
@@ -357,43 +355,17 @@ database_system/
 |------|-------------|---------------|
 | `async_operations.h` | C++20 coroutine support | 520 |
 | `future_operations.h` | C++17 future-based async | 380 |
-| `transaction_coordinator.h` | Distributed transactions | 620 |
 | `stream_processor.h` | Real-time streaming | 450 |
 
 **Features**:
 - C++20 coroutines (optional)
 - C++17 std::future fallback
-- Distributed transactions
 - Real-time data streaming
 - Async connection pooling
 
 **Dependencies**:
 - Core module
 - Optional: thread_system (for async executor)
-
-### Remote Module (`include/database/remote/`, `src/remote/`)
-
-**Purpose**: Network-transparent database operations
-
-**Key Files**:
-
-| File | Description | Lines of Code |
-|------|-------------|---------------|
-| `database_proxy_server.h` | Proxy server | 680 |
-| `remote_database_client.h` | Remote client | 520 |
-| `load_balancer.h` | Load balancing | 450 |
-| `protocol_handler.h` | Network protocol | 380 |
-
-**Features**:
-- Database proxy server
-- Remote database client
-- TLS/SSL encryption
-- Load balancing
-- Automatic failover
-
-**Dependencies**:
-- Core module
-- Optional: network_system
 
 ### Resilient Module (`include/database/resilient/`, `src/resilient/`)
 

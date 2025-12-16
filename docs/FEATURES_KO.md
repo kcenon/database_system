@@ -15,7 +15,6 @@
 - [ORM 프레임워크](#orm-프레임워크)
 - [연결 풀링](#연결-풀링)
 - [쿼리 빌더](#쿼리-빌더)
-- [원격 데이터베이스 액세스](#원격-데이터베이스-액세스)
 - [탄력적 연결](#탄력적-연결)
 - [엔터프라이즈 보안](#엔터프라이즈-보안)
 - [성능 모니터링](#성능-모니터링)
@@ -384,30 +383,6 @@ auto delete_result = db.create_query_builder(database_types::postgres)
     .delete_from("sessions")
     .where("expires_at < ?", std::chrono::system_clock::now())
     .execute(&db);
-```
-
----
-
-## 원격 데이터베이스 액세스
-
-**상태**: ✅ 완전 지원 (network_system 통합)
-**구현**: `remote/database_gateway.h/cpp`, `remote/database_client.h/cpp`
-
-원격 서버를 통한 데이터베이스 액세스:
-
-```cpp
-// 클라이언트 측
-database_client client("db.example.com", 5433);
-client.authenticate("api_key_here");
-
-auto result = client.query("SELECT * FROM users WHERE id = ?", user_id);
-
-// 서버 측
-database_gateway gateway(5433);
-gateway.set_auth_handler([](const std::string& api_key) {
-    return validate_api_key(api_key);
-});
-gateway.start();
 ```
 
 ---

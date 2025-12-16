@@ -79,12 +79,7 @@ namespace database
 		/**
 		 * @brief Indicates a Redis database (future implementation).
 		 */
-		redis = 6,
-
-		/**
-		 * @brief Indicates a remote database accessed via database_proxy_server.
-		 */
-		REMOTE = 7
+		redis = 6
 	};
 
 	/**
@@ -102,7 +97,6 @@ namespace database
 		case database_types::oracle: return "oracle";
 		case database_types::mongodb: return "mongodb";
 		case database_types::redis: return "redis";
-		case database_types::REMOTE: return "remote";
 		default: return "unknown";
 		}
 	}

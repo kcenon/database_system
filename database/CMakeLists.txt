@@ -139,38 +139,6 @@ if(USE_THREAD_SYSTEM)
     )
 endif()
 
-# Enable experimental remote gateway components
-option(ENABLE_REMOTE_DATABASE_GATEWAY "Build remote proxy server/client components" OFF)
-
-# P0-3 and P0-4: Database Proxy Server and Remote Client (added conditionally)
-if(USE_NETWORK_SYSTEM AND ENABLE_REMOTE_DATABASE_GATEWAY)
-    list(APPEND SOURCE_FILES
-        # P0-3 Sources (Database Proxy Server)
-        ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/server/database_session.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/server/database_proxy_server.cpp
-        # P0-4 Sources (Remote Database Client)
-        ${CMAKE_CURRENT_SOURCE_DIR}/client/remote_database_client.cpp
-        # Database Gateway
-        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/database_gateway.cpp
-        # Gateway Audit Logger
-        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/audit_logger.cpp
-        # Gateway Authentication Backends
-        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/local_auth_backend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/ldap_auth_backend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/gateway/auth/oauth_auth_backend.cpp
-        # DB-005 Replication Manager
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/replication_manager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/safe_query_builder.cpp
-        # CDC Strategies
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/sqlite_cdc_strategy.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/postgresql_cdc_strategy.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/mysql_cdc_strategy.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/replication/cdc/mongodb_cdc_strategy.cpp
-    )
-else()
-    message(STATUS "Remote database gateway disabled (ENABLE_REMOTE_DATABASE_GATEWAY=OFF)")
-endif()
 
 ##################################################
 # Library Target Configuration
@@ -406,70 +374,6 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (optional)
-if(USE_NETWORK_SYSTEM)
-    set(_DATABASE_NETWORK_HANDLED FALSE)
-
-    if(_DATABASE_IS_UNIFIED_BUILD)
-        foreach(_candidate NetworkSystem network_system)
-            if(TARGET ${_candidate})
-                target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
-                set(_DATABASE_NETWORK_HANDLED TRUE)
-                message(STATUS "Database: Linked ${_candidate} target from unified build")
-                break()
-            endif()
-        endforeach()
-    endif()
-
-    if(_DATABASE_NETWORK_HANDLED)
-        target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
-    else()
-        find_system_dependency(network_system)
-
-        if(network_system_FOUND AND network_system_SOURCE_DIR)
-            set(_DATABASE_NETWORK_INCLUDE_PATHS
-                "${network_system_SOURCE_DIR}"
-                "${network_system_SOURCE_DIR}/include"
-            )
-        else()
-            find_system_dependency_include(network_system)
-            set(_DATABASE_NETWORK_INCLUDE_PATHS ${network_system_INCLUDE_DIR})
-        endif()
-
-        set(_FOUND_NETWORK_INCLUDE FALSE)
-        foreach(_path ${_DATABASE_NETWORK_INCLUDE_PATHS})
-            if(EXISTS "${_path}/network_system/core/messaging_server.h" OR EXISTS "${_path}/core/messaging_server.h")
-                message(STATUS "Database: Found network_system headers at: ${_path}")
-                target_include_directories(${PROJECT_NAME} PUBLIC
-                    $<BUILD_INTERFACE:${_path}>
-                )
-                set(_FOUND_NETWORK_INCLUDE TRUE)
-                break()
-            endif()
-        endforeach()
-
-        if(_FOUND_NETWORK_INCLUDE)
-            target_compile_definitions(${PROJECT_NAME} PUBLIC USE_NETWORK_SYSTEM)
-            message(STATUS "Database: network_system integration enabled (standalone)")
-
-            set(_DATABASE_NETWORK_TARGET "")
-            if(DEFINED network_system_TARGET AND network_system_TARGET AND TARGET ${network_system_TARGET})
-                set(_DATABASE_NETWORK_TARGET ${network_system_TARGET})
-            elseif(TARGET NetworkSystem)
-                set(_DATABASE_NETWORK_TARGET NetworkSystem)
-            elseif(TARGET network_system)
-                set(_DATABASE_NETWORK_TARGET network_system)
-            endif()
-
-            if(_DATABASE_NETWORK_TARGET)
-                target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_NETWORK_TARGET})
-            endif()
-        else()
-            message(WARNING "Database: network_system headers not found - integration disabled")
-            set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
-        endif()
-    endif()
-endif()
 
 # PostgreSQL dependency (optional)
 if(USE_POSTGRESQL)

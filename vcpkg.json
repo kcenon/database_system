@@ -26,7 +26,8 @@
           "default-features": false
         },
         {
-          "name": "openssl"
+          "name": "openssl",
+          "version>=": "3.0.0"
         }
       ]
     },

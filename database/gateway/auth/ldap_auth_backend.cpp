@@ -82,22 +82,22 @@ std::string ldap_auth_backend::name() const noexcept {
 
 result<void> ldap_auth_backend::initialize() {
     if (initialized_.load()) {
-        return result<void>::ok();
+        return kcenon::common::ok();
     }
 
     // Validate configuration
     if (config_.server_url.empty()) {
-        return result<void>(error_info{-1, "LDAP server URL required", "ldap_auth"});
+        return kcenon::common::error_info{-1, "LDAP server URL required", "ldap_auth"};
     }
 
     if (config_.base_dn.empty()) {
-        return result<void>(error_info{-2, "LDAP base DN required", "ldap_auth"});
+        return kcenon::common::error_info{-2, "LDAP base DN required", "ldap_auth"};
     }
 
     // Parse and validate server URL
     auto [host, port] = parse_ldap_url(config_.server_url);
     if (host.empty()) {
-        return result<void>(error_info{-3, "Invalid LDAP server URL", "ldap_auth"});
+        return kcenon::common::error_info{-3, "Invalid LDAP server URL", "ldap_auth"};
     }
 
     // Initialize connection
@@ -116,7 +116,7 @@ result<void> ldap_auth_backend::initialize() {
     }
 
     initialized_.store(true);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void ldap_auth_backend::shutdown() {
@@ -141,11 +141,11 @@ void ldap_auth_backend::shutdown() {
 
 result<auth_result> ldap_auth_backend::authenticate(const auth_credentials& credentials) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "ldap_auth"};
     }
 
     if (credentials.username.empty() || credentials.password.empty()) {
-        return result<auth_result>(error_info{-2, "Username and password required", "ldap_auth"});
+        return kcenon::common::error_info{-2, "Username and password required", "ldap_auth"};
     }
 
     // Check cache first
@@ -161,7 +161,7 @@ result<auth_result> ldap_auth_backend::authenticate(const auth_credentials& cred
     auto search_result = search_user_dn(credentials.username);
     if (search_result.is_err()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(search_result.error());
+        return search_result.error();
     }
 
     std::string user_dn = search_result.value();
@@ -170,7 +170,7 @@ result<auth_result> ldap_auth_backend::authenticate(const auth_credentials& cred
     auto bind_result = bind_user(user_dn, credentials.password);
     if (bind_result.is_err()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(error_info{-4, "Invalid credentials", "ldap_auth"});
+        return kcenon::common::error_info{-4, "Invalid credentials", "ldap_auth"};
     }
 
     // Fetch user groups
@@ -216,23 +216,23 @@ result<auth_result> ldap_auth_backend::authenticate(const auth_credentials& cred
     result_data.access_token = token;
 
     auth_successes_.fetch_add(1);
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<auth_result> ldap_auth_backend::validate_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "ldap_auth"};
     }
 
     if (token.empty()) {
-        return result<auth_result>(error_info{-2, "Token required", "ldap_auth"});
+        return kcenon::common::error_info{-2, "Token required", "ldap_auth"};
     }
 
     std::lock_guard<std::mutex> lock(sessions_mutex_);
 
     auto it = sessions_.find(token);
     if (it == sessions_.end()) {
-        return result<auth_result>(error_info{-3, "Token not found", "ldap_auth"});
+        return kcenon::common::error_info{-3, "Token not found", "ldap_auth"};
     }
 
     const auto& session = it->second;
@@ -240,13 +240,13 @@ result<auth_result> ldap_auth_backend::validate_token(const std::string& token) 
 
     if (now > session.expires_at) {
         sessions_.erase(it);
-        return result<auth_result>(error_info{-4, "Token expired", "ldap_auth"});
+        return kcenon::common::error_info{-4, "Token expired", "ldap_auth"};
     }
 
     // Get cached user info
     auto cached = get_cached_user(session.username);
     if (!cached.has_value()) {
-        return result<auth_result>(error_info{-5, "User info not found in cache", "ldap_auth"});
+        return kcenon::common::error_info{-5, "User info not found in cache", "ldap_auth"};
     }
 
     auth_result result_data;
@@ -257,28 +257,28 @@ result<auth_result> ldap_auth_backend::validate_token(const std::string& token) 
     result_data.authenticated_at = cached->cached_at;
     result_data.access_token = token;
 
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<auth_result> ldap_auth_backend::refresh_token(const std::string& /* refresh_token */) {
     // LDAP doesn't use refresh tokens
-    return result<auth_result>(error_info{-10, "Refresh tokens not supported for LDAP auth", "ldap_auth"});
+    return kcenon::common::error_info{-10, "Refresh tokens not supported for LDAP auth", "ldap_auth"};
 }
 
 result<void> ldap_auth_backend::revoke_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<void>(error_info{-1, "Backend not initialized", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "ldap_auth"};
     }
 
     std::lock_guard<std::mutex> lock(sessions_mutex_);
 
     auto it = sessions_.find(token);
     if (it == sessions_.end()) {
-        return result<void>(error_info{-2, "Token not found", "ldap_auth"});
+        return kcenon::common::error_info{-2, "Token not found", "ldap_auth"};
     }
 
     sessions_.erase(it);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 bool ldap_auth_backend::has_permission(
@@ -319,9 +319,10 @@ result<void> ldap_auth_backend::test_connection() {
         }
     }
 
-    return connection_state_.load() == ldap_connection_state::connected
-        ? result<void>::ok()
-        : result<void>(error_info{-1, "LDAP connection not established", "ldap_auth"});
+    if (connection_state_.load() == ldap_connection_state::connected) {
+        return kcenon::common::ok();
+    }
+    return kcenon::common::error_info{-1, "LDAP connection not established", "ldap_auth"};
 }
 
 ldap_connection_state ldap_auth_backend::connection_state() const noexcept {
@@ -363,14 +364,14 @@ result<void> ldap_auth_backend::connect() {
     // int rc = ldap_initialize(&ld, config_.server_url.c_str());
     // if (rc != LDAP_SUCCESS) {
     //     connection_state_.store(ldap_connection_state::error);
-    //     return result<void>(error_info{rc, ldap_err2string(rc), "ldap_auth"});
+    //     return kcenon::common::error_info{rc, ldap_err2string(rc), "ldap_auth"};
     // }
     //
     // if (config_.use_tls) {
     //     rc = ldap_start_tls_s(ld, nullptr, nullptr);
     //     if (rc != LDAP_SUCCESS) {
     //         ldap_unbind_ext_s(ld, nullptr, nullptr);
-    //         return result<void>(error_info{rc, "TLS handshake failed", "ldap_auth"});
+    //         return kcenon::common::error_info{rc, "TLS handshake failed", "ldap_auth"};
     //     }
     // }
 
@@ -378,7 +379,7 @@ result<void> ldap_auth_backend::connect() {
     ldap_handle_ = reinterpret_cast<void*>(0x1);  // Non-null marker
     connection_state_.store(ldap_connection_state::connected);
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void ldap_auth_backend::disconnect() {
@@ -392,7 +393,7 @@ void ldap_auth_backend::disconnect() {
 
 result<void> ldap_auth_backend::bind_service_account() {
     if (ldap_handle_ == nullptr) {
-        return result<void>(error_info{-1, "Not connected to LDAP server", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Not connected to LDAP server", "ldap_auth"};
     }
 
     // In production:
@@ -408,15 +409,15 @@ result<void> ldap_auth_backend::bind_service_account() {
     //     nullptr, nullptr, nullptr);
     //
     // if (rc != LDAP_SUCCESS) {
-    //     return result<void>(error_info{rc, "Service account bind failed", "ldap_auth"});
+    //     return kcenon::common::error_info{rc, "Service account bind failed", "ldap_auth"};
     // }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<std::string> ldap_auth_backend::search_user_dn(const std::string& username) {
     if (ldap_handle_ == nullptr) {
-        return result<std::string>(error_info{-1, "Not connected to LDAP server", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Not connected to LDAP server", "ldap_auth"};
     }
 
     // Format search filter
@@ -438,13 +439,13 @@ result<std::string> ldap_auth_backend::search_user_dn(const std::string& usernam
     //     &result);
     //
     // if (rc != LDAP_SUCCESS) {
-    //     return result<std::string>(error_info{rc, "User search failed", "ldap_auth"});
+    //     return kcenon::common::error_info{rc, "User search failed", "ldap_auth"};
     // }
     //
     // LDAPMessage* entry = ldap_first_entry(static_cast<LDAP*>(ldap_handle_), result);
     // if (entry == nullptr) {
     //     ldap_msgfree(result);
-    //     return result<std::string>(error_info{-2, "User not found", "ldap_auth"});
+    //     return kcenon::common::error_info{-2, "User not found", "ldap_auth"};
     // }
     //
     // char* dn = ldap_get_dn(static_cast<LDAP*>(ldap_handle_), entry);
@@ -454,12 +455,12 @@ result<std::string> ldap_auth_backend::search_user_dn(const std::string& usernam
 
     // Simulated: return a constructed DN
     std::string user_dn = config_.user_id_attribute + "=" + username + "," + config_.base_dn;
-    return result<std::string>::ok(user_dn);
+    return user_dn;
 }
 
 result<void> ldap_auth_backend::bind_user(const std::string& user_dn, const std::string& password) {
     if (ldap_handle_ == nullptr) {
-        return result<void>(error_info{-1, "Not connected to LDAP server", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Not connected to LDAP server", "ldap_auth"};
     }
 
     // In production:
@@ -467,7 +468,7 @@ result<void> ldap_auth_backend::bind_user(const std::string& user_dn, const std:
     // LDAP* user_ld = nullptr;
     // int rc = ldap_initialize(&user_ld, config_.server_url.c_str());
     // if (rc != LDAP_SUCCESS) {
-    //     return result<void>(error_info{rc, "Failed to create user connection", "ldap_auth"});
+    //     return kcenon::common::error_info{rc, "Failed to create user connection", "ldap_auth"};
     // }
     //
     // struct berval cred;
@@ -479,21 +480,20 @@ result<void> ldap_auth_backend::bind_user(const std::string& user_dn, const std:
     // ldap_unbind_ext_s(user_ld, nullptr, nullptr);
     //
     // if (rc != LDAP_SUCCESS) {
-    //     return result<void>(error_info{rc, "User bind failed", "ldap_auth"});
+    //     return kcenon::common::error_info{rc, "User bind failed", "ldap_auth"};
     // }
 
     // Simulated: accept any non-empty password for testing
     if (password.empty()) {
-        return result<void>(error_info{-2, "Password required", "ldap_auth"});
+        return kcenon::common::error_info{-2, "Password required", "ldap_auth"};
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<std::vector<std::string>> ldap_auth_backend::fetch_user_groups(const std::string& user_dn) {
     if (ldap_handle_ == nullptr) {
-        return result<std::vector<std::string>>(
-            error_info{-1, "Not connected to LDAP server", "ldap_auth"});
+        return kcenon::common::error_info{-1, "Not connected to LDAP server", "ldap_auth"};
     }
 
     std::string group_base = config_.group_base_dn.empty()
@@ -510,7 +510,7 @@ result<std::vector<std::string>> ldap_auth_backend::fetch_user_groups(const std:
     // Parse results to extract group names
 
     // Simulated: return empty groups
-    return result<std::vector<std::string>>::ok(std::vector<std::string>{});
+    return std::vector<std::string>{};
 }
 
 std::vector<std::string> ldap_auth_backend::map_groups_to_permissions(

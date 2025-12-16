@@ -152,16 +152,16 @@ std::string oauth_auth_backend::name() const noexcept {
 
 result<void> oauth_auth_backend::initialize() {
     if (initialized_.load()) {
-        return result<void>::ok();
+        return kcenon::common::ok();
     }
 
     // Validate required configuration
     if (config_.client_id.empty()) {
-        return result<void>(error_info{-1, "OAuth client_id required", "oauth_auth"});
+        return kcenon::common::error_info{-1, "OAuth client_id required", "oauth_auth"};
     }
 
     if (config_.token_url.empty() && config_.issuer.empty()) {
-        return result<void>(error_info{-2, "OAuth token_url or issuer required", "oauth_auth"});
+        return kcenon::common::error_info{-2, "OAuth token_url or issuer required", "oauth_auth"};
     }
 
     // Try to fetch discovery document if issuer is provided
@@ -198,7 +198,7 @@ result<void> oauth_auth_backend::initialize() {
     }
 
     initialized_.store(true);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void oauth_auth_backend::shutdown() {
@@ -222,7 +222,7 @@ void oauth_auth_backend::shutdown() {
 
 result<auth_result> oauth_auth_backend::authenticate(const auth_credentials& credentials) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     // If access_token is provided, validate it
@@ -240,20 +240,20 @@ result<auth_result> oauth_auth_backend::authenticate(const auth_credentials& cre
         return client_credentials_flow();
     }
 
-    return result<auth_result>(error_info{
+    return kcenon::common::error_info{
         -2,
         "OAuth requires access_token or client credentials",
         "oauth_auth"
-    });
+    };
 }
 
 result<auth_result> oauth_auth_backend::validate_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     if (token.empty()) {
-        return result<auth_result>(error_info{-2, "Token required", "oauth_auth"});
+        return kcenon::common::error_info{-2, "Token required", "oauth_auth"};
     }
 
     // Check session cache first
@@ -273,7 +273,7 @@ result<auth_result> oauth_auth_backend::validate_token(const std::string& token)
                 result_data.access_token = token;
 
                 tokens_validated_.fetch_add(1);
-                return result<auth_result>::ok(std::move(result_data));
+                return result_data;
             } else {
                 sessions_.erase(it);
             }
@@ -323,7 +323,7 @@ result<auth_result> oauth_auth_backend::validate_token(const std::string& token)
             result_data.token_ttl = token_info.expires_in;
 
             tokens_validated_.fetch_add(1);
-            return result<auth_result>::ok(std::move(result_data));
+            return result_data;
         }
     }
 
@@ -376,24 +376,24 @@ result<auth_result> oauth_auth_backend::validate_token(const std::string& token)
         result_data.token_ttl = ttl;
 
         tokens_validated_.fetch_add(1);
-        return result<auth_result>::ok(std::move(result_data));
+        return result_data;
     }
 
     auth_failures_.fetch_add(1);
-    return result<auth_result>(error_info{-3, "Token validation failed", "oauth_auth"});
+    return kcenon::common::error_info{-3, "Token validation failed", "oauth_auth"};
 }
 
 result<auth_result> oauth_auth_backend::refresh_token(const std::string& refresh_token) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     if (refresh_token.empty()) {
-        return result<auth_result>(error_info{-2, "Refresh token required", "oauth_auth"});
+        return kcenon::common::error_info{-2, "Refresh token required", "oauth_auth"};
     }
 
     if (discovered_token_url_.empty()) {
-        return result<auth_result>(error_info{-3, "Token URL not configured", "oauth_auth"});
+        return kcenon::common::error_info{-3, "Token URL not configured", "oauth_auth"};
     }
 
     // Build refresh token request
@@ -410,7 +410,7 @@ result<auth_result> oauth_auth_backend::refresh_token(const std::string& refresh
     auto response = http_post(discovered_token_url_, body.str());
     if (response.is_err()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(response.error());
+        return response.error();
     }
 
     // Parse token response
@@ -421,7 +421,7 @@ result<auth_result> oauth_auth_backend::refresh_token(const std::string& refresh
 
     if (access_token.empty()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(error_info{-4, "Invalid token response", "oauth_auth"});
+        return kcenon::common::error_info{-4, "Invalid token response", "oauth_auth"};
     }
 
     // Validate new access token
@@ -444,12 +444,12 @@ result<auth_result> oauth_auth_backend::refresh_token(const std::string& refresh
     }
 
     tokens_refreshed_.fetch_add(1);
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<void> oauth_auth_backend::revoke_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<void>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     // Remove from local session cache
@@ -462,7 +462,7 @@ result<void> oauth_auth_backend::revoke_token(const std::string& token) {
     // Most implementations don't have a revocation endpoint
 
     tokens_revoked_.fetch_add(1);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 bool oauth_auth_backend::has_permission(
@@ -524,15 +524,15 @@ result<auth_result> oauth_auth_backend::exchange_code(
     const std::string& code_verifier)
 {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     if (code.empty()) {
-        return result<auth_result>(error_info{-2, "Authorization code required", "oauth_auth"});
+        return kcenon::common::error_info{-2, "Authorization code required", "oauth_auth"};
     }
 
     if (discovered_token_url_.empty()) {
-        return result<auth_result>(error_info{-3, "Token URL not configured", "oauth_auth"});
+        return kcenon::common::error_info{-3, "Token URL not configured", "oauth_auth"};
     }
 
     // Build token request
@@ -554,7 +554,7 @@ result<auth_result> oauth_auth_backend::exchange_code(
     auto response = http_post(discovered_token_url_, body.str());
     if (response.is_err()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(response.error());
+        return response.error();
     }
 
     // Parse token response
@@ -565,7 +565,7 @@ result<auth_result> oauth_auth_backend::exchange_code(
 
     if (access_token.empty()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(error_info{-4, "Invalid token response", "oauth_auth"});
+        return kcenon::common::error_info{-4, "Invalid token response", "oauth_auth"};
     }
 
     // Validate access token
@@ -588,16 +588,16 @@ result<auth_result> oauth_auth_backend::exchange_code(
     }
 
     tokens_issued_.fetch_add(1);
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<auth_result> oauth_auth_backend::client_credentials_flow() {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "oauth_auth"};
     }
 
     if (discovered_token_url_.empty()) {
-        return result<auth_result>(error_info{-2, "Token URL not configured", "oauth_auth"});
+        return kcenon::common::error_info{-2, "Token URL not configured", "oauth_auth"};
     }
 
     // Build client credentials request
@@ -620,7 +620,7 @@ result<auth_result> oauth_auth_backend::client_credentials_flow() {
     auto response = http_post(discovered_token_url_, body.str());
     if (response.is_err()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(response.error());
+        return response.error();
     }
 
     // Parse token response
@@ -630,7 +630,7 @@ result<auth_result> oauth_auth_backend::client_credentials_flow() {
 
     if (access_token.empty()) {
         auth_failures_.fetch_add(1);
-        return result<auth_result>(error_info{-3, "Invalid token response", "oauth_auth"});
+        return kcenon::common::error_info{-3, "Invalid token response", "oauth_auth"};
     }
 
     // Create auth result for service account
@@ -658,12 +658,12 @@ result<auth_result> oauth_auth_backend::client_credentials_flow() {
     result_data.token_ttl = ttl;
 
     tokens_issued_.fetch_add(1);
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<oauth_token_info> oauth_auth_backend::introspect_token(const std::string& token) {
     if (discovered_introspection_url_.empty()) {
-        return result<oauth_token_info>(error_info{-1, "Introspection URL not configured", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Introspection URL not configured", "oauth_auth"};
     }
 
     // Build introspection request
@@ -678,7 +678,7 @@ result<oauth_token_info> oauth_auth_backend::introspect_token(const std::string&
     // Make introspection request
     auto response = http_post(discovered_introspection_url_, body.str());
     if (response.is_err()) {
-        return result<oauth_token_info>(response.error());
+        return response.error();
     }
 
     // Parse response
@@ -687,7 +687,7 @@ result<oauth_token_info> oauth_auth_backend::introspect_token(const std::string&
     // Check if token is active
     if (json.find("\"active\":true") == std::string::npos &&
         json.find("\"active\": true") == std::string::npos) {
-        return result<oauth_token_info>(error_info{-2, "Token is not active", "oauth_auth"});
+        return kcenon::common::error_info{-2, "Token is not active", "oauth_auth"};
     }
 
     oauth_token_info info;
@@ -718,12 +718,12 @@ result<oauth_token_info> oauth_auth_backend::introspect_token(const std::string&
         }
     }
 
-    return result<oauth_token_info>::ok(std::move(info));
+    return info;
 }
 
 result<oauth_user_info> oauth_auth_backend::fetch_user_info(const std::string& access_token) {
     if (discovered_userinfo_url_.empty()) {
-        return result<oauth_user_info>(error_info{-1, "Userinfo URL not configured", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Userinfo URL not configured", "oauth_auth"};
     }
 
     // Check cache first
@@ -733,7 +733,7 @@ result<oauth_user_info> oauth_auth_backend::fetch_user_info(const std::string& a
         if (it != user_info_cache_.end()) {
             auto age = std::chrono::system_clock::now() - it->second.fetched_at;
             if (age < config_.cache_ttl) {
-                return result<oauth_user_info>::ok(it->second);
+                return it->second;
             }
         }
     }
@@ -741,7 +741,7 @@ result<oauth_user_info> oauth_auth_backend::fetch_user_info(const std::string& a
     // Fetch user info
     auto response = http_get_authorized(discovered_userinfo_url_, access_token);
     if (response.is_err()) {
-        return result<oauth_user_info>(response.error());
+        return response.error();
     }
 
     // Parse response
@@ -760,7 +760,7 @@ result<oauth_user_info> oauth_auth_backend::fetch_user_info(const std::string& a
         user_info_cache_[access_token] = info;
     }
 
-    return result<oauth_user_info>::ok(std::move(info));
+    return info;
 }
 
 void oauth_auth_backend::set_scope_permission_mappings(
@@ -814,7 +814,7 @@ result<void> oauth_auth_backend::fetch_discovery_document() {
     discovered_introspection_url_ = config_.issuer + "/introspect";
     discovered_jwks_url_ = config_.issuer + "/.well-known/jwks.json";
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> oauth_auth_backend::fetch_jwks() {
@@ -824,7 +824,7 @@ result<void> oauth_auth_backend::fetch_jwks() {
     jwks_json_ = "{}";  // Placeholder
     jwks_fetched_at_ = std::chrono::system_clock::now();
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<std::map<std::string, std::string>> oauth_auth_backend::validate_jwt(const std::string& token) {
@@ -833,8 +833,7 @@ result<std::map<std::string, std::string>> oauth_auth_backend::validate_jwt(cons
 
     auto claims = parse_jwt_claims(token);
     if (claims.empty()) {
-        return result<std::map<std::string, std::string>>(
-            error_info{-1, "Invalid JWT format", "oauth_auth"});
+        return kcenon::common::error_info{-1, "Invalid JWT format", "oauth_auth"};
     }
 
     // Check expiration
@@ -844,28 +843,25 @@ result<std::map<std::string, std::string>> oauth_auth_backend::validate_jwt(cons
             std::chrono::system_clock::now().time_since_epoch()).count();
 
         if (now >= exp) {
-            return result<std::map<std::string, std::string>>(
-                error_info{-2, "Token expired", "oauth_auth"});
+            return kcenon::common::error_info{-2, "Token expired", "oauth_auth"};
         }
     }
 
     // Validate issuer if configured
     if (!config_.issuer.empty() && claims.count("iss")) {
         if (claims["iss"] != config_.issuer) {
-            return result<std::map<std::string, std::string>>(
-                error_info{-3, "Invalid issuer", "oauth_auth"});
+            return kcenon::common::error_info{-3, "Invalid issuer", "oauth_auth"};
         }
     }
 
     // Validate audience if configured
     if (!config_.audience.empty() && claims.count("aud")) {
         if (claims["aud"] != config_.audience) {
-            return result<std::map<std::string, std::string>>(
-                error_info{-4, "Invalid audience", "oauth_auth"});
+            return kcenon::common::error_info{-4, "Invalid audience", "oauth_auth"};
         }
     }
 
-    return result<std::map<std::string, std::string>>::ok(std::move(claims));
+    return claims;
 }
 
 std::map<std::string, std::string> oauth_auth_backend::parse_jwt_claims(const std::string& token) const {
@@ -914,7 +910,7 @@ result<std::string> oauth_auth_backend::http_post(
     (void)url;
     (void)body;
 
-    return result<std::string>::ok(response);
+    return response;
 }
 
 result<std::string> oauth_auth_backend::http_get_authorized(
@@ -934,7 +930,7 @@ result<std::string> oauth_auth_backend::http_get_authorized(
 
     (void)url;
 
-    return result<std::string>::ok(response);
+    return response;
 }
 
 std::string oauth_auth_backend::generate_code_verifier() {

@@ -57,7 +57,7 @@ database_gateway::~database_gateway() {
 
 result<void> database_gateway::start(uint16_t port, const security_config& security) {
     if (running_.load()) {
-        return result<void>(error_info{-1, "Gateway already running", "gateway"});
+        return kcenon::common::error_info{-1, "Gateway already running", "gateway"};
     }
 
     port_ = port;
@@ -79,11 +79,11 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
         if (backend) {
             auto init_result = backend->initialize();
             if (init_result.is_err()) {
-                return result<void>(error_info{
+                return kcenon::common::error_info{
                     -8,
                     "Failed to initialize auth backend: " + init_result.error().message,
                     "gateway"
-                });
+                };
             }
             auth_manager_.add_backend(std::move(backend), true);
 
@@ -139,11 +139,11 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
             logger_->log_error("start", "Failed to start network server: " +
                 start_result.error().message, "");
         }
-        return result<void>(error_info{
+        return kcenon::common::error_info{
             -10,
             "Failed to start network server: " + start_result.error().message,
             "gateway"
-        });
+        };
     }
 
     running_.store(true);
@@ -154,7 +154,7 @@ result<void> database_gateway::start(uint16_t port, const security_config& secur
             "Gateway started on port " + std::to_string(port));
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void database_gateway::stop() {
@@ -205,26 +205,26 @@ result<void> database_gateway::register_cluster(
     std::shared_ptr<distributed::cluster_manager> cluster
 ) {
     if (cluster_id.empty()) {
-        return result<void>(error_info{-2, "Cluster ID cannot be empty", "gateway"});
+        return kcenon::common::error_info{-2, "Cluster ID cannot be empty", "gateway"};
     }
 
     if (!cluster) {
-        return result<void>(error_info{-2, "Cluster cannot be null", "gateway"});
+        return kcenon::common::error_info{-2, "Cluster cannot be null", "gateway"};
     }
 
     std::lock_guard<std::mutex> lock(clusters_mutex_);
 
     if (clusters_.find(cluster_id) != clusters_.end()) {
-        return result<void>(error_info{-3, "Cluster already registered: " + cluster_id, "gateway"});
+        return kcenon::common::error_info{-3, "Cluster already registered: " + cluster_id, "gateway"};
     }
 
     clusters_[cluster_id] = cluster;
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> database_gateway::add_routing_rule(const routing_rule& rule) {
     if (rule.name.empty()) {
-        return result<void>(error_info{-2, "Rule name cannot be empty", "gateway"});
+        return kcenon::common::error_info{-2, "Rule name cannot be empty", "gateway"};
     }
 
     std::lock_guard<std::mutex> lock(routing_mutex_);
@@ -232,7 +232,7 @@ result<void> database_gateway::add_routing_rule(const routing_rule& rule) {
     // Check for duplicate name
     for (const auto& existing : routing_rules_) {
         if (existing.name == rule.name) {
-            return result<void>(error_info{-3, "Rule already exists: " + rule.name, "gateway"});
+            return kcenon::common::error_info{-3, "Rule already exists: " + rule.name, "gateway"};
         }
     }
 
@@ -244,7 +244,7 @@ result<void> database_gateway::add_routing_rule(const routing_rule& rule) {
                   return a.priority > b.priority;
               });
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> database_gateway::remove_routing_rule(const std::string& rule_name) {
@@ -256,11 +256,11 @@ result<void> database_gateway::remove_routing_rule(const std::string& rule_name)
                            });
 
     if (it == routing_rules_.end()) {
-        return result<void>(error_info{-4, "Rule not found: " + rule_name, "gateway"});
+        return kcenon::common::error_info{-4, "Rule not found: " + rule_name, "gateway"};
     }
 
     routing_rules_.erase(it);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void database_gateway::configure_cache(const cache_config& config) {
@@ -316,11 +316,11 @@ result<void> database_gateway::configure_observability(const gateway_observabili
         );
         auto init_result = logger_->initialize();
         if (!init_result.is_ok()) {
-            return result<void>(error_info{
+            return kcenon::common::error_info{
                 -20,
-                "Failed to initialize gateway logger: " + init_result.get_error().message,
+                "Failed to initialize gateway logger: " + init_result.error().message,
                 "gateway"
-            });
+            };
         }
         logger_->log(integrated::db_log_level::info, "Gateway logger initialized");
     }
@@ -333,18 +333,18 @@ result<void> database_gateway::configure_observability(const gateway_observabili
         );
         auto init_result = monitor_->initialize();
         if (!init_result.is_ok()) {
-            return result<void>(error_info{
+            return kcenon::common::error_info{
                 -21,
-                "Failed to initialize gateway monitoring: " + init_result.get_error().message,
+                "Failed to initialize gateway monitoring: " + init_result.error().message,
                 "gateway"
-            });
+            };
         }
         if (logger_) {
             logger_->log(integrated::db_log_level::info, "Gateway monitoring initialized");
         }
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<core::database_result> database_gateway::execute_query(const std::string& query) {
@@ -377,7 +377,7 @@ result<core::database_result> database_gateway::execute_query(const std::string&
             }
 
             audit_log_query(query, true, duration, "cache", "");
-            return result<core::database_result>::ok(cached.value());
+            return cached.value();
         }
         cache_misses_.fetch_add(1);
 
@@ -403,9 +403,7 @@ result<core::database_result> database_gateway::execute_query(const std::string&
                     end_time - start_time
                 );
                 audit_log_query(query, false, duration, "", "No clusters registered");
-                return result<core::database_result>(
-                    error_info{-5, "No clusters registered", "gateway"}
-                );
+                return kcenon::common::error_info{-5, "No clusters registered", "gateway"};
             }
             target_cluster = clusters_.begin()->second;
             target_cluster_id = clusters_.begin()->first;
@@ -417,16 +415,14 @@ result<core::database_result> database_gateway::execute_query(const std::string&
                     end_time - start_time
                 );
                 audit_log_query(query, false, duration, cluster_id, "Cluster not found");
-                return result<core::database_result>(
-                    error_info{-5, "Cluster not found: " + cluster_id, "gateway"}
-                );
+                return kcenon::common::error_info{-5, "Cluster not found: " + cluster_id, "gateway"};
             }
             target_cluster = it->second;
         }
     }
 
     // Execute query on cluster
-    result<core::database_result> query_result(error_info{-1, "Unknown error", "gateway"});
+    result<core::database_result> query_result(kcenon::common::error_info{-1, "Unknown error", "gateway"});
 
     if (is_select_query(query)) {
         query_result = target_cluster->execute_read_query(query);
@@ -438,9 +434,9 @@ result<core::database_result> database_gateway::execute_query(const std::string&
             // Note: database_result is std::vector<database_row>, so we return empty
             // The rows_affected count is available in write_result.value() but not stored
             (void)write_result.value();  // Suppress unused warning
-            query_result = result<core::database_result>::ok(result_data);
+            query_result = result_data;
         } else {
-            query_result = result<core::database_result>(write_result.error());
+            query_result = write_result.error();
         }
     }
 
@@ -499,9 +495,9 @@ result<void> database_gateway::authenticate(
 
         auto auth_result = auth_manager_.authenticate(creds);
         if (auth_result.is_ok()) {
-            return result<void>::ok();
+            return kcenon::common::ok();
         }
-        return result<void>(error_info{-6, "Authentication failed: " + auth_result.error().message, "gateway"});
+        return kcenon::common::error_info{-6, "Authentication failed: " + auth_result.error().message, "gateway"};
     }
 
     // Legacy fallback: use simple username/password map
@@ -509,24 +505,24 @@ result<void> database_gateway::authenticate(
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-6, "Authentication failed: user not found", "gateway"});
+        return kcenon::common::error_info{-6, "Authentication failed: user not found", "gateway"};
     }
 
     // Simple password comparison (in production, use proper hashing)
     if (it->second != password) {
-        return result<void>(error_info{-6, "Authentication failed: invalid password", "gateway"});
+        return kcenon::common::error_info{-6, "Authentication failed: invalid password", "gateway"};
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<auth::auth_result> database_gateway::authenticate(
     const auth::auth_credentials& credentials
 ) {
     if (auth_manager_.backend_count() == 0) {
-        return result<auth::auth_result>(error_info{
+        return kcenon::common::error_info{
             -7, "No authentication backend configured", "gateway"
-        });
+        };
     }
 
     return auth_manager_.authenticate(credentials);
@@ -534,9 +530,9 @@ result<auth::auth_result> database_gateway::authenticate(
 
 result<auth::auth_result> database_gateway::validate_token(const std::string& token) {
     if (auth_manager_.backend_count() == 0) {
-        return result<auth::auth_result>(error_info{
+        return kcenon::common::error_info{
             -7, "No authentication backend configured", "gateway"
-        });
+        };
     }
 
     return auth_manager_.validate_token(token);
@@ -544,9 +540,9 @@ result<auth::auth_result> database_gateway::validate_token(const std::string& to
 
 result<auth::auth_result> database_gateway::refresh_token(const std::string& refresh_token) {
     if (auth_manager_.backend_count() == 0) {
-        return result<auth::auth_result>(error_info{
+        return kcenon::common::error_info{
             -7, "No authentication backend configured", "gateway"
-        });
+        };
     }
 
     // Find OAuth backend and refresh
@@ -557,9 +553,9 @@ result<auth::auth_result> database_gateway::refresh_token(const std::string& ref
         }
     }
 
-    return result<auth::auth_result>(error_info{
+    return kcenon::common::error_info{
         -8, "No OAuth backend configured for token refresh", "gateway"
-    });
+    };
 }
 
 void database_gateway::add_auth_backend(

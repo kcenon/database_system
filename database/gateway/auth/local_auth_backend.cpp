@@ -73,11 +73,11 @@ std::string local_auth_backend::name() const noexcept {
 
 result<void> local_auth_backend::initialize() {
     if (initialized_.load()) {
-        return result<void>::ok();
+        return kcenon::common::ok();
     }
 
     initialized_.store(true);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 void local_auth_backend::shutdown() {
@@ -95,30 +95,30 @@ void local_auth_backend::shutdown() {
 
 result<auth_result> local_auth_backend::authenticate(const auth_credentials& credentials) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "local_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "local_auth"};
     }
 
     if (credentials.username.empty() || credentials.password.empty()) {
-        return result<auth_result>(error_info{-2, "Username and password required", "local_auth"});
+        return kcenon::common::error_info{-2, "Username and password required", "local_auth"};
     }
 
     std::lock_guard<std::mutex> lock(users_mutex_);
 
     auto it = users_.find(credentials.username);
     if (it == users_.end()) {
-        return result<auth_result>(error_info{-3, "User not found", "local_auth"});
+        return kcenon::common::error_info{-3, "User not found", "local_auth"};
     }
 
     auto& user = it->second;
 
     // Check if account is enabled
     if (!user.enabled) {
-        return result<auth_result>(error_info{-4, "Account disabled", "local_auth"});
+        return kcenon::common::error_info{-4, "Account disabled", "local_auth"};
     }
 
     // Check if account is locked
     if (is_locked(user)) {
-        return result<auth_result>(error_info{-5, "Account locked due to too many failed attempts", "local_auth"});
+        return kcenon::common::error_info{-5, "Account locked due to too many failed attempts", "local_auth"};
     }
 
     // Verify password
@@ -127,7 +127,7 @@ result<auth_result> local_auth_backend::authenticate(const auth_credentials& cre
         if (user.failed_attempts >= config_.max_failed_attempts) {
             user.locked_until = std::chrono::system_clock::now() + config_.lockout_duration;
         }
-        return result<auth_result>(error_info{-6, "Invalid password", "local_auth"});
+        return kcenon::common::error_info{-6, "Invalid password", "local_auth"};
     }
 
     // Reset failed attempts on successful login
@@ -156,23 +156,23 @@ result<auth_result> local_auth_backend::authenticate(const auth_credentials& cre
     result_data.token_ttl = config_.cache_ttl;
     result_data.access_token = token;
 
-    return result<auth_result>::ok(std::move(result_data));
+    return result_data;
 }
 
 result<auth_result> local_auth_backend::validate_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<auth_result>(error_info{-1, "Backend not initialized", "local_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "local_auth"};
     }
 
     if (token.empty()) {
-        return result<auth_result>(error_info{-2, "Token required", "local_auth"});
+        return kcenon::common::error_info{-2, "Token required", "local_auth"};
     }
 
     std::lock_guard<std::mutex> lock(sessions_mutex_);
 
     auto it = sessions_.find(token);
     if (it == sessions_.end()) {
-        return result<auth_result>(error_info{-3, "Token not found", "local_auth"});
+        return kcenon::common::error_info{-3, "Token not found", "local_auth"};
     }
 
     const auto& session = it->second;
@@ -180,7 +180,7 @@ result<auth_result> local_auth_backend::validate_token(const std::string& token)
 
     if (now > session.expires_at) {
         sessions_.erase(it);
-        return result<auth_result>(error_info{-4, "Token expired", "local_auth"});
+        return kcenon::common::error_info{-4, "Token expired", "local_auth"};
     }
 
     // Get user info
@@ -195,33 +195,33 @@ result<auth_result> local_auth_backend::validate_token(const std::string& token)
             result_data.authenticated_at = session.created_at;
             result_data.access_token = token;
 
-            return result<auth_result>::ok(std::move(result_data));
+            return result_data;
         }
     }
 
-    return result<auth_result>(error_info{-5, "User not found for session", "local_auth"});
+    return kcenon::common::error_info{-5, "User not found for session", "local_auth"};
 }
 
 result<auth_result> local_auth_backend::refresh_token(const std::string& /* refresh_token */) {
     // Local auth doesn't use refresh tokens in the same way as OAuth
     // Just return an error indicating this operation is not supported
-    return result<auth_result>(error_info{-10, "Refresh tokens not supported for local auth", "local_auth"});
+    return kcenon::common::error_info{-10, "Refresh tokens not supported for local auth", "local_auth"};
 }
 
 result<void> local_auth_backend::revoke_token(const std::string& token) {
     if (!initialized_.load()) {
-        return result<void>(error_info{-1, "Backend not initialized", "local_auth"});
+        return kcenon::common::error_info{-1, "Backend not initialized", "local_auth"};
     }
 
     std::lock_guard<std::mutex> lock(sessions_mutex_);
 
     auto it = sessions_.find(token);
     if (it == sessions_.end()) {
-        return result<void>(error_info{-2, "Token not found", "local_auth"});
+        return kcenon::common::error_info{-2, "Token not found", "local_auth"};
     }
 
     sessions_.erase(it);
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 bool local_auth_backend::has_permission(
@@ -263,7 +263,7 @@ result<void> local_auth_backend::add_user(
     const std::vector<std::string>& permissions)
 {
     if (username.empty()) {
-        return result<void>(error_info{-1, "Username required", "local_auth"});
+        return kcenon::common::error_info{-1, "Username required", "local_auth"};
     }
 
     // Validate password policy
@@ -275,7 +275,7 @@ result<void> local_auth_backend::add_user(
     std::lock_guard<std::mutex> lock(users_mutex_);
 
     if (users_.find(username) != users_.end()) {
-        return result<void>(error_info{-2, "User already exists", "local_auth"});
+        return kcenon::common::error_info{-2, "User already exists", "local_auth"};
     }
 
     local_user user;
@@ -290,7 +290,7 @@ result<void> local_auth_backend::add_user(
 
     users_[username] = std::move(user);
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> local_auth_backend::remove_user(const std::string& username) {
@@ -298,7 +298,7 @@ result<void> local_auth_backend::remove_user(const std::string& username) {
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-1, "User not found", "local_auth"});
+        return kcenon::common::error_info{-1, "User not found", "local_auth"};
     }
 
     std::string user_id = it->second.user_id;
@@ -316,7 +316,7 @@ result<void> local_auth_backend::remove_user(const std::string& username) {
         }
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> local_auth_backend::update_password(
@@ -332,12 +332,12 @@ result<void> local_auth_backend::update_password(
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-1, "User not found", "local_auth"});
+        return kcenon::common::error_info{-1, "User not found", "local_auth"};
     }
 
     it->second.password_hash = hash_password(new_password);
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> local_auth_backend::grant_permission(
@@ -348,7 +348,7 @@ result<void> local_auth_backend::grant_permission(
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-1, "User not found", "local_auth"});
+        return kcenon::common::error_info{-1, "User not found", "local_auth"};
     }
 
     auto& perms = it->second.permissions;
@@ -356,7 +356,7 @@ result<void> local_auth_backend::grant_permission(
         perms.push_back(permission);
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> local_auth_backend::revoke_permission(
@@ -367,13 +367,13 @@ result<void> local_auth_backend::revoke_permission(
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-1, "User not found", "local_auth"});
+        return kcenon::common::error_info{-1, "User not found", "local_auth"};
     }
 
     auto& perms = it->second.permissions;
     perms.erase(std::remove(perms.begin(), perms.end(), permission), perms.end());
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 result<void> local_auth_backend::unlock_user(const std::string& username) {
@@ -381,13 +381,13 @@ result<void> local_auth_backend::unlock_user(const std::string& username) {
 
     auto it = users_.find(username);
     if (it == users_.end()) {
-        return result<void>(error_info{-1, "User not found", "local_auth"});
+        return kcenon::common::error_info{-1, "User not found", "local_auth"};
     }
 
     it->second.failed_attempts = 0;
     it->second.locked_until = std::chrono::system_clock::time_point{};
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 size_t local_auth_backend::user_count() const {
@@ -412,18 +412,18 @@ bool local_auth_backend::verify_password(const std::string& password, const std:
 
 result<void> local_auth_backend::validate_password_policy(const std::string& password) const {
     if (password.length() < config_.min_password_length) {
-        return result<void>(error_info{
+        return kcenon::common::error_info{
             -10,
             "Password must be at least " + std::to_string(config_.min_password_length) + " characters",
             "local_auth"
-        });
+        };
     }
 
     if (config_.require_uppercase) {
         bool has_upper = std::any_of(password.begin(), password.end(),
             [](unsigned char c) { return std::isupper(c); });
         if (!has_upper) {
-            return result<void>(error_info{-11, "Password must contain uppercase letter", "local_auth"});
+            return kcenon::common::error_info{-11, "Password must contain uppercase letter", "local_auth"};
         }
     }
 
@@ -431,7 +431,7 @@ result<void> local_auth_backend::validate_password_policy(const std::string& pas
         bool has_lower = std::any_of(password.begin(), password.end(),
             [](unsigned char c) { return std::islower(c); });
         if (!has_lower) {
-            return result<void>(error_info{-12, "Password must contain lowercase letter", "local_auth"});
+            return kcenon::common::error_info{-12, "Password must contain lowercase letter", "local_auth"};
         }
     }
 
@@ -439,7 +439,7 @@ result<void> local_auth_backend::validate_password_policy(const std::string& pas
         bool has_digit = std::any_of(password.begin(), password.end(),
             [](unsigned char c) { return std::isdigit(c); });
         if (!has_digit) {
-            return result<void>(error_info{-13, "Password must contain digit", "local_auth"});
+            return kcenon::common::error_info{-13, "Password must contain digit", "local_auth"};
         }
     }
 
@@ -447,11 +447,11 @@ result<void> local_auth_backend::validate_password_policy(const std::string& pas
         bool has_special = std::any_of(password.begin(), password.end(),
             [](unsigned char c) { return std::ispunct(c); });
         if (!has_special) {
-            return result<void>(error_info{-14, "Password must contain special character", "local_auth"});
+            return kcenon::common::error_info{-14, "Password must contain special character", "local_auth"};
         }
     }
 
-    return result<void>::ok();
+    return kcenon::common::ok();
 }
 
 std::string local_auth_backend::generate_token() const {

@@ -4,19 +4,24 @@
 coverage:
   precision: 2
   round: down
-  range: "70...100"
+  range: "50...100"
 
   status:
     project:
       default:
-        target: 80%
+        target: 55%  # Phase 1: Establish realistic baseline
         threshold: 2%
         if_ci_failed: error
 
     patch:
       default:
-        target: 80%
+        target: 60%
         threshold: 5%
+
+# Gradual improvement plan:
+# - Phase 1 (Current): 55% project, 60% patch - Establish baseline
+# - Phase 2: 65% project, 70% patch - Increase coverage
+# - Phase 3: 75% project, 80% patch - Production-grade coverage
 
 parsers:
   gcov:

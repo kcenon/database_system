@@ -3,25 +3,22 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################
 # Database System CMakeLists.txt
 #
-# Tier 5: Application Layer
-# Independent database system with multi-backend support
+# Tier 3: Database Layer
+# Pure, lightweight Core DAL library with multi-backend support.
 # Provides database abstraction and PostgreSQL implementation.
 #
 # Dependency Chain:
-#   database_system (Tier 5)
-#     ├── network_system (Tier 4) [REQUIRED]
-#     │     └── thread_system (Tier 1) [REQUIRED]
-#     │           └── common_system (Tier 0) [REQUIRED]
+#   database_system (Tier 3)
 #     ├── common_system (Tier 0) [REQUIRED] - ILogger, GlobalLoggerRegistry, LOG_* macros
 #     ├── thread_system (Tier 1) [OPTIONAL]
-#     ├── monitoring_system (Tier 3) [OPTIONAL]
+#     ├── monitoring_system (Tier 2) [OPTIONAL]
 #     └── container_system (Tier 1) [OPTIONAL]
 ##################################################
 
 # Project definition
 project(database_system
     VERSION 0.1.0.0
-    DESCRIPTION "Advanced Distributed C++20 Database System with Full Network Integration"
+    DESCRIPTION "Pure, Lightweight C++20 Core DAL Library"
     LANGUAGES CXX
 )
 
@@ -218,34 +215,6 @@ if(USE_CONTAINER_SYSTEM)
     endif()
 endif()
 
-# network_system integration (REQUIRED for v2.0+ in production)
-option(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM "Allow building without network_system (CI/testing only)" OFF)
-
-message(STATUS "Searching for network_system...")
-find_system_dependency(network_system)
-
-# Check for target existence as well
-if(network_system_FOUND OR TARGET NetworkSystem OR TARGET network_system)
-    message(STATUS "network_system integration enabled")
-    set(USE_NETWORK_SYSTEM ON CACHE BOOL "network_system integration" FORCE)
-    set(network_system_FOUND TRUE)  # Ensure this is set
-else()
-    if(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM)
-        message(WARNING "network_system not found - building without distributed features. "
-                        "This is ONLY for CI/testing. Production builds REQUIRE network_system. "
-                        "Distributed features (Cluster Manager, Gateway, Replication) will be unavailable.")
-        set(USE_NETWORK_SYSTEM OFF CACHE BOOL "network_system not found" FORCE)
-    else()
-        message(FATAL_ERROR "network_system is REQUIRED for database_system v2.0+. "
-                            "Distributed features (Cluster Manager, Gateway, Replication) depend on network_system. "
-                            "Please build network_system first (Tier 2 dependency). "
-                            "See BUILD_ORDER.md for correct build sequence:\n"
-                            "  1. Build Tier 0: common_system\n"
-                            "  2. Build Tier 1: thread_system, container_system, monitoring_system\n"
-                            "  3. Build Tier 2: network_system -> database_system\n"
-                            "\nFor CI/testing only: Use -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON to bypass this requirement.")
-    endif()
-endif()
 
 ##################################################
 # Modular Architecture
@@ -325,12 +294,11 @@ message(STATUS "")
 message(STATUS "Version: ${PROJECT_VERSION}")
 message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
 message(STATUS "")
-message(STATUS "Dependency Chain (Tier 5):")
+message(STATUS "Dependency Chain (Tier 3):")
 message(STATUS "  database_system")
 message(STATUS "    ├── common_system (Tier 0): ${BUILD_WITH_COMMON_SYSTEM} [REQUIRED] - ILogger, LOG_* macros")
-message(STATUS "    ├── network_system (Tier 4): ${USE_NETWORK_SYSTEM} [REQUIRED]")
 message(STATUS "    ├── thread_system (Tier 1): ${USE_THREAD_SYSTEM} [OPTIONAL]")
-message(STATUS "    ├── monitoring_system (Tier 3): ${USE_MONITORING_SYSTEM} [OPTIONAL]")
+message(STATUS "    ├── monitoring_system (Tier 2): ${USE_MONITORING_SYSTEM} [OPTIONAL]")
 message(STATUS "    └── container_system (Tier 1): ${USE_CONTAINER_SYSTEM} [OPTIONAL]")
 message(STATUS "")
 
@@ -342,13 +310,6 @@ else()
     message(FATAL_ERROR "  ✗ common_system - REQUIRED but not found!")
 endif()
 
-if(USE_NETWORK_SYSTEM AND network_system_FOUND)
-    message(STATUS "  ✓ network_system (Tier 4) - Distributed features")
-elseif(ALLOW_BUILD_WITHOUT_NETWORK_SYSTEM)
-    message(STATUS "  ⚠ network_system (Tier 4) - BYPASSED (CI/testing only)")
-else()
-    message(FATAL_ERROR "  ✗ network_system - REQUIRED but not found!")
-endif()
 
 message(STATUS "")
 message(STATUS "Optional Dependencies:")

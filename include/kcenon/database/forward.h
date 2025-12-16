@@ -67,13 +67,6 @@ namespace async {
     class async_connection;
 }
 
-// Server
-namespace server {
-    class database_proxy_server;
-    class request_handler;
-    class session_manager;
-}
-
 // Utilities
 namespace utils {
     class sql_parser;

@@ -30,11 +30,13 @@ Comprehensive guide for building the Database System with multi-backend support,
 
 Database support is optional and can be disabled for testing:
 
-- **PostgreSQL**: libpqxx, libpq, OpenSSL
+- **PostgreSQL**: libpqxx, libpq, OpenSSL 3.x (recommended) or 1.1.1 (deprecated)
 - **MySQL**: libmysql or mysql-connector-cpp
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
+
+> **⚠️ Security Note**: OpenSSL 1.1.1 reached End-of-Life in September 2023. While still supported for backward compatibility, upgrading to OpenSSL 3.x is strongly recommended for continued security patches.
 
 ## Quick Start
 

@@ -30,11 +30,13 @@
 
 데이터베이스 지원은 선택 사항이며 테스트를 위해 비활성화할 수 있습니다:
 
-- **PostgreSQL**: libpqxx, libpq, OpenSSL
+- **PostgreSQL**: libpqxx, libpq, OpenSSL 3.x (권장) 또는 1.1.1 (지원 중단)
 - **MySQL**: libmysql 또는 mysql-connector-cpp
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
+
+> **⚠️ 보안 참고**: OpenSSL 1.1.1은 2023년 9월에 지원이 종료되었습니다. 하위 호환성을 위해 여전히 지원되지만, 지속적인 보안 패치를 위해 OpenSSL 3.x로 업그레이드하는 것을 강력히 권장합니다.
 
 ## 빠른 시작
 

@@ -60,11 +60,12 @@ function(find_system_dependency NAME)
     endif()
 
     # 2. Standard paths (no hardcoded user directories)
+    # Workspace-relative path first (for CI environments where dependencies are in workspace root)
     list(APPEND _SEARCH_PATHS
-        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
         "${CMAKE_SOURCE_DIR}/${NAME}"
         "${CMAKE_SOURCE_DIR}/../${NAME}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
     )
 
     # Try to find source directory
@@ -103,15 +104,16 @@ function(find_system_dependency_include NAME)
     endif()
 
     # 2. Standard paths (no hardcoded user directories)
+    # Workspace-relative paths first (for CI environments where dependencies are in workspace root)
     list(APPEND _INCLUDE_PATHS
-        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/include"
         "${CMAKE_SOURCE_DIR}/${NAME}/include"
         "${CMAKE_SOURCE_DIR}/../${NAME}/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
         "${CMAKE_SOURCE_DIR}/${NAME}"
         "${CMAKE_SOURCE_DIR}/../${NAME}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}"
     )
 
     # Try to find include directory
@@ -138,15 +140,16 @@ function(find_system_dependency_library NAME)
     endif()
 
     # 2. Standard relative paths (no hardcoded user directories)
+    # Workspace-relative paths first (for CI environments where dependencies are in workspace root)
     list(APPEND _LIB_PATHS
-        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build/lib"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build/lib"
         "${CMAKE_SOURCE_DIR}/${NAME}/build/lib"
         "${CMAKE_SOURCE_DIR}/../${NAME}/build/lib"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build"
         "${CMAKE_SOURCE_DIR}/${NAME}/build"
         "${CMAKE_SOURCE_DIR}/../${NAME}/build"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build/lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build/lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/build"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../${NAME}/build"
     )
 
     # Try to find library directory

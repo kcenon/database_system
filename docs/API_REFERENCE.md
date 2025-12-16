@@ -954,10 +954,6 @@ database_awaitable<bool> async_operation() {
     auto result = co_await async_db.execute_coro("SELECT * FROM users");
     co_return result;
 }
-
-// Distributed transactions
-auto& coordinator = transaction_coordinator::instance();
-auto tx_id = coordinator.begin_distributed_transaction({db1, db2});
 ```
 
 ---

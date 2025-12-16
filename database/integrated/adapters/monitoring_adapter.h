@@ -63,7 +63,7 @@
  * monitoring_adapter monitor(config);
  * auto result = monitor.initialize();
  * if (!result.is_ok()) {
- *     std::cerr << "Monitor init failed: " << result.get_error().message << "\n";
+ *     std::cerr << "Monitor init failed: " << result.error().message << "\n";
  *     return;
  * }
  *

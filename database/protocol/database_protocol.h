@@ -220,7 +220,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized header or error
      */
-    static result<message_header> deserialize_header(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<message_header> deserialize_header(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize connect request
@@ -234,7 +234,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized request or error
      */
-    static result<connect_request> deserialize_connect_request(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<connect_request> deserialize_connect_request(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize connect response
@@ -248,7 +248,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized response or error
      */
-    static result<connect_response> deserialize_connect_response(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<connect_response> deserialize_connect_response(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize query request
@@ -262,7 +262,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized request or error
      */
-    static result<query_request> deserialize_query_request(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<query_request> deserialize_query_request(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize query response
@@ -276,7 +276,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized response or error
      */
-    static result<query_response> deserialize_query_response(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<query_response> deserialize_query_response(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize transaction request
@@ -290,7 +290,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized request or error
      */
-    static result<transaction_request> deserialize_transaction_request(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<transaction_request> deserialize_transaction_request(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize error response
@@ -304,7 +304,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized response or error
      */
-    static result<error_response> deserialize_error_response(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<error_response> deserialize_error_response(const std::vector<uint8_t>& data);
 
     /**
      * @brief Serialize transaction response
@@ -318,7 +318,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized response or error
      */
-    static result<transaction_response> deserialize_transaction_response(const std::vector<uint8_t>& data);
+    static kcenon::common::Result<transaction_response> deserialize_transaction_response(const std::vector<uint8_t>& data);
 
 private:
     // Helper methods for primitive types

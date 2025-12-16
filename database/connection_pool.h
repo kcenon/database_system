@@ -132,14 +132,14 @@ namespace database
 		 * @code
 		 * auto result = pool->acquire_connection();
 		 * if (!result) {
-		 *     std::cerr << "Failed: " << result.get_error().message << "\n";
+		 *     std::cerr << "Failed: " << result.error().message << "\n";
 		 *     return;
 		 * }
 		 * auto conn = result.value();
 		 * conn->get()->execute_query("SELECT ...");
 		 * @endcode
 		 */
-		virtual Result<std::shared_ptr<connection_wrapper>> acquire_connection() = 0;
+		virtual kcenon::common::Result<std::shared_ptr<connection_wrapper>> acquire_connection() = 0;
 
 		/**
 		 * @brief Returns a connection to the pool.
@@ -210,7 +210,7 @@ namespace database
 		virtual ~connection_pool();
 
 		// Inherited from connection_pool_base
-		Result<std::shared_ptr<connection_wrapper>> acquire_connection() override;
+		kcenon::common::Result<std::shared_ptr<connection_wrapper>> acquire_connection() override;
 		void release_connection(std::shared_ptr<connection_wrapper> connection) override;
 		size_t active_connections() const override;
 		size_t available_connections() const override;

@@ -163,7 +163,7 @@ void demonstrate_basic_usage() {
         pool.release_connection(conn);
         print_success("Connection returned to pool");
     } else {
-        print_error("Failed to acquire connection: " + result.get_error().message);
+        print_error("Failed to acquire connection: " + result.error().message);
     }
 
     // Show stats
@@ -267,7 +267,7 @@ void demonstrate_async_health_checks() {
     // While health checks are running, submit normal requests
     std::cout << "\nSubmitting normal queries while health checks run in background...\n";
 
-    std::vector<std::future<Result<std::shared_ptr<connection_wrapper>>>> futures;
+    std::vector<std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>> futures;
     for (int i = 0; i < 10; ++i) {
         futures.push_back(pool.acquire_connection(connection_priority::NORMAL_QUERY));
     }
@@ -313,7 +313,7 @@ void demonstrate_high_throughput() {
 
     auto start = high_resolution_clock::now();
 
-    std::vector<std::future<Result<std::shared_ptr<connection_wrapper>>>> futures;
+    std::vector<std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>> futures;
     futures.reserve(num_requests);
 
     for (int i = 0; i < num_requests; ++i) {
@@ -399,7 +399,7 @@ void demonstrate_error_handling() {
         auto result3 = pool.acquire_connection().get();
 
         if (result3.is_err()) {
-            print_success("Correctly returned error: " + result3.get_error().message);
+            print_success("Correctly returned error: " + result3.error().message);
         } else {
             print_error("Expected timeout but got connection");
         }

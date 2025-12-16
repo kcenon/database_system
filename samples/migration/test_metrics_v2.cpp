@@ -83,7 +83,7 @@ int main() {
 
         // Acquire and release connections to generate metrics
         std::cout << "Acquiring 3 connections...\n";
-        std::vector<std::future<Result<std::shared_ptr<connection_wrapper>>>> futures;
+        std::vector<std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>> futures;
 
         for (int i = 0; i < 3; ++i) {
             auto priority = (i == 0) ? connection_priority::CRITICAL :
@@ -102,7 +102,7 @@ int main() {
                 std::cout << "  ✓ Connection acquired\n";
             } else {
                 std::cout << "  ✗ Failed to acquire connection: "
-                         << result.get_error().message << "\n";
+                         << result.error().message << "\n";
             }
         }
 

@@ -33,13 +33,55 @@
 #include <string>
 #include <stdexcept>
 
-// Result<T> header for database_system
-// Provides unified error handling via common_system integration
+/**
+ * @file result.h
+ * @brief Result<T> type for database_system error handling
+ *
+ * This file provides unified error handling via common_system integration.
+ * The primary types to use are:
+ * - common::Result<T> for operations that return a value
+ * - common::VoidResult for operations that don't return a value
+ * - common::error_info for error information
+ *
+ * MIGRATION NOTICE:
+ * The database::result<T> wrapper class is DEPRECATED. Please migrate to
+ * using common::Result<T> directly. The wrapper is maintained only for
+ * backward compatibility and will be removed in a future version.
+ *
+ * Migration guide:
+ * - Replace database::result<T> with common::Result<T>
+ * - Replace database::result<void> with common::VoidResult
+ * - Replace database::error with common::error_info
+ * - Replace is_error() with is_err()
+ * - Replace has_value() with is_ok()
+ * - Replace get_error() with error()
+ *
+ * @see https://github.com/kcenon/common_system/issues/205
+ */
 
 // Include common_system's error handling (Mandatory)
 #include <kcenon/common/patterns/result.h>
 
 namespace database {
+
+// =============================================================================
+// Primary types - USE THESE
+// =============================================================================
+
+/// @brief Primary Result type - use this for all new code
+template<typename T>
+using CommonResult = kcenon::common::Result<T>;
+
+/// @brief Primary VoidResult type - use this for all new code
+using CommonVoidResult = kcenon::common::VoidResult;
+
+/// @brief Primary error type - use this for all new code
+using CommonError = kcenon::common::error_info;
+
+// =============================================================================
+// Database-specific error codes
+// =============================================================================
+
 	// Error codes for database operations
 	enum class error_code {
 		success = 0,
@@ -52,12 +94,18 @@ namespace database {
 		timeout = -7
 	};
 
-	// Primary type aliases using common_system's result
+	// Alias for common_system's error_info (use CommonError for new code)
 	using error = kcenon::common::error_info;
 
-	// Compatibility type for error_info (legacy, will be deprecated)
-	// Must be defined before result<T> classes
-	struct error_info {
+// =============================================================================
+// DEPRECATED - Legacy compatibility types (will be removed in future versions)
+// =============================================================================
+
+	/**
+	 * @brief Legacy error_info struct for backward compatibility
+	 * @deprecated Use common::error_info (or database::CommonError) instead
+	 */
+	struct [[deprecated("Use common::error_info instead")]] error_info {
 		int code;
 		std::string message;
 		std::string module;
@@ -77,9 +125,21 @@ namespace database {
 		}
 	};
 
-	// Compatibility layer: wrapper around common_system::Result with legacy API
+	/**
+	 * @brief Legacy result wrapper for backward compatibility
+	 * @deprecated Use common::Result<T> (or database::CommonResult<T>) instead
+	 *
+	 * This wrapper class is deprecated. Please migrate to common::Result<T>.
+	 * The wrapper provides legacy API methods (is_error, has_value, get_error)
+	 * that are not available in common::Result<T>.
+	 *
+	 * Migration:
+	 * - is_error() -> is_err()
+	 * - has_value() -> is_ok()
+	 * - get_error() -> error()
+	 */
 	template<typename T>
-	class result : public kcenon::common::Result<T> {
+	class [[deprecated("Use common::Result<T> instead")]] result : public kcenon::common::Result<T> {
 	public:
 		using base_type = kcenon::common::Result<T>;
 		using value_type = T;
@@ -122,9 +182,12 @@ namespace database {
 		}
 	};
 
-	// Specialization for void
+	/**
+	 * @brief Legacy result<void> specialization for backward compatibility
+	 * @deprecated Use common::VoidResult (or database::CommonVoidResult) instead
+	 */
 	template<>
-	class result<void> : public kcenon::common::VoidResult {
+	class [[deprecated("Use common::VoidResult instead")]] result<void> : public kcenon::common::VoidResult {
 	public:
 		using base_type = kcenon::common::VoidResult;
 		using value_type = void;
@@ -170,24 +233,31 @@ namespace database {
 		}
 	};
 
-	// Legacy compatibility aliases (will be deprecated)
-	// Note: [[deprecated]] attribute on using declarations requires C++20
-	// For C++17 compatibility, we omit the attribute here
+	// Legacy compatibility aliases
+	// Note: [[deprecated]] attribute on using declarations requires C++14+
 	template<typename T>
-	using Result = result<T>;
+	using Result [[deprecated("Use common::Result<T> instead")]] = result<T>;
 
-	using VoidResult = result<void>;
+	using VoidResult [[deprecated("Use common::VoidResult instead")]] = result<void>;
 
 } // namespace database
 
+// =============================================================================
+// Integrated namespace for compatibility
+// =============================================================================
+
 // Provide the same types in integrated namespace for compatibility
 namespace database::integrated {
+	// Deprecated legacy types
 	using database::result;
 	using database::error_code;
 	using database::error;
 	using database::error_info;
-
-	// Legacy compatibility
 	using database::Result;
 	using database::VoidResult;
+
+	// Recommended types (from common_system)
+	using database::CommonResult;
+	using database::CommonVoidResult;
+	using database::CommonError;
 } // namespace database::integrated

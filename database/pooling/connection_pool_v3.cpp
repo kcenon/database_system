@@ -73,8 +73,8 @@ bool connection_pool_v3::initialize()
 
     // Start the worker pool
     auto start_result = worker_pool_->start();
-    if (start_result.has_error()) {
-        std::cerr << "Failed to start worker pool: " << start_result.get_error().message() << std::endl;
+    if (start_result.is_err()) {
+        std::cerr << "Failed to start worker pool: " << start_result.error().message << std::endl;
         return false;
     }
 
@@ -92,7 +92,7 @@ connection_pool_v3::acquire_connection(connection_priority priority)
     // Check if shutdown requested
     if (shutdown_requested_.load()) {
         std::promise<Result<std::shared_ptr<connection_wrapper>>> promise;
-        promise.set_value(error_info{-500, "Pool is shutting down", "connection_pool_v3"});
+        promise.set_value(kcenon::common::error_info{-500, "Pool is shutting down", "connection_pool_v3"});
         return promise.get_future();
     }
 
@@ -123,11 +123,11 @@ connection_pool_v3::acquire_connection(connection_priority priority)
     // Enqueue job to adaptive queue (cast to base job type)
     std::unique_ptr<kcenon::thread::job> base_job = std::move(job);
     auto enqueue_result = adaptive_queue_->enqueue(std::move(base_job));
-    if (enqueue_result.has_error()) {
+    if (enqueue_result.is_err()) {
         std::promise<Result<std::shared_ptr<connection_wrapper>>> error_promise;
-        error_promise.set_value(error_info{
+        error_promise.set_value(kcenon::common::error_info{
             -598,
-            "Failed to enqueue acquisition request: " + enqueue_result.get_error().message(),
+            "Failed to enqueue acquisition request: " + enqueue_result.error().message,
             "connection_pool_v3"
         });
         return error_promise.get_future();
@@ -142,7 +142,7 @@ connection_pool_v3::acquire_connection(connection_priority priority)
 
         // Try to dequeue a job matching this priority
         auto dequeue_result = adaptive_queue_->dequeue(std::vector<connection_priority>{priority});
-        if (dequeue_result.has_value()) {
+        if (dequeue_result.is_ok()) {
             auto job_ptr = std::move(dequeue_result.value());
             if (job_ptr) {
                 [[maybe_unused]] auto work_result = job_ptr->do_work();

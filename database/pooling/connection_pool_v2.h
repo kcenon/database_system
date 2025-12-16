@@ -101,7 +101,7 @@ class health_check_job;
 template<>
 class connection_request_job<connection_priority> : public kcenon::thread::typed_job_t<connection_priority> {
 public:
-    using completion_callback = std::function<void(Result<std::shared_ptr<connection_wrapper>>)>;
+    using completion_callback = std::function<void(kcenon::common::Result<std::shared_ptr<connection_wrapper>>)>;
 
     /**
      * @brief Constructs a connection request job
@@ -295,7 +295,7 @@ public:
      * auto result = future.get();
      * @endcode
      */
-    std::future<Result<std::shared_ptr<connection_wrapper>>>
+    std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>
     acquire_connection(connection_priority priority = connection_priority::NORMAL_QUERY);
 
     /**

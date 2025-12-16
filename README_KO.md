@@ -230,34 +230,31 @@ cmake --build build
 
 ### Result 타입 안내
 
-**마이그레이션 공지**: `database::result<T>` 래퍼는 `common::Result<T>`로 **deprecated** 되었습니다.
+**마이그레이션 완료**: 모든 내부 모듈이 common_system의 `kcenon::common::Result<T>`를 사용합니다.
 
-- **새 코드**는 common_system의 `common::Result<T>` / `common::VoidResult`를 직접 사용해야 합니다
-- `database::result<T>`를 사용하는 **레거시 코드**는 계속 작동하지만 deprecation 경고가 발생합니다
-- 내부 모듈(pooling, async)은 `common::Result<T>` 및 `common::VoidResult`를 사용하도록 마이그레이션되었습니다
+- **모든 코드**가 `kcenon::common::Result<T>` / `kcenon::common::VoidResult`를 직접 사용합니다
+- **Deprecated 별칭**(`database::result<T>`, `database::Result<T>`, `database::VoidResult`)은 하위 호환성을 위해 여전히 사용 가능하지만 deprecation 경고가 발생합니다
+- **API 변경**: `get_error()` 대신 `error()` 사용, `is_error()` 대신 `is_err()` 사용
 
-**마이그레이션 가이드**:
+**API 참조**:
 ```cpp
-// 이전 API (deprecated)
-database::result<int> old_result = some_operation();
-if (old_result.has_value()) {
-    int value = old_result.value();
+// common::Result<T> 사용
+kcenon::common::Result<int> result = some_operation();
+if (result.is_ok()) {
+    int value = result.value();
 }
-if (old_result.is_error()) {
-    auto error = old_result.get_error();
+if (result.is_err()) {
+    auto error = result.error();  // kcenon::common::error_info 반환
 }
 
-// 새 API (권장)
-common::Result<int> new_result = some_operation();
-if (new_result.is_ok()) {
-    int value = new_result.value();
-}
-if (new_result.is_err()) {
-    auto error = new_result.error();  // common::error_info 반환
+// 값을 반환하지 않는 작업에는 VoidResult 사용
+kcenon::common::VoidResult void_result = some_void_operation();
+if (void_result.is_ok()) {
+    // 성공
 }
 ```
 
-자세한 마이그레이션 정보는 `database/core/result.h`를 참조하세요.
+자세한 정보는 `database/core/result.h`를 참조하세요.
 
 ### 🗄️ 지원 Database
 

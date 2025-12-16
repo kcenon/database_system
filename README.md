@@ -216,34 +216,31 @@ entity_manager::instance().create_tables(db);
 
 ### Result Types
 
-**Migration Notice**: The `database::result<T>` wrapper is **deprecated** in favor of `common::Result<T>`.
+**Migration Completed**: All internal modules now use `kcenon::common::Result<T>` from common_system.
 
-- **New code** should use `common::Result<T>` / `common::VoidResult` directly from common_system
-- **Legacy code** using `database::result<T>` will continue to work but will emit deprecation warnings
-- Internal modules (pooling, async) have been migrated to use `common::Result<T>` and `common::VoidResult`
+- **All code** uses `kcenon::common::Result<T>` / `kcenon::common::VoidResult` directly
+- **Deprecated aliases** (`database::result<T>`, `database::Result<T>`, `database::VoidResult`) are still available for backward compatibility but will emit deprecation warnings
+- **API changes**: Use `error()` instead of `get_error()`, `is_err()` instead of `is_error()`
 
-**Migration Guide**:
+**API Reference**:
 ```cpp
-// Old API (deprecated)
-database::result<int> old_result = some_operation();
-if (old_result.has_value()) {
-    int value = old_result.value();
+// Using common::Result<T>
+kcenon::common::Result<int> result = some_operation();
+if (result.is_ok()) {
+    int value = result.value();
 }
-if (old_result.is_error()) {
-    auto error = old_result.get_error();
+if (result.is_err()) {
+    auto error = result.error();  // Returns kcenon::common::error_info
 }
 
-// New API (recommended)
-common::Result<int> new_result = some_operation();
-if (new_result.is_ok()) {
-    int value = new_result.value();
-}
-if (new_result.is_err()) {
-    auto error = new_result.error();  // Returns common::error_info
+// Using VoidResult for operations that don't return a value
+kcenon::common::VoidResult void_result = some_void_operation();
+if (void_result.is_ok()) {
+    // Success
 }
 ```
 
-For detailed migration information, see `database/core/result.h`.
+For detailed information, see `database/core/result.h`.
 
 ---
 

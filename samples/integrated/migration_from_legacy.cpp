@@ -80,7 +80,7 @@ int main() {
         std::cout << "✅ Query succeeded\n";
     } else {
         std::cout << "❌ Query failed (expected without DB):\n";
-        std::cout << "   Error: " << result.get_error().message << "\n";
+        std::cout << "   Error: " << result.error().message << "\n";
     }
 
     // ========================================

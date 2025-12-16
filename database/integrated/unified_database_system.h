@@ -233,7 +233,7 @@ public:
      * @param params Optional query parameters
      * @return Result containing query results or error
      */
-    virtual Result<query_result> execute(
+    virtual kcenon::common::Result<query_result> execute(
         const std::string& query,
         const std::vector<query_param>& params = {}) = 0;
 
@@ -241,13 +241,13 @@ public:
      * @brief Commit the transaction
      * @return Success or error result
      */
-    virtual VoidResult commit() = 0;
+    virtual kcenon::common::VoidResult commit() = 0;
 
     /**
      * @brief Rollback the transaction
      * @return Success or error result
      */
-    virtual VoidResult rollback() = 0;
+    virtual kcenon::common::VoidResult rollback() = 0;
 
     /**
      * @brief Check if transaction is active
@@ -376,7 +376,7 @@ public:
      * - MySQL: "host=localhost;database=mydb;user=user;password=pass"
      * - SQLite: "mydb.db" or ":memory:"
      */
-    VoidResult connect(const std::string& connection_string);
+    kcenon::common::VoidResult connect(const std::string& connection_string);
 
     /**
      * @brief Connect to database with specific backend
@@ -384,13 +384,13 @@ public:
      * @param connection_string Database connection string
      * @return Success or error result
      */
-    VoidResult connect(backend_type backend, const std::string& connection_string);
+    kcenon::common::VoidResult connect(backend_type backend, const std::string& connection_string);
 
     /**
      * @brief Disconnect from database
      * @return Success or error result
      */
-    VoidResult disconnect();
+    kcenon::common::VoidResult disconnect();
 
     /**
      * @brief Check if connected to database
@@ -409,7 +409,7 @@ public:
      * @example
      * auto result = db.execute("SELECT * FROM users WHERE id = $1", {42});
      */
-    Result<query_result> execute(
+    kcenon::common::Result<query_result> execute(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -419,7 +419,7 @@ public:
      * @param params Optional query parameters
      * @return Result containing selected rows or error
      */
-    Result<query_result> select(
+    kcenon::common::Result<query_result> select(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -429,7 +429,7 @@ public:
      * @param params Optional query parameters
      * @return Result containing number of inserted rows or error
      */
-    Result<size_t> insert(
+    kcenon::common::Result<size_t> insert(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -439,7 +439,7 @@ public:
      * @param params Optional query parameters
      * @return Result containing number of updated rows or error
      */
-    Result<size_t> update(
+    kcenon::common::Result<size_t> update(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -449,7 +449,7 @@ public:
      * @param params Optional query parameters
      * @return Result containing number of deleted rows or error
      */
-    Result<size_t> remove(
+    kcenon::common::Result<size_t> remove(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -466,7 +466,7 @@ public:
      * // Do other work...
      * auto result = future.get();
      */
-    std::future<Result<query_result>> execute_async(
+    std::future<kcenon::common::Result<query_result>> execute_async(
         const std::string& query,
         const std::vector<query_param>& params = {});
 
@@ -477,7 +477,7 @@ public:
      * @param params Optional query parameters
      * @return Future that will contain query results
      */
-    std::future<Result<query_result>> execute_async_priority(
+    std::future<kcenon::common::Result<query_result>> execute_async_priority(
         const std::string& query,
         int priority,
         const std::vector<query_param>& params = {});
@@ -496,7 +496,7 @@ public:
      *     tx->commit();
      * }
      */
-    Result<std::unique_ptr<transaction>> begin_transaction();
+    kcenon::common::Result<std::unique_ptr<transaction>> begin_transaction();
 
     /**
      * @brief Execute multiple queries in a transaction
@@ -505,7 +505,7 @@ public:
      *
      * This is a convenience method that automatically begins, executes, and commits/rollbacks.
      */
-    VoidResult execute_transaction(
+    kcenon::common::VoidResult execute_transaction(
         const std::vector<std::string>& queries);
 
     /**
@@ -521,7 +521,7 @@ public:
      * });
      */
     template<typename Func>
-    Result<typename std::invoke_result_t<Func, transaction&>> in_transaction(Func&& func);
+    kcenon::common::Result<typename std::invoke_result_t<Func, transaction&>> in_transaction(Func&& func);
 
     // Query builder integration
 

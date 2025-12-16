@@ -155,14 +155,14 @@ bool connection_pool::initialize() {
   }
 }
 
-Result<std::shared_ptr<connection_wrapper>>
+kcenon::common::Result<std::shared_ptr<connection_wrapper>>
 connection_pool::acquire_connection() {
   std::unique_lock<std::mutex> lock(pool_mutex_);
 
   // Check if pool is shutting down immediately
   if (shutdown_requested_) {
     ++failed_acquisitions_;
-    return error_info{-500, "Connection pool is shutting down",
+    return kcenon::common::error_info{-500, "Connection pool is shutting down",
                       "connection_pool"};
   }
 
@@ -188,7 +188,7 @@ connection_pool::acquire_connection() {
       } else {
         // Failed to create new connection
         ++failed_acquisitions_;
-        return error_info{-502, "Failed to create new database connection",
+        return kcenon::common::error_info{-502, "Failed to create new database connection",
                           "connection_pool"};
       }
     }
@@ -196,7 +196,7 @@ connection_pool::acquire_connection() {
     // Wait for connection to become available
     if (pool_condition_.wait_until(lock, deadline) == std::cv_status::timeout) {
       ++failed_acquisitions_;
-      return error_info{-501,
+      return kcenon::common::error_info{-501,
                         "Connection acquisition timeout after " +
                             std::to_string(config_.acquire_timeout.count()) +
                             "ms",
@@ -207,14 +207,14 @@ connection_pool::acquire_connection() {
   // Check again for shutdown after wait
   if (shutdown_requested_) {
     ++failed_acquisitions_;
-    return error_info{-500, "Connection pool is shutting down",
+    return kcenon::common::error_info{-500, "Connection pool is shutting down",
                       "connection_pool"};
   }
 
   // Check if no connections available (should not happen, but defensive)
   if (available_connections_.empty()) {
     ++failed_acquisitions_;
-    return error_info{-503,
+    return kcenon::common::error_info{-503,
                       "No connections available and max connections reached",
                       "connection_pool"};
   }
@@ -228,7 +228,7 @@ connection_pool::acquire_connection() {
   connection->update_last_used();
 
   // Return success with connection
-  return Result<std::shared_ptr<connection_wrapper>>(connection);
+  return kcenon::common::Result<std::shared_ptr<connection_wrapper>>(connection);
 }
 
 void connection_pool::release_connection(

@@ -109,11 +109,11 @@ bool connection_pool_v2::initialize() {
     return underlying_pool_->initialize();
 }
 
-std::future<Result<std::shared_ptr<connection_wrapper>>>
+std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>
 connection_pool_v2::acquire_connection(connection_priority priority) {
 #ifdef USE_THREAD_SYSTEM
     // Use priority-based scheduling with thread_system
-    auto promise = std::make_shared<std::promise<Result<std::shared_ptr<connection_wrapper>>>>();
+    auto promise = std::make_shared<std::promise<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>>();
     auto future = promise->get_future();
 
     // Record start time for metrics
@@ -128,7 +128,7 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
     auto metrics_copy = metrics_;
 
     // Create completion callback with metrics tracking
-    auto callback = [promise, start_time, priority, metrics_copy](Result<std::shared_ptr<connection_wrapper>> result) {
+    auto callback = [promise, start_time, priority, metrics_copy](kcenon::common::Result<std::shared_ptr<connection_wrapper>> result) {
         // Calculate wait time
         auto end_time = std::chrono::steady_clock::now();
         auto wait_time_us = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -176,7 +176,7 @@ connection_pool_v2::acquire_connection(connection_priority priority) {
     return future;
 #else
     // Fallback: Direct synchronous acquisition
-    auto promise = std::make_shared<std::promise<Result<std::shared_ptr<connection_wrapper>>>>();
+    auto promise = std::make_shared<std::promise<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>>();
     auto future = promise->get_future();
 
     // Record start time for metrics

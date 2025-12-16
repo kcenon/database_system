@@ -95,14 +95,14 @@ public:
    * Establishes connection using network_system::resilient_client with
    * automatic reconnection support.
    */
-  database::result<void>
+  kcenon::common::VoidResult
   initialize(const core::connection_config &config) override;
 
   /**
    * @brief Shutdown connection gracefully
    * @return VoidResult::ok() on success, error on failure
    */
-  database::result<void> shutdown() override;
+  kcenon::common::VoidResult shutdown() override;
 
   /**
    * @brief Check if client is connected and ready
@@ -115,7 +115,7 @@ public:
    * @param query_string INSERT statement
    * @return Number of rows inserted, or error
    */
-  database::result<uint64_t>
+  kcenon::common::Result<uint64_t>
   insert_query(const std::string &query_string) override;
 
   /**
@@ -123,7 +123,7 @@ public:
    * @param query_string UPDATE statement
    * @return Number of rows updated, or error
    */
-  database::result<uint64_t>
+  kcenon::common::Result<uint64_t>
   update_query(const std::string &query_string) override;
 
   /**
@@ -131,7 +131,7 @@ public:
    * @param query_string DELETE statement
    * @return Number of rows deleted, or error
    */
-  database::result<uint64_t>
+  kcenon::common::Result<uint64_t>
   delete_query(const std::string &query_string) override;
 
   /**
@@ -139,7 +139,7 @@ public:
    * @param query_string SELECT statement
    * @return Query results, or error
    */
-  database::result<core::database_result>
+  kcenon::common::Result<core::database_result>
   select_query(const std::string &query_string) override;
 
   /**
@@ -147,26 +147,26 @@ public:
    * @param query_string SQL statement
    * @return VoidResult::ok() on success, error on failure
    */
-  database::result<void>
+  kcenon::common::VoidResult
   execute_query(const std::string &query_string) override;
 
   /**
    * @brief Begin remote transaction
    * @return VoidResult::ok() on success, error on failure
    */
-  database::result<void> begin_transaction() override;
+  kcenon::common::VoidResult begin_transaction() override;
 
   /**
    * @brief Commit remote transaction
    * @return VoidResult::ok() on success, error on failure
    */
-  database::result<void> commit_transaction() override;
+  kcenon::common::VoidResult commit_transaction() override;
 
   /**
    * @brief Rollback remote transaction
    * @return VoidResult::ok() on success, error on failure
    */
-  database::result<void> rollback_transaction() override;
+  kcenon::common::VoidResult rollback_transaction() override;
 
   /**
    * @brief Check if in remote transaction
@@ -196,7 +196,7 @@ public:
    *
    * Allows non-blocking query execution with futures.
    */
-  std::future<database::result<core::database_result>>
+  std::future<kcenon::common::Result<core::database_result>>
   execute_async(const std::string &query_string);
 
 private:
@@ -207,7 +207,7 @@ private:
    * @param timeout Timeout duration
    * @return Response payload, or error
    */
-  database::result<std::vector<uint8_t>>
+  kcenon::common::Result<std::vector<uint8_t>>
   send_request(protocol::message_type request_type,
                const std::vector<uint8_t> &payload,
                std::chrono::milliseconds timeout = std::chrono::seconds(30));

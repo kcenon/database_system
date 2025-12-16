@@ -58,31 +58,18 @@ namespace database::integrated {
 
 namespace {
 
-#if defined(USE_COMMON_SYSTEM)
-// Helper to create error VoidResult - error_info is already defined via database::integrated namespace
-inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
+// Helper to create error VoidResult
+inline kcenon::common::VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
 {
-    return VoidResult(error_info{code, msg, context});
+    return kcenon::common::VoidResult(kcenon::common::error_info{code, msg, context});
 }
 
-// Helper to create error Result<T> - error_info is already defined via database::integrated namespace
+// Helper to create error Result<T>
 template <typename T>
-inline Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
+inline kcenon::common::Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
 {
-    return Result<T>(error_info{code, msg, context});
+    return kcenon::common::Result<T>(kcenon::common::error_info{code, msg, context});
 }
-#else
-inline VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
-{
-    return VoidResult(error_info{code, msg, context});
-}
-
-template <typename T>
-inline Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
-{
-    return Result<T>(error_info{code, msg, context});
-}
-#endif
 
 } // anonymous namespace
 
@@ -191,7 +178,7 @@ public:
         }
     }
 
-    Result<query_result> execute(
+    kcenon::common::Result<query_result> execute(
         const std::string& query,
         const std::vector<query_param>& params) override {
 
@@ -211,7 +198,7 @@ public:
         return convert_result(db_result, duration);
     }
 
-    VoidResult commit() override {
+    kcenon::common::VoidResult commit() override {
         if (!active_) {
             return make_error("Transaction not active", -1, "transaction");
         }
@@ -221,10 +208,10 @@ public:
         }
 
         active_ = false;
-        return VoidResult::ok();
+        return kcenon::common::ok();
     }
 
-    VoidResult rollback() override {
+    kcenon::common::VoidResult rollback() override {
         if (!active_) {
             return make_error("Transaction not active", -1, "transaction");
         }
@@ -234,7 +221,7 @@ public:
         }
 
         active_ = false;
-        return VoidResult::ok();
+        return kcenon::common::ok();
     }
 
     bool is_active() const override {
@@ -276,7 +263,7 @@ public:
 
     // Connection management
 
-    VoidResult connect(backend_type backend, const std::string& connection_string) {
+    kcenon::common::VoidResult connect(backend_type backend, const std::string& connection_string) {
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (connected_) {
@@ -337,14 +324,14 @@ public:
             );
         }
 
-        return VoidResult::ok();
+        return kcenon::common::ok();
     }
 
-    VoidResult disconnect() {
+    kcenon::common::VoidResult disconnect() {
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return VoidResult::ok();
+            return kcenon::common::ok();
         }
 
         // Close connection pool
@@ -369,7 +356,7 @@ public:
             );
         }
 
-        return VoidResult::ok();
+        return kcenon::common::ok();
     }
 
     bool is_connected() const {
@@ -379,7 +366,7 @@ public:
 
     // Query execution (sync)
 
-    Result<query_result> execute(
+    kcenon::common::Result<query_result> execute(
         const std::string& query,
         const std::vector<query_param>& params) {
 
@@ -420,32 +407,32 @@ public:
 
     // Query execution (async)
 
-    std::future<Result<query_result>> execute_async(
+    std::future<kcenon::common::Result<query_result>> execute_async(
         const std::string& query,
         const std::vector<query_param>& params) {
 
         // Submit to thread pool
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
-            std::promise<Result<query_result>> promise;
+            std::promise<kcenon::common::Result<query_result>> promise;
             promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
             return promise.get_future();
         }
 
         // Create task
-        return thread_pool->submit([this, query, params]() -> Result<query_result> {
+        return thread_pool->submit([this, query, params]() -> kcenon::common::Result<query_result> {
             return this->execute(query, params);
         });
     }
 
-    std::future<Result<query_result>> execute_async_priority(
+    std::future<kcenon::common::Result<query_result>> execute_async_priority(
         const std::string& query,
         int priority,
         const std::vector<query_param>& params) {
 
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
-            std::promise<Result<query_result>> promise;
+            std::promise<kcenon::common::Result<query_result>> promise;
             promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
             return promise.get_future();
         }
@@ -454,14 +441,14 @@ public:
         // Backend pattern removed priority support for simplification
         (void)priority; // Suppress unused parameter warning
 
-        return thread_pool->submit([this, query, params]() -> Result<query_result> {
+        return thread_pool->submit([this, query, params]() -> kcenon::common::Result<query_result> {
             return this->execute(query, params);
         });
     }
 
     // Transaction management
 
-    Result<std::unique_ptr<transaction>> begin_transaction() {
+    kcenon::common::Result<std::unique_ptr<transaction>> begin_transaction() {
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
@@ -475,10 +462,10 @@ public:
         return tx;
     }
 
-    VoidResult execute_transaction(const std::vector<std::string>& queries) {
+    kcenon::common::VoidResult execute_transaction(const std::vector<std::string>& queries) {
         auto tx_result = begin_transaction();
         if (!tx_result.is_ok()) {
-            return tx_result.get_error();
+            return tx_result.error();
         }
 
         auto tx = std::move(tx_result.value());
@@ -488,7 +475,7 @@ public:
             if (!result.is_ok()) {
                 tx->rollback();
                 ++metrics_.transactions_rolled_back;
-                return result.get_error();
+                return result.error();
             }
         }
 
@@ -677,17 +664,17 @@ unified_database_system& unified_database_system::operator=(unified_database_sys
 
 // Connection management
 
-VoidResult unified_database_system::connect(const std::string& connection_string) {
+kcenon::common::VoidResult unified_database_system::connect(const std::string& connection_string) {
     return pimpl_->connect(backend_type::postgres, connection_string);
 }
 
-VoidResult unified_database_system::connect(
+kcenon::common::VoidResult unified_database_system::connect(
     backend_type backend,
     const std::string& connection_string) {
     return pimpl_->connect(backend, connection_string);
 }
 
-VoidResult unified_database_system::disconnect() {
+kcenon::common::VoidResult unified_database_system::disconnect() {
     return pimpl_->disconnect();
 }
 
@@ -697,57 +684,57 @@ bool unified_database_system::is_connected() const {
 
 // Query execution (sync)
 
-Result<query_result> unified_database_system::execute(
+kcenon::common::Result<query_result> unified_database_system::execute(
     const std::string& query,
     const std::vector<query_param>& params) {
     return pimpl_->execute(query, params);
 }
 
-Result<query_result> unified_database_system::select(
+kcenon::common::Result<query_result> unified_database_system::select(
     const std::string& query,
     const std::vector<query_param>& params) {
     return pimpl_->execute(query, params);
 }
 
-Result<size_t> unified_database_system::insert(
+kcenon::common::Result<size_t> unified_database_system::insert(
     const std::string& query,
     const std::vector<query_param>& params) {
     auto result = pimpl_->execute(query, params);
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.get_error();
+    return result.error();
 }
 
-Result<size_t> unified_database_system::update(
+kcenon::common::Result<size_t> unified_database_system::update(
     const std::string& query,
     const std::vector<query_param>& params) {
     auto result = pimpl_->execute(query, params);
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.get_error();
+    return result.error();
 }
 
-Result<size_t> unified_database_system::remove(
+kcenon::common::Result<size_t> unified_database_system::remove(
     const std::string& query,
     const std::vector<query_param>& params) {
     auto result = pimpl_->execute(query, params);
     if (result.is_ok()) {
         return result.value().affected_rows;
     }
-    return result.get_error();
+    return result.error();
 }
 
 // Query execution (async)
 
-std::future<Result<query_result>> unified_database_system::execute_async(
+std::future<kcenon::common::Result<query_result>> unified_database_system::execute_async(
     const std::string& query,
     const std::vector<query_param>& params) {
     return pimpl_->execute_async(query, params);
 }
 
-std::future<Result<query_result>> unified_database_system::execute_async_priority(
+std::future<kcenon::common::Result<query_result>> unified_database_system::execute_async_priority(
     const std::string& query,
     int priority,
     const std::vector<query_param>& params) {
@@ -756,11 +743,11 @@ std::future<Result<query_result>> unified_database_system::execute_async_priorit
 
 // Transaction management
 
-Result<std::unique_ptr<transaction>> unified_database_system::begin_transaction() {
+kcenon::common::Result<std::unique_ptr<transaction>> unified_database_system::begin_transaction() {
     return pimpl_->begin_transaction();
 }
 
-VoidResult unified_database_system::execute_transaction(
+kcenon::common::VoidResult unified_database_system::execute_transaction(
     const std::vector<std::string>& queries) {
     return pimpl_->execute_transaction(queries);
 }
@@ -874,7 +861,7 @@ std::unique_ptr<unified_database_system> unified_database_system::builder::build
     if (!connection_string_.empty()) {
         auto result = system->connect(config_.database.type, connection_string_);
         if (!result.is_ok()) {
-            throw std::runtime_error("Failed to connect: " + result.get_error().message);
+            throw std::runtime_error("Failed to connect: " + result.error().message);
         }
     }
 

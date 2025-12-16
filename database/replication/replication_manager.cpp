@@ -249,7 +249,7 @@ result<void> replication_manager::configure_observability(
         if (!init_result.is_ok()) {
             return result<void>(error_info{
                 -20,
-                "Failed to initialize replication logger: " + init_result.get_error().message,
+                "Failed to initialize replication logger: " + init_result.error().message,
                 "replication"
             });
         }
@@ -266,7 +266,7 @@ result<void> replication_manager::configure_observability(
         if (!init_result.is_ok()) {
             return result<void>(error_info{
                 -21,
-                "Failed to initialize replication monitoring: " + init_result.get_error().message,
+                "Failed to initialize replication monitoring: " + init_result.error().message,
                 "replication"
             });
         }

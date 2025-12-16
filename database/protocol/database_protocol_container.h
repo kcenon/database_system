@@ -42,7 +42,7 @@ public:
      * @param data Serialized bytes
      * @return Deserialized request or error
      */
-    static result<query_request> deserialize_container_query_request(
+    static kcenon::common::Result<query_request> deserialize_container_query_request(
         const std::vector<uint8_t>& data);
 
     /**

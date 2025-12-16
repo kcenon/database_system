@@ -86,18 +86,18 @@ bool connection_pool_v3::initialize()
     return true;
 }
 
-std::future<Result<std::shared_ptr<connection_wrapper>>>
+std::future<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>
 connection_pool_v3::acquire_connection(connection_priority priority)
 {
     // Check if shutdown requested
     if (shutdown_requested_.load()) {
-        std::promise<Result<std::shared_ptr<connection_wrapper>>> promise;
+        std::promise<kcenon::common::Result<std::shared_ptr<connection_wrapper>>> promise;
         promise.set_value(kcenon::common::error_info{-500, "Pool is shutting down", "connection_pool_v3"});
         return promise.get_future();
     }
 
     // Create promise/future pair
-    auto promise = std::make_shared<std::promise<Result<std::shared_ptr<connection_wrapper>>>>();
+    auto promise = std::make_shared<std::promise<kcenon::common::Result<std::shared_ptr<connection_wrapper>>>>();
     auto future = promise->get_future();
 
     // Record acquisition start time
@@ -107,7 +107,7 @@ connection_pool_v3::acquire_connection(connection_priority priority)
     auto job = std::make_unique<connection_acquisition_job>(
         priority,
         underlying_pool_,
-        [this, promise, priority, start_time](Result<std::shared_ptr<connection_wrapper>> result) {
+        [this, promise, priority, start_time](kcenon::common::Result<std::shared_ptr<connection_wrapper>> result) {
             // Calculate acquisition time
             auto end_time = std::chrono::steady_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
@@ -124,7 +124,7 @@ connection_pool_v3::acquire_connection(connection_priority priority)
     std::unique_ptr<kcenon::thread::job> base_job = std::move(job);
     auto enqueue_result = adaptive_queue_->enqueue(std::move(base_job));
     if (enqueue_result.is_err()) {
-        std::promise<Result<std::shared_ptr<connection_wrapper>>> error_promise;
+        std::promise<kcenon::common::Result<std::shared_ptr<connection_wrapper>>> error_promise;
         error_promise.set_value(kcenon::common::error_info{
             -598,
             "Failed to enqueue acquisition request: " + enqueue_result.error().message,
@@ -170,7 +170,7 @@ void connection_pool_v3::schedule_health_check()
     auto job = std::make_unique<connection_acquisition_job>(
         connection_priority::HEALTH_CHECK,
         underlying_pool_,
-        [this](Result<std::shared_ptr<connection_wrapper>> result) {
+        [this](kcenon::common::Result<std::shared_ptr<connection_wrapper>> result) {
             // Health check callback - just verify connection works
             if (result.is_ok()) {
                 auto conn = result.value();

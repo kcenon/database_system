@@ -238,7 +238,7 @@ using CommonError = kcenon::common::error_info;
 	template<typename T>
 	using Result [[deprecated("Use common::Result<T> instead")]] = result<T>;
 
-	using VoidResult [[deprecated("Use common::VoidResult instead")]] = result<void>;
+	using VoidResult [[deprecated("Use common::VoidResult instead")]] = kcenon::common::VoidResult;
 
 } // namespace database
 

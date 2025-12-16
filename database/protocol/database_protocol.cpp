@@ -24,7 +24,7 @@ std::vector<uint8_t> protocol_serializer::serialize_header(const message_header&
     return buffer;
 }
 
-result<message_header> protocol_serializer::deserialize_header(const std::vector<uint8_t>& data) {
+kcenon::common::Result<message_header> protocol_serializer::deserialize_header(const std::vector<uint8_t>& data) {
     if (data.size() < 20) {
         return error{static_cast<int>(error_code::invalid_argument), "Header too small"};
     }
@@ -61,7 +61,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const connect_request& reque
     return buffer;
 }
 
-result<connect_request> protocol_serializer::deserialize_connect_request(const std::vector<uint8_t>& data) {
+kcenon::common::Result<connect_request> protocol_serializer::deserialize_connect_request(const std::vector<uint8_t>& data) {
     connect_request request;
     size_t offset = 0;
     if (data.size() < 4) {
@@ -101,7 +101,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const query_request& request
     return buffer;
 }
 
-result<query_request> protocol_serializer::deserialize_query_request(const std::vector<uint8_t>& data) {
+kcenon::common::Result<query_request> protocol_serializer::deserialize_query_request(const std::vector<uint8_t>& data) {
     query_request request;
     size_t offset = 0;
     if (data.empty()) {
@@ -154,7 +154,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const query_response& respon
     return buffer;
 }
 
-result<query_response> protocol_serializer::deserialize_query_response(const std::vector<uint8_t>& data) {
+kcenon::common::Result<query_response> protocol_serializer::deserialize_query_response(const std::vector<uint8_t>& data) {
     query_response response;
     size_t offset = 0;
     if (data.empty()) {
@@ -213,7 +213,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const connect_response& resp
     return buffer;
 }
 
-result<connect_response> protocol_serializer::deserialize_connect_response(const std::vector<uint8_t>& data) {
+kcenon::common::Result<connect_response> protocol_serializer::deserialize_connect_response(const std::vector<uint8_t>& data) {
     connect_response response;
     size_t offset = 0;
     if (data.empty()) {
@@ -231,7 +231,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const transaction_request& r
     return buffer;
 }
 
-result<transaction_request> protocol_serializer::deserialize_transaction_request(const std::vector<uint8_t>& data) {
+kcenon::common::Result<transaction_request> protocol_serializer::deserialize_transaction_request(const std::vector<uint8_t>& data) {
     transaction_request request;
     size_t offset = 0;
     if (data.size() < 2) {
@@ -249,7 +249,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const error_response& respon
     return buffer;
 }
 
-result<error_response> protocol_serializer::deserialize_error_response(const std::vector<uint8_t>& data) {
+kcenon::common::Result<error_response> protocol_serializer::deserialize_error_response(const std::vector<uint8_t>& data) {
     error_response response;
     size_t offset = 0;
     if (data.size() < 4) {
@@ -268,7 +268,7 @@ std::vector<uint8_t> protocol_serializer::serialize(const transaction_response& 
     return buffer;
 }
 
-result<transaction_response> protocol_serializer::deserialize_transaction_response(const std::vector<uint8_t>& data) {
+kcenon::common::Result<transaction_response> protocol_serializer::deserialize_transaction_response(const std::vector<uint8_t>& data) {
     transaction_response response;
     size_t offset = 0;
     if (data.empty()) {

@@ -40,7 +40,7 @@ std::vector<uint8_t> container_protocol_serializer::serialize_container(
     return container->serialize_array();
 }
 
-result<query_request> container_protocol_serializer::deserialize_container_query_request(
+kcenon::common::Result<query_request> container_protocol_serializer::deserialize_container_query_request(
     const std::vector<uint8_t>& data) {
     try {
         // Create container from bytes

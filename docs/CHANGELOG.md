@@ -63,6 +63,39 @@
 
 ### 🔧 **Changed**
 
+#### **🔄 Result Type Migration to common::Result (Issue #244)**
+- **Unified Result Pattern**: Migrated from deprecated `database::result<T>` to `kcenon::common::Result<T>` across all modules
+  - `database::result<T>` → `kcenon::common::Result<T>`
+  - `database::result<void>` → `kcenon::common::VoidResult`
+  - API methods: `is_error()` → `is_err()`, `has_value()` → `is_ok()`, `get_error()` → `error()`
+
+- **Module-by-Module Migration**:
+  - **Core**: `database_backend.h`, `backend_registry.h/cpp` - interface definitions updated
+  - **Backends**: All 5 backend implementations (sqlite, postgresql, mysql, mongodb, redis)
+  - **Client**: `remote_database_client.h/cpp` - remote client interface
+  - **Resilience**: `resilient_database_connection.h/cpp`, `connection_health_monitor.h/cpp`
+  - **Manager**: `database_manager.h` - compatibility aliases for legacy code
+
+- **Architecture**:
+  - Core interface (`database_backend.h`) now uses `kcenon::common::Result<T>` directly
+  - Implementation files include `core/result.h` for `database::error_code` enum access
+  - Provides seamless migration path from deprecated types
+
+**Changed Files:**
+- `database/core/database_backend.h`
+- `database/core/backend_registry.h`, `database/core/backend_registry.cpp`
+- `database/backends/sqlite_backend.h`, `database/backends/sqlite_backend.cpp`
+- `database/backends/postgresql_backend.h`, `database/backends/postgresql_backend.cpp`
+- `database/backends/mysql_backend.h`, `database/backends/mysql_backend.cpp`
+- `database/backends/mongodb_backend.h`, `database/backends/mongodb_backend.cpp`
+- `database/backends/redis_backend.h`, `database/backends/redis_backend.cpp`
+- `database/client/remote_database_client.h`, `database/client/remote_database_client.cpp`
+- `database/resilience/resilient_database_connection.h`, `database/resilience/resilient_database_connection.cpp`
+- `database/resilience/connection_health_monitor.h`, `database/resilience/connection_health_monitor.cpp`
+- `database/database_manager.h`
+
+---
+
 #### **📝 Connection Pool Logging Integration (Issue #212)**
 - **Logger Adapter Integration**: Replaced all direct `std::cerr` calls in `connection_pool.cpp` with structured `logger_adapter`
   - `log_error()` for error conditions with operation context

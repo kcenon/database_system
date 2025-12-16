@@ -124,27 +124,27 @@ public:
 
 	database_types type() const override;
 
-	database::result<void> initialize(const core::connection_config& config) override;
+	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
 
-	database::result<void> shutdown() override;
+	kcenon::common::VoidResult shutdown() override;
 
 	bool is_initialized() const override;
 
-	database::result<uint64_t> insert_query(const std::string& query_string) override;
+	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
-	database::result<uint64_t> update_query(const std::string& query_string) override;
+	kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
 
-	database::result<uint64_t> delete_query(const std::string& query_string) override;
+	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
-	database::result<database_result> select_query(const std::string& query_string) override;
+	kcenon::common::Result<database_result> select_query(const std::string& query_string) override;
 
-	database::result<void> execute_query(const std::string& query_string) override;
+	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
-	database::result<void> begin_transaction() override;
+	kcenon::common::VoidResult begin_transaction() override;
 
-	database::result<void> commit_transaction() override;
+	kcenon::common::VoidResult commit_transaction() override;
 
-	database::result<void> rollback_transaction() override;
+	kcenon::common::VoidResult rollback_transaction() override;
 
 	bool in_transaction() const override;
 

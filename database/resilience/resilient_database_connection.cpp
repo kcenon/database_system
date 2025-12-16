@@ -30,6 +30,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "resilient_database_connection.h"
+#include "../core/result.h"
+
 #include <thread>
 #include <algorithm>
 #include <cmath>
@@ -59,7 +61,7 @@ database_types resilient_database_connection::type() const {
     return backend_ ? backend_->type() : database_types::none;
 }
 
-database::result<void> resilient_database_connection::initialize(const core::connection_config& config) {
+kcenon::common::VoidResult resilient_database_connection::initialize(const core::connection_config& config) {
     std::lock_guard<std::mutex> lock(mutex_);
 
     if (!backend_) {
@@ -90,7 +92,7 @@ database::result<void> resilient_database_connection::initialize(const core::con
     return kcenon::common::ok();
 }
 
-database::result<void> resilient_database_connection::shutdown() {
+kcenon::common::VoidResult resilient_database_connection::shutdown() {
     stop_auto_recovery();
 
     if (health_monitor_) {
@@ -114,37 +116,37 @@ bool resilient_database_connection::is_initialized() const {
            state_.load() == connection_state::connected;
 }
 
-database::result<uint64_t> resilient_database_connection::insert_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> resilient_database_connection::insert_query(const std::string& query_string) {
     return execute_with_retry([this, &query_string]() {
         return backend_->insert_query(query_string);
     });
 }
 
-database::result<uint64_t> resilient_database_connection::update_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> resilient_database_connection::update_query(const std::string& query_string) {
     return execute_with_retry([this, &query_string]() {
         return backend_->update_query(query_string);
     });
 }
 
-database::result<uint64_t> resilient_database_connection::delete_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> resilient_database_connection::delete_query(const std::string& query_string) {
     return execute_with_retry([this, &query_string]() {
         return backend_->delete_query(query_string);
     });
 }
 
-database::result<core::database_result> resilient_database_connection::select_query(const std::string& query_string) {
+kcenon::common::Result<core::database_result> resilient_database_connection::select_query(const std::string& query_string) {
     return execute_with_retry([this, &query_string]() {
         return backend_->select_query(query_string);
     });
 }
 
-database::result<void> resilient_database_connection::execute_query(const std::string& query_string) {
+kcenon::common::VoidResult resilient_database_connection::execute_query(const std::string& query_string) {
     return execute_with_retry([this, &query_string]() {
         return backend_->execute_query(query_string);
     });
 }
 
-database::result<void> resilient_database_connection::begin_transaction() {
+kcenon::common::VoidResult resilient_database_connection::begin_transaction() {
     // Transactions require stable connection - don't retry during transaction
     auto ensure_result = ensure_connected();
     if (ensure_result.is_err()) {
@@ -154,7 +156,7 @@ database::result<void> resilient_database_connection::begin_transaction() {
     return backend_->begin_transaction();
 }
 
-database::result<void> resilient_database_connection::commit_transaction() {
+kcenon::common::VoidResult resilient_database_connection::commit_transaction() {
     // Don't retry commit - could lead to double commit
     if (!backend_) {
         return kcenon::common::error_info{
@@ -166,7 +168,7 @@ database::result<void> resilient_database_connection::commit_transaction() {
     return backend_->commit_transaction();
 }
 
-database::result<void> resilient_database_connection::rollback_transaction() {
+kcenon::common::VoidResult resilient_database_connection::rollback_transaction() {
     // Don't retry rollback - idempotent operation
     if (!backend_) {
         return kcenon::common::error_info{
@@ -214,7 +216,7 @@ std::map<std::string, std::string> resilient_database_connection::connection_inf
     return info;
 }
 
-database::result<void> resilient_database_connection::ensure_connected() {
+kcenon::common::VoidResult resilient_database_connection::ensure_connected() {
     if (is_initialized()) {
         return kcenon::common::ok();
     }
@@ -222,7 +224,7 @@ database::result<void> resilient_database_connection::ensure_connected() {
     return attempt_reconnect();
 }
 
-database::result<health_status> resilient_database_connection::check_health() {
+kcenon::common::Result<health_status> resilient_database_connection::check_health() {
     if (!health_monitor_) {
         return kcenon::common::error_info{
             static_cast<int>(database::error_code::invalid_state),
@@ -252,7 +254,7 @@ uint32_t resilient_database_connection::get_retry_count() const noexcept {
     return retry_count_.load();
 }
 
-database::result<void> resilient_database_connection::attempt_reconnect() {
+kcenon::common::VoidResult resilient_database_connection::attempt_reconnect() {
     if (!config_.enable_auto_reconnect) {
         return kcenon::common::error_info{
             static_cast<int>(database::error_code::invalid_state),

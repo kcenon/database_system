@@ -35,26 +35,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <mutex>
 
-// Use unified Result<T> implementation
-#include "core/result.h"
+// Use unified Result<T> implementation from common_system
+#include <kcenon/common/patterns/result.h>
 #include "core/database_context.h"
 
 #include "database_base.h"
 #include "connection_pool.h"
 #include "query_builder.h"
 
-// Provide common:: namespace for compatibility
+// Provide compatibility aliases for legacy code
 namespace common {
-	using VoidResult = database::result<void>;
-	using database::error_info;
+	using VoidResult = kcenon::common::VoidResult;
+	using kcenon::common::error_info;
 
 	// Helper functions
 	inline VoidResult ok() {
-		return VoidResult::ok();
+		return kcenon::common::ok();
 	}
 
 	inline VoidResult error(error_info err) {
-		return VoidResult::err(std::move(err));
+		return err;
 	}
 }
 

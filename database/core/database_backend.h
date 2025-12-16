@@ -48,7 +48,8 @@
 #pragma once
 
 #include "../database_types.h"
-#include "result.h"
+
+#include <kcenon/common/patterns/result.h>
 
 #include <memory>
 #include <string>
@@ -134,7 +135,7 @@ public:
 	/**
 	 * @brief Initialize the database backend
 	 * @param config Connection configuration
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 *
 	 * This method should:
 	 * - Establish database connection
@@ -142,11 +143,11 @@ public:
 	 * - Set up connection pooling if applicable
 	 * - Initialize backend-specific resources
 	 */
-	virtual database::result<void> initialize(const connection_config& config) = 0;
+	virtual kcenon::common::VoidResult initialize(const connection_config& config) = 0;
 
 	/**
 	 * @brief Shutdown the database backend gracefully
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 *
 	 * This method should:
 	 * - Close active connections
@@ -154,7 +155,7 @@ public:
 	 * - Flush pending transactions
 	 * - Clean up backend-specific resources
 	 */
-	virtual database::result<void> shutdown() = 0;
+	virtual kcenon::common::VoidResult shutdown() = 0;
 
 	/**
 	 * @brief Check if backend is initialized and ready
@@ -167,53 +168,53 @@ public:
 	 * @param query_string SQL INSERT statement
 	 * @return Number of rows inserted, or error
 	 */
-	virtual database::result<uint64_t> insert_query(const std::string& query_string) = 0;
+	virtual kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) = 0;
 
 	/**
 	 * @brief Execute an UPDATE query
 	 * @param query_string SQL UPDATE statement
 	 * @return Number of rows updated, or error
 	 */
-	virtual database::result<uint64_t> update_query(const std::string& query_string) = 0;
+	virtual kcenon::common::Result<uint64_t> update_query(const std::string& query_string) = 0;
 
 	/**
 	 * @brief Execute a DELETE query
 	 * @param query_string SQL DELETE statement
 	 * @return Number of rows deleted, or error
 	 */
-	virtual database::result<uint64_t> delete_query(const std::string& query_string) = 0;
+	virtual kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) = 0;
 
 	/**
 	 * @brief Execute a SELECT query
 	 * @param query_string SQL SELECT statement
 	 * @return Query results as rows, or error
 	 */
-	virtual database::result<database_result> select_query(const std::string& query_string) = 0;
+	virtual kcenon::common::Result<database_result> select_query(const std::string& query_string) = 0;
 
 	/**
 	 * @brief Execute a general SQL query (DDL, DML)
 	 * @param query_string SQL statement
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 */
-	virtual database::result<void> execute_query(const std::string& query_string) = 0;
+	virtual kcenon::common::VoidResult execute_query(const std::string& query_string) = 0;
 
 	/**
 	 * @brief Begin a transaction
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 */
-	virtual database::result<void> begin_transaction() = 0;
+	virtual kcenon::common::VoidResult begin_transaction() = 0;
 
 	/**
 	 * @brief Commit the current transaction
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 */
-	virtual database::result<void> commit_transaction() = 0;
+	virtual kcenon::common::VoidResult commit_transaction() = 0;
 
 	/**
 	 * @brief Rollback the current transaction
-	 * @return database::result<void>::ok() on success, error on failure
+	 * @return VoidResult::ok() on success, error on failure
 	 */
-	virtual database::result<void> rollback_transaction() = 0;
+	virtual kcenon::common::VoidResult rollback_transaction() = 0;
 
 	/**
 	 * @brief Check if backend is currently in a transaction

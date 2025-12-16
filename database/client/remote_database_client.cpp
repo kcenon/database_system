@@ -18,7 +18,7 @@ database_types remote_database_client::type() const {
   return database_types::REMOTE;
 }
 
-database::result<void>
+kcenon::common::VoidResult
 remote_database_client::initialize(const core::connection_config &config) {
   if (initialized_.exchange(true)) {
     return kcenon::common::error_info{
@@ -82,7 +82,7 @@ remote_database_client::initialize(const core::connection_config &config) {
   }
 }
 
-database::result<void> remote_database_client::shutdown() {
+kcenon::common::VoidResult remote_database_client::shutdown() {
   if (!initialized_.exchange(false)) {
     return kcenon::common::ok(); // Already shut down
   }
@@ -122,7 +122,7 @@ bool remote_database_client::is_initialized() const {
   return initialized_.load();
 }
 
-database::result<uint64_t>
+kcenon::common::Result<uint64_t>
 remote_database_client::insert_query(const std::string &query_string) {
   if (!is_initialized()) {
     return kcenon::common::error_info{
@@ -165,7 +165,7 @@ remote_database_client::insert_query(const std::string &query_string) {
   return query_response.value().affected_rows;
 }
 
-database::result<uint64_t>
+kcenon::common::Result<uint64_t>
 remote_database_client::update_query(const std::string &query_string) {
   if (!is_initialized()) {
     return kcenon::common::error_info{
@@ -206,7 +206,7 @@ remote_database_client::update_query(const std::string &query_string) {
   return query_response.value().affected_rows;
 }
 
-database::result<uint64_t>
+kcenon::common::Result<uint64_t>
 remote_database_client::delete_query(const std::string &query_string) {
   if (!is_initialized()) {
     return kcenon::common::error_info{
@@ -247,7 +247,7 @@ remote_database_client::delete_query(const std::string &query_string) {
   return query_response.value().affected_rows;
 }
 
-database::result<core::database_result>
+kcenon::common::Result<core::database_result>
 remote_database_client::select_query(const std::string &query_string) {
   if (!is_initialized()) {
     return kcenon::common::error_info{
@@ -298,7 +298,7 @@ remote_database_client::select_query(const std::string &query_string) {
   return result;
 }
 
-database::result<void>
+kcenon::common::VoidResult
 remote_database_client::execute_query(const std::string &query_string) {
   if (!is_initialized()) {
     return kcenon::common::error_info{
@@ -339,7 +339,7 @@ remote_database_client::execute_query(const std::string &query_string) {
   return kcenon::common::ok();
 }
 
-database::result<void> remote_database_client::begin_transaction() {
+kcenon::common::VoidResult remote_database_client::begin_transaction() {
   if (!is_initialized()) {
     return kcenon::common::error_info{
         static_cast<int>(database::error_code::unknown_error),
@@ -387,7 +387,7 @@ database::result<void> remote_database_client::begin_transaction() {
   return kcenon::common::ok();
 }
 
-database::result<void> remote_database_client::commit_transaction() {
+kcenon::common::VoidResult remote_database_client::commit_transaction() {
   if (!is_initialized()) {
     return kcenon::common::error_info{
         static_cast<int>(database::error_code::unknown_error),
@@ -419,7 +419,7 @@ database::result<void> remote_database_client::commit_transaction() {
   return kcenon::common::ok();
 }
 
-database::result<void> remote_database_client::rollback_transaction() {
+kcenon::common::VoidResult remote_database_client::rollback_transaction() {
   if (!is_initialized()) {
     return kcenon::common::error_info{
         static_cast<int>(database::error_code::unknown_error),
@@ -477,10 +477,10 @@ remote_database_client::connection_info() const {
   return info;
 }
 
-std::future<database::result<core::database_result>>
+std::future<kcenon::common::Result<core::database_result>>
 remote_database_client::execute_async(const std::string &query_string) {
   auto promise =
-      std::make_shared<std::promise<database::result<core::database_result>>>();
+      std::make_shared<std::promise<kcenon::common::Result<core::database_result>>>();
   auto future = promise->get_future();
 
   // Execute async using std::async
@@ -493,7 +493,7 @@ remote_database_client::execute_async(const std::string &query_string) {
   return future;
 }
 
-database::result<std::vector<uint8_t>>
+kcenon::common::Result<std::vector<uint8_t>>
 remote_database_client::send_request(protocol::message_type request_type,
                                      const std::vector<uint8_t> &payload,
                                      std::chrono::milliseconds timeout) {

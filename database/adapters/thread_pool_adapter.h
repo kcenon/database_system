@@ -61,9 +61,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #include <kcenon/thread/core/typed_thread_pool.h>
     #include <kcenon/thread/core/job.h>
     #include <kcenon/thread/interfaces/thread_context.h>
-    #include <kcenon/thread/interfaces/monitoring_interface.h>
-    // Note: Using common_system interfaces instead of deprecated thread_system interfaces
+    // Note: thread_system v3.0 removes monitoring_interface.h
+    // Use common_system interfaces instead
     #include <kcenon/common/interfaces/logger_interface.h>
+    #include <kcenon/common/interfaces/monitoring_interface.h>
 
     namespace database::async {
         /**
@@ -96,10 +97,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         using thread_context_type = kcenon::thread::thread_context;
 
         /**
-         * @brief Type alias for monitoring interface (placeholder)
-         * Note: thread_system uses internal monitoring, not exposed as interface
+         * @brief Type alias for monitoring interface
+         * @note Uses unified common_system interface instead of deprecated thread_system interface
          */
-        using monitoring_interface_type = void;
+        using monitoring_interface_type = kcenon::common::interfaces::IMonitor;
 
         /**
          * @brief Type alias for logger interface

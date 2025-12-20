@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "database/backends/sqlite/sqlite_manager.h"
 #include "database/backends/mongodb/mongodb_manager.h"
 #include "database/backends/redis/redis_manager.h"
+#include "database/proxy/proxy_connector.h"
 
 namespace database
 {
@@ -44,6 +45,8 @@ namespace database
 		: connected_(false)
 		, database_(nullptr)
 		, context_(std::move(context))
+		, connection_mode_(connection_mode::direct)
+		, proxy_config_()
 	{
 		// DI constructor - recommended for new code
 		if (!context_)
@@ -92,7 +95,41 @@ namespace database
 			return false;
 		}
 
+		connection_mode_ = connection_mode::direct;
 		return true;
+	}
+
+	bool database_manager::set_mode_proxy(const database_types& database_type,
+										  const proxy::proxy_connection_config& proxy_config)
+	{
+		if (connected_)
+		{
+			return false;
+		}
+
+		if (!proxy_config.is_valid())
+		{
+			return false;
+		}
+
+		database_.reset();
+
+		// Create proxy connector for the specified database type
+		database_ = std::make_unique<proxy::proxy_connector>(database_type, proxy_config);
+
+		if (database_ == nullptr)
+		{
+			return false;
+		}
+
+		connection_mode_ = connection_mode::proxy;
+		proxy_config_ = proxy_config;
+		return true;
+	}
+
+	connection_mode database_manager::current_connection_mode() const noexcept
+	{
+		return connection_mode_;
 	}
 
 	database_types database_manager::database_type(void)

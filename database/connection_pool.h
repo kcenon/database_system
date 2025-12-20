@@ -175,6 +175,11 @@ namespace database
 	 * @class connection_pool
 	 * @brief Generic connection pool implementation.
 	 *
+	 * @deprecated This class is deprecated. Use ProxyMode with database_server for
+	 *             centralized connection pooling. In proxy mode, connection pooling
+	 *             is handled server-side, providing better resource management and
+	 *             scalability. See docs/migration/proxy-mode.md for migration guide.
+	 *
 	 * ### Thread Safety
 	 * - All public methods are thread-safe.
 	 * - Connection acquisition and release are protected by pool_mutex_.
@@ -188,7 +193,8 @@ namespace database
 	 * - Health checks: O(n) where n = number of pooled connections
 	 * - Lock contention: Minimal due to atomic counters and separate maintenance mutex
 	 */
-	class connection_pool : public connection_pool_base
+	class [[deprecated("Use ProxyMode with database_server for centralized connection pooling. "
+	                   "See docs/migration/proxy-mode.md")]] connection_pool : public connection_pool_base
 	{
 	public:
 		/**
@@ -280,10 +286,15 @@ namespace database
 	 * @class connection_pool_manager
 	 * @brief Manages multiple connection pools for different database types.
 	 *
+	 * @deprecated This class is deprecated. Use ProxyMode with database_server for
+	 *             centralized connection pooling. In proxy mode, connection pool
+	 *             management is handled server-side. See docs/migration/proxy-mode.md.
+	 *
 	 * @note As of Sprint 2 (Task 2.3), this class uses dependency injection pattern.
 	 * Access via database_context::get_pool_manager().
 	 */
-	class connection_pool_manager
+	class [[deprecated("Use ProxyMode with database_server for centralized connection pooling. "
+	                   "See docs/migration/proxy-mode.md")]] connection_pool_manager
 	{
 	public:
 		/**

@@ -85,6 +85,10 @@ struct health_check_config {
  * @class connection_health_monitor
  * @brief Monitors database connection health with heartbeat
  *
+ * @deprecated This class is deprecated. Use ProxyMode with database_server for
+ *             centralized health monitoring. In proxy mode, connection health
+ *             monitoring is handled server-side. See docs/migration/proxy-mode.md.
+ *
  * Features:
  * - Periodic heartbeat queries to verify connectivity
  * - Latency tracking with moving average
@@ -119,7 +123,8 @@ struct health_check_config {
  *   }
  * @endcode
  */
-class connection_health_monitor {
+class [[deprecated("Use ProxyMode with database_server for centralized health monitoring. "
+                    "See docs/migration/proxy-mode.md")]] connection_health_monitor {
 public:
     /**
      * @brief Construct health monitor for database backend

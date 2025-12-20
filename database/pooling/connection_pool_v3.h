@@ -113,6 +113,11 @@ private:
  * @class connection_pool_v3
  * @brief Next-generation connection pool with adaptive queue and cancellation support
  *
+ * @deprecated This class is deprecated. Use ProxyMode with database_server for
+ *             centralized connection pooling. In proxy mode, connection pooling
+ *             is handled server-side, providing better resource management and
+ *             scalability. See docs/migration/proxy-mode.md for migration guide.
+ *
  * connection_pool_v3 is the third generation connection pool that builds upon v2 with:
  * - **Adaptive Job Queue**: Automatically switches between mutex-based and lock-free
  *   implementations based on runtime contention metrics (4x-7.7x performance improvement)
@@ -167,7 +172,8 @@ private:
  * std::cout << "Contention ratio: " << pool_v3.get_contention_ratio() << "%\n";
  * @endcode
  */
-class connection_pool_v3 {
+class [[deprecated("Use ProxyMode with database_server for centralized connection pooling. "
+                    "See docs/migration/proxy-mode.md")]] connection_pool_v3 {
 public:
     /**
      * @brief Constructs connection pool v3 with adaptive queue

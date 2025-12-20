@@ -68,14 +68,10 @@ namespace database
 {
 
 // Forward declarations
-class connection_pool_base;
-class connection_pool_manager;
-struct connection_pool_config;
 enum class database_types : uint8_t;
 
 namespace monitoring {
     class performance_monitor;
-    class connection_leak_detector;
 }
 
 namespace orm {
@@ -139,27 +135,7 @@ public:
      * @return true if all required components are initialized
      */
     inline bool is_initialized() const noexcept {
-        return pool_manager_ != nullptr;
-    }
-
-    /**
-     * @brief Get connection pool manager instance (inline for zero overhead)
-     * @return Shared pointer to connection pool manager
-     *
-     * @details Returns the connection pool manager for this context. This manages
-     * connection pools for different database types.
-     *
-     * @note This method is lock-free, inline, and noexcept for maximum performance.
-     * The pool_manager_ is set once during construction and never modified,
-     * making it safe to read without locks.
-     *
-     * @since Sprint 2 (Task 2.3)
-     */
-    inline std::shared_ptr<connection_pool_manager> get_pool_manager() const noexcept {
-        // Lock-free read: pool_manager_ is immutable after construction
-        // std::shared_ptr copy is thread-safe due to atomic ref counting
-        // Inline for zero call overhead in hot paths
-        return pool_manager_;
+        return performance_monitor_ != nullptr;
     }
 
     /**
@@ -174,19 +150,6 @@ public:
      */
     inline std::shared_ptr<monitoring::performance_monitor> get_performance_monitor() const noexcept {
         return performance_monitor_;
-    }
-
-    /**
-     * @brief Get connection leak detector instance
-     * @return Shared pointer to connection leak detector
-     *
-     * @details Returns the leak detector for monitoring connection leases.
-     *
-     * @note Lock-free read, inline for performance.
-     * @since Sprint 3 (Task 3.2)
-     */
-    inline std::shared_ptr<monitoring::connection_leak_detector> get_leak_detector() const noexcept {
-        return leak_detector_;
     }
 
     /**
@@ -281,14 +244,8 @@ public:
     }
 
 private:
-    /// Connection pool manager instance (Sprint 2, Task 2.3)
-    std::shared_ptr<connection_pool_manager> pool_manager_;
-
     /// Performance monitor instance (Sprint 3, Task 3.2)
     std::shared_ptr<monitoring::performance_monitor> performance_monitor_;
-
-    /// Connection leak detector instance (Sprint 3, Task 3.2)
-    std::shared_ptr<monitoring::connection_leak_detector> leak_detector_;
 
     /// Entity manager instance (Sprint 3, Task 3.1)
     std::shared_ptr<orm::entity_manager> entity_manager_;

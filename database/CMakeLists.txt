@@ -55,7 +55,6 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.h
@@ -81,9 +80,6 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
-    # P1-1 Headers (Resilient Connection)
-    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.h
     # P1-2 Headers (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
     # Phase 4.1 Headers (Proxy Mode)
@@ -96,7 +92,6 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.cpp
@@ -119,9 +114,6 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
-    # P1-1 Sources (Resilient Connection)
-    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/resilient_database_connection.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.cpp
     # P1-2 Sources (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.cpp
     # Phase 4.1 Sources (Proxy Mode)
@@ -135,14 +127,6 @@ if(USE_CONTAINER_SYSTEM AND (container_system_FOUND OR TARGET container_system O
     )
 endif()
 
-# Phase 2: connection_pool_v2 and connection_pool_v3 (added conditionally with thread_system)
-if(USE_THREAD_SYSTEM)
-    list(APPEND SOURCE_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_pool_v3.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/pooling/connection_priority_instantiation.cpp
-    )
-endif()
 
 
 ##################################################

@@ -24,7 +24,38 @@
 
 ---
 
-## [Unreleased] - 2025-12-17
+## [Unreleased] - 2025-12-21
+
+### 🗑️ **제거됨 (Breaking Changes)**
+
+#### **커넥션 풀링 및 레질리언스 코드 제거 (Phase 4.3, Issue #265, #270)**
+- **모든 로컬 풀링 클래스 제거**: database_server를 통한 ProxyMode로 마이그레이션 완료
+  - `database/pooling/` 디렉토리 제거 (connection_pool_v2.h/cpp, connection_pool_v3.h/cpp)
+  - `database/resilience/` 디렉토리 제거 (resilient_database_connection.h/cpp, connection_health_monitor.h/cpp)
+  - `database/connection_pool.h` 및 `database/connection_pool.cpp` 제거
+  - `database/connection_leak_detector.h` 및 `database/leak_detector_enhanced.h` 제거
+
+- **API 변경**:
+  - `database_manager::create_connection_pool()` - 제거됨
+  - `database_manager::get_connection_pool()` - 제거됨
+  - `database_manager::get_pool_stats()` - 제거됨
+  - `database_context::get_pool_manager()` - 제거됨
+  - `database_context::get_leak_detector()` - 제거됨
+
+- **테스트 및 샘플 제거**:
+  - `tests/resilience_test.cpp`, `tests/thread_safety_tests.cpp` 제거
+  - `tests/stress/connection_stress_test.cpp` 제거
+  - `integration_tests/scenarios/connection_management_test.cpp` 제거
+  - `benchmarks/connection_pool_bench.cpp` 제거
+  - `samples/connection_pool_demo.cpp` 제거
+  - `samples/migration/connection_pool_v2_demo.cpp` 제거
+
+- **마이그레이션 필요**: 프로덕션 배포에는 database_server를 통한 ProxyMode 사용
+  - 마이그레이션 가이드: `docs/migration/proxy-mode.md`
+  - DirectMode (`set_mode()`)는 개발 및 테스트용으로 유지
+  - ProxyMode (`set_mode_proxy()`)를 프로덕션에 권장
+
+---
 
 ### 🔒 **보안**
 

@@ -337,20 +337,23 @@ db.execute_query(
 #### Redis Migration (Caching Layer)
 
 ```cpp
-// Add Redis as a cache layer
-connection_pool_config redis_config;
-redis_config.connection_string = "redis://localhost:6379/0";
-db.create_connection_pool(database_types::redis, redis_config);
+// Add Redis as a cache layer using DirectMode
+// Note: For production, use ProxyMode with database_server middleware
+auto context = std::make_shared<database_context>();
+auto db = std::make_shared<database_manager>(context);
 
 // Write-through cache pattern
 void save_user(const User& user) {
     // Save to primary database (PostgreSQL)
-    db.set_mode(database_types::postgres);
-    db.execute_query("INSERT INTO users ...");
+    db->set_mode(database_types::postgres);
+    db->connect("host=localhost port=5432 dbname=mydb");
+    db->execute_query("INSERT INTO users ...");
 
     // Cache in Redis
-    db.set_mode(database_types::redis);
-    db.execute_query(
+    db->disconnect();
+    db->set_mode(database_types::redis);
+    db->connect("redis://localhost:6379/0");
+    db->execute_query(
         "HSET user:" + std::to_string(user.id) +
         " name " + user.name +
         " email " + user.email
@@ -360,18 +363,23 @@ void save_user(const User& user) {
 // Read-through cache pattern
 std::optional<User> get_user(int64_t user_id) {
     // Try Redis cache first
-    db.set_mode(database_types::redis);
-    auto cached = db.select_query("HGETALL user:" + std::to_string(user_id));
+    db->set_mode(database_types::redis);
+    db->connect("redis://localhost:6379/0");
+    auto cached = db->select_query("HGETALL user:" + std::to_string(user_id));
     if (!cached.empty()) {
         return parse_user(cached);
     }
 
     // Fallback to PostgreSQL
-    db.set_mode(database_types::postgres);
-    auto result = db.select_query("SELECT * FROM users WHERE id = " + std::to_string(user_id));
+    db->disconnect();
+    db->set_mode(database_types::postgres);
+    db->connect("host=localhost port=5432 dbname=mydb");
+    auto result = db->select_query("SELECT * FROM users WHERE id = " + std::to_string(user_id));
     return parse_user(result);
 }
 ```
+
+> **Note**: For production deployments with multiple database types, use ProxyMode with `database_server` middleware for centralized connection management. See [docs/migration/proxy-mode.md](../migration/proxy-mode.md).
 
 ---
 
@@ -655,19 +663,22 @@ while (true) {
 
 **Solution**:
 ```cpp
-// Increase connection timeout
-connection_pool_config config;
-config.connection_string = "host=localhost dbname=mydb connect_timeout=300";
-config.acquire_timeout = std::chrono::seconds(300);
-
-db.create_connection_pool(database_types::postgres, config);
+// Increase connection timeout in connection string
+auto context = std::make_shared<database_context>();
+auto db = std::make_shared<database_manager>(context);
+db->set_mode(database_types::postgres);
+db->connect("host=localhost dbname=mydb connect_timeout=300");
 
 // Use async operations for very large migrations
-auto future = async_db.execute_async("INSERT INTO new_table SELECT * FROM old_table");
+auto future = std::async(std::launch::async, [&db]() {
+    return db->execute_query("INSERT INTO new_table SELECT * FROM old_table");
+});
 while (future.wait_for(std::chrono::seconds(1)) != std::future_status::ready) {
     std::cout << "Migration in progress..." << std::endl;
 }
 ```
+
+> **Note**: For production deployments with high-volume migrations, use ProxyMode with `database_server` middleware for server-side connection management and timeouts.
 
 ### Issue 6: Index Rebuild Performance
 

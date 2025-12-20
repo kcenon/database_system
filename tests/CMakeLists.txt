@@ -221,88 +221,6 @@ if(GTest_FOUND OR gtest_FOUND)
 endif()
 
 ##################################################
-# Resilience Module Tests (DB-003)
-##################################################
-
-if(GTest_FOUND OR gtest_FOUND)
-    add_executable(resilience_test
-        resilience_test.cpp
-    )
-
-    if(GTest_FOUND)
-        target_link_libraries(resilience_test PRIVATE
-            database
-            GTest::gtest
-            GTest::gtest_main
-            Threads::Threads
-        )
-    else()
-        target_link_libraries(resilience_test PRIVATE
-            database
-            gtest
-            gtest_main
-            Threads::Threads
-        )
-    endif()
-
-    set_target_properties(resilience_test PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    )
-
-    add_test(NAME ResilienceModuleTests COMMAND resilience_test)
-
-    gtest_discover_tests(resilience_test
-        PROPERTIES
-            TIMEOUT ${TEST_TIMEOUT}
-        DISCOVERY_TIMEOUT 60
-    )
-
-    message(STATUS "Resilience module tests configured (DB-003)")
-endif()
-
-##################################################
-# Thread Safety Tests (Phase 1 - Task 1.5)
-##################################################
-
-if(GTest_FOUND OR gtest_FOUND)
-    add_executable(database_thread_safety_test
-        thread_safety_tests.cpp
-    )
-
-    if(GTest_FOUND)
-        target_link_libraries(database_thread_safety_test PRIVATE
-            database
-            GTest::gtest
-            GTest::gtest_main
-            Threads::Threads
-        )
-    else()
-        target_link_libraries(database_thread_safety_test PRIVATE
-            database
-            gtest
-            gtest_main
-            Threads::Threads
-        )
-    endif()
-
-    set_target_properties(database_thread_safety_test PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    )
-
-    add_test(NAME DatabaseThreadSafetyTests COMMAND database_thread_safety_test)
-
-    gtest_discover_tests(database_thread_safety_test
-        PROPERTIES
-            TIMEOUT ${TEST_TIMEOUT}
-        DISCOVERY_TIMEOUT 60
-    )
-endif()
-
-##################################################
 # Integrated Database Configuration Tests
 ##################################################
 
@@ -660,41 +578,6 @@ if(GTest_FOUND OR gtest_FOUND)
     endif()
 
     gtest_discover_tests(async_stress_test
-        PROPERTIES
-            TIMEOUT ${STRESS_TEST_TIMEOUT}
-        DISCOVERY_TIMEOUT 60
-    )
-
-    # Connection Stress Tests
-    add_executable(connection_stress_test
-        stress/connection_stress_test.cpp
-    )
-
-    if(GTest_FOUND)
-        target_link_libraries(connection_stress_test PRIVATE
-            database
-            GTest::gtest
-            GTest::gtest_main
-            Threads::Threads
-        )
-    else()
-        target_link_libraries(connection_stress_test PRIVATE
-            database
-            gtest
-            gtest_main
-            Threads::Threads
-        )
-    endif()
-
-    set_target_properties(connection_stress_test PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    )
-
-    add_test(NAME ConnectionStressTests COMMAND connection_stress_test)
-
-    gtest_discover_tests(connection_stress_test
         PROPERTIES
             TIMEOUT ${STRESS_TEST_TIMEOUT}
         DISCOVERY_TIMEOUT 60

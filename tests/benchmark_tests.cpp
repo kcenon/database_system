@@ -311,35 +311,7 @@ static void BM_ConcurrentAsyncOperations(benchmark::State& state) {
 }
 BENCHMARK(BM_ConcurrentAsyncOperations)->Arg(10)->Arg(50)->Arg(100);
 
-// Phase 4: Connection Pool Benchmarks
-static void BM_ConnectionPoolCreation(benchmark::State& state) {
-    auto context = std::make_shared<database_context>();
-    auto db = std::make_shared<database_manager>(context);
-
-    for (auto _ : state) {
-        connection_pool_config config;
-        config.connection_string = "test_connection";
-        config.min_connections = 5;
-        config.max_connections = 20;
-        config.acquire_timeout = std::chrono::milliseconds(30000);
-
-        // Note: May fail in test environment, but benchmarks the API call
-        db->create_connection_pool(database_types::postgres, config);
-        benchmark::DoNotOptimize(&config);
-    }
-}
-BENCHMARK(BM_ConnectionPoolCreation);
-
-static void BM_ConnectionPoolStats(benchmark::State& state) {
-    auto context = std::make_shared<database_context>();
-    auto db = std::make_shared<database_manager>(context);
-
-    for (auto _ : state) {
-        auto stats = db->get_pool_stats();
-        benchmark::DoNotOptimize(stats);
-    }
-}
-BENCHMARK(BM_ConnectionPoolStats);
+// Connection Pool Benchmarks removed in Phase 4.3 - pooling moved to server-side ProxyMode
 
 // Phase 4: Query Builder Benchmarks
 static void BM_SQLQueryBuilderCreation(benchmark::State& state) {

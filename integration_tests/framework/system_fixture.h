@@ -33,7 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "database/backends/sqlite/sqlite_manager.h"
-#include "database/connection_pool.h"
 #include "database/core/database_context.h"
 #include "database/database_manager.h"
 #include <chrono>
@@ -94,9 +93,6 @@ protected:
       connected_ = false;
     }
 
-    // Shutdown all connection pools
-    context_->get_pool_manager()->shutdown_all();
-
     // Yield to allow cleanup to complete
     std::this_thread::yield();
 
@@ -130,22 +126,6 @@ protected:
                            "price REAL NOT NULL, "
                            "stock INTEGER DEFAULT 0"
                            ")");
-  }
-
-  /**
-   * @brief Gets a connection from the pool.
-   * @return Shared pointer to connection wrapper
-   */
-  std::shared_ptr<connection_wrapper> GetConnection() {
-    auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
-    if (!pool) {
-      return nullptr;
-    }
-    auto conn_result = pool->acquire_connection();
-    if (conn_result.is_err()) {
-      return nullptr;
-    }
-    return conn_result.value();
   }
 
   /**
@@ -255,108 +235,6 @@ protected:
   database_manager *manager_{nullptr}; // Raw pointer for backward compatibility
   std::filesystem::path test_db_path_;
   bool connected_{false};
-};
-
-/**
- * @class ConnectionPoolFixture
- * @brief Test fixture with connection pool support.
- *
- * NOTE: This fixture does NOT call DatabaseSystemFixture::SetUp() to avoid
- * conflicts between database_manager singleton and connection pool.
- * Use connection pool directly instead of database_manager.
- */
-class ConnectionPoolFixture : public ::testing::Test {
-protected:
-  void SetUp() override {
-#ifndef USE_SQLITE
-    GTEST_SKIP()
-        << "SQLite support not compiled. "
-        << "Build with --with-sqlite or -DUSE_SQLITE=ON to enable these tests.";
-#endif
-
-    // Create unique test database file
-    test_db_path_ =
-        std::filesystem::temp_directory_path() /
-        ("test_db_pool_" +
-         std::to_string(
-             std::chrono::steady_clock::now().time_since_epoch().count()) +
-         ".db");
-
-    // Initialize database context with dependency injection
-    context_ = std::make_shared<database_context>();
-
-    // Create connection pool (NOT database_manager to avoid conflicts)
-    connection_pool_config config;
-    config.min_connections = 2;
-    config.max_connections = 10;
-    config.acquire_timeout =
-        std::chrono::milliseconds(500); // Shorter timeout for faster failures
-    config.idle_timeout = std::chrono::milliseconds(30000);
-    config.health_check_interval = std::chrono::milliseconds(60000);
-    config.enable_health_checks = true;
-    config.connection_string = test_db_path_.string();
-
-    pool_created_ = context_->get_pool_manager()->create_pool(
-        database_types::sqlite, config);
-
-    if (!pool_created_) {
-      std::cerr << "Failed to create connection pool for: " << test_db_path_
-                << std::endl;
-      GTEST_SKIP() << "Failed to create SQLite connection pool";
-    } else {
-      // Create test tables using a connection from the pool
-      auto pool =
-          context_->get_pool_manager()->get_pool(database_types::sqlite);
-      if (pool) {
-        auto conn_result = pool->acquire_connection();
-        if (conn_result.is_ok() && conn_result.value()->get()) {
-          auto conn = conn_result.value();
-          conn->get()->create_query(
-              "CREATE TABLE IF NOT EXISTS users ("
-              "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-              "name TEXT NOT NULL, "
-              "email TEXT UNIQUE NOT NULL, "
-              "age INTEGER, "
-              "created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
-              ")");
-          conn->get()->create_query("CREATE TABLE IF NOT EXISTS products ("
-                                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                                    "name TEXT NOT NULL, "
-                                    "price REAL NOT NULL, "
-                                    "stock INTEGER DEFAULT 0"
-                                    ")");
-          pool->release_connection(conn);
-        }
-      }
-    }
-  }
-
-  void TearDown() override {
-    // Shutdown connection pool
-    context_->get_pool_manager()->shutdown_all();
-
-    // Remove the pool to allow fresh creation in next test
-    context_->get_pool_manager()->remove_pool(database_types::sqlite);
-
-    // Yield to allow cleanup to complete
-    std::this_thread::yield();
-
-    // Clean up test database file
-    if (std::filesystem::exists(test_db_path_)) {
-      std::error_code ec;
-      std::filesystem::remove(test_db_path_, ec);
-      // Retry if file is still locked
-      if (std::filesystem::exists(test_db_path_)) {
-        std::this_thread::yield();
-        std::filesystem::remove(test_db_path_, ec);
-      }
-    }
-  }
-
-protected:
-  std::shared_ptr<database_context> context_;
-  std::filesystem::path test_db_path_;
-  bool pool_created_{false};
 };
 
 } // namespace database::testing

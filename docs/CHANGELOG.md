@@ -24,7 +24,33 @@
 
 ---
 
-## [Unreleased] - 2025-12-17
+## [Unreleased] - 2025-12-21
+
+### ⚠️ **Deprecated**
+
+#### **Connection Pooling Classes Deprecated (Phase 4.2, Issue #265, #269)**
+- **Local pooling classes marked as deprecated**: Migration toward ProxyMode with database_server
+  - `connection_pool` - Use ProxyMode for centralized pooling
+  - `connection_pool_v2` - Use ProxyMode for priority-based scheduling
+  - `connection_pool_v3` - Use ProxyMode for adaptive queue management
+  - `connection_pool_manager` - Use ProxyMode for pool management
+  - `connection_health_monitor` - Health monitoring handled server-side in ProxyMode
+  - `resilient_database_connection` - Resilience handled server-side in ProxyMode
+
+- **Migration Guide Added**: `docs/migration/proxy-mode.md`
+  - Step-by-step migration instructions
+  - Code examples for before/after
+  - Configuration options reference
+  - TLS/mTLS setup guide
+  - Fallback strategy for gradual migration
+
+- **Deprecation Impact**:
+  - Deprecation warnings will be shown when using local pooling classes
+  - DirectMode still functional for development and simple use cases
+  - ProxyMode recommended for production deployments
+  - Full removal scheduled for Phase 4.3 (after database_server migration complete)
+
+---
 
 ### 🔒 **Security**
 

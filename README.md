@@ -17,7 +17,13 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 ### Latest Updates (2025-12)
 
-- **[NEW] ProxyMode Support (Phase 4.1)**: Connect through database_server middleware
+- **[NEW] Connection Pooling Deprecation (Phase 4.2)**: Preparing migration to ProxyMode
+  - Local pooling classes marked as `[[deprecated]]`
+  - Migration guide added: [docs/migration/proxy-mode.md](docs/migration/proxy-mode.md)
+  - Affected classes: `connection_pool`, `connection_pool_v2`, `connection_pool_v3`
+  - Resilience classes deprecated: `connection_health_monitor`, `resilient_database_connection`
+  - Use ProxyMode with `database_server` for production deployments
+- **ProxyMode Support (Phase 4.1)**: Connect through database_server middleware
   - `connection_mode` enum: `direct` (legacy) and `proxy` (recommended for production)
   - `proxy_connector` class for middleware communication
   - `set_mode_proxy()` method in `database_manager`

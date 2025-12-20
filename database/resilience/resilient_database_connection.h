@@ -78,6 +78,10 @@ enum class connection_state {
  * @class resilient_database_connection
  * @brief Database connection wrapper with automatic reconnection
  *
+ * @deprecated This class is deprecated. Use ProxyMode with database_server for
+ *             centralized resilience handling. In proxy mode, automatic reconnection
+ *             and health monitoring are handled server-side. See docs/migration/proxy-mode.md.
+ *
  * Wraps any database_backend implementation and adds:
  * - Automatic reconnection with exponential backoff
  * - Connection health monitoring with heartbeat
@@ -109,7 +113,8 @@ enum class connection_state {
  *   auto result = resilient->select_query("SELECT * FROM users");
  * @endcode
  */
-class resilient_database_connection : public core::database_backend {
+class [[deprecated("Use ProxyMode with database_server for centralized resilience handling. "
+                    "See docs/migration/proxy-mode.md")]] resilient_database_connection : public core::database_backend {
 public:
     /**
      * @brief Construct resilient connection wrapper

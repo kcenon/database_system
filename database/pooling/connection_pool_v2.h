@@ -182,6 +182,11 @@ private:
  * @class connection_pool_v2
  * @brief High-performance connection pool with priority-based scheduling
  *
+ * @deprecated This class is deprecated. Use ProxyMode with database_server for
+ *             centralized connection pooling. In proxy mode, connection pooling
+ *             is handled server-side, providing better resource management and
+ *             scalability. See docs/migration/proxy-mode.md for migration guide.
+ *
  * This is a next-generation connection pool that leverages thread_system's
  * typed_thread_pool for priority-based connection request handling:
  * - **Priority Scheduling**: Critical operations get connections first
@@ -218,7 +223,8 @@ private:
  * auto result = pool_v2.acquire_connection(connection_priority::CRITICAL);
  * @endcode
  */
-class connection_pool_v2 {
+class [[deprecated("Use ProxyMode with database_server for centralized connection pooling. "
+                    "See docs/migration/proxy-mode.md")]] connection_pool_v2 {
 public:
     /**
      * @brief Constructs a connection pool with priority scheduling

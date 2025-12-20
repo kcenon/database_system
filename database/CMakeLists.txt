@@ -86,6 +86,9 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.h
     # P1-2 Headers (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
+    # Phase 4.1 Headers (Proxy Mode)
+    ${CMAKE_CURRENT_SOURCE_DIR}/proxy/proxy_config.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/proxy/proxy_connector.h
 )
 
 # Collect all source files
@@ -121,6 +124,8 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/resilience/connection_health_monitor.cpp
     # P1-2 Sources (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.cpp
+    # Phase 4.1 Sources (Proxy Mode)
+    ${CMAKE_CURRENT_SOURCE_DIR}/proxy/proxy_connector.cpp
 )
 
 # Add container-based protocol serialization if container_system is available

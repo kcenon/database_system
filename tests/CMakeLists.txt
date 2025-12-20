@@ -46,6 +46,7 @@ if(GTest_FOUND OR gtest_FOUND)
     # Create unit test executable
     add_executable(database_unit_tests
         unit_tests.cpp
+        proxy_connector_test.cpp
     )
 
     # Link dependencies - handle different target names

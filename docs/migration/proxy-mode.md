@@ -179,18 +179,20 @@ db_mgr->set_mode(database::database_types::postgres);
 db_mgr->connect(config.get_string("database.connection_string"));
 ```
 
-## Deprecated Classes Reference
+## Removed Classes Reference
 
-The following classes are deprecated and will be removed in a future release:
+The following classes have been removed as of Phase 4.3:
 
-| Class | Replacement |
-|-------|-------------|
-| `connection_pool` | ProxyMode (server-side pooling) |
-| `connection_pool_v2` | ProxyMode (server-side pooling) |
-| `connection_pool_v3` | ProxyMode (server-side pooling) |
-| `connection_pool_manager` | ProxyMode (server-side management) |
-| `connection_health_monitor` | ProxyMode (server-side monitoring) |
-| `resilient_database_connection` | ProxyMode (server-side resilience) |
+| Class | Status | Replacement |
+|-------|--------|-------------|
+| `connection_pool` | **Removed** | ProxyMode (server-side pooling) |
+| `connection_pool_v2` | **Removed** | ProxyMode (server-side pooling) |
+| `connection_pool_v3` | **Removed** | ProxyMode (server-side pooling) |
+| `connection_pool_manager` | **Removed** | ProxyMode (server-side management) |
+| `connection_health_monitor` | **Removed** | ProxyMode (server-side monitoring) |
+| `resilient_database_connection` | **Removed** | ProxyMode (server-side resilience) |
+
+> **Note:** DirectMode still works for development and testing but no longer includes local connection pooling.
 
 ## Troubleshooting
 
@@ -231,10 +233,14 @@ Error: TLS handshake failed
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| Phase 4.1 | Complete | ProxyMode infrastructure added |
-| Phase 4.2 | Complete | Deprecation warnings added |
-| Phase 4.3 | Pending | Pooling code removal |
+| Phase 4.1 | ✅ Complete | ProxyMode infrastructure added |
+| Phase 4.2 | ✅ Complete | Deprecation warnings added |
+| Phase 4.3 | ✅ Complete | Pooling code removal |
+
+All phases are now complete. The following directories and files have been removed:
+- `database/pooling/` - Connection pool implementations
+- `database/resilience/` - Health monitoring and resilient connections
 
 ---
 
-*Last updated: Phase 4.2*
+*Last updated: Phase 4.3 Complete*

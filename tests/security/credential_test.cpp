@@ -20,7 +20,6 @@
 #include "database/database_base.h"
 #include "database/database_types.h"
 #include "database/backends/sqlite/sqlite_manager.h"
-#include "database/connection_pool.h"
 
 using namespace database;
 
@@ -212,12 +211,6 @@ TEST_F(CredentialSecurityTest, DebugModeMasksCredentials) {
     // If there's a debug/toString method, it should mask credentials
     // This is a design principle verification
 
-    // Connection pool config with sensitive info
-    connection_pool_config config;
-    config.min_connections = 1;
-    config.max_connections = 5;
-    config.connection_string = "host=localhost;password=secret123;database=test";
-
     // Any debug representation should mask the password
     // This verifies the principle even if not all backends implement it
     SUCCEED() << "Credential masking in debug output is a security requirement";
@@ -265,42 +258,6 @@ TEST_F(CredentialSecurityTest, EnvironmentCredentialsNotLogged) {
 
     // This documents the security requirement
     SUCCEED() << "Environment-based credentials must be masked in all output";
-}
-
-//=============================================================================
-// Connection Pool Credential Security
-//=============================================================================
-
-/**
- * @test PoolDoesNotExposeCredentials
- * @brief Tests that connection pool operations don't expose credentials
- */
-TEST_F(CredentialSecurityTest, PoolDoesNotExposeCredentials) {
-    connection_pool_config config;
-    config.min_connections = 0;
-    config.max_connections = 2;
-    config.connection_string = ":memory:";
-    config.idle_timeout = std::chrono::milliseconds(1000);
-
-    std::string output = captureOutput(std::clog, [&]() {
-        try {
-            // Connection pool requires database type and factory function
-            auto factory = []() -> std::unique_ptr<database_base> {
-                return std::make_unique<sqlite_manager>();
-            };
-            connection_pool pool(database_types::sqlite, config, factory);
-            pool.initialize();
-            // Pool operations
-            pool.shutdown();
-        } catch (...) {
-            // Connection pool may not be fully implemented - that's OK
-        }
-    });
-
-    // Even if pool logs operations, credentials shouldn't appear
-    EXPECT_TRUE(output.find("password") == std::string::npos &&
-                output.find("secret") == std::string::npos)
-        << "Possible credential exposure in pool logs";
 }
 
 //=============================================================================

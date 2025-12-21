@@ -54,8 +54,6 @@ namespace database
 			// Fallback to default context if nullptr passed
 			context_ = std::make_shared<database_context>();
 		}
-		// Cache pool_manager for performance
-		pool_manager_ = context_->get_pool_manager();
 	}
 
 	database_manager::~database_manager() {}

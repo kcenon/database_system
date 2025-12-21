@@ -8,6 +8,8 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <chrono>
+#include <thread>
+#include <vector>
 
 #include "database/core/database_context.h"
 #include "database/database_manager.h"

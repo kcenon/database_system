@@ -21,7 +21,6 @@ All rights reserved.
 
 #include "../database_base.h"
 #include "../database_manager.h"
-#include "../connection_pool.h"
 
 namespace database {
 namespace adapters {
@@ -208,30 +207,6 @@ public:
      */
     bool is_connected() const override {
         return this->impl_ && this->impl_->is_connected();
-    }
-};
-
-/**
- * @brief Adapter for connection pool with common_system executor
- */
-class common_connection_pool_adapter {
-public:
-    /**
-     * @brief Create connection pool with common_system executor
-     */
-    static std::shared_ptr<connection_pool> create_with_common_executor(
-        std::shared_ptr<::common::interfaces::IExecutor> executor,
-        const connection_pool::config& cfg) {
-
-        // Create a connection pool that can use common executor
-        // for async operations
-        auto pool = std::make_shared<connection_pool>(cfg);
-
-        // Note: The actual integration would require modifying
-        // connection_pool to accept an executor, but we provide
-        // the interface here
-
-        return pool;
     }
 };
 

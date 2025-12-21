@@ -17,12 +17,12 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 ### Latest Updates (2025-12)
 
-- **[NEW] Connection Pooling Deprecation (Phase 4.2)**: Preparing migration to ProxyMode
-  - Local pooling classes marked as `[[deprecated]]`
-  - Migration guide added: [docs/migration/proxy-mode.md](docs/migration/proxy-mode.md)
-  - Affected classes: `connection_pool`, `connection_pool_v2`, `connection_pool_v3`
-  - Resilience classes deprecated: `connection_health_monitor`, `resilient_database_connection`
+- **[BREAKING] Connection Pooling Removed (Phase 4.3)**: Migration to ProxyMode completed
+  - All local pooling classes removed: `connection_pool`, `connection_pool_v2`, `connection_pool_v3`
+  - Resilience classes removed: `connection_health_monitor`, `resilient_database_connection`
+  - Migration guide: [docs/migration/proxy-mode.md](docs/migration/proxy-mode.md)
   - Use ProxyMode with `database_server` for production deployments
+  - DirectMode remains for development and testing
 - **ProxyMode Support (Phase 4.1)**: Connect through database_server middleware
   - `connection_mode` enum: `direct` (legacy) and `proxy` (recommended for production)
   - `proxy_connector` class for middleware communication
@@ -116,31 +116,37 @@ cmake --build build
 
 [📚 Detailed Backend Features →](docs/FEATURES.md)
 
-### Enterprise-Grade Connection Pooling
+### Server-Side Connection Pooling (ProxyMode)
 
-**Connection Pool v3 Performance**:
-- **77ns** connection acquisition latency (65x faster than v2)
-- **1.16M+ ops/s** throughput with thread_system integration
-- **10,000+ concurrent connections** supported
-- **95%+ pool efficiency** maintained under load
-- Priority-based connection scheduling
-- Automatic health monitoring and recovery
+**ProxyMode Benefits** (via database_server middleware):
+- **Centralized pooling**: No per-application connection pools
+- **Secure credential management**: Database credentials stored server-side only
+- **Load balancing**: Automatic connection distribution
+- **Unified monitoring**: Centralized metrics and health checks
+- **Reduced client complexity**: Lighter client library
 
 ```cpp
-#include <database/connection_pool.h>
+#include <database/database_manager.h>
+#include <database/proxy/proxy_config.h>
 
-connection_pool_config config;
-config.min_connections = 10;
-config.max_connections = 100;
-config.connection_string = "host=localhost port=5432 dbname=mydb";
+// ProxyMode - Recommended for production
+database::proxy::proxy_connection_config proxy_config;
+proxy_config.server_host = "db-gateway.internal";
+proxy_config.server_port = 9432;
+proxy_config.auth_token = "your-client-token";
+proxy_config.use_tls = true;
 
-auto& db = database_manager::handle();
-db.create_connection_pool(database_types::postgres, config);
+auto context = std::make_shared<database_context>();
+auto db = std::make_shared<database_manager>(context);
+db->set_mode_proxy(database_types::postgres, proxy_config);
+db->connect("");  // Connection managed by server
 
-// RAII-managed connection (automatically returned to pool)
-auto pool = db.get_connection_pool(database_types::postgres);
-auto connection = pool->acquire_connection();
+// DirectMode - For development and testing
+db->set_mode(database_types::postgres);
+db->connect("host=localhost port=5432 dbname=mydb");
 ```
+
+> **Note**: ProxyMode requires [database_server](https://github.com/kcenon/database_server) middleware.
 
 ### Connection Modes (Phase 4.1)
 
@@ -294,22 +300,18 @@ For detailed information, see `database/core/result.h`.
 
 ### Benchmarks (Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD)
 
-| Metric | Performance | vs. Native | Notes |
-|--------|-------------|-----------|-------|
-| **Connection Acquisition** | 0.1ms | 20x faster | Pooled vs. native |
-| **Connection Pool v3** | 77ns | 65x faster | vs. v2 (5μs) |
-| **Throughput** | 1.16M+ ops/s | 7.7x faster | High load scenario |
-| **Simple SELECT (PostgreSQL)** | 1.2ms | +20% overhead | Type-safe abstraction |
-| **Complex JOIN (PostgreSQL)** | 15ms | +7% overhead | Minimal impact |
-| **Bulk INSERT (1K rows)** | 45ms | +7% overhead | Near-native speed |
-| **Transaction TPS** | 5,000 TPS | +19% faster | PostgreSQL |
-| **Concurrent Connections** | 10,000+ | Stable | 95%+ efficiency |
+| Metric | Performance | Notes |
+|--------|-------------|-------|
+| **Simple SELECT (PostgreSQL)** | 1.2ms | Type-safe abstraction |
+| **Complex JOIN (PostgreSQL)** | 15ms | Minimal overhead |
+| **Bulk INSERT (1K rows)** | 45ms | Near-native speed |
+| **Transaction TPS** | 5,000 TPS | PostgreSQL ACID |
+| **Query Builder Overhead** | <20% | vs. raw SQL |
 
 **Key Insights**:
-- 🚀 **Connection pooling**: 20x faster than native drivers
 - ⚡ **Query overhead**: Minimal (<20%) for type safety and flexibility
-- 📈 **Scalability**: Linear scaling up to 10,000+ concurrent connections
-- 💾 **Memory efficiency**: <50MB baseline, 850MB at 10K connections
+- 🔒 **ProxyMode**: Centralized pooling via database_server for production
+- 💾 **Memory efficiency**: Lightweight client library with server-side pooling
 
 [⚡ Complete Benchmarks →](docs/BENCHMARKS.md)
 
@@ -348,36 +350,32 @@ cmake --build .
 
 # Run examples
 ./bin/basic_usage
-./bin/connection_pool_demo
+./bin/postgres_advanced
 ```
 
 ### Basic Usage
 
 ```cpp
 #include <database/database_manager.h>
-#include <database/connection_pool.h>
+#include <database/core/database_context.h>
 
 int main() {
-    // Initialize database system
-    database_manager& db = database_manager::handle();
+    // Initialize database system with dependency injection
+    auto context = std::make_shared<database_context>();
+    auto db = std::make_shared<database_manager>(context);
 
-    // Configure connection pool
-    connection_pool_config config;
-    config.min_connections = 10;
-    config.max_connections = 100;
-    config.connection_string = "host=localhost port=5432 dbname=mydb user=admin password=secret";
-
-    db.set_mode(database_types::postgres);
-    db.create_connection_pool(database_types::postgres, config);
+    // DirectMode - for development and testing
+    db->set_mode(database_types::postgres);
+    db->connect("host=localhost port=5432 dbname=mydb user=admin password=secret");
 
     // Execute query with type-safe query builder
-    auto result = db.create_query_builder(database_types::postgres)
+    auto result = db->create_query_builder(database_types::postgres)
         .select({"id", "username", "email"})
         .from("users")
         .where("is_active", "=", database_value{true})
         .order_by("created_at", sort_order::desc)
         .limit(100)
-        .execute(&db);
+        .execute(db.get());
 
     if (result) {
         for (const auto& row : *result) {
@@ -385,6 +383,7 @@ int main() {
         }
     }
 
+    db->disconnect();
     return 0;
 }
 ```
@@ -437,9 +436,9 @@ int main() {
 ┌──────────────────────▼──────────────────────────────────────┐
 │              Database Abstraction Layer                     │
 │  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐   │
-│  │ ORM         │  │ Query Builder│  │ Connection Pool  │   │
-│  │ Framework   │  │ (SQL/NoSQL)  │  │ (v3: 77ns, 1.16M │   │
-│  │             │  │              │  │  ops/s)          │   │
+│  │ ORM         │  │ Query Builder│  │ ProxyMode        │   │
+│  │ Framework   │  │ (SQL/NoSQL)  │  │ (Server-side     │   │
+│  │             │  │              │  │  pooling)        │   │
 │  └─────────────┘  └──────────────┘  └──────────────────┘   │
 └──────────────────────┬──────────────────────────────────────┘
                        │
@@ -452,10 +451,10 @@ int main() {
 ```
 
 **Key Components**:
-- **database_manager**: Singleton manager with connection pooling
-- **connection_pool v3**: Enterprise-grade pooling (77ns, 1.16M+ ops/s)
+- **database_manager**: Manager with DirectMode/ProxyMode support
+- **ProxyMode**: Centralized pooling via database_server middleware
 - **Query Builders**: Type-safe SQL/NoSQL query construction
-- **ORM Framework**: C++17 SFINAE-based entity system
+- **ORM Framework**: C++20 concepts-based entity system
 - **Backend Adapters**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
 
 [🏛️ Architecture Details →](docs/01-ARCHITECTURE.md)
@@ -578,10 +577,9 @@ target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 ### Thread Safety & Concurrency
 
 - ✅ **Grade A+**: ThreadSanitizer clean, zero data races
-- ✅ **10,000+ concurrent connections** supported
-- ✅ **95%+ pool efficiency** under high load
 - ✅ **Lock-based coordination** for shared state
 - ✅ **Atomic operations** for statistics
+- ✅ **ProxyMode**: Server-side pooling for high-concurrency scenarios
 
 ### Resource Management (RAII)
 
@@ -608,13 +606,14 @@ target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 
 | Metric | Value | Notes |
 |--------|-------|-------|
-| Connection Pool Acquisition | 0.1ms | 20x faster than native |
-| Connection Pool v3 Latency | 77ns | 65x improvement vs v2 |
-| Throughput (high load) | 1.16M+ ops/s | With thread_system |
 | Transaction TPS (PostgreSQL) | 5,000 TPS | ACID compliant |
 | Simple SELECT (PostgreSQL) | 1.2ms | Minimal overhead |
-| Concurrent Connections | 10,000+ | Stable, 95%+ efficiency |
-| Memory Baseline | <50MB | Efficient resource usage |
+| Complex JOIN (PostgreSQL) | 15ms | Type-safe abstraction |
+| Bulk INSERT (1K rows) | 45ms | Near-native speed |
+| Query Builder Overhead | <20% | vs. raw SQL |
+| Memory Baseline | <50MB | Lightweight client |
+
+> **Note**: Connection pooling metrics are now server-side with ProxyMode via database_server.
 
 ---
 

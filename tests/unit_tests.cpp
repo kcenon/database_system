@@ -369,43 +369,8 @@ TEST_F(AsyncOperationsTest, AsyncConceptDemonstration) {
   EXPECT_TRUE(true); // Async concepts validated
 }
 
-// Connection Pool Tests
-class ConnectionPoolTest : public ::testing::Test {
-protected:
-  std::shared_ptr<database_context> context_;
-  std::shared_ptr<database_manager> db_mgr_;
-
-  void SetUp() override {
-    // Connection pool setup with dependency injection
-    context_ = std::make_shared<database_context>();
-    db_mgr_ = std::make_shared<database_manager>(context_);
-  }
-
-  void TearDown() override {
-    // Connection pool cleanup
-    if (db_mgr_) {
-      db_mgr_->disconnect();
-    }
-  }
-};
-
-TEST_F(ConnectionPoolTest, PoolConfiguration) {
-  connection_pool_config config;
-  config.connection_string = "test_connection_string";
-  config.min_connections = 5;
-  config.max_connections = 20;
-  config.acquire_timeout = std::chrono::milliseconds(30000);
-
-  // This might fail in test environment without actual database, but should not
-  // crash
-  EXPECT_NO_THROW(
-      db_mgr_->create_connection_pool(database_types::postgres, config));
-}
-
-TEST_F(ConnectionPoolTest, PoolStatistics) {
-  // Get pool statistics (should work even if pool is not active)
-  EXPECT_NO_THROW(db_mgr_->get_pool_stats());
-}
+// Connection Pool Tests removed in Phase 4.3 - pooling moved to server-side ProxyMode
+// Use ProxyMode with database_server for centralized connection pooling
 
 // Query Builder Tests
 class QueryBuilderTest : public ::testing::Test {

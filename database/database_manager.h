@@ -40,7 +40,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "core/database_context.h"
 
 #include "database_base.h"
-#include "connection_pool.h"
 #include "query_builder.h"
 #include "proxy/proxy_config.h"
 
@@ -231,45 +230,6 @@ namespace database
 		bool disconnect(void);
 
 		/**
-		 * @brief Creates a connection pool for the specified database type.
-		 *
-		 * @param db_type The database type to create a pool for
-		 * @param config Connection pool configuration parameters
-		 * @return @c true if the pool was created successfully, @c false otherwise
-		 *
-		 * @note Inline for zero overhead in hot paths (batch operations)
-		 */
-		inline bool create_connection_pool(database_types db_type, const connection_pool_config& config) {
-			// Direct access to cached pool_manager for performance
-			return pool_manager_ ? pool_manager_->create_pool(db_type, config) : false;
-		}
-
-		/**
-		 * @brief Gets the connection pool for the specified database type.
-		 *
-		 * @param db_type The database type to get a pool for
-		 * @return Shared pointer to the connection pool, nullptr if not found
-		 *
-		 * @note Inline for zero overhead in hot paths (batch operations)
-		 */
-		inline std::shared_ptr<connection_pool_base> get_connection_pool(database_types db_type) {
-			// Direct access to cached pool_manager for performance
-			return pool_manager_ ? pool_manager_->get_pool(db_type) : nullptr;
-		}
-
-		/**
-		 * @brief Gets connection pool statistics for all active pools.
-		 *
-		 * @return Map of database type to connection statistics
-		 *
-		 * @note Inline for zero overhead in hot paths (monitoring)
-		 */
-		inline std::map<database_types, connection_stats> get_pool_stats() const {
-			// Direct access to cached pool_manager for performance
-			return pool_manager_ ? pool_manager_->get_all_stats() : std::map<database_types, connection_stats>{};
-		}
-
-		/**
 		 * @brief Creates a query builder for the current database type.
 		 *
 		 * @return A query builder configured for the current database
@@ -304,7 +264,6 @@ namespace database
 		std::unique_ptr<database_base>
 			database_;	 ///< The underlying database interface.
 		std::shared_ptr<database_context> context_; ///< Dependency injection context
-		std::shared_ptr<connection_pool_manager> pool_manager_; ///< Cached pool manager for performance
 		connection_mode connection_mode_; ///< Current connection mode (Phase 4.1)
 		proxy::proxy_connection_config proxy_config_; ///< Proxy configuration (Phase 4.1)
 

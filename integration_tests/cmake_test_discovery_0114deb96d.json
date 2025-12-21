@@ -1,10 +1,10 @@
 {
-  "tests": 46,
+  "tests": 30,
   "name": "AllTests",
   "testsuites": [
     {
       "name": "ErrorHandlingTest",
-      "tests": 13,
+      "tests": 11,
       "testsuite": [
         {
           "name": "InvalidQuerySyntax",
@@ -37,39 +37,29 @@
           "line": 123
         },
         {
-          "name": "ConnectionPoolExhaustion",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 147
-        },
-        {
           "name": "InvalidDatabaseFile",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 186
+          "line": 150
         },
         {
           "name": "QueryOnDisconnectedDatabase",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 206
+          "line": 170
         },
         {
           "name": "InvalidConnectionStringFormat",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 222
+          "line": 186
         },
         {
           "name": "ConcurrentConstraintViolations",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 240
-        },
-        {
-          "name": "RecoveryFromUnhealthyConnection",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 272
+          "line": 204
         },
         {
           "name": "EmptyQueryString",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
-          "line": 309
+          "line": 239
         }
       ]
     },
@@ -106,82 +96,6 @@
           "name": "PreparedStatementAdvantage",
           "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 193
-        }
-      ]
-    },
-    {
-      "name": "ConnectionManagementTest",
-      "tests": 14,
-      "testsuite": [
-        {
-          "name": "PoolInitializationDefault",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 51
-        },
-        {
-          "name": "PoolInitializationCustomConfig",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 66
-        },
-        {
-          "name": "ConnectionAcquisitionSuccess",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 92
-        },
-        {
-          "name": "ConnectionReleaseSuccess",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 105
-        },
-        {
-          "name": "ConnectionPoolingAndReuse",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 127
-        },
-        {
-          "name": "ConnectionTimeoutHandling",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 146
-        },
-        {
-          "name": "MaxConnectionsLimitEnforcement",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 184
-        },
-        {
-          "name": "ConnectionHealthChecking",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 213
-        },
-        {
-          "name": "ConcurrentConnectionRequests",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 230
-        },
-        {
-          "name": "ConnectionStringParsingSQLite",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 264
-        },
-        {
-          "name": "ConnectionMetadataTracking",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 277
-        },
-        {
-          "name": "IdleConnectionTimeoutDetection",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 297
-        },
-        {
-          "name": "ConnectionPoolStatisticsTracking",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 317
-        },
-        {
-          "name": "ConnectionPoolShutdown",
-          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/connection_management_test.cpp",
-          "line": 334
         }
       ]
     },

@@ -41,8 +41,6 @@
 #include "adapters/thread_adapter.h"
 #include "../database_base.h"
 #include "../postgres_manager.h"
-#include "../connection_pool.h"
-#include "../pooling/connection_pool_v2.h"
 
 #include <mutex>
 #include <chrono>
@@ -73,25 +71,6 @@ inline kcenon::common::Result<T> make_error_result(const std::string& msg, int c
 
 } // anonymous namespace
 
-/**
- * @brief Convert backend_type to database_types
- */
-static database_types to_database_types(backend_type type) {
-    switch (type) {
-        case backend_type::postgres:
-            return database_types::postgres;
-        case backend_type::mysql:
-            return database_types::mysql;
-        case backend_type::sqlite:
-            return database_types::sqlite;
-        case backend_type::mongodb:
-            return database_types::mongodb;
-        case backend_type::redis:
-            return database_types::redis;
-        default:
-            return database_types::postgres;
-    }
-}
 
 /**
  * @brief Create database backend instance
@@ -284,36 +263,6 @@ public:
             return make_error("Connection failed", -3, "unified_database_system");
         }
 
-        // Create connection pool
-        connection_pool_config pool_config;
-        pool_config.connection_string = connection_string;
-        pool_config.min_connections = config_.connection_pool.min_connections;
-        pool_config.max_connections = config_.connection_pool.max_connections;
-        pool_config.acquire_timeout = config_.connection_pool.connection_timeout;
-
-        // Create factory function for connection pool
-        // Each call creates a NEW connection instance
-        auto factory = [backend]() -> std::unique_ptr<database_base> {
-            switch (backend) {
-                case backend_type::postgres:
-                    return std::make_unique<postgres_manager>();
-                // Add other backends when implemented
-                default:
-                    return nullptr;
-            }
-        };
-
-        pool_ = std::make_shared<connection_pool>(
-            to_database_types(backend),
-            pool_config,
-            factory
-        );
-
-        if (!pool_->initialize()) {
-            backend_->disconnect();
-            return make_error("Connection pool initialization failed", -4, "unified_database_system");
-        }
-
         connected_ = true;
 
         // Log connection
@@ -332,12 +281,6 @@ public:
 
         if (!connected_) {
             return kcenon::common::ok();
-        }
-
-        // Close connection pool
-        if (pool_) {
-            pool_->shutdown();
-            pool_.reset();
         }
 
         // Disconnect backend
@@ -511,26 +454,14 @@ public:
             health.thread_pool_healthy = true;
         }
 
-        // Check connection pool
-        if (pool_) {
-            auto stats = pool_->get_stats();
-            health.connection_pool_healthy = true;
-            health.connection_pool_utilization =
-                stats.total_connections > 0
-                    ? static_cast<double>(stats.active_connections) / stats.total_connections * 100.0
-                    : 0.0;
-        }
+        // Connection pooling is now handled server-side via ProxyMode
+        health.connection_pool_healthy = true;
+        health.connection_pool_utilization = 0.0;
 
         // Determine overall health
         if (!connected_) {
             health.status = health_status::failed;
             health.issues.push_back("Not connected to database");
-        } else if (!health.connection_pool_healthy) {
-            health.status = health_status::critical;
-            health.issues.push_back("Connection pool unhealthy");
-        } else if (health.connection_pool_utilization > 90.0) {
-            health.status = health_status::degraded;
-            health.issues.push_back("Connection pool utilization high");
         } else {
             health.status = health_status::healthy;
         }
@@ -557,20 +488,14 @@ public:
     unified_database_system::pool_stats get_pool_stats() const {
         std::lock_guard<std::mutex> lock(mutex_);
 
+        // Connection pooling is now handled server-side via ProxyMode
+        // Return empty stats for client-side
         unified_database_system::pool_stats stats;
-
-        if (pool_) {
-            auto pool_stats = pool_->get_stats();
-            stats.total_connections = pool_stats.total_connections;
-            stats.active_connections = pool_stats.active_connections;
-            stats.idle_connections = pool_stats.available_connections;
-            stats.wait_queue_size = 0; // Not available in connection_stats
-            stats.utilization_percent =
-                pool_stats.total_connections > 0
-                    ? static_cast<double>(pool_stats.active_connections) /
-                      pool_stats.total_connections * 100.0
-                    : 0.0;
-        }
+        stats.total_connections = connected_ ? 1 : 0;
+        stats.active_connections = connected_ ? 1 : 0;
+        stats.idle_connections = 0;
+        stats.wait_queue_size = 0;
+        stats.utilization_percent = connected_ ? 100.0 : 0.0;
 
         return stats;
     }
@@ -636,7 +561,6 @@ private:
     bool connected_;
 
     std::shared_ptr<database_base> backend_; // shared_ptr for transaction support
-    std::shared_ptr<connection_pool> pool_;
 
     database_metrics metrics_;
 

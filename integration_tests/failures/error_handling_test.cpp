@@ -141,44 +141,8 @@ TEST_F(ErrorHandlingTest, TransactionRollbackOnError)
 		<< "Rollback should revert all changes";
 }
 
-/**
- * @test Verify connection pool exhaustion handling.
- */
-TEST_F(ErrorHandlingTest, ConnectionPoolExhaustion)
-{
-	// Create pool with very limited connections
-	connection_pool_config config;
-	config.min_connections = 1;
-	config.max_connections = 2;
-	config.acquire_timeout = std::chrono::milliseconds(500);
-	config.connection_string = test_db_path_.string();  // Use absolute path without URI prefix
-
-	context_->get_pool_manager()->remove_pool(database_types::sqlite);
-	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
-
-	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
-	ASSERT_NE(pool, nullptr);
-
-	// Acquire all connections
-	auto conn1_result = pool->acquire_connection();
-	auto conn2_result = pool->acquire_connection();
-
-	ASSERT_TRUE(conn1_result.is_ok());
-	ASSERT_TRUE(conn2_result.is_ok());
-
-	// Try to acquire when pool is exhausted
-	PerformanceTimer timer;
-	auto conn3_result = pool->acquire_connection();
-
-	// Should timeout or return error
-	if (conn3_result.is_err()) {
-		EXPECT_GE(timer.Elapsed(), 400) << "Should wait for timeout period";
-	}
-
-	auto stats = pool->get_stats();
-	EXPECT_GT(stats.failed_acquisitions, 0u)
-		<< "Should track failed acquisitions";
-}
+// Connection pool exhaustion test removed in Phase 4.3
+// Connection pooling is now handled server-side via ProxyMode
 
 /**
  * @test Verify handling of connection to invalid database file.
@@ -266,42 +230,8 @@ TEST_F(ErrorHandlingTest, ConcurrentConstraintViolations)
 	EXPECT_LT(failed_inserts, num_threads) << "At least one insert should succeed";
 }
 
-/**
- * @test Verify recovery from unhealthy connection.
- */
-TEST_F(ErrorHandlingTest, RecoveryFromUnhealthyConnection)
-{
-	// Create pool for this test
-	connection_pool_config config;
-	config.min_connections = 2;
-	config.max_connections = 5;
-	config.acquire_timeout = std::chrono::milliseconds(1000);
-	config.connection_string = test_db_path_.string();
-
-	context_->get_pool_manager()->remove_pool(database_types::sqlite);
-	context_->get_pool_manager()->create_pool(database_types::sqlite, config);
-
-	auto pool = context_->get_pool_manager()->get_pool(database_types::sqlite);
-	ASSERT_NE(pool, nullptr);
-
-	auto conn_result = pool->acquire_connection();
-	ASSERT_TRUE(conn_result.is_ok());
-	auto conn = conn_result.value();
-	EXPECT_TRUE(conn->is_healthy());
-
-	// Mark connection as unhealthy
-	conn->mark_unhealthy();
-	EXPECT_FALSE(conn->is_healthy());
-
-	// Release unhealthy connection
-	pool->release_connection(conn);
-
-	// Acquire new connection - pool should provide healthy one
-	auto new_conn_result = pool->acquire_connection();
-	ASSERT_TRUE(new_conn_result.is_ok());
-	auto new_conn = new_conn_result.value();
-	EXPECT_TRUE(new_conn->is_healthy()) << "Pool should provide healthy connection";
-}
+// Recovery from unhealthy connection test removed in Phase 4.3
+// Connection health management is now handled server-side via ProxyMode
 
 /**
  * @test Verify handling of empty query string.

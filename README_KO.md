@@ -14,7 +14,15 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 > **🏗️ 모듈식 아키텍처**: 다중 백엔드 지원, 엔터프라이즈 보안, 실시간 모니터링을 갖춘 포괄적인 database abstraction layer.
 
-> **✅ 최신 업데이트 (2025-12)**: C++20 Concepts 통합 (`SubmittableTask`, `ErrorHandler`, `QueryCallback`, `StreamEventHandler` 등)으로 비동기 작업에 대한 컴파일 타임 타입 검증, 더 명확한 오류 메시지, 더 나은 IDE 지원 제공. 기존 `std::function` API와 하위 호환. 모든 플랫폼에서 CI/CD pipeline 정상 작동.
+> **⚠️ 최신 업데이트 (2025-12)**:
+> - **[BREAKING] 커넥션 풀링 제거 (Phase 4.3)**: 모든 로컬 풀링 클래스 제거 완료
+>   - `connection_pool`, `connection_pool_v2`, `connection_pool_v3` 제거
+>   - `connection_health_monitor`, `resilient_database_connection` 제거
+>   - 프로덕션: database_server를 통한 ProxyMode 사용 권장
+>   - 개발/테스트: DirectMode (`set_mode()`) 유지
+>   - 마이그레이션 가이드: [docs/migration/proxy-mode.md](docs/migration/proxy-mode.md)
+> - C++20 Concepts 통합으로 컴파일 타임 타입 검증 제공
+> - 모든 플랫폼에서 CI/CD pipeline 정상 작동
 
 ---
 

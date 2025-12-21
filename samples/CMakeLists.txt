@@ -26,10 +26,10 @@ find_package(Threads REQUIRED)
 
 # List of all sample programs
 # Note: Advanced samples excluded - require API features not yet fully implemented
+# Note: connection_pool_demo removed in Phase 4.3 (pooling moved to server-side ProxyMode)
 set(SAMPLE_PROGRAMS
     basic_usage
     postgres_advanced
-    connection_pool_demo
     # async_operations_demo  # Excluded: requires async_executor API not yet implemented
     # orm_framework_demo  # Excluded: requires ORM framework API not yet implemented
     # performance_monitoring_demo  # Excluded: requires performance monitoring API updates
@@ -103,14 +103,7 @@ if(USE_THREAD_SYSTEM)
     # Phase 1: Async Executor
     configure_migration_sample(async_executor_v2_demo migration/async_executor_v2_demo.cpp)
 
-    # Phase 2: Connection Pool with Priority Scheduling
-    configure_migration_sample(connection_pool_v2_demo migration/connection_pool_v2_demo.cpp)
-
-    # Simple test for debugging
-    configure_migration_sample(test_simple_v2 migration/test_simple_v2.cpp)
-
-    # Phase 3: Metrics test
-    configure_migration_sample(test_metrics_v2 migration/test_metrics_v2.cpp)
+    # Note: Connection pool samples removed in Phase 4.3 (pooling moved to server-side ProxyMode)
 endif()
 
 # Output directory
@@ -190,7 +183,6 @@ install(TARGETS ${PREFIXED_SAMPLE_PROGRAMS}
 install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_basic_usage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_advanced.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/connection_pool_demo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/database_run_all_samples.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md

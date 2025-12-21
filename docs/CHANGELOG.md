@@ -26,29 +26,46 @@
 
 ## [Unreleased] - 2025-12-21
 
-### ⚠️ **Deprecated**
+### 🗑️ **Removed (Breaking Changes)**
 
-#### **Connection Pooling Classes Deprecated (Phase 4.2, Issue #265, #269)**
-- **Local pooling classes marked as deprecated**: Migration toward ProxyMode with database_server
-  - `connection_pool` - Use ProxyMode for centralized pooling
-  - `connection_pool_v2` - Use ProxyMode for priority-based scheduling
-  - `connection_pool_v3` - Use ProxyMode for adaptive queue management
-  - `connection_pool_manager` - Use ProxyMode for pool management
-  - `connection_health_monitor` - Health monitoring handled server-side in ProxyMode
-  - `resilient_database_connection` - Resilience handled server-side in ProxyMode
+#### **Connection Pooling and Resilience Code Removed (Phase 4.3, Issue #265, #270)**
+- **All local pooling classes removed**: Migration to ProxyMode with database_server completed
+  - Removed `database/pooling/` directory (connection_pool_v2.h/cpp, connection_pool_v3.h/cpp)
+  - Removed `database/resilience/` directory (resilient_database_connection.h/cpp, connection_health_monitor.h/cpp)
+  - Removed `database/connection_pool.h` and `database/connection_pool.cpp`
+  - Removed `database/connection_leak_detector.h` and `database/leak_detector_enhanced.h`
 
-- **Migration Guide Added**: `docs/migration/proxy-mode.md`
+- **API Changes**:
+  - `database_manager::create_connection_pool()` - Removed
+  - `database_manager::get_connection_pool()` - Removed
+  - `database_manager::get_pool_stats()` - Removed
+  - `database_context::get_pool_manager()` - Removed
+  - `database_context::get_leak_detector()` - Removed
+
+- **Tests and Samples Removed**:
+  - Removed `tests/resilience_test.cpp`, `tests/thread_safety_tests.cpp`
+  - Removed `tests/stress/connection_stress_test.cpp`
+  - Removed `integration_tests/scenarios/connection_management_test.cpp`
+  - Removed `benchmarks/connection_pool_bench.cpp`
+  - Removed `samples/connection_pool_demo.cpp`
+  - Removed `samples/migration/connection_pool_v2_demo.cpp`
+
+- **Migration Required**: Use ProxyMode with database_server for production deployments
+  - See `docs/migration/proxy-mode.md` for migration guide
+  - DirectMode (`set_mode()`) remains for development and testing
+  - ProxyMode (`set_mode_proxy()`) recommended for production
+
+---
+
+### ⚠️ **Previously Deprecated (Phase 4.2)**
+
+#### **Connection Pooling Classes Were Deprecated (Phase 4.2, Issue #265, #269)**
+- **Note**: These classes were deprecated in Phase 4.2 and have now been **removed** in Phase 4.3
+- **Migration Guide**: `docs/migration/proxy-mode.md`
   - Step-by-step migration instructions
   - Code examples for before/after
   - Configuration options reference
   - TLS/mTLS setup guide
-  - Fallback strategy for gradual migration
-
-- **Deprecation Impact**:
-  - Deprecation warnings will be shown when using local pooling classes
-  - DirectMode still functional for development and simple use cases
-  - ProxyMode recommended for production deployments
-  - Full removal scheduled for Phase 4.3 (after database_server migration complete)
 
 ---
 

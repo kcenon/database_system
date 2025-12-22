@@ -559,7 +559,7 @@ target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 | `USE_REDIS` | OFF | Enable Redis support |
 | `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
 | `USE_UNIT_TEST` | ON | Build unit tests |
-| `BUILD_WITH_COMMON_SYSTEM` | OFF | Enable common_system integration (Result<T>) |
+| `BUILD_WITH_COMMON_SYSTEM` | OFF | Enable common_system integration (Result<T>, sets KCENON_HAS_COMMON_SYSTEM) |
 
 [📦 Complete Build Guide →](docs/guides/BUILD_GUIDE.md)
 

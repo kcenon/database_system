@@ -524,7 +524,9 @@ Support for standard SQL isolation levels (backend-dependent):
 Result pattern for exception-free error handling:
 
 ```cpp
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <kcenon/database/config/feature_flags.h>
+
+#if KCENON_HAS_COMMON_SYSTEM
 #include <kcenon/common/patterns/result.h>
 
 namespace database::adapters {

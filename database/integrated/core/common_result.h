@@ -12,7 +12,9 @@
 
 #pragma once
 
-#if defined(BUILD_WITH_COMMON_SYSTEM) || defined(USE_COMMON_SYSTEM)
+#include <kcenon/database/config/feature_flags.h>
+
+#if KCENON_HAS_COMMON_SYSTEM
 	// Use common_system's Result implementation directly
 	#include <kcenon/common/patterns/result.h>
 

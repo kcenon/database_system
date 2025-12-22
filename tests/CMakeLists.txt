@@ -5,6 +5,28 @@
 # Enable testing
 enable_testing()
 
+##################################################
+# Common Compiler Options for Tests
+##################################################
+
+# Function to apply deprecation warnings to test targets
+function(apply_test_compiler_options target)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(${target} PRIVATE
+            -Wall
+            -Wextra
+            -Wdeprecated-declarations
+            -Wno-unused-parameter
+        )
+    elseif(MSVC)
+        target_compile_options(${target} PRIVATE
+            /W4
+            /WX-
+            /w14996  # Enable deprecation warnings (C4996)
+        )
+    endif()
+endfunction()
+
 # Find test dependencies
 find_package(GTest QUIET)
 if(NOT GTest_FOUND)
@@ -73,6 +95,9 @@ if(GTest_FOUND OR gtest_FOUND)
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     )
     
+    # Apply deprecation warnings
+    apply_test_compiler_options(database_unit_tests)
+
     # Add test
     add_test(NAME DatabaseUnitTests COMMAND database_unit_tests)
 

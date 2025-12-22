@@ -218,6 +218,28 @@ if(USE_MONITORING_SYSTEM)
 endif()
 
 ##################################################
+# Compiler Options
+##################################################
+
+if(INTEGRATED_DB_SOURCES)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(${INTEGRATED_DB_TARGET} PRIVATE
+            -Wall
+            -Wextra
+            -Wpedantic
+            -Wdeprecated-declarations
+            -Wno-unused-parameter
+        )
+    elseif(MSVC)
+        target_compile_options(${INTEGRATED_DB_TARGET} PRIVATE
+            /W4
+            /WX-
+            /w14996  # Enable deprecation warnings (C4996)
+        )
+    endif()
+endif()
+
+##################################################
 # C++ Standard
 ##################################################
 

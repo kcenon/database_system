@@ -5,7 +5,7 @@
 
 #include "common_logger_backend.h"
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 #include <kcenon/common/interfaces/global_logger_registry.h>
 #include <kcenon/common/logging/log_macros.h>
 #endif
@@ -50,7 +50,7 @@ common::VoidResult common_logger_backend::initialize()
 		return common::ok();
 	}
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 	try
 	{
 		// The GlobalLoggerRegistry is already initialized by common_system.
@@ -107,7 +107,7 @@ void common_logger_backend::log(db_log_level level, const std::string& message)
 		return;
 	}
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 	// Use common_system's logging functions
 	auto common_level = convert_log_level(level);
 	kcenon::common::logging::log(common_level, message);
@@ -116,7 +116,7 @@ void common_logger_backend::log(db_log_level level, const std::string& message)
 
 void common_logger_backend::flush()
 {
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 	if (initialized_)
 	{
 		kcenon::common::logging::flush();
@@ -124,7 +124,7 @@ void common_logger_backend::flush()
 #endif
 }
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 kcenon::common::interfaces::log_level common_logger_backend::convert_log_level(db_log_level level)
 {
 	switch (level)

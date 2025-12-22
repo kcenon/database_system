@@ -226,7 +226,7 @@ namespace database {
 
     namespace adapters {
         // Integration adapters (database/adapters/)
-        #ifdef BUILD_WITH_COMMON_SYSTEM
+        #if KCENON_HAS_COMMON_SYSTEM
         class common_system_database_adapter { /* ... */ };
         class common_connection_pool_adapter { /* ... */ };
         #endif
@@ -436,7 +436,7 @@ target_link_libraries(database_system PRIVATE hiredis::hiredis)
 #include <database/async/async_operations.h>
 
 // Optional integrations
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 #include <database/adapters/common_system_adapter.h>
 #endif
 ```

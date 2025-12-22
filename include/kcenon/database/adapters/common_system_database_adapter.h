@@ -17,7 +17,9 @@
 #include <memory>
 #include <string>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#include "../config/feature_flags.h"
+
+#if KCENON_HAS_COMMON_SYSTEM
 
 #include <kcenon/common/interfaces/database_interface.h>
 #include <kcenon/common/patterns/result.h>
@@ -280,4 +282,4 @@ private:
 
 } // namespace kcenon::database::adapters
 
-#endif // BUILD_WITH_COMMON_SYSTEM
+#endif // KCENON_HAS_COMMON_SYSTEM

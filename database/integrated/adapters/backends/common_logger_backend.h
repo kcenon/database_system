@@ -46,7 +46,9 @@
 
 #include <memory>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <kcenon/database/config/feature_flags.h>
+
+#if KCENON_HAS_COMMON_SYSTEM
 #include <kcenon/common/interfaces/logger_interface.h>
 #endif
 
@@ -90,7 +92,7 @@ public:
 	void flush() override;
 
 private:
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#if KCENON_HAS_COMMON_SYSTEM
 	/**
 	 * @brief Convert db_log_level to common_system's log_level
 	 */

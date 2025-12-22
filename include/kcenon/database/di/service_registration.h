@@ -17,7 +17,9 @@
 #include <memory>
 #include <string>
 
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#include "../config/feature_flags.h"
+
+#if KCENON_HAS_COMMON_SYSTEM
 
 #include <kcenon/common/di/service_container.h>
 #include <kcenon/common/interfaces/database_interface.h>
@@ -210,4 +212,4 @@ inline common::VoidResult register_all_database_services(
 
 } // namespace kcenon::database::di
 
-#endif // BUILD_WITH_COMMON_SYSTEM
+#endif // KCENON_HAS_COMMON_SYSTEM

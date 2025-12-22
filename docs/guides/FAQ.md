@@ -1066,7 +1066,9 @@ for (const auto& [query_hash, metric] : query_metrics) {
 
 **common_system** (Result<T> error handling):
 ```cpp
-#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <kcenon/database/config/feature_flags.h>
+
+#if KCENON_HAS_COMMON_SYSTEM
     #include <kcenon/common/patterns/result.h>
     using Result = kcenon::common::Result;
 #else

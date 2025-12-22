@@ -89,7 +89,7 @@ if (auto* name = std::get_if<std::string>(&row["name"])) {
 
 **Purpose**: Type-safe error handling without exceptions
 
-**When `BUILD_WITH_COMMON_SYSTEM` is defined**:
+**When `KCENON_HAS_COMMON_SYSTEM` is enabled**:
 ```cpp
 #include <kcenon/common/patterns/result.h>
 using common::Result;

@@ -506,6 +506,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wall
         -Wextra
         -Wpedantic
+        -Wdeprecated-declarations
         -Wno-unused-parameter
         -Wno-unused-variable
     )
@@ -513,6 +514,7 @@ elseif(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4
         /WX-
+        /w14996  # Enable deprecation warnings (C4996)
     )
 endif()
 

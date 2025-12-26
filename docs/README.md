@@ -65,6 +65,7 @@ For experienced users and contributors:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
+| [ADAPTER_PATTERNS.md](ADAPTER_PATTERNS.md) | Adapter pattern best practices for dependency management | [🇰🇷](ADAPTER_PATTERNS_KO.md) | 500+ |
 | [TYPE_SYSTEM.md](advanced/TYPE_SYSTEM.md) | database_value, type mapping, ORM integration | - | 484 |
 | [THREAD_SYSTEM_MIGRATION.md](advanced/THREAD_SYSTEM_MIGRATION.md) | Thread system integration guide | - | 300+ |
 | [CURRENT_STATE.md](advanced/CURRENT_STATE.md) | Current implementation status | [🇰🇷](advanced/CURRENT_STATE_KO.md) | 100+ |
@@ -115,6 +116,7 @@ For contributors and maintainers:
 4. **📊 Performance** - Review [benchmarks](performance/BENCHMARKS.md)
 
 **Deep Dive Topics**:
+- [Adapter Patterns](ADAPTER_PATTERNS.md) - Optional dependency management
 - [Type System](advanced/TYPE_SYSTEM.md) - Type mapping and ORM
 - [Thread Integration](advanced/THREAD_SYSTEM_MIGRATION.md) - Multi-threading
 - [Security Best Practices](guides/BEST_PRACTICES.md#security-best-practices)

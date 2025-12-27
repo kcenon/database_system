@@ -61,27 +61,6 @@ namespace database
 
 	database_manager::~database_manager() {}
 
-	namespace {
-		std::string database_type_to_backend_name(database_types type)
-		{
-			switch (type)
-			{
-			case database_types::postgres:
-				return "postgresql";
-			case database_types::mysql:
-				return "mysql";
-			case database_types::sqlite:
-				return "sqlite";
-			case database_types::mongodb:
-				return "mongodb";
-			case database_types::redis:
-				return "redis";
-			default:
-				return "";
-			}
-		}
-	} // anonymous namespace
-
 	bool database_manager::set_mode(const database_types& database_type)
 	{
 		if (connected_)

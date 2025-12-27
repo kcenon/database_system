@@ -17,6 +17,18 @@
 #include <sstream>
 #include <regex>
 
+// Suppress deprecation warnings for legacy interface testing
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
 #include "database/database_base.h"
 #include "database/database_types.h"
 #include "database/backends/sqlite/sqlite_manager.h"
@@ -295,3 +307,12 @@ TEST_F(CredentialSecurityTest, VeryLongPasswordHandled) {
         (void)result;
     }) << "Very long connection string caused crash";
 }
+
+// Restore diagnostic settings
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif

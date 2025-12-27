@@ -41,6 +41,8 @@ find_package(benchmark QUIET)
 add_library(database_mocks STATIC
     mocks/mock_database.cpp
     mocks/mock_expectations.cpp
+    mocks/mock_backend.cpp
+    mocks/mock_backend_expectations.cpp
 )
 
 target_include_directories(database_mocks PUBLIC

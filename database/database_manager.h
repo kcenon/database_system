@@ -38,8 +38,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Use unified Result<T> implementation from common_system
 #include <kcenon/common/patterns/result.h>
 #include "core/database_context.h"
+#include "core/database_backend.h"
+#include "core/backend_registry.h"
 
-#include "database_base.h"
 #include "query_builder.h"
 #include "proxy/proxy_config.h"
 
@@ -52,8 +53,12 @@ namespace database
 	 *
 	 * The @c database_manager class provides a high-level interface for
 	 * controlling database connections and executing queries. It wraps
-	 * a @c database_base instance and exposes methods such as @c connect,
+	 * a @c database_backend instance and exposes methods such as @c connect,
 	 * @c disconnect, @c create_query, @c insert_query, etc.
+	 *
+	 * @note As of Issue #287, this class uses database_backend internally
+	 * instead of the deprecated database_base interface. The public API
+	 * remains backward compatible, but also provides new Result-based methods.
 	 *
 	 * @note As of Sprint 2, this class uses dependency injection pattern.
 	 * Access via constructor with database_context parameter.
@@ -245,13 +250,89 @@ namespace database
 		 */
 		kcenon::common::VoidResult create_query_result(const std::string& query_string);
 
+		// Result-based query methods (new API)
+
+		/**
+		 * @brief Result-based wrapper for insert_query().
+		 * @param query_string The SQL INSERT statement.
+		 * @return Number of rows inserted, or error.
+		 */
+		kcenon::common::Result<uint64_t> insert_query_result(const std::string& query_string);
+
+		/**
+		 * @brief Result-based wrapper for update_query().
+		 * @param query_string The SQL UPDATE statement.
+		 * @return Number of rows updated, or error.
+		 */
+		kcenon::common::Result<uint64_t> update_query_result(const std::string& query_string);
+
+		/**
+		 * @brief Result-based wrapper for delete_query().
+		 * @param query_string The SQL DELETE statement.
+		 * @return Number of rows deleted, or error.
+		 */
+		kcenon::common::Result<uint64_t> delete_query_result(const std::string& query_string);
+
+		/**
+		 * @brief Result-based wrapper for select_query().
+		 * @param query_string The SQL SELECT statement.
+		 * @return Query results, or error.
+		 */
+		kcenon::common::Result<core::database_result> select_query_result(const std::string& query_string);
+
+		/**
+		 * @brief Result-based wrapper for execute_query().
+		 * @param query_string The SQL statement.
+		 * @return VoidResult indicating success or failure.
+		 */
+		kcenon::common::VoidResult execute_query_result(const std::string& query_string);
+
+		// Transaction support (new API)
+
+		/**
+		 * @brief Begin a database transaction.
+		 * @return VoidResult indicating success or failure.
+		 */
+		kcenon::common::VoidResult begin_transaction();
+
+		/**
+		 * @brief Commit the current transaction.
+		 * @return VoidResult indicating success or failure.
+		 */
+		kcenon::common::VoidResult commit_transaction();
+
+		/**
+		 * @brief Rollback the current transaction.
+		 * @return VoidResult indicating success or failure.
+		 */
+		kcenon::common::VoidResult rollback_transaction();
+
+		/**
+		 * @brief Check if currently in a transaction.
+		 * @return true if a transaction is active.
+		 */
+		bool in_transaction() const;
+
+		/**
+		 * @brief Get last error message from the backend.
+		 * @return Error message string.
+		 */
+		std::string last_error() const;
+
+		/**
+		 * @brief Get connection information for monitoring.
+		 * @return Map of connection properties.
+		 */
+		std::map<std::string, std::string> connection_info() const;
+
 	private:
 		bool connected_; ///< Indicates whether a database connection is active.
-		std::unique_ptr<database_base>
-			database_;	 ///< The underlying database interface.
+		std::unique_ptr<core::database_backend>
+			database_;	 ///< The underlying database backend.
 		std::shared_ptr<database_context> context_; ///< Dependency injection context
 		connection_mode connection_mode_; ///< Current connection mode (Phase 4.1)
 		proxy::proxy_connection_config proxy_config_; ///< Proxy configuration (Phase 4.1)
+		std::string connect_string_; ///< Cached connection string for initialization
 
 	};
 } // namespace database

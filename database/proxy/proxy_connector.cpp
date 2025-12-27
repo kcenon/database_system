@@ -287,7 +287,7 @@ std::map<std::string, std::string> proxy_connector::connection_info() const
 	info["database_type"] = std::to_string(static_cast<int>(db_type_));
 
 	if (server_info_) {
-		info["server_version"] = server_info_->server_version;
+		info["server_version"] = server_info_->version;
 	}
 
 	return info;

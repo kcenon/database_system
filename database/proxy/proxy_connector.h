@@ -186,12 +186,6 @@ public:
 	[[nodiscard]] std::optional<proxy_server_info> server_info() const;
 
 	/**
-	 * @brief Gets the last error message.
-	 * @return Last error message, empty if no error.
-	 */
-	[[nodiscard]] std::string last_error() const;
-
-	/**
 	 * @brief Gets the current configuration.
 	 * @return Reference to the proxy connection configuration.
 	 */

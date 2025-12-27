@@ -210,8 +210,67 @@ Yes, `database_manager`'s public API is backward compatible. Internal changes do
 
 `proxy_connector` now implements `database_backend` instead of `database_base`. This is transparent if you use it via `database_manager`.
 
+## Test Mocks
+
+For testing, use the new `mock_backend` instead of `mock_database`:
+
+```cpp
+// Before (deprecated)
+#include "mocks/mock_database.h"
+mock_database db;
+db.expect_query("SELECT * FROM users").will_return(test_data);
+
+// After
+#include "mocks/mock_backend.h"
+mock_backend db;
+db.expect_query("SELECT * FROM users").will_return(test_data);
+
+// Modern mock with Result<T> types
+auto result = db.select_query("SELECT * FROM users");
+EXPECT_TRUE(result.is_ok());
+EXPECT_EQ(result.value().size(), 3);
+```
+
+The `mock_backend` class provides:
+- `expect_query()` - Exact match expectations
+- `expect_pattern()` - Regex pattern matching
+- `expect_any()` - Match any query
+- Full `Result<T>` support for proper error testing
+- Transaction state tracking
+- Query history for verification
+
+## Suppressing Deprecation Warnings
+
+For legacy code that must use `database_base`:
+
+```cpp
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
+#include "database/database_base.h"
+// Your legacy code here
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+```
+
 ## See Also
 
 - [database_backend.h](../database/core/database_backend.h) - New interface
 - [database_base.h](../database/database_base.h) - Deprecated interface (for reference)
 - [database_base_adapter.h](../database/database_base_adapter.h) - Adapter for gradual migration
+- [mock_backend.h](../tests/mocks/mock_backend.h) - Test mock for database_backend
+- [adapter_usage_example.cpp](../samples/migration/adapter_usage_example.cpp) - Adapter usage example

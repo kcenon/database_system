@@ -41,9 +41,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @details This file implements the proxy_connector class which handles
  * communication with the database_server middleware. Queries are serialized
  * and sent to the server, which executes them against the actual database.
+ *
+ * @note Updated in Issue #287 to implement database_backend interface instead
+ *       of deprecated database_base, enabling database_manager to use
+ *       database_backend internally for both direct and proxy modes.
  */
 
-#include "../database_base.h"
+#include "../core/database_backend.h"
 #include "proxy_config.h"
 
 #include <atomic>
@@ -86,7 +90,7 @@ constexpr const char* to_string(proxy_state state) noexcept
  * @class proxy_connector
  * @brief Database connector for proxy mode operations.
  *
- * @details This class implements the database_base interface for proxy mode,
+ * @details This class implements the database_backend interface for proxy mode,
  * where all queries are sent to a database_server middleware instead of
  * directly connecting to the database.
  *
@@ -109,16 +113,20 @@ constexpr const char* to_string(proxy_state state) noexcept
  * auto connector = std::make_unique<proxy_connector>(
  *     database_types::postgres, config);
  *
- * if (connector->connect("")) {
+ * core::connection_config conn_config;
+ * if (connector->initialize(conn_config).is_ok()) {
  *     auto result = connector->select_query("SELECT * FROM users");
- *     // Process result...
- *     connector->disconnect();
+ *     if (result.is_ok()) {
+ *         // Process result...
+ *     }
+ *     connector->shutdown();
  * }
  * @endcode
  *
  * @since Phase 4.1
+ * @note Updated in Issue #287 to implement database_backend instead of database_base
  */
-class proxy_connector : public database_base
+class proxy_connector : public core::database_backend
 {
 public:
 	/**
@@ -138,20 +146,26 @@ public:
 	proxy_connector(const proxy_connector&) = delete;
 	proxy_connector& operator=(const proxy_connector&) = delete;
 
-	// Allow move operations
-	proxy_connector(proxy_connector&&) noexcept;
-	proxy_connector& operator=(proxy_connector&&) noexcept;
+	// Prevent moving (atomic members are not moveable)
+	proxy_connector(proxy_connector&&) noexcept = delete;
+	proxy_connector& operator=(proxy_connector&&) noexcept = delete;
 
-	// database_base interface implementation
-	database_types database_type() override;
-	bool connect(const std::string& connect_string) override;
-	bool create_query(const std::string& query_string) override;
-	unsigned int insert_query(const std::string& query_string) override;
-	unsigned int update_query(const std::string& query_string) override;
-	unsigned int delete_query(const std::string& query_string) override;
-	database_result select_query(const std::string& query_string) override;
-	bool execute_query(const std::string& query_string) override;
-	bool disconnect() override;
+	// database_backend interface implementation
+	database_types type() const override;
+	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
+	kcenon::common::VoidResult shutdown() override;
+	bool is_initialized() const override;
+	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
+	kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
+	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
+	kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
+	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
+	kcenon::common::VoidResult begin_transaction() override;
+	kcenon::common::VoidResult commit_transaction() override;
+	kcenon::common::VoidResult rollback_transaction() override;
+	bool in_transaction() const override;
+	std::string last_error() const override;
+	std::map<std::string, std::string> connection_info() const override;
 
 	/**
 	 * @brief Gets the current connection state.
@@ -186,21 +200,21 @@ public:
 private:
 	/**
 	 * @brief Attempts to connect to the database_server.
-	 * @return true if connection successful, false otherwise.
+	 * @return VoidResult indicating success or failure.
 	 */
-	bool try_connect();
+	kcenon::common::VoidResult try_connect();
 
 	/**
 	 * @brief Sends a query to the server and returns the result.
 	 *
 	 * @param query_type Type of query (SELECT, INSERT, UPDATE, DELETE, etc.)
 	 * @param query_string The SQL query string.
-	 * @return Response from the server, empty if error.
+	 * @return Response from the server, or error.
 	 *
 	 * @note This is a stub that returns empty/default values until
 	 *       database_server is implemented.
 	 */
-	database_result send_query(const std::string& query_type,
+	kcenon::common::Result<core::database_result> send_query(const std::string& query_type,
 							   const std::string& query_string);
 
 	/**
@@ -213,9 +227,10 @@ private:
 	database_types db_type_;
 	proxy_connection_config config_;
 	std::atomic<proxy_state> state_;
+	std::atomic<bool> in_transaction_{false};
 
 	mutable std::mutex mutex_;
-	std::string last_error_;
+	mutable std::string last_error_;
 	std::optional<proxy_server_info> server_info_;
 };
 

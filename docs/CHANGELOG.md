@@ -26,6 +26,20 @@
 
 ## [Unreleased] - 2025-12-21
 
+### 🔨 **Refactored**
+
+#### **Remove namespace common Alias from database_manager.h (Issue #281)**
+- **Removed local `namespace common` alias** that was shadowing `kcenon::common`
+  - The alias caused ADL (Argument-Dependent Lookup) confusion
+  - Code using `using namespace common;` could have conflicts
+- **Updated `database_manager.h`**: All Result types now use fully qualified `kcenon::common::`
+  - `connect_result()` returns `kcenon::common::VoidResult`
+  - `disconnect_result()` returns `kcenon::common::VoidResult`
+  - `create_query_result()` returns `kcenon::common::VoidResult`
+- **No breaking changes for users**: Code should work as before when using explicit namespace
+
+---
+
 ### 🗑️ **Removed (Breaking Changes)**
 
 #### **Connection Pooling and Resilience Code Removed (Phase 4.3, Issue #265, #270)**

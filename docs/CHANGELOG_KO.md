@@ -26,6 +26,20 @@
 
 ## [Unreleased] - 2025-12-21
 
+### 🔨 **리팩토링**
+
+#### **database_manager.h에서 namespace common 별칭 제거 (Issue #281)**
+- **`kcenon::common`을 섀도잉하는 로컬 `namespace common` 별칭 제거**
+  - 해당 별칭이 ADL (Argument-Dependent Lookup) 혼란을 야기
+  - `using namespace common;` 사용 시 충돌 가능성 있었음
+- **`database_manager.h` 업데이트**: 모든 Result 타입이 완전한 `kcenon::common::` 사용
+  - `connect_result()`는 `kcenon::common::VoidResult` 반환
+  - `disconnect_result()`는 `kcenon::common::VoidResult` 반환
+  - `create_query_result()`는 `kcenon::common::VoidResult` 반환
+- **사용자에게 Breaking Change 없음**: 명시적 네임스페이스 사용 시 기존과 동일하게 동작
+
+---
+
 ### 🗑️ **제거됨 (Breaking Changes)**
 
 #### **커넥션 풀링 및 레질리언스 코드 제거 (Phase 4.3, Issue #265, #270)**

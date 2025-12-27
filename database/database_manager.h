@@ -43,20 +43,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "query_builder.h"
 #include "proxy/proxy_config.h"
 
-// Provide compatibility aliases for legacy code
-namespace common {
-	using VoidResult = kcenon::common::VoidResult;
-	using kcenon::common::error_info;
-
-	// Helper functions
-	inline VoidResult ok() {
-		return kcenon::common::ok();
-	}
-
-	inline VoidResult error(error_info err) {
-		return err;
-	}
-}
 
 namespace database
 {
@@ -247,17 +233,17 @@ namespace database
 		/**
 		 * @brief Result-based wrapper for connect().
 		 */
-		common::VoidResult connect_result(const std::string& connect_string);
+		kcenon::common::VoidResult connect_result(const std::string& connect_string);
 
 		/**
 		 * @brief Result-based wrapper for disconnect().
 		 */
-		common::VoidResult disconnect_result();
+		kcenon::common::VoidResult disconnect_result();
 
 		/**
 		 * @brief Result-based wrapper for create_query().
 		 */
-		common::VoidResult create_query_result(const std::string& query_string);
+		kcenon::common::VoidResult create_query_result(const std::string& query_string);
 
 	private:
 		bool connected_; ///< Indicates whether a database connection is active.

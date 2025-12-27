@@ -216,34 +216,34 @@ namespace database
 		return result;
 	}
 
-	common::VoidResult database_manager::connect_result(const std::string& connect_string)
+	kcenon::common::VoidResult database_manager::connect_result(const std::string& connect_string)
 	{
 		if (connect(connect_string))
 		{
-			return common::ok();
+			return kcenon::common::ok();
 		}
-		return common::VoidResult(
-			common::error_info{-1, "Failed to connect to database", "database_system"});
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to connect to database", "database_system"});
 	}
 
-	common::VoidResult database_manager::disconnect_result()
+	kcenon::common::VoidResult database_manager::disconnect_result()
 	{
 		if (disconnect())
 		{
-			return common::ok();
+			return kcenon::common::ok();
 		}
-		return common::VoidResult(
-			common::error_info{-1, "Failed to disconnect from database", "database_system"});
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to disconnect from database", "database_system"});
 	}
 
-	common::VoidResult database_manager::create_query_result(const std::string& query_string)
+	kcenon::common::VoidResult database_manager::create_query_result(const std::string& query_string)
 	{
 		if (create_query(query_string))
 		{
-			return common::ok();
+			return kcenon::common::ok();
 		}
-		return common::VoidResult(
-			common::error_info{-1, "Failed to prepare database query", "database_system"});
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Failed to prepare database query", "database_system"});
 	}
 
 	// Connection pool methods moved to header as inline functions for performance

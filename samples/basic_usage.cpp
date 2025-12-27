@@ -98,7 +98,9 @@ int main() {
             for (const auto& row : all_users) {
                 std::cout << "  User: ";
                 for (const auto& [key, value] : row) {
-                    std::cout << key << "=" << value << " ";
+                    std::cout << key << "=";
+                    std::visit([](const auto& v) { std::cout << v; }, value);
+                    std::cout << " ";
                 }
                 std::cout << std::endl;
             }
@@ -118,7 +120,9 @@ int main() {
             std::cout << "✓ John's data retrieved:" << std::endl;
             for (const auto& row : john_data) {
                 for (const auto& [key, value] : row) {
-                    std::cout << "  " << key << ": " << value << std::endl;
+                    std::cout << "  " << key << ": ";
+                    std::visit([](const auto& v) { std::cout << v; }, value);
+                    std::cout << std::endl;
                 }
             }
         } else {
@@ -140,7 +144,9 @@ int main() {
                 std::cout << "Updated data: ";
                 for (const auto& row : verify_result.value()) {
                     for (const auto& [key, value] : row) {
-                        std::cout << key << "=" << value << " ";
+                        std::cout << key << "=";
+                        std::visit([](const auto& v) { std::cout << v; }, value);
+                        std::cout << " ";
                     }
                     std::cout << std::endl;
                 }

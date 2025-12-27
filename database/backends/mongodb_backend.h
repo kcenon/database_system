@@ -34,25 +34,24 @@
  * @brief MongoDB database backend plugin implementation
  *
  * This file implements the database_backend interface for MongoDB,
- * adapting the existing mongodb_manager implementation to the new
- * plugin architecture.
+ * directly using the MongoDB C++ driver without depending on the legacy mongodb_manager.
  *
- * Sprint 5 Task 5.3: Refactor MongoDB backend to plugin system
- * - Adapts mongodb_manager to database_backend interface
+ * Issue #286: Update backends to use database_backend only
+ * - Implements database_backend interface directly
  * - Registers with backend_registry for runtime selection
- * - Maintains compile-time option for convenience (#ifdef USE_MONGODB)
- * - Reduces conditional compilation from scattered usage to single registration point
+ * - Eliminates dependency on database_base-derived classes
+ * - Uses Result-based error handling pattern
  */
 
 #pragma once
 
 #include "../core/database_backend.h"
 #include "../core/backend_registry.h"
-#include "mongodb/mongodb_manager.h"
 
 #include <memory>
 #include <string>
 #include <atomic>
+#include <mutex>
 
 namespace database
 {
@@ -63,18 +62,18 @@ namespace backends
  * @class mongodb_backend
  * @brief MongoDB implementation of database_backend interface
  *
- * This class adapts the existing mongodb_manager to the new database_backend
- * interface, enabling MongoDB to work as a plugin in the backend registry.
+ * This class directly implements the database_backend interface for MongoDB,
+ * using the MongoDB C++ driver without depending on the legacy mongodb_manager.
  *
- * Design Pattern: Adapter pattern
- * - Wraps mongodb_manager (existing implementation)
- * - Adapts database_base interface to database_backend interface
- * - Converts return types (bool/unsigned int → Result<T>)
- * - Converts connection params (string → connection_config)
+ * Design Pattern: Strategy pattern
+ * - Directly implements database_backend interface
+ * - Uses mongocxx driver for database access
+ * - Provides Result-based error handling
+ * - Thread-safe with internal mutex
  *
  * Thread Safety:
- * - Thread-safe for read operations (SELECT queries)
- * - Write operations require external synchronization
+ * - All operations are thread-safe via mutex
+ * - Suitable for multi-threaded access
  *
  * Usage:
  * @code
@@ -164,11 +163,27 @@ private:
 	 */
 	std::string build_connection_uri(const core::connection_config& config) const;
 
-	std::unique_ptr<mongodb_manager> manager_; ///< Underlying MongoDB manager
-	std::atomic<bool> initialized_{false};     ///< Initialization state
-	std::atomic<bool> in_transaction_{false};  ///< Transaction state
-	mutable std::string last_error_;           ///< Last error message
-	core::connection_config connection_config_; ///< Cached connection config
+	/**
+	 * @brief Parse query string format
+	 * @param query_string Query string in format "collection:filter:update"
+	 * @param collection Output collection name
+	 * @param filter Output filter JSON
+	 * @param update Output update JSON (optional)
+	 * @return true if parsing succeeded
+	 */
+	bool parse_query_string(const std::string& query_string,
+							std::string& collection,
+							std::string& filter,
+							std::string& update) const;
+
+	void* client_{nullptr};                      ///< MongoDB client (mongocxx::client*)
+	void* database_{nullptr};                    ///< MongoDB database (mongocxx::database*)
+	std::string db_name_;                        ///< Database name
+	std::atomic<bool> initialized_{false};       ///< Initialization state
+	std::atomic<bool> in_transaction_{false};    ///< Transaction state
+	mutable std::string last_error_;             ///< Last error message
+	core::connection_config connection_config_;  ///< Cached connection config
+	mutable std::mutex mongo_mutex_;             ///< Mutex for thread safety
 };
 
 } // namespace backends

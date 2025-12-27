@@ -24,7 +24,29 @@
 
 ---
 
-## [Unreleased] - 2025-12-21
+## [Unreleased] - 2025-12-27
+
+### ⚠️ **Deprecated**
+
+#### **database_base Interface Deprecated (Issue #282)**
+- **Marked `database_base` class as deprecated** in favor of `database::core::database_backend`
+  - Added `[[deprecated]]` attribute with migration guidance
+  - Will be removed in v0.5.0.0
+- **Created `database_base_adapter`** for gradual migration
+  - Wraps `database_backend` and exposes legacy `database_base` interface
+  - Allows existing code to work during migration period
+- **Migration documentation**: `docs/migration/database_base.md`
+  - Method mapping reference
+  - Code examples for before/after
+  - Error handling migration guide
+
+**Why migrate?**
+- `database_backend` provides `Result<T>` types for explicit error handling
+- Transaction support (`begin_transaction`, `commit_transaction`, `rollback_transaction`)
+- Connection information and last error access
+- Structured `connection_config` instead of raw connection strings
+
+---
 
 ### 🔨 **Refactored**
 

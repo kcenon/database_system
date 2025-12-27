@@ -34,25 +34,24 @@
  * @brief SQLite database backend plugin implementation
  *
  * This file implements the database_backend interface for SQLite,
- * adapting the existing sqlite_manager implementation to the new
- * plugin architecture.
+ * directly using the SQLite3 C API without depending on the legacy sqlite_manager.
  *
- * Sprint 5 Task 5.3: Refactor SQLite backend to plugin system
- * - Adapts sqlite_manager to database_backend interface
+ * Issue #286: Update backends to use database_backend only
+ * - Implements database_backend interface directly
  * - Registers with backend_registry for runtime selection
- * - Maintains compile-time option for convenience (#ifdef USE_SQLITE)
- * - Reduces conditional compilation from scattered usage to single registration point
+ * - Eliminates dependency on database_base-derived classes
+ * - Uses Result-based error handling pattern
  */
 
 #pragma once
 
 #include "../core/database_backend.h"
 #include "../core/backend_registry.h"
-#include "sqlite/sqlite_manager.h"
 
 #include <memory>
 #include <string>
 #include <atomic>
+#include <mutex>
 
 namespace database
 {
@@ -63,18 +62,19 @@ namespace backends
  * @class sqlite_backend
  * @brief SQLite implementation of database_backend interface
  *
- * This class adapts the existing sqlite_manager to the new database_backend
- * interface, enabling SQLite to work as a plugin in the backend registry.
+ * This class directly implements the database_backend interface for SQLite,
+ * using the SQLite3 C API without depending on the legacy sqlite_manager.
  *
- * Design Pattern: Adapter pattern
- * - Wraps sqlite_manager (existing implementation)
- * - Adapts database_base interface to database_backend interface
- * - Converts return types (bool/unsigned int → Result<T>)
- * - Converts connection params (string → connection_config)
+ * Design Pattern: Strategy pattern
+ * - Directly implements database_backend interface
+ * - Uses SQLite3 C API for database access
+ * - Provides Result-based error handling
+ * - Supports transactions natively
+ * - Thread-safe with internal mutex
  *
  * Thread Safety:
- * - Thread-safe for read operations (SELECT queries)
- * - Write operations require external synchronization
+ * - All operations are thread-safe via recursive mutex
+ * - Suitable for multi-threaded access
  *
  * Usage:
  * @code
@@ -134,7 +134,7 @@ public:
 
 	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
-	kcenon::common::Result<database_result> select_query(const std::string& query_string) override;
+	kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
 	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
@@ -152,20 +152,26 @@ public:
 
 private:
 	/**
-	 * @brief Extract database file path from connection_config
-	 * @param config Structured connection configuration
-	 * @return Database file path or ":memory:" for in-memory database
-	 *
-	 * SQLite uses file paths instead of network connections.
-	 * The database field contains the file path.
+	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
+	 * @param query_string SQL query to execute
+	 * @return Number of affected rows
 	 */
-	std::string get_database_path(const core::connection_config& config) const;
+	unsigned int execute_modification_query(const std::string& query_string);
 
-	std::unique_ptr<sqlite_manager> manager_; ///< Underlying SQLite manager
-	std::atomic<bool> initialized_{false};    ///< Initialization state
-	std::atomic<bool> in_transaction_{false}; ///< Transaction state
-	mutable std::string last_error_;          ///< Last error message
-	core::connection_config connection_config_; ///< Cached connection config
+	/**
+	 * @brief Convert SQLite column value to database_value
+	 * @param stmt SQLite prepared statement
+	 * @param column_index Column index in the result set
+	 * @return database_value containing the converted value
+	 */
+	core::database_value convert_sqlite_value(void* stmt, int column_index);
+
+	void* connection_{nullptr};                      ///< SQLite connection (sqlite3*)
+	std::atomic<bool> initialized_{false};           ///< Initialization state
+	std::atomic<bool> in_transaction_{false};        ///< Transaction state
+	mutable std::string last_error_;                 ///< Last error message
+	core::connection_config connection_config_;      ///< Cached connection config
+	mutable std::recursive_mutex sqlite_mutex_;      ///< Mutex for thread safety
 };
 
 } // namespace backends

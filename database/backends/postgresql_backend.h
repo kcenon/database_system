@@ -34,21 +34,19 @@
  * @brief PostgreSQL database backend plugin implementation
  *
  * This file implements the database_backend interface for PostgreSQL,
- * adapting the existing postgres_manager implementation to the new
- * plugin architecture.
+ * directly using libpq/pqxx without depending on the legacy postgres_manager.
  *
- * Sprint 5 Task 5.2: Refactor PostgreSQL backend to plugin system
- * - Adapts postgres_manager to database_backend interface
+ * Issue #286: Update backends to use database_backend only
+ * - Implements database_backend interface directly
  * - Registers with backend_registry for runtime selection
- * - Maintains compile-time option for convenience (#ifdef USE_POSTGRESQL)
- * - Reduces conditional compilation from scattered usage to single registration point
+ * - Eliminates dependency on database_base-derived classes
+ * - Uses Result-based error handling pattern
  */
 
 #pragma once
 
 #include "../core/database_backend.h"
 #include "../core/backend_registry.h"
-#include "../postgres_manager.h"
 
 #include <memory>
 #include <string>
@@ -63,14 +61,14 @@ namespace backends
  * @class postgresql_backend
  * @brief PostgreSQL implementation of database_backend interface
  *
- * This class adapts the existing postgres_manager to the new database_backend
- * interface, enabling PostgreSQL to work as a plugin in the backend registry.
+ * This class directly implements the database_backend interface for PostgreSQL,
+ * using libpq/pqxx libraries without depending on the legacy postgres_manager.
  *
- * Design Pattern: Adapter pattern
- * - Wraps postgres_manager (existing implementation)
- * - Adapts database_base interface to database_backend interface
- * - Converts return types (bool/unsigned int → Result<T>)
- * - Converts connection params (string → connection_config)
+ * Design Pattern: Strategy pattern
+ * - Directly implements database_backend interface
+ * - Uses libpq (C API) or pqxx (C++ API) for PostgreSQL access
+ * - Provides Result-based error handling
+ * - Supports transactions natively
  *
  * Thread Safety:
  * - Thread-safe for read operations (SELECT queries)
@@ -138,7 +136,7 @@ public:
 
 	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
-	kcenon::common::Result<database_result> select_query(const std::string& query_string) override;
+	kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
 	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
@@ -164,7 +162,14 @@ private:
 	 */
 	std::string build_connection_string(const core::connection_config& config) const;
 
-	std::unique_ptr<postgres_manager> manager_; ///< Underlying PostgreSQL manager
+	/**
+	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
+	 * @param query_string SQL query to execute
+	 * @return Number of affected rows
+	 */
+	unsigned int execute_modification_query(const std::string& query_string);
+
+	void* connection_{nullptr};                 ///< PostgreSQL connection (PGconn* or pqxx::connection*)
 	std::atomic<bool> initialized_{false};      ///< Initialization state
 	std::atomic<bool> in_transaction_{false};   ///< Transaction state
 	mutable std::string last_error_;            ///< Last error message

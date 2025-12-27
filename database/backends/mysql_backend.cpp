@@ -32,9 +32,22 @@
 #include "mysql_backend.h"
 #include "../core/result.h"
 
+#ifdef USE_MYSQL
+#include <mysql.h>
+#endif
+
 #include <sstream>
 #include <iomanip>
 #include <variant>
+#include <iostream>
+
+// Logging helper macros
+#define MYSQL_LOG_ERROR(context, message) \
+	std::cerr << "[MySQL:" << context << "] Error: " << message << std::endl
+#define MYSQL_LOG_WARNING(message) \
+	std::cerr << "[MySQL] Warning: " << message << std::endl
+#define MYSQL_LOG_INFO(message) \
+	std::cout << "[MySQL] Info: " << message << std::endl
 
 namespace database
 {
@@ -42,7 +55,7 @@ namespace backends
 {
 
 mysql_backend::mysql_backend()
-	: manager_(std::make_unique<mysql_manager>())
+	: connection_(nullptr)
 {
 }
 
@@ -72,20 +85,70 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 	}
 
 	connection_config_ = config;
-	std::string conn_str = build_connection_string(config);
 
-	if (!manager_->connect(conn_str)) {
-		last_error_ = "Failed to connect to MySQL server";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::connection_failed),
-			last_error_,
-			"mysql_backend"
-		};
+#ifdef USE_MYSQL
+	try {
+		// Initialize MySQL connection
+		MYSQL* mysql = mysql_init(nullptr);
+		if (!mysql) {
+			last_error_ = "MySQL library initialization failed";
+			MYSQL_LOG_ERROR("initialize", last_error_);
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::connection_failed),
+				last_error_,
+				"mysql_backend"
+			};
+		}
+
+		// Attempt to connect
+		const char* host = config.host.empty() ? "localhost" : config.host.c_str();
+		unsigned int port = config.port > 0 ? config.port : 3306;
+
+		connection_ = mysql_real_connect(
+			mysql,
+			host,
+			config.username.c_str(),
+			config.password.c_str(),
+			config.database.c_str(),
+			port,
+			nullptr,
+			0
+		);
+
+		if (!connection_) {
+			last_error_ = std::string("Connection failed: ") + mysql_error(mysql);
+			MYSQL_LOG_ERROR("initialize", last_error_);
+			mysql_close(mysql);
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::connection_failed),
+				last_error_,
+				"mysql_backend"
+			};
+		}
+
+		initialized_ = true;
+		last_error_.clear();
+		return kcenon::common::ok();
+	} catch (const std::exception& e) {
+		last_error_ = std::string("Connection error: ") + e.what();
+		MYSQL_LOG_ERROR("initialize", last_error_);
 	}
-
+#else
+	MYSQL_LOG_WARNING("MySQL support not compiled. Mock mode enabled.");
+	// Mock mode for testing without MySQL
 	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
+#endif
+
+	if (last_error_.empty()) {
+		last_error_ = "Failed to connect to MySQL server";
+	}
+	return kcenon::common::error_info{
+		static_cast<int>(database::error_code::connection_failed),
+		last_error_,
+		"mysql_backend"
+	};
 }
 
 kcenon::common::VoidResult mysql_backend::shutdown()
@@ -99,14 +162,13 @@ kcenon::common::VoidResult mysql_backend::shutdown()
 		rollback_transaction();
 	}
 
-	if (!manager_->disconnect()) {
-		last_error_ = "Failed to disconnect from MySQL server";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::connection_failed),
-			last_error_,
-			"mysql_backend"
-		};
+#ifdef USE_MYSQL
+	if (connection_) {
+		MYSQL* mysql = static_cast<MYSQL*>(connection_);
+		mysql_close(mysql);
+		connection_ = nullptr;
 	}
+#endif
 
 	initialized_ = false;
 	last_error_.clear();
@@ -116,6 +178,30 @@ kcenon::common::VoidResult mysql_backend::shutdown()
 bool mysql_backend::is_initialized() const
 {
 	return initialized_;
+}
+
+unsigned int mysql_backend::execute_modification_query(const std::string& query_string)
+{
+#ifdef USE_MYSQL
+	if (!connection_) return 0;
+	try {
+		MYSQL* mysql = static_cast<MYSQL*>(connection_);
+		if (mysql_query(mysql, query_string.c_str()) != 0) {
+			last_error_ = std::string("Modification query failed: ") + mysql_error(mysql);
+			MYSQL_LOG_ERROR("execute_modification_query", last_error_);
+			return 0;
+		}
+		last_error_.clear();
+		return static_cast<unsigned int>(mysql_affected_rows(mysql));
+	} catch (const std::exception& e) {
+		last_error_ = std::string("Modification query error: ") + e.what();
+		MYSQL_LOG_ERROR("execute_modification_query", last_error_);
+	}
+#else
+	MYSQL_LOG_WARNING("MySQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
+	return 1; // Mock: return 1 affected row
+#endif
+	return 0;
 }
 
 kcenon::common::Result<uint64_t> mysql_backend::insert_query(const std::string& query_string)
@@ -129,8 +215,14 @@ kcenon::common::Result<uint64_t> mysql_backend::insert_query(const std::string& 
 		};
 	}
 
-	unsigned int affected = manager_->insert_query(query_string);
-	last_error_.clear();
+	unsigned int affected = execute_modification_query(query_string);
+	if (!last_error_.empty()) {
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
 	return static_cast<uint64_t>(affected);
 }
 
@@ -145,8 +237,14 @@ kcenon::common::Result<uint64_t> mysql_backend::update_query(const std::string& 
 		};
 	}
 
-	unsigned int affected = manager_->update_query(query_string);
-	last_error_.clear();
+	unsigned int affected = execute_modification_query(query_string);
+	if (!last_error_.empty()) {
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
 	return static_cast<uint64_t>(affected);
 }
 
@@ -161,12 +259,18 @@ kcenon::common::Result<uint64_t> mysql_backend::delete_query(const std::string& 
 		};
 	}
 
-	unsigned int affected = manager_->delete_query(query_string);
-	last_error_.clear();
+	unsigned int affected = execute_modification_query(query_string);
+	if (!last_error_.empty()) {
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
 	return static_cast<uint64_t>(affected);
 }
 
-kcenon::common::Result<database_result> mysql_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> mysql_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -177,7 +281,114 @@ kcenon::common::Result<database_result> mysql_backend::select_query(const std::s
 		};
 	}
 
-	database_result result = manager_->select_query(query_string);
+	core::database_result result;
+
+#ifdef USE_MYSQL
+	if (!connection_) {
+		last_error_ = "No active connection";
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::connection_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
+	try {
+		MYSQL* mysql = static_cast<MYSQL*>(connection_);
+
+		// Execute query
+		if (mysql_query(mysql, query_string.c_str()) != 0) {
+			last_error_ = std::string("Query failed: ") + mysql_error(mysql);
+			MYSQL_LOG_ERROR("select_query", last_error_);
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::query_failed),
+				last_error_,
+				"mysql_backend"
+			};
+		}
+
+		// Get result set
+		MYSQL_RES* res = mysql_store_result(mysql);
+		if (!res) {
+			if (mysql_field_count(mysql) == 0) {
+				// Query was not a SELECT
+				last_error_.clear();
+				return result;
+			} else {
+				last_error_ = std::string("Result retrieval failed: ") + mysql_error(mysql);
+				MYSQL_LOG_ERROR("select_query", last_error_);
+				return kcenon::common::error_info{
+					static_cast<int>(database::error_code::query_failed),
+					last_error_,
+					"mysql_backend"
+				};
+			}
+		}
+
+		// Get field information
+		MYSQL_FIELD* fields = mysql_fetch_fields(res);
+		unsigned int num_fields = mysql_num_fields(res);
+
+		// Process rows
+		MYSQL_ROW row;
+		while ((row = mysql_fetch_row(res))) {
+			core::database_row db_row;
+			unsigned long* lengths = mysql_fetch_lengths(res);
+
+			for (unsigned int i = 0; i < num_fields; i++) {
+				std::string field_name = fields[i].name;
+
+				if (row[i] == nullptr) {
+					db_row[field_name] = nullptr;
+				} else {
+					// Convert MySQL types to database_value
+					switch (fields[i].type) {
+					case MYSQL_TYPE_TINY:
+					case MYSQL_TYPE_SHORT:
+					case MYSQL_TYPE_LONG:
+					case MYSQL_TYPE_LONGLONG:
+					case MYSQL_TYPE_INT24:
+						db_row[field_name] = static_cast<int64_t>(std::stoll(row[i]));
+						break;
+					case MYSQL_TYPE_DECIMAL:
+					case MYSQL_TYPE_NEWDECIMAL:
+					case MYSQL_TYPE_FLOAT:
+					case MYSQL_TYPE_DOUBLE:
+						db_row[field_name] = std::stod(row[i]);
+						break;
+					case MYSQL_TYPE_BIT:
+						db_row[field_name] = (row[i][0] != '0');
+						break;
+					default:
+						db_row[field_name] = std::string(row[i], lengths[i]);
+						break;
+					}
+				}
+			}
+			result.push_back(std::move(db_row));
+		}
+
+		mysql_free_result(res);
+	} catch (const std::exception& e) {
+		last_error_ = std::string("Query error: ") + e.what();
+		MYSQL_LOG_ERROR("select_query", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
+#else
+	MYSQL_LOG_WARNING("MySQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	// Return mock data for testing
+	if (query_string.find("SELECT") != std::string::npos) {
+		core::database_row mock_row;
+		mock_row["id"] = int64_t(1);
+		mock_row["name"] = std::string("mysql_mock_data");
+		mock_row["active"] = true;
+		result.push_back(mock_row);
+	}
+#endif
+
 	last_error_.clear();
 	return result;
 }
@@ -193,8 +404,20 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 		};
 	}
 
-	if (!manager_->execute_query(query_string)) {
-		last_error_ = "Query execution failed";
+#ifdef USE_MYSQL
+	if (!connection_) {
+		last_error_ = "No active MySQL connection";
+		MYSQL_LOG_ERROR("execute_query", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::connection_failed),
+			last_error_,
+			"mysql_backend"
+		};
+	}
+
+	if (mysql_query(static_cast<MYSQL*>(connection_), query_string.c_str()) != 0) {
+		last_error_ = std::string("Execute error: ") + mysql_error(static_cast<MYSQL*>(connection_));
+		MYSQL_LOG_ERROR("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -204,6 +427,12 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 
 	last_error_.clear();
 	return kcenon::common::ok();
+#else
+	// Mock execution
+	MYSQL_LOG_INFO("MySQL support not compiled. Mock execute: " + query_string);
+	last_error_.clear();
+	return kcenon::common::ok();
+#endif
 }
 
 kcenon::common::VoidResult mysql_backend::begin_transaction()
@@ -226,13 +455,9 @@ kcenon::common::VoidResult mysql_backend::begin_transaction()
 		};
 	}
 
-	if (!manager_->execute_query("START TRANSACTION")) {
-		last_error_ = "Failed to begin transaction";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"mysql_backend"
-		};
+	auto result = execute_query("START TRANSACTION");
+	if (result.is_err()) {
+		return result;
 	}
 
 	in_transaction_ = true;
@@ -260,13 +485,9 @@ kcenon::common::VoidResult mysql_backend::commit_transaction()
 		};
 	}
 
-	if (!manager_->execute_query("COMMIT")) {
-		last_error_ = "Failed to commit transaction";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"mysql_backend"
-		};
+	auto result = execute_query("COMMIT");
+	if (result.is_err()) {
+		return result;
 	}
 
 	in_transaction_ = false;
@@ -290,17 +511,13 @@ kcenon::common::VoidResult mysql_backend::rollback_transaction()
 		return kcenon::common::ok();
 	}
 
-	if (!manager_->execute_query("ROLLBACK")) {
-		last_error_ = "Failed to rollback transaction";
-		in_transaction_ = false; // Force state reset even on error
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"mysql_backend"
-		};
+	auto result = execute_query("ROLLBACK");
+	in_transaction_ = false; // Force state reset even on error
+
+	if (result.is_err()) {
+		return result;
 	}
 
-	in_transaction_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
 }
@@ -326,38 +543,6 @@ std::map<std::string, std::string> mysql_backend::connection_info() const
 	info["initialized"] = initialized_ ? "true" : "false";
 	info["in_transaction"] = in_transaction_ ? "true" : "false";
 	return info;
-}
-
-std::string mysql_backend::build_connection_string(const core::connection_config& config) const
-{
-	std::ostringstream oss;
-
-	if (!config.host.empty()) {
-		oss << "host=" << config.host << ";";
-	}
-
-	if (config.port > 0) {
-		oss << "port=" << config.port << ";";
-	}
-
-	if (!config.database.empty()) {
-		oss << "database=" << config.database << ";";
-	}
-
-	if (!config.username.empty()) {
-		oss << "user=" << config.username << ";";
-	}
-
-	if (!config.password.empty()) {
-		oss << "password=" << config.password << ";";
-	}
-
-	// Append any additional options
-	for (const auto& [key, value] : config.options) {
-		oss << key << "=" << value << ";";
-	}
-
-	return oss.str();
 }
 
 } // namespace backends

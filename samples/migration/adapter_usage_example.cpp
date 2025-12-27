@@ -119,7 +119,7 @@ void modern_query_function(core::database_backend& backend) {
     if (exec_result.is_ok()) {
         std::cout << "Table created successfully\n";
     } else {
-        std::cout << "Error: " << exec_result.error() << "\n";
+        std::cout << "Error: " << exec_result.error().message << "\n";
         return;
     }
 
@@ -131,7 +131,7 @@ void modern_query_function(core::database_backend& backend) {
     if (insert_result.is_ok()) {
         std::cout << "Inserted " << insert_result.value() << " row(s)\n";
     } else {
-        std::cout << "Insert error: " << insert_result.error() << "\n";
+        std::cout << "Insert error: " << insert_result.error().message << "\n";
     }
 
     // Modern interface returns Result<database_result>
@@ -160,7 +160,7 @@ void modern_query_function(core::database_backend& backend) {
             }
         }
     } else {
-        std::cout << "Select error: " << select_result.error() << "\n";
+        std::cout << "Select error: " << select_result.error().message << "\n";
     }
 }
 

@@ -268,33 +268,51 @@ namespace database
 
 	kcenon::common::VoidResult database_manager::connect_result(const std::string& connect_string)
 	{
-		if (connect(connect_string))
+		if (!database_)
 		{
-			return kcenon::common::ok();
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend configured", "database_manager"});
 		}
-		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, "Failed to connect to database", "database_system"});
+
+		// Store connection string for potential reconnection
+		connect_string_ = connect_string;
+
+		// Use database_backend's initialize method with connection_config
+		auto config = core::connection_config::from_string(connect_string);
+		auto result = database_->initialize(config);
+
+		if (result.is_ok())
+		{
+			connected_ = true;
+		}
+		return result;
 	}
 
 	kcenon::common::VoidResult database_manager::disconnect_result()
 	{
-		if (disconnect())
+		if (!database_)
 		{
-			return kcenon::common::ok();
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
 		}
-		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, "Failed to disconnect from database", "database_system"});
+
+		auto result = database_->shutdown();
+		if (result.is_ok())
+		{
+			connected_ = false;
+		}
+		return result;
 	}
 
 	kcenon::common::VoidResult database_manager::create_query_result(const std::string& query_string)
 	{
-		if (create_query(query_string))
+		if (!database_)
 		{
-			return kcenon::common::ok();
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
 		}
-		std::string error_msg = database_ ? database_->last_error() : "No database backend";
-		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, error_msg, "database_manager"});
+		// database_backend uses execute_query for DDL/prepared statements
+		return database_->execute_query(query_string);
 	}
 
 	kcenon::common::Result<uint64_t> database_manager::insert_query_result(const std::string& query_string)

@@ -137,7 +137,7 @@ private:
     void cleanup_components() {
         // Reset all components to clean state
         if (db_mgr_) {
-            db_mgr_->disconnect();
+            db_mgr_->disconnect_result();
         }
     }
 };

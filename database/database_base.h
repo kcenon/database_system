@@ -55,8 +55,20 @@ namespace database
 	 * connecting, querying, and disconnecting. It provides pure virtual
 	 * methods that derived classes must implement for specific database
 	 * systems.
+	 *
+	 * @deprecated Since v0.4.0.0. Use database::core::database_backend instead.
+	 *             Will be removed in v0.5.0.0.
+	 *
+	 * Migration guide:
+	 * - connect(string) → initialize(connection_config)
+	 * - disconnect() → shutdown()
+	 * - Return types change from bool/unsigned int to Result<T>
+	 *
+	 * See docs/MIGRATION_database_base.md for detailed migration instructions.
 	 */
-	class database_base
+	class [[deprecated("Use database::core::database_backend instead. "
+					   "See docs/MIGRATION_database_base.md for migration guide. "
+					   "Will be removed in v0.5.0.0.")]] database_base
 	{
 	public:
 		/**

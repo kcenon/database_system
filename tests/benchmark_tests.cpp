@@ -52,7 +52,7 @@ static void BM_QueryCreation(benchmark::State& state) {
     db->set_mode(database_types::postgres);
 
     for (auto _ : state) {
-        bool result = db->create_query("SELECT 1");
+        auto result = db->create_query_result("SELECT 1");
         benchmark::DoNotOptimize(result);
     }
 }
@@ -64,7 +64,7 @@ static void BM_SelectQuery(benchmark::State& state) {
     db->set_mode(database_types::postgres);
 
     for (auto _ : state) {
-        auto result = db->select_query("SELECT 1");
+        auto result = db->select_query_result("SELECT 1");
         benchmark::DoNotOptimize(result);
     }
 }

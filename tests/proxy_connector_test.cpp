@@ -33,7 +33,7 @@ protected:
 
 	void TearDown() override {
 		if (db_mgr_) {
-			db_mgr_->disconnect();
+			db_mgr_->disconnect_result();
 		}
 	}
 
@@ -195,8 +195,8 @@ TEST_F(ProxyConnectorTest, DatabaseManagerProxyModeConnect) {
 	EXPECT_TRUE(db_mgr_->set_mode_proxy(database_types::postgres, config));
 
 	// Connect should fail (stub, no server)
-	bool connected = db_mgr_->connect("");
-	EXPECT_FALSE(connected);
+	auto connect_result = db_mgr_->connect_result("");
+	EXPECT_TRUE(connect_result.is_err());
 }
 
 // proxy_server_info tests

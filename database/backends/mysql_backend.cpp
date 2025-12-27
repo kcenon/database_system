@@ -270,7 +270,7 @@ kcenon::common::Result<uint64_t> mysql_backend::delete_query(const std::string& 
 	return static_cast<uint64_t>(affected);
 }
 
-kcenon::common::Result<database_result> mysql_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> mysql_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -281,7 +281,7 @@ kcenon::common::Result<database_result> mysql_backend::select_query(const std::s
 		};
 	}
 
-	database_result result;
+	core::database_result result;
 
 #ifdef USE_MYSQL
 	if (!connection_) {
@@ -331,7 +331,7 @@ kcenon::common::Result<database_result> mysql_backend::select_query(const std::s
 		// Process rows
 		MYSQL_ROW row;
 		while ((row = mysql_fetch_row(res))) {
-			database_row db_row;
+			core::database_row db_row;
 			unsigned long* lengths = mysql_fetch_lengths(res);
 
 			for (unsigned int i = 0; i < num_fields; i++) {
@@ -381,7 +381,7 @@ kcenon::common::Result<database_result> mysql_backend::select_query(const std::s
 	MYSQL_LOG_WARNING("MySQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
-		database_row mock_row;
+		core::database_row mock_row;
 		mock_row["id"] = int64_t(1);
 		mock_row["name"] = std::string("mysql_mock_data");
 		mock_row["active"] = true;
@@ -456,7 +456,7 @@ kcenon::common::VoidResult mysql_backend::begin_transaction()
 	}
 
 	auto result = execute_query("START TRANSACTION");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -486,7 +486,7 @@ kcenon::common::VoidResult mysql_backend::commit_transaction()
 	}
 
 	auto result = execute_query("COMMIT");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -514,7 +514,7 @@ kcenon::common::VoidResult mysql_backend::rollback_transaction()
 	auto result = execute_query("ROLLBACK");
 	in_transaction_ = false; // Force state reset even on error
 
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 

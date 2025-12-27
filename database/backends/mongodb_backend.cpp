@@ -365,7 +365,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string
 #endif
 }
 
-kcenon::common::Result<database_result> mongodb_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> mongodb_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -376,7 +376,7 @@ kcenon::common::Result<database_result> mongodb_backend::select_query(const std:
 		};
 	}
 
-	database_result result;
+	core::database_result result;
 
 #ifdef USE_MONGODB
 	if (!database_) {
@@ -410,7 +410,7 @@ kcenon::common::Result<database_result> mongodb_backend::select_query(const std:
 		auto cursor = collection.find(filter_doc.view());
 
 		for (auto&& doc : cursor) {
-			database_row row;
+			core::database_row row;
 
 			// Convert BSON document to database_row
 			auto json_string = bsoncxx::to_json(doc);
@@ -444,7 +444,7 @@ kcenon::common::Result<database_result> mongodb_backend::select_query(const std:
 #else
 	MONGODB_LOG_WARNING("MongoDB support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
-	database_row mock_row;
+	core::database_row mock_row;
 	mock_row["_id"] = std::string("mock_object_id");
 	mock_row["name"] = std::string("mongodb_mock_data");
 	mock_row["_document"] = std::string("{\"_id\":\"mock_object_id\",\"name\":\"mongodb_mock_data\"}");

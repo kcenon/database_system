@@ -297,7 +297,7 @@ kcenon::common::Result<uint64_t> postgresql_backend::delete_query(const std::str
 	return static_cast<uint64_t>(affected);
 }
 
-kcenon::common::Result<database_result> postgresql_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> postgresql_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -308,7 +308,7 @@ kcenon::common::Result<database_result> postgresql_backend::select_query(const s
 		};
 	}
 
-	database_result result;
+	core::database_result result;
 
 #ifdef USE_POSTGRESQL
 	if (!connection_) {
@@ -326,7 +326,7 @@ kcenon::common::Result<database_result> postgresql_backend::select_query(const s
 		txn.commit();
 
 		for (const auto& row : pqxx_result) {
-			database_row db_row;
+			core::database_row db_row;
 			for (size_t i = 0; i < row.size(); ++i) {
 				std::string column_name = pqxx_result.column_name(i);
 				if (row[i].is_null()) {
@@ -382,7 +382,7 @@ kcenon::common::Result<database_result> postgresql_backend::select_query(const s
 		int cols = PQnfields(pg_result);
 
 		for (int row = 0; row < rows; ++row) {
-			database_row db_row;
+			core::database_row db_row;
 			for (int col = 0; col < cols; ++col) {
 				std::string column_name = PQfname(pg_result, col);
 				if (PQgetisnull(pg_result, row, col)) {
@@ -419,7 +419,7 @@ kcenon::common::Result<database_result> postgresql_backend::select_query(const s
 	POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
-		database_row mock_row;
+		core::database_row mock_row;
 		mock_row["id"] = int64_t(1);
 		mock_row["name"] = std::string("mock_data");
 		mock_row["active"] = true;
@@ -536,7 +536,7 @@ kcenon::common::VoidResult postgresql_backend::begin_transaction()
 	}
 
 	auto result = execute_query("BEGIN");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -566,7 +566,7 @@ kcenon::common::VoidResult postgresql_backend::commit_transaction()
 	}
 
 	auto result = execute_query("COMMIT");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -594,7 +594,7 @@ kcenon::common::VoidResult postgresql_backend::rollback_transaction()
 	auto result = execute_query("ROLLBACK");
 	in_transaction_ = false; // Force state reset even on error
 
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 

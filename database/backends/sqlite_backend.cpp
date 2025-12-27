@@ -183,7 +183,7 @@ bool sqlite_backend::is_initialized() const
 	return initialized_;
 }
 
-database_value sqlite_backend::convert_sqlite_value(void* stmt, int column_index)
+core::database_value sqlite_backend::convert_sqlite_value(void* stmt, int column_index)
 {
 #ifdef USE_SQLITE
 	sqlite3_stmt* sqlite_stmt = static_cast<sqlite3_stmt*>(stmt);
@@ -320,7 +320,7 @@ kcenon::common::Result<uint64_t> sqlite_backend::delete_query(const std::string&
 	return static_cast<uint64_t>(affected);
 }
 
-kcenon::common::Result<database_result> sqlite_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> sqlite_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -331,7 +331,7 @@ kcenon::common::Result<database_result> sqlite_backend::select_query(const std::
 		};
 	}
 
-	database_result result;
+	core::database_result result;
 
 #ifdef USE_SQLITE
 	if (!connection_) {
@@ -368,7 +368,7 @@ kcenon::common::Result<database_result> sqlite_backend::select_query(const std::
 
 		// Execute and fetch results
 		while (sqlite3_step(stmt) == SQLITE_ROW) {
-			database_row row;
+			core::database_row row;
 
 			for (int i = 0; i < column_count; i++) {
 				const std::string& column_name = column_names[i];
@@ -394,7 +394,7 @@ kcenon::common::Result<database_result> sqlite_backend::select_query(const std::
 	SQLITE_LOG_WARNING("SQLite support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
-		database_row mock_row;
+		core::database_row mock_row;
 		mock_row["id"] = int64_t(1);
 		mock_row["name"] = std::string("sqlite_mock_data");
 		mock_row["active"] = true;
@@ -476,7 +476,7 @@ kcenon::common::VoidResult sqlite_backend::begin_transaction()
 	}
 
 	auto result = execute_query("BEGIN TRANSACTION");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -506,7 +506,7 @@ kcenon::common::VoidResult sqlite_backend::commit_transaction()
 	}
 
 	auto result = execute_query("COMMIT");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -534,7 +534,7 @@ kcenon::common::VoidResult sqlite_backend::rollback_transaction()
 	auto result = execute_query("ROLLBACK");
 	in_transaction_ = false; // Force state reset even on error
 
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 

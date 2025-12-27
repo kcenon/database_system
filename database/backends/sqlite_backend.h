@@ -134,7 +134,7 @@ public:
 
 	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
-	kcenon::common::Result<database_result> select_query(const std::string& query_string) override;
+	kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
 	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
@@ -164,7 +164,7 @@ private:
 	 * @param column_index Column index in the result set
 	 * @return database_value containing the converted value
 	 */
-	database_value convert_sqlite_value(void* stmt, int column_index);
+	core::database_value convert_sqlite_value(void* stmt, int column_index);
 
 	void* connection_{nullptr};                      ///< SQLite connection (sqlite3*)
 	std::atomic<bool> initialized_{false};           ///< Initialization state

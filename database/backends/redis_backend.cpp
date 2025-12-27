@@ -358,7 +358,7 @@ kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& 
 #endif
 }
 
-kcenon::common::Result<database_result> redis_backend::select_query(const std::string& query_string)
+kcenon::common::Result<core::database_result> redis_backend::select_query(const std::string& query_string)
 {
 	if (!initialized_) {
 		last_error_ = "Backend not initialized";
@@ -369,7 +369,7 @@ kcenon::common::Result<database_result> redis_backend::select_query(const std::s
 		};
 	}
 
-	database_result result;
+	core::database_result result;
 
 #ifdef USE_REDIS
 	if (!context_) {
@@ -391,7 +391,7 @@ kcenon::common::Result<database_result> redis_backend::select_query(const std::s
 
 		if (reply != nullptr && reply->type != REDIS_REPLY_ERROR &&
 			reply->type != REDIS_REPLY_NIL) {
-			database_row row;
+			core::database_row row;
 			row["key"] = key;
 
 			if (reply->type == REDIS_REPLY_STRING) {
@@ -419,7 +419,7 @@ kcenon::common::Result<database_result> redis_backend::select_query(const std::s
 	REDIS_LOG_WARNING("Redis support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (!query_string.empty()) {
-		database_row mock_row;
+		core::database_row mock_row;
 		mock_row["key"] = query_string;
 		mock_row["value"] = std::string("redis_mock_value");
 		result.push_back(mock_row);
@@ -526,7 +526,7 @@ kcenon::common::VoidResult redis_backend::begin_transaction()
 
 	// Redis uses MULTI to begin a transaction
 	auto result = execute_query("MULTI");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -557,7 +557,7 @@ kcenon::common::VoidResult redis_backend::commit_transaction()
 
 	// Redis uses EXEC to commit a transaction
 	auto result = execute_query("EXEC");
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 
@@ -586,7 +586,7 @@ kcenon::common::VoidResult redis_backend::rollback_transaction()
 	auto result = execute_query("DISCARD");
 	in_transaction_ = false; // Force state reset even on error
 
-	if (!result) {
+	if (result.is_err()) {
 		return result;
 	}
 

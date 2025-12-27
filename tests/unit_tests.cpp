@@ -38,7 +38,7 @@ protected:
   void TearDown() override {
     // Cleanup
     if (db_mgr_) {
-      db_mgr_->disconnect();
+      db_mgr_->disconnect_result();
     }
   }
 };
@@ -63,14 +63,14 @@ TEST_F(DatabaseTest, DatabaseTypeSettings) {
   EXPECT_EQ(db_mgr_->database_type(), database_types::postgres);
 
   // Reset to ensure clean state
-  db_mgr_->disconnect();
+  db_mgr_->disconnect_result();
 
   // Test SQLite backend (may be supported)
   bool sqlite_result = db_mgr_->set_mode(database_types::sqlite);
   if (sqlite_result) {
     // SQLite is supported
     EXPECT_EQ(db_mgr_->database_type(), database_types::sqlite);
-    db_mgr_->disconnect();
+    db_mgr_->disconnect_result();
   } else {
     // SQLite not supported
     EXPECT_EQ(db_mgr_->database_type(), database_types::none);
@@ -88,10 +88,10 @@ TEST_F(DatabaseTest, BasicQueryOperations) {
   EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
 
   // Test query creation (should not crash)
-  EXPECT_NO_THROW(db_mgr_->create_query("SELECT 1"));
+  EXPECT_NO_THROW(db_mgr_->create_query_result("SELECT 1"));
 
   // Test select query behavior
-  auto result = db_mgr_->select_query("SELECT 1");
+  auto result = db_mgr_->select_query_result("SELECT 1");
   // Note: PostgreSQL support may not be compiled, so result may contain error
   // info We just test that it doesn't crash and returns some result
   EXPECT_NO_THROW(result);
@@ -104,12 +104,12 @@ TEST_F(DatabaseTest, ConnectionHandling) {
   // Test connection with invalid connection string
   // Note: In mock mode (PostgreSQL not compiled), connect may succeed
   // as backends use mock implementation for testing without actual DB
-  bool connected = db_mgr_->connect("invalid_connection_string");
+  auto connect_result = db_mgr_->connect_result("invalid_connection_string");
   // Just verify it doesn't crash - actual result depends on mock mode
-  (void)connected;
+  (void)connect_result;
 
   // Test disconnect (should not crash)
-  EXPECT_NO_THROW(db_mgr_->disconnect());
+  EXPECT_NO_THROW(db_mgr_->disconnect_result());
 }
 
 // Test entity for ORM tests
@@ -391,7 +391,7 @@ protected:
   void TearDown() override {
     // Query builder cleanup
     if (db_mgr_) {
-      db_mgr_->disconnect();
+      db_mgr_->disconnect_result();
     }
   }
 };
@@ -445,8 +445,8 @@ TEST_F(DatabaseTest, GeneralQueryExecution) {
   EXPECT_TRUE(db_mgr_->set_mode(database_types::postgres));
 
   // Test various query types work without crashing
-  EXPECT_NO_THROW(db_mgr_->create_query("SELECT 1"));
-  EXPECT_NO_THROW(db_mgr_->select_query("SELECT 1"));
+  EXPECT_NO_THROW(db_mgr_->create_query_result("SELECT 1"));
+  EXPECT_NO_THROW(db_mgr_->select_query_result("SELECT 1"));
 }
 
 // Main function for running tests

@@ -49,29 +49,39 @@ public:
 
 ### database_manager
 
-Singleton class for managing database connections and operations.
+Class for managing database connections and operations. Uses dependency injection
+pattern with `database_context` for testability.
 
 ```cpp
 class database_manager
 {
 public:
-    // Singleton access
-    static database_manager& handle();
+    // Constructor with dependency injection
+    explicit database_manager(std::shared_ptr<database_context> context);
 
     // Database configuration
     bool set_mode(const database_types& database_type);
     database_types database_type();
 
-    // Connection management
-    bool connect(const std::string& connection_string);
-    bool disconnect();
+    // Connection management (DEPRECATED - use Result-based API)
+    [[deprecated]] bool connect(const std::string& connection_string);
+    [[deprecated]] bool disconnect();
 
-    // Query operations
-    bool create_query(const std::string& query_string);
-    unsigned int insert_query(const std::string& query_string);
-    unsigned int update_query(const std::string& query_string);
-    unsigned int delete_query(const std::string& query_string);
-    database_result select_query(const std::string& query_string);
+    // Query operations (DEPRECATED - use Result-based API)
+    [[deprecated]] bool create_query(const std::string& query_string);
+    [[deprecated]] unsigned int insert_query(const std::string& query_string);
+    [[deprecated]] unsigned int update_query(const std::string& query_string);
+    [[deprecated]] unsigned int delete_query(const std::string& query_string);
+    [[deprecated]] database_result select_query(const std::string& query_string);
+
+    // Result-based API (RECOMMENDED)
+    VoidResult connect_result(const std::string& connection_string);
+    VoidResult disconnect_result();
+    VoidResult create_query_result(const std::string& query_string);
+    Result<uint64_t> insert_query_result(const std::string& query_string);
+    Result<uint64_t> update_query_result(const std::string& query_string);
+    Result<uint64_t> delete_query_result(const std::string& query_string);
+    Result<database_result> select_query_result(const std::string& query_string);
 
     // Phase 3: Advanced Features
     bool create_connection_pool(database_types db_type, const connection_pool_config& config);
@@ -95,39 +105,78 @@ public:
 
 ```cpp
 #include <database/database_manager.h>
+#include <database/core/database_context.h>
 using namespace database;
 
-// Get singleton instance
-database_manager& db = database_manager::handle();
+// Create manager with dependency injection
+auto context = std::make_shared<database_context>();
+auto db = std::make_shared<database_manager>(context);
 
 // Set database type
-db.set_mode(database_types::postgres);
+db->set_mode(database_types::postgres);
 
-// Connect
+// Connect using Result-based API
 std::string conn_str = "host=localhost port=5432 dbname=test user=admin password=secret";
-if (!db.connect(conn_str)) {
-    // Handle connection error
+auto connect_result = db->connect_result(conn_str);
+if (connect_result.is_err()) {
+    std::cerr << "Connection failed: " << connect_result.error().message << std::endl;
+    return;
 }
 
-// Execute queries
-db.create_query("CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(100))");
-unsigned int rows = db.insert_query("INSERT INTO users (name) VALUES ('John')");
-database_result result = db.select_query("SELECT * FROM users");
+// Execute queries using Result-based API
+auto create_result = db->create_query_result("CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(100))");
+if (create_result.is_err()) {
+    std::cerr << "Create table failed: " << create_result.error().message << std::endl;
+}
+
+auto insert_result = db->insert_query_result("INSERT INTO users (name) VALUES ('John')");
+if (insert_result.is_ok()) {
+    std::cout << "Inserted " << insert_result.value() << " rows" << std::endl;
+}
+
+auto select_result = db->select_query_result("SELECT * FROM users");
+if (select_result.is_ok()) {
+    for (const auto& row : select_result.value()) {
+        // Process row
+    }
+}
+
+// Disconnect
+db->disconnect_result();
 ```
 
 ### Supported Methods
 
+#### Configuration Methods
 | Method | Description | Returns |
 |--------|-------------|---------|
 | `set_mode(database_types)` | Set database backend type | `bool` success |
 | `database_type()` | Get current database type | `database_types` |
-| `connect(connection_string)` | Connect to database | `bool` success |
-| `disconnect()` | Disconnect from database | `bool` success |
-| `create_query(query)` | Execute DDL query | `bool` success |
-| `insert_query(query)` | Execute INSERT query | `unsigned int` rows affected |
-| `update_query(query)` | Execute UPDATE query | `unsigned int` rows affected |
-| `delete_query(query)` | Execute DELETE query | `unsigned int` rows affected |
-| `select_query(query)` | Execute SELECT query | `database_result` |
+
+#### Result-based API (Recommended)
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `connect_result(connection_string)` | Connect to database | `VoidResult` |
+| `disconnect_result()` | Disconnect from database | `VoidResult` |
+| `create_query_result(query)` | Execute DDL query | `VoidResult` |
+| `insert_query_result(query)` | Execute INSERT query | `Result<uint64_t>` |
+| `update_query_result(query)` | Execute UPDATE query | `Result<uint64_t>` |
+| `delete_query_result(query)` | Execute DELETE query | `Result<uint64_t>` |
+| `select_query_result(query)` | Execute SELECT query | `Result<database_result>` |
+
+#### Legacy API (Deprecated)
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `connect(connection_string)` | ~~Connect to database~~ | `bool` |
+| `disconnect()` | ~~Disconnect from database~~ | `bool` |
+| `create_query(query)` | ~~Execute DDL query~~ | `bool` |
+| `insert_query(query)` | ~~Execute INSERT query~~ | `unsigned int` |
+| `update_query(query)` | ~~Execute UPDATE query~~ | `unsigned int` |
+| `delete_query(query)` | ~~Execute DELETE query~~ | `unsigned int` |
+| `select_query(query)` | ~~Execute SELECT query~~ | `database_result` |
+
+> **Note**: Legacy methods are deprecated as of v1.x. Use Result-based API for proper error handling.
+> See [Migration Guide](migration/legacy_api.md) for migration instructions.
 
 ## Connection Pooling
 

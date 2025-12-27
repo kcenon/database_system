@@ -24,7 +24,29 @@
 
 ---
 
-## [Unreleased] - 2025-12-21
+## [Unreleased] - 2025-12-27
+
+### ⚠️ **Deprecated**
+
+#### **database_base 인터페이스 지원 중단 (Issue #282)**
+- **`database_base` 클래스를 deprecated로 표시** (`database::core::database_backend` 사용 권장)
+  - 마이그레이션 안내와 함께 `[[deprecated]]` 속성 추가
+  - v0.5.0.0에서 제거 예정
+- **점진적 마이그레이션을 위한 `database_base_adapter` 생성**
+  - `database_backend`를 래핑하고 레거시 `database_base` 인터페이스 노출
+  - 마이그레이션 기간 동안 기존 코드가 계속 작동 가능
+- **마이그레이션 문서**: `docs/migration/database_base.md`
+  - 메서드 매핑 참조
+  - 전후 코드 예제
+  - 에러 처리 마이그레이션 가이드
+
+**왜 마이그레이션해야 하나요?**
+- `database_backend`는 명시적 오류 처리를 위한 `Result<T>` 타입 제공
+- 트랜잭션 지원 (`begin_transaction`, `commit_transaction`, `rollback_transaction`)
+- 연결 정보 및 마지막 오류 접근 가능
+- 원시 연결 문자열 대신 구조화된 `connection_config` 사용
+
+---
 
 ### 🔨 **리팩토링**
 

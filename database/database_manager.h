@@ -161,7 +161,11 @@ namespace database
 		 *                       and database name.
 		 * @return @c true if the connection was established successfully,
 		 *         @c false otherwise.
+		 *
+		 * @deprecated Use connect_result() for Result-based error handling.
+		 * @see connect_result()
 		 */
+		[[deprecated("Use connect_result() for Result-based error handling")]]
 		bool connect(const std::string& connect_string);
 
 		/**
@@ -173,7 +177,11 @@ namespace database
 		 *
 		 * This method may handle prepared statements in some database
 		 * implementations.
+		 *
+		 * @deprecated Use create_query_result() for Result-based error handling.
+		 * @see create_query_result()
 		 */
+		[[deprecated("Use create_query_result() for Result-based error handling")]]
 		bool create_query(const std::string& query_string);
 
 		/**
@@ -182,7 +190,11 @@ namespace database
 		 * @param query_string The SQL INSERT statement.
 		 * @return The number of rows inserted, or an implementation-specific
 		 *         value if row counts are not supported.
+		 *
+		 * @deprecated Use insert_query_result() for Result-based error handling.
+		 * @see insert_query_result()
 		 */
+		[[deprecated("Use insert_query_result() for Result-based error handling")]]
 		unsigned int insert_query(const std::string& query_string);
 
 		/**
@@ -191,7 +203,11 @@ namespace database
 		 * @param query_string The SQL UPDATE statement.
 		 * @return The number of rows updated, or an implementation-specific
 		 *         value if row counts are not supported.
+		 *
+		 * @deprecated Use update_query_result() for Result-based error handling.
+		 * @see update_query_result()
 		 */
+		[[deprecated("Use update_query_result() for Result-based error handling")]]
 		unsigned int update_query(const std::string& query_string);
 
 		/**
@@ -200,7 +216,11 @@ namespace database
 		 * @param query_string The SQL DELETE statement.
 		 * @return The number of rows deleted, or an implementation-specific
 		 *         value if row counts are not supported.
+		 *
+		 * @deprecated Use delete_query_result() for Result-based error handling.
+		 * @see delete_query_result()
 		 */
+		[[deprecated("Use delete_query_result() for Result-based error handling")]]
 		unsigned int delete_query(const std::string& query_string);
 
 		/**
@@ -209,7 +229,11 @@ namespace database
 		 * @param query_string The SQL SELECT statement.
 		 * @return A database_result containing rows of data as key-value pairs.
 		 *         Returns empty vector if query fails or returns no results.
+		 *
+		 * @deprecated Use select_query_result() for Result-based error handling.
+		 * @see select_query_result()
 		 */
+		[[deprecated("Use select_query_result() for Result-based error handling")]]
 		database_result select_query(const std::string& query_string);
 
 		/**
@@ -217,7 +241,11 @@ namespace database
 		 *
 		 * @return @c true if successfully disconnected, @c false otherwise
 		 *         (e.g., no active connection).
+		 *
+		 * @deprecated Use disconnect_result() for Result-based error handling.
+		 * @see disconnect_result()
 		 */
+		[[deprecated("Use disconnect_result() for Result-based error handling")]]
 		bool disconnect(void);
 
 		/**

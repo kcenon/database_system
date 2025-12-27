@@ -34,21 +34,19 @@
  * @brief MySQL database backend plugin implementation
  *
  * This file implements the database_backend interface for MySQL,
- * adapting the existing mysql_manager implementation to the new
- * plugin architecture.
+ * directly using the MySQL C API without depending on the legacy mysql_manager.
  *
- * Sprint 5 Task 5.3: Refactor MySQL backend to plugin system
- * - Adapts mysql_manager to database_backend interface
+ * Issue #286: Update backends to use database_backend only
+ * - Implements database_backend interface directly
  * - Registers with backend_registry for runtime selection
- * - Maintains compile-time option for convenience (#ifdef USE_MYSQL)
- * - Reduces conditional compilation from scattered usage to single registration point
+ * - Eliminates dependency on database_base-derived classes
+ * - Uses Result-based error handling pattern
  */
 
 #pragma once
 
 #include "../core/database_backend.h"
 #include "../core/backend_registry.h"
-#include "mysql/mysql_manager.h"
 
 #include <memory>
 #include <string>
@@ -63,14 +61,14 @@ namespace backends
  * @class mysql_backend
  * @brief MySQL implementation of database_backend interface
  *
- * This class adapts the existing mysql_manager to the new database_backend
- * interface, enabling MySQL to work as a plugin in the backend registry.
+ * This class directly implements the database_backend interface for MySQL,
+ * using the MySQL C API without depending on the legacy mysql_manager.
  *
- * Design Pattern: Adapter pattern
- * - Wraps mysql_manager (existing implementation)
- * - Adapts database_base interface to database_backend interface
- * - Converts return types (bool/unsigned int → Result<T>)
- * - Converts connection params (string → connection_config)
+ * Design Pattern: Strategy pattern
+ * - Directly implements database_backend interface
+ * - Uses MySQL C API for database access
+ * - Provides Result-based error handling
+ * - Supports transactions natively
  *
  * Thread Safety:
  * - Thread-safe for read operations (SELECT queries)
@@ -156,18 +154,16 @@ public:
 
 private:
 	/**
-	 * @brief Convert connection_config to MySQL connection string
-	 * @param config Structured connection configuration
-	 * @return Connection string for MySQL C API
-	 *
-	 * Format: "host=... port=... database=... user=... password=..."
+	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
+	 * @param query_string SQL query to execute
+	 * @return Number of affected rows
 	 */
-	std::string build_connection_string(const core::connection_config& config) const;
+	unsigned int execute_modification_query(const std::string& query_string);
 
-	std::unique_ptr<mysql_manager> manager_; ///< Underlying MySQL manager
-	std::atomic<bool> initialized_{false};   ///< Initialization state
-	std::atomic<bool> in_transaction_{false};///< Transaction state
-	mutable std::string last_error_;         ///< Last error message
+	void* connection_{nullptr};                 ///< MySQL connection (MYSQL*)
+	std::atomic<bool> initialized_{false};      ///< Initialization state
+	std::atomic<bool> in_transaction_{false};   ///< Transaction state
+	mutable std::string last_error_;            ///< Last error message
 	core::connection_config connection_config_; ///< Cached connection config
 };
 

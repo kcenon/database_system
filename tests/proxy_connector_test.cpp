@@ -103,7 +103,7 @@ TEST_F(ProxyConnectorTest, ProxyConnectorConstruction) {
 		database_types::postgres, config);
 
 	EXPECT_NE(connector, nullptr);
-	EXPECT_EQ(connector->database_type(), database_types::postgres);
+	EXPECT_EQ(connector->type(), database_types::postgres);
 	EXPECT_EQ(connector->state(), proxy_state::disconnected);
 	EXPECT_FALSE(connector->is_connected());
 }
@@ -121,9 +121,10 @@ TEST_F(ProxyConnectorTest, ProxyConnectorConnect) {
 		database_types::postgres, config);
 
 	// Connection should fail (stub implementation, server doesn't exist)
-	bool connected = connector->connect("");
-	EXPECT_FALSE(connected);
-	EXPECT_FALSE(connector->is_connected());
+	core::connection_config conn_config;
+	auto result = connector->initialize(conn_config);
+	EXPECT_FALSE(result.is_ok());
+	EXPECT_FALSE(connector->is_initialized());
 
 	// Should have error message
 	std::string error = connector->last_error();
@@ -132,17 +133,20 @@ TEST_F(ProxyConnectorTest, ProxyConnectorConnect) {
 				error.find("stub") != std::string::npos);
 }
 
-TEST_F(ProxyConnectorTest, ProxyConnectorMoveSemantics) {
+TEST_F(ProxyConnectorTest, ProxyConnectorNonMoveable) {
+	// proxy_connector is non-moveable due to atomic members
+	// Verify it can only be used via unique_ptr
 	auto config = create_valid_config();
-	auto connector1 = std::make_unique<proxy_connector>(
+	auto connector = std::make_unique<proxy_connector>(
 		database_types::mysql, config);
 
-	EXPECT_EQ(connector1->database_type(), database_types::mysql);
+	EXPECT_EQ(connector->type(), database_types::mysql);
+	EXPECT_EQ(connector->state(), proxy_state::disconnected);
 
-	// Move constructor
-	proxy_connector connector2 = std::move(*connector1);
-	EXPECT_EQ(connector2.database_type(), database_types::mysql);
-	EXPECT_EQ(connector2.state(), proxy_state::disconnected);
+	// Verify unique_ptr transfer works
+	std::unique_ptr<proxy_connector> connector2 = std::move(connector);
+	EXPECT_EQ(connector2->type(), database_types::mysql);
+	EXPECT_EQ(connector, nullptr);
 }
 
 // database_manager proxy mode tests

@@ -86,7 +86,7 @@ namespace database {
 class database_base;
 namespace core {
 class database_backend;
-struct database_row;
+// database_row is a type alias defined in database_backend.h, not forward-declarable
 } // namespace core
 } // namespace database
 

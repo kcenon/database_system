@@ -32,12 +32,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "database/database_manager.h"
 
-#include "database/postgres_manager.h"
-#include "database/backends/mysql/mysql_manager.h"
-#include "database/backends/sqlite/sqlite_manager.h"
-#include "database/backends/mongodb/mongodb_manager.h"
-#include "database/backends/redis/redis_manager.h"
+#include "database/core/backend_registry.h"
+#include "database/backends/postgresql_backend.h"
+#include "database/backends/mysql_backend.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/backends/mongodb_backend.h"
+#include "database/backends/redis_backend.h"
 #include "database/proxy/proxy_connector.h"
+
+#include <sstream>
 
 namespace database
 {
@@ -67,25 +70,28 @@ namespace database
 
 		database_.reset();
 
+		// Create the appropriate backend directly
+		// This ensures backends are linked even when static library registration
+		// might not work due to initialization order
 		switch (database_type)
 		{
 		case database_types::postgres:
-			database_ = std::make_unique<postgres_manager>();
+			database_ = backends::postgresql_backend::create();
 			break;
 		case database_types::mysql:
-			database_ = std::make_unique<mysql_manager>();
+			database_ = backends::mysql_backend::create();
 			break;
 		case database_types::sqlite:
-			database_ = std::make_unique<sqlite_manager>();
+			database_ = backends::sqlite_backend::create();
 			break;
 		case database_types::mongodb:
-			database_ = std::make_unique<mongodb_manager>();
+			database_ = backends::mongodb_backend::create();
 			break;
 		case database_types::redis:
-			database_ = std::make_unique<redis_manager>();
+			database_ = backends::redis_backend::create();
 			break;
 		default:
-			break;
+			return false;
 		}
 
 		if (database_ == nullptr)
@@ -113,6 +119,7 @@ namespace database
 		database_.reset();
 
 		// Create proxy connector for the specified database type
+		// proxy_connector now implements database_backend interface
 		database_ = std::make_unique<proxy::proxy_connector>(database_type, proxy_config);
 
 		if (database_ == nullptr)
@@ -137,7 +144,7 @@ namespace database
 			return database_types::none;
 		}
 
-		return database_->database_type();
+		return database_->type();
 	}
 
 	bool database_manager::connect(const std::string& connect_string)
@@ -147,7 +154,14 @@ namespace database
 			return false;
 		}
 
-		connected_ = database_->connect(connect_string);
+		// Store connection string for potential reconnection
+		connect_string_ = connect_string;
+
+		// Use database_backend's initialize method with connection_config
+		auto config = core::connection_config::from_string(connect_string);
+		auto result = database_->initialize(config);
+
+		connected_ = result.is_ok();
 		return connected_;
 	}
 
@@ -158,7 +172,9 @@ namespace database
 			return false;
 		}
 
-		return database_->create_query(query_string);
+		// database_backend uses execute_query for DDL/prepared statements
+		auto result = database_->execute_query(query_string);
+		return result.is_ok();
 	}
 
 	unsigned int database_manager::insert_query(const std::string& query_string)
@@ -168,7 +184,12 @@ namespace database
 			return 0;
 		}
 
-		return database_->insert_query(query_string);
+		auto result = database_->insert_query(query_string);
+		if (result.is_ok())
+		{
+			return static_cast<unsigned int>(result.value());
+		}
+		return 0;
 	}
 
 	unsigned int database_manager::update_query(const std::string& query_string)
@@ -178,7 +199,12 @@ namespace database
 			return 0;
 		}
 
-		return database_->update_query(query_string);
+		auto result = database_->update_query(query_string);
+		if (result.is_ok())
+		{
+			return static_cast<unsigned int>(result.value());
+		}
+		return 0;
 	}
 
 	unsigned int database_manager::delete_query(const std::string& query_string)
@@ -188,7 +214,12 @@ namespace database
 			return 0;
 		}
 
-		return database_->delete_query(query_string);
+		auto result = database_->delete_query(query_string);
+		if (result.is_ok())
+		{
+			return static_cast<unsigned int>(result.value());
+		}
+		return 0;
 	}
 
 	database_result database_manager::select_query(const std::string& query_string)
@@ -198,7 +229,26 @@ namespace database
 			return database_result{};
 		}
 
-		return database_->select_query(query_string);
+		auto result = database_->select_query(query_string);
+		if (result.is_ok())
+		{
+			// Convert from core::database_result to database::database_result
+			const auto& core_result = result.value();
+			database_result legacy_result;
+			legacy_result.reserve(core_result.size());
+
+			for (const auto& row : core_result)
+			{
+				database_row legacy_row;
+				for (const auto& [key, value] : row)
+				{
+					legacy_row[key] = value;
+				}
+				legacy_result.push_back(std::move(legacy_row));
+			}
+			return legacy_result;
+		}
+		return database_result{};
 	}
 
 	bool database_manager::disconnect(void)
@@ -208,12 +258,12 @@ namespace database
 			return false;
 		}
 
-		bool result = database_->disconnect();
-		if (result)
+		auto result = database_->shutdown();
+		if (result.is_ok())
 		{
 			connected_ = false;
 		}
-		return result;
+		return result.is_ok();
 	}
 
 	kcenon::common::VoidResult database_manager::connect_result(const std::string& connect_string)
@@ -242,8 +292,116 @@ namespace database
 		{
 			return kcenon::common::ok();
 		}
+		std::string error_msg = database_ ? database_->last_error() : "No database backend";
 		return kcenon::common::VoidResult(
-			kcenon::common::error_info{-1, "Failed to prepare database query", "database_system"});
+			kcenon::common::error_info{-1, error_msg, "database_manager"});
+	}
+
+	kcenon::common::Result<uint64_t> database_manager::insert_query_result(const std::string& query_string)
+	{
+		if (!database_)
+		{
+			return kcenon::common::Result<uint64_t>(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->insert_query(query_string);
+	}
+
+	kcenon::common::Result<uint64_t> database_manager::update_query_result(const std::string& query_string)
+	{
+		if (!database_)
+		{
+			return kcenon::common::Result<uint64_t>(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->update_query(query_string);
+	}
+
+	kcenon::common::Result<uint64_t> database_manager::delete_query_result(const std::string& query_string)
+	{
+		if (!database_)
+		{
+			return kcenon::common::Result<uint64_t>(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->delete_query(query_string);
+	}
+
+	kcenon::common::Result<core::database_result> database_manager::select_query_result(const std::string& query_string)
+	{
+		if (!database_)
+		{
+			return kcenon::common::Result<core::database_result>(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->select_query(query_string);
+	}
+
+	kcenon::common::VoidResult database_manager::execute_query_result(const std::string& query_string)
+	{
+		if (!database_)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->execute_query(query_string);
+	}
+
+	kcenon::common::VoidResult database_manager::begin_transaction()
+	{
+		if (!database_)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->begin_transaction();
+	}
+
+	kcenon::common::VoidResult database_manager::commit_transaction()
+	{
+		if (!database_)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->commit_transaction();
+	}
+
+	kcenon::common::VoidResult database_manager::rollback_transaction()
+	{
+		if (!database_)
+		{
+			return kcenon::common::VoidResult(
+				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+		}
+		return database_->rollback_transaction();
+	}
+
+	bool database_manager::in_transaction() const
+	{
+		if (!database_)
+		{
+			return false;
+		}
+		return database_->in_transaction();
+	}
+
+	std::string database_manager::last_error() const
+	{
+		if (!database_)
+		{
+			return "No database backend";
+		}
+		return database_->last_error();
+	}
+
+	std::map<std::string, std::string> database_manager::connection_info() const
+	{
+		if (!database_)
+		{
+			return {};
+		}
+		return database_->connection_info();
 	}
 
 	// Connection pool methods moved to header as inline functions for performance

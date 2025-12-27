@@ -51,59 +51,31 @@ proxy_connector::proxy_connector(database_types db_type,
 
 proxy_connector::~proxy_connector()
 {
-	if (is_connected()) {
-		disconnect();
+	if (is_initialized()) {
+		shutdown();
 	}
 }
 
-proxy_connector::proxy_connector(proxy_connector&& other) noexcept
-	: db_type_(other.db_type_)
-	, config_(std::move(other.config_))
-	, state_(other.state_.load())
-	, last_error_(std::move(other.last_error_))
-	, server_info_(std::move(other.server_info_))
-{
-	other.state_ = proxy_state::disconnected;
-}
-
-proxy_connector& proxy_connector::operator=(proxy_connector&& other) noexcept
-{
-	if (this != &other) {
-		if (is_connected()) {
-			disconnect();
-		}
-
-		std::lock_guard<std::mutex> lock(mutex_);
-		db_type_ = other.db_type_;
-		config_ = std::move(other.config_);
-		state_ = other.state_.load();
-		last_error_ = std::move(other.last_error_);
-		server_info_ = std::move(other.server_info_);
-
-		other.state_ = proxy_state::disconnected;
-	}
-	return *this;
-}
-
-database_types proxy_connector::database_type()
+database_types proxy_connector::type() const
 {
 	return db_type_;
 }
 
-bool proxy_connector::connect(const std::string& /*connect_string*/)
+kcenon::common::VoidResult proxy_connector::initialize(const core::connection_config& /*config*/)
 {
-	// In proxy mode, the connect_string is ignored.
-	// Connection parameters are taken from proxy_connection_config.
+	// In proxy mode, the connection_config is ignored.
+	// Connection parameters are taken from proxy_connection_config passed to constructor.
 
 	if (!config_.is_valid()) {
 		set_error("Invalid proxy configuration");
-		return false;
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Invalid proxy configuration", "proxy_connector"});
 	}
 
 	return try_connect();
 }
 
-bool proxy_connector::try_connect()
+kcenon::common::VoidResult proxy_connector::try_connect()
 {
 	state_ = proxy_state::connecting;
 
@@ -125,84 +97,14 @@ bool proxy_connector::try_connect()
 	set_error(oss.str());
 	state_ = proxy_state::error;
 
-	return false;
+	return kcenon::common::VoidResult(
+		kcenon::common::error_info{-2, oss.str(), "proxy_connector"});
 }
 
-bool proxy_connector::create_query(const std::string& query_string)
+kcenon::common::VoidResult proxy_connector::shutdown()
 {
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return false;
-	}
-
-	// TODO: Phase 1-3 - Send prepared statement request to server
-	auto result = send_query("PREPARE", query_string);
-	return !result.empty();
-}
-
-unsigned int proxy_connector::insert_query(const std::string& query_string)
-{
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return 0;
-	}
-
-	// TODO: Phase 1-3 - Send INSERT query to server and parse affected rows
-	send_query("INSERT", query_string);
-	return 0;
-}
-
-unsigned int proxy_connector::update_query(const std::string& query_string)
-{
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return 0;
-	}
-
-	// TODO: Phase 1-3 - Send UPDATE query to server and parse affected rows
-	send_query("UPDATE", query_string);
-	return 0;
-}
-
-unsigned int proxy_connector::delete_query(const std::string& query_string)
-{
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return 0;
-	}
-
-	// TODO: Phase 1-3 - Send DELETE query to server and parse affected rows
-	send_query("DELETE", query_string);
-	return 0;
-}
-
-database_result proxy_connector::select_query(const std::string& query_string)
-{
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return {};
-	}
-
-	// TODO: Phase 1-3 - Send SELECT query to server and deserialize results
-	return send_query("SELECT", query_string);
-}
-
-bool proxy_connector::execute_query(const std::string& query_string)
-{
-	if (!is_connected()) {
-		set_error("Not connected to database_server");
-		return false;
-	}
-
-	// TODO: Phase 1-3 - Send general query to server
-	auto result = send_query("EXECUTE", query_string);
-	return true; // Stub always returns true if connected
-}
-
-bool proxy_connector::disconnect()
-{
-	if (!is_connected()) {
-		return true; // Already disconnected
+	if (!is_initialized()) {
+		return kcenon::common::ok(); // Already disconnected
 	}
 
 	std::lock_guard<std::mutex> lock(mutex_);
@@ -213,7 +115,139 @@ bool proxy_connector::disconnect()
 	server_info_ = std::nullopt;
 	last_error_.clear();
 
-	return true;
+	return kcenon::common::ok();
+}
+
+bool proxy_connector::is_initialized() const
+{
+	return state_.load() == proxy_state::connected;
+}
+
+kcenon::common::Result<uint64_t> proxy_connector::insert_query(const std::string& query_string)
+{
+	if (!is_initialized()) {
+		set_error("Not connected to database_server");
+		return kcenon::common::Result<uint64_t>(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send INSERT query to server and parse affected rows
+	auto result = send_query("INSERT", query_string);
+	if (!result.is_ok()) {
+		return kcenon::common::Result<uint64_t>(result.error());
+	}
+	return kcenon::common::Result<uint64_t>(0ULL);
+}
+
+kcenon::common::Result<uint64_t> proxy_connector::update_query(const std::string& query_string)
+{
+	if (!is_initialized()) {
+		set_error("Not connected to database_server");
+		return kcenon::common::Result<uint64_t>(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send UPDATE query to server and parse affected rows
+	auto result = send_query("UPDATE", query_string);
+	if (!result.is_ok()) {
+		return kcenon::common::Result<uint64_t>(result.error());
+	}
+	return kcenon::common::Result<uint64_t>(0ULL);
+}
+
+kcenon::common::Result<uint64_t> proxy_connector::delete_query(const std::string& query_string)
+{
+	if (!is_initialized()) {
+		set_error("Not connected to database_server");
+		return kcenon::common::Result<uint64_t>(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send DELETE query to server and parse affected rows
+	auto result = send_query("DELETE", query_string);
+	if (!result.is_ok()) {
+		return kcenon::common::Result<uint64_t>(result.error());
+	}
+	return kcenon::common::Result<uint64_t>(0ULL);
+}
+
+kcenon::common::Result<core::database_result> proxy_connector::select_query(const std::string& query_string)
+{
+	if (!is_initialized()) {
+		set_error("Not connected to database_server");
+		return kcenon::common::Result<core::database_result>(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send SELECT query to server and deserialize results
+	return send_query("SELECT", query_string);
+}
+
+kcenon::common::VoidResult proxy_connector::execute_query(const std::string& query_string)
+{
+	if (!is_initialized()) {
+		set_error("Not connected to database_server");
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send general query to server
+	auto result = send_query("EXECUTE", query_string);
+	if (!result.is_ok()) {
+		return kcenon::common::VoidResult(result.error());
+	}
+	return kcenon::common::ok();
+}
+
+kcenon::common::VoidResult proxy_connector::begin_transaction()
+{
+	if (!is_initialized()) {
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send BEGIN TRANSACTION to server
+	in_transaction_ = true;
+	return kcenon::common::ok();
+}
+
+kcenon::common::VoidResult proxy_connector::commit_transaction()
+{
+	if (!is_initialized()) {
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	if (!in_transaction_) {
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-2, "No active transaction", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send COMMIT to server
+	in_transaction_ = false;
+	return kcenon::common::ok();
+}
+
+kcenon::common::VoidResult proxy_connector::rollback_transaction()
+{
+	if (!is_initialized()) {
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-1, "Not connected to database_server", "proxy_connector"});
+	}
+
+	if (!in_transaction_) {
+		return kcenon::common::VoidResult(
+			kcenon::common::error_info{-2, "No active transaction", "proxy_connector"});
+	}
+
+	// TODO: Phase 1-3 - Send ROLLBACK to server
+	in_transaction_ = false;
+	return kcenon::common::ok();
+}
+
+bool proxy_connector::in_transaction() const
+{
+	return in_transaction_.load();
 }
 
 proxy_state proxy_connector::state() const noexcept
@@ -243,8 +277,25 @@ const proxy_connection_config& proxy_connector::config() const noexcept
 	return config_;
 }
 
-database_result proxy_connector::send_query(const std::string& /*query_type*/,
-											const std::string& /*query_string*/)
+std::map<std::string, std::string> proxy_connector::connection_info() const
+{
+	std::map<std::string, std::string> info;
+	info["mode"] = "proxy";
+	info["server_host"] = config_.server_host;
+	info["server_port"] = std::to_string(config_.server_port);
+	info["state"] = to_string(state_.load());
+	info["database_type"] = std::to_string(static_cast<int>(db_type_));
+
+	if (server_info_) {
+		info["server_version"] = server_info_->version;
+	}
+
+	return info;
+}
+
+kcenon::common::Result<core::database_result> proxy_connector::send_query(
+	const std::string& /*query_type*/,
+	const std::string& /*query_string*/)
 {
 	// TODO: Phase 1-3 - Implement actual query sending
 	//
@@ -256,7 +307,7 @@ database_result proxy_connector::send_query(const std::string& /*query_type*/,
 	// 5. Handle errors and retries
 
 	// Stub implementation returns empty result
-	return {};
+	return kcenon::common::Result<core::database_result>(core::database_result{});
 }
 
 void proxy_connector::set_error(const std::string& message)

@@ -37,9 +37,8 @@ A modern C++20 database abstraction layer providing unified access to multiple d
   - Clearer error messages and better IDE support
   - Backward compatible with existing `std::function` APIs
 - **monitoring_system Integration**: Full integration for production-grade metrics collection
-- **Connection Pool v3**: 65x latency improvement (5μs → 77ns) with thread_system integration
-- **Resilient Connections**: Automatic reconnection with health monitoring (<1s recovery)
 - **Immutable Query Builder**: Thread-safe query construction with functional programming style
+- **ProxyMode Pooling**: Server-side connection pooling via database_server middleware (replaced local pooling)
 - All CI/CD pipelines green across platforms
 
 ---

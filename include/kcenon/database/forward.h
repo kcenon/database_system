@@ -22,7 +22,6 @@ namespace core {
 
 // Connection management
 namespace connection {
-    class connection_pool;
     class connection_factory;
     struct connection_config;
     struct connection_stats;

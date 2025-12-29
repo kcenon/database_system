@@ -28,6 +28,16 @@
 
 ### 🔧 **Changed**
 
+#### **connection_pool Code Cleanup (Issue #300)**
+- **Removed orphaned forward declarations** from `forward.h`
+  - `connection_pool` class declaration removed (class no longer exists since Phase 4.3)
+- **Removed dead code** from `async_operations.h`
+  - `connection_pool_async` class removed (depended on removed `connection_pool_base`)
+- **Updated documentation examples** in `service_registration.h`
+  - Replaced `get_connection_pool()` example with `is_connected()` (available API)
+- **Updated README.md** to remove references to removed Connection Pool v3
+  - Clarified that connection pooling is now server-side via ProxyMode
+
 #### **vcpkg.json Standardization (Issue #297)**
 - **Renamed package** from `database-system` to `kcenon-database-system`
   - Follows unified_system ecosystem naming convention

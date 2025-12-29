@@ -173,8 +173,8 @@ inline common::VoidResult unregister_database_services(
  * auto idatabase = container.resolve<common::interfaces::IDatabase>().value();
  * auto manager = get_underlying_database_manager(idatabase);
  * if (manager) {
- *     // Use advanced database_manager features
- *     auto pool = manager->get_connection_pool(::database::database_types::postgresql);
+ *     // Use advanced database_manager features (e.g., ProxyMode configuration)
+ *     auto connected = manager->is_connected();
  * }
  * @endcode
  */

@@ -28,6 +28,16 @@
 
 ### 🔧 **변경됨**
 
+#### **connection_pool 코드 정리 (Issue #300)**
+- **고아 전방 선언 제거** (`forward.h`)
+  - `connection_pool` 클래스 선언 제거 (Phase 4.3 이후 클래스가 더 이상 존재하지 않음)
+- **데드 코드 제거** (`async_operations.h`)
+  - `connection_pool_async` 클래스 제거 (제거된 `connection_pool_base`에 의존)
+- **문서 예제 업데이트** (`service_registration.h`)
+  - `get_connection_pool()` 예제를 `is_connected()` (사용 가능한 API)로 교체
+- **README.md 업데이트** (제거된 Connection Pool v3 참조 제거)
+  - 커넥션 풀링이 이제 ProxyMode를 통해 서버 측에서 제공됨을 명확히 함
+
 #### **vcpkg.json 표준화 (Issue #297)**
 - **패키지명 변경**: `database-system` → `kcenon-database-system`
   - unified_system 생태계 네이밍 규칙 준수

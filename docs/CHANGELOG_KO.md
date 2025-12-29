@@ -34,8 +34,16 @@
 - **`port-version` 추가**: 0 (초기 vcpkg 포트 추적용)
 - **`supports` 추가**: `!(uwp | xbox)` 플랫폼 제한
 - **문서 업데이트**: QUICK_START.md에 새 패키지명 반영
-- **참고**: 생태계 의존성(kcenon-common-system 등)은 Issue #296으로 연기
-  - 생태계 패키지가 vcpkg 레지스트리에 등록된 후 추가 예정
+
+#### **vcpkg.json 생태계 의존성 추가 (Issue #296)**
+- **5개 생태계 의존성 추가** vcpkg.json에:
+  - `kcenon-common-system` - 핵심 유틸리티 및 공통 타입
+  - `kcenon-thread-system` - 고성능 스레딩 프레임워크
+  - `kcenon-logger-system` - 구조화된 로깅 시스템
+  - `kcenon-container-system` - 고급 컨테이너 타입
+  - `kcenon-monitoring-system` - 메트릭 및 모니터링
+- **의존성 형식 단순화**: 일관성을 위해 `asio`를 단순 문자열 형식으로 변경
+- **기존 기능 유지**: 모든 데이터베이스 백엔드 기능(postgresql, mysql, sqlite, testing)은 변경 없이 유지
 
 ---
 

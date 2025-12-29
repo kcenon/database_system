@@ -8,11 +8,6 @@
   "license": "BSD-3-Clause",
   "supports": "!(uwp | xbox)",
   "dependencies": [
-    "kcenon-common-system",
-    "kcenon-thread-system",
-    "kcenon-logger-system",
-    "kcenon-container-system",
-    "kcenon-monitoring-system",
     {
       "name": "fmt",
       "version>=": "10.2.1"
@@ -20,6 +15,16 @@
     "asio"
   ],
   "features": {
+    "ecosystem": {
+      "description": "Enable kcenon ecosystem integration (requires ecosystem packages in vcpkg registry)",
+      "dependencies": [
+        "kcenon-common-system",
+        "kcenon-thread-system",
+        "kcenon-logger-system",
+        "kcenon-container-system",
+        "kcenon-monitoring-system"
+      ]
+    },
     "postgresql": {
       "description": "Enable PostgreSQL database support",
       "dependencies": [

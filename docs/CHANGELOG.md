@@ -36,13 +36,14 @@
 - **Updated documentation**: QUICK_START.md reflects new package name
 
 #### **vcpkg.json Ecosystem Dependencies (Issue #296)**
-- **Added 5 ecosystem dependencies** to vcpkg.json:
+- **Added `ecosystem` feature** with 5 ecosystem dependencies:
   - `kcenon-common-system` - Core utilities and common types
   - `kcenon-thread-system` - High-performance threading framework
   - `kcenon-logger-system` - Structured logging system
   - `kcenon-container-system` - Advanced container types
   - `kcenon-monitoring-system` - Metrics and monitoring
-- **Simplified dependency format**: Changed `asio` to simple string format for consistency
+- **Made ecosystem optional**: Dependencies moved to `ecosystem` feature to allow CI to pass while ecosystem packages are being registered in vcpkg registry
+- **Usage**: Install with `vcpkg install kcenon-database-system[ecosystem]` once packages are available
 - **Preserved existing features**: All database backend features (postgresql, mysql, sqlite, testing) remain unchanged
 
 ---

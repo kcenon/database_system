@@ -36,13 +36,14 @@
 - **문서 업데이트**: QUICK_START.md에 새 패키지명 반영
 
 #### **vcpkg.json 생태계 의존성 추가 (Issue #296)**
-- **5개 생태계 의존성 추가** vcpkg.json에:
+- **`ecosystem` feature 추가** (5개 생태계 의존성 포함):
   - `kcenon-common-system` - 핵심 유틸리티 및 공통 타입
   - `kcenon-thread-system` - 고성능 스레딩 프레임워크
   - `kcenon-logger-system` - 구조화된 로깅 시스템
   - `kcenon-container-system` - 고급 컨테이너 타입
   - `kcenon-monitoring-system` - 메트릭 및 모니터링
-- **의존성 형식 단순화**: 일관성을 위해 `asio`를 단순 문자열 형식으로 변경
+- **생태계 의존성 선택적으로 변경**: vcpkg registry에 패키지가 등록되는 동안 CI가 통과할 수 있도록 `ecosystem` feature로 이동
+- **사용법**: 패키지 등록 후 `vcpkg install kcenon-database-system[ecosystem]`으로 설치
 - **기존 기능 유지**: 모든 데이터베이스 백엔드 기능(postgresql, mysql, sqlite, testing)은 변경 없이 유지
 
 ---

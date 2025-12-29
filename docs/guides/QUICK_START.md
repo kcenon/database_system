@@ -16,7 +16,7 @@ Get started with database_system in 5 minutes.
 ### Method 1: Using vcpkg
 
 ```bash
-vcpkg install database-system[postgresql]:x64-linux
+vcpkg install kcenon-database-system[postgresql]:x64-linux
 ```
 
 ### Method 2: Using FetchContent

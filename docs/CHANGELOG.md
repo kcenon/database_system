@@ -24,7 +24,20 @@
 
 ---
 
-## [Unreleased] - 2025-12-27
+## [Unreleased] - 2025-12-29
+
+### 🔧 **Changed**
+
+#### **vcpkg.json Standardization (Issue #297)**
+- **Renamed package** from `database-system` to `kcenon-database-system`
+  - Follows unified_system ecosystem naming convention
+- **Added `port-version`**: 0 for initial vcpkg port tracking
+- **Added `supports`**: `!(uwp | xbox)` for platform restrictions
+- **Updated documentation**: QUICK_START.md reflects new package name
+- **Note**: Ecosystem dependencies (kcenon-common-system, etc.) deferred to Issue #296
+  - Requires ecosystem packages to be registered in vcpkg registry first
+
+---
 
 ### ⚠️ **Deprecated**
 

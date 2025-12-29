@@ -24,7 +24,27 @@
 
 ---
 
-## [Unreleased] - 2025-12-29
+## [Unreleased] - 2025-12-30
+
+### 📝 **Documentation**
+
+#### **ProxyMode Implementation Status Clarification (Issue #301)**
+- **Updated README.md** to clarify ProxyMode stub status
+  - Added prominent warning banner to ProxyMode section
+  - Added status table showing DirectMode (stable) vs ProxyMode (stub)
+  - Updated code comments to indicate stub status
+  - Clarified that DirectMode is currently the only production-ready option
+- **Updated docs/migration/proxy-mode.md** with implementation roadmap
+  - Added status warning at document start
+  - Added current implementation status table
+  - Added detailed roadmap with phase dependencies
+  - Added dependency chain visualization
+  - Added current recommendation section with external pooling alternatives
+- **Updated database/proxy/proxy_connector.h** documentation
+  - Added @warning directives at file and class level
+  - Added operation status table showing all methods return not_implemented
+
+---
 
 ### 🔧 **Changed**
 

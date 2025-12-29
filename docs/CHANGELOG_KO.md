@@ -24,7 +24,27 @@
 
 ---
 
-## [Unreleased] - 2025-12-29
+## [Unreleased] - 2025-12-30
+
+### 📝 **문서**
+
+#### **ProxyMode 구현 상태 명확화 (Issue #301)**
+- **README.md 업데이트**: ProxyMode stub 상태 명확화
+  - ProxyMode 섹션에 눈에 띄는 경고 배너 추가
+  - DirectMode (안정) vs ProxyMode (stub) 상태 테이블 추가
+  - stub 상태를 나타내는 코드 주석 업데이트
+  - DirectMode가 현재 유일한 프로덕션 준비 옵션임을 명확히 함
+- **docs/migration/proxy-mode.md 업데이트**: 구현 로드맵 추가
+  - 문서 시작 부분에 상태 경고 추가
+  - 현재 구현 상태 테이블 추가
+  - 단계별 의존성이 있는 상세 로드맵 추가
+  - 의존성 체인 시각화 추가
+  - 외부 풀링 대안이 포함된 현재 권장사항 섹션 추가
+- **database/proxy/proxy_connector.h 문서 업데이트**
+  - 파일 및 클래스 수준에 @warning 지시어 추가
+  - 모든 메서드가 not_implemented를 반환함을 보여주는 작업 상태 테이블 추가
+
+---
 
 ### 🔧 **변경됨**
 

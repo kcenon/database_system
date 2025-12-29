@@ -38,6 +38,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @author kcenon
  * @since Phase 4.1
  *
+ * @warning **STUB IMPLEMENTATION** - This is currently a stub. All operations
+ *          will return `database_error_code::not_implemented` errors.
+ *          Full functionality requires `database_server` (Phases 1-3) which
+ *          is not yet available.
+ *
  * @details This file implements the proxy_connector class which handles
  * communication with the database_server middleware. Queries are serialized
  * and sent to the server, which executes them against the actual database.
@@ -45,6 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @note Updated in Issue #287 to implement database_backend interface instead
  *       of deprecated database_base, enabling database_manager to use
  *       database_backend internally for both direct and proxy modes.
+ *
+ * @see docs/migration/proxy-mode.md for implementation roadmap and current status.
  */
 
 #include "../core/database_backend.h"
@@ -90,13 +97,22 @@ constexpr const char* to_string(proxy_state state) noexcept
  * @class proxy_connector
  * @brief Database connector for proxy mode operations.
  *
+ * @warning **STUB IMPLEMENTATION** - Do not use in production.
+ *          All methods will return `not_implemented` errors.
+ *
  * @details This class implements the database_backend interface for proxy mode,
  * where all queries are sent to a database_server middleware instead of
  * directly connecting to the database.
  *
- * ### Current Status (Phase 4.1)
- * This is a stub implementation. The actual network communication will be
+ * ### Current Status (Phase 4.1) - STUB
+ * This is a **stub implementation**. The actual network communication will be
  * implemented when database_server is available (Phases 1-3).
+ *
+ * | Operation | Status |
+ * |-----------|--------|
+ * | initialize() | Returns not_implemented error |
+ * | All queries | Returns not_implemented error |
+ * | Transactions | Returns not_implemented error |
  *
  * ### Thread Safety
  * - All public methods are thread-safe.

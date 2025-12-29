@@ -33,11 +33,9 @@
   - unified_system 생태계 네이밍 규칙 준수
 - **`port-version` 추가**: 0 (초기 vcpkg 포트 추적용)
 - **`supports` 추가**: `!(uwp | xbox)` 플랫폼 제한
-- **생태계 의존성 추가**:
-  - `kcenon-common-system` (Tier 0 - 필수)
-  - `kcenon-thread-system` (Tier 1 - 선택)
-  - `kcenon-container-system` (Tier 1 - 선택)
 - **문서 업데이트**: QUICK_START.md에 새 패키지명 반영
+- **참고**: 생태계 의존성(kcenon-common-system 등)은 Issue #296으로 연기
+  - 생태계 패키지가 vcpkg 레지스트리에 등록된 후 추가 예정
 
 ---
 

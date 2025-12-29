@@ -33,11 +33,9 @@
   - Follows unified_system ecosystem naming convention
 - **Added `port-version`**: 0 for initial vcpkg port tracking
 - **Added `supports`**: `!(uwp | xbox)` for platform restrictions
-- **Added ecosystem dependencies**:
-  - `kcenon-common-system` (Tier 0 - required)
-  - `kcenon-thread-system` (Tier 1 - optional)
-  - `kcenon-container-system` (Tier 1 - optional)
 - **Updated documentation**: QUICK_START.md reflects new package name
+- **Note**: Ecosystem dependencies (kcenon-common-system, etc.) deferred to Issue #296
+  - Requires ecosystem packages to be registered in vcpkg registry first
 
 ---
 

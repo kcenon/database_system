@@ -8,9 +8,6 @@
   "license": "BSD-3-Clause",
   "supports": "!(uwp | xbox)",
   "dependencies": [
-    "kcenon-common-system",
-    "kcenon-thread-system",
-    "kcenon-container-system",
     {
       "name": "fmt",
       "version>=": "10.2.1"

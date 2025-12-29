@@ -1,12 +1,33 @@
 # ProxyMode Migration Guide
 
+> ⚠️ **Status: Development Preview (Stub Implementation)**
+>
+> ProxyMode is currently a **stub implementation**. Full functionality requires `database_server`
+> middleware which is not yet available (Phases 1-3 pending).
+>
+> **For production deployments, please use DirectMode until ProxyMode is fully released.**
+>
+> Attempting to use ProxyMode will result in a `not_implemented` error at runtime.
+
+## Current Implementation Status
+
+| Component | Status | Description |
+|-----------|--------|-------------|
+| `proxy_connector` interface | ✅ Complete | Interface defined and ready |
+| `proxy_config` | ✅ Complete | Configuration structures available |
+| `set_mode_proxy()` API | ✅ Complete | API available in `database_manager` |
+| Network communication | ❌ Not implemented | Awaiting `database_server` |
+| `database_server` | ❌ Not available | Phases 1-3 not started |
+
 ## Overview
 
 This guide helps you migrate from local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) to **ProxyMode** with `database_server` middleware.
 
-### Why Migrate?
+### Why Migrate? *(Future Benefits)*
 
-ProxyMode offers significant advantages over local connection pooling:
+> **Note**: These benefits will be available once `database_server` is implemented.
+
+ProxyMode will offer significant advantages over local connection pooling:
 
 | Feature | Local Pooling | ProxyMode |
 |---------|--------------|-----------|
@@ -229,18 +250,80 @@ Error: TLS handshake failed
 - [Architecture Overview](../ARCHITECTURE.md)
 - [API Reference](../API_REFERENCE.md)
 
+## Implementation Roadmap
+
+### ProxyMode Development Phases
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ProxyMode Implementation                      │
+├─────────────────────────────────────────────────────────────────┤
+│ Phase 4.1 [✅ COMPLETE]                                          │
+│   └── proxy_connector interface and stub implementation          │
+│                                                                  │
+│ Phase 1-3 [❌ NOT STARTED] - database_server                     │
+│   ├── Phase 1: Core server architecture                          │
+│   ├── Phase 2: Connection pool management                        │
+│   └── Phase 3: Authentication and security                       │
+│                                                                  │
+│ Phase 4.2 [⏳ BLOCKED] - Network integration                     │
+│   └── Requires database_server (Phases 1-3)                      │
+│                                                                  │
+│ Phase 4.3 [⏳ BLOCKED] - Production hardening                    │
+│   └── Requires network integration (Phase 4.2)                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Dependency Chain
+
+```
+database_server (Phases 1-3) ← Required first
+    ↓
+proxy_connector network impl (Phase 4.2) ← Currently blocked
+    ↓
+Production-ready ProxyMode (Phase 4.3) ← Not yet possible
+```
+
 ## Migration Timeline
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| Phase 4.1 | ✅ Complete | ProxyMode infrastructure added |
-| Phase 4.2 | ✅ Complete | Deprecation warnings added |
-| Phase 4.3 | ✅ Complete | Pooling code removal |
+| Phase 4.1 | ✅ Complete | ProxyMode infrastructure added (stub) |
+| Phase 1-3 | ❌ Not started | database_server implementation |
+| Phase 4.2 | ⏳ Blocked | Network communication integration |
+| Phase 4.3 | ⏳ Blocked | Production hardening |
 
-All phases are now complete. The following directories and files have been removed:
+### What Has Been Removed
+
+The following directories and files have been removed in Phase 4.3:
 - `database/pooling/` - Connection pool implementations
 - `database/resilience/` - Health monitoring and resilient connections
 
+> ⚠️ **Important**: Local connection pooling has been removed, but ProxyMode is not yet functional.
+> **DirectMode without pooling is the current production option.**
+
+## Current Recommendation
+
+Until ProxyMode is fully implemented:
+
+1. **Use DirectMode** for all deployments (development, testing, and production)
+2. **Manage connection limits** at the application level or via external tools (e.g., PgBouncer for PostgreSQL)
+3. **Monitor** for `database_server` releases to plan future migration
+
+```cpp
+// Current recommended approach (DirectMode)
+auto context = std::make_shared<database::database_context>();
+auto db_mgr = std::make_shared<database::database_manager>(context);
+
+db_mgr->set_mode(database::database_types::postgres);
+db_mgr->connect("host=localhost port=5432 dbname=mydb user=user password=pass");
+
+// For production connection pooling, consider external solutions:
+// - PostgreSQL: PgBouncer, Pgpool-II
+// - MySQL: ProxySQL, MySQL Router
+// - General: HAProxy with database health checks
+```
+
 ---
 
-*Last updated: Phase 4.3 Complete*
+*Last updated: Phase 4.1 Complete (Stub Implementation)*

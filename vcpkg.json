@@ -8,13 +8,16 @@
   "license": "BSD-3-Clause",
   "supports": "!(uwp | xbox)",
   "dependencies": [
+    "kcenon-common-system",
+    "kcenon-thread-system",
+    "kcenon-logger-system",
+    "kcenon-container-system",
+    "kcenon-monitoring-system",
     {
       "name": "fmt",
       "version>=": "10.2.1"
     },
-    {
-      "name": "asio"
-    }
+    "asio"
   ],
   "features": {
     "postgresql": {

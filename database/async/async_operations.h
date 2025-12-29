@@ -393,27 +393,6 @@ namespace database::async
 		std::vector<saga_step> steps_;
 	};
 
-	/**
-	 * @class connection_pool_async
-	 * @brief Asynchronous connection pool wrapper.
-	 */
-	class connection_pool_async
-	{
-	public:
-		connection_pool_async(std::shared_ptr<class connection_pool_base> pool);
-
-		// Asynchronous connection management
-		async_result<std::shared_ptr<async_database>> acquire_connection_async();
-		void release_connection_async(std::shared_ptr<async_database> connection);
-
-		// Pool monitoring
-		async_result<class connection_stats> get_stats_async() const;
-
-	private:
-		std::shared_ptr<class connection_pool_base> pool_;
-		std::shared_ptr<async_executor> executor_;
-	};
-
 	// Template implementation for async_executor
 	template<typename F, typename... Args>
 		requires concepts::SubmittableTask<F, Args...>

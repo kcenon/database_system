@@ -24,7 +24,22 @@
 
 ---
 
-## [Unreleased] - 2025-12-27
+## [Unreleased] - 2025-12-29
+
+### 🔧 **변경됨**
+
+#### **vcpkg.json 표준화 (Issue #297)**
+- **패키지명 변경**: `database-system` → `kcenon-database-system`
+  - unified_system 생태계 네이밍 규칙 준수
+- **`port-version` 추가**: 0 (초기 vcpkg 포트 추적용)
+- **`supports` 추가**: `!(uwp | xbox)` 플랫폼 제한
+- **생태계 의존성 추가**:
+  - `kcenon-common-system` (Tier 0 - 필수)
+  - `kcenon-thread-system` (Tier 1 - 선택)
+  - `kcenon-container-system` (Tier 1 - 선택)
+- **문서 업데이트**: QUICK_START.md에 새 패키지명 반영
+
+---
 
 ### ⚠️ **Deprecated**
 

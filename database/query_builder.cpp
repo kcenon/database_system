@@ -1156,24 +1156,37 @@ namespace database
 			case database_types::postgres:
 			case database_types::mysql:
 			case database_types::sqlite:
+				// Release unused builders to save memory
+				mongo_builder_.reset();
+				redis_builder_.reset();
 				if (!sql_builder_) {
 					sql_builder_ = std::make_unique<sql_query_builder>();
 				}
 				break;
 
 			case database_types::mongodb:
+				// Release unused builders to save memory
+				sql_builder_.reset();
+				redis_builder_.reset();
 				if (!mongo_builder_) {
 					mongo_builder_ = std::make_unique<mongodb_query_builder>();
 				}
 				break;
 
 			case database_types::redis:
+				// Release unused builders to save memory
+				sql_builder_.reset();
+				mongo_builder_.reset();
 				if (!redis_builder_) {
 					redis_builder_ = std::make_unique<redis_query_builder>();
 				}
 				break;
 
 			default:
+				// Release all builders when no type is set
+				sql_builder_.reset();
+				mongo_builder_.reset();
+				redis_builder_.reset();
 				break;
 		}
 	}

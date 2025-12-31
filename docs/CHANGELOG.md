@@ -42,6 +42,13 @@
 
 ### 🐛 **Fixed**
 
+#### **Incomplete Type Error in Fallback Mode (Issue #309)**
+- **Added complete `fallback_context` class definition** in `thread_pool_adapter.h`
+  - Forward declaration alone was insufficient for default parameter initialization
+  - `async_executor` constructor requires complete type for `thread_context_type()` default argument
+  - Build failed on all platforms (Linux, macOS, Windows) when `USE_THREAD_SYSTEM` was not defined
+- **No API changes**: Fix is internal to adapter layer
+
 #### **SQLite Backend Test Failures in Sanitizer Builds (Issue #307)**
 - **Fixed test expectations** when `USE_SQLITE` is not defined
   - Changed `EXPECT_FALSE(connectToMemory())` to `GTEST_SKIP()` for 13 tests

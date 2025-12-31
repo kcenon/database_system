@@ -42,6 +42,13 @@
 
 ### 🐛 **수정됨**
 
+#### **폴백 모드에서 불완전 타입 오류 수정 (Issue #309)**
+- **`thread_pool_adapter.h`에 완전한 `fallback_context` 클래스 정의 추가**
+  - 전방 선언만으로는 기본 매개변수 초기화에 불충분
+  - `async_executor` 생성자는 `thread_context_type()` 기본 인자에 완전한 타입 필요
+  - `USE_THREAD_SYSTEM` 미정의 시 모든 플랫폼(Linux, macOS, Windows)에서 빌드 실패
+- **API 변경 없음**: 수정은 어댑터 레이어 내부에서만 적용
+
 #### **Sanitizer 빌드에서 SQLite 백엔드 테스트 실패 수정 (Issue #307)**
 - **`USE_SQLITE` 미정의 시 테스트 기대값 수정**
   - 13개 테스트에서 `EXPECT_FALSE(connectToMemory())`를 `GTEST_SKIP()`으로 변경

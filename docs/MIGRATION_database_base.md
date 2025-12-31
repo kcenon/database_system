@@ -7,7 +7,22 @@ As of Issue #287, `database_base` is deprecated in favor of the new `database_ba
 ## Timeline
 
 - **v0.4.x**: `database_base` deprecated, `database_backend` recommended
-- **v0.5.0.0**: `database_base` will be removed
+- **v0.4.4**: Legacy manager implementations removed (sqlite_manager, mysql_manager, mongodb_manager, redis_manager)
+- **v0.5.0.0**: `database_base` interface will be removed completely
+
+## Removed Legacy Managers
+
+As of v0.4.4 (#304), the following legacy manager implementations have been removed:
+
+| Removed File | Replacement |
+|--------------|-------------|
+| `database/backends/sqlite/sqlite_manager.{h,cpp}` | `sqlite_backend` |
+| `database/backends/mysql/mysql_manager.{h,cpp}` | `mysql_backend` |
+| `database/backends/mongodb/mongodb_manager.{h,cpp}` | `mongodb_backend` |
+| `database/backends/redis/redis_manager.{h,cpp}` | `redis_backend` |
+
+These legacy managers implemented `database_base` and used the old API with bool/unsigned int returns.
+All new development should use the `*_backend` implementations with `Result<T>` error handling.
 
 ## Key Changes
 
@@ -273,4 +288,6 @@ For legacy code that must use `database_base`:
 - [database_base.h](../database/database_base.h) - Deprecated interface (for reference)
 - [database_base_adapter.h](../database/database_base_adapter.h) - Adapter for gradual migration
 - [mock_backend.h](../tests/mocks/mock_backend.h) - Test mock for database_backend
-- [adapter_usage_example.cpp](../samples/migration/adapter_usage_example.cpp) - Adapter usage example
+
+> **Note**: The `adapter_usage_example.cpp` sample has been removed as legacy managers are no longer available.
+> Use the new `*_backend` implementations directly instead.

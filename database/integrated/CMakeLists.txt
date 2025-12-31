@@ -77,8 +77,8 @@ if(INTEGRATED_DB_SOURCES)
 
     target_include_directories(${INTEGRATED_DB_TARGET}
         PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>  # For #include "integrated/..."
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>     # For #include <kcenon/database/...>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>      # For #include "integrated/..."
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>  # For #include <kcenon/database/...>
             $<INSTALL_INTERFACE:include>
     )
 
@@ -110,7 +110,7 @@ else()
     target_include_directories(${INTEGRATED_DB_TARGET}
         INTERFACE
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>     # For #include <kcenon/database/...>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>  # For #include <kcenon/database/...>
             $<INSTALL_INTERFACE:include>
     )
 endif()

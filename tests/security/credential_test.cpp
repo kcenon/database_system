@@ -17,23 +17,13 @@
 #include <sstream>
 #include <regex>
 
-// Suppress deprecation warnings for legacy interface testing
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-#include "database/database_base.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/core/database_backend.h"
 #include "database/database_types.h"
-#include "database/backends/sqlite/sqlite_manager.h"
 
 using namespace database;
+using namespace database::backends;
+using namespace database::core;
 
 /**
  * @class CredentialSecurityTest
@@ -72,17 +62,18 @@ protected:
  * the password from the connection string.
  */
 TEST_F(CredentialSecurityTest, PasswordNotInErrorMessages) {
-    auto db = std::make_unique<sqlite_manager>();
+    auto db = std::make_unique<sqlite_backend>();
 
     // Try connecting with a path that contains password-like info
     // Note: SQLite doesn't use passwords, but we test the principle
-    std::string test_path_with_secret = "/nonexistent/secret123/database.db";
+    connection_config config;
+    config.database = "/nonexistent/secret123/database.db";
 
-    bool connected = db->connect(test_path_with_secret);
+    auto result = db->initialize(config);
 
     // Connection should fail for non-existent path
 #ifdef USE_SQLITE
-    EXPECT_FALSE(connected);
+    EXPECT_FALSE(result.is_ok());
 #endif
 
     // Even if we had a way to get error messages,
@@ -96,14 +87,18 @@ TEST_F(CredentialSecurityTest, PasswordNotInErrorMessages) {
  * @brief Tests that failed connections don't expose credentials
  */
 TEST_F(CredentialSecurityTest, PasswordNotExposedOnConnectionFailure) {
-    // Simulate a connection string with embedded credentials
-    std::string conn_string = "host=localhost;port=5432;database=test;"
-                              "user=admin;password=SuperSecret123!@#";
+    // Simulate a connection with credentials
+    connection_config config;
+    config.host = "localhost";
+    config.port = 5432;
+    config.database = "test";
+    config.username = "admin";
+    config.password = "SuperSecret123!@#";
 
     // Capture any console output during connection attempt
     std::string output = captureOutput(std::cerr, [&]() {
-        auto db = std::make_unique<sqlite_manager>();
-        db->connect(conn_string);  // Will fail - SQLite doesn't parse this format
+        auto db = std::make_unique<sqlite_backend>();
+        db->initialize(config);  // Will fail - SQLite doesn't use network connections
     });
 
     // Verify password is not in captured output
@@ -138,12 +133,16 @@ TEST_F(CredentialSecurityTest, SpecialCharactersInPassword) {
 
     for (const auto& pwd : special_passwords) {
         // These should not cause crashes or undefined behavior
-        auto db = std::make_unique<sqlite_manager>();
+        auto db = std::make_unique<sqlite_backend>();
+
+        connection_config config;
+        config.database = ":memory:";
+        config.password = pwd;
 
         // SQLite uses file paths, not connection strings with passwords
         // But the parsing should be safe regardless
         EXPECT_NO_THROW({
-            db->connect(":memory:");
+            db->initialize(config);
         }) << "Connection failed with password containing special chars: " << pwd;
     }
 }
@@ -161,13 +160,16 @@ TEST_F(CredentialSecurityTest, ConnectionStringInjectionPrevention) {
         "database=test;--comment",            // Comment injection
     };
 
-    for (const auto& conn_str : injection_attempts) {
-        auto db = std::make_unique<sqlite_manager>();
+    for (const auto& db_name : injection_attempts) {
+        auto db = std::make_unique<sqlite_backend>();
+
+        connection_config config;
+        config.database = db_name;
 
         // Should not crash or behave unexpectedly
         EXPECT_NO_THROW({
-            db->connect(conn_str);
-        }) << "Connection string injection attempt caused issue: " << conn_str;
+            db->initialize(config);
+        }) << "Connection string injection attempt caused issue: " << db_name;
     }
 }
 
@@ -182,14 +184,17 @@ TEST_F(CredentialSecurityTest, ConnectionStringInjectionPrevention) {
  * When logging is enabled, passwords should be masked or omitted.
  */
 TEST_F(CredentialSecurityTest, ConnectionLogDoesNotContainPassword) {
+#ifdef USE_SQLITE
     std::string output;
 
     // Capture clog output during connection
     output = captureOutput(std::clog, [&]() {
-        auto db = std::make_unique<sqlite_manager>();
-        db->connect(":memory:");
+        auto db = std::make_unique<sqlite_backend>();
+        connection_config config;
+        config.database = ":memory:";
+        db->initialize(config);
         db->execute_query("SELECT 1");
-        db->disconnect();
+        db->shutdown();
     });
 
     // Look for common password patterns that shouldn't appear
@@ -213,6 +218,9 @@ TEST_F(CredentialSecurityTest, ConnectionLogDoesNotContainPassword) {
         EXPECT_TRUE(lower_output.find(lower_pattern) == std::string::npos)
             << "Sensitive pattern '" << pattern << "' found in logs";
     }
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
 }
 
 /**
@@ -240,10 +248,13 @@ TEST_F(CredentialSecurityTest, DebugModeMasksCredentials) {
  * without specialized tools, but we can verify the principle.
  */
 TEST_F(CredentialSecurityTest, PasswordNotInCoreAfterDisconnect) {
+#ifdef USE_SQLITE
     {
-        auto db = std::make_unique<sqlite_manager>();
-        db->connect(":memory:");
-        db->disconnect();
+        auto db = std::make_unique<sqlite_backend>();
+        connection_config config;
+        config.database = ":memory:";
+        db->initialize(config);
+        db->shutdown();
         // db goes out of scope
     }
 
@@ -251,6 +262,9 @@ TEST_F(CredentialSecurityTest, PasswordNotInCoreAfterDisconnect) {
     // This is a design verification - actual memory clearing requires
     // tools like Valgrind or specialized memory analyzers
     SUCCEED() << "Connection objects should clear credentials on disconnect";
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
 }
 
 //=============================================================================
@@ -281,11 +295,14 @@ TEST_F(CredentialSecurityTest, EnvironmentCredentialsNotLogged) {
  * @brief Tests that empty passwords are handled safely
  */
 TEST_F(CredentialSecurityTest, EmptyPasswordHandled) {
-    auto db = std::make_unique<sqlite_manager>();
+    auto db = std::make_unique<sqlite_backend>();
 
-    // Empty path (like empty password) should be handled gracefully
+    // Empty database path should be handled gracefully
+    connection_config config;
+    config.database = "";
+
     EXPECT_NO_THROW({
-        bool result = db->connect("");
+        auto result = db->initialize(config);
         // Empty connection string should fail gracefully
         (void)result;
     });
@@ -296,23 +313,16 @@ TEST_F(CredentialSecurityTest, EmptyPasswordHandled) {
  * @brief Tests that very long passwords don't cause buffer overflows
  */
 TEST_F(CredentialSecurityTest, VeryLongPasswordHandled) {
-    auto db = std::make_unique<sqlite_manager>();
+    auto db = std::make_unique<sqlite_backend>();
 
-    // Very long path (simulating very long password in connection string)
-    std::string very_long = std::string(100000, 'a') + ".db";
+    // Very long password (simulating very long password in connection string)
+    connection_config config;
+    config.database = ":memory:";
+    config.password = std::string(100000, 'a');
 
     EXPECT_NO_THROW({
-        bool result = db->connect(very_long);
+        auto result = db->initialize(config);
         // Should fail gracefully, not crash or buffer overflow
         (void)result;
-    }) << "Very long connection string caused crash";
+    }) << "Very long password caused crash";
 }
-
-// Restore diagnostic settings
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif

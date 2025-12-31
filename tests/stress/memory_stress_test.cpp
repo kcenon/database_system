@@ -17,7 +17,8 @@
 #include <vector>
 #include <chrono>
 
-#include "database/backends/sqlite/sqlite_manager.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/core/database_backend.h"
 #include "database/query_builder.h"
 
 #ifdef __APPLE__
@@ -26,6 +27,8 @@
 #endif
 
 using namespace database;
+using namespace database::backends;
+using namespace database::core;
 
 /**
  * @class MemoryStressTest
@@ -33,20 +36,22 @@ using namespace database;
  */
 class MemoryStressTest : public ::testing::Test {
 protected:
-    std::unique_ptr<sqlite_manager> db_;
+    std::unique_ptr<sqlite_backend> db_;
 
     void SetUp() override {
-        db_ = std::make_unique<sqlite_manager>();
+        db_ = std::make_unique<sqlite_backend>();
 #ifdef USE_SQLITE
-        ASSERT_TRUE(db_->connect(":memory:"));
+        connection_config config;
+        config.database = ":memory:";
+        ASSERT_TRUE(db_->initialize(config).is_ok());
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
     }
 
     void TearDown() override {
-        if (db_) {
-            db_->disconnect();
+        if (db_ && db_->is_initialized()) {
+            db_->shutdown();
         }
     }
 
@@ -93,9 +98,8 @@ protected:
 TEST_F(MemoryStressTest, LargeResultSetMemory) {
 #ifdef USE_SQLITE
     // Create table
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE large_data (id INTEGER PRIMARY KEY, data TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE large_data (id INTEGER PRIMARY KEY, data TEXT)"
+    ).is_ok());
 
     // Insert data (1000 rows with 1KB each)
     constexpr int NUM_ROWS = 1000;
@@ -104,13 +108,17 @@ TEST_F(MemoryStressTest, LargeResultSetMemory) {
 
     for (int i = 0; i < NUM_ROWS; ++i) {
         std::string query = "INSERT INTO large_data (data) VALUES ('" + data_value + "')";
-        ASSERT_GT(db_->insert_query(query), 0u);
+        auto insert_result = db_->insert_query(query);
+        ASSERT_TRUE(insert_result.is_ok());
+        ASSERT_GT(insert_result.value(), 0u);
     }
 
     size_t before_query = getCurrentMemoryUsage();
 
     // Query all data
-    auto result = db_->select_query("SELECT * FROM large_data");
+    auto query_result = db_->select_query("SELECT * FROM large_data");
+    ASSERT_TRUE(query_result.is_ok());
+    auto result = query_result.value();
 
     size_t after_query = getCurrentMemoryUsage();
 
@@ -149,8 +157,7 @@ TEST_F(MemoryStressTest, RepeatedQueryMemoryStability) {
 #ifdef USE_SQLITE
     // Create and populate table
     ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE test_table (id INTEGER PRIMARY KEY, value TEXT)"
-    ));
+        "CREATE TABLE test_table (id INTEGER PRIMARY KEY, value TEXT)").is_ok());
 
     for (int i = 0; i < 100; ++i) {
         db_->insert_query("INSERT INTO test_table (value) VALUES ('test_value_" +
@@ -249,9 +256,7 @@ TEST_F(MemoryStressTest, QueryBuilderMemoryUsage) {
  */
 TEST_F(MemoryStressTest, ResultSetProperCleanup) {
 #ifdef USE_SQLITE
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE cleanup_test (id INTEGER PRIMARY KEY, data TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE cleanup_test (id INTEGER PRIMARY KEY, data TEXT)").is_ok());
 
     // Insert some data
     std::string data(500, 'A');
@@ -261,7 +266,9 @@ TEST_F(MemoryStressTest, ResultSetProperCleanup) {
 
     // Query and clear in a loop
     for (int iteration = 0; iteration < 10; ++iteration) {
-        database_result result = db_->select_query("SELECT * FROM cleanup_test");
+        auto query_result = db_->select_query("SELECT * FROM cleanup_test");
+        ASSERT_TRUE(query_result.is_ok());
+        database_result result = query_result.value();
         EXPECT_EQ(result.size(), 50u);
 
         // Explicitly clear
@@ -281,9 +288,7 @@ TEST_F(MemoryStressTest, ResultSetProperCleanup) {
  */
 TEST_F(MemoryStressTest, PartialResultConsumption) {
 #ifdef USE_SQLITE
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE partial_test (id INTEGER PRIMARY KEY, data TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE partial_test (id INTEGER PRIMARY KEY, data TEXT)").is_ok());
 
     std::string data(200, 'B');
     for (int i = 0; i < 100; ++i) {
@@ -294,10 +299,10 @@ TEST_F(MemoryStressTest, PartialResultConsumption) {
 
     // Query but only use first few rows
     for (int i = 0; i < 100; ++i) {
-        auto result = db_->select_query("SELECT * FROM partial_test");
-        if (!result.empty()) {
+        auto query_result = db_->select_query("SELECT * FROM partial_test");
+        if (query_result.is_ok() && !query_result.value().empty()) {
             // Only access first row
-            auto& first_row = result[0];
+            auto& first_row = query_result.value()[0];
             (void)first_row;
         }
         // Result goes out of scope
@@ -326,9 +331,7 @@ TEST_F(MemoryStressTest, PartialResultConsumption) {
  */
 TEST_F(MemoryStressTest, MixedOperationsMemoryStability) {
 #ifdef USE_SQLITE
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE mixed_test (id INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE mixed_test (id INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT)").is_ok());
 
     size_t baseline = getCurrentMemoryUsage();
     constexpr int ITERATIONS = 100;
@@ -382,9 +385,7 @@ TEST_F(MemoryStressTest, MixedOperationsMemoryStability) {
  */
 TEST_F(MemoryStressTest, VeryLongStringHandling) {
 #ifdef USE_SQLITE
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE long_string_test (id INTEGER PRIMARY KEY, data TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE long_string_test (id INTEGER PRIMARY KEY, data TEXT)").is_ok());
 
     // Insert progressively longer strings
     std::vector<size_t> sizes = {1000, 5000, 10000, 50000};
@@ -399,8 +400,9 @@ TEST_F(MemoryStressTest, VeryLongStringHandling) {
     }
 
     // Query and verify
-    auto result = db_->select_query("SELECT * FROM long_string_test");
-    EXPECT_EQ(result.size(), sizes.size());
+    auto query_result = db_->select_query("SELECT * FROM long_string_test");
+    ASSERT_TRUE(query_result.is_ok());
+    EXPECT_EQ(query_result.value().size(), sizes.size());
 
     SUCCEED() << "Successfully handled strings up to " << sizes.back() << " bytes";
 #else
@@ -414,9 +416,7 @@ TEST_F(MemoryStressTest, VeryLongStringHandling) {
  */
 TEST_F(MemoryStressTest, ManySmallStrings) {
 #ifdef USE_SQLITE
-    ASSERT_TRUE(db_->execute_query(
-        "CREATE TABLE small_strings (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)"
-    ));
+    ASSERT_TRUE(db_->execute_query("CREATE TABLE small_strings (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)").is_ok());
 
     constexpr int NUM_STRINGS = 5000;
     constexpr int STRING_SIZE = 50;
@@ -429,8 +429,9 @@ TEST_F(MemoryStressTest, ManySmallStrings) {
     }
 
     // Query all
-    auto result = db_->select_query("SELECT * FROM small_strings");
-    EXPECT_EQ(result.size(), static_cast<size_t>(NUM_STRINGS));
+    auto query_result = db_->select_query("SELECT * FROM small_strings");
+    ASSERT_TRUE(query_result.is_ok());
+    EXPECT_EQ(query_result.value().size(), static_cast<size_t>(NUM_STRINGS));
 
     size_t final_memory = getCurrentMemoryUsage();
 

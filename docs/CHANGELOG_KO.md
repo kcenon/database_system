@@ -24,7 +24,18 @@
 
 ---
 
-## [Unreleased] - 2025-12-30
+## [Unreleased] - 2025-12-31
+
+### 🐛 **수정됨**
+
+#### **Sanitizer 빌드에서 SQLite 백엔드 테스트 실패 수정 (Issue #307)**
+- **`USE_SQLITE` 미정의 시 테스트 기대값 수정**
+  - 13개 테스트에서 `EXPECT_FALSE(connectToMemory())`를 `GTEST_SKIP()`으로 변경
+  - Mock 모드에서 초기화가 성공하므로 테스트는 실패 대신 스킵해야 함
+  - 영향받는 테스트: 연결이 필요한 모든 SQLite 백엔드 테스트
+- **기존 동작과 일관성 유지**: `ConcurrentReads` 테스트는 이미 `GTEST_SKIP()` 사용 중
+
+---
 
 ### 📝 **문서**
 

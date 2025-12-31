@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "database/backends/sqlite/sqlite_manager.h"
 #include "database/core/database_context.h"
 #include "database/database_manager.h"
 #include <chrono>

@@ -17,9 +17,12 @@
 #include <vector>
 
 #include "database/query_builder.h"
-#include "database/backends/sqlite/sqlite_manager.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/core/database_backend.h"
 
 using namespace database;
+using namespace database::backends;
+using namespace database::core;
 
 /**
  * @class SQLInjectionTest
@@ -27,38 +30,42 @@ using namespace database;
  */
 class SQLInjectionTest : public ::testing::Test {
 protected:
-    std::unique_ptr<sqlite_manager> db_;
+    std::unique_ptr<sqlite_backend> db_;
     sql_query_builder builder_;
 
     void SetUp() override {
-        db_ = std::make_unique<sqlite_manager>();
+        db_ = std::make_unique<sqlite_backend>();
 #ifdef USE_SQLITE
-        ASSERT_TRUE(db_->connect(":memory:"));
-        ASSERT_TRUE(db_->execute_query(
-            "CREATE TABLE users ("
+        connection_config config;
+        config.database = ":memory:";
+        ASSERT_TRUE(db_->initialize(config).is_ok());
+        ASSERT_TRUE(db_->execute_query("CREATE TABLE users ("
             "  id INTEGER PRIMARY KEY,"
             "  name TEXT,"
             "  email TEXT,"
             "  password_hash TEXT"
-            ")"
-        ));
+            ")").is_ok());
         // Insert test data
-        ASSERT_GT(db_->insert_query(
+        auto r1 = db_->insert_query(
             "INSERT INTO users (id, name, email, password_hash) "
             "VALUES (1, 'Alice', 'alice@test.com', 'hash123')"
-        ), 0u);
-        ASSERT_GT(db_->insert_query(
+        );
+        ASSERT_TRUE(r1.is_ok());
+        ASSERT_GT(r1.value(), 0u);
+        auto r2 = db_->insert_query(
             "INSERT INTO users (id, name, email, password_hash) "
             "VALUES (2, 'Bob', 'bob@test.com', 'hash456')"
-        ), 0u);
+        );
+        ASSERT_TRUE(r2.is_ok());
+        ASSERT_GT(r2.value(), 0u);
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
     }
 
     void TearDown() override {
-        if (db_) {
-            db_->disconnect();
+        if (db_ && db_->is_initialized()) {
+            db_->shutdown();
         }
         builder_.reset();
     }
@@ -85,12 +92,14 @@ TEST_F(SQLInjectionTest, BasicInjectionAttempt) {
         .where("name", "=", malicious_input)
         .build();
 
-    auto result = db_->select_query(query);
+    auto query_result = db_->select_query(query);
 
     // If properly escaped, should return 0 rows (no user named "' OR '1'='1")
     // If vulnerable, would return all rows
-    EXPECT_LE(result.size(), 1u)
-        << "Possible SQL injection vulnerability: query returned multiple rows";
+    if (query_result.is_ok()) {
+        EXPECT_LE(query_result.value().size(), 1u)
+            << "Possible SQL injection vulnerability: query returned multiple rows";
+    }
 #else
     GTEST_SKIP() << "SQLite not available";
 #endif
@@ -113,10 +122,12 @@ TEST_F(SQLInjectionTest, CommentInjectionAttempt) {
         .where("name", "=", malicious_input)
         .build();
 
-    auto result = db_->select_query(query);
+    auto query_result = db_->select_query(query);
 
     // Should return 0 rows - no user named "admin'--"
-    EXPECT_EQ(result.size(), 0u);
+    if (query_result.is_ok()) {
+        EXPECT_EQ(query_result.value().size(), 0u);
+    }
 #else
     GTEST_SKIP() << "SQLite not available";
 #endif
@@ -144,7 +155,7 @@ TEST_F(SQLInjectionTest, BatchStatementInjectionAttempt) {
 
     // Verify table still exists by querying it
     auto check = db_->select_query("SELECT COUNT(*) as cnt FROM users");
-    EXPECT_FALSE(check.empty())
+    EXPECT_TRUE(check.is_ok() && !check.value().empty())
         << "CRITICAL: Table appears to have been dropped!";
 #else
     GTEST_SKIP() << "SQLite not available";
@@ -180,15 +191,17 @@ TEST_F(SQLInjectionTest, UnionInjectionAttempt) {
         .where("name", "=", malicious_input)
         .build();
 
-    auto result = db_->select_query(query);
+    auto query_result = db_->select_query(query);
 
     // Check that sensitive data was not leaked
     bool found_secret = false;
-    for (const auto& row : result) {
-        for (const auto& [key, value] : row) {
-            if (std::holds_alternative<std::string>(value)) {
-                if (std::get<std::string>(value).find("top_secret") != std::string::npos) {
-                    found_secret = true;
+    if (query_result.is_ok()) {
+        for (const auto& row : query_result.value()) {
+            for (const auto& [key, value] : row) {
+                if (std::holds_alternative<std::string>(value)) {
+                    if (std::get<std::string>(value).find("top_secret") != std::string::npos) {
+                        found_secret = true;
+                    }
                 }
             }
         }
@@ -214,10 +227,11 @@ TEST_F(SQLInjectionTest, UnionInjectionAttempt) {
 TEST_F(SQLInjectionTest, ApostropheInValueSafe) {
 #ifdef USE_SQLITE
     // Insert a user with apostrophe in name
-    db_->insert_query(
+    auto insert_result = db_->insert_query(
         "INSERT INTO users (id, name, email, password_hash) "
         "VALUES (3, 'O''Brien', 'obrien@test.com', 'hash789')"
     );
+    (void)insert_result;
 
     database_value safe_value = std::string("O'Brien");
 
@@ -300,11 +314,11 @@ TEST_F(SQLInjectionTest, RawWhereBypassesEscaping) {
         .from("users")
         .build();
 
-    auto result = db_->select_query(query);
+    auto query_result = db_->select_query(query);
 
     // Raw method WILL be vulnerable - this is expected behavior
     // Document this as a security consideration
-    if (result.size() > 1) {
+    if (query_result.is_ok() && query_result.value().size() > 1) {
         // This is expected - raw methods bypass escaping
         SUCCEED() << "SECURITY NOTE: where_raw() bypasses SQL escaping as documented. "
                   << "Only use with trusted input.";

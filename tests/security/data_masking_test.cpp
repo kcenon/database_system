@@ -18,23 +18,13 @@
 #include <vector>
 #include <regex>
 
-// Suppress deprecation warnings for legacy interface testing
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-#include "database/database_base.h"
-#include "database/backends/sqlite/sqlite_manager.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/core/database_backend.h"
 #include "database/query_builder.h"
 
 using namespace database;
+using namespace database::backends;
+using namespace database::core;
 
 /**
  * @class DataMaskingTest
@@ -42,12 +32,14 @@ using namespace database;
  */
 class DataMaskingTest : public ::testing::Test {
 protected:
-    std::unique_ptr<sqlite_manager> db_;
+    std::unique_ptr<sqlite_backend> db_;
 
     void SetUp() override {
-        db_ = std::make_unique<sqlite_manager>();
+        db_ = std::make_unique<sqlite_backend>();
 #ifdef USE_SQLITE
-        ASSERT_TRUE(db_->connect(":memory:"));
+        connection_config config;
+        config.database = ":memory:";
+        ASSERT_TRUE(db_->initialize(config).is_ok());
 
         // Create tables with sensitive data
         ASSERT_TRUE(db_->execute_query(
@@ -58,22 +50,24 @@ protected:
             "  bank_account TEXT,"
             "  password_hash TEXT"
             ")"
-        ));
+        ).is_ok());
 
         // Insert test sensitive data
-        ASSERT_GT(db_->insert_query(
+        auto insert_result = db_->insert_query(
             "INSERT INTO sensitive_data "
             "(id, ssn, credit_card, bank_account, password_hash) VALUES "
             "(1, '123-45-6789', '4111111111111111', 'ACC123456789', 'hash_secret_123')"
-        ), 0u);
+        );
+        ASSERT_TRUE(insert_result.is_ok());
+        ASSERT_GT(insert_result.value(), 0u);
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
     }
 
     void TearDown() override {
-        if (db_) {
-            db_->disconnect();
+        if (db_ && db_->is_initialized()) {
+            db_->shutdown();
         }
     }
 
@@ -111,8 +105,9 @@ protected:
 TEST_F(DataMaskingTest, QueryResultsNotLeakedInExceptions) {
 #ifdef USE_SQLITE
     // First, successfully query sensitive data
-    auto result = db_->select_query("SELECT * FROM sensitive_data");
-    ASSERT_FALSE(result.empty());
+    auto query_result = db_->select_query("SELECT * FROM sensitive_data");
+    ASSERT_TRUE(query_result.is_ok());
+    ASSERT_FALSE(query_result.value().empty());
 
     // Now try to cause an error
     try {
@@ -164,7 +159,9 @@ TEST_F(DataMaskingTest, DatabaseErrorsNotLeakData) {
  */
 TEST_F(DataMaskingTest, ResultDebugOutputMasked) {
 #ifdef USE_SQLITE
-    auto result = db_->select_query("SELECT * FROM sensitive_data");
+    auto query_result = db_->select_query("SELECT * FROM sensitive_data");
+    ASSERT_TRUE(query_result.is_ok());
+    auto result = query_result.value();
     ASSERT_FALSE(result.empty());
 
     // If there's a to_string or debug method for results,
@@ -288,8 +285,9 @@ TEST_F(DataMaskingTest, SensitiveColumnNamePatterns) {
 TEST_F(DataMaskingTest, PIINotInStackTraces) {
 #ifdef USE_SQLITE
     // Query PII data
-    auto result = db_->select_query("SELECT ssn FROM sensitive_data");
-    ASSERT_FALSE(result.empty());
+    auto query_result = db_->select_query("SELECT ssn FROM sensitive_data");
+    ASSERT_TRUE(query_result.is_ok());
+    ASSERT_FALSE(query_result.value().empty());
 
     // Cause an error and check stack trace doesn't contain PII
     try {
@@ -320,8 +318,9 @@ TEST_F(DataMaskingTest, LargeDataSetDoesNotLeakOnError) {
     }
 
     // Query all data
-    auto result = db_->select_query("SELECT * FROM sensitive_data");
-    ASSERT_GE(result.size(), 100u);
+    auto query_result = db_->select_query("SELECT * FROM sensitive_data");
+    ASSERT_TRUE(query_result.is_ok());
+    ASSERT_GE(query_result.value().size(), 100u);
 
     // If an error occurs, none of this data should appear in messages
     SUCCEED() << "Large datasets require careful error message construction";
@@ -341,7 +340,9 @@ TEST_F(DataMaskingTest, LargeDataSetDoesNotLeakOnError) {
 TEST_F(DataMaskingTest, SensitiveDataClearedFromResult) {
 #ifdef USE_SQLITE
     {
-        auto result = db_->select_query("SELECT * FROM sensitive_data");
+        auto query_result = db_->select_query("SELECT * FROM sensitive_data");
+        ASSERT_TRUE(query_result.is_ok());
+        auto result = query_result.value();
         ASSERT_FALSE(result.empty());
 
         // Clear the result
@@ -447,12 +448,3 @@ TEST_F(DataMaskingTest, SSNMaskingFormat) {
 
     SUCCEED() << "SSN should be masked to show only last 4 digits";
 }
-
-// Restore diagnostic settings
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif

@@ -20,10 +20,13 @@
 #include <atomic>
 #include <chrono>
 
-#include "database/backends/sqlite/sqlite_manager.h"
+#include "database/backends/sqlite_backend.h"
+#include "database/core/database_backend.h"
 #include "database/query_builder.h"
 
 using namespace database;
+using namespace database::backends;
+using namespace database::core;
 
 /**
  * @class AsyncStressTest
@@ -31,28 +34,28 @@ using namespace database;
  */
 class AsyncStressTest : public ::testing::Test {
 protected:
-    std::unique_ptr<sqlite_manager> db_;
+    std::unique_ptr<sqlite_backend> db_;
 
     void SetUp() override {
-        db_ = std::make_unique<sqlite_manager>();
+        db_ = std::make_unique<sqlite_backend>();
 #ifdef USE_SQLITE
-        ASSERT_TRUE(db_->connect(":memory:"));
-        ASSERT_TRUE(db_->execute_query(
-            "CREATE TABLE stress_test ("
+        connection_config config;
+        config.database = ":memory:";
+        ASSERT_TRUE(db_->initialize(config).is_ok());
+        ASSERT_TRUE(db_->execute_query("CREATE TABLE stress_test ("
             "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "  thread_id INTEGER,"
             "  value TEXT,"
             "  created_at TEXT DEFAULT CURRENT_TIMESTAMP"
-            ")"
-        ));
+            ")").is_ok());
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
     }
 
     void TearDown() override {
-        if (db_) {
-            db_->disconnect();
+        if (db_ && db_->is_initialized()) {
+            db_->shutdown();
         }
     }
 };
@@ -86,7 +89,8 @@ TEST_F(AsyncStressTest, HighConcurrencyInserts) {
                                     std::to_string(t) + ", 'value_" +
                                     std::to_string(t * OPS_PER_THREAD + i) + "')";
                 try {
-                    if (db_->insert_query(query) > 0) {
+                    auto result = db_->insert_query(query);
+                    if (result.is_ok() && result.value() > 0) {
                         success_count++;
                     } else {
                         failure_count++;
@@ -154,7 +158,8 @@ TEST_F(AsyncStressTest, MixedReadWriteWorkload) {
                     std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (" +
                                         std::to_string(i) + ", 'write_" +
                                         std::to_string(counter++) + "')";
-                    if (db_->insert_query(query) > 0) {
+                    auto result = db_->insert_query(query);
+                    if (result.is_ok() && result.value() > 0) {
                         write_ops++;
                     } else {
                         write_errors++;
@@ -172,7 +177,7 @@ TEST_F(AsyncStressTest, MixedReadWriteWorkload) {
             while (running) {
                 try {
                     auto result = db_->select_query("SELECT COUNT(*) FROM stress_test");
-                    if (!result.empty()) {
+                    if (result.is_ok() && !result.value().empty()) {
                         read_ops++;
                     } else {
                         read_errors++;
@@ -278,7 +283,8 @@ TEST_F(AsyncStressTest, RapidQueryExecution) {
         try {
             std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (0, 'rapid_" +
                                 std::to_string(i) + "')";
-            if (db_->insert_query(query) > 0) {
+            auto result = db_->insert_query(query);
+            if (result.is_ok() && result.value() > 0) {
                 success++;
             } else {
                 failure++;
@@ -328,7 +334,7 @@ TEST_F(AsyncStressTest, SystemRemainResponsiveAfterLoad) {
     auto duration = std::chrono::high_resolution_clock::now() - start;
     auto us = std::chrono::duration_cast<std::chrono::microseconds>(duration);
 
-    EXPECT_FALSE(result.empty()) << "System unresponsive after load";
+    EXPECT_TRUE(result.is_ok() && !result.value().empty()) << "System unresponsive after load";
     EXPECT_LT(us.count(), 100000) << "Query took too long after load: " << us.count() << "us";
 
     std::cout << "Post-load query response time: " << us.count() << "us\n";
@@ -357,7 +363,8 @@ TEST_F(AsyncStressTest, NoDataCorruptionUnderConcurrency) {
                                           "_op_" + std::to_string(i);
                 std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (" +
                                     std::to_string(t) + ", '" + unique_value + "')";
-                if (db_->insert_query(query) > 0) {
+                auto insert_result = db_->insert_query(query);
+                if (insert_result.is_ok() && insert_result.value() > 0) {
                     actual_inserts++;
                 }
             }
@@ -370,11 +377,11 @@ TEST_F(AsyncStressTest, NoDataCorruptionUnderConcurrency) {
 
     // Verify row count
     auto result = db_->select_query("SELECT COUNT(*) as cnt FROM stress_test");
-    ASSERT_FALSE(result.empty());
+    ASSERT_TRUE(result.is_ok() && !result.value().empty());
 
     int row_count = 0;
-    if (!result.empty() && result[0].count("cnt") > 0) {
-        auto& cnt_value = result[0].at("cnt");
+    if (!result.value().empty() && result.value()[0].count("cnt") > 0) {
+        auto& cnt_value = result.value()[0].at("cnt");
         if (std::holds_alternative<int64_t>(cnt_value)) {
             row_count = static_cast<int>(std::get<int64_t>(cnt_value));
         } else if (std::holds_alternative<std::string>(cnt_value)) {
@@ -412,8 +419,11 @@ TEST_F(AsyncStressTest, GracefulHandlingOfErrors) {
                     // Some valid queries
                     db_->select_query("SELECT * FROM stress_test LIMIT 1");
 
-                    // Some invalid queries (should throw or return error)
-                    db_->select_query("SELECT * FROM nonexistent_table");
+                    // Some invalid queries (should return error)
+                    auto result = db_->select_query("SELECT * FROM nonexistent_table");
+                    if (!result.is_ok()) {
+                        errors_caught++;
+                    }
                 } catch (...) {
                     errors_caught++;
                 }
@@ -430,7 +440,7 @@ TEST_F(AsyncStressTest, GracefulHandlingOfErrors) {
 
     // System should still be functional
     auto result = db_->select_query("SELECT 1 as test");
-    EXPECT_FALSE(result.empty()) << "System non-functional after error handling test";
+    EXPECT_TRUE(result.is_ok() && !result.value().empty()) << "System non-functional after error handling test";
 #else
     GTEST_SKIP() << "SQLite not available";
 #endif

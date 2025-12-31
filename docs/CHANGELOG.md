@@ -24,7 +24,18 @@
 
 ---
 
-## [Unreleased] - 2025-12-30
+## [Unreleased] - 2025-12-31
+
+### 🐛 **Fixed**
+
+#### **SQLite Backend Test Failures in Sanitizer Builds (Issue #307)**
+- **Fixed test expectations** when `USE_SQLITE` is not defined
+  - Changed `EXPECT_FALSE(connectToMemory())` to `GTEST_SKIP()` for 13 tests
+  - Mock mode successfully initializes, so tests should skip not fail
+  - Affected tests: all SQLite backend tests requiring connection
+- **Consistent with existing behavior**: `ConcurrentReads` test already used `GTEST_SKIP()`
+
+---
 
 ### 📝 **Documentation**
 

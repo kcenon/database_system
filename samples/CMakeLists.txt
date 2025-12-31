@@ -106,36 +106,6 @@ if(USE_THREAD_SYSTEM)
     # Note: Connection pool samples removed in Phase 4.3 (pooling moved to server-side ProxyMode)
 endif()
 
-##################################################
-# Adapter Usage Example (database_base to database_backend migration)
-##################################################
-
-add_executable(adapter_usage_example migration/adapter_usage_example.cpp)
-
-set_target_properties(adapter_usage_example PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-)
-
-target_include_directories(adapter_usage_example PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${CMAKE_CURRENT_SOURCE_DIR}/../..
-)
-
-target_link_libraries(adapter_usage_example PRIVATE
-    database
-    Threads::Threads
-)
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(adapter_usage_example PRIVATE
-        -Wall -Wextra -Wpedantic -Wno-unused-parameter
-    )
-endif()
-
-message(STATUS "Migration sample configured: adapter_usage_example (database_base_adapter)")
-
 # Output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

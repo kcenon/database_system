@@ -61,10 +61,6 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/join_builder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.h
     # Phase 4 Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.h
     ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.h
@@ -97,13 +93,9 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/join_builder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql/mysql_manager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite/sqlite_manager.cpp
     # Phase 4 Sources
     ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb/mongodb_manager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis/redis_manager.cpp
     # Sprint 5 Sources (Backend Plugin System)
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.cpp

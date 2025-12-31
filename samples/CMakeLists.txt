@@ -101,7 +101,7 @@ if(USE_THREAD_SYSTEM)
     endfunction()
 
     # Phase 1: Async Executor
-    configure_migration_sample(async_executor_v2_demo migration/async_executor_v2_demo.cpp)
+    configure_migration_sample(async_executor_demo migration/async_executor_demo.cpp)
 
     # Note: Connection pool samples removed in Phase 4.3 (pooling moved to server-side ProxyMode)
 endif()

@@ -26,6 +26,20 @@
 
 ## [Unreleased] - 2025-12-31
 
+### ♻️ **리팩토링**
+
+#### **async_executor 통합 (Issue #305)**
+- **`async_executor_v2`를 통합된 `async_executor` 구현으로 병합**
+  - `USE_THREAD_SYSTEM=ON` 시 thread_system 지원하는 단일 구현
+  - thread_system 미사용 시 std::thread로 자동 폴백
+  - ~13KB 코드 감소 (중복 구현 제거)
+- **`database/async_v2/` 디렉토리 제거** - 더 이상 필요 없음
+- **샘플 코드 업데이트** - `async_executor_v2_demo.cpp`를 `async_executor_demo.cpp`로 이름 변경
+- **문서 업데이트** - THREAD_SYSTEM_MIGRATION.md가 통합 구현 반영
+- **API 유지** - 기존 async_executor 메서드 모두 호환 유지
+
+---
+
 ### 🐛 **수정됨**
 
 #### **Sanitizer 빌드에서 SQLite 백엔드 테스트 실패 수정 (Issue #307)**

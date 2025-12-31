@@ -26,6 +26,20 @@
 
 ## [Unreleased] - 2025-12-31
 
+### ♻️ **Refactored**
+
+#### **async_executor Consolidation (Issue #305)**
+- **Merged `async_executor_v2` into unified `async_executor`** implementation
+  - Single implementation with thread_system support when `USE_THREAD_SYSTEM=ON`
+  - Automatic fallback to std::thread when thread_system is not available
+  - ~13KB code reduction (removed duplicate implementation)
+- **Removed `database/async_v2/` directory** - no longer needed
+- **Updated sample code** - renamed `async_executor_v2_demo.cpp` to `async_executor_demo.cpp`
+- **Updated documentation** - THREAD_SYSTEM_MIGRATION.md reflects unified implementation
+- **API preserved** - all existing async_executor methods remain compatible
+
+---
+
 ### 🐛 **Fixed**
 
 #### **SQLite Backend Test Failures in Sanitizer Builds (Issue #307)**

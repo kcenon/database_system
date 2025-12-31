@@ -26,7 +26,28 @@
 
 ## [Unreleased] - 2025-12-31
 
+### ♻️ **리팩토링**
+
+#### **async_executor 통합 (Issue #305)**
+- **`async_executor_v2`를 통합된 `async_executor` 구현으로 병합**
+  - `USE_THREAD_SYSTEM=ON` 시 thread_system 지원하는 단일 구현
+  - thread_system 미사용 시 std::thread로 자동 폴백
+  - ~13KB 코드 감소 (중복 구현 제거)
+- **`database/async_v2/` 디렉토리 제거** - 더 이상 필요 없음
+- **샘플 코드 업데이트** - `async_executor_v2_demo.cpp`를 `async_executor_demo.cpp`로 이름 변경
+- **문서 업데이트** - THREAD_SYSTEM_MIGRATION.md가 통합 구현 반영
+- **API 유지** - 기존 async_executor 메서드 모두 호환 유지
+
+---
+
 ### 🐛 **수정됨**
+
+#### **폴백 모드에서 불완전 타입 오류 수정 (Issue #309)**
+- **`thread_pool_adapter.h`에 완전한 `fallback_context` 클래스 정의 추가**
+  - 전방 선언만으로는 기본 매개변수 초기화에 불충분
+  - `async_executor` 생성자는 `thread_context_type()` 기본 인자에 완전한 타입 필요
+  - `USE_THREAD_SYSTEM` 미정의 시 모든 플랫폼(Linux, macOS, Windows)에서 빌드 실패
+- **API 변경 없음**: 수정은 어댑터 레이어 내부에서만 적용
 
 #### **Sanitizer 빌드에서 SQLite 백엔드 테스트 실패 수정 (Issue #307)**
 - **`USE_SQLITE` 미정의 시 테스트 기대값 수정**

@@ -26,7 +26,28 @@
 
 ## [Unreleased] - 2025-12-31
 
+### ♻️ **Refactored**
+
+#### **async_executor Consolidation (Issue #305)**
+- **Merged `async_executor_v2` into unified `async_executor`** implementation
+  - Single implementation with thread_system support when `USE_THREAD_SYSTEM=ON`
+  - Automatic fallback to std::thread when thread_system is not available
+  - ~13KB code reduction (removed duplicate implementation)
+- **Removed `database/async_v2/` directory** - no longer needed
+- **Updated sample code** - renamed `async_executor_v2_demo.cpp` to `async_executor_demo.cpp`
+- **Updated documentation** - THREAD_SYSTEM_MIGRATION.md reflects unified implementation
+- **API preserved** - all existing async_executor methods remain compatible
+
+---
+
 ### 🐛 **Fixed**
+
+#### **Incomplete Type Error in Fallback Mode (Issue #309)**
+- **Added complete `fallback_context` class definition** in `thread_pool_adapter.h`
+  - Forward declaration alone was insufficient for default parameter initialization
+  - `async_executor` constructor requires complete type for `thread_context_type()` default argument
+  - Build failed on all platforms (Linux, macOS, Windows) when `USE_THREAD_SYSTEM` was not defined
+- **No API changes**: Fix is internal to adapter layer
 
 #### **SQLite Backend Test Failures in Sanitizer Builds (Issue #307)**
 - **Fixed test expectations** when `USE_SQLITE` is not defined

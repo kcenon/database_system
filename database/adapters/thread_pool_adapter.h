@@ -141,10 +141,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #include <string>
 
     namespace database::async {
+        /**
+         * @brief Fallback thread context (empty implementation)
+         * Provides a no-op context when thread_system is not available
+         */
+        class fallback_context {
+        public:
+            fallback_context() = default;
+            ~fallback_context() = default;
+            fallback_context(const fallback_context&) = default;
+            fallback_context& operator=(const fallback_context&) = default;
+            fallback_context(fallback_context&&) = default;
+            fallback_context& operator=(fallback_context&&) = default;
+        };
+
         // Forward declarations for fallback implementations
         class fallback_thread_pool;
         class fallback_job;
-        class fallback_context;
 
         /**
          * @brief Fallback thread pool using std::thread

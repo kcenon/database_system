@@ -84,7 +84,7 @@ If not found, automatically falls back to `std::thread`.
 
 - [x] CMake integration with `USE_THREAD_SYSTEM` option
 - [x] Adapter layer (`thread_pool_adapter.h`)
-- [x] `async_executor_v2` implementation
+- [x] High-performance `async_executor` implementation
 - [x] Fallback implementation for compatibility
 - [x] Demonstration sample code
 
@@ -96,7 +96,7 @@ If not found, automatically falls back to `std::thread`.
   - Template instantiation for custom enum type
   - Async health checks as background jobs
   - ABI compatibility resolution (Debug/Release build matching)
-- [ ] Migration of `async_operations.h` (deferred)
+- [x] Consolidation of `async_executor` (v1 and v2 merged into single implementation)
 - [ ] `stream_processor` integration (deferred)
 - [ ] Batch operation optimization (deferred)
 
@@ -110,9 +110,11 @@ If not found, automatically falls back to `std::thread`.
 
 ## API Compatibility
 
-### async_executor → async_executor_v2
+### async_executor (Unified Implementation)
 
-**Before:**
+The `async_executor` class now includes high-performance thread_system integration with automatic fallback:
+
+**Basic Usage:**
 ```cpp
 #include "database/async/async_operations.h"
 
@@ -121,16 +123,7 @@ auto future = executor.submit([]() { return 42; });
 int result = future.get();
 ```
 
-**After (Drop-in Replacement):**
-```cpp
-#include "database/async_v2/async_executor_v2.h"
-
-database::async::async_executor_v2 executor(8);
-auto future = executor.submit([]() { return 42; });
-int result = future.get();
-```
-
-**With Monitoring:**
+**With Monitoring (when USE_THREAD_SYSTEM is enabled):**
 ```cpp
 #ifdef USE_THREAD_SYSTEM
     #include <kcenon/thread/interfaces/thread_context.h>
@@ -138,10 +131,20 @@ int result = future.get();
     auto context = database::async::thread_context_type();
     context.set_monitoring(my_monitor);
 
-    database::async::async_executor_v2 executor(8, context);
+    database::async::async_executor executor(8, context);
 #else
-    database::async::async_executor_v2 executor(8);
+    database::async::async_executor executor(8);
 #endif
+```
+
+**Check Implementation:**
+```cpp
+database::async::async_executor executor(8);
+if (executor.is_using_thread_system()) {
+    std::cout << "Using high-performance thread_system\n";
+} else {
+    std::cout << "Using std::thread fallback\n";
+}
 ```
 
 ## Performance Validation
@@ -151,10 +154,10 @@ int result = future.get();
 ```bash
 # Build and run the demonstration
 cd build
-./bin/async_executor_v2_demo
+./bin/async_executor_demo
 
 # Expected output:
-# ==> Basic async_executor_v2 Usage ===
+# ==> Basic async_executor Usage ===
 # Executor created with 8 threads
 # Using thread_system: YES
 # ...
@@ -203,7 +206,7 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 **Issue**: Lower than expected performance
 ```cpp
 // Check if thread_system is actually being used
-async_executor_v2 executor;
+async_executor executor;
 if (executor.is_using_thread_system()) {
     std::cout << "✅ Using thread_system\n";
 } else {
@@ -217,7 +220,7 @@ if (executor.is_using_thread_system()) {
     // Ensure monitoring is set BEFORE starting executor
     auto context = database::async::thread_context_type();
     context.set_monitoring(monitor);  // Must be before executor creation
-    async_executor_v2 executor(8, context);
+    async_executor executor(8, context);
 #endif
 ```
 
@@ -228,16 +231,16 @@ if (executor.is_using_thread_system()) {
 ```bash
 # Run unit tests with thread_system
 cd build
-ctest -R async_executor_v2
+ctest -R async_executor
 
 # Expected output:
 # Test project /Users/.../database_system/build
-#     Start 1: async_executor_v2_basic
-# 1/3 Test #1: async_executor_v2_basic ..........   Passed    0.12 sec
-#     Start 2: async_executor_v2_performance
-# 2/3 Test #2: async_executor_v2_performance ....   Passed    1.45 sec
-#     Start 3: async_executor_v2_shutdown
-# 3/3 Test #3: async_executor_v2_shutdown .......   Passed    0.35 sec
+#     Start 1: async_executor_basic
+# 1/3 Test #1: async_executor_basic ..........   Passed    0.12 sec
+#     Start 2: async_executor_performance
+# 2/3 Test #2: async_executor_performance ....   Passed    1.45 sec
+#     Start 3: async_executor_shutdown
+# 3/3 Test #3: async_executor_shutdown .......   Passed    0.35 sec
 #
 # 100% tests passed, 0 tests failed out of 3
 ```
@@ -258,10 +261,10 @@ ctest -R async_executor_v2
 
 ### For Application Code
 
-- [ ] Update includes from `async/async_operations.h` to `async_v2/async_executor_v2.h`
-- [ ] Replace `async_executor` with `async_executor_v2`
+- [x] Use `async/async_operations.h` for unified async_executor implementation
+- [x] `async_executor` now includes thread_system support automatically
 - [ ] Add thread context for monitoring (optional)
-- [ ] Update CMakeLists.txt to link thread_system
+- [ ] Update CMakeLists.txt to link thread_system (for USE_THREAD_SYSTEM=ON)
 - [ ] Run performance benchmarks to verify improvement
 - [ ] Update documentation
 
@@ -304,7 +307,7 @@ database::async::thread_context_type context;
 ### 2. Check Runtime Configuration
 
 ```cpp
-async_executor_v2 executor;
+async_executor executor;
 assert(executor.is_using_thread_system() && "thread_system not enabled");
 ```
 
@@ -316,7 +319,7 @@ assert(executor.is_using_thread_system() && "thread_system not enabled");
     auto context = database::async::thread_context_type();
     context.set_monitoring(monitor);
 
-    async_executor_v2 executor(8, context);
+    async_executor executor(8, context);
 
     // Later: check metrics
     auto metrics = monitor->get_metrics("job_latency_ns");
@@ -340,7 +343,7 @@ if constexpr (database::async::using_thread_system) {
 
 ### Q: Will this break existing code?
 
-**A**: No. The `async_executor_v2` is a new class with the same API. Existing code using `async_executor` continues to work unchanged.
+**A**: No. The `async_executor` maintains the same API and is fully backward compatible. It now includes high-performance thread_system integration with automatic fallback to std::thread.
 
 ### Q: What happens if thread_system is not found?
 
@@ -367,16 +370,14 @@ if constexpr (database::async::using_thread_system) {
 1. **Test the integration**:
    ```bash
    cd build
-   ./bin/async_executor_v2_demo
+   ./bin/async_executor_demo
    ```
 
-2. **Migrate async_operations.h** (Phase 2)
+2. **Migrate `stream_processor`** to use thread_system (Phase 3)
 
-3. **Implement connection_pool_v2** with priority scheduling (Phase 2)
+3. **Add comprehensive monitoring** (Phase 3)
 
-4. **Add comprehensive monitoring** (Phase 3)
-
-5. **Performance validation** in production workloads (Phase 3)
+4. **Performance validation** in production workloads (Phase 3)
 
 ## Resources
 
@@ -394,6 +395,6 @@ For questions or issues:
 
 ---
 
-**Status**: Phase 1 Complete ✅
-**Last Updated**: 2025-11-03
+**Status**: Phase 2 Complete ✅ (async_executor unified)
+**Last Updated**: 2025-12-31
 **Maintainer**: kcenon@naver.com

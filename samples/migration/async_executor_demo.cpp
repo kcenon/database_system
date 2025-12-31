@@ -2,23 +2,23 @@
  * BSD 3-Clause License
  * Copyright (c) 2025, Database System Project
  *
- * async_executor_v2 Demonstration
- * Shows migration from async_executor to async_executor_v2
+ * async_executor Demonstration
+ * Shows high-performance async_executor with thread_system integration
  */
 
 #include <iostream>
 #include <chrono>
 #include <vector>
-#include "database/async_v2/async_executor_v2.h"
+#include "database/async/async_operations.h"
 
 using namespace database::async;
 using namespace std::chrono;
 
 void demonstrate_basic_usage() {
-    std::cout << "=== Basic async_executor_v2 Usage ===\n";
+    std::cout << "=== Basic async_executor Usage ===\n";
 
     // Create executor with default thread count
-    async_executor_v2 executor;
+    async_executor executor;
 
     std::cout << "Executor created with " << executor.thread_count() << " threads\n";
     std::cout << "Using thread_system: " << (executor.is_using_thread_system() ? "YES" : "NO") << "\n\n";
@@ -55,7 +55,7 @@ void demonstrate_basic_usage() {
 void demonstrate_high_throughput() {
     std::cout << "=== High-Throughput Performance Test ===\n";
 
-    async_executor_v2 executor(8);
+    async_executor executor(8);
 
     const int num_tasks = 10000;
     std::cout << "Submitting " << num_tasks << " lightweight tasks...\n";
@@ -95,7 +95,7 @@ void demonstrate_high_throughput() {
 void demonstrate_error_handling() {
     std::cout << "=== Error Handling ===\n";
 
-    async_executor_v2 executor(4);
+    async_executor executor(4);
 
     // Submit task that throws exception
     auto future = executor.submit([]() -> int {
@@ -116,7 +116,7 @@ void demonstrate_error_handling() {
 void demonstrate_shutdown() {
     std::cout << "=== Graceful Shutdown ===\n";
 
-    async_executor_v2 executor(4);
+    async_executor executor(4);
 
     // Submit long-running tasks
     std::cout << "Submitting 3 long-running tasks...\n";
@@ -145,13 +145,13 @@ void demonstrate_shutdown() {
 
 void compare_with_legacy() {
     std::cout << "=== Performance Comparison ===\n";
-    std::cout << "async_executor_v2 vs std::async\n\n";
+    std::cout << "async_executor vs std::async\n\n";
 
     const int num_tasks = 1000;
 
-    // Test async_executor_v2
+    // Test async_executor
     {
-        async_executor_v2 executor(8);
+        async_executor executor(8);
         auto start = high_resolution_clock::now();
 
         std::vector<std::future<int>> futures;
@@ -166,7 +166,7 @@ void compare_with_legacy() {
         auto end = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(end - start);
 
-        std::cout << "async_executor_v2: " << duration.count() << " μs\n";
+        std::cout << "async_executor: " << duration.count() << " μs\n";
         std::cout << "  (" << (duration.count() / num_tasks) << " μs/task)\n";
     }
 
@@ -195,7 +195,7 @@ void compare_with_legacy() {
 
 int main() {
     std::cout << "╔════════════════════════════════════════════════╗\n";
-    std::cout << "║  async_executor_v2 Demonstration              ║\n";
+    std::cout << "║  async_executor Demonstration              ║\n";
     std::cout << "║  thread_system Integration for Database       ║\n";
     std::cout << "╚════════════════════════════════════════════════╝\n\n";
 

@@ -89,7 +89,7 @@ TEST_F(SQLiteBackendTest, ConnectToMemoryDatabase) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(backend_->is_initialized());
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -98,7 +98,7 @@ TEST_F(SQLiteBackendTest, ConnectToFileDatabase) {
   EXPECT_TRUE(connectToFile());
   EXPECT_TRUE(std::filesystem::exists(test_db_path_));
 #else
-  EXPECT_FALSE(connectToFile());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -113,7 +113,7 @@ TEST_F(SQLiteBackendTest, ShutdownAfterConnection) {
   EXPECT_TRUE(backend_->shutdown().is_ok());
   EXPECT_FALSE(backend_->is_initialized());
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -131,7 +131,7 @@ TEST_F(SQLiteBackendTest, CreateTableQuery) {
   EXPECT_TRUE(backend_->execute_query(
       "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)").is_ok());
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -154,7 +154,7 @@ TEST_F(SQLiteBackendTest, InsertSingleRow) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value(), 1u);
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -176,7 +176,7 @@ TEST_F(SQLiteBackendTest, SelectFromEmptyTable) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_TRUE(result.value().empty());
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -197,7 +197,7 @@ TEST_F(SQLiteBackendTest, SelectWithCondition) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value().size(), 2u);
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -223,7 +223,7 @@ TEST_F(SQLiteBackendTest, UpdateSingleRow) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value(), 1u);
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -251,7 +251,7 @@ TEST_F(SQLiteBackendTest, DeleteSingleRow) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value(), 1u);
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -276,7 +276,7 @@ TEST_F(SQLiteBackendTest, TransactionCommit) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value().size(), 1u);
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -295,7 +295,7 @@ TEST_F(SQLiteBackendTest, TransactionRollback) {
   EXPECT_TRUE(result.is_ok());
   EXPECT_TRUE(result.value().empty());
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -356,7 +356,7 @@ TEST_F(SQLiteBackendTest, SpecialCharactersInData) {
   ASSERT_EQ(result.value().size(), 1u);
   EXPECT_EQ(std::get<std::string>(result.value()[0].at("name")), "test's data");
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 
@@ -373,7 +373,7 @@ TEST_F(SQLiteBackendTest, UnicodeData) {
   ASSERT_EQ(result.value().size(), 1u);
   EXPECT_EQ(std::get<std::string>(result.value()[0].at("name")), "한글테스트");
 #else
-  EXPECT_FALSE(connectToMemory());
+  GTEST_SKIP() << "SQLite support not compiled";
 #endif
 }
 

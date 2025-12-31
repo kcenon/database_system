@@ -37,6 +37,18 @@
 
 ---
 
+### ⚡ **Improved**
+
+#### **query_builder Memory Optimization (Issue #306)**
+- **Implemented proper lazy initialization** in `query_builder::ensure_builder()`
+  - Only allocates the required builder based on database type
+  - Releases unused builders when switching database types via `for_database()`
+  - Previously, multiple builders could accumulate in memory
+- **Memory footprint reduced**: Only one builder instance is kept at a time
+- **No API changes**: Fully backward compatible
+
+---
+
 ### 📝 **Documentation**
 
 #### **ProxyMode Implementation Status Clarification (Issue #301)**

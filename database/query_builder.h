@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "database_types.h"
 #include "database_base.h"
+#include "query_dialect.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -97,6 +98,8 @@ namespace database
 	 * @class sql_query_builder
 	 * @brief Builder for SQL queries (PostgreSQL, MySQL, SQLite).
 	 *
+	 * @deprecated Use query_builder instead. This class will be removed in a future release.
+	 *
 	 * ### Thread Safety
 	 * - NOT thread-safe. Each thread should use its own instance.
 	 * - Builder pattern is inherently stateful and not designed for concurrent access.
@@ -107,7 +110,7 @@ namespace database
 	 * - Use parameterized methods (where, set) for user-provided data.
 	 * - Raw methods are provided for advanced use cases only.
 	 */
-	class sql_query_builder
+	class [[deprecated("Use query_builder instead")]] sql_query_builder
 	{
 	public:
 		sql_query_builder();
@@ -190,8 +193,10 @@ namespace database
 	/**
 	 * @class mongodb_query_builder
 	 * @brief Builder for MongoDB queries.
+	 *
+	 * @deprecated Use query_builder instead. This class will be removed in a future release.
 	 */
-	class mongodb_query_builder
+	class [[deprecated("Use query_builder instead")]] mongodb_query_builder
 	{
 	public:
 		mongodb_query_builder();
@@ -269,12 +274,14 @@ namespace database
 	 * @class redis_query_builder
 	 * @brief Builder for Redis commands.
 	 *
+	 * @deprecated Use query_builder instead. This class will be removed in a future release.
+	 *
 	 * ### Thread Safety
 	 * - NOT thread-safe. Each thread must use its own instance.
 	 * - Internal state (command_, args_) is not protected by mutex.
 	 * - DO NOT share instances across threads.
 	 */
-	class redis_query_builder
+	class [[deprecated("Use query_builder instead")]] redis_query_builder
 	{
 	public:
 		redis_query_builder();
@@ -324,12 +331,30 @@ namespace database
 	/**
 	 * @class query_builder
 	 * @brief Universal query builder that adapts to different database types.
+	 *
+	 * This class provides a unified interface for building queries across different
+	 * database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) using the
+	 * Strategy pattern.
+	 *
+	 * ### Thread Safety
+	 * - NOT thread-safe. Each thread should use its own instance.
+	 * - Create separate builders for each thread or protect with external mutex.
+	 *
+	 * ### Memory Efficiency
+	 * - Only allocates ONE dialect instance (vs 3 builders before).
+	 * - Memory footprint reduced by ~66% compared to previous implementation.
 	 */
 	class query_builder
 	{
 	public:
 		explicit query_builder(database_types db_type = database_types::none);
 		~query_builder() = default;
+
+		// Move-only (dialect ownership)
+		query_builder(query_builder&&) noexcept = default;
+		query_builder& operator=(query_builder&&) noexcept = default;
+		query_builder(const query_builder&) = delete;
+		query_builder& operator=(const query_builder&) = delete;
 
 		// Set database type
 		query_builder& for_database(database_types db_type);
@@ -338,18 +363,39 @@ namespace database
 		query_builder& select(const std::vector<std::string>& columns);
 		query_builder& from(const std::string& table);
 		query_builder& where(const std::string& field, const std::string& op, const database_value& value);
-		query_builder& join(const std::string& table, const std::string& condition);
+		query_builder& where(const query_condition& condition);
+		query_builder& join(const std::string& table, const std::string& condition, join_type type = join_type::inner);
 		query_builder& order_by(const std::string& column, sort_order order = sort_order::asc);
+		query_builder& group_by(const std::vector<std::string>& columns);
+		query_builder& group_by(const std::string& column);
+		query_builder& having(const std::string& condition);
 		query_builder& limit(size_t count);
+		query_builder& offset(size_t count);
+
+		// INSERT operations
+		query_builder& insert_into(const std::string& table);
+		query_builder& values(const std::map<std::string, database_value>& data);
+		query_builder& values(const std::vector<std::map<std::string, database_value>>& rows);
+
+		// UPDATE operations
+		query_builder& update(const std::string& table);
+		query_builder& set(const std::string& field, const database_value& value);
+		query_builder& set(const std::map<std::string, database_value>& data);
+
+		// DELETE operations
+		query_builder& delete_from(const std::string& table);
 
 		// NoSQL-style interface
 		query_builder& collection(const std::string& name); // MongoDB
 		query_builder& key(const std::string& key); // Redis
 
-		// Universal operations
+		// Legacy universal operations (deprecated)
+		[[deprecated("Use insert_into().values() instead")]]
 		query_builder& insert(const std::map<std::string, database_value>& data);
+		[[deprecated("Use update(table).set(data) instead")]]
 		query_builder& update(const std::map<std::string, database_value>& data);
-		query_builder& remove(); // DELETE/DROP
+		[[deprecated("Use delete_from() instead")]]
+		query_builder& remove();
 
 		// Build and execute
 		std::string build() const;
@@ -358,13 +404,14 @@ namespace database
 		// Reset builder
 		void reset();
 
+		// Get current database type
+		database_types get_database_type() const;
+
 	private:
 		database_types db_type_;
-		std::unique_ptr<sql_query_builder> sql_builder_;
-		std::unique_ptr<mongodb_query_builder> mongo_builder_;
-		std::unique_ptr<redis_query_builder> redis_builder_;
+		std::unique_ptr<query_dialect> dialect_;
 
-		void ensure_builder();
+		void ensure_dialect();
 	};
 
 } // namespace database

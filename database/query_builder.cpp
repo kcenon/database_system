@@ -990,135 +990,232 @@ namespace database
 		args_.clear();
 	}
 
-	// query_builder implementation
+	// query_builder implementation using Strategy pattern
 	query_builder::query_builder(database_types db_type)
 		: db_type_(db_type)
 	{
-		ensure_builder();
+		ensure_dialect();
 	}
 
 	query_builder& query_builder::for_database(database_types db_type)
 	{
-		db_type_ = db_type;
-		ensure_builder();
+		if (db_type_ != db_type) {
+			db_type_ = db_type;
+			dialect_.reset();
+			ensure_dialect();
+		}
 		return *this;
 	}
 
 	query_builder& query_builder::select(const std::vector<std::string>& columns)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->select(columns);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_select_columns(columns);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::from(const std::string& table)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->from(table);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_from_table(table);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::where(const std::string& field, const std::string& op, const database_value& value)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->where(field, op, value);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->add_where_condition(field, op, value);
 		}
 		return *this;
 	}
 
-	query_builder& query_builder::join(const std::string& table, const std::string& condition)
+	query_builder& query_builder::where(const query_condition& condition)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->join(table, condition);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->add_where_condition(condition);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::join(const std::string& table, const std::string& condition, join_type type)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->add_join(table, condition, type);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::order_by(const std::string& column, sort_order order)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->order_by(column, order);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->add_order_by(column, order);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::group_by(const std::vector<std::string>& columns)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_group_by(columns);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::group_by(const std::string& column)
+	{
+		return group_by(std::vector<std::string>{column});
+	}
+
+	query_builder& query_builder::having(const std::string& condition)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_having(condition);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::limit(size_t count)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->limit(count);
-		} else if (mongo_builder_) {
-			mongo_builder_->limit(count);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_limit(count);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::offset(size_t count)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_offset(count);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::insert_into(const std::string& table)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_insert_table(table);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::values(const std::map<std::string, database_value>& data)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_insert_data(data);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::values(const std::vector<std::map<std::string, database_value>>& rows)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_insert_rows(rows);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::update(const std::string& table)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_update_table(table);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::set(const std::string& field, const database_value& value)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			std::map<std::string, database_value> data;
+			data[field] = value;
+			dialect_->set_update_data(data);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::set(const std::map<std::string, database_value>& data)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_update_data(data);
+		}
+		return *this;
+	}
+
+	query_builder& query_builder::delete_from(const std::string& table)
+	{
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_delete_table(table);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::collection(const std::string& name)
 	{
-		ensure_builder();
-		if (mongo_builder_) {
-			mongo_builder_->collection(name);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_collection(name);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::key(const std::string& key)
 	{
-		ensure_builder();
-		if (redis_builder_) {
-			redis_builder_->get(key);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_key(key);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::insert(const std::map<std::string, database_value>& data)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->values(data);
-		} else if (mongo_builder_) {
-			mongo_builder_->insert_one(data);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_insert_data(data);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::update(const std::map<std::string, database_value>& data)
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			sql_builder_->set(data);
-		} else if (mongo_builder_) {
-			mongo_builder_->update_one({}, data);
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_update_data(data);
 		}
 		return *this;
 	}
 
 	query_builder& query_builder::remove()
 	{
-		ensure_builder();
-		if (sql_builder_) {
-			// DELETE command should be set via delete_from method
-		} else if (mongo_builder_) {
-			mongo_builder_->delete_many({});
+		ensure_dialect();
+		if (dialect_) {
+			dialect_->set_query_type(query_dialect::query_type::delete_query);
 		}
 		return *this;
 	}
 
 	std::string query_builder::build() const
 	{
-		if (sql_builder_) {
-			return sql_builder_->build_for_database(db_type_);
-		} else if (mongo_builder_) {
-			return mongo_builder_->build();
-		} else if (redis_builder_) {
-			return redis_builder_->build();
+		if (dialect_) {
+			return dialect_->build();
 		}
 		return "";
 	}
@@ -1139,55 +1236,20 @@ namespace database
 
 	void query_builder::reset()
 	{
-		if (sql_builder_) {
-			sql_builder_->reset();
-		}
-		if (mongo_builder_) {
-			mongo_builder_->reset();
-		}
-		if (redis_builder_) {
-			redis_builder_->reset();
+		if (dialect_) {
+			dialect_->reset();
 		}
 	}
 
-	void query_builder::ensure_builder()
+	database_types query_builder::get_database_type() const
 	{
-		switch (db_type_) {
-			case database_types::postgres:
-			case database_types::mysql:
-			case database_types::sqlite:
-				// Release unused builders to save memory
-				mongo_builder_.reset();
-				redis_builder_.reset();
-				if (!sql_builder_) {
-					sql_builder_ = std::make_unique<sql_query_builder>();
-				}
-				break;
+		return db_type_;
+	}
 
-			case database_types::mongodb:
-				// Release unused builders to save memory
-				sql_builder_.reset();
-				redis_builder_.reset();
-				if (!mongo_builder_) {
-					mongo_builder_ = std::make_unique<mongodb_query_builder>();
-				}
-				break;
-
-			case database_types::redis:
-				// Release unused builders to save memory
-				sql_builder_.reset();
-				mongo_builder_.reset();
-				if (!redis_builder_) {
-					redis_builder_ = std::make_unique<redis_query_builder>();
-				}
-				break;
-
-			default:
-				// Release all builders when no type is set
-				sql_builder_.reset();
-				mongo_builder_.reset();
-				redis_builder_.reset();
-				break;
+	void query_builder::ensure_dialect()
+	{
+		if (!dialect_ && db_type_ != database_types::none) {
+			dialect_ = create_dialect(db_type_);
 		}
 	}
 

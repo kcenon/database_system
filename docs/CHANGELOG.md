@@ -28,6 +28,26 @@
 
 ### ♻️ **Refactored**
 
+#### **Query Builder Strategy Pattern (Issue #310)**
+- **Consolidated 4 query builder classes** into unified design using Strategy pattern
+  - Added `query_dialect` abstract interface for database-specific query formatting
+  - Implemented `sql_dialect`, `mongodb_dialect`, `redis_dialect` as concrete strategies
+  - `query_builder` now uses single dialect instead of 3 separate builders
+- **Memory footprint reduced by ~66%**
+  - Only 1 dialect allocation per builder (vs 3 builders previously)
+  - Dialect created lazily based on database type
+- **Deprecated individual builders**
+  - `sql_query_builder` marked `[[deprecated("Use query_builder instead")]]`
+  - `mongodb_query_builder` marked `[[deprecated("Use query_builder instead")]]`
+  - `redis_query_builder` marked `[[deprecated("Use query_builder instead")]]`
+- **Extended `query_builder` API** (full SQL builder feature parity)
+  - Added `insert_into()`, `values()`, `update(table)`, `set()`, `delete_from()`
+  - Added `group_by()`, `having()`, `offset()`, `where(query_condition)`
+  - Added `join()` with `join_type` parameter
+- **Backward compatible**: Legacy `insert(data)`, `update(data)`, `remove()` preserved as deprecated
+
+---
+
 #### **async_executor Consolidation (Issue #305)**
 - **Merged `async_executor_v2` into unified `async_executor`** implementation
   - Single implementation with thread_system support when `USE_THREAD_SYSTEM=ON`

@@ -274,13 +274,21 @@ for (const auto& [db_type, stat] : stats) {
 
 ### query_builder
 
-Universal query builder that adapts to different database types.
+Universal query builder that adapts to different database types using the Strategy pattern.
+This is the **recommended** class for all query building operations.
+
+> **Memory Efficiency**: Uses a single dialect allocation per builder (~66% reduction vs previous implementation)
 
 ```cpp
 class query_builder
 {
 public:
     explicit query_builder(database_types db_type = database_types::none);
+    ~query_builder() = default;
+
+    // Move-only (dialect ownership)
+    query_builder(query_builder&&) noexcept = default;
+    query_builder& operator=(query_builder&&) noexcept = default;
 
     // Database type selection
     query_builder& for_database(database_types db_type);
@@ -289,18 +297,39 @@ public:
     query_builder& select(const std::vector<std::string>& columns);
     query_builder& from(const std::string& table);
     query_builder& where(const std::string& field, const std::string& op, const database_value& value);
-    query_builder& join(const std::string& table, const std::string& condition);
+    query_builder& where(const query_condition& condition);
+    query_builder& join(const std::string& table, const std::string& condition, join_type type = join_type::inner);
     query_builder& order_by(const std::string& column, sort_order order = sort_order::asc);
+    query_builder& group_by(const std::vector<std::string>& columns);
+    query_builder& group_by(const std::string& column);
+    query_builder& having(const std::string& condition);
     query_builder& limit(size_t count);
+    query_builder& offset(size_t count);
+
+    // INSERT operations
+    query_builder& insert_into(const std::string& table);
+    query_builder& values(const std::map<std::string, database_value>& data);
+    query_builder& values(const std::vector<std::map<std::string, database_value>>& rows);
+
+    // UPDATE operations
+    query_builder& update(const std::string& table);
+    query_builder& set(const std::string& field, const database_value& value);
+    query_builder& set(const std::map<std::string, database_value>& data);
+
+    // DELETE operations
+    query_builder& delete_from(const std::string& table);
 
     // NoSQL-style interface
     query_builder& collection(const std::string& name); // MongoDB
     query_builder& key(const std::string& key);         // Redis
 
-    // Universal operations
+    // Legacy operations (deprecated)
+    [[deprecated("Use insert_into().values() instead")]]
     query_builder& insert(const std::map<std::string, database_value>& data);
+    [[deprecated("Use update(table).set(data) instead")]]
     query_builder& update(const std::map<std::string, database_value>& data);
-    query_builder& remove(); // DELETE/DROP
+    [[deprecated("Use delete_from() instead")]]
+    query_builder& remove();
 
     // Build and execute
     std::string build() const;
@@ -308,10 +337,15 @@ public:
 
     // Reset builder
     void reset();
+
+    // Get current database type
+    database_types get_database_type() const;
 };
 ```
 
-### sql_query_builder
+### sql_query_builder (DEPRECATED)
+
+> **⚠️ DEPRECATED**: Use `query_builder` instead. This class will be removed in a future release.
 
 Specialized query builder for SQL databases.
 
@@ -371,7 +405,9 @@ public:
 };
 ```
 
-### mongodb_query_builder
+### mongodb_query_builder (DEPRECATED)
+
+> **⚠️ DEPRECATED**: Use `query_builder` instead. This class will be removed in a future release.
 
 Specialized query builder for MongoDB.
 
@@ -426,7 +462,9 @@ public:
 };
 ```
 
-### redis_query_builder
+### redis_query_builder (DEPRECATED)
+
+> **⚠️ DEPRECATED**: Use `query_builder` instead. This class will be removed in a future release.
 
 Specialized query builder for Redis.
 

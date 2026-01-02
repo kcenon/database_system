@@ -24,9 +24,26 @@
 
 ---
 
-## [Unreleased] - 2025-12-31
+## [Unreleased] - 2026-01-02
 
 ### ♻️ **Refactored**
+
+#### **Remove Deprecated Legacy Query Builders (Issue #312)**
+- **Removed deprecated query builder classes**
+  - `sql_query_builder` - removed (use `query_builder` with SQL database types)
+  - `mongodb_query_builder` - removed (use `query_builder` with `database_types::mongodb`)
+  - `redis_query_builder` - removed (use `query_builder` with `database_types::redis`)
+- **Migrated all tests to unified `query_builder`**
+  - `sql_query_builder_test.cpp` - migrated to use `query_builder`
+  - `mongodb_query_builder_test.cpp` - removed (covered by `universal_query_builder_test.cpp`)
+  - `redis_query_builder_test.cpp` - removed (covered by `universal_query_builder_test.cpp`)
+  - Security tests (`sql_injection_test.cpp`, `data_masking_test.cpp`) - migrated
+  - Stress tests (`memory_stress_test.cpp`, `async_stress_test.cpp`) - migrated
+- **Updated `unified_database_system`** to use `query_builder` instead of `sql_query_builder`
+- **Removed deprecated legacy methods** from `query_builder`
+  - `insert(data)` - use `insert_into(table).values(data)` instead
+  - `update(data)` - use `update(table).set(data)` instead
+  - `remove()` - use `delete_from(table)` instead
 
 #### **Query Builder Strategy Pattern (Issue #310)**
 - **Consolidated 4 query builder classes** into unified design using Strategy pattern
@@ -36,15 +53,10 @@
 - **Memory footprint reduced by ~66%**
   - Only 1 dialect allocation per builder (vs 3 builders previously)
   - Dialect created lazily based on database type
-- **Deprecated individual builders**
-  - `sql_query_builder` marked `[[deprecated("Use query_builder instead")]]`
-  - `mongodb_query_builder` marked `[[deprecated("Use query_builder instead")]]`
-  - `redis_query_builder` marked `[[deprecated("Use query_builder instead")]]`
 - **Extended `query_builder` API** (full SQL builder feature parity)
   - Added `insert_into()`, `values()`, `update(table)`, `set()`, `delete_from()`
   - Added `group_by()`, `having()`, `offset()`, `where(query_condition)`
   - Added `join()` with `join_type` parameter
-- **Backward compatible**: Legacy `insert(data)`, `update(data)`, `remove()` preserved as deprecated
 
 ---
 

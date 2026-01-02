@@ -210,9 +210,9 @@ TEST_F(MemoryStressTest, QueryBuilderMemoryUsage) {
     constexpr int NUM_BUILDERS = 1000;
 
     for (int i = 0; i < NUM_BUILDERS; ++i) {
-        sql_query_builder builder;
+        query_builder builder(database_types::sqlite);
         auto query = builder
-            .select(std::vector<std::string>{"id", "name", "value"})
+            .select({"id", "name", "value"})
             .from("test_table")
             .where("id", ">", static_cast<int64_t>(i))
             .where("name", "=", std::string("test"))

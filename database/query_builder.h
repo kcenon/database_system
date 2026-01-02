@@ -95,240 +95,6 @@ namespace database
 	};
 
 	/**
-	 * @class sql_query_builder
-	 * @brief Builder for SQL queries (PostgreSQL, MySQL, SQLite).
-	 *
-	 * @deprecated Use query_builder instead. This class will be removed in a future release.
-	 *
-	 * ### Thread Safety
-	 * - NOT thread-safe. Each thread should use its own instance.
-	 * - Builder pattern is inherently stateful and not designed for concurrent access.
-	 * - Create separate builders for each thread or protect with external mutex.
-	 *
-	 * ### SQL Injection Warning
-	 * - AVOID using *_raw() methods with user input!
-	 * - Use parameterized methods (where, set) for user-provided data.
-	 * - Raw methods are provided for advanced use cases only.
-	 */
-	class [[deprecated("Use query_builder instead")]] sql_query_builder
-	{
-	public:
-		sql_query_builder();
-		~sql_query_builder() = default;
-
-		// SELECT operations
-		sql_query_builder& select(const std::vector<std::string>& columns);
-		sql_query_builder& select(const std::string& column);
-		sql_query_builder& select_raw(const std::string& raw_select);
-		sql_query_builder& from(const std::string& table);
-
-		// WHERE conditions
-		sql_query_builder& where(const std::string& field, const std::string& op, const database_value& value);
-		sql_query_builder& where(const query_condition& condition);
-		sql_query_builder& where_raw(const std::string& raw_where);
-		sql_query_builder& or_where(const std::string& field, const std::string& op, const database_value& value);
-
-		// JOIN operations
-		sql_query_builder& join(const std::string& table, const std::string& condition, join_type type = join_type::inner);
-		sql_query_builder& left_join(const std::string& table, const std::string& condition);
-		sql_query_builder& right_join(const std::string& table, const std::string& condition);
-
-		// GROUP BY and HAVING
-		sql_query_builder& group_by(const std::vector<std::string>& columns);
-		sql_query_builder& group_by(const std::string& column);
-		sql_query_builder& having(const std::string& condition);
-
-		// ORDER BY
-		sql_query_builder& order_by(const std::string& column, sort_order order = sort_order::asc);
-		sql_query_builder& order_by_raw(const std::string& raw_order);
-
-		// LIMIT and OFFSET
-		sql_query_builder& limit(size_t count);
-		sql_query_builder& offset(size_t count);
-
-		// INSERT operations
-		sql_query_builder& insert_into(const std::string& table);
-		sql_query_builder& values(const std::map<std::string, database_value>& data);
-		sql_query_builder& values(const std::vector<std::map<std::string, database_value>>& rows);
-
-		// UPDATE operations
-		sql_query_builder& update(const std::string& table);
-		sql_query_builder& set(const std::string& field, const database_value& value);
-		sql_query_builder& set(const std::map<std::string, database_value>& data);
-
-		// DELETE operations
-		sql_query_builder& delete_from(const std::string& table);
-
-		// Build final query
-		std::string build() const;
-		std::string build_for_database(database_types db_type) const;
-
-		// Reset builder
-		void reset();
-
-	private:
-		enum class query_type { none, select, insert, update, delete_query };
-
-		query_type type_;
-		std::vector<std::string> select_columns_;
-		std::string from_table_;
-		std::vector<query_condition> where_conditions_;
-		std::vector<std::string> joins_;
-		std::vector<std::string> group_by_columns_;
-		std::string having_clause_;
-		std::vector<std::string> order_by_clauses_;
-		size_t limit_count_;
-		size_t offset_count_;
-
-		// For INSERT/UPDATE
-		std::string target_table_;
-		std::map<std::string, database_value> set_data_;
-		std::vector<std::map<std::string, database_value>> insert_rows_;
-
-		std::string escape_identifier(const std::string& identifier, database_types db_type) const;
-		std::string format_value(const database_value& value, database_types db_type) const;
-		std::string join_type_to_string(join_type type) const;
-	};
-
-	/**
-	 * @class mongodb_query_builder
-	 * @brief Builder for MongoDB queries.
-	 *
-	 * @deprecated Use query_builder instead. This class will be removed in a future release.
-	 */
-	class [[deprecated("Use query_builder instead")]] mongodb_query_builder
-	{
-	public:
-		mongodb_query_builder();
-		~mongodb_query_builder() = default;
-
-		// Collection operations
-		mongodb_query_builder& collection(const std::string& name);
-
-		// Find operations
-		mongodb_query_builder& find(const std::map<std::string, database_value>& filter = {});
-		mongodb_query_builder& find_one(const std::map<std::string, database_value>& filter = {});
-
-		// Projection
-		mongodb_query_builder& project(const std::vector<std::string>& fields);
-		mongodb_query_builder& exclude(const std::vector<std::string>& fields);
-
-		// Sorting
-		mongodb_query_builder& sort(const std::map<std::string, int>& sort_spec);
-		mongodb_query_builder& sort(const std::string& field, int direction = 1);
-
-		// Limit and Skip
-		mongodb_query_builder& limit(size_t count);
-		mongodb_query_builder& skip(size_t count);
-
-		// Insert operations
-		mongodb_query_builder& insert_one(const std::map<std::string, database_value>& document);
-		mongodb_query_builder& insert_many(const std::vector<std::map<std::string, database_value>>& documents);
-
-		// Update operations
-		mongodb_query_builder& update_one(const std::map<std::string, database_value>& filter,
-										   const std::map<std::string, database_value>& update);
-		mongodb_query_builder& update_many(const std::map<std::string, database_value>& filter,
-											const std::map<std::string, database_value>& update);
-
-		// Delete operations
-		mongodb_query_builder& delete_one(const std::map<std::string, database_value>& filter);
-		mongodb_query_builder& delete_many(const std::map<std::string, database_value>& filter);
-
-		// Aggregation pipeline
-		mongodb_query_builder& match(const std::map<std::string, database_value>& conditions);
-		mongodb_query_builder& group(const std::map<std::string, database_value>& group_spec);
-		mongodb_query_builder& unwind(const std::string& field);
-
-		// Build final query
-		std::string build() const;
-		std::string build_json() const;
-
-		// Reset builder
-		void reset();
-
-	private:
-		enum class operation_type { none, find, insert, update, delete_op, aggregate };
-
-		operation_type type_;
-		std::string collection_name_;
-		std::map<std::string, database_value> filter_;
-		std::map<std::string, database_value> projection_;
-		std::map<std::string, int> sort_spec_;
-		size_t limit_count_;
-		size_t skip_count_;
-
-		// For operations
-		std::map<std::string, database_value> document_;
-		std::vector<std::map<std::string, database_value>> documents_;
-		std::map<std::string, database_value> update_spec_;
-
-		// For aggregation
-		std::vector<std::map<std::string, database_value>> pipeline_;
-
-		std::string to_json(const std::map<std::string, database_value>& data) const;
-		std::string value_to_json(const database_value& value) const;
-	};
-
-	/**
-	 * @class redis_query_builder
-	 * @brief Builder for Redis commands.
-	 *
-	 * @deprecated Use query_builder instead. This class will be removed in a future release.
-	 *
-	 * ### Thread Safety
-	 * - NOT thread-safe. Each thread must use its own instance.
-	 * - Internal state (command_, args_) is not protected by mutex.
-	 * - DO NOT share instances across threads.
-	 */
-	class [[deprecated("Use query_builder instead")]] redis_query_builder
-	{
-	public:
-		redis_query_builder();
-		~redis_query_builder() = default;
-
-		// String operations
-		redis_query_builder& set(const std::string& key, const std::string& value);
-		redis_query_builder& get(const std::string& key);
-		redis_query_builder& del(const std::string& key);
-		redis_query_builder& exists(const std::string& key);
-
-		// Hash operations
-		redis_query_builder& hset(const std::string& key, const std::string& field, const std::string& value);
-		redis_query_builder& hget(const std::string& key, const std::string& field);
-		redis_query_builder& hdel(const std::string& key, const std::string& field);
-		redis_query_builder& hgetall(const std::string& key);
-
-		// List operations
-		redis_query_builder& lpush(const std::string& key, const std::string& value);
-		redis_query_builder& rpush(const std::string& key, const std::string& value);
-		redis_query_builder& lpop(const std::string& key);
-		redis_query_builder& rpop(const std::string& key);
-		redis_query_builder& lrange(const std::string& key, int start, int stop);
-
-		// Set operations
-		redis_query_builder& sadd(const std::string& key, const std::string& member);
-		redis_query_builder& srem(const std::string& key, const std::string& member);
-		redis_query_builder& sismember(const std::string& key, const std::string& member);
-		redis_query_builder& smembers(const std::string& key);
-
-		// Expiration
-		redis_query_builder& expire(const std::string& key, int seconds);
-		redis_query_builder& ttl(const std::string& key);
-
-		// Build command
-		std::string build() const;
-		std::vector<std::string> build_args() const;
-
-		// Reset builder
-		void reset();
-
-	private:
-		std::string command_;
-		std::vector<std::string> args_;
-	};
-
-	/**
 	 * @class query_builder
 	 * @brief Universal query builder that adapts to different database types.
 	 *
@@ -341,8 +107,25 @@ namespace database
 	 * - Create separate builders for each thread or protect with external mutex.
 	 *
 	 * ### Memory Efficiency
-	 * - Only allocates ONE dialect instance (vs 3 builders before).
-	 * - Memory footprint reduced by ~66% compared to previous implementation.
+	 * - Only allocates ONE dialect instance per builder.
+	 * - Dialect is lazily initialized when first needed.
+	 *
+	 * ### Example Usage
+	 * ```cpp
+	 * // SQL query
+	 * query_builder builder(database_types::postgres);
+	 * auto query = builder
+	 *     .select({"id", "name"})
+	 *     .from("users")
+	 *     .where("active", "=", true)
+	 *     .order_by("name")
+	 *     .limit(10)
+	 *     .build();
+	 *
+	 * // Switch database type
+	 * builder.for_database(database_types::mysql);
+	 * auto mysql_query = builder.select({"*"}).from("users").build();
+	 * ```
 	 */
 	class query_builder
 	{
@@ -388,14 +171,6 @@ namespace database
 		// NoSQL-style interface
 		query_builder& collection(const std::string& name); // MongoDB
 		query_builder& key(const std::string& key); // Redis
-
-		// Legacy universal operations (deprecated)
-		[[deprecated("Use insert_into().values() instead")]]
-		query_builder& insert(const std::map<std::string, database_value>& data);
-		[[deprecated("Use update(table).set(data) instead")]]
-		query_builder& update(const std::map<std::string, database_value>& data);
-		[[deprecated("Use delete_from() instead")]]
-		query_builder& remove();
 
 		// Build and execute
 		std::string build() const;

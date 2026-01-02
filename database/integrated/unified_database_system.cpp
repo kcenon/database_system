@@ -502,8 +502,8 @@ public:
 
     // Query builder
 
-    sql_query_builder create_query_builder() const {
-        return sql_query_builder{};
+    query_builder create_query_builder() const {
+        return query_builder{database_types::sqlite};
     }
 
 private:
@@ -706,7 +706,7 @@ unified_database_system::pool_stats unified_database_system::get_pool_stats() co
 
 // Query builder
 
-sql_query_builder unified_database_system::create_query_builder() const {
+query_builder unified_database_system::create_query_builder() const {
     return pimpl_->create_query_builder();
 }
 

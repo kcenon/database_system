@@ -24,9 +24,26 @@
 
 ---
 
-## [Unreleased] - 2025-12-31
+## [Unreleased] - 2026-01-02
 
 ### ♻️ **리팩토링**
+
+#### **Deprecated 레거시 Query Builder 제거 (Issue #312)**
+- **deprecated된 query builder 클래스 제거**
+  - `sql_query_builder` - 제거됨 (`query_builder`와 SQL 데이터베이스 타입 사용)
+  - `mongodb_query_builder` - 제거됨 (`query_builder`와 `database_types::mongodb` 사용)
+  - `redis_query_builder` - 제거됨 (`query_builder`와 `database_types::redis` 사용)
+- **모든 테스트를 통합 `query_builder`로 마이그레이션**
+  - `sql_query_builder_test.cpp` - `query_builder` 사용으로 마이그레이션
+  - `mongodb_query_builder_test.cpp` - 제거됨 (`universal_query_builder_test.cpp`에서 커버)
+  - `redis_query_builder_test.cpp` - 제거됨 (`universal_query_builder_test.cpp`에서 커버)
+  - 보안 테스트 (`sql_injection_test.cpp`, `data_masking_test.cpp`) - 마이그레이션
+  - 스트레스 테스트 (`memory_stress_test.cpp`, `async_stress_test.cpp`) - 마이그레이션
+- **`unified_database_system`** - `sql_query_builder` 대신 `query_builder` 사용하도록 업데이트
+- **deprecated된 레거시 메서드** `query_builder`에서 제거
+  - `insert(data)` - `insert_into(table).values(data)` 사용
+  - `update(data)` - `update(table).set(data)` 사용
+  - `remove()` - `delete_from(table)` 사용
 
 #### **async_executor 통합 (Issue #305)**
 - **`async_executor_v2`를 통합된 `async_executor` 구현으로 병합**

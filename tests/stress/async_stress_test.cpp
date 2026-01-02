@@ -233,9 +233,9 @@ TEST_F(AsyncStressTest, ConcurrentQueryBuilderUsage) {
             for (int i = 0; i < QUERIES_PER_THREAD; ++i) {
                 try {
                     // Each thread uses its own builder (not shared)
-                    sql_query_builder builder;
+                    query_builder builder(database_types::sqlite);
                     auto query = builder
-                        .select(std::vector<std::string>{"*"})
+                        .select({"*"})
                         .from("stress_test")
                         .where("thread_id", "=", static_cast<int64_t>(t))
                         .limit(10)

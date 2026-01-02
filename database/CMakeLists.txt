@@ -56,6 +56,7 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_dialect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.h
@@ -89,6 +90,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.cpp

@@ -8,7 +8,6 @@
  * - Classic injection attempts (OR '1'='1, --, ;)
  * - Union-based injection attempts
  * - Parameterized query safety
- * - Raw method warnings
  */
 
 #include <gtest/gtest.h>
@@ -31,7 +30,6 @@ using namespace database::core;
 class SQLInjectionTest : public ::testing::Test {
 protected:
     std::unique_ptr<sqlite_backend> db_;
-    sql_query_builder builder_;
 
     void SetUp() override {
         db_ = std::make_unique<sqlite_backend>();
@@ -67,7 +65,6 @@ protected:
         if (db_ && db_->is_initialized()) {
             db_->shutdown();
         }
-        builder_.reset();
     }
 };
 
@@ -86,8 +83,9 @@ TEST_F(SQLInjectionTest, BasicInjectionAttempt) {
 #ifdef USE_SQLITE
     std::string malicious_input = "' OR '1'='1";
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("name", "=", malicious_input)
         .build();
@@ -116,8 +114,9 @@ TEST_F(SQLInjectionTest, CommentInjectionAttempt) {
 #ifdef USE_SQLITE
     std::string malicious_input = "admin'--";
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("name", "=", malicious_input)
         .build();
@@ -144,8 +143,9 @@ TEST_F(SQLInjectionTest, BatchStatementInjectionAttempt) {
 #ifdef USE_SQLITE
     std::string malicious_input = "'; DROP TABLE users; --";
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("name", "=", malicious_input)
         .build();
@@ -185,8 +185,9 @@ TEST_F(SQLInjectionTest, UnionInjectionAttempt) {
 
     std::string malicious_input = "' UNION SELECT secret, secret, secret, secret FROM sensitive_data --";
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("name", "=", malicious_input)
         .build();
@@ -235,8 +236,9 @@ TEST_F(SQLInjectionTest, ApostropheInValueSafe) {
 
     database_value safe_value = std::string("O'Brien");
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("name", "=", safe_value)
         .build();
@@ -272,9 +274,9 @@ TEST_F(SQLInjectionTest, SpecialCharactersInValue) {
     };
 
     for (const auto& input : special_inputs) {
-        builder_.reset();
-        auto query = builder_
-            .select(std::vector<std::string>{"*"})
+        query_builder builder(database_types::sqlite);
+        auto query = builder
+            .select({"*"})
             .from("users")
             .where("name", "=", input)
             .build();
@@ -294,41 +296,6 @@ TEST_F(SQLInjectionTest, SpecialCharactersInValue) {
 }
 
 //=============================================================================
-// Raw Method Warning Tests
-//=============================================================================
-
-/**
- * @test RawWhereBypassesEscaping
- * @brief Documents that where_raw() bypasses escaping (intentional behavior)
- *
- * This test documents that raw methods are vulnerable by design.
- * They should only be used with trusted input.
- */
-TEST_F(SQLInjectionTest, RawWhereBypassesEscaping) {
-#ifdef USE_SQLITE
-    std::string user_input = "1 OR 1=1";
-
-    builder_.where_raw("id = " + user_input);
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
-        .from("users")
-        .build();
-
-    auto query_result = db_->select_query(query);
-
-    // Raw method WILL be vulnerable - this is expected behavior
-    // Document this as a security consideration
-    if (query_result.is_ok() && query_result.value().size() > 1) {
-        // This is expected - raw methods bypass escaping
-        SUCCEED() << "SECURITY NOTE: where_raw() bypasses SQL escaping as documented. "
-                  << "Only use with trusted input.";
-    }
-#else
-    GTEST_SKIP() << "SQLite not available";
-#endif
-}
-
-//=============================================================================
 // Numeric Value Tests
 //=============================================================================
 
@@ -341,8 +308,9 @@ TEST_F(SQLInjectionTest, NumericValueInjection) {
     // Attempting to inject via what should be a numeric field
     database_value numeric_value = static_cast<int64_t>(1);
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("id", "=", numeric_value)
         .build();
@@ -364,8 +332,9 @@ TEST_F(SQLInjectionTest, BooleanValueHandling) {
 #ifdef USE_SQLITE
     database_value bool_value = true;
 
-    auto query = builder_
-        .select(std::vector<std::string>{"*"})
+    query_builder builder(database_types::sqlite);
+    auto query = builder
+        .select({"*"})
         .from("users")
         .where("id", ">", bool_value)
         .build();
@@ -388,16 +357,18 @@ TEST_F(SQLInjectionTest, BooleanValueHandling) {
  * @brief Tests that reset() properly clears all builder state
  */
 TEST_F(SQLInjectionTest, ResetPreventsDataLeakage) {
+    query_builder builder(database_types::sqlite);
+
     // Build first query with sensitive filter
-    builder_
-        .select(std::vector<std::string>{"*"})
+    builder
+        .select({"*"})
         .from("users")
         .where("email", "=", std::string("admin@secret.com"));
 
     // Reset and build new query
-    builder_.reset();
-    auto query = builder_
-        .select(std::vector<std::string>{"id"})
+    builder.reset();
+    auto query = builder
+        .select({"id"})
         .from("public_data")
         .build();
 
@@ -426,9 +397,9 @@ TEST_F(SQLInjectionTest, UnicodeBypassAttempt) {
     };
 
     for (const auto& attack : unicode_attacks) {
-        builder_.reset();
-        auto query = builder_
-            .select(std::vector<std::string>{"*"})
+        query_builder builder(database_types::sqlite);
+        auto query = builder
+            .select({"*"})
             .from("users")
             .where("name", "=", attack)
             .build();

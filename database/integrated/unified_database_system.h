@@ -539,7 +539,7 @@ public:
      * auto query_str = builder.build();
      * auto users = db.execute(query_str);
      */
-    sql_query_builder create_query_builder() const;
+    query_builder create_query_builder() const;
 
     // Monitoring and health
 

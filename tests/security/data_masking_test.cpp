@@ -216,9 +216,9 @@ TEST_F(DataMaskingTest, QueryBuilderDoesNotLogSensitiveData) {
     std::streambuf* original = std::clog.rdbuf(captured.rdbuf());
 
     {
-        sql_query_builder builder;
+        query_builder builder(database_types::sqlite);
         builder
-            .select(std::vector<std::string>{"*"})
+            .select({"*"})
             .from("users")
             .where("ssn", "=", std::string("123-45-6789"))
             .where("credit_card", "=", std::string("4111111111111111"))

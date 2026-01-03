@@ -15,7 +15,15 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 **Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, MySQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
 
-### Latest Updates (2025-12)
+### Latest Updates (2026-01)
+
+- **C++20 Module Support**: Added module files for modern C++20 module imports
+  - Primary module: `kcenon.database`
+  - Module partitions: `:core`, `:query`, `:backends`
+  - Requires CMake 3.28+ with `DATABASE_BUILD_MODULES=ON`
+  - Compatible with existing header-based includes
+
+### Previous Updates (2025-12)
 
 - **[BREAKING] Connection Pooling Removed (Phase 4.3)**: Migration to ProxyMode completed
   - All local pooling classes removed: `connection_pool`, `connection_pool_v2`, `connection_pool_v3`
@@ -95,6 +103,34 @@ git clone https://github.com/kcenon/database_system.git
 cd database_system
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_POSTGRESQL=ON
 cmake --build build
+```
+
+### C++20 Module Support
+
+For C++20 module-based development (requires CMake 3.28+):
+
+```bash
+# Build with module support
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DDATABASE_BUILD_MODULES=ON
+cmake --build build
+```
+
+```cpp
+// Using C++20 modules
+import kcenon.database;
+
+using namespace database;
+
+auto context = std::make_shared<database_context>();
+auto manager = std::make_shared<database_manager>(context);
+manager->set_mode(database_types::sqlite);
+
+auto builder = manager->create_query_builder();
+auto query = builder
+    .select({"id", "name"})
+    .from("users")
+    .where("active", "=", true)
+    .build();
 ```
 
 📖 **[Quick Start Guide →](docs/guides/QUICK_START.md)** | **[빠른 시작 가이드 →](docs/guides/QUICK_START_KO.md)**

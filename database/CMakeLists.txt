@@ -545,6 +545,76 @@ if(BUILD_INTEGRATED_DATABASE)
 endif()
 
 ##################################################
+# C++20 Module Support (CMake 3.28+)
+##################################################
+
+# C++20 modules require CMake 3.28 or later
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.28")
+    option(DATABASE_BUILD_MODULES "Build C++20 module files" OFF)
+
+    if(DATABASE_BUILD_MODULES)
+        message(STATUS "C++20 module support enabled")
+
+        # Enable module scanning
+        set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+
+        # Module source files
+        set(DATABASE_MODULE_FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/../src/modules/database.cppm
+            ${CMAKE_CURRENT_SOURCE_DIR}/../src/modules/core.cppm
+            ${CMAKE_CURRENT_SOURCE_DIR}/../src/modules/query.cppm
+            ${CMAKE_CURRENT_SOURCE_DIR}/../src/modules/backends.cppm
+        )
+
+        # Check if module files exist
+        set(_MODULES_EXIST TRUE)
+        foreach(_module ${DATABASE_MODULE_FILES})
+            if(NOT EXISTS "${_module}")
+                message(WARNING "Module file not found: ${_module}")
+                set(_MODULES_EXIST FALSE)
+            endif()
+        endforeach()
+
+        if(_MODULES_EXIST)
+            # Create module library target
+            add_library(database_modules)
+            target_sources(database_modules
+                PRIVATE FILE_SET CXX_MODULES
+                FILES ${DATABASE_MODULE_FILES}
+            )
+
+            # Link with main database library
+            target_link_libraries(database_modules PUBLIC ${PROJECT_NAME})
+
+            # Set C++20 standard for modules
+            set_target_properties(database_modules PROPERTIES
+                CXX_STANDARD 20
+                CXX_STANDARD_REQUIRED ON
+                CXX_EXTENSIONS OFF
+            )
+
+            # Include directories for module compilation
+            target_include_directories(database_modules PUBLIC
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            )
+
+            message(STATUS "Database C++20 modules configured:")
+            message(STATUS "  - kcenon.database (primary)")
+            message(STATUS "  - kcenon.database:core")
+            message(STATUS "  - kcenon.database:query")
+            message(STATUS "  - kcenon.database:backends")
+        else()
+            message(WARNING "Some module files are missing - module build disabled")
+        endif()
+    else()
+        message(STATUS "C++20 module support available but disabled (set DATABASE_BUILD_MODULES=ON to enable)")
+    endif()
+else()
+    message(STATUS "C++20 module support requires CMake 3.28+ (current: ${CMAKE_VERSION})")
+endif()
+
+##################################################
 # Summary
 ##################################################
 

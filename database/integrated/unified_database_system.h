@@ -206,18 +206,64 @@ struct health_check {
 };
 
 /**
- * @brief Query parameter value
+ * @brief Query parameter value with null safety
+ *
+ * Supports implicit conversions from common types while providing null safety.
+ * When a null pointer is passed, is_null() returns true and value() returns empty string.
+ *
+ * @example
+ * // Normal usage
+ * db.execute("SELECT * FROM users WHERE id = $1", {42});
+ * db.execute("SELECT * FROM users WHERE name = $1", {"Alice"});
+ *
+ * // Null handling
+ * const char* ptr = get_nullable_string();  // might return nullptr
+ * db.execute("SELECT * FROM users WHERE name = $1", {ptr});  // safe, won't crash
+ *
+ * // Explicit null
+ * db.execute("UPDATE users SET deleted_at = $1", {nullptr});
  */
 struct query_param {
-    std::string value;
+    std::optional<std::string> value;
 
-    // Implicit conversions for convenience
+    // Implicit conversions for convenience with null safety
     query_param(const std::string& v) : value(v) {}
-    query_param(const char* v) : value(v) {}
+    query_param(std::string&& v) : value(std::move(v)) {}
+    query_param(const char* v) : value(v ? std::optional<std::string>(v) : std::nullopt) {}
+    query_param(std::nullptr_t) : value(std::nullopt) {}
     query_param(int v) : value(std::to_string(v)) {}
     query_param(long v) : value(std::to_string(v)) {}
+    query_param(long long v) : value(std::to_string(v)) {}
+    query_param(unsigned int v) : value(std::to_string(v)) {}
+    query_param(unsigned long v) : value(std::to_string(v)) {}
+    query_param(unsigned long long v) : value(std::to_string(v)) {}
     query_param(double v) : value(std::to_string(v)) {}
+    query_param(float v) : value(std::to_string(v)) {}
     query_param(bool v) : value(v ? "true" : "false") {}
+
+    /**
+     * @brief Check if this parameter represents a NULL value
+     * @return true if the parameter is null
+     */
+    bool is_null() const noexcept { return !value.has_value(); }
+
+    /**
+     * @brief Get the string value (returns empty string for null)
+     * @return The parameter value as string, or empty string if null
+     * @note Use is_null() to distinguish between empty string and null
+     */
+    const std::string& get_value() const noexcept {
+        static const std::string empty_string;
+        return value.has_value() ? *value : empty_string;
+    }
+
+    /**
+     * @brief Get the value for SQL generation
+     * @return "NULL" for null values, otherwise the quoted/escaped value
+     */
+    std::string to_sql_string() const {
+        return value.has_value() ? *value : "NULL";
+    }
 };
 
 /**

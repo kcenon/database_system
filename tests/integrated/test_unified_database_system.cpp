@@ -309,10 +309,64 @@ bool test_query_parameters() {
     params.push_back(query_param(false));
 
     ASSERT_TRUE(params.size() == 5, "Should accept various parameter types");
-    ASSERT_TRUE(params[0].value == "string value", "String param should work");
-    ASSERT_TRUE(params[1].value == "42", "Int param should convert to string");
-    ASSERT_TRUE(params[3].value == "true", "Bool true should convert correctly");
-    ASSERT_TRUE(params[4].value == "false", "Bool false should convert correctly");
+    ASSERT_TRUE(params[0].get_value() == "string value", "String param should work");
+    ASSERT_TRUE(params[1].get_value() == "42", "Int param should convert to string");
+    ASSERT_TRUE(params[3].get_value() == "true", "Bool true should convert correctly");
+    ASSERT_TRUE(params[4].get_value() == "false", "Bool false should convert correctly");
+
+    // Verify non-null parameters
+    ASSERT_FALSE(params[0].is_null(), "String param should not be null");
+    ASSERT_FALSE(params[1].is_null(), "Int param should not be null");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 10a: Query Parameter Null Safety
+//==============================================================================
+
+bool test_query_param_null_safety() {
+    TEST_START("Query Parameter Null Safety");
+
+    // Test explicit nullptr
+    query_param null_param(nullptr);
+    ASSERT_TRUE(null_param.is_null(), "nullptr should create null param");
+    ASSERT_TRUE(null_param.get_value().empty(), "Null param get_value should return empty string");
+    ASSERT_TRUE(null_param.to_sql_string() == "NULL", "Null param SQL string should be NULL");
+
+    // Test null const char*
+    const char* null_str = nullptr;
+    query_param null_char_param(null_str);
+    ASSERT_TRUE(null_char_param.is_null(), "null const char* should create null param");
+
+    // Test valid const char*
+    const char* valid_str = "test";
+    query_param valid_char_param(valid_str);
+    ASSERT_FALSE(valid_char_param.is_null(), "valid const char* should not be null");
+    ASSERT_TRUE(valid_char_param.get_value() == "test", "valid const char* should preserve value");
+
+    // Test empty string vs null
+    query_param empty_param("");
+    ASSERT_FALSE(empty_param.is_null(), "Empty string should not be null");
+    ASSERT_TRUE(empty_param.get_value().empty(), "Empty string value should be empty");
+    ASSERT_TRUE(empty_param.to_sql_string().empty(), "Empty string SQL should be empty");
+
+    // Test move semantics
+    std::string str = "moved value";
+    query_param moved_param(std::move(str));
+    ASSERT_FALSE(moved_param.is_null(), "Moved string should not be null");
+    ASSERT_TRUE(moved_param.get_value() == "moved value", "Moved value should be preserved");
+
+    // Test additional integer types
+    query_param ll_param(static_cast<long long>(123456789012345LL));
+    ASSERT_FALSE(ll_param.is_null(), "long long should not be null");
+
+    query_param ull_param(static_cast<unsigned long long>(18446744073709551615ULL));
+    ASSERT_FALSE(ull_param.is_null(), "unsigned long long should not be null");
+
+    // Test float
+    query_param float_param(3.14f);
+    ASSERT_FALSE(float_param.is_null(), "float should not be null");
 
     TEST_END();
 }
@@ -482,6 +536,7 @@ int main() {
     test_metrics_api();
     test_query_result_structure();
     test_query_parameters();
+    test_query_param_null_safety();
     test_metrics_structure();
     test_health_check_structure();
     test_thread_safety_health_checks();

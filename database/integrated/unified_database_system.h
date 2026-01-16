@@ -464,6 +464,12 @@ public:
      * @param query SQL SELECT statement
      * @param params Optional query parameters
      * @return Result containing selected rows or error
+     *
+     * @note This is a convenience wrapper around execute() that returns
+     *       the full query_result. Use this method when you need all
+     *       columns and rows from a SELECT statement.
+     *
+     * @see execute() for the underlying implementation
      */
     kcenon::common::Result<query_result> select(
         const std::string& query,
@@ -474,6 +480,12 @@ public:
      * @param query SQL INSERT statement
      * @param params Optional query parameters
      * @return Result containing number of inserted rows or error
+     *
+     * @note This is a convenience wrapper around execute() that extracts
+     *       only the affected_rows count from the query_result. Use this
+     *       method when you only need to know how many rows were inserted.
+     *
+     * @see execute() for the underlying implementation
      */
     kcenon::common::Result<size_t> insert(
         const std::string& query,
@@ -484,6 +496,12 @@ public:
      * @param query SQL UPDATE statement
      * @param params Optional query parameters
      * @return Result containing number of updated rows or error
+     *
+     * @note This is a convenience wrapper around execute() that extracts
+     *       only the affected_rows count from the query_result. Use this
+     *       method when you only need to know how many rows were updated.
+     *
+     * @see execute() for the underlying implementation
      */
     kcenon::common::Result<size_t> update(
         const std::string& query,
@@ -494,6 +512,12 @@ public:
      * @param query SQL DELETE statement
      * @param params Optional query parameters
      * @return Result containing number of deleted rows or error
+     *
+     * @note This is a convenience wrapper around execute() that extracts
+     *       only the affected_rows count from the query_result. Use this
+     *       method when you only need to know how many rows were deleted.
+     *
+     * @see execute() for the underlying implementation
      */
     kcenon::common::Result<size_t> remove(
         const std::string& query,

@@ -318,12 +318,31 @@ if(BUILD_INTEGRATED_DATABASE)
 
     add_test(NAME IntegratedUnifiedSystemTest COMMAND integrated_unified_system_test)
 
+    # Connection string builder test
+    add_executable(integrated_connection_string_builder_test
+        integrated/test_connection_string_builder.cpp
+    )
+
+    target_link_libraries(integrated_connection_string_builder_test PRIVATE
+        integrated_database
+        Threads::Threads
+    )
+
+    set_target_properties(integrated_connection_string_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME IntegratedConnectionStringBuilderTest COMMAND integrated_connection_string_builder_test)
+
     message(STATUS "Integrated database configuration test configured")
     message(STATUS "Integrated database logger adapter test configured")
     message(STATUS "Integrated database monitoring adapter test configured")
     message(STATUS "Integrated database thread adapter test configured")
     message(STATUS "Integrated database coordinator test configured")
     message(STATUS "Integrated database unified system test configured (Phase 6)")
+    message(STATUS "Integrated database connection string builder test configured")
 endif()
 
 ##################################################

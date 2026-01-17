@@ -38,6 +38,8 @@ set(INTEGRATED_DB_HEADERS
     adapters/backends/null_thread_backend.h
     # Unified System
     unified_database_system.h
+    # Connection String Builder
+    connection_string_builder.h
 )
 
 set(INTEGRATED_DB_SOURCES
@@ -56,6 +58,8 @@ set(INTEGRATED_DB_SOURCES
     adapters/backends/fallback_thread_backend.cpp
     # Unified System
     unified_database_system.cpp
+    # Connection String Builder
+    connection_string_builder.cpp
 )
 
 # Conditionally add system_monitoring_backend if monitoring_system is available

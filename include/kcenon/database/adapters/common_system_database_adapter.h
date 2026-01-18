@@ -97,13 +97,14 @@ public:
                 2, "Already connected to database", "database_system::adapter");
         }
 
-        if (manager_->connect(connection_string)) {
+        auto result = manager_->connect_result(connection_string);
+        if (result.is_ok()) {
             connected_ = true;
             return common::VoidResult::ok({});
         }
 
         return common::make_error<std::monostate>(
-            3, "Failed to connect to database", "database_system::adapter");
+            3, result.error().message, "database_system::adapter");
     }
 
     /**
@@ -120,13 +121,14 @@ public:
             return common::VoidResult::ok({});  // Already disconnected
         }
 
-        if (manager_->disconnect()) {
+        auto result = manager_->disconnect_result();
+        if (result.is_ok()) {
             connected_ = false;
             return common::VoidResult::ok({});
         }
 
         return common::make_error<std::monostate>(
-            4, "Failed to disconnect from database", "database_system::adapter");
+            4, result.error().message, "database_system::adapter");
     }
 
     /**
@@ -145,16 +147,21 @@ public:
                 5, "Not connected to database", "database_system::adapter");
         }
 
-        auto result = manager_->select_query(query);
+        auto result = manager_->select_query_result(query);
+        if (!result.is_ok()) {
+            return common::make_error<common::database_result>(
+                6, result.error().message, "database_system::adapter");
+        }
 
-        // Convert database::database_result to common::database_result
+        // Convert core::database_result to common::database_result
         common::database_result common_result;
-        common_result.reserve(result.size());
+        const auto& core_result = result.value();
+        common_result.reserve(core_result.size());
 
-        for (const auto& row : result) {
+        for (const auto& row : core_result) {
             common::database_row common_row;
             for (const auto& [key, value] : row) {
-                common_row[key] = convert_value(value);
+                common_row[key] = convert_core_value(value);
             }
             common_result.push_back(std::move(common_row));
         }
@@ -183,23 +190,33 @@ public:
         std::transform(upper_command.begin(), upper_command.end(),
                        upper_command.begin(), ::toupper);
 
-        unsigned int affected_rows = 0;
         if (upper_command.find("INSERT") != std::string::npos) {
-            affected_rows = manager_->insert_query(command);
-        } else if (upper_command.find("UPDATE") != std::string::npos) {
-            affected_rows = manager_->update_query(command);
-        } else if (upper_command.find("DELETE") != std::string::npos) {
-            affected_rows = manager_->delete_query(command);
-        } else {
-            // For DDL or other commands, use create_query
-            if (!manager_->create_query(command)) {
+            auto result = manager_->insert_query_result(command);
+            if (!result.is_ok()) {
                 return common::make_error<std::monostate>(
-                    6, "Failed to execute command", "database_system::adapter");
+                    6, result.error().message, "database_system::adapter");
             }
-            return common::VoidResult::ok({});
+        } else if (upper_command.find("UPDATE") != std::string::npos) {
+            auto result = manager_->update_query_result(command);
+            if (!result.is_ok()) {
+                return common::make_error<std::monostate>(
+                    6, result.error().message, "database_system::adapter");
+            }
+        } else if (upper_command.find("DELETE") != std::string::npos) {
+            auto result = manager_->delete_query_result(command);
+            if (!result.is_ok()) {
+                return common::make_error<std::monostate>(
+                    6, result.error().message, "database_system::adapter");
+            }
+        } else {
+            // For DDL or other commands, use create_query_result
+            auto result = manager_->create_query_result(command);
+            if (!result.is_ok()) {
+                return common::make_error<std::monostate>(
+                    6, result.error().message, "database_system::adapter");
+            }
         }
 
-        // affected_rows of 0 might be valid (e.g., no matching rows)
         return common::VoidResult::ok({});
     }
 
@@ -253,12 +270,12 @@ public:
 
 private:
     /**
-     * @brief Convert database_system value to common_system value
+     * @brief Convert core::database_value to common_system value
      */
-    static common::database_value convert_value(const ::database::database_value& value) {
+    static common::database_value convert_core_value(const ::database::core::database_value& value) {
         return std::visit([](auto&& arg) -> common::database_value {
             using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_same_v<T, ::database::database_null>) {
+            if constexpr (std::is_same_v<T, std::nullptr_t>) {
                 return common::database_null{};
             } else if constexpr (std::is_same_v<T, std::string>) {
                 return arg;

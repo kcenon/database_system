@@ -73,7 +73,8 @@ protected:
     manager_->set_mode(database_types::sqlite);
 
     // Connect to test database - use absolute path without URI prefix
-    connected_ = manager_->connect(test_db_path_.string());
+    auto connect_result = manager_->connect_result(test_db_path_.string());
+    connected_ = connect_result.is_ok();
 
     if (connected_) {
       // Create test tables
@@ -88,7 +89,7 @@ protected:
   void TearDown() override {
     // Disconnect from database
     if (connected_) {
-      manager_->disconnect();
+      manager_->disconnect_result();
       connected_ = false;
     }
 
@@ -111,7 +112,7 @@ protected:
    * @brief Creates standard test tables.
    */
   virtual void CreateTestTables() {
-    manager_->create_query("CREATE TABLE IF NOT EXISTS users ("
+    manager_->create_query_result("CREATE TABLE IF NOT EXISTS users ("
                            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                            "name TEXT NOT NULL, "
                            "email TEXT UNIQUE NOT NULL, "
@@ -119,7 +120,7 @@ protected:
                            "created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
                            ")");
 
-    manager_->create_query("CREATE TABLE IF NOT EXISTS products ("
+    manager_->create_query_result("CREATE TABLE IF NOT EXISTS products ("
                            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                            "name TEXT NOT NULL, "
                            "price REAL NOT NULL, "
@@ -132,8 +133,12 @@ protected:
    * @param query SQL query to execute
    * @return Query result
    */
-  database_result ExecuteQuery(const std::string &query) {
-    return manager_->select_query(query);
+  core::database_result ExecuteQuery(const std::string &query) {
+    auto result = manager_->select_query_result(query);
+    if (result.is_ok()) {
+      return result.value();
+    }
+    return {};
   }
 
   /**
@@ -146,7 +151,7 @@ protected:
                        const std::string &schema) {
     std::string query =
         "CREATE TABLE IF NOT EXISTS " + table_name + " (" + schema + ")";
-    return manager_->create_query(query);
+    return manager_->create_query_result(query).is_ok();
   }
 
   /**
@@ -156,7 +161,7 @@ protected:
    */
   bool DropTestTable(const std::string &table_name) {
     std::string query = "DROP TABLE IF EXISTS " + table_name;
-    return manager_->create_query(query);
+    return manager_->create_query_result(query).is_ok();
   }
 
   /**
@@ -174,7 +179,8 @@ protected:
                           "'user" +
                           std::to_string(i) + "@test.com', " +
                           std::to_string(20 + (i % 50)) + ")";
-      if (manager_->insert_query(query) > 0) {
+      auto result = manager_->insert_query_result(query);
+      if (result.is_ok() && result.value() > 0) {
         ++inserted;
       }
     }
@@ -225,7 +231,7 @@ protected:
    * @param table_name Table name
    */
   void ClearTable(const std::string &table_name) {
-    manager_->delete_query("DELETE FROM " + table_name);
+    manager_->delete_query_result("DELETE FROM " + table_name);
   }
 
 protected:

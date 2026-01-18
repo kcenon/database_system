@@ -240,7 +240,7 @@ TEST_F(ProxyConnectorTest, ProxyConfigAccessThreadSafe) {
 	}
 }
 
-// Backward compatibility tests
+// Backward compatibility tests - now uses Result-based API
 TEST_F(ProxyConnectorTest, ExistingAPIBackwardCompatibility) {
 	// Verify existing API still works
 
@@ -249,8 +249,8 @@ TEST_F(ProxyConnectorTest, ExistingAPIBackwardCompatibility) {
 	EXPECT_EQ(db_mgr_->database_type(), database_types::postgres);
 	EXPECT_EQ(db_mgr_->current_connection_mode(), connection_mode::direct);
 
-	// All other methods should work
-	EXPECT_NO_THROW(db_mgr_->create_query("SELECT 1"));
-	EXPECT_NO_THROW(db_mgr_->select_query("SELECT 1"));
-	EXPECT_NO_THROW(db_mgr_->disconnect());
+	// All methods now use Result-based API
+	EXPECT_NO_THROW(db_mgr_->create_query_result("SELECT 1"));
+	EXPECT_NO_THROW(db_mgr_->select_query_result("SELECT 1"));
+	EXPECT_NO_THROW(db_mgr_->disconnect_result());
 }

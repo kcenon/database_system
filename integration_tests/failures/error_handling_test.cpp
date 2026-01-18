@@ -78,13 +78,13 @@ TEST_F(ErrorHandlingTest, PrimaryKeyConstraintViolation)
 	CreateTestTable("pk_test", "id INTEGER PRIMARY KEY, value TEXT");
 
 	// Insert first row
-	manager_->insert_query("INSERT INTO pk_test (id, value) VALUES (1, 'first')");
+	manager_->insert_query_result("INSERT INTO pk_test (id, value) VALUES (1, 'first')");
 
 	// Try to insert duplicate primary key
-	unsigned int affected = manager_->insert_query(
+	auto result = manager_->insert_query_result(
 		"INSERT INTO pk_test (id, value) VALUES (1, 'duplicate')");
 
-	EXPECT_EQ(affected, 0u) << "Duplicate primary key should fail";
+	EXPECT_FALSE(result.is_ok()) << "Duplicate primary key should fail";
 }
 
 /**
@@ -93,15 +93,15 @@ TEST_F(ErrorHandlingTest, PrimaryKeyConstraintViolation)
 TEST_F(ErrorHandlingTest, UniqueConstraintViolation)
 {
 	// Users table has UNIQUE constraint on email
-	manager_->insert_query("INSERT INTO users (name, email, age) VALUES "
+	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User1', 'unique@test.com', 25)");
 
 	// Try to insert duplicate email
-	unsigned int affected = manager_->insert_query(
+	auto result = manager_->insert_query_result(
 		"INSERT INTO users (name, email, age) VALUES "
 		"('User2', 'unique@test.com', 30)");
 
-	EXPECT_EQ(affected, 0u) << "Duplicate unique value should fail";
+	EXPECT_FALSE(result.is_ok()) << "Duplicate unique value should fail";
 }
 
 /**
@@ -113,8 +113,8 @@ TEST_F(ErrorHandlingTest, NotNullConstraintViolation)
 	std::string query = "INSERT INTO users (name, email) VALUES "
 	                    "('User', NULL)"; // email is NOT NULL
 
-	unsigned int affected = manager_->insert_query(query);
-	EXPECT_EQ(affected, 0u) << "NULL in NOT NULL column should fail";
+	auto result = manager_->insert_query_result(query);
+	EXPECT_FALSE(result.is_ok()) << "NULL in NOT NULL column should fail";
 }
 
 /**
@@ -126,11 +126,11 @@ TEST_F(ErrorHandlingTest, TransactionRollbackOnError)
 	ASSERT_TRUE(txn.Begin());
 
 	// Insert valid row
-	manager_->insert_query("INSERT INTO users (name, email, age) VALUES "
+	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User1', 'user1@test.com', 25)");
 
 	// Try to insert invalid row (duplicate email)
-	manager_->insert_query("INSERT INTO users (name, email, age) VALUES "
+	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User2', 'user1@test.com', 30)");
 
 	// Rollback transaction
@@ -154,11 +154,11 @@ TEST_F(ErrorHandlingTest, InvalidDatabaseFile)
 	test_mgr->set_mode(database_types::sqlite);
 
 	// Try to connect to invalid path
-	bool connected = test_mgr->connect("/invalid/path/to/database.db");
+	auto connect_result = test_mgr->connect_result("/invalid/path/to/database.db");
 
 	// May succeed (SQLite creates files) or fail - both are valid
-	if (connected) {
-		test_mgr->disconnect();
+	if (connect_result.is_ok()) {
+		test_mgr->disconnect_result();
 	}
 
 	SUCCEED() << "Handled invalid database file path";
@@ -171,13 +171,13 @@ TEST_F(ErrorHandlingTest, QueryOnDisconnectedDatabase)
 {
 	auto test_context = std::make_shared<database_context>();
 	auto test_mgr = std::make_shared<database_manager>(test_context);
-	test_mgr->disconnect();
+	test_mgr->disconnect_result();
 
 	// Try to execute query when disconnected
-	auto result = test_mgr->select_query("SELECT * FROM users");
+	auto result = test_mgr->select_query_result("SELECT * FROM users");
 
-	EXPECT_TRUE(result.empty())
-		<< "Query on disconnected database should return empty";
+	EXPECT_FALSE(result.is_ok())
+		<< "Query on disconnected database should fail";
 }
 
 /**
@@ -211,11 +211,11 @@ TEST_F(ErrorHandlingTest, ConcurrentConstraintViolations)
 		futures.push_back(std::async(std::launch::async,
 			[this, &failed_inserts]() {
 				// Try to insert same email (UNIQUE constraint)
-				unsigned int affected = manager_->insert_query(
+				auto result = manager_->insert_query_result(
 					"INSERT INTO users (name, email, age) VALUES "
 					"('User', 'concurrent@test.com', 25)");
 
-				if (affected == 0) {
+				if (!result.is_ok() || result.value() == 0) {
 					++failed_inserts;
 				}
 			}));

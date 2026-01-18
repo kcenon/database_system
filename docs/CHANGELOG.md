@@ -24,7 +24,28 @@
 
 ---
 
-## [Unreleased] - 2026-01-02
+## [Unreleased] - 2026-01-18
+
+### 💥 **Breaking Changes**
+
+#### **Remove Deprecated Bool-Returning Methods from database_manager (Issue #323)**
+- **Removed deprecated methods** (7 methods total):
+  - `connect(const std::string&)` - use `connect_result()` instead
+  - `disconnect()` - use `disconnect_result()` instead
+  - `create_query(const std::string&)` - use `create_query_result()` instead
+  - `insert_query(const std::string&)` - use `insert_query_result()` instead
+  - `update_query(const std::string&)` - use `update_query_result()` instead
+  - `delete_query(const std::string&)` - use `delete_query_result()` instead
+  - `select_query(const std::string&)` - use `select_query_result()` instead
+- **Migration guide**: Replace all deprecated method calls with their `_result()` counterparts
+  - Legacy: `if (db->connect(str)) { ... }`
+  - New: `if (db->connect_result(str).is_ok()) { ... }`
+- **Updated adapters and tests** to use Result-based API
+- **Consistent error handling**: All APIs now use `Result<T>` pattern for explicit error handling
+
+---
+
+## [Previous] - 2026-01-02
 
 ### ♻️ **Refactored**
 

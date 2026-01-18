@@ -241,7 +241,7 @@ public:
     if (active_) {
       return false;
     }
-    active_ = manager_->create_query("BEGIN TRANSACTION");
+    active_ = manager_->create_query_result("BEGIN TRANSACTION").is_ok();
     return active_;
   }
 
@@ -249,7 +249,7 @@ public:
     if (!active_) {
       return false;
     }
-    bool result = manager_->create_query("COMMIT");
+    bool result = manager_->create_query_result("COMMIT").is_ok();
     active_ = false;
     return result;
   }
@@ -258,7 +258,7 @@ public:
     if (!active_) {
       return false;
     }
-    bool result = manager_->create_query("ROLLBACK");
+    bool result = manager_->create_query_result("ROLLBACK").is_ok();
     active_ = false;
     return result;
   }

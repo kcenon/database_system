@@ -118,7 +118,7 @@ TEST_F(DatabasePerformanceTest, TransactionCommitLatency)
 		TransactionHelper txn(manager_);
 		txn.Begin();
 
-		manager_->insert_query("INSERT INTO users (name, email, age) VALUES "
+		manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
 		                       "('TxnUser', 'txn@test.com', 30)");
 
 		PerformanceTimer timer;
@@ -200,7 +200,7 @@ TEST_F(DatabasePerformanceTest, PreparedStatementAdvantage)
 		std::string query = "INSERT INTO products (name, price, stock) VALUES ("
 		                   "'Product" + std::to_string(i) + "', "
 		                   + std::to_string(10.0 + i) + ", " + std::to_string(i) + ")";
-		manager_->insert_query(query);
+		manager_->insert_query_result(query);
 	}
 	auto regular_elapsed = regular_timer.Elapsed();
 
@@ -212,7 +212,7 @@ TEST_F(DatabasePerformanceTest, PreparedStatementAdvantage)
 		std::string query = "INSERT INTO products (name, price, stock) VALUES ("
 		                   "'Product" + std::to_string(i) + "', "
 		                   + std::to_string(10.0 + i) + ", " + std::to_string(i) + ")";
-		manager_->insert_query(query);
+		manager_->insert_query_result(query);
 	}
 	auto prepared_elapsed = prepared_timer.Elapsed();
 

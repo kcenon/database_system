@@ -164,8 +164,8 @@ const auto admin_users = base_query
 
 ## 다음 단계
 
-- **[빌드 가이드](BUILD_GUIDE_KO.md)** - 상세한 빌드 지침
-- **[샘플 가이드](SAMPLES_GUIDE_KO.md)** - 예제 애플리케이션
+- **[빌드 가이드](BUILD_GUIDE.kr.md)** - 상세한 빌드 지침
+- **[샘플 가이드](SAMPLES_GUIDE.kr.md)** - 예제 애플리케이션
 - **[통합 가이드](INTEGRATION.md)** - 생태계 통합
 - **[FAQ](FAQ.md)** - 자주 묻는 질문
 - **[문제 해결](TROUBLESHOOTING.md)** - 일반적인 문제

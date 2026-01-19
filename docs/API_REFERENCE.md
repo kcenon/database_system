@@ -1,6 +1,6 @@
 # Database System API Reference
 
-> **Language:** **English** | [한국어](API_REFERENCE_KO.md)
+> **Language:** **English** | [한국어](API_REFERENCE.kr.md)
 
 Complete API reference for the Database System C++20 library with multi-backend support, connection pooling, and query builders.
 

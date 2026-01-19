@@ -1,6 +1,6 @@
 # Architecture Issues - Phase 0 Identification
 
-> **Language:** **English** | [한국어](ARCHITECTURE_ISSUES_KO.md)
+> **Language:** **English** | [한국어](ARCHITECTURE_ISSUES.kr.md)
 
 **Document Version**: 1.0
 **Date**: 2025-10-05

@@ -316,7 +316,7 @@ All heap blocks were freed -- no leaks are possible
 
 ## 성능 기준선
 
-상세 성능 데이터는 [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS_KO.md](BENCHMARKS_KO.md) 참조.
+상세 성능 데이터는 [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS.kr.md](BENCHMARKS.kr.md) 참조.
 
 **핵심 메트릭**:
 - 연결 풀: 77ns 획득, 1.16M+ ops/s
@@ -363,8 +363,8 @@ All heap blocks were freed -- no leaks are possible
 ---
 
 **참고 문서**:
-- [FEATURES.md](FEATURES.md) / [FEATURES_KO.md](FEATURES_KO.md) - 상세 기능
-- [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS_KO.md](BENCHMARKS_KO.md) - 성능 벤치마크
+- [FEATURES.md](FEATURES.md) / [FEATURES.kr.md](FEATURES.kr.md) - 상세 기능
+- [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS.kr.md](BENCHMARKS.kr.md) - 성능 벤치마크
 - [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - 프로젝트 구조
 
 ---

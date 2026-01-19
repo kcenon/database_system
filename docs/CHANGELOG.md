@@ -1,6 +1,6 @@
 # 📜 Database System - Development History
 
-**English** | [한국어](CHANGELOG_KO.md)
+**English** | [한국어](CHANGELOG.kr.md)
 
 <div align="center">
 

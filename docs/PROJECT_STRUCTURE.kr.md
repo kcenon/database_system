@@ -645,9 +645,9 @@ monitor.set_monitoring_system(monitoring_system::instance());
 
 ## 참고 문서
 
-상세 기능 문서는 [FEATURES.md](FEATURES.md) / [FEATURES_KO.md](FEATURES_KO.md) 참조
-성능 벤치마크는 [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS_KO.md](BENCHMARKS_KO.md) 참조
-프로덕션 품질 세부사항은 [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) / [PRODUCTION_QUALITY_KO.md](PRODUCTION_QUALITY_KO.md) 참조
+상세 기능 문서는 [FEATURES.md](FEATURES.md) / [FEATURES.kr.md](FEATURES.kr.md) 참조
+성능 벤치마크는 [BENCHMARKS.md](BENCHMARKS.md) / [BENCHMARKS.kr.md](BENCHMARKS.kr.md) 참조
+프로덕션 품질 세부사항은 [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) / [PRODUCTION_QUALITY.kr.md](PRODUCTION_QUALITY.kr.md) 참조
 
 ---
 

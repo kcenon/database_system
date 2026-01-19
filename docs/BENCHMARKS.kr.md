@@ -532,7 +532,7 @@ config.max_connections = std::thread::hardware_concurrency() * 3;
 
 ---
 
-**상세 기능 문서**: [FEATURES.md](FEATURES.md) / [FEATURES_KO.md](FEATURES_KO.md) 참조
+**상세 기능 문서**: [FEATURES.md](FEATURES.md) / [FEATURES.kr.md](FEATURES.kr.md) 참조
 **프로덕션 품질 메트릭**: [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) 참조
 **기준 성능 데이터**: [../benchmarks/BASELINE.md](../benchmarks/BASELINE.md) 참조
 

@@ -39,7 +39,7 @@
 #include "adapters/logger_adapter.h"
 #include "adapters/monitoring_adapter.h"
 #include "adapters/thread_adapter.h"
-#include "../database_base.h"
+#include "../core/database_backend.h"
 #include "../postgres_manager.h"
 
 #include <mutex>
@@ -75,7 +75,7 @@ inline kcenon::common::Result<T> make_error_result(const std::string& msg, int c
 /**
  * @brief Create database backend instance
  */
-static std::shared_ptr<database_base> create_backend(backend_type type) {
+static std::shared_ptr<core::database_backend> create_backend(backend_type type) {
     switch (type) {
         case backend_type::postgres:
             return std::make_shared<postgres_manager>();
@@ -92,7 +92,7 @@ static std::shared_ptr<database_base> create_backend(backend_type type) {
 /**
  * @brief Convert database_value (variant) to string
  */
-static std::string value_to_string(const database_value& value) {
+static std::string value_to_string(const core::database_value& value) {
     return std::visit([](const auto& v) -> std::string {
         using T = std::decay_t<decltype(v)>;
         if constexpr (std::is_same_v<T, std::string>) {
@@ -111,10 +111,10 @@ static std::string value_to_string(const database_value& value) {
 }
 
 /**
- * @brief Convert database_result to query_result
+ * @brief Convert core::database_result to query_result
  */
 static query_result convert_result(
-    const database_result& db_result,
+    const core::database_result& db_result,
     std::chrono::microseconds exec_time) {
 
     query_result result;
@@ -141,19 +141,22 @@ static query_result convert_result(
 
 class transaction_impl : public transaction {
 public:
-    explicit transaction_impl(std::shared_ptr<database_base> backend)
+    explicit transaction_impl(std::shared_ptr<core::database_backend> backend)
         : backend_(std::move(backend)), active_(false) {
 
         // Begin transaction
-        if (backend_ && backend_->create_query("BEGIN")) {
-            active_ = true;
+        if (backend_) {
+            auto result = backend_->begin_transaction();
+            if (result.is_ok()) {
+                active_ = true;
+            }
         }
     }
 
     ~transaction_impl() override {
         if (active_) {
             // Auto-rollback if not committed
-            backend_->create_query("ROLLBACK");
+            backend_->rollback_transaction();
         }
     }
 
@@ -165,16 +168,18 @@ public:
             return make_error_result<query_result>("Transaction not active", -1, "transaction");
         }
 
-        // Note: Parameterized queries are not yet supported by database_base interface.
-        // Once database_base adds support for prepared statements, this should be updated to:
-        // auto db_result = backend_->select_query_prepared(query, params);
+        // Note: Parameterized queries are not yet supported.
         // For now, params are ignored and query is executed as-is (ensure query is pre-sanitized).
         auto start = std::chrono::steady_clock::now();
         auto db_result = backend_->select_query(query);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::steady_clock::now() - start);
 
-        return convert_result(db_result, duration);
+        if (db_result.is_err()) {
+            return db_result.error();
+        }
+
+        return convert_result(db_result.value(), duration);
     }
 
     kcenon::common::VoidResult commit() override {
@@ -182,8 +187,9 @@ public:
             return make_error("Transaction not active", -1, "transaction");
         }
 
-        if (!backend_->create_query("COMMIT")) {
-            return make_error("Commit failed", -1, "transaction");
+        auto result = backend_->commit_transaction();
+        if (result.is_err()) {
+            return make_error("Commit failed: " + result.error().message, -1, "transaction");
         }
 
         active_ = false;
@@ -195,8 +201,9 @@ public:
             return make_error("Transaction not active", -1, "transaction");
         }
 
-        if (!backend_->create_query("ROLLBACK")) {
-            return make_error("Rollback failed", -1, "transaction");
+        auto result = backend_->rollback_transaction();
+        if (result.is_err()) {
+            return make_error("Rollback failed: " + result.error().message, -1, "transaction");
         }
 
         active_ = false;
@@ -208,7 +215,7 @@ public:
     }
 
 private:
-    std::shared_ptr<database_base> backend_;
+    std::shared_ptr<core::database_backend> backend_;
     bool active_;
 };
 
@@ -258,9 +265,11 @@ public:
             return make_error("Unsupported backend type", -2, "unified_database_system");
         }
 
-        // Connect to database
-        if (!backend_->connect(connection_string)) {
-            return make_error("Connection failed", -3, "unified_database_system");
+        // Connect to database using connection_config
+        auto config = core::connection_config::from_string(connection_string);
+        auto result = backend_->initialize(config);
+        if (result.is_err()) {
+            return make_error("Connection failed: " + result.error().message, -3, "unified_database_system");
         }
 
         connected_ = true;
@@ -285,7 +294,7 @@ public:
 
         // Disconnect backend
         if (backend_) {
-            backend_->disconnect();
+            backend_->shutdown();
             backend_.reset();
         }
 
@@ -329,6 +338,11 @@ public:
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::steady_clock::now() - start);
 
+        if (db_result.is_err()) {
+            update_metrics(duration, false);
+            return db_result.error();
+        }
+
         // Update metrics
         update_metrics(duration, true);
 
@@ -345,7 +359,7 @@ public:
             monitor->record_query_execution(duration, true);
         }
 
-        return convert_result(db_result, duration);
+        return convert_result(db_result.value(), duration);
     }
 
     // Query execution (async)
@@ -560,7 +574,7 @@ private:
     std::string connection_string_;
     bool connected_;
 
-    std::shared_ptr<database_base> backend_; // shared_ptr for transaction support
+    std::shared_ptr<core::database_backend> backend_; // shared_ptr for transaction support
 
     database_metrics metrics_;
 

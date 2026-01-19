@@ -412,7 +412,7 @@ kcenon::common::Result<core::database_result> mongodb_backend::select_query(cons
 		for (auto&& doc : cursor) {
 			core::database_row row;
 
-			// Convert BSON document to database_row
+			// Convert BSON document to core::database_row
 			auto json_string = bsoncxx::to_json(doc);
 			row["_document"] = json_string;  // Store full document as JSON string
 

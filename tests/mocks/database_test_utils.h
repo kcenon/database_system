@@ -7,19 +7,6 @@ All rights reserved.
 
 #pragma once
 
-// Suppress deprecation warnings for legacy compatibility
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-#include "database/database_base.h"
 #include "database/core/database_backend.h"
 #include "mock_database.h"
 #include "mock_backend.h"
@@ -36,20 +23,20 @@ namespace database::testing {
  * Example:
  * @code
  *   auto result = make_result({
- *       {{"id", 1}, {"name", std::string("Alice")}},
- *       {{"id", 2}, {"name", std::string("Bob")}}
+ *       {{"id", int64_t(1)}, {"name", std::string("Alice")}},
+ *       {{"id", int64_t(2)}, {"name", std::string("Bob")}}
  *   });
  * @endcode
  */
-inline database_result make_result(std::initializer_list<database_row> rows) {
-    return database_result(rows);
+inline core::database_result make_result(std::initializer_list<core::database_row> rows) {
+    return core::database_result(rows);
 }
 
 /**
  * @brief Create a single row
  */
-inline database_row make_row(std::initializer_list<std::pair<std::string, database_value>> fields) {
-    database_row row;
+inline core::database_row make_row(std::initializer_list<std::pair<std::string, core::database_value>> fields) {
+    core::database_row row;
     for (const auto& [key, value] : fields) {
         row[key] = value;
     }
@@ -60,15 +47,15 @@ inline database_row make_row(std::initializer_list<std::pair<std::string, databa
  * @brief Create a database_value from common types
  */
 template<typename T>
-database_value make_value(const T& val) {
-    return database_value(val);
+core::database_value make_value(const T& val) {
+    return core::database_value(val);
 }
 
 /**
  * @brief Create a NULL value
  */
-inline database_value make_null() {
-    return database_value(nullptr);
+inline core::database_value make_null() {
+    return core::database_value(nullptr);
 }
 
 /**
@@ -106,11 +93,15 @@ public:
     explicit scoped_test_database(mock_database& db)
         : db_(db)
     {
-        db_.connect("test://localhost/test_db");
+        core::connection_config config;
+        config.host = "localhost";
+        config.port = 5432;
+        config.database = "test_db";
+        db_.initialize(config);
     }
 
     ~scoped_test_database() {
-        db_.disconnect();
+        db_.shutdown();
         db_.reset();
     }
 
@@ -127,185 +118,6 @@ private:
  * @param row_generator Function to generate each row
  * @return database_result with generated rows
  */
-inline database_result generate_test_data(
-    size_t count,
-    std::function<database_row(size_t index)> row_generator)
-{
-    database_result result;
-    result.reserve(count);
-    for (size_t i = 0; i < count; ++i) {
-        result.push_back(row_generator(i));
-    }
-    return result;
-}
-
-/**
- * @brief Generate sequential integer test data
- * @param count Number of rows
- * @param id_column Name of the ID column
- * @return database_result with sequential IDs
- */
-inline database_result generate_sequential_ids(size_t count, const std::string& id_column = "id") {
-    return generate_test_data(count, [&](size_t i) {
-        return database_row{{id_column, static_cast<int64_t>(i + 1)}};
-    });
-}
-
-/**
- * @brief Test fixture helpers
- */
-namespace fixtures {
-
-/**
- * @brief Standard user table data
- */
-inline database_result users_data() {
-    return make_result({
-        {{"id", int64_t(1)}, {"name", std::string("Alice")}, {"email", std::string("alice@example.com")}, {"active", true}},
-        {{"id", int64_t(2)}, {"name", std::string("Bob")}, {"email", std::string("bob@example.com")}, {"active", true}},
-        {{"id", int64_t(3)}, {"name", std::string("Charlie")}, {"email", std::string("charlie@example.com")}, {"active", false}}
-    });
-}
-
-/**
- * @brief Standard products table data
- */
-inline database_result products_data() {
-    return make_result({
-        {{"id", int64_t(1)}, {"name", std::string("Widget")}, {"price", 19.99}, {"quantity", int64_t(100)}},
-        {{"id", int64_t(2)}, {"name", std::string("Gadget")}, {"price", 29.99}, {"quantity", int64_t(50)}},
-        {{"id", int64_t(3)}, {"name", std::string("Thing")}, {"price", 9.99}, {"quantity", int64_t(200)}}
-    });
-}
-
-/**
- * @brief Empty result
- */
-inline database_result empty_result() {
-    return database_result{};
-}
-
-} // namespace fixtures
-
-/**
- * @brief Query assertion helpers
- */
-namespace assertions {
-
-/**
- * @brief Check if result contains expected number of rows
- */
-inline bool has_rows(const database_result& result, size_t expected) {
-    return result.size() == expected;
-}
-
-/**
- * @brief Check if result is empty
- */
-inline bool is_empty(const database_result& result) {
-    return result.empty();
-}
-
-/**
- * @brief Check if result contains a row with specific field value
- */
-template<typename T>
-bool contains_field_value(const database_result& result, const std::string& field, const T& value) {
-    for (const auto& row : result) {
-        auto it = row.find(field);
-        if (it != row.end()) {
-            if (auto* v = std::get_if<T>(&it->second)) {
-                if (*v == value) return true;
-            }
-        }
-    }
-    return false;
-}
-
-} // namespace assertions
-
-//=============================================================================
-// database_backend utilities (modern interface)
-//=============================================================================
-
-namespace backend {
-
-/**
- * @brief Helper function to create test data rows for database_backend
- *
- * Example:
- * @code
- *   auto result = backend::make_result({
- *       {{"id", int64_t(1)}, {"name", std::string("Alice")}},
- *       {{"id", int64_t(2)}, {"name", std::string("Bob")}}
- *   });
- * @endcode
- */
-inline core::database_result make_result(std::initializer_list<core::database_row> rows) {
-    return core::database_result(rows);
-}
-
-/**
- * @brief Create a single row for database_backend
- */
-inline core::database_row make_row(
-    std::initializer_list<std::pair<std::string, core::database_value>> fields) {
-    core::database_row row;
-    for (const auto& [key, value] : fields) {
-        row[key] = value;
-    }
-    return row;
-}
-
-/**
- * @brief Create a database_value from common types
- */
-template<typename T>
-core::database_value make_value(const T& val) {
-    return core::database_value(val);
-}
-
-/**
- * @brief Create a NULL value
- */
-inline core::database_value make_null() {
-    return core::database_value(nullptr);
-}
-
-/**
- * @class scoped_test_backend
- * @brief RAII wrapper for test backend setup/teardown
- */
-class scoped_test_backend {
-public:
-    explicit scoped_test_backend(mock_backend& db)
-        : db_(db)
-    {
-        core::connection_config config;
-        config.host = "localhost";
-        config.port = 5432;
-        config.database = "test_db";
-        db_.initialize(config);
-    }
-
-    ~scoped_test_backend() {
-        db_.shutdown();
-        db_.reset();
-    }
-
-    mock_backend& get() { return db_; }
-    const mock_backend& get() const { return db_; }
-
-private:
-    mock_backend& db_;
-};
-
-/**
- * @brief Generate test data for a table using database_backend types
- * @param count Number of rows to generate
- * @param row_generator Function to generate each row
- * @return core::database_result with generated rows
- */
 inline core::database_result generate_test_data(
     size_t count,
     std::function<core::database_row(size_t index)> row_generator)
@@ -319,50 +131,46 @@ inline core::database_result generate_test_data(
 }
 
 /**
- * @brief Generate sequential integer test data for database_backend
+ * @brief Generate sequential integer test data
  * @param count Number of rows
  * @param id_column Name of the ID column
- * @return core::database_result with sequential IDs
+ * @return database_result with sequential IDs
  */
-inline core::database_result generate_sequential_ids(
-    size_t count, const std::string& id_column = "id") {
+inline core::database_result generate_sequential_ids(size_t count, const std::string& id_column = "id") {
     return generate_test_data(count, [&](size_t i) {
         return core::database_row{{id_column, static_cast<int64_t>(i + 1)}};
     });
 }
 
+/**
+ * @brief Test fixture helpers
+ */
 namespace fixtures {
 
 /**
- * @brief Standard user table data for database_backend
+ * @brief Standard user table data
  */
 inline core::database_result users_data() {
     return make_result({
-        {{"id", int64_t(1)}, {"name", std::string("Alice")},
-         {"email", std::string("alice@example.com")}, {"active", true}},
-        {{"id", int64_t(2)}, {"name", std::string("Bob")},
-         {"email", std::string("bob@example.com")}, {"active", true}},
-        {{"id", int64_t(3)}, {"name", std::string("Charlie")},
-         {"email", std::string("charlie@example.com")}, {"active", false}}
+        {{"id", int64_t(1)}, {"name", std::string("Alice")}, {"email", std::string("alice@example.com")}, {"active", true}},
+        {{"id", int64_t(2)}, {"name", std::string("Bob")}, {"email", std::string("bob@example.com")}, {"active", true}},
+        {{"id", int64_t(3)}, {"name", std::string("Charlie")}, {"email", std::string("charlie@example.com")}, {"active", false}}
     });
 }
 
 /**
- * @brief Standard products table data for database_backend
+ * @brief Standard products table data
  */
 inline core::database_result products_data() {
     return make_result({
-        {{"id", int64_t(1)}, {"name", std::string("Widget")},
-         {"price", 19.99}, {"quantity", int64_t(100)}},
-        {{"id", int64_t(2)}, {"name", std::string("Gadget")},
-         {"price", 29.99}, {"quantity", int64_t(50)}},
-        {{"id", int64_t(3)}, {"name", std::string("Thing")},
-         {"price", 9.99}, {"quantity", int64_t(200)}}
+        {{"id", int64_t(1)}, {"name", std::string("Widget")}, {"price", 19.99}, {"quantity", int64_t(100)}},
+        {{"id", int64_t(2)}, {"name", std::string("Gadget")}, {"price", 29.99}, {"quantity", int64_t(50)}},
+        {{"id", int64_t(3)}, {"name", std::string("Thing")}, {"price", 9.99}, {"quantity", int64_t(200)}}
     });
 }
 
 /**
- * @brief Empty result for database_backend
+ * @brief Empty result
  */
 inline core::database_result empty_result() {
     return core::database_result{};
@@ -370,6 +178,9 @@ inline core::database_result empty_result() {
 
 } // namespace fixtures
 
+/**
+ * @brief Query assertion helpers
+ */
 namespace assertions {
 
 /**
@@ -390,10 +201,7 @@ inline bool is_empty(const core::database_result& result) {
  * @brief Check if result contains a row with specific field value
  */
 template<typename T>
-bool contains_field_value(
-    const core::database_result& result,
-    const std::string& field,
-    const T& value) {
+bool contains_field_value(const core::database_result& result, const std::string& field, const T& value) {
     for (const auto& row : result) {
         auto it = row.find(field);
         if (it != row.end()) {
@@ -418,7 +226,7 @@ bool is_success(const kcenon::common::Result<T>& result) {
  */
 template<typename T>
 bool is_error(const kcenon::common::Result<T>& result) {
-    return result.is_error();
+    return result.is_err();
 }
 
 /**
@@ -432,20 +240,9 @@ inline bool is_success(const kcenon::common::VoidResult& result) {
  * @brief Check if a VoidResult is an error
  */
 inline bool is_error(const kcenon::common::VoidResult& result) {
-    return result.is_error();
+    return result.is_err();
 }
 
 } // namespace assertions
 
-} // namespace backend
-
 } // namespace database::testing
-
-// Restore diagnostic settings
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif

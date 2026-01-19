@@ -48,8 +48,10 @@ kcenon::common::Result<query_request> container_protocol_serializer::deserialize
 
         // Validate message type
         if (container->message_type() != "query_request") {
-            return error{error_code::invalid_argument,
-                         "Invalid message type: " + container->message_type()};
+            return kcenon::common::error_info{
+                static_cast<int>(error_code::invalid_argument),
+                "Invalid message type: " + container->message_type(),
+                "database_protocol"};
         }
 
         query_request request;
@@ -61,10 +63,16 @@ kcenon::common::Result<query_request> container_protocol_serializer::deserialize
                 request.operation = static_cast<query_operation>(
                     std::get<int>(operation_val->data));
             } else {
-                return error{error_code::invalid_argument, "Invalid operation field type"};
+                return kcenon::common::error_info{
+                    static_cast<int>(error_code::invalid_argument),
+                    "Invalid operation field type",
+                    "database_protocol"};
             }
         } else {
-            return error{error_code::invalid_argument, "Missing operation field"};
+            return kcenon::common::error_info{
+                static_cast<int>(error_code::invalid_argument),
+                "Missing operation field",
+                "database_protocol"};
         }
 
         // Deserialize query_string
@@ -73,10 +81,16 @@ kcenon::common::Result<query_request> container_protocol_serializer::deserialize
             if (std::holds_alternative<std::string>(query_val->data)) {
                 request.query_string = std::get<std::string>(query_val->data);
             } else {
-                return error{error_code::invalid_argument, "Invalid query_string field type"};
+                return kcenon::common::error_info{
+                    static_cast<int>(error_code::invalid_argument),
+                    "Invalid query_string field type",
+                    "database_protocol"};
             }
         } else {
-            return error{error_code::invalid_argument, "Missing query_string field"};
+            return kcenon::common::error_info{
+                static_cast<int>(error_code::invalid_argument),
+                "Missing query_string field",
+                "database_protocol"};
         }
 
         // Deserialize parameters count
@@ -94,25 +108,37 @@ kcenon::common::Result<query_request> container_protocol_serializer::deserialize
                         if (std::holds_alternative<std::string>(param_val->data)) {
                             request.parameters.push_back(std::get<std::string>(param_val->data));
                         } else {
-                            return error{error_code::invalid_argument,
-                                         "Invalid parameter type at index " + std::to_string(i)};
+                            return kcenon::common::error_info{
+                                static_cast<int>(error_code::invalid_argument),
+                                "Invalid parameter type at index " + std::to_string(i),
+                                "database_protocol"};
                         }
                     } else {
-                        return error{error_code::invalid_argument,
-                                     "Missing parameter at index " + std::to_string(i)};
+                        return kcenon::common::error_info{
+                            static_cast<int>(error_code::invalid_argument),
+                            "Missing parameter at index " + std::to_string(i),
+                            "database_protocol"};
                     }
                 }
             } else {
-                return error{error_code::invalid_argument, "Invalid param_count field type"};
+                return kcenon::common::error_info{
+                    static_cast<int>(error_code::invalid_argument),
+                    "Invalid param_count field type",
+                    "database_protocol"};
             }
         } else {
-            return error{error_code::invalid_argument, "Missing param_count field"};
+            return kcenon::common::error_info{
+                static_cast<int>(error_code::invalid_argument),
+                "Missing param_count field",
+                "database_protocol"};
         }
 
         return request;
     } catch (const std::exception& e) {
-        return error{error_code::invalid_argument,
-                     std::string("Deserialization exception: ") + e.what()};
+        return kcenon::common::error_info{
+            static_cast<int>(error_code::invalid_argument),
+            std::string("Deserialization exception: ") + e.what(),
+            "database_protocol"};
     }
 }
 

@@ -333,7 +333,7 @@ static void BM_SQLQueryBuilding(benchmark::State& state) {
     for (auto _ : state) {
         builder.select({"id", "name", "email"})
                .from("users")
-               .where("active", "=", database_value{true})
+               .where("active", "=", core::database_value{true})
                .order_by("name");
         benchmark::DoNotOptimize(&builder);
     }

@@ -234,7 +234,7 @@ TEST_F(SQLInjectionTest, ApostropheInValueSafe) {
     );
     (void)insert_result;
 
-    database_value safe_value = std::string("O'Brien");
+    core::database_value safe_value = std::string("O'Brien");
 
     query_builder builder(database_types::sqlite);
     auto query = builder
@@ -306,7 +306,7 @@ TEST_F(SQLInjectionTest, SpecialCharactersInValue) {
 TEST_F(SQLInjectionTest, NumericValueInjection) {
 #ifdef USE_SQLITE
     // Attempting to inject via what should be a numeric field
-    database_value numeric_value = static_cast<int64_t>(1);
+    core::database_value numeric_value = static_cast<int64_t>(1);
 
     query_builder builder(database_types::sqlite);
     auto query = builder
@@ -330,7 +330,7 @@ TEST_F(SQLInjectionTest, NumericValueInjection) {
  */
 TEST_F(SQLInjectionTest, BooleanValueHandling) {
 #ifdef USE_SQLITE
-    database_value bool_value = true;
+    core::database_value bool_value = true;
 
     query_builder builder(database_types::sqlite);
     auto query = builder

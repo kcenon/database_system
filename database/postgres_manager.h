@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "database_base.h"
+#include "core/database_backend.h"
 
 namespace database
 {
@@ -40,11 +40,11 @@ namespace database
 	 * @class postgres_manager
 	 * @brief Manages PostgreSQL database operations.
 	 *
-	 * This class provides an implementation of the @c database_base interface
+	 * This class provides an implementation of the @c database_backend interface
 	 * for PostgreSQL databases. It defines methods for connecting, querying,
 	 * and disconnecting from a PostgreSQL database.
 	 */
-	class postgres_manager : public database_base
+	class postgres_manager : public core::database_backend
 	{
 	public:
 		/**
@@ -63,108 +63,118 @@ namespace database
 		 * @return An enum value of type @c database_types indicating that
 		 *         this is a PostgreSQL database.
 		 */
-		database_types database_type(void) override;
+		database_types type() const override;
 
 		/**
-		 * @brief Establishes a connection to a PostgreSQL database using
-		 *        the provided connection string.
-		 *
-		 * @param connect_string A string containing connection details
-		 *                       (e.g., host, port, database name, user,
-		 *                       password).
-		 * @return @c true if the connection is successfully established,
-		 *         @c false otherwise.
+		 * @brief Initialize the database backend
+		 * @param config Connection configuration
+		 * @return VoidResult::ok() on success, error on failure
 		 */
-		bool connect(const std::string& connect_string) override;
+		kcenon::common::VoidResult initialize(const core::connection_config& config) override;
 
 		/**
-		 * @brief Creates a query (e.g., prepares a statement) using
-		 *        the provided SQL query string.
-		 *
-		 * @param query_string The SQL query to create or prepare.
-		 * @return @c true if the query is successfully created,
-		 *         @c false otherwise.
-		 *
-		 * This method may set up the necessary internal structures
-		 * for prepared statements.
+		 * @brief Shutdown the database backend gracefully
+		 * @return VoidResult::ok() on success, error on failure
 		 */
-		bool create_query(const std::string& query_string) override;
+		kcenon::common::VoidResult shutdown() override;
+
+		/**
+		 * @brief Check if backend is initialized and ready
+		 * @return true if initialized and can accept queries
+		 */
+		bool is_initialized() const override;
 
 		/**
 		 * @brief Executes an INSERT query on the connected PostgreSQL database.
 		 *
 		 * @param query_string The SQL INSERT query to be executed.
-		 * @return The number of rows inserted, or an implementation-specific
-		 *         value if row count is not available.
+		 * @return Number of rows inserted, or error
 		 */
-		unsigned int insert_query(const std::string& query_string) override;
+		kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
 		/**
 		 * @brief Executes an UPDATE query on the connected PostgreSQL database.
 		 *
 		 * @param query_string The SQL UPDATE query to be executed.
-		 * @return The number of rows updated, or an implementation-specific
-		 *         value if row count is not available.
+		 * @return Number of rows updated, or error
 		 */
-		unsigned int update_query(const std::string& query_string) override;
+		kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
 
 		/**
 		 * @brief Executes a DELETE query on the connected PostgreSQL database.
 		 *
 		 * @param query_string The SQL DELETE query to be executed.
-		 * @return The number of rows deleted, or an implementation-specific
-		 *         value if row count is not available.
+		 * @return Number of rows deleted, or error
 		 */
-		unsigned int delete_query(const std::string& query_string) override;
+		kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
 
 		/**
 		 * @brief Executes a SELECT query on the connected PostgreSQL database
 		 *        and returns the resulting data.
 		 *
 		 * @param query_string The SQL SELECT query to be executed.
-		 * @return A database_result containing rows of data as key-value pairs.
-		 *         Returns empty vector if query fails or returns no results.
+		 * @return Query results as rows, or error
 		 */
-		database_result select_query(const std::string& query_string) override;
+		kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
 		/**
 		 * @brief Executes a general SQL query (DDL, DML) on PostgreSQL.
 		 *
 		 * @param query_string The SQL query string to execute.
-		 * @return @c true if the query executed successfully,
-		 *         @c false otherwise.
+		 * @return VoidResult::ok() on success, error on failure
 		 */
-		bool execute_query(const std::string& query_string) override;
+		kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
 		/**
-		 * @brief Closes the connection to the PostgreSQL database.
-		 *
-		 * @return @c true if the disconnection is successful,
-		 *         @c false otherwise (e.g., if no active connection exists).
+		 * @brief Begin a transaction
+		 * @return VoidResult::ok() on success, error on failure
 		 */
-		bool disconnect(void) override;
+		kcenon::common::VoidResult begin_transaction() override;
+
+		/**
+		 * @brief Commit the current transaction
+		 * @return VoidResult::ok() on success, error on failure
+		 */
+		kcenon::common::VoidResult commit_transaction() override;
+
+		/**
+		 * @brief Rollback the current transaction
+		 * @return VoidResult::ok() on success, error on failure
+		 */
+		kcenon::common::VoidResult rollback_transaction() override;
+
+		/**
+		 * @brief Check if backend is currently in a transaction
+		 * @return true if transaction is active
+		 */
+		bool in_transaction() const override;
+
+		/**
+		 * @brief Get last error message from backend
+		 * @return Error message, or empty string if no error
+		 */
+		std::string last_error() const override;
+
+		/**
+		 * @brief Get backend-specific connection information
+		 * @return Map of connection properties (for debugging/monitoring)
+		 */
+		std::map<std::string, std::string> connection_info() const override;
 
 	private:
-		/**
-		 * @brief Executes a generic PostgreSQL query and returns a pointer
-		 *        to the raw result.
-		 *
-		 * @param query_string The SQL query to be executed.
-		 * @return A pointer to the underlying query result structure,
-		 *         or @c nullptr if an error occurs.
-		 */
-		void* query_result(const std::string& query_string);
-
 		/**
 		 * @brief Common implementation for INSERT, UPDATE, and DELETE queries.
-		 * 
+		 *
 		 * @param query_string The SQL query to be executed.
-		 * @return The number of affected rows, or 0 if an error occurs.
+		 * @return Number of affected rows, or error
 		 */
-		unsigned int execute_modification_query(const std::string& query_string);
+		kcenon::common::Result<uint64_t> execute_modification_query(const std::string& query_string);
 
 	private:
-		void* connection_; ///< Pointer to the underlying PostgreSQL connection
-						   ///< object.
+		void* connection_;        ///< Pointer to the underlying PostgreSQL connection object.
+		bool initialized_;        ///< Whether the backend is initialized
+		bool in_transaction_;     ///< Whether a transaction is active
+		std::string last_error_;  ///< Last error message
+		std::string connection_string_; ///< Connection string for connection_info
 	};
 } // namespace database

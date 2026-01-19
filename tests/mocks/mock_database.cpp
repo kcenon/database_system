@@ -13,117 +13,187 @@ namespace database::testing {
 // mock_database implementation
 mock_database::mock_database()
     : db_type_(database_types::none)
-    , connected_(false)
+    , initialized_(false)
     , connect_result_(true)
+    , in_transaction_(false)
     , default_rows_affected_(1)
 {
 }
 
 mock_database::mock_database(mock_database&& other) noexcept
     : db_type_(other.db_type_)
-    , connected_(other.connected_)
+    , initialized_(other.initialized_)
     , connect_result_(other.connect_result_)
+    , in_transaction_(other.in_transaction_)
     , connection_string_(std::move(other.connection_string_))
     , default_result_(std::move(other.default_result_))
     , default_rows_affected_(other.default_rows_affected_)
+    , last_error_(std::move(other.last_error_))
     , expectations_(std::move(other.expectations_))
     , executed_queries_(std::move(other.executed_queries_))
 {
-    other.connected_ = false;
+    other.initialized_ = false;
+    other.in_transaction_ = false;
 }
 
 mock_database& mock_database::operator=(mock_database&& other) noexcept {
     if (this != &other) {
         db_type_ = other.db_type_;
-        connected_ = other.connected_;
+        initialized_ = other.initialized_;
         connect_result_ = other.connect_result_;
+        in_transaction_ = other.in_transaction_;
         connection_string_ = std::move(other.connection_string_);
         default_result_ = std::move(other.default_result_);
         default_rows_affected_ = other.default_rows_affected_;
+        last_error_ = std::move(other.last_error_);
         expectations_ = std::move(other.expectations_);
         executed_queries_ = std::move(other.executed_queries_);
-        other.connected_ = false;
+        other.initialized_ = false;
+        other.in_transaction_ = false;
     }
     return *this;
 }
 
-database_types mock_database::database_type() {
+database_types mock_database::type() const {
     return db_type_;
 }
 
-bool mock_database::connect(const std::string& connect_string) {
+kcenon::common::VoidResult mock_database::initialize(const core::connection_config& config) {
     std::lock_guard<std::mutex> lock(mutex_);
-    connection_string_ = connect_string;
+    connection_string_ = config.host + ":" + std::to_string(config.port) + "/" + config.database;
     if (connect_result_) {
-        connected_ = true;
+        initialized_ = true;
+        return kcenon::common::VoidResult::ok(std::monostate{});
     }
-    return connect_result_;
+    last_error_ = "Connection failed";
+    return kcenon::common::VoidResult::err(kcenon::common::error_info{"Connection failed"});
 }
 
-bool mock_database::disconnect() {
+kcenon::common::VoidResult mock_database::shutdown() {
     std::lock_guard<std::mutex> lock(mutex_);
-    connected_ = false;
-    return true;
+    initialized_ = false;
+    in_transaction_ = false;
+    return kcenon::common::VoidResult::ok(std::monostate{});
 }
 
-bool mock_database::create_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        return exp->get_execute_result();
-    }
-    return true;
+bool mock_database::is_initialized() const {
+    return initialized_;
 }
 
-unsigned int mock_database::insert_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> mock_database::insert_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);
 
     if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
+        if (exp->should_throw()) {
+            last_error_ = exp->get_error_message();
+            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
+        }
+        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
     }
-    return default_rows_affected_;
+    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
 }
 
-unsigned int mock_database::update_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> mock_database::update_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);
 
     if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
+        if (exp->should_throw()) {
+            last_error_ = exp->get_error_message();
+            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
+        }
+        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
     }
-    return default_rows_affected_;
+    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
 }
 
-unsigned int mock_database::delete_query(const std::string& query_string) {
+kcenon::common::Result<uint64_t> mock_database::delete_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);
 
     if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
+        if (exp->should_throw()) {
+            last_error_ = exp->get_error_message();
+            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
+        }
+        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
     }
-    return default_rows_affected_;
+    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
 }
 
-database_result mock_database::select_query(const std::string& query_string) {
+kcenon::common::Result<core::database_result> mock_database::select_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);
 
     if (auto* exp = find_expectation(query_string)) {
-        return exp->get_result();
+        if (exp->should_throw()) {
+            last_error_ = exp->get_error_message();
+            return kcenon::common::Result<core::database_result>::err(kcenon::common::error_info{last_error_});
+        }
+        return kcenon::common::Result<core::database_result>::ok(exp->get_result());
     }
-    return default_result_;
+    return kcenon::common::Result<core::database_result>::ok(default_result_);
 }
 
-bool mock_database::execute_query(const std::string& query_string) {
+kcenon::common::VoidResult mock_database::execute_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);
 
     if (auto* exp = find_expectation(query_string)) {
-        return exp->get_execute_result();
+        if (exp->should_throw()) {
+            last_error_ = exp->get_error_message();
+            return kcenon::common::VoidResult::err(kcenon::common::error_info{last_error_});
+        }
+        if (!exp->get_execute_result()) {
+            last_error_ = "Query execution failed";
+            return kcenon::common::VoidResult::err(kcenon::common::error_info{last_error_});
+        }
     }
-    return true;
+    return kcenon::common::VoidResult::ok(std::monostate{});
+}
+
+kcenon::common::VoidResult mock_database::begin_transaction() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (in_transaction_) {
+        return kcenon::common::VoidResult::err(kcenon::common::error_info{"Transaction already active"});
+    }
+    in_transaction_ = true;
+    return kcenon::common::VoidResult::ok(std::monostate{});
+}
+
+kcenon::common::VoidResult mock_database::commit_transaction() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (!in_transaction_) {
+        return kcenon::common::VoidResult::err(kcenon::common::error_info{"No active transaction"});
+    }
+    in_transaction_ = false;
+    return kcenon::common::VoidResult::ok(std::monostate{});
+}
+
+kcenon::common::VoidResult mock_database::rollback_transaction() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (!in_transaction_) {
+        return kcenon::common::VoidResult::err(kcenon::common::error_info{"No active transaction"});
+    }
+    in_transaction_ = false;
+    return kcenon::common::VoidResult::ok(std::monostate{});
+}
+
+bool mock_database::in_transaction() const {
+    return in_transaction_;
+}
+
+std::string mock_database::last_error() const {
+    return last_error_;
+}
+
+std::map<std::string, std::string> mock_database::connection_info() const {
+    std::map<std::string, std::string> info;
+    info["connection_string"] = connection_string_;
+    info["initialized"] = initialized_ ? "true" : "false";
+    info["in_transaction"] = in_transaction_ ? "true" : "false";
+    return info;
 }
 
 mock_database& mock_database::set_database_type(database_types type) {
@@ -136,12 +206,12 @@ mock_database& mock_database::set_connect_result(bool result) {
     return *this;
 }
 
-mock_database& mock_database::set_default_select_result(const database_result& result) {
+mock_database& mock_database::set_default_select_result(const core::database_result& result) {
     default_result_ = result;
     return *this;
 }
 
-mock_database& mock_database::set_default_rows_affected(unsigned int rows) {
+mock_database& mock_database::set_default_rows_affected(uint64_t rows) {
     default_rows_affected_ = rows;
     return *this;
 }
@@ -170,7 +240,7 @@ mock_database& mock_database::simulate_connection_failure() {
 }
 
 mock_database& mock_database::simulate_disconnect() {
-    connected_ = false;
+    initialized_ = false;
     return *this;
 }
 
@@ -201,8 +271,10 @@ void mock_database::reset() {
     std::lock_guard<std::mutex> lock(mutex_);
     expectations_.clear();
     executed_queries_.clear();
-    connected_ = false;
+    initialized_ = false;
+    in_transaction_ = false;
     connection_string_.clear();
+    last_error_.clear();
 }
 
 void mock_database::clear_expectations() {
@@ -216,7 +288,7 @@ void mock_database::clear_history() {
 }
 
 bool mock_database::is_connected() const {
-    return connected_;
+    return initialized_;
 }
 
 std::string mock_database::get_connection_string() const {
@@ -246,7 +318,7 @@ mock_database mock_database_builder::empty_database() {
     return mock_database();
 }
 
-mock_database mock_database_builder::with_data(const std::string& table_name, const database_result& data) {
+mock_database mock_database_builder::with_data(const std::string& table_name, const core::database_result& data) {
     mock_database db;
     db.expect_pattern("SELECT.*FROM.*" + table_name).will_return(data);
     return db;
@@ -263,7 +335,7 @@ mock_database_builder& mock_database_builder::with_type(database_types type) {
     return *this;
 }
 
-mock_database_builder& mock_database_builder::with_default_result(const database_result& result) {
+mock_database_builder& mock_database_builder::with_default_result(const core::database_result& result) {
     mock_->set_default_select_result(result);
     return *this;
 }

@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "database/database_types.h"
+#include "database/core/database_backend.h"
 #include <algorithm>
 #include <chrono>
 #include <numeric>
@@ -158,7 +159,7 @@ inline int GenerateRandomInt(int min, int max) {
 /**
  * @brief Verifies data in query result.
  */
-inline bool VerifyData(const database_result &result, const std::string &column,
+inline bool VerifyData(const core::database_result &result, const std::string &column,
                        const std::string &expected_value) {
   if (result.empty()) {
     return false;
@@ -193,7 +194,7 @@ inline bool VerifyData(const database_result &result, const std::string &column,
 /**
  * @brief Checks if row count matches expected value.
  */
-inline bool CheckRowCount(const database_result &result, size_t expected) {
+inline bool CheckRowCount(const core::database_result &result, size_t expected) {
   return result.size() == expected;
 }
 

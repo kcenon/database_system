@@ -8,7 +8,7 @@ All rights reserved.
 #pragma once
 
 #include "../database_types.h"
-#include "../database_base.h"
+#include "../core/database_backend.h"
 #include <string>
 #include <vector>
 
@@ -45,7 +45,7 @@ public:
      * @param value Value to format
      * @return Formatted string representation
      */
-    std::string format(const database_value& value) const;
+    std::string format(const core::database_value& value) const;
 
     /**
      * @brief Escape a string value

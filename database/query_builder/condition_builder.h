@@ -31,7 +31,7 @@ enum class logical_op {
 struct condition {
     std::string field;           ///< Field name
     std::string op;              ///< Operator (=, !=, <, >, <=, >=, LIKE, IN, etc.)
-    database_value value;        ///< Value to compare
+    core::database_value value;        ///< Value to compare
     std::string raw;             ///< Raw SQL condition (if any)
 
     bool is_raw() const { return !raw.empty(); }
@@ -91,7 +91,7 @@ public:
      * @return Reference to this builder
      */
     condition_builder& add(const std::string& field, const std::string& operator_,
-                          const database_value& value, logical_op op = logical_op::AND);
+                          const core::database_value& value, logical_op op = logical_op::AND);
 
     /**
      * @brief Add a raw SQL condition

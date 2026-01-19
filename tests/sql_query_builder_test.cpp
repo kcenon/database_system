@@ -135,7 +135,7 @@ TEST_F(SQLQueryBuilderTest, SimpleWhere)
 {
     auto query = builder_->select({"*"})
                          .from("users")
-                         .where("active", "=", database_value{true})
+                         .where("active", "=", core::database_value{true})
                          .build();
 
     EXPECT_TRUE(query.find("WHERE") != std::string::npos);
@@ -147,7 +147,7 @@ TEST_F(SQLQueryBuilderTest, WhereWithString)
 {
     auto query = builder_->select({"*"})
                          .from("users")
-                         .where("status", "=", database_value{std::string("active")})
+                         .where("status", "=", core::database_value{std::string("active")})
                          .build();
 
     EXPECT_TRUE(query.find("'active'") != std::string::npos);
@@ -157,7 +157,7 @@ TEST_F(SQLQueryBuilderTest, WhereWithInt)
 {
     auto query = builder_->select({"*"})
                          .from("users")
-                         .where("age", ">", database_value{int64_t(18)})
+                         .where("age", ">", core::database_value{int64_t(18)})
                          .build();
 
     EXPECT_TRUE(query.find("> 18") != std::string::npos);
@@ -167,7 +167,7 @@ TEST_F(SQLQueryBuilderTest, WhereWithDouble)
 {
     auto query = builder_->select({"*"})
                          .from("products")
-                         .where("price", "<", database_value{99.99})
+                         .where("price", "<", core::database_value{99.99})
                          .build();
 
     EXPECT_TRUE(query.find("price") != std::string::npos);
@@ -178,8 +178,8 @@ TEST_F(SQLQueryBuilderTest, MultipleWhereConditions)
 {
     auto query = builder_->select({"*"})
                          .from("users")
-                         .where("active", "=", database_value{true})
-                         .where("age", ">", database_value{int64_t(18)})
+                         .where("active", "=", core::database_value{true})
+                         .where("age", ">", core::database_value{int64_t(18)})
                          .build();
 
     EXPECT_TRUE(query.find("AND") != std::string::npos);
@@ -187,8 +187,8 @@ TEST_F(SQLQueryBuilderTest, MultipleWhereConditions)
 
 TEST_F(SQLQueryBuilderTest, NestedConditionsWithAnd)
 {
-    query_condition cond1("age", ">", database_value{int64_t(18)});
-    query_condition cond2("status", "=", database_value{std::string("active")});
+    query_condition cond1("age", ">", core::database_value{int64_t(18)});
+    query_condition cond2("status", "=", core::database_value{std::string("active")});
     auto combined = cond1 && cond2;
 
     auto query = builder_->select({"*"})
@@ -201,8 +201,8 @@ TEST_F(SQLQueryBuilderTest, NestedConditionsWithAnd)
 
 TEST_F(SQLQueryBuilderTest, NestedConditionsWithOr)
 {
-    query_condition cond1("role", "=", database_value{std::string("admin")});
-    query_condition cond2("role", "=", database_value{std::string("superadmin")});
+    query_condition cond1("role", "=", core::database_value{std::string("admin")});
+    query_condition cond2("role", "=", core::database_value{std::string("superadmin")});
     auto combined = cond1 || cond2;
 
     auto query = builder_->select({"*"})
@@ -325,9 +325,9 @@ TEST_F(SQLQueryBuilderTest, LimitWithOffset)
 
 TEST_F(SQLQueryBuilderTest, InsertSingleRow)
 {
-    std::map<std::string, database_value> data;
-    data["name"] = database_value{std::string("John")};
-    data["email"] = database_value{std::string("john@example.com")};
+    std::map<std::string, core::database_value> data;
+    data["name"] = core::database_value{std::string("John")};
+    data["email"] = core::database_value{std::string("john@example.com")};
 
     auto query = builder_->insert_into("users")
                          .values(data)
@@ -339,16 +339,16 @@ TEST_F(SQLQueryBuilderTest, InsertSingleRow)
 
 TEST_F(SQLQueryBuilderTest, InsertMultipleRows)
 {
-    std::vector<std::map<std::string, database_value>> rows;
+    std::vector<std::map<std::string, core::database_value>> rows;
 
-    std::map<std::string, database_value> row1;
-    row1["name"] = database_value{std::string("John")};
-    row1["age"] = database_value{int64_t(30)};
+    std::map<std::string, core::database_value> row1;
+    row1["name"] = core::database_value{std::string("John")};
+    row1["age"] = core::database_value{int64_t(30)};
     rows.push_back(row1);
 
-    std::map<std::string, database_value> row2;
-    row2["name"] = database_value{std::string("Jane")};
-    row2["age"] = database_value{int64_t(25)};
+    std::map<std::string, core::database_value> row2;
+    row2["name"] = core::database_value{std::string("Jane")};
+    row2["age"] = core::database_value{int64_t(25)};
     rows.push_back(row2);
 
     auto query = builder_->insert_into("users")
@@ -366,8 +366,8 @@ TEST_F(SQLQueryBuilderTest, InsertMultipleRows)
 TEST_F(SQLQueryBuilderTest, UpdateSingleField)
 {
     auto query = builder_->update("users")
-                         .set("status", database_value{std::string("active")})
-                         .where("id", "=", database_value{int64_t(1)})
+                         .set("status", core::database_value{std::string("active")})
+                         .where("id", "=", core::database_value{int64_t(1)})
                          .build();
 
     EXPECT_TRUE(query.find("UPDATE") != std::string::npos);
@@ -377,13 +377,13 @@ TEST_F(SQLQueryBuilderTest, UpdateSingleField)
 
 TEST_F(SQLQueryBuilderTest, UpdateMultipleFields)
 {
-    std::map<std::string, database_value> data;
-    data["status"] = database_value{std::string("active")};
-    data["updated_at"] = database_value{std::string("2025-01-01")};
+    std::map<std::string, core::database_value> data;
+    data["status"] = core::database_value{std::string("active")};
+    data["updated_at"] = core::database_value{std::string("2025-01-01")};
 
     auto query = builder_->update("users")
                          .set(data)
-                         .where("id", "=", database_value{int64_t(1)})
+                         .where("id", "=", core::database_value{int64_t(1)})
                          .build();
 
     EXPECT_TRUE(query.find("UPDATE") != std::string::npos);
@@ -397,7 +397,7 @@ TEST_F(SQLQueryBuilderTest, UpdateMultipleFields)
 TEST_F(SQLQueryBuilderTest, DeleteWithWhere)
 {
     auto query = builder_->delete_from("users")
-                         .where("id", "=", database_value{int64_t(1)})
+                         .where("id", "=", core::database_value{int64_t(1)})
                          .build();
 
     EXPECT_TRUE(query.find("DELETE FROM") != std::string::npos);
@@ -407,8 +407,8 @@ TEST_F(SQLQueryBuilderTest, DeleteWithWhere)
 TEST_F(SQLQueryBuilderTest, DeleteWithMultipleConditions)
 {
     auto query = builder_->delete_from("users")
-                         .where("status", "=", database_value{std::string("inactive")})
-                         .where("last_login", "<", database_value{std::string("2024-01-01")})
+                         .where("status", "=", core::database_value{std::string("inactive")})
+                         .where("last_login", "<", core::database_value{std::string("2024-01-01")})
                          .build();
 
     EXPECT_TRUE(query.find("DELETE FROM") != std::string::npos);
@@ -489,7 +489,7 @@ TEST_F(SQLQueryBuilderTest, ComplexSelectQuery)
     auto query = builder_->select(cols)
                          .from("users u")
                          .join("orders o", "u.id = o.user_id", join_type::left)
-                         .where("u.status", "=", database_value{std::string("active")})
+                         .where("u.status", "=", core::database_value{std::string("active")})
                          .group_by(group_cols)
                          .having("COUNT(o.id) > 5")
                          .order_by("order_count", sort_order::desc)

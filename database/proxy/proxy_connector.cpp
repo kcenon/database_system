@@ -303,7 +303,7 @@ kcenon::common::Result<core::database_result> proxy_connector::send_query(
 	// 1. Serialize request: { type: query_type, db_type: db_type_, query: query_string }
 	// 2. Send to server via established connection
 	// 3. Wait for response with timeout (config_.query_timeout)
-	// 4. Deserialize response to database_result
+	// 4. Deserialize response to core::database_result
 	// 5. Handle errors and retries
 
 	// Stub implementation returns empty result

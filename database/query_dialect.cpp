@@ -91,7 +91,7 @@ namespace database
 			where_conditions_.push_back(condition);
 		}
 
-		void sql_dialect::add_where_condition(const std::string& field, const std::string& op, const database_value& value)
+		void sql_dialect::add_where_condition(const std::string& field, const std::string& op, const core::database_value& value)
 		{
 			where_conditions_.emplace_back(field, op, value);
 		}
@@ -136,12 +136,12 @@ namespace database
 			target_table_ = table;
 		}
 
-		void sql_dialect::set_insert_data(const std::map<std::string, database_value>& data)
+		void sql_dialect::set_insert_data(const std::map<std::string, core::database_value>& data)
 		{
 			set_data_ = data;
 		}
 
-		void sql_dialect::set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows)
+		void sql_dialect::set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows)
 		{
 			insert_rows_ = rows;
 		}
@@ -152,7 +152,7 @@ namespace database
 			target_table_ = table;
 		}
 
-		void sql_dialect::set_update_data(const std::map<std::string, database_value>& data)
+		void sql_dialect::set_update_data(const std::map<std::string, core::database_value>& data)
 		{
 			set_data_ = data;
 		}
@@ -339,7 +339,7 @@ namespace database
 			}
 		}
 
-		std::string sql_dialect::format_value(const database_value& value) const
+		std::string sql_dialect::format_value(const core::database_value& value) const
 		{
 			std::ostringstream oss;
 			std::visit([&oss](const auto& val) {
@@ -421,7 +421,7 @@ namespace database
 			op_type_ = operation_type::find;
 			projection_.clear();
 			for (const auto& field : columns) {
-				projection_[field] = database_value{int64_t(1)};
+				projection_[field] = core::database_value{int64_t(1)};
 			}
 		}
 
@@ -435,7 +435,7 @@ namespace database
 			// MongoDB uses filter_ directly
 		}
 
-		void mongodb_dialect::add_where_condition(const std::string& field, const std::string& op, const database_value& value)
+		void mongodb_dialect::add_where_condition(const std::string& field, const std::string& op, const core::database_value& value)
 		{
 			if (op == "=") {
 				filter_[field] = value;
@@ -484,13 +484,13 @@ namespace database
 			collection_name_ = table;
 		}
 
-		void mongodb_dialect::set_insert_data(const std::map<std::string, database_value>& data)
+		void mongodb_dialect::set_insert_data(const std::map<std::string, core::database_value>& data)
 		{
 			op_type_ = operation_type::insert;
 			document_ = data;
 		}
 
-		void mongodb_dialect::set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows)
+		void mongodb_dialect::set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows)
 		{
 			op_type_ = operation_type::insert;
 			documents_ = rows;
@@ -502,7 +502,7 @@ namespace database
 			collection_name_ = table;
 		}
 
-		void mongodb_dialect::set_update_data(const std::map<std::string, database_value>& data)
+		void mongodb_dialect::set_update_data(const std::map<std::string, core::database_value>& data)
 		{
 			op_type_ = operation_type::update;
 			update_spec_ = data;
@@ -616,7 +616,7 @@ namespace database
 			return database_types::mongodb;
 		}
 
-		std::string mongodb_dialect::to_json(const std::map<std::string, database_value>& data) const
+		std::string mongodb_dialect::to_json(const std::map<std::string, core::database_value>& data) const
 		{
 			if (data.empty()) {
 				return "{}";
@@ -634,7 +634,7 @@ namespace database
 			return oss.str();
 		}
 
-		std::string mongodb_dialect::value_to_json(const database_value& value) const
+		std::string mongodb_dialect::value_to_json(const core::database_value& value) const
 		{
 			std::ostringstream oss;
 			std::visit([&oss](const auto& val) {
@@ -684,7 +684,7 @@ namespace database
 			// No-op for Redis
 		}
 
-		void redis_dialect::add_where_condition(const std::string& /*field*/, const std::string& /*op*/, const database_value& /*value*/)
+		void redis_dialect::add_where_condition(const std::string& /*field*/, const std::string& /*op*/, const core::database_value& /*value*/)
 		{
 			// No-op for Redis
 		}
@@ -724,7 +724,7 @@ namespace database
 			// No-op for Redis
 		}
 
-		void redis_dialect::set_insert_data(const std::map<std::string, database_value>& data)
+		void redis_dialect::set_insert_data(const std::map<std::string, core::database_value>& data)
 		{
 			// For Redis, we can use HSET to insert hash data
 			if (!data.empty()) {
@@ -751,7 +751,7 @@ namespace database
 			}
 		}
 
-		void redis_dialect::set_insert_rows(const std::vector<std::map<std::string, database_value>>& /*rows*/)
+		void redis_dialect::set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& /*rows*/)
 		{
 			// Redis doesn't support bulk insert in the same way
 		}
@@ -761,7 +761,7 @@ namespace database
 			// No-op for Redis
 		}
 
-		void redis_dialect::set_update_data(const std::map<std::string, database_value>& data)
+		void redis_dialect::set_update_data(const std::map<std::string, core::database_value>& data)
 		{
 			set_insert_data(data); // Same as insert for Redis HSET
 		}

@@ -24,7 +24,34 @@
 
 ---
 
-## [Unreleased] - 2026-01-02
+## [Unreleased] - 2026-01-20
+
+### 💥 **Breaking Changes**
+
+#### **Deprecated Result 타입 및 database_base 클래스 제거 (Issue #325)**
+- **`database/core/result.h`에서 deprecated 타입 제거**:
+  - `database::error_info` 구조체 - 대신 `kcenon::common::error_info` 사용
+  - `database::result<T>` 클래스 - 대신 `kcenon::common::Result<T>` 사용
+  - `database::result<void>` 특수화 - 대신 `kcenon::common::VoidResult` 사용
+  - `database::Result<T>` 별칭 - 대신 `kcenon::common::Result<T>` 사용
+  - `database::VoidResult` 별칭 - 대신 `kcenon::common::VoidResult` 사용
+- **deprecated 클래스 제거**:
+  - `database/database_base.h` - 대신 `database/core/database_backend.h` 사용
+  - `database/database_base_adapter.h` - 더 이상 필요 없음
+  - `database/adapters/common_system_adapter.h` - 더 이상 필요 없음
+- **API 마이그레이션 필요**:
+  - `database_base` → `database::core::database_backend`
+  - `connect(string)` → `initialize(connection_config)`
+  - `disconnect()` → `shutdown()`
+  - `create_query()` → `execute_query()`
+  - `database_value` → `core::database_value`
+  - `database_result` → `core::database_result`
+  - `database_row` → `core::database_row`
+- **내부 코드에서 데이터베이스 타입에 `core::` 네임스페이스 접두사 사용**
+- **샘플 파일**을 새로운 `database_backend` API 사용하도록 업데이트
+- **마이그레이션 가이드**: 자세한 내용은 `docs/migration/database_base.md` 참조
+
+---
 
 ### ♻️ **리팩토링**
 

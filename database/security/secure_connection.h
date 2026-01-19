@@ -198,7 +198,7 @@ namespace database::security
 		static bool validate_table_access(const std::string& table, const std::string& operation, const std::string& user);
 
 		// Prepared statement support
-		static std::string convert_to_prepared_statement(const std::string& query, const std::vector<database_value>& parameters);
+		static std::string convert_to_prepared_statement(const std::string& query, const std::vector<core::database_value>& parameters);
 
 	private:
 		static const std::vector<std::string> dangerous_keywords_;

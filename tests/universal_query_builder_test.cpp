@@ -118,7 +118,7 @@ TEST_F(UniversalQueryBuilderTest, SelectQuery)
 
     auto query = builder.select({"id", "name", "email"})
                         .from("users")
-                        .where("active", "=", database_value{true})
+                        .where("active", "=", core::database_value{true})
                         .order_by("name", sort_order::asc)
                         .limit(10)
                         .build();
@@ -150,9 +150,9 @@ TEST_F(UniversalQueryBuilderTest, InsertData)
 {
     query_builder builder(database_types::postgres);
 
-    std::map<std::string, database_value> data;
-    data["name"] = database_value{std::string("John")};
-    data["email"] = database_value{std::string("john@example.com")};
+    std::map<std::string, core::database_value> data;
+    data["name"] = core::database_value{std::string("John")};
+    data["email"] = core::database_value{std::string("john@example.com")};
 
     auto query = builder.insert_into("users").values(data).build();
 
@@ -165,8 +165,8 @@ TEST_F(UniversalQueryBuilderTest, UpdateData)
     query_builder builder(database_types::postgres);
 
     auto query = builder.update("users")
-                        .set("status", database_value{std::string("active")})
-                        .where("id", "=", database_value{int64_t(1)})
+                        .set("status", core::database_value{std::string("active")})
+                        .where("id", "=", core::database_value{int64_t(1)})
                         .build();
 
     EXPECT_TRUE(query.find("UPDATE") != std::string::npos);
@@ -259,7 +259,7 @@ TEST_F(UniversalQueryBuilderTest, SameSQLAcrossDialects)
 
         auto query = builder.select({"id", "name"})
                             .from("users")
-                            .where("active", "=", database_value{true})
+                            .where("active", "=", core::database_value{true})
                             .limit(10)
                             .build();
 
@@ -295,7 +295,7 @@ TEST_F(UniversalQueryBuilderTest, MethodChaining)
     auto& ref1 = builder.for_database(database_types::mysql);
     auto& ref2 = ref1.select({"*"});
     auto& ref3 = ref2.from("users");
-    auto& ref4 = ref3.where("active", "=", database_value{true});
+    auto& ref4 = ref3.where("active", "=", core::database_value{true});
     auto& ref5 = ref4.order_by("name");
     auto& ref6 = ref5.limit(10);
 
@@ -311,8 +311,8 @@ TEST_F(UniversalQueryBuilderTest, MongoDBInsert)
 {
     query_builder builder(database_types::mongodb);
 
-    std::map<std::string, database_value> data;
-    data["name"] = database_value{std::string("John")};
+    std::map<std::string, core::database_value> data;
+    data["name"] = core::database_value{std::string("John")};
 
     // MongoDB operations use insert_into().values() for inserts
     auto query = builder.collection("users")

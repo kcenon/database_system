@@ -404,7 +404,7 @@ TEST_F(QueryBuilderTest, SQLQueryBuilder) {
   auto builder = db_mgr_->create_query_builder(database_types::postgres);
   EXPECT_NO_THROW(builder.select({"id", "name"}));
   EXPECT_NO_THROW(builder.from("users"));
-  EXPECT_NO_THROW(builder.where("active", "=", database_value{true}));
+  EXPECT_NO_THROW(builder.where("active", "=", core::database_value{true}));
 }
 
 TEST_F(QueryBuilderTest, MongoDBQueryBuilder) {

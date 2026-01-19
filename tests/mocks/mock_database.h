@@ -7,19 +7,7 @@ All rights reserved.
 
 #pragma once
 
-// Suppress deprecation warnings for legacy interface support
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-#include "database/database_base.h"
+#include "database/core/database_backend.h"
 #include "mock_expectations.h"
 #include <queue>
 #include <functional>
@@ -30,7 +18,7 @@ namespace database::testing {
 
 /**
  * @class mock_database
- * @brief Configurable mock for database_base interface
+ * @brief Configurable mock for database_backend interface
  *
  * Features:
  * - Set expected queries and results
@@ -53,7 +41,7 @@ namespace database::testing {
  *   EXPECT_TRUE(db.verify_all_expectations());
  * @endcode
  */
-class mock_database : public database_base {
+class mock_database : public core::database_backend {
 public:
     mock_database();
     ~mock_database() override = default;
@@ -66,22 +54,28 @@ public:
     mock_database(mock_database&& other) noexcept;
     mock_database& operator=(mock_database&& other) noexcept;
 
-    // database_base interface implementation
-    database_types database_type() override;
-    bool connect(const std::string& connect_string) override;
-    bool disconnect() override;
-    bool create_query(const std::string& query_string) override;
-    unsigned int insert_query(const std::string& query_string) override;
-    unsigned int update_query(const std::string& query_string) override;
-    unsigned int delete_query(const std::string& query_string) override;
-    database_result select_query(const std::string& query_string) override;
-    bool execute_query(const std::string& query_string) override;
+    // database_backend interface implementation
+    database_types type() const override;
+    kcenon::common::VoidResult initialize(const core::connection_config& config) override;
+    kcenon::common::VoidResult shutdown() override;
+    bool is_initialized() const override;
+    kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
+    kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
+    kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
+    kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
+    kcenon::common::VoidResult execute_query(const std::string& query_string) override;
+    kcenon::common::VoidResult begin_transaction() override;
+    kcenon::common::VoidResult commit_transaction() override;
+    kcenon::common::VoidResult rollback_transaction() override;
+    bool in_transaction() const override;
+    std::string last_error() const override;
+    std::map<std::string, std::string> connection_info() const override;
 
     // Mock configuration
     mock_database& set_database_type(database_types type);
     mock_database& set_connect_result(bool result);
-    mock_database& set_default_select_result(const database_result& result);
-    mock_database& set_default_rows_affected(unsigned int rows);
+    mock_database& set_default_select_result(const core::database_result& result);
+    mock_database& set_default_rows_affected(uint64_t rows);
 
     // Expectation setting - returns expectation_builder for fluent API
     expectation_builder expect_query(const std::string& query);
@@ -109,11 +103,13 @@ private:
     friend class expectation_builder;
 
     database_types db_type_;
-    bool connected_;
+    bool initialized_;
     bool connect_result_;
+    bool in_transaction_;
     std::string connection_string_;
-    database_result default_result_;
-    unsigned int default_rows_affected_;
+    core::database_result default_result_;
+    uint64_t default_rows_affected_;
+    std::string last_error_;
 
     std::vector<expectation> expectations_;
     std::vector<std::string> executed_queries_;
@@ -133,12 +129,12 @@ public:
 
     // Preset configurations
     static mock_database empty_database();
-    static mock_database with_data(const std::string& table_name, const database_result& data);
+    static mock_database with_data(const std::string& table_name, const core::database_result& data);
     static mock_database failing_database(const std::string& error = "Mock database error");
 
     // Fluent configuration
     mock_database_builder& with_type(database_types type);
-    mock_database_builder& with_default_result(const database_result& result);
+    mock_database_builder& with_default_result(const core::database_result& result);
     mock_database_builder& that_fails_on_connect();
 
     mock_database build();
@@ -148,12 +144,3 @@ private:
 };
 
 } // namespace database::testing
-
-// Restore diagnostic settings
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif

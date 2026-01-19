@@ -25,7 +25,7 @@ condition_builder& condition_builder::add(const condition& cond, logical_op op) 
 }
 
 condition_builder& condition_builder::add(const std::string& field, const std::string& operator_,
-                                         const database_value& value, logical_op op) {
+                                         const core::database_value& value, logical_op op) {
     condition cond;
     cond.field = field;
     cond.op = operator_;

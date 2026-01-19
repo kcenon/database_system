@@ -7,6 +7,7 @@ All rights reserved.
 
 #include "mock_expectations.h"
 #include "mock_database.h"
+#include <cstdint>
 
 namespace database::testing {
 
@@ -37,12 +38,12 @@ expectation& expectation::for_any() {
     return *this;
 }
 
-expectation& expectation::returning(const database_result& result) {
+expectation& expectation::returning(const core::database_result& result) {
     result_ = result;
     return *this;
 }
 
-expectation& expectation::returning_rows_affected(unsigned int count) {
+expectation& expectation::returning_rows_affected(uint64_t count) {
     rows_affected_ = count;
     return *this;
 }
@@ -102,15 +103,15 @@ bool expectation::can_be_invoked() const {
     return actual_invocations_ < max_invocations_;
 }
 
-database_result expectation::get_result() {
+core::database_result expectation::get_result() {
     ++actual_invocations_;
     if (error_message_) {
         throw database_exception(*error_message_);
     }
-    return result_.value_or(database_result{});
+    return result_.value_or(core::database_result{});
 }
 
-unsigned int expectation::get_rows_affected() {
+uint64_t expectation::get_rows_affected() {
     ++actual_invocations_;
     if (error_message_) {
         throw database_exception(*error_message_);
@@ -140,13 +141,13 @@ expectation_builder::expectation_builder(mock_database* db, expectation exp)
 {
 }
 
-expectation_builder& expectation_builder::will_return(const database_result& result) {
+expectation_builder& expectation_builder::will_return(const core::database_result& result) {
     exp_.returning(result);
     db_->expectations_.push_back(exp_);
     return *this;
 }
 
-expectation_builder& expectation_builder::will_return_rows(unsigned int count) {
+expectation_builder& expectation_builder::will_return_rows(uint64_t count) {
     exp_.returning_rows_affected(count);
     db_->expectations_.push_back(exp_);
     return *this;

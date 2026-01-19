@@ -24,9 +24,32 @@
 
 ---
 
-## [Unreleased] - 2026-01-18
+## [Unreleased] - 2026-01-20
 
 ### 💥 **Breaking Changes**
+
+#### **Remove Deprecated Result Types and database_base Class (Issue #325)**
+- **Removed deprecated types from `database/core/result.h`**:
+  - `database::error_info` struct - use `kcenon::common::error_info` instead
+  - `database::result<T>` class - use `kcenon::common::Result<T>` instead
+  - `database::result<void>` specialization - use `kcenon::common::VoidResult` instead
+  - `database::Result<T>` alias - use `kcenon::common::Result<T>` instead
+  - `database::VoidResult` alias - use `kcenon::common::VoidResult` instead
+- **Removed deprecated classes**:
+  - `database/database_base.h` - use `database/core/database_backend.h` instead
+  - `database/database_base_adapter.h` - no longer needed
+  - `database/adapters/common_system_adapter.h` - no longer needed
+- **API migration required**:
+  - `database_base` → `database::core::database_backend`
+  - `connect(string)` → `initialize(connection_config)`
+  - `disconnect()` → `shutdown()`
+  - `create_query()` → `execute_query()`
+  - `database_value` → `core::database_value`
+  - `database_result` → `core::database_result`
+  - `database_row` → `core::database_row`
+- **Updated internal code to use `core::` namespace prefix** for database types
+- **Updated sample files** to use new `database_backend` API
+- **Migration guide**: See `docs/migration/database_base.md` for detailed instructions
 
 #### **Remove Deprecated Bool-Returning Methods from database_manager (Issue #323)**
 - **Removed deprecated methods** (7 methods total):

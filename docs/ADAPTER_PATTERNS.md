@@ -1,6 +1,6 @@
 # Adapter Pattern Best Practices
 
-> **Language:** **English** | [한국어](ADAPTER_PATTERNS_KO.md)
+> **Language:** **English** | [한국어](ADAPTER_PATTERNS.kr.md)
 
 **Version:** 1.0.0
 **Last Updated:** 2025-12-27

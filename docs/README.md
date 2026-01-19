@@ -1,6 +1,6 @@
 # Database System Documentation
 
-> **Language:** **English** | [한국어](README_KO.md)
+> **Language:** **English** | [한국어](README.kr.md)
 
 **Version:** 0.1.0
 **Last Updated:** 2025-11-11
@@ -43,8 +43,8 @@ Essential documents for understanding the system:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design decisions, backend plugin system | [🇰🇷](01-ARCHITECTURE_KO.md) | 600+ |
-| [02-API_REFERENCE.md](02-API_REFERENCE.md) | Complete API docs: database_manager, connection_pool, ORM, query builders | [🇰🇷](02-API_REFERENCE_KO.md) | 1000+ |
+| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design decisions, backend plugin system | [🇰🇷](01-ARCHITECTURE.kr.md) | 600+ |
+| [02-API_REFERENCE.md](02-API_REFERENCE.md) | Complete API docs: database_manager, connection_pool, ORM, query builders | [🇰🇷](02-API_REFERENCE.kr.md) | 1000+ |
 
 ### 📗 User Guides
 
@@ -53,11 +53,11 @@ Step-by-step guides for users:
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
 | [QUICK_START.md](guides/QUICK_START.md) | 5-minute getting started guide | - | 170 |
-| [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) | Build instructions, dependencies, troubleshooting | [🇰🇷](guides/BUILD_GUIDE_KO.md) | 500+ |
+| [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) | Build instructions, dependencies, troubleshooting | [🇰🇷](guides/BUILD_GUIDE.kr.md) | 500+ |
 | [FAQ.md](guides/FAQ.md) | 20+ frequently asked questions with answers | - | 484 |
 | [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) | Common problems and solutions | - | 964 |
 | [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) | Recommended patterns for connection, queries, security | - | 1255 |
-| [SAMPLES_GUIDE.md](guides/SAMPLES_GUIDE.md) | Walkthrough of example applications | [🇰🇷](guides/SAMPLES_GUIDE_KO.md) | 800+ |
+| [SAMPLES_GUIDE.md](guides/SAMPLES_GUIDE.md) | Walkthrough of example applications | [🇰🇷](guides/SAMPLES_GUIDE.kr.md) | 800+ |
 
 ### 📙 Advanced Topics
 
@@ -65,11 +65,11 @@ For experienced users and contributors:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [ADAPTER_PATTERNS.md](ADAPTER_PATTERNS.md) | Adapter pattern best practices for dependency management | [🇰🇷](ADAPTER_PATTERNS_KO.md) | 500+ |
+| [ADAPTER_PATTERNS.md](ADAPTER_PATTERNS.md) | Adapter pattern best practices for dependency management | [🇰🇷](ADAPTER_PATTERNS.kr.md) | 500+ |
 | [TYPE_SYSTEM.md](advanced/TYPE_SYSTEM.md) | database_value, type mapping, ORM integration | - | 484 |
 | [THREAD_SYSTEM_MIGRATION.md](advanced/THREAD_SYSTEM_MIGRATION.md) | Thread system integration guide | - | 300+ |
-| [CURRENT_STATE.md](advanced/CURRENT_STATE.md) | Current implementation status | [🇰🇷](advanced/CURRENT_STATE_KO.md) | 100+ |
-| [ARCHITECTURE_ISSUES.md](advanced/ARCHITECTURE_ISSUES.md) | Known architectural issues | [🇰🇷](advanced/ARCHITECTURE_ISSUES_KO.md) | 50+ |
+| [CURRENT_STATE.md](advanced/CURRENT_STATE.md) | Current implementation status | [🇰🇷](advanced/CURRENT_STATE.kr.md) | 100+ |
+| [ARCHITECTURE_ISSUES.md](advanced/ARCHITECTURE_ISSUES.md) | Known architectural issues | [🇰🇷](advanced/ARCHITECTURE_ISSUES.kr.md) | 50+ |
 
 ### 📊 Performance
 
@@ -77,9 +77,9 @@ Performance metrics and optimization:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [BASELINE.md](performance/BASELINE.md) | Performance baseline: 1.2ms queries, 5K TPS, 1.16M ops/s | [🇰🇷](performance/BASELINE_KO.md) | 300+ |
-| [BENCHMARKS.md](performance/BENCHMARKS.md) | Detailed benchmark results by backend | [🇰🇷](performance/BENCHMARKS_KO.md) | 600+ |
-| [STATIC_ANALYSIS_BASELINE.md](performance/STATIC_ANALYSIS_BASELINE.md) | Static analysis results (Clang-Tidy, Cppcheck) | [🇰🇷](performance/STATIC_ANALYSIS_BASELINE_KO.md) | 100+ |
+| [BASELINE.md](performance/BASELINE.md) | Performance baseline: 1.2ms queries, 5K TPS, 1.16M ops/s | [🇰🇷](performance/BASELINE.kr.md) | 300+ |
+| [BENCHMARKS.md](performance/BENCHMARKS.md) | Detailed benchmark results by backend | [🇰🇷](performance/BENCHMARKS.kr.md) | 600+ |
+| [STATIC_ANALYSIS_BASELINE.md](performance/STATIC_ANALYSIS_BASELINE.md) | Static analysis results (Clang-Tidy, Cppcheck) | [🇰🇷](performance/STATIC_ANALYSIS_BASELINE.kr.md) | 100+ |
 
 ### 🤝 Contributing
 

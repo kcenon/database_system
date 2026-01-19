@@ -80,17 +80,17 @@ database_system/
 │   └── transaction_bench.cpp           # Transaction benchmarks
 ├── docs/                               # Documentation
 │   ├── API_REFERENCE.md                # Complete API reference
-│   ├── API_REFERENCE_KO.md             # API reference (Korean)
+│   ├── API_REFERENCE.kr.md             # API reference (Korean)
 │   ├── ARCHITECTURE.md                 # System architecture (detailed)
-│   ├── ARCHITECTURE_KO.md              # Architecture (Korean)
+│   ├── ARCHITECTURE.kr.md              # Architecture (Korean)
 │   ├── BUILD_GUIDE.md                  # Build instructions
-│   ├── BUILD_GUIDE_KO.md               # Build guide (Korean)
+│   ├── BUILD_GUIDE.kr.md               # Build guide (Korean)
 │   ├── CURRENT_STATE.md                # Current implementation status
-│   ├── CURRENT_STATE_KO.md             # Current state (Korean)
+│   ├── CURRENT_STATE.kr.md             # Current state (Korean)
 │   ├── PERFORMANCE_BENCHMARKS.md       # Performance benchmark results
-│   ├── PERFORMANCE_BENCHMARKS_KO.md    # Benchmarks (Korean)
+│   ├── PERFORMANCE_BENCHMARKS.kr.md    # Benchmarks (Korean)
 │   ├── SAMPLES_GUIDE.md                # Sample code guide
-│   └── SAMPLES_GUIDE_KO.md             # Samples guide (Korean)
+│   └── SAMPLES_GUIDE.kr.md             # Samples guide (Korean)
 ├── integration_tests/                  # Integration test suite
 │   ├── failures/                       # Error handling tests
 │   │   └── error_handling_test.cpp     # Error scenario tests
@@ -118,18 +118,18 @@ database_system/
 │   └── unit_tests.cpp                  # Unit test suite
 ├── ARCHITECTURE.md                     # Architecture overview (root)
 ├── BASELINE.md                         # Performance baselines
-├── BASELINE_KO.md                      # Baselines (Korean)
+├── BASELINE.kr.md                      # Baselines (Korean)
 ├── CHANGELOG.md                        # Development changelog
-├── CHANGELOG_KO.md                     # Changelog (Korean)
+├── CHANGELOG.kr.md                     # Changelog (Korean)
 ├── CMakeLists.txt                      # Main build configuration
 ├── IMPLEMENTATION_SUMMARY.md           # Implementation summary
-├── IMPLEMENTATION_SUMMARY_KO.md        # Summary (Korean)
+├── IMPLEMENTATION_SUMMARY.kr.md        # Summary (Korean)
 ├── IMPROVEMENTS.md                     # Planned improvements
-├── IMPROVEMENTS_KO.md                  # Improvements (Korean)
+├── IMPROVEMENTS.kr.md                  # Improvements (Korean)
 ├── INTEGRATION.md                      # Integration guide
 ├── MIGRATION.md                        # Migration guide (root)
 ├── README.md                           # Project overview
-├── README_KO.md                        # README (Korean)
+├── README.kr.md                        # README (Korean)
 ├── STRUCTURE.md                        # Project structure (this file)
 └── vcpkg.json                          # Dependency manifest
 ```

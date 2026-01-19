@@ -1,6 +1,6 @@
 # Database System - Performance Baseline Metrics
 
-**English** | [한국어](BASELINE_KO.md)
+**English** | [한국어](BASELINE.kr.md)
 
 **Version**: 0.1.0.0
 **Date**: 2025-10-09

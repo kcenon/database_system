@@ -660,7 +660,7 @@ Update documentation when:
 - [ ] Update API_REFERENCE.md for API changes
 - [ ] Add entry to CHANGELOG.md
 - [ ] Update examples if behavior changes
-- [ ] Update Korean translations (_KO.md files)
+- [ ] Update Korean translations (.kr.md files)
 - [ ] Update BUILD_GUIDE.md for new dependencies
 
 **Documentation checklist**:

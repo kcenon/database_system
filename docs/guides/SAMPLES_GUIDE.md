@@ -1,6 +1,6 @@
 # Database System Samples Guide
 
-> **Language:** **English** | [한국어](SAMPLES_GUIDE_KO.md)
+> **Language:** **English** | [한국어](SAMPLES_GUIDE.kr.md)
 
 Comprehensive guide to the sample programs demonstrating various features of the Database System.
 

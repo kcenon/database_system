@@ -1,6 +1,6 @@
 # Database System Build Guide
 
-> **Language:** **English** | [한국어](BUILD_GUIDE_KO.md)
+> **Language:** **English** | [한국어](BUILD_GUIDE.kr.md)
 
 Comprehensive guide for building the Database System with multi-backend support, connection pooling, and query builders.
 

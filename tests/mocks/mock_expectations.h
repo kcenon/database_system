@@ -7,19 +7,7 @@ All rights reserved.
 
 #pragma once
 
-// Suppress deprecation warnings for legacy interface support
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-#include "database/database_base.h"
+#include "database/core/database_backend.h"
 #include <string>
 #include <functional>
 #include <regex>
@@ -55,7 +43,7 @@ public:
     expectation& for_any();
 
     // Response configuration
-    expectation& returning(const database_result& result);
+    expectation& returning(const core::database_result& result);
     expectation& returning_rows_affected(unsigned int count);
     expectation& throwing(const std::string& error_message);
     expectation& returning_execute_result(bool result);
@@ -73,7 +61,7 @@ public:
     bool can_be_invoked() const;
 
     // Get results
-    database_result get_result();
+    core::database_result get_result();
     unsigned int get_rows_affected();
     bool get_execute_result();
 
@@ -86,7 +74,7 @@ private:
     match_type match_type_;
     std::regex pattern_;
 
-    std::optional<database_result> result_;
+    std::optional<core::database_result> result_;
     std::optional<unsigned int> rows_affected_;
     std::optional<bool> execute_result_;
     std::optional<std::string> error_message_;
@@ -105,7 +93,7 @@ public:
     expectation_builder(mock_database* db, expectation exp);
 
     // Response configuration
-    expectation_builder& will_return(const database_result& result);
+    expectation_builder& will_return(const core::database_result& result);
     expectation_builder& will_return_rows(unsigned int count);
     expectation_builder& will_fail(const std::string& error_message);
     expectation_builder& will_succeed();
@@ -131,12 +119,3 @@ public:
 };
 
 } // namespace database::testing
-
-// Restore diagnostic settings
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif

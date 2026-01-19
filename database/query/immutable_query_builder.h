@@ -91,7 +91,7 @@ namespace database
 		 * @param value Value to compare against.
 		 * @return New immutable_query_builder instance with updated conditions.
 		 */
-		immutable_query_builder where(const std::string& field, const std::string& op, const database_value& value) const;
+		immutable_query_builder where(const std::string& field, const std::string& op, const core::database_value& value) const;
 
 		/**
 		 * @brief WHERE clause - adds a query_condition.
@@ -187,7 +187,7 @@ namespace database
 
 		// Helper methods
 		std::string escape_identifier(const std::string& identifier, database_types db_type) const;
-		std::string format_value(const database_value& value, database_types db_type) const;
+		std::string format_value(const core::database_value& value, database_types db_type) const;
 		std::string join_type_to_string(join_type type) const;
 	};
 

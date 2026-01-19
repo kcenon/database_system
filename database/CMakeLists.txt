@@ -51,7 +51,6 @@ endif()
 
 # Collect all header files
 set(HEADER_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_base.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h

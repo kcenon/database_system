@@ -89,7 +89,7 @@ namespace database
 		);
 	}
 
-	immutable_query_builder immutable_query_builder::where(const std::string& field, const std::string& op, const database_value& value) const
+	immutable_query_builder immutable_query_builder::where(const std::string& field, const std::string& op, const core::database_value& value) const
 	{
 		auto new_conditions = conditions_;
 		new_conditions.emplace_back(field, op, value);
@@ -330,7 +330,7 @@ namespace database
 		}
 	}
 
-	std::string immutable_query_builder::format_value(const database_value& value, database_types db_type) const
+	std::string immutable_query_builder::format_value(const core::database_value& value, database_types db_type) const
 	{
 		if (std::holds_alternative<std::string>(value))
 		{

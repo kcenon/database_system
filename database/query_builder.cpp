@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace database
 {
 	// query_condition implementation
-	query_condition::query_condition(const std::string& field, const std::string& op, const database_value& value)
+	query_condition::query_condition(const std::string& field, const std::string& op, const core::database_value& value)
 		: field_(field), operator_(op), value_(value)
 	{
 	}
@@ -213,7 +213,7 @@ namespace database
 		return *this;
 	}
 
-	query_builder& query_builder::where(const std::string& field, const std::string& op, const database_value& value)
+	query_builder& query_builder::where(const std::string& field, const std::string& op, const core::database_value& value)
 	{
 		ensure_dialect();
 		if (dialect_) {
@@ -299,7 +299,7 @@ namespace database
 		return *this;
 	}
 
-	query_builder& query_builder::values(const std::map<std::string, database_value>& data)
+	query_builder& query_builder::values(const std::map<std::string, core::database_value>& data)
 	{
 		ensure_dialect();
 		if (dialect_) {
@@ -308,7 +308,7 @@ namespace database
 		return *this;
 	}
 
-	query_builder& query_builder::values(const std::vector<std::map<std::string, database_value>>& rows)
+	query_builder& query_builder::values(const std::vector<std::map<std::string, core::database_value>>& rows)
 	{
 		ensure_dialect();
 		if (dialect_) {
@@ -326,18 +326,18 @@ namespace database
 		return *this;
 	}
 
-	query_builder& query_builder::set(const std::string& field, const database_value& value)
+	query_builder& query_builder::set(const std::string& field, const core::database_value& value)
 	{
 		ensure_dialect();
 		if (dialect_) {
-			std::map<std::string, database_value> data;
+			std::map<std::string, core::database_value> data;
 			data[field] = value;
 			dialect_->set_update_data(data);
 		}
 		return *this;
 	}
 
-	query_builder& query_builder::set(const std::map<std::string, database_value>& data)
+	query_builder& query_builder::set(const std::map<std::string, core::database_value>& data)
 	{
 		ensure_dialect();
 		if (dialect_) {
@@ -381,7 +381,7 @@ namespace database
 		return "";
 	}
 
-	database_result query_builder::execute(database_base* db) const
+	core::database_result query_builder::execute(core::database_backend* db) const
 	{
 		if (!db) {
 			return {};
@@ -392,7 +392,11 @@ namespace database
 			return {};
 		}
 
-		return db->select_query(query);
+		auto result = db->select_query(query);
+		if (result.is_err()) {
+			return {};
+		}
+		return result.value();
 	}
 
 	void query_builder::reset()

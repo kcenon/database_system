@@ -9,6 +9,7 @@
 #include <vector>
 #include <variant>
 #include "database/postgres_manager.h"
+#include "database/core/database_backend.h"
 
 using namespace database;
 
@@ -25,10 +26,11 @@ int main() {
         std::string connection_string = "host=localhost port=5432 dbname=testdb user=testuser password=testpass";
 
         std::cout << "Attempting to connect to PostgreSQL..." << std::endl;
-        bool connected = pg_manager->connect(connection_string);
+        auto config = core::connection_config::from_string(connection_string);
+        auto connect_result = pg_manager->initialize(config);
 
-        if (connected) {
-            std::cout << "✓ Successfully connected to PostgreSQL database" << std::endl;
+        if (connect_result.is_ok()) {
+            std::cout << "Successfully connected to PostgreSQL database" << std::endl;
 
             // 2. Table creation with advanced features
             std::cout << "\n2. Creating Advanced Table:" << std::endl;
@@ -46,11 +48,11 @@ int main() {
             )";
 
             std::cout << "Creating products table with advanced PostgreSQL features..." << std::endl;
-            bool table_created = pg_manager->create_query(create_table_sql);
-            if (table_created) {
-                std::cout << "✓ Advanced products table created successfully" << std::endl;
+            auto table_result = pg_manager->execute_query(create_table_sql);
+            if (table_result.is_ok()) {
+                std::cout << "Advanced products table created successfully" << std::endl;
             } else {
-                std::cout << "✗ Failed to create products table" << std::endl;
+                std::cout << "Failed to create products table: " << table_result.error().message << std::endl;
             }
 
             // 3. Insert sample data
@@ -74,11 +76,11 @@ int main() {
             };
 
             for (const auto& query : insert_queries) {
-                unsigned int inserted = pg_manager->insert_query(query);
-                if (inserted > 0) {
-                    std::cout << "✓ Product inserted successfully" << std::endl;
+                auto insert_result = pg_manager->insert_query(query);
+                if (insert_result.is_ok() && insert_result.value() > 0) {
+                    std::cout << "Product inserted successfully" << std::endl;
                 } else {
-                    std::cout << "✗ Failed to insert product (may already exist)" << std::endl;
+                    std::cout << "Failed to insert product (may already exist)" << std::endl;
                 }
             }
 
@@ -88,9 +90,10 @@ int main() {
             // Array operations
             std::cout << "\nQuerying products with array operations:" << std::endl;
             std::string array_query = "SELECT name, tags FROM products WHERE 'gaming' = ANY(tags)";
-            auto gaming_products = pg_manager->select_query(array_query);
+            auto gaming_result = pg_manager->select_query(array_query);
 
-            if (!gaming_products.empty()) {
+            if (gaming_result.is_ok() && !gaming_result.value().empty()) {
+                const auto& gaming_products = gaming_result.value();
                 std::cout << "Products with 'gaming' tag (" << gaming_products.size() << " rows):" << std::endl;
                 for (const auto& row : gaming_products) {
                     for (const auto& [key, value] : row) {
@@ -107,9 +110,10 @@ int main() {
             // JSONB operations
             std::cout << "\nQuerying products with JSONB operations:" << std::endl;
             std::string json_query = "SELECT name, metadata->>'brand' as brand FROM products WHERE metadata->>'brand' = 'TechCorp'";
-            auto techcorp_products = pg_manager->select_query(json_query);
+            auto techcorp_result = pg_manager->select_query(json_query);
 
-            if (!techcorp_products.empty()) {
+            if (techcorp_result.is_ok() && !techcorp_result.value().empty()) {
+                const auto& techcorp_products = techcorp_result.value();
                 std::cout << "TechCorp products (" << techcorp_products.size() << " rows):" << std::endl;
                 for (const auto& row : techcorp_products) {
                     for (const auto& [key, value] : row) {
@@ -128,15 +132,18 @@ int main() {
 
             // Optionally clean up test data
             // std::string cleanup_sql = "DELETE FROM products WHERE name LIKE '%Gaming%' OR name LIKE '%Office%'";
-            // unsigned int deleted = pg_manager->delete_query(cleanup_sql);
-            // std::cout << "Cleaned up " << deleted << " test records" << std::endl;
+            // auto delete_result = pg_manager->delete_query(cleanup_sql);
+            // if (delete_result.is_ok()) {
+            //     std::cout << "Cleaned up " << delete_result.value() << " test records" << std::endl;
+            // }
 
-            // Disconnect
-            pg_manager->disconnect();
-            std::cout << "✓ Disconnected from PostgreSQL database" << std::endl;
+            // Shutdown
+            pg_manager->shutdown();
+            std::cout << "Disconnected from PostgreSQL database" << std::endl;
 
         } else {
-            std::cout << "✗ Failed to connect to PostgreSQL database" << std::endl;
+            std::cout << "Failed to connect to PostgreSQL database" << std::endl;
+            std::cout << "Error: " << connect_result.error().message << std::endl;
             std::cout << "Please ensure:" << std::endl;
             std::cout << "  - PostgreSQL server is running" << std::endl;
             std::cout << "  - Database 'testdb' exists" << std::endl;

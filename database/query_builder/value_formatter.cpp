@@ -16,7 +16,7 @@ namespace database::query {
 value_formatter::value_formatter(database_types db_type)
     : db_type_(db_type) {}
 
-std::string value_formatter::format(const database_value& value) const {
+std::string value_formatter::format(const core::database_value& value) const {
     return std::visit([this](auto&& arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
 

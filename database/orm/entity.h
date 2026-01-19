@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../database_types.h"
-#include "../database_base.h"
+#include "../core/database_backend.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -219,7 +219,7 @@ namespace database::orm
 	class query_builder
 	{
 	public:
-		query_builder(std::shared_ptr<database_base> db);
+		query_builder(std::shared_ptr<core::database_backend> db);
 
 		// Query building methods
 		query_builder& where(const std::string& condition);
@@ -242,11 +242,11 @@ namespace database::orm
 		// Aggregation methods
 		double sum(const std::string& field);
 		double avg(const std::string& field);
-		database_value min(const std::string& field);
-		database_value max(const std::string& field);
+		core::database_value min(const std::string& field);
+		core::database_value max(const std::string& field);
 
 	private:
-		std::shared_ptr<database_base> db_;
+		std::shared_ptr<core::database_backend> db_;
 		std::string where_clause_;
 		std::string order_clause_;
 		std::string join_clause_;
@@ -254,7 +254,7 @@ namespace database::orm
 		size_t offset_count_ = 0;
 
 		std::string build_query() const;
-		EntityType map_result_to_entity(const database_result& result, size_t row) const;
+		EntityType map_result_to_entity(const core::database_result& result, size_t row) const;
 	};
 
 	/**
@@ -286,12 +286,12 @@ namespace database::orm
 		std::enable_if_t<is_entity_v<EntityType>, const entity_metadata&> get_metadata();
 
 		template<typename EntityType>
-		std::enable_if_t<is_entity_v<EntityType>, query_builder<EntityType>> query(std::shared_ptr<database_base> db);
+		std::enable_if_t<is_entity_v<EntityType>, query_builder<EntityType>> query(std::shared_ptr<core::database_backend> db);
 
 		// Schema operations
-		bool create_tables(std::shared_ptr<database_base> db);
-		bool drop_tables(std::shared_ptr<database_base> db);
-		bool sync_schema(std::shared_ptr<database_base> db);
+		bool create_tables(std::shared_ptr<core::database_backend> db);
+		bool drop_tables(std::shared_ptr<core::database_backend> db);
+		bool sync_schema(std::shared_ptr<core::database_backend> db);
 
 	private:
 		std::unordered_map<std::string, std::unique_ptr<entity_metadata>> metadata_cache_;

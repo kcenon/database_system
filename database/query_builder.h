@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "database_types.h"
-#include "database_base.h"
+#include "core/database_backend.h"
 #include "query_dialect.h"
 #include <string>
 #include <vector>
@@ -74,7 +74,7 @@ namespace database
 	class query_condition
 	{
 	public:
-		query_condition(const std::string& field, const std::string& op, const database_value& value);
+		query_condition(const std::string& field, const std::string& op, const core::database_value& value);
 		query_condition(const std::string& raw_condition);
 
 		std::string to_sql() const;
@@ -88,7 +88,7 @@ namespace database
 	private:
 		std::string field_;
 		std::string operator_;
-		database_value value_;
+		core::database_value value_;
 		std::string raw_condition_;
 		std::vector<query_condition> sub_conditions_;
 		std::string logical_operator_;
@@ -145,7 +145,7 @@ namespace database
 		// SQL-style interface (works for PostgreSQL, MySQL, SQLite)
 		query_builder& select(const std::vector<std::string>& columns);
 		query_builder& from(const std::string& table);
-		query_builder& where(const std::string& field, const std::string& op, const database_value& value);
+		query_builder& where(const std::string& field, const std::string& op, const core::database_value& value);
 		query_builder& where(const query_condition& condition);
 		query_builder& join(const std::string& table, const std::string& condition, join_type type = join_type::inner);
 		query_builder& order_by(const std::string& column, sort_order order = sort_order::asc);
@@ -157,13 +157,13 @@ namespace database
 
 		// INSERT operations
 		query_builder& insert_into(const std::string& table);
-		query_builder& values(const std::map<std::string, database_value>& data);
-		query_builder& values(const std::vector<std::map<std::string, database_value>>& rows);
+		query_builder& values(const std::map<std::string, core::database_value>& data);
+		query_builder& values(const std::vector<std::map<std::string, core::database_value>>& rows);
 
 		// UPDATE operations
 		query_builder& update(const std::string& table);
-		query_builder& set(const std::string& field, const database_value& value);
-		query_builder& set(const std::map<std::string, database_value>& data);
+		query_builder& set(const std::string& field, const core::database_value& value);
+		query_builder& set(const std::map<std::string, core::database_value>& data);
 
 		// DELETE operations
 		query_builder& delete_from(const std::string& table);
@@ -174,7 +174,7 @@ namespace database
 
 		// Build and execute
 		std::string build() const;
-		database_result execute(database_base* db) const;
+		core::database_result execute(core::database_backend* db) const;
 
 		// Reset builder
 		void reset();

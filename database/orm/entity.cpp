@@ -191,7 +191,7 @@ namespace database::orm
 	}
 
 	// entity_manager implementation
-	bool entity_manager::create_tables(std::shared_ptr<database_base> db)
+	bool entity_manager::create_tables(std::shared_ptr<core::database_backend> db)
 	{
 		if (!db) {
 			ORM_LOG_ERROR("create_tables", "Database connection is null");
@@ -202,16 +202,20 @@ namespace database::orm
 			for (const auto& [name, metadata] : metadata_cache_) {
 				// Create table
 				std::string create_sql = metadata->create_table_sql();
-				if (!db->execute_query(create_sql)) {
+				auto result = db->execute_query(create_sql);
+				if (result.is_err()) {
 					ORM_LOG_ERROR("create_tables", "Failed to create table: " + name);
 					return false;
 				}
 
 				// Create indexes
 				std::string index_sql = metadata->create_indexes_sql();
-				if (!index_sql.empty() && !db->execute_query(index_sql)) {
-					ORM_LOG_ERROR("create_tables", "Failed to create indexes for table: " + name);
-					return false;
+				if (!index_sql.empty()) {
+					auto index_result = db->execute_query(index_sql);
+					if (index_result.is_err()) {
+						ORM_LOG_ERROR("create_tables", "Failed to create indexes for table: " + name);
+						return false;
+					}
 				}
 			}
 			return true;
@@ -221,7 +225,7 @@ namespace database::orm
 		}
 	}
 
-	bool entity_manager::drop_tables(std::shared_ptr<database_base> db)
+	bool entity_manager::drop_tables(std::shared_ptr<core::database_backend> db)
 	{
 		if (!db) {
 			ORM_LOG_ERROR("drop_tables", "Database connection is null");
@@ -231,7 +235,8 @@ namespace database::orm
 		try {
 			for (const auto& [name, metadata] : metadata_cache_) {
 				std::string drop_sql = "DROP TABLE IF EXISTS " + metadata->table_name();
-				if (!db->execute_query(drop_sql)) {
+				auto result = db->execute_query(drop_sql);
+				if (result.is_err()) {
 					ORM_LOG_ERROR("drop_tables", "Failed to drop table: " + name);
 					return false;
 				}
@@ -243,7 +248,7 @@ namespace database::orm
 		}
 	}
 
-	bool entity_manager::sync_schema(std::shared_ptr<database_base> db)
+	bool entity_manager::sync_schema(std::shared_ptr<core::database_backend> db)
 	{
 		if (!db) {
 			ORM_LOG_ERROR("sync_schema", "Database connection is null");

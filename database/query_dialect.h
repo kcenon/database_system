@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "database_types.h"
-#include "database_base.h"
+#include "core/database_backend.h"
 
 #include <memory>
 #include <string>
@@ -75,7 +75,7 @@ namespace database
 
 		// WHERE conditions
 		virtual void add_where_condition(const query_condition& condition) = 0;
-		virtual void add_where_condition(const std::string& field, const std::string& op, const database_value& value) = 0;
+		virtual void add_where_condition(const std::string& field, const std::string& op, const core::database_value& value) = 0;
 
 		// JOIN operations
 		virtual void add_join(const std::string& table, const std::string& condition, join_type type) = 0;
@@ -93,12 +93,12 @@ namespace database
 
 		// INSERT operations
 		virtual void set_insert_table(const std::string& table) = 0;
-		virtual void set_insert_data(const std::map<std::string, database_value>& data) = 0;
-		virtual void set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows) = 0;
+		virtual void set_insert_data(const std::map<std::string, core::database_value>& data) = 0;
+		virtual void set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows) = 0;
 
 		// UPDATE operations
 		virtual void set_update_table(const std::string& table) = 0;
-		virtual void set_update_data(const std::map<std::string, database_value>& data) = 0;
+		virtual void set_update_data(const std::map<std::string, core::database_value>& data) = 0;
 
 		// DELETE operations
 		virtual void set_delete_table(const std::string& table) = 0;
@@ -136,7 +136,7 @@ namespace database
 			void set_from_table(const std::string& table) override;
 
 			void add_where_condition(const query_condition& condition) override;
-			void add_where_condition(const std::string& field, const std::string& op, const database_value& value) override;
+			void add_where_condition(const std::string& field, const std::string& op, const core::database_value& value) override;
 
 			void add_join(const std::string& table, const std::string& condition, join_type type) override;
 
@@ -149,11 +149,11 @@ namespace database
 			void set_offset(size_t count) override;
 
 			void set_insert_table(const std::string& table) override;
-			void set_insert_data(const std::map<std::string, database_value>& data) override;
-			void set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows) override;
+			void set_insert_data(const std::map<std::string, core::database_value>& data) override;
+			void set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows) override;
 
 			void set_update_table(const std::string& table) override;
-			void set_update_data(const std::map<std::string, database_value>& data) override;
+			void set_update_data(const std::map<std::string, core::database_value>& data) override;
 
 			void set_delete_table(const std::string& table) override;
 
@@ -180,11 +180,11 @@ namespace database
 			size_t offset_count_;
 
 			std::string target_table_;
-			std::map<std::string, database_value> set_data_;
-			std::vector<std::map<std::string, database_value>> insert_rows_;
+			std::map<std::string, core::database_value> set_data_;
+			std::vector<std::map<std::string, core::database_value>> insert_rows_;
 
 			std::string escape_identifier(const std::string& identifier) const;
-			std::string format_value(const database_value& value) const;
+			std::string format_value(const core::database_value& value) const;
 			std::string join_type_to_string(join_type type) const;
 		};
 
@@ -205,7 +205,7 @@ namespace database
 			void set_from_table(const std::string& table) override;
 
 			void add_where_condition(const query_condition& condition) override;
-			void add_where_condition(const std::string& field, const std::string& op, const database_value& value) override;
+			void add_where_condition(const std::string& field, const std::string& op, const core::database_value& value) override;
 
 			void add_join(const std::string& table, const std::string& condition, join_type type) override;
 
@@ -218,11 +218,11 @@ namespace database
 			void set_offset(size_t count) override;
 
 			void set_insert_table(const std::string& table) override;
-			void set_insert_data(const std::map<std::string, database_value>& data) override;
-			void set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows) override;
+			void set_insert_data(const std::map<std::string, core::database_value>& data) override;
+			void set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows) override;
 
 			void set_update_table(const std::string& table) override;
-			void set_update_data(const std::map<std::string, database_value>& data) override;
+			void set_update_data(const std::map<std::string, core::database_value>& data) override;
 
 			void set_delete_table(const std::string& table) override;
 
@@ -240,20 +240,20 @@ namespace database
 
 			operation_type op_type_;
 			std::string collection_name_;
-			std::map<std::string, database_value> filter_;
-			std::map<std::string, database_value> projection_;
+			std::map<std::string, core::database_value> filter_;
+			std::map<std::string, core::database_value> projection_;
 			std::map<std::string, int> sort_spec_;
 			size_t limit_count_;
 			size_t skip_count_;
 
-			std::map<std::string, database_value> document_;
-			std::vector<std::map<std::string, database_value>> documents_;
-			std::map<std::string, database_value> update_spec_;
+			std::map<std::string, core::database_value> document_;
+			std::vector<std::map<std::string, core::database_value>> documents_;
+			std::map<std::string, core::database_value> update_spec_;
 
-			std::vector<std::map<std::string, database_value>> pipeline_;
+			std::vector<std::map<std::string, core::database_value>> pipeline_;
 
-			std::string to_json(const std::map<std::string, database_value>& data) const;
-			std::string value_to_json(const database_value& value) const;
+			std::string to_json(const std::map<std::string, core::database_value>& data) const;
+			std::string value_to_json(const core::database_value& value) const;
 		};
 
 		/**
@@ -273,7 +273,7 @@ namespace database
 			void set_from_table(const std::string& table) override;
 
 			void add_where_condition(const query_condition& condition) override;
-			void add_where_condition(const std::string& field, const std::string& op, const database_value& value) override;
+			void add_where_condition(const std::string& field, const std::string& op, const core::database_value& value) override;
 
 			void add_join(const std::string& table, const std::string& condition, join_type type) override;
 
@@ -286,11 +286,11 @@ namespace database
 			void set_offset(size_t count) override;
 
 			void set_insert_table(const std::string& table) override;
-			void set_insert_data(const std::map<std::string, database_value>& data) override;
-			void set_insert_rows(const std::vector<std::map<std::string, database_value>>& rows) override;
+			void set_insert_data(const std::map<std::string, core::database_value>& data) override;
+			void set_insert_rows(const std::vector<std::map<std::string, core::database_value>>& rows) override;
 
 			void set_update_table(const std::string& table) override;
-			void set_update_data(const std::map<std::string, database_value>& data) override;
+			void set_update_data(const std::map<std::string, core::database_value>& data) override;
 
 			void set_delete_table(const std::string& table) override;
 

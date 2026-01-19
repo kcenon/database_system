@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../database_types.h"
-#include "../database_base.h"
+#include "../core/database_backend.h"
 #include "../core/concepts.h"
 #include "../adapters/thread_pool_adapter.h"
 #include <future>
@@ -215,21 +215,21 @@ namespace database::async
 	class async_database
 	{
 	public:
-		async_database(std::shared_ptr<database_base> db, std::shared_ptr<async_executor> executor);
+		async_database(std::shared_ptr<core::database_backend> db, std::shared_ptr<async_executor> executor);
 
 		// Asynchronous query operations
 		async_result<bool> execute_async(const std::string& query);
-		async_result<database_result> select_async(const std::string& query);
+		async_result<core::database_result> select_async(const std::string& query);
 
 #ifdef HAS_COROUTINES
 		// Coroutine support (C++20 only)
 		database_awaitable<bool> execute_coro(const std::string& query);
-		database_awaitable<database_result> select_coro(const std::string& query);
+		database_awaitable<core::database_result> select_coro(const std::string& query);
 #endif
 
 		// Batch operations
 		async_result<std::vector<bool>> execute_batch_async(const std::vector<std::string>& queries);
-		async_result<std::vector<database_result>> select_batch_async(const std::vector<std::string>& queries);
+		async_result<std::vector<core::database_result>> select_batch_async(const std::vector<std::string>& queries);
 
 		// Transaction support
 		async_result<bool> begin_transaction_async();
@@ -241,7 +241,7 @@ namespace database::async
 		async_result<bool> disconnect_async();
 
 	private:
-		std::shared_ptr<database_base> db_;
+		std::shared_ptr<core::database_backend> db_;
 		std::shared_ptr<async_executor> executor_;
 	};
 
@@ -518,7 +518,7 @@ namespace database::async
 			std::unordered_map<std::string, std::string> metadata;
 		};
 
-		stream_processor(std::shared_ptr<database_base> db);
+		stream_processor(std::shared_ptr<core::database_backend> db);
 		~stream_processor();
 
 		// Stream management - thread-safe
@@ -550,7 +550,7 @@ namespace database::async
 		void stream_thread(const std::string& channel, stream_type type);
 		void process_event(const stream_event& event);
 
-		std::shared_ptr<database_base> db_;
+		std::shared_ptr<core::database_backend> db_;
 		std::mutex threads_mutex_;  // Protects stream_threads_
 		std::unordered_map<std::string, std::thread> stream_threads_;
 		std::mutex handlers_mutex_;  // Protects all handler/filter containers
@@ -590,7 +590,7 @@ namespace database::async
 
 		struct distributed_transaction {
 			std::string transaction_id;
-			std::vector<std::shared_ptr<database_base>> participants;
+			std::vector<std::shared_ptr<core::database_backend>> participants;
 			transaction_state state;
 			std::chrono::system_clock::time_point start_time;
 			std::chrono::system_clock::time_point last_activity;
@@ -602,7 +602,7 @@ namespace database::async
 		transaction_coordinator() = default;
 
 		// Transaction management
-		std::string begin_distributed_transaction(const std::vector<std::shared_ptr<database_base>>& participants);
+		std::string begin_distributed_transaction(const std::vector<std::shared_ptr<core::database_backend>>& participants);
 		async_result<bool> commit_distributed_transaction(const std::string& transaction_id);
 		async_result<bool> rollback_distributed_transaction(const std::string& transaction_id);
 

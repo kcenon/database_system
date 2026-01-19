@@ -8,6 +8,7 @@ All rights reserved.
 #pragma once
 
 #include "database/core/database_backend.h"
+#include <cstdint>
 #include <string>
 #include <functional>
 #include <regex>
@@ -44,7 +45,7 @@ public:
 
     // Response configuration
     expectation& returning(const core::database_result& result);
-    expectation& returning_rows_affected(unsigned int count);
+    expectation& returning_rows_affected(uint64_t count);
     expectation& throwing(const std::string& error_message);
     expectation& returning_execute_result(bool result);
 
@@ -62,7 +63,7 @@ public:
 
     // Get results
     core::database_result get_result();
-    unsigned int get_rows_affected();
+    uint64_t get_rows_affected();
     bool get_execute_result();
 
     // Check if should throw
@@ -75,7 +76,7 @@ private:
     std::regex pattern_;
 
     std::optional<core::database_result> result_;
-    std::optional<unsigned int> rows_affected_;
+    std::optional<uint64_t> rows_affected_;
     std::optional<bool> execute_result_;
     std::optional<std::string> error_message_;
 
@@ -94,7 +95,7 @@ public:
 
     // Response configuration
     expectation_builder& will_return(const core::database_result& result);
-    expectation_builder& will_return_rows(unsigned int count);
+    expectation_builder& will_return_rows(uint64_t count);
     expectation_builder& will_fail(const std::string& error_message);
     expectation_builder& will_succeed();
 

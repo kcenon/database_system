@@ -60,31 +60,8 @@ postgresql_backend::postgresql_backend()
 {
 }
 
-postgresql_backend::~postgresql_backend()
+kcenon::common::VoidResult postgresql_backend::do_initialize(const core::connection_config& config)
 {
-	shutdown();
-}
-
-std::unique_ptr<core::database_backend> postgresql_backend::create()
-{
-	return std::make_unique<postgresql_backend>();
-}
-
-database_types postgresql_backend::type() const
-{
-	return database_types::postgres;
-}
-
-kcenon::common::VoidResult postgresql_backend::initialize(const core::connection_config& config)
-{
-	if (initialized_) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			"Backend already initialized",
-			"postgresql_backend"
-		};
-	}
-
 	connection_config_ = config;
 	std::string conn_str = build_connection_string(config);
 
@@ -93,19 +70,17 @@ kcenon::common::VoidResult postgresql_backend::initialize(const core::connection
 		auto conn = std::make_unique<pqxx::connection>(conn_str);
 		if (conn->is_open()) {
 			connection_ = conn.release();
-			initialized_ = true;
 			last_error_.clear();
 			return kcenon::common::ok();
 		}
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
 	try {
 		connection_ = PQconnectdb(conn_str.c_str());
 		if (PQstatus(static_cast<PGconn*>(connection_)) == CONNECTION_OK) {
-			initialized_ = true;
 			last_error_.clear();
 			return kcenon::common::ok();
 		}
@@ -114,12 +89,11 @@ kcenon::common::VoidResult postgresql_backend::initialize(const core::connection
 		connection_ = nullptr;
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #else
 	logger_.warning("PostgreSQL support not compiled. Connection: " + conn_str.substr(0, 20) + "...");
 	// Mock mode for testing without PostgreSQL
-	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -134,12 +108,8 @@ kcenon::common::VoidResult postgresql_backend::initialize(const core::connection
 	};
 }
 
-kcenon::common::VoidResult postgresql_backend::shutdown()
+kcenon::common::VoidResult postgresql_backend::do_shutdown()
 {
-	if (!initialized_) {
-		return kcenon::common::ok(); // Already shutdown
-	}
-
 	// Rollback any active transaction before disconnecting
 	if (in_transaction_) {
 		rollback_transaction();
@@ -149,27 +119,24 @@ kcenon::common::VoidResult postgresql_backend::shutdown()
 	try {
 		delete static_cast<pqxx::connection*>(connection_);
 		connection_ = nullptr;
-		initialized_ = false;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Disconnect error: ") + e.what();
-		logger_.error("shutdown", last_error_);
+		logger_.error("do_shutdown", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
 	try {
 		PQfinish(static_cast<PGconn*>(connection_));
 		connection_ = nullptr;
-		initialized_ = false;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Disconnect error: ") + e.what();
-		logger_.error("shutdown", last_error_);
+		logger_.error("do_shutdown", last_error_);
 	}
 #else
 	connection_ = nullptr;
-	initialized_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -181,10 +148,6 @@ kcenon::common::VoidResult postgresql_backend::shutdown()
 	};
 }
 
-bool postgresql_backend::is_initialized() const
-{
-	return initialized_;
-}
 
 unsigned int postgresql_backend::execute_modification_query(const std::string& query_string)
 {
@@ -229,7 +192,7 @@ unsigned int postgresql_backend::execute_modification_query(const std::string& q
 
 kcenon::common::Result<uint64_t> postgresql_backend::insert_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -252,7 +215,7 @@ kcenon::common::Result<uint64_t> postgresql_backend::insert_query(const std::str
 
 kcenon::common::Result<uint64_t> postgresql_backend::update_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -275,7 +238,7 @@ kcenon::common::Result<uint64_t> postgresql_backend::update_query(const std::str
 
 kcenon::common::Result<uint64_t> postgresql_backend::delete_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -298,7 +261,7 @@ kcenon::common::Result<uint64_t> postgresql_backend::delete_query(const std::str
 
 kcenon::common::Result<core::database_result> postgresql_backend::select_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -432,7 +395,7 @@ kcenon::common::Result<core::database_result> postgresql_backend::select_query(c
 
 kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -516,7 +479,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 
 kcenon::common::VoidResult postgresql_backend::begin_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -546,7 +509,7 @@ kcenon::common::VoidResult postgresql_backend::begin_transaction()
 
 kcenon::common::VoidResult postgresql_backend::commit_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -576,7 +539,7 @@ kcenon::common::VoidResult postgresql_backend::commit_transaction()
 
 kcenon::common::VoidResult postgresql_backend::rollback_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),

@@ -37,7 +37,8 @@
  * directly using libpq/pqxx without depending on the legacy postgres_manager.
  *
  * Issue #286: Update backends to use database_backend only
- * - Implements database_backend interface directly
+ * Issue #328: Refactored to use backend_base template
+ * - Implements database_backend interface via backend_base CRTP
  * - Registers with backend_registry for runtime selection
  * - Eliminates dependency on database_base-derived classes
  * - Uses Result-based error handling pattern
@@ -45,7 +46,7 @@
 
 #pragma once
 
-#include "../core/database_backend.h"
+#include "../core/backend_base.h"
 #include "../core/backend_registry.h"
 
 #include <memory>
@@ -61,11 +62,11 @@ namespace backends
  * @class postgresql_backend
  * @brief PostgreSQL implementation of database_backend interface
  *
- * This class directly implements the database_backend interface for PostgreSQL,
- * using libpq/pqxx libraries without depending on the legacy postgres_manager.
+ * This class implements the database_backend interface for PostgreSQL via
+ * backend_base CRTP template, using libpq/pqxx libraries.
  *
- * Design Pattern: Strategy pattern
- * - Directly implements database_backend interface
+ * Design Pattern: Strategy pattern with CRTP
+ * - Extends backend_base for common lifecycle management
  * - Uses libpq (C API) or pqxx (C++ API) for PostgreSQL access
  * - Provides Result-based error handling
  * - Supports transactions natively
@@ -93,9 +94,15 @@ namespace backends
  *   auto rows = backend->select_query("SELECT * FROM users");
  * @endcode
  */
-class postgresql_backend : public core::database_backend
+class postgresql_backend
+	: public core::backend_base<postgresql_backend, database_types::postgres>
 {
 public:
+	/**
+	 * @brief Backend name for error messages
+	 */
+	static constexpr const char* backend_name() { return "postgresql_backend"; }
+
 	/**
 	 * @brief Default constructor
 	 */
@@ -104,31 +111,9 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~postgresql_backend() override;
-
-	// Prevent copying (unique ownership of postgres_manager)
-	postgresql_backend(const postgresql_backend&) = delete;
-	postgresql_backend& operator=(const postgresql_backend&) = delete;
-
-	// Prevent moving (std::atomic members are not moveable)
-	postgresql_backend(postgresql_backend&&) noexcept = delete;
-	postgresql_backend& operator=(postgresql_backend&&) noexcept = delete;
-
-	/**
-	 * @brief Factory method for backend_registry
-	 * @return Unique pointer to new postgresql_backend instance
-	 */
-	static std::unique_ptr<core::database_backend> create();
+	~postgresql_backend() override = default;
 
 	// database_backend interface implementation
-
-	database_types type() const override;
-
-	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
-
-	kcenon::common::VoidResult shutdown() override;
-
-	bool is_initialized() const override;
 
 	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
@@ -152,6 +137,22 @@ public:
 
 	std::map<std::string, std::string> connection_info() const override;
 
+protected:
+	friend class core::backend_base<postgresql_backend, database_types::postgres>;
+
+	/**
+	 * @brief Database-specific initialization logic
+	 * @param config Connection configuration
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_initialize(const core::connection_config& config);
+
+	/**
+	 * @brief Database-specific shutdown logic
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_shutdown();
+
 private:
 	/**
 	 * @brief Convert connection_config to PostgreSQL connection string
@@ -170,7 +171,6 @@ private:
 	unsigned int execute_modification_query(const std::string& query_string);
 
 	void* connection_{nullptr};                 ///< PostgreSQL connection (PGconn* or pqxx::connection*)
-	std::atomic<bool> initialized_{false};      ///< Initialization state
 	std::atomic<bool> in_transaction_{false};   ///< Transaction state
 	mutable std::string last_error_;            ///< Last error message
 	core::connection_config connection_config_; ///< Cached connection config

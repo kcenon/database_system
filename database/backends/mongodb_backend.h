@@ -37,7 +37,8 @@
  * directly using the MongoDB C++ driver without depending on the legacy mongodb_manager.
  *
  * Issue #286: Update backends to use database_backend only
- * - Implements database_backend interface directly
+ * Issue #328: Refactored to use backend_base template
+ * - Implements database_backend interface via backend_base CRTP
  * - Registers with backend_registry for runtime selection
  * - Eliminates dependency on database_base-derived classes
  * - Uses Result-based error handling pattern
@@ -45,7 +46,7 @@
 
 #pragma once
 
-#include "../core/database_backend.h"
+#include "../core/backend_base.h"
 #include "../core/backend_registry.h"
 
 #include <memory>
@@ -62,11 +63,11 @@ namespace backends
  * @class mongodb_backend
  * @brief MongoDB implementation of database_backend interface
  *
- * This class directly implements the database_backend interface for MongoDB,
- * using the MongoDB C++ driver without depending on the legacy mongodb_manager.
+ * This class implements the database_backend interface for MongoDB via
+ * backend_base CRTP template, using the MongoDB C++ driver.
  *
- * Design Pattern: Strategy pattern
- * - Directly implements database_backend interface
+ * Design Pattern: Strategy pattern with CRTP
+ * - Extends backend_base for common lifecycle management
  * - Uses mongocxx driver for database access
  * - Provides Result-based error handling
  * - Thread-safe with internal mutex
@@ -94,9 +95,15 @@ namespace backends
  *   auto rows = backend->select_query("users:{\"name\":\"John\"}");
  * @endcode
  */
-class mongodb_backend : public core::database_backend
+class mongodb_backend
+	: public core::backend_base<mongodb_backend, database_types::mongodb>
 {
 public:
+	/**
+	 * @brief Backend name for error messages
+	 */
+	static constexpr const char* backend_name() { return "mongodb_backend"; }
+
 	/**
 	 * @brief Default constructor
 	 */
@@ -105,31 +112,9 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~mongodb_backend() override;
-
-	// Prevent copying (unique ownership of mongodb_manager)
-	mongodb_backend(const mongodb_backend&) = delete;
-	mongodb_backend& operator=(const mongodb_backend&) = delete;
-
-	// Prevent moving (std::atomic members are not moveable)
-	mongodb_backend(mongodb_backend&&) noexcept = delete;
-	mongodb_backend& operator=(mongodb_backend&&) noexcept = delete;
-
-	/**
-	 * @brief Factory method for backend_registry
-	 * @return Unique pointer to new mongodb_backend instance
-	 */
-	static std::unique_ptr<core::database_backend> create();
+	~mongodb_backend() override = default;
 
 	// database_backend interface implementation
-
-	database_types type() const override;
-
-	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
-
-	kcenon::common::VoidResult shutdown() override;
-
-	bool is_initialized() const override;
 
 	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
@@ -152,6 +137,22 @@ public:
 	std::string last_error() const override;
 
 	std::map<std::string, std::string> connection_info() const override;
+
+protected:
+	friend class core::backend_base<mongodb_backend, database_types::mongodb>;
+
+	/**
+	 * @brief Database-specific initialization logic
+	 * @param config Connection configuration
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_initialize(const core::connection_config& config);
+
+	/**
+	 * @brief Database-specific shutdown logic
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_shutdown();
 
 private:
 	/**
@@ -179,7 +180,6 @@ private:
 	void* client_{nullptr};                      ///< MongoDB client (mongocxx::client*)
 	void* database_{nullptr};                    ///< MongoDB database (mongocxx::database*)
 	std::string db_name_;                        ///< Database name
-	std::atomic<bool> initialized_{false};       ///< Initialization state
 	std::atomic<bool> in_transaction_{false};    ///< Transaction state
 	mutable std::string last_error_;             ///< Last error message
 	core::connection_config connection_config_;  ///< Cached connection config

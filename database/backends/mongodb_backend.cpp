@@ -65,31 +65,8 @@ mongodb_backend::mongodb_backend()
 {
 }
 
-mongodb_backend::~mongodb_backend()
+kcenon::common::VoidResult mongodb_backend::do_initialize(const core::connection_config& config)
 {
-	shutdown();
-}
-
-std::unique_ptr<core::database_backend> mongodb_backend::create()
-{
-	return std::make_unique<mongodb_backend>();
-}
-
-database_types mongodb_backend::type() const
-{
-	return database_types::mongodb;
-}
-
-kcenon::common::VoidResult mongodb_backend::initialize(const core::connection_config& config)
-{
-	if (initialized_) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			"Backend already initialized",
-			"mongodb_backend"
-		};
-	}
-
 	connection_config_ = config;
 	std::string conn_uri = build_connection_uri(config);
 	db_name_ = config.database;
@@ -116,17 +93,15 @@ kcenon::common::VoidResult mongodb_backend::initialize(const core::connection_co
 		auto* mongo_db = static_cast<mongocxx::database*>(database_);
 		auto result = mongo_db->run_command(bsoncxx::builder::stream::document{} << "ping" << 1 << bsoncxx::builder::stream::finalize);
 
-		initialized_ = true;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #else
 	logger_.warning("MongoDB support not compiled. Mock mode enabled.");
 	// Mock mode for testing without MongoDB
-	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -141,12 +116,8 @@ kcenon::common::VoidResult mongodb_backend::initialize(const core::connection_co
 	};
 }
 
-kcenon::common::VoidResult mongodb_backend::shutdown()
+kcenon::common::VoidResult mongodb_backend::do_shutdown()
 {
-	if (!initialized_) {
-		return kcenon::common::ok(); // Already shutdown
-	}
-
 	// Rollback any active transaction before disconnecting
 	if (in_transaction_) {
 		rollback_transaction();
@@ -164,14 +135,8 @@ kcenon::common::VoidResult mongodb_backend::shutdown()
 	}
 #endif
 
-	initialized_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
-}
-
-bool mongodb_backend::is_initialized() const
-{
-	return initialized_;
 }
 
 bool mongodb_backend::parse_query_string(const std::string& query_string,
@@ -197,7 +162,7 @@ bool mongodb_backend::parse_query_string(const std::string& query_string,
 
 kcenon::common::Result<uint64_t> mongodb_backend::insert_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -253,7 +218,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::insert_query(const std::string
 
 kcenon::common::Result<uint64_t> mongodb_backend::update_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -310,7 +275,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::update_query(const std::string
 
 kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -366,7 +331,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string
 
 kcenon::common::Result<core::database_result> mongodb_backend::select_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -456,7 +421,7 @@ kcenon::common::Result<core::database_result> mongodb_backend::select_query(cons
 
 kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -515,7 +480,7 @@ kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& que
 
 kcenon::common::VoidResult mongodb_backend::begin_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -542,7 +507,7 @@ kcenon::common::VoidResult mongodb_backend::begin_transaction()
 
 kcenon::common::VoidResult mongodb_backend::commit_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -567,7 +532,7 @@ kcenon::common::VoidResult mongodb_backend::commit_transaction()
 
 kcenon::common::VoidResult mongodb_backend::rollback_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),

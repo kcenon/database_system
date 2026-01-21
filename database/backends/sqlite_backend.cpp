@@ -59,31 +59,8 @@ sqlite_backend::sqlite_backend()
 {
 }
 
-sqlite_backend::~sqlite_backend()
+kcenon::common::VoidResult sqlite_backend::do_initialize(const core::connection_config& config)
 {
-	shutdown();
-}
-
-std::unique_ptr<core::database_backend> sqlite_backend::create()
-{
-	return std::make_unique<sqlite_backend>();
-}
-
-database_types sqlite_backend::type() const
-{
-	return database_types::sqlite;
-}
-
-kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_config& config)
-{
-	if (initialized_) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			"Backend already initialized",
-			"sqlite_backend"
-		};
-	}
-
 	connection_config_ = config;
 
 	// Use database field as file path, default to ":memory:" for in-memory database
@@ -99,7 +76,7 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 
 		if (result != SQLITE_OK) {
 			last_error_ = std::string("Connection failed: ") + sqlite3_errmsg(db);
-			logger_.error("initialize", last_error_);
+			logger_.error("do_initialize", last_error_);
 			if (db) {
 				sqlite3_close(db);
 			}
@@ -119,17 +96,15 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 			if (error_msg) sqlite3_free(error_msg);
 		}
 
-		initialized_ = true;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #else
 	logger_.warning("SQLite support not compiled. Mock mode enabled.");
 	// Mock mode for testing without SQLite
-	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -144,12 +119,8 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 	};
 }
 
-kcenon::common::VoidResult sqlite_backend::shutdown()
+kcenon::common::VoidResult sqlite_backend::do_shutdown()
 {
-	if (!initialized_) {
-		return kcenon::common::ok(); // Already shutdown
-	}
-
 	// Rollback any active transaction before disconnecting
 	if (in_transaction_) {
 		rollback_transaction();
@@ -172,14 +143,8 @@ kcenon::common::VoidResult sqlite_backend::shutdown()
 	}
 #endif
 
-	initialized_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
-}
-
-bool sqlite_backend::is_initialized() const
-{
-	return initialized_;
 }
 
 core::database_value sqlite_backend::convert_sqlite_value(void* stmt, int column_index)
@@ -255,7 +220,7 @@ unsigned int sqlite_backend::execute_modification_query(const std::string& query
 
 kcenon::common::Result<uint64_t> sqlite_backend::insert_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -277,7 +242,7 @@ kcenon::common::Result<uint64_t> sqlite_backend::insert_query(const std::string&
 
 kcenon::common::Result<uint64_t> sqlite_backend::update_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -299,7 +264,7 @@ kcenon::common::Result<uint64_t> sqlite_backend::update_query(const std::string&
 
 kcenon::common::Result<uint64_t> sqlite_backend::delete_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -321,7 +286,7 @@ kcenon::common::Result<uint64_t> sqlite_backend::delete_query(const std::string&
 
 kcenon::common::Result<core::database_result> sqlite_backend::select_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -407,7 +372,7 @@ kcenon::common::Result<core::database_result> sqlite_backend::select_query(const
 
 kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -456,7 +421,7 @@ kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& quer
 
 kcenon::common::VoidResult sqlite_backend::begin_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -486,7 +451,7 @@ kcenon::common::VoidResult sqlite_backend::begin_transaction()
 
 kcenon::common::VoidResult sqlite_backend::commit_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -516,7 +481,7 @@ kcenon::common::VoidResult sqlite_backend::commit_transaction()
 
 kcenon::common::VoidResult sqlite_backend::rollback_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),

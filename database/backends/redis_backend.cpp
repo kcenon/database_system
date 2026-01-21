@@ -58,31 +58,8 @@ redis_backend::redis_backend()
 {
 }
 
-redis_backend::~redis_backend()
+kcenon::common::VoidResult redis_backend::do_initialize(const core::connection_config& config)
 {
-	shutdown();
-}
-
-std::unique_ptr<core::database_backend> redis_backend::create()
-{
-	return std::make_unique<redis_backend>();
-}
-
-database_types redis_backend::type() const
-{
-	return database_types::redis;
-}
-
-kcenon::common::VoidResult redis_backend::initialize(const core::connection_config& config)
-{
-	if (initialized_) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			"Backend already initialized",
-			"redis_backend"
-		};
-	}
-
 	connection_config_ = config;
 	host_ = config.host.empty() ? "localhost" : config.host;
 	port_ = config.port > 0 ? config.port : 6379;
@@ -95,11 +72,11 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		if (ctx == nullptr || ctx->err) {
 			if (ctx) {
 				last_error_ = std::string("Connection error: ") + ctx->errstr;
-				logger_.error("initialize", last_error_);
+				logger_.error("do_initialize", last_error_);
 				redisFree(ctx);
 			} else {
 				last_error_ = "Connection allocation error";
-				logger_.error("initialize", last_error_);
+				logger_.error("do_initialize", last_error_);
 			}
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
@@ -116,7 +93,7 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 				redisCommand(ctx, "AUTH %s", config.password.c_str()));
 			if (reply == nullptr || reply->type == REDIS_REPLY_ERROR) {
 				last_error_ = "Authentication failed";
-				logger_.error("initialize", last_error_);
+				logger_.error("do_initialize", last_error_);
 				if (reply) freeReplyObject(reply);
 				redisFree(ctx);
 				context_ = nullptr;
@@ -133,7 +110,7 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		redisReply* ping_reply = static_cast<redisReply*>(redisCommand(ctx, "PING"));
 		if (ping_reply == nullptr || ping_reply->type == REDIS_REPLY_ERROR) {
 			last_error_ = "PING failed";
-			logger_.error("initialize", last_error_);
+			logger_.error("do_initialize", last_error_);
 			if (ping_reply) freeReplyObject(ping_reply);
 			redisFree(ctx);
 			context_ = nullptr;
@@ -145,17 +122,15 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		}
 		freeReplyObject(ping_reply);
 
-		initialized_ = true;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #else
 	logger_.warning("Redis support not compiled. Mock mode enabled.");
 	// Mock mode for testing without Redis
-	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -170,12 +145,8 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 	};
 }
 
-kcenon::common::VoidResult redis_backend::shutdown()
+kcenon::common::VoidResult redis_backend::do_shutdown()
 {
-	if (!initialized_) {
-		return kcenon::common::ok(); // Already shutdown
-	}
-
 	// Discard any active transaction before disconnecting
 	if (in_transaction_) {
 		rollback_transaction();
@@ -189,14 +160,8 @@ kcenon::common::VoidResult redis_backend::shutdown()
 	}
 #endif
 
-	initialized_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
-}
-
-bool redis_backend::is_initialized() const
-{
-	return initialized_;
 }
 
 bool redis_backend::parse_redis_query(const std::string& query_string,
@@ -220,7 +185,7 @@ bool redis_backend::parse_redis_query(const std::string& query_string,
 
 kcenon::common::Result<uint64_t> redis_backend::insert_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -295,7 +260,7 @@ kcenon::common::Result<uint64_t> redis_backend::update_query(const std::string& 
 
 kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -359,7 +324,7 @@ kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& 
 
 kcenon::common::Result<core::database_result> redis_backend::select_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -431,7 +396,7 @@ kcenon::common::Result<core::database_result> redis_backend::select_query(const 
 
 kcenon::common::VoidResult redis_backend::execute_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -505,7 +470,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 
 kcenon::common::VoidResult redis_backend::begin_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -536,7 +501,7 @@ kcenon::common::VoidResult redis_backend::begin_transaction()
 
 kcenon::common::VoidResult redis_backend::commit_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -567,7 +532,7 @@ kcenon::common::VoidResult redis_backend::commit_transaction()
 
 kcenon::common::VoidResult redis_backend::rollback_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),

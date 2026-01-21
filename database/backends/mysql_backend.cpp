@@ -41,13 +41,12 @@
 #include <variant>
 #include <iostream>
 
-// Logging helper macros
-#define MYSQL_LOG_ERROR(context, message) \
-	std::cerr << "[MySQL:" << context << "] Error: " << message << std::endl
-#define MYSQL_LOG_WARNING(message) \
-	std::cerr << "[MySQL] Warning: " << message << std::endl
-#define MYSQL_LOG_INFO(message) \
-	std::cout << "[MySQL] Info: " << message << std::endl
+#include "../utils/backend_logger.h"
+
+namespace
+{
+const database::utils::backend_logger logger_("MySQL");
+}
 
 namespace database
 {
@@ -92,7 +91,7 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 		MYSQL* mysql = mysql_init(nullptr);
 		if (!mysql) {
 			last_error_ = "MySQL library initialization failed";
-			MYSQL_LOG_ERROR("initialize", last_error_);
+			logger_.error("initialize", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
 				last_error_,
@@ -117,7 +116,7 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 
 		if (!connection_) {
 			last_error_ = std::string("Connection failed: ") + mysql_error(mysql);
-			MYSQL_LOG_ERROR("initialize", last_error_);
+			logger_.error("initialize", last_error_);
 			mysql_close(mysql);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
@@ -131,10 +130,10 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		MYSQL_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #else
-	MYSQL_LOG_WARNING("MySQL support not compiled. Mock mode enabled.");
+	logger_.warning("MySQL support not compiled. Mock mode enabled.");
 	// Mock mode for testing without MySQL
 	initialized_ = true;
 	last_error_.clear();
@@ -188,17 +187,17 @@ unsigned int mysql_backend::execute_modification_query(const std::string& query_
 		MYSQL* mysql = static_cast<MYSQL*>(connection_);
 		if (mysql_query(mysql, query_string.c_str()) != 0) {
 			last_error_ = std::string("Modification query failed: ") + mysql_error(mysql);
-			MYSQL_LOG_ERROR("execute_modification_query", last_error_);
+			logger_.error("execute_modification_query", last_error_);
 			return 0;
 		}
 		last_error_.clear();
 		return static_cast<unsigned int>(mysql_affected_rows(mysql));
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Modification query error: ") + e.what();
-		MYSQL_LOG_ERROR("execute_modification_query", last_error_);
+		logger_.error("execute_modification_query", last_error_);
 	}
 #else
-	MYSQL_LOG_WARNING("MySQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MySQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
 	return 1; // Mock: return 1 affected row
 #endif
 	return 0;
@@ -298,7 +297,7 @@ kcenon::common::Result<core::database_result> mysql_backend::select_query(const 
 		// Execute query
 		if (mysql_query(mysql, query_string.c_str()) != 0) {
 			last_error_ = std::string("Query failed: ") + mysql_error(mysql);
-			MYSQL_LOG_ERROR("select_query", last_error_);
+			logger_.error("select_query", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::query_failed),
 				last_error_,
@@ -315,7 +314,7 @@ kcenon::common::Result<core::database_result> mysql_backend::select_query(const 
 				return result;
 			} else {
 				last_error_ = std::string("Result retrieval failed: ") + mysql_error(mysql);
-				MYSQL_LOG_ERROR("select_query", last_error_);
+				logger_.error("select_query", last_error_);
 				return kcenon::common::error_info{
 					static_cast<int>(database::error_code::query_failed),
 					last_error_,
@@ -370,7 +369,7 @@ kcenon::common::Result<core::database_result> mysql_backend::select_query(const 
 		mysql_free_result(res);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Query error: ") + e.what();
-		MYSQL_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -378,7 +377,7 @@ kcenon::common::Result<core::database_result> mysql_backend::select_query(const 
 		};
 	}
 #else
-	MYSQL_LOG_WARNING("MySQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MySQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
 		core::database_row mock_row;
@@ -407,7 +406,7 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 #ifdef USE_MYSQL
 	if (!connection_) {
 		last_error_ = "No active MySQL connection";
-		MYSQL_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::connection_failed),
 			last_error_,
@@ -417,7 +416,7 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 
 	if (mysql_query(static_cast<MYSQL*>(connection_), query_string.c_str()) != 0) {
 		last_error_ = std::string("Execute error: ") + mysql_error(static_cast<MYSQL*>(connection_));
-		MYSQL_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -429,7 +428,7 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 	return kcenon::common::ok();
 #else
 	// Mock execution
-	MYSQL_LOG_INFO("MySQL support not compiled. Mock execute: " + query_string);
+	logger_.info("MySQL support not compiled. Mock execute: " + query_string);
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif

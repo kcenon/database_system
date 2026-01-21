@@ -43,13 +43,12 @@
 #include <variant>
 #include <iostream>
 
-// Logging helper macros
-#define POSTGRES_LOG_ERROR(context, message) \
-	std::cerr << "[PostgreSQL:" << context << "] Error: " << message << std::endl
-#define POSTGRES_LOG_WARNING(message) \
-	std::cerr << "[PostgreSQL] Warning: " << message << std::endl
-#define POSTGRES_LOG_INFO(message) \
-	std::cout << "[PostgreSQL] Info: " << message << std::endl
+#include "../utils/backend_logger.h"
+
+namespace
+{
+const database::utils::backend_logger logger_("PostgreSQL");
+}
 
 namespace database
 {
@@ -100,7 +99,7 @@ kcenon::common::VoidResult postgresql_backend::initialize(const core::connection
 		}
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		POSTGRES_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
 	try {
@@ -115,10 +114,10 @@ kcenon::common::VoidResult postgresql_backend::initialize(const core::connection
 		connection_ = nullptr;
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		POSTGRES_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #else
-	POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Connection: " + conn_str.substr(0, 20) + "...");
+	logger_.warning("PostgreSQL support not compiled. Connection: " + conn_str.substr(0, 20) + "...");
 	// Mock mode for testing without PostgreSQL
 	initialized_ = true;
 	last_error_.clear();
@@ -155,7 +154,7 @@ kcenon::common::VoidResult postgresql_backend::shutdown()
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Disconnect error: ") + e.what();
-		POSTGRES_LOG_ERROR("shutdown", last_error_);
+		logger_.error("shutdown", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
 	try {
@@ -166,7 +165,7 @@ kcenon::common::VoidResult postgresql_backend::shutdown()
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Disconnect error: ") + e.what();
-		POSTGRES_LOG_ERROR("shutdown", last_error_);
+		logger_.error("shutdown", last_error_);
 	}
 #else
 	connection_ = nullptr;
@@ -199,7 +198,7 @@ unsigned int postgresql_backend::execute_modification_query(const std::string& q
 		return static_cast<unsigned int>(result.affected_rows());
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Modification query error: ") + e.what();
-		POSTGRES_LOG_ERROR("execute_modification_query", last_error_);
+		logger_.error("execute_modification_query", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
 	if (!connection_) return 0;
@@ -219,10 +218,10 @@ unsigned int postgresql_backend::execute_modification_query(const std::string& q
 		return count;
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Modification query error: ") + e.what();
-		POSTGRES_LOG_ERROR("execute_modification_query", last_error_);
+		logger_.error("execute_modification_query", last_error_);
 	}
 #else
-	POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("PostgreSQL support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
 	return 1; // Mock: return 1 affected row
 #endif
 	return 0;
@@ -350,7 +349,7 @@ kcenon::common::Result<core::database_result> postgresql_backend::select_query(c
 		}
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Select query error: ") + e.what();
-		POSTGRES_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -408,7 +407,7 @@ kcenon::common::Result<core::database_result> postgresql_backend::select_query(c
 		PQclear(pg_result);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Select query error: ") + e.what();
-		POSTGRES_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -416,7 +415,7 @@ kcenon::common::Result<core::database_result> postgresql_backend::select_query(c
 		};
 	}
 #else
-	POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("PostgreSQL support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
 		core::database_row mock_row;
@@ -446,7 +445,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 	try {
 		if (!connection_) {
 			last_error_ = "No active PostgreSQL connection";
-			POSTGRES_LOG_ERROR("execute_query", last_error_);
+			logger_.error("execute_query", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
 				last_error_,
@@ -461,7 +460,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Execute error: ") + e.what();
-		POSTGRES_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -471,7 +470,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 #elif defined(HAVE_LIBPQ)
 	if (!connection_) {
 		last_error_ = "No active PostgreSQL connection";
-		POSTGRES_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::connection_failed),
 			last_error_,
@@ -482,7 +481,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 	PGresult* result = PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
 	if (result == nullptr) {
 		last_error_ = "PostgreSQL execute failed";
-		POSTGRES_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -495,7 +494,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 
 	if (!success) {
 		last_error_ = PQerrorMessage(static_cast<PGconn*>(connection_));
-		POSTGRES_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		PQclear(result);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
@@ -509,7 +508,7 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 	return kcenon::common::ok();
 #else
 	// Mock execution
-	POSTGRES_LOG_INFO("PostgreSQL support not compiled. Mock execute: " + query_string);
+	logger_.info("PostgreSQL support not compiled. Mock execute: " + query_string);
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif

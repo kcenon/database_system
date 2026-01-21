@@ -42,13 +42,12 @@
 #include <iostream>
 #include <vector>
 
-// Logging helper macros
-#define SQLITE_LOG_ERROR(context, message) \
-	std::cerr << "[SQLite:" << context << "] Error: " << message << std::endl
-#define SQLITE_LOG_WARNING(message) \
-	std::cerr << "[SQLite] Warning: " << message << std::endl
-#define SQLITE_LOG_INFO(message) \
-	std::cout << "[SQLite] Info: " << message << std::endl
+#include "../utils/backend_logger.h"
+
+namespace
+{
+const database::utils::backend_logger logger_("SQLite");
+}
 
 namespace database
 {
@@ -100,7 +99,7 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 
 		if (result != SQLITE_OK) {
 			last_error_ = std::string("Connection failed: ") + sqlite3_errmsg(db);
-			SQLITE_LOG_ERROR("initialize", last_error_);
+			logger_.error("initialize", last_error_);
 			if (db) {
 				sqlite3_close(db);
 			}
@@ -116,7 +115,7 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 		// Enable foreign key constraints
 		char* error_msg = nullptr;
 		if (sqlite3_exec(db, "PRAGMA foreign_keys = ON", nullptr, nullptr, &error_msg) != SQLITE_OK) {
-			SQLITE_LOG_WARNING(std::string("Failed to enable foreign key constraints: ") + (error_msg ? error_msg : ""));
+			logger_.warning(std::string("Failed to enable foreign key constraints: ") + (error_msg ? error_msg : ""));
 			if (error_msg) sqlite3_free(error_msg);
 		}
 
@@ -125,10 +124,10 @@ kcenon::common::VoidResult sqlite_backend::initialize(const core::connection_con
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		SQLITE_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #else
-	SQLITE_LOG_WARNING("SQLite support not compiled. Mock mode enabled.");
+	logger_.warning("SQLite support not compiled. Mock mode enabled.");
 	// Mock mode for testing without SQLite
 	initialized_ = true;
 	last_error_.clear();
@@ -236,7 +235,7 @@ unsigned int sqlite_backend::execute_modification_query(const std::string& query
 
 		if (result != SQLITE_OK) {
 			last_error_ = std::string("Modification query failed: ") + (error_msg ? error_msg : "Unknown error");
-			SQLITE_LOG_ERROR("execute_modification_query", last_error_);
+			logger_.error("execute_modification_query", last_error_);
 			if (error_msg) sqlite3_free(error_msg);
 			return 0;
 		}
@@ -245,10 +244,10 @@ unsigned int sqlite_backend::execute_modification_query(const std::string& query
 		return static_cast<unsigned int>(sqlite3_changes(db));
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Modification query error: ") + e.what();
-		SQLITE_LOG_ERROR("execute_modification_query", last_error_);
+		logger_.error("execute_modification_query", last_error_);
 	}
 #else
-	SQLITE_LOG_WARNING("SQLite support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("SQLite support not compiled. Modification query: " + query_string.substr(0, 20) + "...");
 	return 1; // Mock: return 1 affected row
 #endif
 	return 0;
@@ -351,7 +350,7 @@ kcenon::common::Result<core::database_result> sqlite_backend::select_query(const
 		int prepare_result = sqlite3_prepare_v2(db, query_string.c_str(), -1, &stmt, nullptr);
 		if (prepare_result != SQLITE_OK) {
 			last_error_ = std::string("Prepare failed: ") + sqlite3_errmsg(db);
-			SQLITE_LOG_ERROR("select_query", last_error_);
+			logger_.error("select_query", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::query_failed),
 				last_error_,
@@ -383,7 +382,7 @@ kcenon::common::Result<core::database_result> sqlite_backend::select_query(const
 
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Select query error: ") + e.what();
-		SQLITE_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -391,7 +390,7 @@ kcenon::common::Result<core::database_result> sqlite_backend::select_query(const
 		};
 	}
 #else
-	SQLITE_LOG_WARNING("SQLite support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("SQLite support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (query_string.find("SELECT") != std::string::npos) {
 		core::database_row mock_row;
@@ -420,7 +419,7 @@ kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& quer
 #ifdef USE_SQLITE
 	if (!connection_) {
 		last_error_ = "No active SQLite connection";
-		SQLITE_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::connection_failed),
 			last_error_,
@@ -436,7 +435,7 @@ kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& quer
 
 	if (result != SQLITE_OK) {
 		last_error_ = std::string("Execute error: ") + (error_msg ? error_msg : "Unknown error");
-		SQLITE_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		if (error_msg) sqlite3_free(error_msg);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
@@ -449,7 +448,7 @@ kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& quer
 	return kcenon::common::ok();
 #else
 	// Mock execution
-	SQLITE_LOG_INFO("SQLite support not compiled. Mock execute: " + query_string);
+	logger_.info("SQLite support not compiled. Mock execute: " + query_string);
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif

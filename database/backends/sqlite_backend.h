@@ -37,7 +37,8 @@
  * directly using the SQLite3 C API without depending on the legacy sqlite_manager.
  *
  * Issue #286: Update backends to use database_backend only
- * - Implements database_backend interface directly
+ * Issue #328: Refactored to use backend_base template
+ * - Implements database_backend interface via backend_base CRTP
  * - Registers with backend_registry for runtime selection
  * - Eliminates dependency on database_base-derived classes
  * - Uses Result-based error handling pattern
@@ -45,7 +46,7 @@
 
 #pragma once
 
-#include "../core/database_backend.h"
+#include "../core/backend_base.h"
 #include "../core/backend_registry.h"
 
 #include <memory>
@@ -62,11 +63,11 @@ namespace backends
  * @class sqlite_backend
  * @brief SQLite implementation of database_backend interface
  *
- * This class directly implements the database_backend interface for SQLite,
- * using the SQLite3 C API without depending on the legacy sqlite_manager.
+ * This class implements the database_backend interface for SQLite via
+ * backend_base CRTP template, using the SQLite3 C API.
  *
- * Design Pattern: Strategy pattern
- * - Directly implements database_backend interface
+ * Design Pattern: Strategy pattern with CRTP
+ * - Extends backend_base for common lifecycle management
  * - Uses SQLite3 C API for database access
  * - Provides Result-based error handling
  * - Supports transactions natively
@@ -91,9 +92,15 @@ namespace backends
  *   auto rows = backend->select_query("SELECT * FROM users");
  * @endcode
  */
-class sqlite_backend : public core::database_backend
+class sqlite_backend
+	: public core::backend_base<sqlite_backend, database_types::sqlite>
 {
 public:
+	/**
+	 * @brief Backend name for error messages
+	 */
+	static constexpr const char* backend_name() { return "sqlite_backend"; }
+
 	/**
 	 * @brief Default constructor
 	 */
@@ -102,31 +109,9 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~sqlite_backend() override;
-
-	// Prevent copying (unique ownership of sqlite_manager)
-	sqlite_backend(const sqlite_backend&) = delete;
-	sqlite_backend& operator=(const sqlite_backend&) = delete;
-
-	// Prevent moving (std::atomic members are not moveable)
-	sqlite_backend(sqlite_backend&&) noexcept = delete;
-	sqlite_backend& operator=(sqlite_backend&&) noexcept = delete;
-
-	/**
-	 * @brief Factory method for backend_registry
-	 * @return Unique pointer to new sqlite_backend instance
-	 */
-	static std::unique_ptr<core::database_backend> create();
+	~sqlite_backend() override = default;
 
 	// database_backend interface implementation
-
-	database_types type() const override;
-
-	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
-
-	kcenon::common::VoidResult shutdown() override;
-
-	bool is_initialized() const override;
 
 	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
@@ -150,6 +135,22 @@ public:
 
 	std::map<std::string, std::string> connection_info() const override;
 
+protected:
+	friend class core::backend_base<sqlite_backend, database_types::sqlite>;
+
+	/**
+	 * @brief Database-specific initialization logic
+	 * @param config Connection configuration
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_initialize(const core::connection_config& config);
+
+	/**
+	 * @brief Database-specific shutdown logic
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_shutdown();
+
 private:
 	/**
 	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
@@ -167,7 +168,6 @@ private:
 	core::database_value convert_sqlite_value(void* stmt, int column_index);
 
 	void* connection_{nullptr};                      ///< SQLite connection (sqlite3*)
-	std::atomic<bool> initialized_{false};           ///< Initialization state
 	std::atomic<bool> in_transaction_{false};        ///< Transaction state
 	mutable std::string last_error_;                 ///< Last error message
 	core::connection_config connection_config_;      ///< Cached connection config

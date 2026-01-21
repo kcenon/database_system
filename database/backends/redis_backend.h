@@ -37,7 +37,8 @@
  * directly using hiredis without depending on the legacy redis_manager.
  *
  * Issue #286: Update backends to use database_backend only
- * - Implements database_backend interface directly
+ * Issue #328: Refactored to use backend_base template
+ * - Implements database_backend interface via backend_base CRTP
  * - Registers with backend_registry for runtime selection
  * - Eliminates dependency on database_base-derived classes
  * - Uses Result-based error handling pattern
@@ -45,7 +46,7 @@
 
 #pragma once
 
-#include "../core/database_backend.h"
+#include "../core/backend_base.h"
 #include "../core/backend_registry.h"
 
 #include <memory>
@@ -62,11 +63,11 @@ namespace backends
  * @class redis_backend
  * @brief Redis implementation of database_backend interface
  *
- * This class directly implements the database_backend interface for Redis,
- * using hiredis without depending on the legacy redis_manager.
+ * This class implements the database_backend interface for Redis via
+ * backend_base CRTP template, using hiredis.
  *
- * Design Pattern: Strategy pattern
- * - Directly implements database_backend interface
+ * Design Pattern: Strategy pattern with CRTP
+ * - Extends backend_base for common lifecycle management
  * - Uses hiredis for Redis access
  * - Provides Result-based error handling
  * - Thread-safe with internal mutex
@@ -92,9 +93,15 @@ namespace backends
  *   auto rows = backend->select_query("key");
  * @endcode
  */
-class redis_backend : public core::database_backend
+class redis_backend
+	: public core::backend_base<redis_backend, database_types::redis>
 {
 public:
+	/**
+	 * @brief Backend name for error messages
+	 */
+	static constexpr const char* backend_name() { return "redis_backend"; }
+
 	/**
 	 * @brief Default constructor
 	 */
@@ -103,31 +110,9 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~redis_backend() override;
-
-	// Prevent copying (unique ownership of redis_manager)
-	redis_backend(const redis_backend&) = delete;
-	redis_backend& operator=(const redis_backend&) = delete;
-
-	// Prevent moving (std::atomic members are not moveable)
-	redis_backend(redis_backend&&) noexcept = delete;
-	redis_backend& operator=(redis_backend&&) noexcept = delete;
-
-	/**
-	 * @brief Factory method for backend_registry
-	 * @return Unique pointer to new redis_backend instance
-	 */
-	static std::unique_ptr<core::database_backend> create();
+	~redis_backend() override = default;
 
 	// database_backend interface implementation
-
-	database_types type() const override;
-
-	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
-
-	kcenon::common::VoidResult shutdown() override;
-
-	bool is_initialized() const override;
 
 	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
@@ -151,6 +136,22 @@ public:
 
 	std::map<std::string, std::string> connection_info() const override;
 
+protected:
+	friend class core::backend_base<redis_backend, database_types::redis>;
+
+	/**
+	 * @brief Database-specific initialization logic
+	 * @param config Connection configuration
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_initialize(const core::connection_config& config);
+
+	/**
+	 * @brief Database-specific shutdown logic
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_shutdown();
+
 private:
 	/**
 	 * @brief Parse Redis query string format
@@ -166,7 +167,6 @@ private:
 	void* context_{nullptr};                     ///< Redis context (redisContext*)
 	std::string host_;                           ///< Redis host
 	int port_{6379};                             ///< Redis port
-	std::atomic<bool> initialized_{false};       ///< Initialization state
 	std::atomic<bool> in_transaction_{false};    ///< Transaction state (MULTI/EXEC)
 	mutable std::string last_error_;             ///< Last error message
 	core::connection_config connection_config_;  ///< Cached connection config

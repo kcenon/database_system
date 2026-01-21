@@ -41,13 +41,12 @@
 #include <iostream>
 #include <vector>
 
-// Logging helper macros
-#define REDIS_LOG_ERROR(context, message) \
-	std::cerr << "[Redis:" << context << "] Error: " << message << std::endl
-#define REDIS_LOG_WARNING(message) \
-	std::cerr << "[Redis] Warning: " << message << std::endl
-#define REDIS_LOG_INFO(message) \
-	std::cout << "[Redis] Info: " << message << std::endl
+#include "../utils/backend_logger.h"
+
+namespace
+{
+const database::utils::backend_logger logger_("Redis");
+}
 
 namespace database
 {
@@ -96,11 +95,11 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		if (ctx == nullptr || ctx->err) {
 			if (ctx) {
 				last_error_ = std::string("Connection error: ") + ctx->errstr;
-				REDIS_LOG_ERROR("initialize", last_error_);
+				logger_.error("initialize", last_error_);
 				redisFree(ctx);
 			} else {
 				last_error_ = "Connection allocation error";
-				REDIS_LOG_ERROR("initialize", last_error_);
+				logger_.error("initialize", last_error_);
 			}
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
@@ -117,7 +116,7 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 				redisCommand(ctx, "AUTH %s", config.password.c_str()));
 			if (reply == nullptr || reply->type == REDIS_REPLY_ERROR) {
 				last_error_ = "Authentication failed";
-				REDIS_LOG_ERROR("initialize", last_error_);
+				logger_.error("initialize", last_error_);
 				if (reply) freeReplyObject(reply);
 				redisFree(ctx);
 				context_ = nullptr;
@@ -134,7 +133,7 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		redisReply* ping_reply = static_cast<redisReply*>(redisCommand(ctx, "PING"));
 		if (ping_reply == nullptr || ping_reply->type == REDIS_REPLY_ERROR) {
 			last_error_ = "PING failed";
-			REDIS_LOG_ERROR("initialize", last_error_);
+			logger_.error("initialize", last_error_);
 			if (ping_reply) freeReplyObject(ping_reply);
 			redisFree(ctx);
 			context_ = nullptr;
@@ -151,10 +150,10 @@ kcenon::common::VoidResult redis_backend::initialize(const core::connection_conf
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		REDIS_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #else
-	REDIS_LOG_WARNING("Redis support not compiled. Mock mode enabled.");
+	logger_.warning("Redis support not compiled. Mock mode enabled.");
 	// Mock mode for testing without Redis
 	initialized_ = true;
 	last_error_.clear();
@@ -275,7 +274,7 @@ kcenon::common::Result<uint64_t> redis_backend::insert_query(const std::string& 
 		return success ? uint64_t(1) : uint64_t(0);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Insert error: ") + e.what();
-		REDIS_LOG_ERROR("insert_query", last_error_);
+		logger_.error("insert_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -283,7 +282,7 @@ kcenon::common::Result<uint64_t> redis_backend::insert_query(const std::string& 
 		};
 	}
 #else
-	REDIS_LOG_WARNING("Redis support not compiled. Insert query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("Redis support not compiled. Insert query: " + query_string.substr(0, 20) + "...");
 	return uint64_t(1); // Mock: return 1 inserted
 #endif
 }
@@ -345,7 +344,7 @@ kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& 
 		return deleted_count;
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Delete error: ") + e.what();
-		REDIS_LOG_ERROR("delete_query", last_error_);
+		logger_.error("delete_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -353,7 +352,7 @@ kcenon::common::Result<uint64_t> redis_backend::delete_query(const std::string& 
 		};
 	}
 #else
-	REDIS_LOG_WARNING("Redis support not compiled. Delete query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("Redis support not compiled. Delete query: " + query_string.substr(0, 20) + "...");
 	return uint64_t(1); // Mock: return 1 deleted
 #endif
 }
@@ -408,7 +407,7 @@ kcenon::common::Result<core::database_result> redis_backend::select_query(const 
 		if (reply) freeReplyObject(reply);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Select error: ") + e.what();
-		REDIS_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -416,7 +415,7 @@ kcenon::common::Result<core::database_result> redis_backend::select_query(const 
 		};
 	}
 #else
-	REDIS_LOG_WARNING("Redis support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("Redis support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	if (!query_string.empty()) {
 		core::database_row mock_row;
@@ -444,7 +443,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 #ifdef USE_REDIS
 	if (!context_) {
 		last_error_ = "No active Redis connection";
-		REDIS_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::connection_failed),
 			last_error_,
@@ -460,7 +459,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 
 		if (reply == nullptr) {
 			last_error_ = std::string("Command failed: ") + ctx->errstr;
-			REDIS_LOG_ERROR("execute_query", last_error_);
+			logger_.error("execute_query", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::query_failed),
 				last_error_,
@@ -471,7 +470,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 		bool success = true;
 		if (reply->type == REDIS_REPLY_ERROR) {
 			last_error_ = std::string("Execute error: ") + reply->str;
-			REDIS_LOG_ERROR("execute_query", last_error_);
+			logger_.error("execute_query", last_error_);
 			success = false;
 		}
 
@@ -489,7 +488,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Execute error: ") + e.what();
-		REDIS_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -498,7 +497,7 @@ kcenon::common::VoidResult redis_backend::execute_query(const std::string& query
 	}
 #else
 	// Mock execution
-	REDIS_LOG_INFO("Redis support not compiled. Mock execute: " + query_string);
+	logger_.info("Redis support not compiled. Mock execute: " + query_string);
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif

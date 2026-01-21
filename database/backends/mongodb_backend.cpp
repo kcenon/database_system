@@ -48,13 +48,12 @@
 #include <iostream>
 #include <vector>
 
-// Logging helper macros
-#define MONGODB_LOG_ERROR(context, message) \
-	std::cerr << "[MongoDB:" << context << "] Error: " << message << std::endl
-#define MONGODB_LOG_WARNING(message) \
-	std::cerr << "[MongoDB] Warning: " << message << std::endl
-#define MONGODB_LOG_INFO(message) \
-	std::cout << "[MongoDB] Info: " << message << std::endl
+#include "../utils/backend_logger.h"
+
+namespace
+{
+const database::utils::backend_logger logger_("MongoDB");
+}
 
 namespace database
 {
@@ -122,10 +121,10 @@ kcenon::common::VoidResult mongodb_backend::initialize(const core::connection_co
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		MONGODB_LOG_ERROR("initialize", last_error_);
+		logger_.error("initialize", last_error_);
 	}
 #else
-	MONGODB_LOG_WARNING("MongoDB support not compiled. Mock mode enabled.");
+	logger_.warning("MongoDB support not compiled. Mock mode enabled.");
 	// Mock mode for testing without MongoDB
 	initialized_ = true;
 	last_error_.clear();
@@ -239,7 +238,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::insert_query(const std::string
 		return result ? uint64_t(1) : uint64_t(0);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Insert error: ") + e.what();
-		MONGODB_LOG_ERROR("insert_query", last_error_);
+		logger_.error("insert_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -247,7 +246,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::insert_query(const std::string
 		};
 	}
 #else
-	MONGODB_LOG_WARNING("MongoDB support not compiled. Insert query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MongoDB support not compiled. Insert query: " + query_string.substr(0, 20) + "...");
 	return uint64_t(1); // Mock: return 1 inserted
 #endif
 }
@@ -296,7 +295,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::update_query(const std::string
 		return result ? static_cast<uint64_t>(result->modified_count()) : uint64_t(0);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Update error: ") + e.what();
-		MONGODB_LOG_ERROR("update_query", last_error_);
+		logger_.error("update_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -304,7 +303,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::update_query(const std::string
 		};
 	}
 #else
-	MONGODB_LOG_WARNING("MongoDB support not compiled. Update query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MongoDB support not compiled. Update query: " + query_string.substr(0, 20) + "...");
 	return uint64_t(1); // Mock: return 1 updated
 #endif
 }
@@ -352,7 +351,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string
 		return result ? static_cast<uint64_t>(result->deleted_count()) : uint64_t(0);
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Delete error: ") + e.what();
-		MONGODB_LOG_ERROR("delete_query", last_error_);
+		logger_.error("delete_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -360,7 +359,7 @@ kcenon::common::Result<uint64_t> mongodb_backend::delete_query(const std::string
 		};
 	}
 #else
-	MONGODB_LOG_WARNING("MongoDB support not compiled. Delete query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MongoDB support not compiled. Delete query: " + query_string.substr(0, 20) + "...");
 	return uint64_t(1); // Mock: return 1 deleted
 #endif
 }
@@ -434,7 +433,7 @@ kcenon::common::Result<core::database_result> mongodb_backend::select_query(cons
 		}
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Select error: ") + e.what();
-		MONGODB_LOG_ERROR("select_query", last_error_);
+		logger_.error("select_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -442,7 +441,7 @@ kcenon::common::Result<core::database_result> mongodb_backend::select_query(cons
 		};
 	}
 #else
-	MONGODB_LOG_WARNING("MongoDB support not compiled. Select query: " + query_string.substr(0, 20) + "...");
+	logger_.warning("MongoDB support not compiled. Select query: " + query_string.substr(0, 20) + "...");
 	// Return mock data for testing
 	core::database_row mock_row;
 	mock_row["_id"] = std::string("mock_object_id");
@@ -469,7 +468,7 @@ kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& que
 #ifdef USE_MONGODB
 	if (!database_) {
 		last_error_ = "No active MongoDB connection";
-		MONGODB_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::connection_failed),
 			last_error_,
@@ -499,7 +498,7 @@ kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& que
 		}
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Execute error: ") + e.what();
-		MONGODB_LOG_ERROR("execute_query", last_error_);
+		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::query_failed),
 			last_error_,
@@ -508,7 +507,7 @@ kcenon::common::VoidResult mongodb_backend::execute_query(const std::string& que
 	}
 #else
 	// Mock execution
-	MONGODB_LOG_INFO("MongoDB support not compiled. Mock execute: " + query_string);
+	logger_.info("MongoDB support not compiled. Mock execute: " + query_string);
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif

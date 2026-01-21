@@ -58,31 +58,8 @@ mysql_backend::mysql_backend()
 {
 }
 
-mysql_backend::~mysql_backend()
+kcenon::common::VoidResult mysql_backend::do_initialize(const core::connection_config& config)
 {
-	shutdown();
-}
-
-std::unique_ptr<core::database_backend> mysql_backend::create()
-{
-	return std::make_unique<mysql_backend>();
-}
-
-database_types mysql_backend::type() const
-{
-	return database_types::mysql;
-}
-
-kcenon::common::VoidResult mysql_backend::initialize(const core::connection_config& config)
-{
-	if (initialized_) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			"Backend already initialized",
-			"mysql_backend"
-		};
-	}
-
 	connection_config_ = config;
 
 #ifdef USE_MYSQL
@@ -91,7 +68,7 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 		MYSQL* mysql = mysql_init(nullptr);
 		if (!mysql) {
 			last_error_ = "MySQL library initialization failed";
-			logger_.error("initialize", last_error_);
+			logger_.error("do_initialize", last_error_);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
 				last_error_,
@@ -116,7 +93,7 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 
 		if (!connection_) {
 			last_error_ = std::string("Connection failed: ") + mysql_error(mysql);
-			logger_.error("initialize", last_error_);
+			logger_.error("do_initialize", last_error_);
 			mysql_close(mysql);
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
@@ -125,17 +102,15 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 			};
 		}
 
-		initialized_ = true;
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
 		last_error_ = std::string("Connection error: ") + e.what();
-		logger_.error("initialize", last_error_);
+		logger_.error("do_initialize", last_error_);
 	}
 #else
 	logger_.warning("MySQL support not compiled. Mock mode enabled.");
 	// Mock mode for testing without MySQL
-	initialized_ = true;
 	last_error_.clear();
 	return kcenon::common::ok();
 #endif
@@ -150,12 +125,8 @@ kcenon::common::VoidResult mysql_backend::initialize(const core::connection_conf
 	};
 }
 
-kcenon::common::VoidResult mysql_backend::shutdown()
+kcenon::common::VoidResult mysql_backend::do_shutdown()
 {
-	if (!initialized_) {
-		return kcenon::common::ok(); // Already shutdown
-	}
-
 	// Rollback any active transaction before disconnecting
 	if (in_transaction_) {
 		rollback_transaction();
@@ -169,14 +140,8 @@ kcenon::common::VoidResult mysql_backend::shutdown()
 	}
 #endif
 
-	initialized_ = false;
 	last_error_.clear();
 	return kcenon::common::ok();
-}
-
-bool mysql_backend::is_initialized() const
-{
-	return initialized_;
 }
 
 unsigned int mysql_backend::execute_modification_query(const std::string& query_string)
@@ -205,7 +170,7 @@ unsigned int mysql_backend::execute_modification_query(const std::string& query_
 
 kcenon::common::Result<uint64_t> mysql_backend::insert_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -227,7 +192,7 @@ kcenon::common::Result<uint64_t> mysql_backend::insert_query(const std::string& 
 
 kcenon::common::Result<uint64_t> mysql_backend::update_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -249,7 +214,7 @@ kcenon::common::Result<uint64_t> mysql_backend::update_query(const std::string& 
 
 kcenon::common::Result<uint64_t> mysql_backend::delete_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -271,7 +236,7 @@ kcenon::common::Result<uint64_t> mysql_backend::delete_query(const std::string& 
 
 kcenon::common::Result<core::database_result> mysql_backend::select_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -394,7 +359,7 @@ kcenon::common::Result<core::database_result> mysql_backend::select_query(const 
 
 kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query_string)
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -436,7 +401,7 @@ kcenon::common::VoidResult mysql_backend::execute_query(const std::string& query
 
 kcenon::common::VoidResult mysql_backend::begin_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -466,7 +431,7 @@ kcenon::common::VoidResult mysql_backend::begin_transaction()
 
 kcenon::common::VoidResult mysql_backend::commit_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),
@@ -496,7 +461,7 @@ kcenon::common::VoidResult mysql_backend::commit_transaction()
 
 kcenon::common::VoidResult mysql_backend::rollback_transaction()
 {
-	if (!initialized_) {
+	if (!is_initialized()) {
 		last_error_ = "Backend not initialized";
 		return kcenon::common::error_info{
 			static_cast<int>(database::error_code::invalid_state),

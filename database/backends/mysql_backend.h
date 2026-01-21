@@ -37,7 +37,8 @@
  * directly using the MySQL C API without depending on the legacy mysql_manager.
  *
  * Issue #286: Update backends to use database_backend only
- * - Implements database_backend interface directly
+ * Issue #328: Refactored to use backend_base template
+ * - Implements database_backend interface via backend_base CRTP
  * - Registers with backend_registry for runtime selection
  * - Eliminates dependency on database_base-derived classes
  * - Uses Result-based error handling pattern
@@ -45,7 +46,7 @@
 
 #pragma once
 
-#include "../core/database_backend.h"
+#include "../core/backend_base.h"
 #include "../core/backend_registry.h"
 
 #include <memory>
@@ -61,11 +62,11 @@ namespace backends
  * @class mysql_backend
  * @brief MySQL implementation of database_backend interface
  *
- * This class directly implements the database_backend interface for MySQL,
- * using the MySQL C API without depending on the legacy mysql_manager.
+ * This class implements the database_backend interface for MySQL via
+ * backend_base CRTP template, using the MySQL C API.
  *
- * Design Pattern: Strategy pattern
- * - Directly implements database_backend interface
+ * Design Pattern: Strategy pattern with CRTP
+ * - Extends backend_base for common lifecycle management
  * - Uses MySQL C API for database access
  * - Provides Result-based error handling
  * - Supports transactions natively
@@ -93,9 +94,15 @@ namespace backends
  *   auto rows = backend->select_query("SELECT * FROM users");
  * @endcode
  */
-class mysql_backend : public core::database_backend
+class mysql_backend
+	: public core::backend_base<mysql_backend, database_types::mysql>
 {
 public:
+	/**
+	 * @brief Backend name for error messages
+	 */
+	static constexpr const char* backend_name() { return "mysql_backend"; }
+
 	/**
 	 * @brief Default constructor
 	 */
@@ -104,31 +111,9 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~mysql_backend() override;
-
-	// Prevent copying (unique ownership of mysql_manager)
-	mysql_backend(const mysql_backend&) = delete;
-	mysql_backend& operator=(const mysql_backend&) = delete;
-
-	// Prevent moving (std::atomic members are not moveable)
-	mysql_backend(mysql_backend&&) noexcept = delete;
-	mysql_backend& operator=(mysql_backend&&) noexcept = delete;
-
-	/**
-	 * @brief Factory method for backend_registry
-	 * @return Unique pointer to new mysql_backend instance
-	 */
-	static std::unique_ptr<core::database_backend> create();
+	~mysql_backend() override = default;
 
 	// database_backend interface implementation
-
-	database_types type() const override;
-
-	kcenon::common::VoidResult initialize(const core::connection_config& config) override;
-
-	kcenon::common::VoidResult shutdown() override;
-
-	bool is_initialized() const override;
 
 	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
 
@@ -152,6 +137,22 @@ public:
 
 	std::map<std::string, std::string> connection_info() const override;
 
+protected:
+	friend class core::backend_base<mysql_backend, database_types::mysql>;
+
+	/**
+	 * @brief Database-specific initialization logic
+	 * @param config Connection configuration
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_initialize(const core::connection_config& config);
+
+	/**
+	 * @brief Database-specific shutdown logic
+	 * @return VoidResult::ok() on success, error on failure
+	 */
+	kcenon::common::VoidResult do_shutdown();
+
 private:
 	/**
 	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
@@ -161,7 +162,6 @@ private:
 	unsigned int execute_modification_query(const std::string& query_string);
 
 	void* connection_{nullptr};                 ///< MySQL connection (MYSQL*)
-	std::atomic<bool> initialized_{false};      ///< Initialization state
 	std::atomic<bool> in_transaction_{false};   ///< Transaction state
 	mutable std::string last_error_;            ///< Last error message
 	core::connection_config connection_config_; ///< Cached connection config

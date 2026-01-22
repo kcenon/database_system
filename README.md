@@ -146,10 +146,41 @@ auto query = builder
 | **PostgreSQL** | ✅ Full | JSONB, Arrays, CTEs, FTS | 1.2ms SELECT, 5K TPS |
 | **MySQL** | ✅ Full | Full-text search, Transactions | 1.5ms SELECT, 4.2K TPS |
 | **SQLite** | ✅ Full | WAL mode, FTS5, In-memory | 0.8ms SELECT |
-| **MongoDB** | ✅ Full | Documents, Aggregation, GridFS | 2.1ms insertOne |
-| **Redis** | ✅ Full | All data types, Pub/Sub, Lua | 0.3ms GET/SET |
+| **MongoDB** | 🧪 Experimental | Documents, Aggregation, GridFS | 2.1ms insertOne |
+| **Redis** | 🧪 Experimental | All data types, Pub/Sub, Lua | 0.3ms GET/SET |
 
 [📚 Detailed Backend Features →](docs/FEATURES.md)
+
+### Experimental Features
+
+> ⚠️ **Note**: The following backends are experimental and disabled by default.
+> These backends are fully functional but may have limited support or undergo breaking changes in future releases.
+
+| Backend | CMake Option | vcpkg Feature | Status | Notes |
+|---------|--------------|---------------|--------|-------|
+| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 Experimental | NoSQL document store |
+| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 Experimental | In-memory data store |
+
+**To enable experimental backends:**
+
+```bash
+# Enable MongoDB support
+cmake -DUSE_MONGODB=ON ..
+
+# Enable Redis support
+cmake -DUSE_REDIS=ON ..
+
+# Enable both
+cmake -DUSE_MONGODB=ON -DUSE_REDIS=ON ..
+```
+
+**vcpkg features (optional):**
+```bash
+# Install with specific features
+vcpkg install database-system[mongodb,redis]
+```
+
+For detailed build instructions, see [Build Guide →](docs/guides/BUILD_GUIDE.md#experimental-backends)
 
 ### Server-Side Connection Pooling (ProxyMode)
 

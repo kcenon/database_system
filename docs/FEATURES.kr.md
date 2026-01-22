@@ -114,8 +114,10 @@ auto cte_result = db.create_query_builder(database_types::postgres)
 
 ### MongoDB 백엔드
 
-**상태**: ✅ 완전 지원
+**상태**: 🧪 실험적 (기본 비활성화)
 **구현**: `mongodb/mongodb_manager.h/cpp`
+
+> ⚠️ **실험적**: MongoDB 지원은 기능적이지만 실험적입니다. CMake 옵션 `USE_MONGODB=ON`으로 활성화하세요.
 
 **기능**:
 - BSON을 통한 문서 기반 저장
@@ -130,8 +132,10 @@ auto cte_result = db.create_query_builder(database_types::postgres)
 
 ### Redis 백엔드
 
-**상태**: ✅ 완전 지원
+**상태**: 🧪 실험적 (기본 비활성화)
 **구현**: `redis/redis_manager.h/cpp`
+
+> ⚠️ **실험적**: Redis 지원은 기능적이지만 실험적입니다. CMake 옵션 `USE_REDIS=ON`으로 활성화하세요.
 
 **기능**:
 - 모든 데이터 타입 (문자열, 해시, 리스트, 셋, 정렬된 셋)

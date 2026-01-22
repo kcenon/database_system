@@ -24,7 +24,28 @@
 
 ---
 
-## [Unreleased] - 2026-01-20
+## [Unreleased] - 2026-01-23
+
+### 📚 **Documentation**
+
+#### **Mark MongoDB and Redis Backends as Experimental (Issue #339)**
+- **Updated README.md and README.kr.md**:
+  - Added "Experimental Features" section documenting MongoDB and Redis as experimental
+  - Updated Multi-Backend Support table to show experimental status (🧪)
+  - Added CMake options and vcpkg features for enabling experimental backends
+- **Updated docs/FEATURES.md and docs/FEATURES.kr.md**:
+  - Changed MongoDB and Redis backend status from "✅ Full Support" to "🧪 Experimental"
+  - Added warning notes about experimental nature and how to enable
+- **Updated docs/guides/BUILD_GUIDE.md and BUILD_GUIDE.kr.md**:
+  - Added "Experimental Backends" section with enable instructions
+  - Updated CMake options table to indicate experimental status
+  - Documented vcpkg features and future plans
+- **Related to**: Issue #333 (potential future separation into contrib packages)
+- **Dependencies completed**: Issue #337 (CMake options), Issue #338 (vcpkg features)
+
+---
+
+## [Previous] - 2026-01-20
 
 ### 💥 **Breaking Changes**
 

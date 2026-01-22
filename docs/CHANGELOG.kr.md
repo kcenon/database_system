@@ -24,7 +24,28 @@
 
 ---
 
-## [Unreleased] - 2026-01-20
+## [Unreleased] - 2026-01-23
+
+### 📚 **문서화**
+
+#### **MongoDB 및 Redis 백엔드를 실험적으로 표시 (Issue #339)**
+- **README.md 및 README.kr.md 업데이트**:
+  - MongoDB와 Redis를 실험적으로 문서화하는 "Experimental Features" 섹션 추가
+  - Multi-Backend Support 테이블에 실험적 상태 (🧪) 표시
+  - 실험적 백엔드 활성화를 위한 CMake 옵션 및 vcpkg features 추가
+- **docs/FEATURES.md 및 docs/FEATURES.kr.md 업데이트**:
+  - MongoDB 및 Redis 백엔드 상태를 "✅ 완전 지원"에서 "🧪 실험적"으로 변경
+  - 실험적 특성 및 활성화 방법에 대한 경고 메모 추가
+- **docs/guides/BUILD_GUIDE.md 및 BUILD_GUIDE.kr.md 업데이트**:
+  - 활성화 지침이 포함된 "실험적 백엔드" 섹션 추가
+  - CMake 옵션 테이블에 실험적 상태 표시
+  - vcpkg features 및 향후 계획 문서화
+- **관련**: Issue #333 (향후 contrib 패키지로의 분리 가능성)
+- **완료된 의존성**: Issue #337 (CMake 옵션), Issue #338 (vcpkg features)
+
+---
+
+## [Previous] - 2026-01-20
 
 ### 💥 **Breaking Changes**
 

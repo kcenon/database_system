@@ -84,11 +84,54 @@ ninja
 | `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 (libpqxx 필요) |
 | `USE_MYSQL` | OFF | MySQL 지원 활성화 (libmysql 필요) |
 | `USE_SQLITE` | OFF | SQLite 지원 활성화 (sqlite3 필요) |
-| `USE_MONGODB` | OFF | MongoDB 지원 활성화 (mongocxx 필요) |
-| `USE_REDIS` | OFF | Redis 지원 활성화 (hiredis 필요) |
+| `USE_MONGODB` | OFF | MongoDB 지원 활성화 (mongocxx 필요) - **실험적** |
+| `USE_REDIS` | OFF | Redis 지원 활성화 (hiredis 필요) - **실험적** |
 | `BUILD_DATABASE_SAMPLES` | ON | 샘플 프로그램 빌드 |
 | `USE_UNIT_TEST` | ON | 단위 테스트 빌드 |
 | `BUILD_SHARED_LIBS` | OFF | 공유 라이브러리로 빌드 |
+
+### 실험적 백엔드
+
+> ⚠️ **참고**: MongoDB와 Redis 백엔드는 실험적이며 기본적으로 비활성화되어 있습니다.
+> 이 백엔드들은 완전히 기능하지만 향후 릴리스에서 지원이 제한되거나 Breaking Changes가 발생할 수 있습니다.
+
+#### 실험적 백엔드 활성화
+
+```bash
+# MongoDB 활성화 (실험적)
+cmake .. -DUSE_MONGODB=ON
+
+# Redis 활성화 (실험적)
+cmake .. -DUSE_REDIS=ON
+
+# 두 실험적 백엔드 모두 활성화
+cmake .. -DUSE_MONGODB=ON -DUSE_REDIS=ON
+```
+
+#### 실험적 백엔드를 위한 vcpkg Features
+
+```bash
+# MongoDB 의존성 설치
+vcpkg install mongo-cxx-driver
+
+# Redis 의존성 설치
+vcpkg install hiredis
+
+# 실험적 백엔드로 빌드
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  -DUSE_MONGODB=ON \
+  -DUSE_REDIS=ON
+```
+
+#### 실험적 백엔드 상태
+
+| 백엔드 | 상태 | 의존성 | 비고 |
+|--------|------|--------|------|
+| MongoDB | 🧪 실험적 | mongocxx, bsoncxx | NoSQL 문서 저장소, 집계 지원 |
+| Redis | 🧪 실험적 | hiredis | 인메모리 데이터 저장소, Pub/Sub 지원 |
+
+**향후 계획**: 이 백엔드들은 향후 릴리스에서 선택적 contrib 패키지로 분리될 수 있습니다. 자세한 내용은 [Issue #333](https://github.com/kcenon/database_system/issues/333)을 참조하세요.
 
 ### 빌드 타입
 

@@ -57,6 +57,22 @@
         }
       ]
     },
+    "mongodb": {
+      "description": "Enable MongoDB backend (experimental)",
+      "dependencies": [
+        {
+          "name": "mongo-cxx-driver"
+        }
+      ]
+    },
+    "redis": {
+      "description": "Enable Redis backend (experimental)",
+      "dependencies": [
+        {
+          "name": "hiredis"
+        }
+      ]
+    },
     "testing": {
       "description": "Enable unit testing and benchmarking",
       "dependencies": [

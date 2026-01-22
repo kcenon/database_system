@@ -36,8 +36,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "database/backends/postgresql_backend.h"
 #include "database/backends/mysql_backend.h"
 #include "database/backends/sqlite_backend.h"
+#ifdef USE_MONGODB
 #include "database/backends/mongodb_backend.h"
+#endif
+#ifdef USE_REDIS
 #include "database/backends/redis_backend.h"
+#endif
 #include "database/proxy/proxy_connector.h"
 
 #include <sstream>
@@ -84,12 +88,16 @@ namespace database
 		case database_types::sqlite:
 			database_ = backends::sqlite_backend::create();
 			break;
+#ifdef USE_MONGODB
 		case database_types::mongodb:
 			database_ = backends::mongodb_backend::create();
 			break;
+#endif
+#ifdef USE_REDIS
 		case database_types::redis:
 			database_ = backends::redis_backend::create();
 			break;
+#endif
 		default:
 			return false;
 		}

@@ -70,6 +70,7 @@ TEST_F(UniversalQueryBuilderTest, SQLiteBuilder)
     EXPECT_TRUE(query.find("[users]") != std::string::npos);  // SQLite uses square brackets
 }
 
+#ifdef USE_MONGODB
 // Note: Universal builder's MongoDB support requires find() to be called
 // This is expected behavior - collection().limit() alone doesn't set operation type
 TEST_F(UniversalQueryBuilderTest, MongoDBBuilder)
@@ -80,7 +81,9 @@ TEST_F(UniversalQueryBuilderTest, MongoDBBuilder)
     // Test that the builder is created without throwing
     EXPECT_NO_THROW(builder.collection("users"));
 }
+#endif // USE_MONGODB
 
+#ifdef USE_REDIS
 TEST_F(UniversalQueryBuilderTest, RedisBuilder)
 {
     query_builder builder(database_types::redis);
@@ -90,6 +93,7 @@ TEST_F(UniversalQueryBuilderTest, RedisBuilder)
 
     EXPECT_TRUE(query.find("GET") != std::string::npos);
 }
+#endif // USE_REDIS
 
 //=============================================================================
 // For Database Switch Tests
@@ -194,6 +198,7 @@ TEST_F(UniversalQueryBuilderTest, Reset)
 // NoSQL Interface Tests
 //=============================================================================
 
+#ifdef USE_MONGODB
 // Note: MongoDB universal builder requires find() to set operation type
 TEST_F(UniversalQueryBuilderTest, MongoDBCollection)
 {
@@ -203,7 +208,9 @@ TEST_F(UniversalQueryBuilderTest, MongoDBCollection)
     // This is expected behavior - full MongoDB operations need mongodb_query_builder directly
     EXPECT_NO_THROW(builder.collection("users").limit(10));
 }
+#endif // USE_MONGODB
 
+#ifdef USE_REDIS
 TEST_F(UniversalQueryBuilderTest, RedisKey)
 {
     query_builder builder(database_types::redis);
@@ -214,6 +221,7 @@ TEST_F(UniversalQueryBuilderTest, RedisKey)
     EXPECT_TRUE(query.find("GET") != std::string::npos);
     EXPECT_TRUE(query.find("user:1") != std::string::npos);
 }
+#endif // USE_REDIS
 
 //=============================================================================
 // Default Constructor Tests
@@ -307,6 +315,7 @@ TEST_F(UniversalQueryBuilderTest, MethodChaining)
 // MongoDB Universal Interface Tests
 //=============================================================================
 
+#ifdef USE_MONGODB
 TEST_F(UniversalQueryBuilderTest, MongoDBInsert)
 {
     query_builder builder(database_types::mongodb);
@@ -324,6 +333,7 @@ TEST_F(UniversalQueryBuilderTest, MongoDBInsert)
     // The exact output format depends on the mongodb_dialect implementation
     EXPECT_FALSE(query.empty());
 }
+#endif // USE_MONGODB
 
 //=============================================================================
 // Limit Across Databases
@@ -341,6 +351,7 @@ TEST_F(UniversalQueryBuilderTest, LimitForSQL)
     EXPECT_TRUE(query.find("LIMIT 10") != std::string::npos);
 }
 
+#ifdef USE_MONGODB
 // Note: MongoDB limit requires find() to be called to set operation type
 TEST_F(UniversalQueryBuilderTest, LimitForMongoDB)
 {
@@ -350,5 +361,6 @@ TEST_F(UniversalQueryBuilderTest, LimitForMongoDB)
     // This is expected behavior - use mongodb_query_builder directly for full functionality
     EXPECT_NO_THROW(builder.collection("users").limit(10));
 }
+#endif // USE_MONGODB
 
 } // namespace database::tests

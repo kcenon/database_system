@@ -45,10 +45,14 @@ namespace database
 			case database_types::mysql:
 			case database_types::sqlite:
 				return std::make_unique<detail::sql_dialect>(type);
+#ifdef USE_MONGODB
 			case database_types::mongodb:
 				return std::make_unique<detail::mongodb_dialect>();
+#endif
+#ifdef USE_REDIS
 			case database_types::redis:
 				return std::make_unique<detail::redis_dialect>();
+#endif
 			default:
 				throw std::invalid_argument("Unsupported database type");
 		}
@@ -371,6 +375,7 @@ namespace database
 			}
 		}
 
+#ifdef USE_MONGODB
 		// mongodb_dialect implementation
 		mongodb_dialect::mongodb_dialect()
 			: op_type_(operation_type::none)
@@ -653,7 +658,9 @@ namespace database
 			}, value);
 			return oss.str();
 		}
+#endif // USE_MONGODB
 
+#ifdef USE_REDIS
 		// redis_dialect implementation
 		redis_dialect::redis_dialect()
 		{
@@ -816,6 +823,7 @@ namespace database
 			result.insert(result.end(), args_.begin(), args_.end());
 			return result;
 		}
+#endif // USE_REDIS
 
 	} // namespace detail
 

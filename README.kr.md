@@ -260,8 +260,39 @@ if (void_result.is_ok()) {
 | PostgreSQL | ✅ Full | JSONB, Arrays, CTEs, Prepared Statements | Excellent | ✅ | TLS/SSL |
 | MySQL | ✅ Full | Full-text search, Transactions, Prepared Statements | Very Good | ✅ | TLS/SSL |
 | SQLite | ✅ Full | WAL mode, FTS5, In-memory databases | Good | ✅ | Encryption |
-| MongoDB | ✅ Full | Documents, Aggregation, GridFS | Very Good | ✅ | TLS/SSL |
-| Redis | ✅ Full | All data types, Pub/Sub, Transactions | Excellent | ✅ | TLS/SSL |
+| MongoDB | 🧪 Experimental | Documents, Aggregation, GridFS | Very Good | ✅ | TLS/SSL |
+| Redis | 🧪 Experimental | All data types, Pub/Sub, Transactions | Excellent | ✅ | TLS/SSL |
+
+### 🧪 실험적 기능
+
+> ⚠️ **참고**: 다음 백엔드는 실험적이며 기본적으로 비활성화되어 있습니다.
+> 이 백엔드들은 완전히 기능하지만 향후 릴리스에서 지원이 제한되거나 Breaking Changes가 발생할 수 있습니다.
+
+| 백엔드 | CMake 옵션 | vcpkg Feature | 상태 | 비고 |
+|--------|------------|---------------|------|------|
+| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 Experimental | NoSQL 문서 저장소 |
+| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 Experimental | 인메모리 데이터 저장소 |
+
+**실험적 백엔드 활성화:**
+
+```bash
+# MongoDB 지원 활성화
+cmake -DUSE_MONGODB=ON ..
+
+# Redis 지원 활성화
+cmake -DUSE_REDIS=ON ..
+
+# 둘 다 활성화
+cmake -DUSE_MONGODB=ON -DUSE_REDIS=ON ..
+```
+
+**vcpkg features (선택 사항):**
+```bash
+# 특정 features와 함께 설치
+vcpkg install database-system[mongodb,redis]
+```
+
+자세한 빌드 지침은 [빌드 가이드 →](docs/guides/BUILD_GUIDE.kr.md#실험적-백엔드)를 참조하세요.
 
 ### 📊 Database 타입
 

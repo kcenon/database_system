@@ -84,11 +84,54 @@ ninja
 | `USE_POSTGRESQL` | ON | Enable PostgreSQL support (requires libpqxx) |
 | `USE_MYSQL` | OFF | Enable MySQL support (requires libmysql) |
 | `USE_SQLITE` | OFF | Enable SQLite support (requires sqlite3) |
-| `USE_MONGODB` | OFF | Enable MongoDB support (requires mongocxx) |
-| `USE_REDIS` | OFF | Enable Redis support (requires hiredis) |
+| `USE_MONGODB` | OFF | Enable MongoDB support (requires mongocxx) - **Experimental** |
+| `USE_REDIS` | OFF | Enable Redis support (requires hiredis) - **Experimental** |
 | `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
 | `USE_UNIT_TEST` | ON | Build unit tests |
 | `BUILD_SHARED_LIBS` | OFF | Build as shared library |
+
+### Experimental Backends
+
+> ⚠️ **Note**: MongoDB and Redis backends are experimental and disabled by default.
+> These backends are fully functional but may have limited support or undergo breaking changes in future releases.
+
+#### Enabling Experimental Backends
+
+```bash
+# Enable MongoDB (experimental)
+cmake .. -DUSE_MONGODB=ON
+
+# Enable Redis (experimental)
+cmake .. -DUSE_REDIS=ON
+
+# Enable both experimental backends
+cmake .. -DUSE_MONGODB=ON -DUSE_REDIS=ON
+```
+
+#### vcpkg Features for Experimental Backends
+
+```bash
+# Install MongoDB dependencies
+vcpkg install mongo-cxx-driver
+
+# Install Redis dependencies
+vcpkg install hiredis
+
+# Build with experimental backends
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  -DUSE_MONGODB=ON \
+  -DUSE_REDIS=ON
+```
+
+#### Experimental Backend Status
+
+| Backend | Status | Dependencies | Notes |
+|---------|--------|--------------|-------|
+| MongoDB | 🧪 Experimental | mongocxx, bsoncxx | NoSQL document store, aggregation support |
+| Redis | 🧪 Experimental | hiredis | In-memory data store, Pub/Sub support |
+
+**Future Plans**: These backends may be separated into optional contrib packages in a future release. See [Issue #333](https://github.com/kcenon/database_system/issues/333) for details.
 
 ### Build Types
 

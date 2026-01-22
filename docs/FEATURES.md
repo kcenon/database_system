@@ -191,8 +191,10 @@ auto json_result = db.create_query_builder(database_types::sqlite)
 
 ### MongoDB Backend
 
-**Status**: ✅ Full Support
+**Status**: 🧪 Experimental (disabled by default)
 **Implementation**: `mongodb/mongodb_manager.h/cpp`
+
+> ⚠️ **Experimental**: MongoDB support is functional but experimental. Enable with `USE_MONGODB=ON` CMake option.
 
 **Features**:
 - Document-based storage with BSON
@@ -252,8 +254,10 @@ stream->on_change([](const change_event& event) {
 
 ### Redis Backend
 
-**Status**: ✅ Full Support
+**Status**: 🧪 Experimental (disabled by default)
 **Implementation**: `redis/redis_manager.h/cpp`
+
+> ⚠️ **Experimental**: Redis support is functional but experimental. Enable with `USE_REDIS=ON` CMake option.
 
 **Features**:
 - All data types (Strings, Hashes, Lists, Sets, Sorted Sets)

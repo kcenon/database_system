@@ -9,7 +9,9 @@ All rights reserved.
 
 #include "../database_types.h"
 #include <string>
+#include <string_view>
 #include <memory>
+#include <vector>
 
 namespace database::query {
 
@@ -23,15 +25,78 @@ namespace database::query {
  * - Makes it easy to add new database support
  *
  * Responsibilities:
+ * - Placeholder style formatting ($1 vs ? vs ?1)
+ * - Identifier quoting ("col" vs `col` vs [col])
  * - LIMIT/OFFSET clause formatting
+ * - RETURNING clause support
+ * - UPSERT clause formatting
  * - Auto-increment column definition
  * - Current timestamp functions
+ * - String escaping
  * - Boolean literals
  * - Data type mappings
  */
 class sql_dialect {
 public:
     virtual ~sql_dialect() = default;
+
+    /**
+     * @brief Generate parameter placeholder
+     * @param index 1-based parameter index
+     * @return Database-specific placeholder string
+     *
+     * Examples:
+     * - PostgreSQL: "$1", "$2", "$3"
+     * - MySQL: "?"
+     * - SQLite: "?1", "?2", "?3"
+     */
+    virtual std::string placeholder(int index) const = 0;
+
+    /**
+     * @brief Quote an identifier (table or column name)
+     * @param name The identifier to quote
+     * @return Quoted identifier
+     *
+     * Examples:
+     * - PostgreSQL: "\"column_name\""
+     * - MySQL: "`column_name`"
+     * - SQLite: "\"column_name\""
+     */
+    virtual std::string quote_identifier(std::string_view name) const = 0;
+
+    /**
+     * @brief Escape a string value for safe SQL inclusion
+     * @param str The string to escape
+     * @return Escaped string (without surrounding quotes)
+     */
+    virtual std::string escape_string(std::string_view str) const = 0;
+
+    /**
+     * @brief Generate RETURNING clause for INSERT/UPDATE
+     * @param column The column to return (empty for all)
+     * @return Database-specific RETURNING clause or empty if unsupported
+     *
+     * Examples:
+     * - PostgreSQL: " RETURNING id"
+     * - MySQL: "" (not supported, use LAST_INSERT_ID())
+     * - SQLite: " RETURNING id" (3.35+)
+     */
+    virtual std::string returning_clause(std::string_view column = "") const = 0;
+
+    /**
+     * @brief Generate UPSERT (INSERT OR UPDATE) clause
+     * @param conflict_columns Columns that define conflict
+     * @param update_columns Columns to update on conflict
+     * @return Database-specific upsert clause
+     *
+     * Examples:
+     * - PostgreSQL: "ON CONFLICT (id) DO UPDATE SET ..."
+     * - MySQL: "ON DUPLICATE KEY UPDATE ..."
+     * - SQLite: "ON CONFLICT (id) DO UPDATE SET ..."
+     */
+    virtual std::string upsert_clause(
+        const std::vector<std::string>& conflict_columns,
+        const std::vector<std::string>& update_columns) const = 0;
 
     /**
      * @brief Generate LIMIT clause
@@ -100,6 +165,13 @@ public:
  */
 class postgresql_dialect : public sql_dialect {
 public:
+    std::string placeholder(int index) const override;
+    std::string quote_identifier(std::string_view name) const override;
+    std::string escape_string(std::string_view str) const override;
+    std::string returning_clause(std::string_view column = "") const override;
+    std::string upsert_clause(
+        const std::vector<std::string>& conflict_columns,
+        const std::vector<std::string>& update_columns) const override;
     std::string limit_clause(size_t limit, size_t offset) const override;
     std::string auto_increment() const override;
     std::string current_timestamp() const override;
@@ -113,6 +185,13 @@ public:
  */
 class mysql_dialect : public sql_dialect {
 public:
+    std::string placeholder(int index) const override;
+    std::string quote_identifier(std::string_view name) const override;
+    std::string escape_string(std::string_view str) const override;
+    std::string returning_clause(std::string_view column = "") const override;
+    std::string upsert_clause(
+        const std::vector<std::string>& conflict_columns,
+        const std::vector<std::string>& update_columns) const override;
     std::string limit_clause(size_t limit, size_t offset) const override;
     std::string auto_increment() const override;
     std::string current_timestamp() const override;
@@ -126,6 +205,13 @@ public:
  */
 class sqlite_dialect : public sql_dialect {
 public:
+    std::string placeholder(int index) const override;
+    std::string quote_identifier(std::string_view name) const override;
+    std::string escape_string(std::string_view str) const override;
+    std::string returning_clause(std::string_view column = "") const override;
+    std::string upsert_clause(
+        const std::vector<std::string>& conflict_columns,
+        const std::vector<std::string>& update_columns) const override;
     std::string limit_clause(size_t limit, size_t offset) const override;
     std::string auto_increment() const override;
     std::string current_timestamp() const override;

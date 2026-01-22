@@ -420,6 +420,42 @@ if(GTest_FOUND OR gtest_FOUND)
         DISCOVERY_TIMEOUT 60
     )
 
+    # SQL Dialect Tests (Issue #332)
+    add_executable(sql_dialect_test
+        query_builder/sql_dialect_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(sql_dialect_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(sql_dialect_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(sql_dialect_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME SQLDialectTests COMMAND sql_dialect_test)
+
+    gtest_discover_tests(sql_dialect_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "SQL dialect tests configured (Issue #332)")
     message(STATUS "Query builder tests configured (DB-002)")
 endif()
 

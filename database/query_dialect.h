@@ -188,9 +188,13 @@ namespace database
 			std::string join_type_to_string(join_type type) const;
 		};
 
+#ifdef USE_MONGODB
 		/**
 		 * @class mongodb_dialect
-		 * @brief MongoDB dialect implementation.
+		 * @brief MongoDB dialect implementation (experimental).
+		 *
+		 * @note This dialect is experimental and disabled by default.
+		 *       Enable with CMake option USE_MONGODB=ON.
 		 */
 		class mongodb_dialect final : public query_dialect
 		{
@@ -255,10 +259,15 @@ namespace database
 			std::string to_json(const std::map<std::string, core::database_value>& data) const;
 			std::string value_to_json(const core::database_value& value) const;
 		};
+#endif // USE_MONGODB
 
+#ifdef USE_REDIS
 		/**
 		 * @class redis_dialect
-		 * @brief Redis dialect implementation.
+		 * @brief Redis dialect implementation (experimental).
+		 *
+		 * @note This dialect is experimental and disabled by default.
+		 *       Enable with CMake option USE_REDIS=ON.
 		 */
 		class redis_dialect final : public query_dialect
 		{
@@ -311,6 +320,7 @@ namespace database
 			std::string key_;
 			std::string value_;
 		};
+#endif // USE_REDIS
 
 	} // namespace detail
 

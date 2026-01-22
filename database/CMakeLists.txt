@@ -74,8 +74,6 @@ set(HEADER_FILES
     # Sprint 5.3 Headers (Additional Backend Plugins)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
     # P1-2 Headers (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
     # Phase 4.1 Headers (Proxy Mode)
@@ -105,8 +103,6 @@ set(SOURCE_FILES
     # Sprint 5.3 Sources (Additional Backend Plugins)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/mysql_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
     # P1-2 Sources (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.cpp
     # Phase 4.1 Sources (Proxy Mode)
@@ -118,6 +114,28 @@ if(USE_CONTAINER_SYSTEM AND (container_system_FOUND OR TARGET container_system O
     list(APPEND SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol_container.cpp
     )
+endif()
+
+# MongoDB backend (experimental, disabled by default)
+if(USE_MONGODB)
+    list(APPEND HEADER_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
+    )
+    list(APPEND SOURCE_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.cpp
+    )
+    message(STATUS "MongoDB backend sources included (experimental)")
+endif()
+
+# Redis backend (experimental, disabled by default)
+if(USE_REDIS)
+    list(APPEND HEADER_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
+    )
+    list(APPEND SOURCE_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
+    )
+    message(STATUS "Redis backend sources included (experimental)")
 endif()
 
 

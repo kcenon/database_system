@@ -185,7 +185,7 @@ Measures transaction performance:
 
 ## Baseline Results
 
-**To be measured**: Run benchmarks and record results in `docs/BASELINE.md`
+**Documentation**: For comprehensive baseline metrics and performance targets, see [`docs/performance/BASELINE.md`](../docs/performance/BASELINE.md)
 
 Expected baseline ranges (to be confirmed):
 

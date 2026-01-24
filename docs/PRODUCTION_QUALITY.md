@@ -628,7 +628,7 @@ See [BENCHMARKS.md](BENCHMARKS.md) for comprehensive performance data.
 - MongoDB: 2.1ms insertOne
 - Redis: 0.3ms GET/SET
 
-**Baseline Documentation**: See `benchmarks/BASELINE.md` for detailed baseline metrics and CI thresholds.
+**Baseline Documentation**: See `performance/BASELINE.md` for detailed baseline metrics and CI thresholds.
 
 ---
 

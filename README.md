@@ -676,7 +676,7 @@ target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 
 ## Performance Baselines
 
-**See [benchmarks/BASELINE.md](benchmarks/BASELINE.md) for detailed baseline metrics**
+**See [docs/performance/BASELINE.md](docs/performance/BASELINE.md) for detailed baseline metrics**
 
 ### Key Metrics
 

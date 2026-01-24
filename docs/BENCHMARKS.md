@@ -643,7 +643,7 @@ exporter.register_metric("db_queries_total", metric_type::counter);
 
 **For detailed feature documentation**, see [FEATURES.md](FEATURES.md)
 **For production quality metrics**, see [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md)
-**For baseline performance data**, see [../benchmarks/BASELINE.md](../benchmarks/BASELINE.md)
+**For baseline performance data**, see [performance/BASELINE.md](performance/BASELINE.md)
 
 ---
 

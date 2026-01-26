@@ -349,7 +349,17 @@ namespace database
 			std::visit([&oss](const auto& val) {
 				using T = std::decay_t<decltype(val)>;
 				if constexpr (std::is_same_v<T, std::string>) {
-					oss << "'" << val << "'";
+					// Escape single quotes by doubling them (SQL standard)
+					std::string escaped;
+					escaped.reserve(val.size() + 10);
+					for (char c : val) {
+						if (c == '\'') {
+							escaped += "''";
+						} else {
+							escaped += c;
+						}
+					}
+					oss << "'" << escaped << "'";
 				} else if constexpr (std::is_same_v<T, int64_t>) {
 					oss << val;
 				} else if constexpr (std::is_same_v<T, double>) {

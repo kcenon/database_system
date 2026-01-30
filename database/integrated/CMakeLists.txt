@@ -168,6 +168,18 @@ endif()
 # Dependencies
 ##################################################
 
+# Link database library (REQUIRED - provides postgres_manager)
+if(TARGET database)
+    if(INTEGRATED_DB_SOURCES)
+        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC database)
+    else()
+        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE database)
+    endif()
+    message(STATUS "Integrated DB: Linked with database (provides postgres_manager)")
+else()
+    message(FATAL_ERROR "Integrated DB: database target not found - required for postgres_manager")
+endif()
+
 # Link external systems (if found)
 
 # common_system (Mandatory)

@@ -14,7 +14,9 @@
 
 #pragma once
 
+#include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "../config/feature_flags.h"
@@ -38,9 +40,11 @@ namespace kcenon::database::adapters {
  * and database_system's database_manager implementation.
  *
  * Thread Safety:
- * - Delegates thread safety to underlying database_manager
- * - Each adapter instance should be used from a single thread
- *   or protected with appropriate synchronization
+ * - is_connected() is thread-safe (uses std::atomic<bool>)
+ * - connect()/disconnect() are serialized by connection_mutex_
+ * - execute_query()/execute_command() thread-safety delegated to database_manager
+ * - Multiple threads may safely check connection state concurrently
+ * - Connection state transitions are protected against race conditions
  */
 class common_system_database_adapter : public common::interfaces::IDatabase {
 public:
@@ -68,7 +72,7 @@ public:
         , connected_(false) {}
 
     ~common_system_database_adapter() override {
-        if (connected_) {
+        if (connected_.load(std::memory_order_acquire)) {
             disconnect();
         }
     }
@@ -87,19 +91,21 @@ public:
      * @return VoidResult indicating success or error
      */
     common::VoidResult connect(const std::string& connection_string) override {
+        std::lock_guard<std::mutex> lock(connection_mutex_);
+
         if (!manager_) {
             return common::make_error<std::monostate>(
                 1, "Database manager not initialized", "database_system::adapter");
         }
 
-        if (connected_) {
+        if (connected_.load(std::memory_order_acquire)) {
             return common::make_error<std::monostate>(
                 2, "Already connected to database", "database_system::adapter");
         }
 
         auto result = manager_->connect_result(connection_string);
         if (result.is_ok()) {
-            connected_ = true;
+            connected_.store(true, std::memory_order_release);
             return common::VoidResult::ok({});
         }
 
@@ -112,18 +118,20 @@ public:
      * @return VoidResult indicating success or error
      */
     common::VoidResult disconnect() override {
+        std::lock_guard<std::mutex> lock(connection_mutex_);
+
         if (!manager_) {
             return common::make_error<std::monostate>(
                 1, "Database manager not initialized", "database_system::adapter");
         }
 
-        if (!connected_) {
+        if (!connected_.load(std::memory_order_acquire)) {
             return common::VoidResult::ok({});  // Already disconnected
         }
 
         auto result = manager_->disconnect_result();
         if (result.is_ok()) {
-            connected_ = false;
+            connected_.store(false, std::memory_order_release);
             return common::VoidResult::ok({});
         }
 
@@ -142,7 +150,7 @@ public:
                 1, "Database manager not initialized", "database_system::adapter");
         }
 
-        if (!connected_) {
+        if (!connected_.load(std::memory_order_acquire)) {
             return common::make_error<common::database_result>(
                 5, "Not connected to database", "database_system::adapter");
         }
@@ -180,7 +188,7 @@ public:
                 1, "Database manager not initialized", "database_system::adapter");
         }
 
-        if (!connected_) {
+        if (!connected_.load(std::memory_order_acquire)) {
             return common::make_error<std::monostate>(
                 5, "Not connected to database", "database_system::adapter");
         }
@@ -249,7 +257,7 @@ public:
      * @return true if connected, false otherwise
      */
     bool is_connected() const override {
-        return connected_;
+        return connected_.load(std::memory_order_acquire);
     }
 
     /**
@@ -294,7 +302,8 @@ private:
     std::shared_ptr<::database::database_context> context_;
     std::shared_ptr<::database::database_manager> manager_;
     ::database::database_types db_type_;
-    bool connected_;
+    mutable std::mutex connection_mutex_;
+    std::atomic<bool> connected_;
 };
 
 } // namespace kcenon::database::adapters

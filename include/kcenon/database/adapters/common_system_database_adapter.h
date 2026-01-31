@@ -179,8 +179,17 @@ public:
 
     /**
      * @brief Execute a command without returning results
-     * @param command SQL command string (INSERT, UPDATE, DELETE, etc.)
+     * @param command SQL command string (INSERT, UPDATE, DELETE, DDL, etc.)
      * @return VoidResult indicating success or error
+     *
+     * @note This method delegates SQL command type detection and routing to
+     *       database_manager::execute_query_result(), which handles all SQL
+     *       command types uniformly without requiring client-side parsing.
+     *       This approach correctly handles edge cases like:
+     *       - SQL comments before the command keyword
+     *       - Leading/trailing whitespace
+     *       - Common Table Expressions (CTEs) with WITH clause
+     *       - Multi-line SQL statements
      */
     common::VoidResult execute_command(const std::string& command) override {
         if (!manager_) {
@@ -193,36 +202,13 @@ public:
                 ERROR_NOT_CONNECTED, "Not connected to database", "database_system::adapter");
         }
 
-        // Determine command type and execute appropriate method
-        std::string upper_command = command.substr(0, 10);
-        std::transform(upper_command.begin(), upper_command.end(),
-                       upper_command.begin(), ::toupper);
-
-        if (upper_command.find("INSERT") != std::string::npos) {
-            auto result = manager_->insert_query_result(command);
-            if (!result.is_ok()) {
-                return common::make_error<std::monostate>(
-                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
-            }
-        } else if (upper_command.find("UPDATE") != std::string::npos) {
-            auto result = manager_->update_query_result(command);
-            if (!result.is_ok()) {
-                return common::make_error<std::monostate>(
-                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
-            }
-        } else if (upper_command.find("DELETE") != std::string::npos) {
-            auto result = manager_->delete_query_result(command);
-            if (!result.is_ok()) {
-                return common::make_error<std::monostate>(
-                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
-            }
-        } else {
-            // For DDL or other commands, use create_query_result
-            auto result = manager_->create_query_result(command);
-            if (!result.is_ok()) {
-                return common::make_error<std::monostate>(
-                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
-            }
+        // Delegate to database_manager's unified execute method
+        // This eliminates the need for naive string parsing and handles
+        // all SQL command types (INSERT, UPDATE, DELETE, DDL, etc.) uniformly
+        auto result = manager_->execute_query_result(command);
+        if (!result.is_ok()) {
+            return common::make_error<std::monostate>(
+                ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
         }
 
         return common::VoidResult::ok({});

@@ -95,12 +95,12 @@ public:
 
         if (!manager_) {
             return common::make_error<std::monostate>(
-                1, "Database manager not initialized", "database_system::adapter");
+                ERROR_MANAGER_NOT_INITIALIZED, "Database manager not initialized", "database_system::adapter");
         }
 
         if (connected_.load(std::memory_order_acquire)) {
             return common::make_error<std::monostate>(
-                2, "Already connected to database", "database_system::adapter");
+                ERROR_ALREADY_CONNECTED, "Already connected to database", "database_system::adapter");
         }
 
         auto result = manager_->connect_result(connection_string);
@@ -110,7 +110,7 @@ public:
         }
 
         return common::make_error<std::monostate>(
-            3, result.error().message, "database_system::adapter");
+            ERROR_CONNECTION_FAILED, result.error().message, "database_system::adapter");
     }
 
     /**
@@ -122,7 +122,7 @@ public:
 
         if (!manager_) {
             return common::make_error<std::monostate>(
-                1, "Database manager not initialized", "database_system::adapter");
+                ERROR_MANAGER_NOT_INITIALIZED, "Database manager not initialized", "database_system::adapter");
         }
 
         if (!connected_.load(std::memory_order_acquire)) {
@@ -136,7 +136,7 @@ public:
         }
 
         return common::make_error<std::monostate>(
-            4, result.error().message, "database_system::adapter");
+            ERROR_DISCONNECT_FAILED, result.error().message, "database_system::adapter");
     }
 
     /**
@@ -147,18 +147,18 @@ public:
     common::Result<common::database_result> execute_query(const std::string& query) override {
         if (!manager_) {
             return common::make_error<common::database_result>(
-                1, "Database manager not initialized", "database_system::adapter");
+                ERROR_MANAGER_NOT_INITIALIZED, "Database manager not initialized", "database_system::adapter");
         }
 
         if (!connected_.load(std::memory_order_acquire)) {
             return common::make_error<common::database_result>(
-                5, "Not connected to database", "database_system::adapter");
+                ERROR_NOT_CONNECTED, "Not connected to database", "database_system::adapter");
         }
 
         auto result = manager_->select_query_result(query);
         if (!result.is_ok()) {
             return common::make_error<common::database_result>(
-                6, result.error().message, "database_system::adapter");
+                ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
         }
 
         // Convert core::database_result to common::database_result
@@ -185,12 +185,12 @@ public:
     common::VoidResult execute_command(const std::string& command) override {
         if (!manager_) {
             return common::make_error<std::monostate>(
-                1, "Database manager not initialized", "database_system::adapter");
+                ERROR_MANAGER_NOT_INITIALIZED, "Database manager not initialized", "database_system::adapter");
         }
 
         if (!connected_.load(std::memory_order_acquire)) {
             return common::make_error<std::monostate>(
-                5, "Not connected to database", "database_system::adapter");
+                ERROR_NOT_CONNECTED, "Not connected to database", "database_system::adapter");
         }
 
         // Determine command type and execute appropriate method
@@ -202,26 +202,26 @@ public:
             auto result = manager_->insert_query_result(command);
             if (!result.is_ok()) {
                 return common::make_error<std::monostate>(
-                    6, result.error().message, "database_system::adapter");
+                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
             }
         } else if (upper_command.find("UPDATE") != std::string::npos) {
             auto result = manager_->update_query_result(command);
             if (!result.is_ok()) {
                 return common::make_error<std::monostate>(
-                    6, result.error().message, "database_system::adapter");
+                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
             }
         } else if (upper_command.find("DELETE") != std::string::npos) {
             auto result = manager_->delete_query_result(command);
             if (!result.is_ok()) {
                 return common::make_error<std::monostate>(
-                    6, result.error().message, "database_system::adapter");
+                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
             }
         } else {
             // For DDL or other commands, use create_query_result
             auto result = manager_->create_query_result(command);
             if (!result.is_ok()) {
                 return common::make_error<std::monostate>(
-                    6, result.error().message, "database_system::adapter");
+                    ERROR_QUERY_FAILED, result.error().message, "database_system::adapter");
             }
         }
 
@@ -277,6 +277,15 @@ public:
     }
 
 private:
+    // Error codes for database adapter
+    // Using database_system range: -500 to -599
+    static constexpr int ERROR_MANAGER_NOT_INITIALIZED = -580;
+    static constexpr int ERROR_ALREADY_CONNECTED = -581;
+    static constexpr int ERROR_CONNECTION_FAILED = -582;
+    static constexpr int ERROR_DISCONNECT_FAILED = -583;
+    static constexpr int ERROR_NOT_CONNECTED = -584;
+    static constexpr int ERROR_QUERY_FAILED = -585;
+
     /**
      * @brief Convert core::database_value to common_system value
      */

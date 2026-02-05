@@ -1,7 +1,7 @@
 # Database System Project Structure
 
 **Last Updated**: 2025-11-15
-**Version**: 3.0
+**Version**: 0.3.0.0
 
 This document provides a comprehensive guide to the database_system directory organization, module descriptions, and build configuration.
 

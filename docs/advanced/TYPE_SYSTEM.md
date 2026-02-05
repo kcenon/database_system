@@ -1,6 +1,6 @@
 # Database System Type System Documentation
 
-**Version**: 0.1.0
+**Version**: 0.1.0.0
 **Created**: 2025-11-11  
 **Last Updated**: 2025-11-11
 

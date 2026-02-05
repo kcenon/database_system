@@ -1,7 +1,7 @@
 # Database System Features
 
 **Last Updated**: 2025-12-09
-**Version**: 3.0
+**Version**: 0.3.0.0
 
 This document provides comprehensive details on all database_system features, backend implementations, and capabilities.
 

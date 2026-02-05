@@ -55,13 +55,15 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
-| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required |
+| C++20 Compiler | GCC **13+** / Clang **17+** / MSVC 2022+ / Apple Clang 14+ | Yes | Higher requirements due to thread_system dependency |
 | CMake | 3.20+ | Yes | Build system |
 | [common_system](https://github.com/kcenon/common_system) | latest | Yes | Common interfaces and Result<T> |
 | [thread_system](https://github.com/kcenon/thread_system) | latest | Yes | Thread pool and async operations |
 | [logger_system](https://github.com/kcenon/logger_system) | latest | Yes | Logging infrastructure |
 | [container_system](https://github.com/kcenon/container_system) | latest | Yes | Data container operations |
 | [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | Yes | Performance monitoring |
+
+> **Note**: Compiler requirements are higher than some other systems due to thread_system dependency. See [thread_system requirements](https://github.com/kcenon/thread_system#requirements) for details.
 
 ### Database Backends (at least one required)
 
@@ -397,7 +399,7 @@ For detailed information, see `database/core/result.h`.
 
 ### Prerequisites
 
-- **Compiler**: C++20 capable (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
+- **Compiler**: C++20 capable (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+)
 - **CMake**: 3.20+
 - **Optional**: Database libraries (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
 
@@ -722,7 +724,7 @@ BSD 3-Clause License - see [LICENSE](LICENSE) file for details.
 ## Acknowledgments
 
 - Inspired by modern database abstraction patterns and best practices
-- Built with C++20 features (GCC 11+, Clang 14+, MSVC 2022+) for maximum performance and safety
+- Built with C++20 features (GCC 13+, Clang 17+, MSVC 2022+) for maximum performance and safety
 - Maintained by kcenon@naver.com
 
 ---

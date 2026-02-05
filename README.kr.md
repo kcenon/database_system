@@ -30,13 +30,15 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 | 의존성 | 버전 | 필수 | 설명 |
 |--------|------|------|------|
-| C++20 컴파일러 | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | 예 | C++20 기능 필요 |
+| C++20 컴파일러 | GCC **13+** / Clang **17+** / MSVC 2022+ / Apple Clang 14+ | 예 | thread_system 의존성으로 인한 높은 요구사항 |
 | CMake | 3.20+ | 예 | 빌드 시스템 |
 | [common_system](https://github.com/kcenon/common_system) | latest | 예 | 공통 인터페이스 및 Result<T> |
 | [thread_system](https://github.com/kcenon/thread_system) | latest | 예 | 스레드 풀 및 비동기 작업 |
 | [logger_system](https://github.com/kcenon/logger_system) | latest | 예 | 로깅 인프라 |
 | [container_system](https://github.com/kcenon/container_system) | latest | 예 | 데이터 컨테이너 작업 |
 | [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | 예 | 성능 모니터링 |
+
+> **참고**: thread_system 의존성으로 인해 컴파일러 요구사항이 다른 시스템보다 높습니다. 자세한 내용은 [thread_system 요구사항](https://github.com/kcenon/thread_system#requirements)을 참조하세요.
 
 ### 데이터베이스 백엔드 (최소 하나 필요)
 

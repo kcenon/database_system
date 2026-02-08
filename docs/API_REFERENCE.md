@@ -990,22 +990,37 @@ int main() {
 
 ### ORM Framework
 
+> Full documentation: [ORM Framework Guide](ORM_GUIDE.md)
+
 ```cpp
 #include <database/orm/entity.h>
+using namespace database::orm;
 
-// Entity definition
+// Entity definition with declarative macros
 class User : public entity_base {
     ENTITY_TABLE("users")
     ENTITY_FIELD(int64_t, id, primary_key() | auto_increment())
-    ENTITY_FIELD(std::string, username, not_null() | index("idx_username"))
-    ENTITY_FIELD(std::string, email, unique())
+    ENTITY_FIELD(std::string, username, not_null() | unique() | index("idx_username"))
+    ENTITY_FIELD(std::string, email, not_null() | unique())
     ENTITY_METADATA()
 };
 
-// Entity operations
-entity_manager::instance().create_tables(db);
-auto users = User::query(db).where("age > 18").execute();
+// Register entity and create tables
+auto& entity_mgr = context->get_entity_manager();
+entity_mgr.register_entity<User>();
+entity_mgr.create_tables(db);
+
+// Type-safe query builder
+auto users = entity_mgr.query<User>(db)
+    .where("is_active = true")
+    .order_by("username")
+    .limit(100)
+    .execute();
 ```
+
+**Key classes**: `entity_base`, `entity_manager`, `query_builder<T>`, `field_metadata`, `entity_metadata`
+
+**Macros**: `ENTITY_TABLE(table)`, `ENTITY_FIELD(type, name, constraints...)`, `ENTITY_METADATA()`
 
 ### Performance Monitoring
 

@@ -207,7 +207,7 @@ TRY(transaction->commit());
 
 - [Database System API Reference](../API_REFERENCE.md)
 - [Database System Architecture](../ARCHITECTURE.md)
-- [Ecosystem Integration Guide](../../../ECOSYSTEM_INTEGRATION.md)
+- [Ecosystem Integration Guide](../../../ECOSYSTEM.md)
 - [Example Applications](../../../examples/database/)
 
 ## Support

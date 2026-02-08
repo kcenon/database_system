@@ -18,6 +18,7 @@ Complete API reference for the Database System C++20 library with multi-backend 
 - [C++20 Concepts](#c20-concepts)
 - [Error Handling](#error-handling)
 - [Proxy Mode](#proxy-mode)
+- [Unified Database System](#unified-database-system)
 - [Examples](#examples)
 
 ## Core Classes
@@ -1139,6 +1140,60 @@ if (db_mgr->current_connection_mode() == database::connection_mode::proxy) {
 // Switch back to direct mode
 db_mgr->set_mode(database::database_types::postgres);
 ```
+
+---
+
+## Unified Database System
+
+> Full documentation: [Unified System Guide](guides/UNIFIED_SYSTEM.md)
+
+**Headers**: `database/integrated/unified_database_system.h`, `database/integrated/core/configuration.h`
+**Namespace**: `database::integrated`
+
+The unified database system provides a single entry point for database operations with integrated logging, monitoring, and async support.
+
+### Quick Start
+
+```cpp
+#include <database/integrated/unified_database_system.h>
+using namespace database::integrated;
+
+// Zero-config usage
+unified_database_system db;
+db.connect();
+
+// Or with full configuration
+auto config = unified_db_config{}
+    .set_backend(backend_type::postgres, "host=localhost dbname=mydb")
+    .set_pool_size(5, 20)
+    .set_log_level(db_log_level::info)
+    .enable_monitoring(true)
+    .set_thread_count(4);
+
+database_coordinator coordinator(config);
+coordinator.initialize();
+```
+
+### Key Components
+
+| Component | Header | Description |
+|-----------|--------|-------------|
+| `unified_db_config` | `core/configuration.h` | Fluent builder for all configuration |
+| `database_coordinator` | `core/database_coordinator.h` | Adapter lifecycle management |
+| `logger_adapter` | `adapters/logger_adapter.h` | Unified logging with backend selection |
+| `monitoring_adapter` | `adapters/monitoring_adapter.h` | Metrics collection and Prometheus export |
+| `thread_adapter` | `adapters/thread_adapter.h` | Async task execution with `SubmittableTask` concept |
+| `connection_string_builder` | `connection_string_builder.h` | Type-safe connection string construction |
+| `protocol_serializer` | `protocol/database_protocol.h` | Binary protocol for client-server communication |
+
+### Configuration Enums
+
+| Enum | Values |
+|------|--------|
+| `backend_type` | `postgres`, `mysql`, `sqlite`, `mongodb`, `redis` |
+| `db_log_level` | `trace`, `debug`, `info`, `warning`, `error`, `critical`, `fatal` |
+| `thread_pool_type` | `standard`, `typed` |
+| `ssl_mode` | `disable`, `allow`, `prefer`, `require`, `verify_ca`, `verify_full` |
 
 ---
 

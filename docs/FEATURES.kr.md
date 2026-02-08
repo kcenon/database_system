@@ -2,8 +2,8 @@
 
 **언어:** [English](FEATURES.md) | **한국어**
 
-**최종 업데이트**: 2025-12-09
-**버전**: 3.1
+**최종 업데이트**: 2026-02-08
+**버전**: 0.4.0.0
 
 이 문서는 database_system의 모든 기능, 백엔드 구현 및 기능에 대한 포괄적인 세부 정보를 제공합니다.
 
@@ -19,6 +19,10 @@
 - [엔터프라이즈 보안](#엔터프라이즈-보안)
 - [성능 모니터링](#성능-모니터링)
 - [비동기 작업](#비동기-작업)
+- [프록시 모드](#프록시-모드)
+- [통합 데이터베이스 시스템](#통합-데이터베이스-시스템)
+- [common_system 통합](#common_system-통합)
+- [C++20 모듈](#c20-모듈)
 
 ---
 
@@ -288,6 +292,111 @@ class Tag : public entity_base {
 };
 ```
 
+### 스키마 관리
+
+**자동 스키마 생성**:
+```cpp
+#include <database/orm/schema_manager.h>
+
+auto& schema_mgr = schema_manager::instance();
+
+// CREATE TABLE 문 생성
+auto create_sql = schema_mgr.generate_schema<User>();
+
+// 모든 테이블 생성
+schema_mgr.create_tables(db, {
+    schema_mgr.generate_schema<User>(),
+    schema_mgr.generate_schema<Post>(),
+    schema_mgr.generate_schema<Tag>()
+});
+```
+
+**스키마 마이그레이션**:
+```cpp
+// 마이그레이션 정의
+migration migration_001("add_user_bio", [](database_manager& db) {
+    return db.execute_command("ALTER TABLE users ADD COLUMN bio TEXT");
+});
+
+// 마이그레이션 등록 및 실행
+schema_mgr.register_migration(migration_001);
+schema_mgr.run_migrations(db);
+
+// 마이그레이션 이력 추적
+auto applied_migrations = schema_mgr.get_applied_migrations(db);
+```
+
+### 고급 ORM 기능
+
+**즉시 로딩 (N+1 쿼리 방지)**:
+```cpp
+auto users_with_posts = User::query(db)
+    .with("posts")              // 게시물 즉시 로딩
+    .with("posts.comments")     // 게시물의 댓글 즉시 로딩
+    .execute();
+
+// 최적화된 쿼리로 모든 데이터 로드 (N+1 대신 3개 쿼리)
+for (const auto& user : users_with_posts) {
+    std::cout << user.username << " has " << user.posts().size() << " posts" << std::endl;
+}
+```
+
+**스코프 (재사용 가능한 쿼리 필터)**:
+```cpp
+class Post : public entity_base {
+    ENTITY_SCOPE(published, [](query_builder& q) {
+        return q.where("published_at IS NOT NULL")
+                .where("published_at <= ?", std::chrono::system_clock::now());
+    })
+
+    ENTITY_SCOPE(popular, [](query_builder& q, int min_views = 1000) {
+        return q.where("view_count >= ?", min_views);
+    })
+
+    ENTITY_METADATA()
+};
+
+// 스코프 사용
+auto popular_published = Post::query(db)
+    .published()
+    .popular(5000)
+    .order_by("view_count", sort_order::desc)
+    .execute();
+```
+
+**소프트 삭제**:
+```cpp
+class User : public entity_base {
+    ENTITY_FIELD(std::optional<std::chrono::system_clock::time_point>, deleted_at)
+    ENTITY_SOFT_DELETE("deleted_at")
+    ENTITY_METADATA()
+};
+
+user->remove(db);                              // deleted_at = NOW() 설정
+auto active = User::query(db).execute();       // 자동으로 WHERE deleted_at IS NULL 필터
+auto all = User::query(db).with_trashed().execute();  // 삭제된 항목 포함
+user->restore(db);                             // deleted_at = NULL 설정
+```
+
+**옵저버 (라이프사이클 훅)**:
+```cpp
+class User : public entity_base {
+    ENTITY_OBSERVER(before_create, [](User& user) {
+        user.created_at = std::chrono::system_clock::now();
+    })
+
+    ENTITY_OBSERVER(before_update, [](User& user) {
+        user.updated_at = std::chrono::system_clock::now();
+    })
+
+    ENTITY_OBSERVER(after_delete, [](const User& user) {
+        audit_log("User deleted: " + user.username);
+    })
+
+    ENTITY_METADATA()
+};
+```
+
 ---
 
 ## 연결 풀링
@@ -322,6 +431,45 @@ if (conn) {
 - **상태 검사**: 유휴 연결의 주기적 검증
 - **연결 폐기**: 수명이 다한 연결 자동 제거
 - **모니터링 통합**: 풀 메트릭 수집 및 내보내기
+
+### 우선순위 기반 획득
+
+```cpp
+// 중요 작업을 위한 높은 우선순위 연결
+auto critical_conn = pool->acquire_connection(connection_priority::high);
+
+// 일반 우선순위 (기본값)
+auto normal_conn = pool->acquire_connection(connection_priority::normal);
+
+// 백그라운드 작업을 위한 낮은 우선순위
+auto background_conn = pool->acquire_connection(connection_priority::low);
+```
+
+### 상태 모니터링
+
+```cpp
+// 풀 통계 조회
+auto stats = pool->get_statistics();
+std::cout << "활성 연결: " << stats.active_connections << std::endl;
+std::cout << "사용 가능: " << stats.available_connections << std::endl;
+std::cout << "평균 획득 시간: " << stats.avg_acquisition_time.count() << "ns" << std::endl;
+
+// 풀 상태 검사
+if (pool->is_healthy()) {
+    std::cout << "풀 상태 정상" << std::endl;
+}
+```
+
+### 정상 종료
+
+```cpp
+// 취소 토큰을 사용한 정상 종료
+auto shutdown_token = std::make_shared<cancellation_token>();
+pool->set_cancellation_token(shutdown_token);
+
+// 종료 시: 활성 연결 대기, 새 요청 거부
+pool->shutdown();
+```
 
 ---
 
@@ -389,6 +537,83 @@ auto delete_result = db.create_query_builder(database_types::postgres)
     .execute(&db);
 ```
 
+### 불변 쿼리 빌더
+
+스레드 안전한 함수형 프로그래밍 스타일의 쿼리 구성:
+
+```cpp
+#include <database/query/immutable_query_builder.h>
+
+// 불변 빌더 (각 메서드가 새 인스턴스를 반환)
+const auto base_query = immutable_query_builder()
+    .select({"id", "name", "email"})
+    .from("users");
+
+// 분기 1: 활성 사용자 (base_query는 변경되지 않음)
+const auto active_users = base_query
+    .where("is_active", "=", database_value{true})
+    .order_by("name");
+
+// 분기 2: 관리자 (base_query는 변경되지 않음)
+const auto admin_users = base_query
+    .where("role", "=", database_value{std::string("admin")})
+    .order_by("created_at", sort_order::desc);
+
+// 스레드 안전: 레이스 컨디션 없음
+std::thread t1([&]() { auto r1 = active_users.execute(&db); });
+std::thread t2([&]() { auto r2 = admin_users.execute(&db); });
+t1.join(); t2.join();
+```
+
+### NoSQL 쿼리 빌더
+
+**MongoDB 쿼리 빌더**:
+```cpp
+#include <database/query/nosql_builder.h>
+
+// 문서 검색
+auto result = db.create_query_builder(database_types::mongodb)
+    .collection("users")
+    .find({
+        {"age", {{"$gt", database_value{int64_t(18)}}}},
+        {"status", database_value{std::string("active")}}
+    })
+    .sort("created_at", -1)
+    .limit(100)
+    .execute(&db);
+
+// 집계 파이프라인
+auto agg_query = db.create_query_builder(database_types::mongodb)
+    .collection("orders")
+    .aggregate({
+        {"$match", {{"status", database_value{std::string("completed")}}}},
+        {"$group", {
+            {"_id", database_value{std::string("$customer_id")}},
+            {"total", {{"$sum", database_value{std::string("$amount")}}}}
+        }}
+    });
+```
+
+**Redis 쿼리 빌더**:
+```cpp
+// 해시 작업
+auto redis_hset = db.create_query_builder(database_types::redis)
+    .hset("user:1000", {
+        {"username", "john_doe"},
+        {"email", "john@example.com"}
+    })
+    .execute(&db);
+
+// 정렬된 셋 작업
+auto redis_zadd = db.create_query_builder(database_types::redis)
+    .zadd("leaderboard", {
+        {1000, "player1"},
+        {950, "player2"},
+        {1200, "player3"}
+    })
+    .execute(&db);
+```
+
 ---
 
 ## 탄력적 연결
@@ -441,36 +666,135 @@ auto result = execute_with_retry(policy, [&]() {
 
 ## 엔터프라이즈 보안
 
-### 감사 로깅
+**구현**: `security/secure_connection.h`
+
+보안 모듈은 `database_context`를 통한 의존성 주입으로 접근 가능한 6개의 전용 컴포넌트를 제공합니다.
+
+### 자격 증명 관리자
+
+암호화된 자격 증명 저장 및 마스터 키 관리:
 
 ```cpp
-audit_logger logger("/var/log/db_audit.log");
+auto context = std::make_shared<database_context>();
+auto cred_mgr = context->get_credential_manager();
 
-db.set_audit_logger(&logger);
-db.enable_audit_logging({
-    .log_queries = true,
-    .log_connections = true,
-    .log_schema_changes = true,
-    .exclude_tables = {"sessions", "tokens"}
-});
+// 암호화된 자격 증명 저장
+security::security_credentials creds;
+creds.username = "admin";
+creds.password_hash = cred_mgr->hash_password("secure_pass");
+creds.auth_method = security::authentication_method::password;
+cred_mgr->store_credentials("primary_db", creds);
+
+// 키 순환
+cred_mgr->rotate_encryption_keys();
 ```
 
-### 데이터 암호화
+**지원 인증 방법**: Password, Certificate, Kerberos, OAuth2, JWT
+
+### 연결 보안
+
+TLS/SSL 및 상호 인증을 통한 보안 연결:
 
 ```cpp
-// 필드 수준 암호화
-db.set_encryption_key(encryption_key);
-db.enable_field_encryption({
-    {"users", {"ssn", "credit_card", "email"}}
+security::connection_security conn_sec(creds);
+conn_sec.configure_tls("client.crt", "client.key", "ca.crt");
+conn_sec.set_cipher_suite("TLS_AES_256_GCM_SHA384");
+conn_sec.establish_secure_connection("db.example.com", 5432);
+```
+
+### 쿼리 보안
+
+SQL 인젝션 방지 및 쿼리 분석:
+
+```cpp
+bool safe = security::query_security::is_query_safe(user_input);
+std::string sanitized = security::query_security::sanitize_input(user_input);
+bool suspicious = security::query_security::detect_suspicious_patterns(query);
+```
+
+### 역할 기반 접근 제어 (RBAC)
+
+세분화된 권한 관리:
+
+```cpp
+auto access_ctrl = context->get_access_control();
+
+// 역할 생성 및 할당
+security::access_control::role admin_role;
+admin_role.name = "db_admin";
+admin_role.permissions = {
+    security::access_control::permission::select,
+    security::access_control::permission::insert,
+    security::access_control::permission::admin
+};
+access_ctrl->create_role(admin_role);
+access_ctrl->assign_role_to_user("user_123", "db_admin");
+
+// 권한 확인
+bool can_delete = access_ctrl->check_permission("user_123", "users", "DELETE");
+
+// 세션 관리
+auto session_id = access_ctrl->create_session("user_123", "192.168.1.100");
+access_ctrl->cleanup_expired_sessions();
+```
+
+### 감사 로깅
+
+보안 이벤트 로깅 및 보고:
+
+```cpp
+auto audit_log = context->get_audit_logger();
+
+audit_log->log_database_access("user_123", session_id, "SELECT", "users", query_hash, true);
+audit_log->log_authentication_event("user_123", "192.168.1.100", true, "password");
+
+// 보안 보고서 생성
+auto report = audit_log->generate_security_report(std::chrono::hours(720));
+auto suspicious = audit_log->detect_suspicious_activity(std::chrono::hours(24));
+
+// 로그 내보내기
+audit_log->export_logs_to_file("audit_2026_Q1.log");
+```
+
+### 보안 모니터
+
+실시간 위협 감지 및 알림:
+
+```cpp
+auto sec_monitor = context->get_security_monitor();
+
+// 알림 핸들러 등록
+sec_monitor->register_security_handler([](const auto& alert) {
+    if (alert.level == security::security_monitor::threat_level::critical) {
+        send_alert_notification(alert.description);
+    }
 });
 
-// TLS 연결
-connection_options opts {
-    .ssl_mode = ssl_mode::verify_full,
-    .ssl_ca_cert = "/path/to/ca.crt",
-    .ssl_client_cert = "/path/to/client.crt",
-    .ssl_client_key = "/path/to/client.key"
-};
+// 보안 메트릭
+auto failed_logins = sec_monitor->get_failed_login_count(std::chrono::hours(1));
+double security_score = sec_monitor->calculate_security_score();
+```
+
+### 암호화 관리자
+
+필드 수준 및 컬럼 수준 데이터 암호화:
+
+```cpp
+auto enc_mgr = context->get_encryption_manager();
+
+// 마스터 키 설정
+enc_mgr->set_master_encryption_key("master-encryption-key-256bit");
+
+// 컬럼 수준 암호화 구성
+enc_mgr->configure_encrypted_column("users", "ssn", security::encryption_type::aes256);
+enc_mgr->configure_encrypted_column("users", "credit_card", security::encryption_type::aes256);
+
+// 필드 데이터 암호화/복호화
+auto encrypted_ssn = enc_mgr->encrypt_field_data("123-45-6789", "ssn");
+auto decrypted_ssn = enc_mgr->decrypt_field_data(encrypted_ssn, "ssn");
+
+// 키 순환
+enc_mgr->rotate_field_key("ssn");
 ```
 
 ---
@@ -633,6 +957,149 @@ std::cout << "삽입됨: " << batch_result.inserted_count << " 행" << std::endl
 
 ---
 
+## 프록시 모드
+
+**상태**: ✅ 완전 지원 (Phase 4.1)
+**구현**: `proxy/proxy_config.h`, `proxy/proxy_connector.h`
+
+프록시 모드는 데이터베이스에 직접 연결하는 대신 database_server 미들웨어를 통해 연결할 수 있게 합니다. 중앙화된 연결 관리, 보안 적용 및 로드 밸런싱을 지원합니다.
+
+```cpp
+#include <database/proxy/proxy_config.h>
+
+database::proxy::proxy_connection_config config;
+config.server_host = "db-gateway.internal";
+config.server_port = 9432;
+config.auth_token = "client-token-xyz";
+config.connection_timeout = std::chrono::milliseconds{5000};
+config.query_timeout = std::chrono::milliseconds{30000};
+config.retry_count = 3;
+config.use_tls = true;
+
+// mTLS (상호 TLS) 지원
+config.client_cert_path = "/etc/ssl/client.crt";
+config.client_key_path = "/etc/ssl/client.key";
+
+// 프록시 모드 설정
+manager->set_connection_mode(connection_mode::proxy);
+manager->configure_proxy(config);
+```
+
+---
+
+## 통합 데이터베이스 시스템
+
+**상태**: ✅ 완전 지원 (Phase 6)
+**구현**: `integrated/unified_database_system.h`
+
+모든 어댑터(로거, 모니터링, 스레드)를 통합한 제로 구성 진입점:
+
+```cpp
+using namespace database::integrated;
+
+// 1. 제로 구성 사용 (가장 간단)
+unified_database_system db;
+auto result = db.connect("postgresql://localhost/mydb");
+
+// 2. 빌더 패턴 구성
+auto db = unified_database_system::builder()
+    .set_backend(backend_type::postgresql)
+    .set_connection_string("host=localhost dbname=mydb")
+    .set_pool_size(10, 50)
+    .enable_logging(db_log_level::debug, "./logs")
+    .enable_monitoring(true)
+    .enable_async(4)  // 4 워커 스레드
+    .build();
+
+// 3. 비동기 쿼리 실행
+auto future = db->execute_async("SELECT * FROM large_table");
+auto result = future.get();
+
+// 4. 트랜잭션 관리
+auto tx = db->begin_transaction();
+tx->execute("INSERT INTO users (name) VALUES ($1)", "Alice");
+tx->commit();
+```
+
+---
+
+## common_system 통합
+
+**상태**: ✅ 완전 지원
+**구현**: `include/kcenon/database/adapters/`, `include/kcenon/database/di/`
+
+common_system과 함께 빌드 시 (`KCENON_HAS_COMMON_SYSTEM` 플래그), 어댑터 및 DI 통합을 제공합니다.
+
+### IDatabase 어댑터
+
+common_system의 `IDatabase` 인터페이스와 database_system의 `database_manager`를 연결:
+
+```cpp
+#include <kcenon/database/adapters/common_system_database_adapter.h>
+
+auto adapter = std::make_shared<common_system_database_adapter>(
+    ::database::database_types::postgresql);
+
+// common_system IDatabase 인터페이스를 통해 사용
+auto connect_result = adapter->connect("host=localhost dbname=mydb");
+auto query_result = adapter->execute_query("SELECT * FROM users");
+adapter->begin_transaction();
+adapter->execute_command("UPDATE accounts SET balance = balance - 100");
+adapter->commit();
+```
+
+### 서비스 컨테이너 등록
+
+common_system의 의존성 주입 컨테이너에 데이터베이스 서비스 등록:
+
+```cpp
+#include <kcenon/database/di/service_registration.h>
+
+auto& container = common::di::service_container::global();
+
+// 사용자 정의 구성으로 등록
+database_registration_config config;
+config.db_type = ::database::database_types::sqlite;
+config.connection_string = "database.db";
+config.connect_on_register = true;
+auto result = register_database_services(container, config);
+
+// 어플리케이션 어디서든 데이터베이스 해석
+auto db = container.resolve<common::interfaces::IDatabase>().value();
+```
+
+---
+
+## C++20 모듈
+
+**상태**: ✅ 완전 지원
+**구현**: `src/modules/database.cppm`
+
+C++20 모듈을 통한 빠른 컴파일 및 향상된 캡슐화:
+
+| 모듈 | 파티션 | 내용 |
+|------|--------|------|
+| `kcenon.database` | (주 모듈) | 모든 파티션 집계 |
+| `kcenon.database:core` | Core | 타입, 컨텍스트, 매니저, 백엔드 레지스트리 |
+| `kcenon.database:query` | Query | 쿼리 빌더, 조건, 방언 (SQL, MongoDB, Redis) |
+| `kcenon.database:backends` | Backends | PostgreSQL, MySQL, SQLite, MongoDB, Redis |
+
+```cpp
+import kcenon.database;
+using namespace database;
+
+auto context = std::make_shared<database_context>();
+auto manager = std::make_shared<database_manager>(context);
+manager->set_mode(database_types::postgres);
+
+auto result = manager->connect_result("host=localhost dbname=test");
+if (result.is_ok()) {
+    auto query_result = manager->select_query_result("SELECT * FROM users");
+}
+```
+
+---
+
 ## 성능 특성
 
 ### 벤치마크 결과
@@ -655,8 +1122,8 @@ std::cout << "삽입됨: " << batch_result.inserted_count << " 행" << std::endl
 
 ---
 
-**최종 업데이트**: 2025-12-09
-**버전**: 3.1
+**최종 업데이트**: 2026-02-08
+**버전**: 0.4.0.0
 
 ---
 

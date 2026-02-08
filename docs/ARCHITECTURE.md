@@ -70,10 +70,12 @@ The Database System is designed as a modular, enterprise-grade database abstract
 ├─────────────────────────────────────────────────────────────┤
 │                  Connection Pooling                        │
 ├─────────────────────────────────────────────────────────────┤
-│                  Database Manager                          │
-├─────────────────────────────────────────────────────────────┤
-│   PostgreSQL │   MySQL   │  SQLite  │ MongoDB │   Redis   │
-└─────────────────────────────────────────────────────────────┘
+│               Database Manager (direct/proxy)              │
+├───────────────────────────────┬─────────────────────────────┤
+│     Direct Mode Backends      │       Proxy Layer           │
+│  PostgreSQL │ MySQL │ SQLite  │  proxy_connector ──►        │
+│  MongoDB    │ Redis │         │    database_server          │
+└───────────────────────────────┴─────────────────────────────┘
 ```
 
 ## Core Components
@@ -105,6 +107,7 @@ public:
 - `sqlite_manager`: SQLite backend using sqlite3
 - `mongodb_manager`: MongoDB backend using mongocxx
 - `redis_manager`: Redis backend using hiredis
+- `proxy_connector`: Proxy backend that routes queries through `database_server` middleware (see [Proxy Layer](guides/PROXY_LAYER.md))
 
 ### 2. Connection Management
 
@@ -125,6 +128,12 @@ public:
 - **Singleton Pattern**: Global access point
 - **Factory Pattern**: Creates appropriate database backends
 - **Command Pattern**: Encapsulates database operations
+
+**Connection Modes:**
+- `connection_mode::direct` — Connects directly to database backends (default)
+- `connection_mode::proxy` — Routes queries through `database_server` middleware via `proxy_connector`
+
+The `set_mode_proxy()` method switches to proxy mode, while `set_mode()` reverts to direct mode.
 
 #### Connection Pooling
 Enterprise-grade connection pooling with adaptive sizing and monitoring.

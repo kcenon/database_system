@@ -636,76 +636,140 @@ This eliminates conditional compilation (`#ifdef`) and allows backend selection 
 
 ### Builder Pattern Setup
 
+The `unified_database_system` supports two construction approaches:
+
+**1. Zero-config (default constructor):**
+
 ```cpp
 #include "database/integrated/unified_database_system.h"
 
 using namespace database::integrated;
 
+// Zero-config with defaults (pool 2-10, info logging, monitoring enabled, 4 threads)
 unified_database_system db;
-db.set_backend(backend_type::postgres);
-db.set_connection_string("host=localhost dbname=mydb");
-db.set_pool_size(5, 20);
-db.enable_logging(db_log_level::info);
-db.enable_monitoring(true);
-db.enable_async(4);  // 4 worker threads
-db.set_slow_query_threshold(std::chrono::milliseconds(500));
-
-bool connected = db.connect();
+auto result = db.connect(backend_type::postgres, "host=localhost dbname=mydb");
 ```
+
+**2. Builder pattern (custom configuration):**
+
+```cpp
+auto db = unified_database_system::create_builder()
+    .set_backend(backend_type::postgres)
+    .set_connection_string("host=localhost dbname=mydb")
+    .set_pool_size(5, 20)
+    .enable_logging(db_log_level::info)
+    .enable_monitoring(true)
+    .enable_async(4)  // 4 worker threads
+    .set_slow_query_threshold(std::chrono::milliseconds(500))
+    .build();  // returns std::unique_ptr<unified_database_system>
+
+auto result = db->connect("host=localhost dbname=mydb");
+```
+
+**3. Direct config construction:**
+
+```cpp
+auto config = unified_db_config{}
+    .set_backend(backend_type::postgres, "host=localhost dbname=mydb")
+    .set_pool_size(5, 20)
+    .set_log_level(db_log_level::info)
+    .enable_monitoring(true)
+    .set_thread_count(4);
+
+unified_database_system db(config);
+auto result = db.connect("host=localhost dbname=mydb");
+```
+
+**Builder methods** (on `unified_database_system::builder`):
+
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| `set_backend()` | `backend_type` | Set database backend type |
+| `set_connection_string()` | `string` | Set connection string |
+| `set_pool_size()` | `min, max` | Configure connection pool size |
+| `enable_logging()` | `db_log_level, log_dir` | Enable logging with level and directory |
+| `enable_monitoring()` | `bool` | Enable metrics collection |
+| `enable_async()` | `worker_threads` | Enable async with thread count |
+| `set_slow_query_threshold()` | `milliseconds` | Set slow query detection threshold |
+| `build()` | — | Build and return `unique_ptr<unified_database_system>` |
 
 ### Synchronous Operations
 
+All synchronous methods return `Result<T>` for proper error handling:
+
 ```cpp
-// Execute (INSERT, UPDATE, DELETE)
-bool ok = db.execute("INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com')");
+// Execute (general query) — returns Result<query_result>
+auto result = db.execute("INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com')");
+if (result.is_ok()) {
+    // result.value() is query_result
+}
 
-// Select
-auto result = db.select("SELECT * FROM users WHERE active = true");
-// result is query_result with rows and column info
+// Select — returns Result<query_result>
+auto rows = db.select("SELECT * FROM users WHERE active = true");
+if (rows.is_ok()) {
+    // rows.value() contains column info and row data
+}
 
-// Insert (returns bool)
-bool inserted = db.insert("INSERT INTO logs (msg) VALUES ('started')");
+// Insert — returns Result<size_t> (affected rows count)
+auto inserted = db.insert("INSERT INTO logs (msg) VALUES ('started')");
+if (inserted.is_ok()) {
+    std::cout << "Inserted " << inserted.value() << " rows\n";
+}
 
-// Update
-bool updated = db.update("UPDATE users SET active = false WHERE id = 5");
+// Update — returns Result<size_t>
+auto updated = db.update("UPDATE users SET active = false WHERE id = 5");
 
-// Remove
-bool removed = db.remove("DELETE FROM sessions WHERE expired = true");
+// Remove — returns Result<size_t>
+auto removed = db.remove("DELETE FROM sessions WHERE expired = true");
+
+// Parameterized queries
+auto result = db.execute("SELECT * FROM users WHERE id = $1", {query_param{42}});
 ```
 
 ### Asynchronous Operations
 
+Async methods return `std::future<Result<query_result>>`:
+
 ```cpp
-// Async execute
+// Async execute — returns future<Result<query_result>>
 auto future = db.execute_async("INSERT INTO events (type) VALUES ('login')");
 // ... do other work ...
-bool ok = future.get();
+auto result = future.get();
+if (result.is_ok()) {
+    // Success
+}
 
-// Async with priority
+// Async with priority (0=lowest, 100=highest)
 auto high_priority = db.execute_async_priority(
     "SELECT * FROM critical_alerts", /*priority=*/1);
+auto critical_result = high_priority.get();
 ```
 
 ### Transactions
 
 ```cpp
-// Manual transaction
-auto tx = db.begin_transaction();
-tx->execute("INSERT INTO orders (user_id, total) VALUES (1, 99.99)");
-tx->execute("UPDATE inventory SET quantity = quantity - 1 WHERE item_id = 42");
-tx->commit();
-// If tx goes out of scope without commit(), auto-rollback in destructor
+// Manual transaction — begin_transaction() returns Result<unique_ptr<transaction>>
+auto tx_result = db.begin_transaction();
+if (tx_result.is_ok()) {
+    auto tx = std::move(tx_result.value());
+    tx->execute("INSERT INTO orders (user_id, total) VALUES (1, 99.99)");
+    tx->execute("UPDATE inventory SET quantity = quantity - 1 WHERE item_id = 42");
+    tx->commit();
+    // If tx goes out of scope without commit(), auto-rollback in destructor
+}
 
-// Lambda-based transaction
-bool ok = db.execute_transaction([](auto& tx) {
-    tx.execute("INSERT INTO orders (user_id, total) VALUES (1, 99.99)");
-    tx.execute("UPDATE inventory SET quantity = quantity - 1 WHERE item_id = 42");
-    // Return false to rollback, true to commit
-    return true;
+// Batch transaction (list of queries)
+auto result = db.execute_transaction({
+    "INSERT INTO orders (user_id, total) VALUES (1, 99.99)",
+    "UPDATE inventory SET quantity = quantity - 1 WHERE item_id = 42"
 });
 
-// Check transaction state
-bool in_tx = db.in_transaction();
+// Lambda-based transaction
+auto result = db.in_transaction([](transaction& tx) {
+    tx.execute("INSERT INTO orders (user_id, total) VALUES (1, 99.99)");
+    tx.execute("UPDATE inventory SET quantity = quantity - 1 WHERE item_id = 42");
+    return true;  // return value forwarded via Result
+});
 ```
 
 ### Metrics and Health
@@ -733,13 +797,13 @@ The protocol layer defines a binary message format for client-server communicati
 
 ### Message Format
 
-Every protocol message starts with a fixed 12-byte header:
+Every protocol message starts with a fixed 20-byte header:
 
-```
-┌───────────┬───────────┬───────────┬───────────────────┐
-│  Magic    │  Version  │  Type     │  Payload Length    │
-│  (4 bytes)│  (2 bytes)│  (2 bytes)│  (4 bytes)        │
-└───────────┴───────────┴───────────┴───────────────────┘
+```text
+┌───────────┬───────────┬───────────┬──────────────────┬───────────────────┐
+│  Magic    │  Version  │  Type     │  Request ID      │  Payload Size     │
+│  (4 bytes)│  (2 bytes)│  (2 bytes)│  (8 bytes)       │  (4 bytes)        │
+└───────────┴───────────┴───────────┴──────────────────┴───────────────────┘
 ```
 
 | Field | Size | Value | Description |
@@ -747,7 +811,8 @@ Every protocol message starts with a fixed 12-byte header:
 | Magic | 4 bytes | `0xDB01DB01` | Protocol identifier |
 | Version | 2 bytes | `1` | Protocol version |
 | Type | 2 bytes | `message_type` enum | Message type identifier |
-| Payload Length | 4 bytes | variable | Payload size in bytes |
+| Request ID | 8 bytes | variable | Unique request identifier for correlation |
+| Payload Size | 4 bytes | variable | Payload size in bytes |
 
 All multi-byte values use **little-endian** byte order.
 
@@ -757,18 +822,18 @@ All multi-byte values use **little-endian** byte order.
 |----------|------|-------|-------------|
 | Connection | `CONNECT_REQUEST` | 1 | Client connection request |
 | | `CONNECT_RESPONSE` | 2 | Server connection response |
-| | `DISCONNECT_REQUEST` | 3 | Client disconnect request |
-| | `DISCONNECT_RESPONSE` | 4 | Server disconnect response |
-| | `PING` | 5 | Keep-alive ping |
+| | `DISCONNECT` | 3 | Disconnect request |
+| | `PING` | 4 | Keep-alive ping |
+| | `PONG` | 5 | Keep-alive pong response |
 | Query | `QUERY_REQUEST` | 10 | SQL query request |
 | | `QUERY_RESPONSE` | 11 | Query result response |
-| Transaction | `TRANSACTION_BEGIN` | 20 | Begin transaction |
-| | `TRANSACTION_COMMIT` | 21 | Commit transaction |
-| | `TRANSACTION_ROLLBACK` | 22 | Rollback transaction |
+| Transaction | `BEGIN_TRANSACTION` | 20 | Begin transaction |
+| | `COMMIT_TRANSACTION` | 21 | Commit transaction |
+| | `ROLLBACK_TRANSACTION` | 22 | Rollback transaction |
 | | `TRANSACTION_RESPONSE` | 23 | Transaction result response |
-| Prepared | `PREPARE_REQUEST` | 30 | Prepare statement request |
-| | `PREPARE_RESPONSE` | 31 | Prepare statement response |
-| | `EXECUTE_PREPARED` | 32 | Execute prepared statement |
+| Prepared | `PREPARE_STATEMENT` | 30 | Prepare statement |
+| | `EXECUTE_PREPARED` | 31 | Execute prepared statement |
+| | `CLOSE_PREPARED` | 32 | Close prepared statement |
 | Error | `ERROR_RESPONSE` | 100 | Error response |
 
 ### Protocol Serializer
@@ -836,11 +901,13 @@ std::string json = container_protocol_serializer::serialize_to_json(request);
 using namespace database::integrated;
 
 int main() {
-    // Zero-config: defaults to postgres on localhost:5432
+    // Zero-config: defaults (pool 2-10, info logging, monitoring, 4 threads)
     unified_database_system db;
 
-    if (!db.connect()) {
-        std::cerr << "Connection failed\n";
+    auto conn = db.connect(backend_type::postgres,
+                           "host=localhost dbname=mydb");
+    if (!conn.is_ok()) {
+        std::cerr << "Connection failed: " << conn.error().message << "\n";
         return 1;
     }
 
@@ -854,6 +921,9 @@ int main() {
               "VALUES ('Alice', 'alice@example.com')");
 
     auto result = db.select("SELECT * FROM users");
+    if (result.is_ok()) {
+        // result.value() is query_result
+    }
 
     return 0;
 }
@@ -942,18 +1012,21 @@ int main() {
 using namespace database::integrated;
 
 int main() {
-    unified_database_system db;
-    db.set_backend(backend_type::postgres);
-    db.set_connection_string("host=localhost dbname=mydb");
-    db.enable_monitoring(true);
-    db.enable_async(4);
-    db.connect();
+    auto db = unified_database_system::create_builder()
+        .set_backend(backend_type::postgres)
+        .set_connection_string("host=localhost dbname=mydb")
+        .enable_monitoring(true)
+        .enable_async(4)
+        .build();
 
-    // Fire multiple async queries
-    std::vector<std::future<bool>> futures;
+    auto conn = db->connect("host=localhost dbname=mydb");
+    if (!conn.is_ok()) return 1;
+
+    // Fire multiple async queries — returns future<Result<query_result>>
+    std::vector<std::future<kcenon::common::Result<query_result>>> futures;
     for (int i = 0; i < 100; ++i) {
         futures.push_back(
-            db.execute_async(
+            db->execute_async(
                 "INSERT INTO events (type, data) VALUES ('batch', '"
                 + std::to_string(i) + "')"));
     }
@@ -961,16 +1034,17 @@ int main() {
     // Wait for all to complete
     int succeeded = 0;
     for (auto& f : futures) {
-        if (f.get()) ++succeeded;
+        auto result = f.get();
+        if (result.is_ok()) ++succeeded;
     }
 
     std::cout << succeeded << "/100 inserts succeeded\n";
 
     // Check metrics after batch
-    auto metrics = db.get_metrics();
+    auto metrics = db->get_metrics();
     // metrics contains total queries, avg latency, success rate, etc.
 
-    auto health = db.check_health();
+    auto health = db->check_health();
 
     return 0;
 }

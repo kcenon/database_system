@@ -1,7 +1,7 @@
 # Database System Features
 
-**Last Updated**: 2025-12-09
-**Version**: 0.3.0.0
+**Last Updated**: 2026-02-08
+**Version**: 0.4.0.0
 
 This document provides comprehensive details on all database_system features, backend implementations, and capabilities.
 
@@ -17,6 +17,10 @@ This document provides comprehensive details on all database_system features, ba
 - [Enterprise Security](#enterprise-security)
 - [Performance Monitoring](#performance-monitoring)
 - [Asynchronous Operations](#asynchronous-operations)
+- [Proxy Mode](#proxy-mode)
+- [Unified Database System](#unified-database-system)
+- [common_system Integration](#common_system-integration)
+- [C++20 Modules](#c20-modules)
 
 ---
 
@@ -1099,7 +1103,194 @@ switch (circuit_state) {
 ## Enterprise Security
 
 **Status**: ✅ Full Support
-**Implementation**: `security/`, see [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md) for details
+**Implementation**: `security/secure_connection.h`
+
+The security module provides six dedicated components accessible via dependency injection through `database_context`.
+
+### Credential Manager
+
+Encrypted credential storage with master key management:
+
+```cpp
+#include <database/security/secure_connection.h>
+
+auto context = std::make_shared<database_context>();
+auto cred_mgr = context->get_credential_manager();
+
+// Store encrypted credentials
+security::security_credentials creds;
+creds.username = "admin";
+creds.password_hash = cred_mgr->hash_password("secure_pass");
+creds.auth_method = security::authentication_method::password;
+creds.encryption = security::encryption_type::tls;
+cred_mgr->store_credentials("primary_db", creds);
+
+// Retrieve credentials
+auto stored = cred_mgr->get_credentials("primary_db");
+
+// Key rotation
+cred_mgr->set_master_key("new-master-key");
+cred_mgr->rotate_encryption_keys();
+```
+
+**Supported Authentication Methods**:
+- Password-based authentication
+- Certificate-based authentication
+- Kerberos
+- OAuth2 (with client_id, client_secret, token management)
+- JWT (with token expiry tracking)
+
+### Connection Security
+
+Secure database connections with TLS/SSL and mutual authentication:
+
+```cpp
+security::security_credentials creds;
+creds.encryption = security::encryption_type::tls;
+creds.verify_certificate = true;
+creds.mutual_authentication = true;
+
+security::connection_security conn_sec(creds);
+
+// Configure TLS
+conn_sec.configure_tls("client.crt", "client.key", "ca.crt");
+conn_sec.set_cipher_suite("TLS_AES_256_GCM_SHA384");
+
+// Establish secure connection
+conn_sec.establish_secure_connection("db.example.com", 5432);
+
+// Connection string encryption for secure storage
+auto encrypted = conn_sec.encrypt_connection_string("host=localhost password=secret");
+auto decrypted = conn_sec.decrypt_connection_string(encrypted);
+```
+
+### Query Security
+
+SQL injection prevention and query analysis:
+
+```cpp
+// SQL injection detection
+bool safe = security::query_security::is_query_safe(user_input);
+std::string sanitized = security::query_security::sanitize_input(user_input);
+std::string escaped = security::query_security::escape_sql_string(user_value);
+
+// Suspicious pattern detection
+bool suspicious = security::query_security::detect_suspicious_patterns(query);
+
+// Table access validation
+auto tables = security::query_security::extract_table_names(query);
+bool allowed = security::query_security::validate_table_access("users", "SELECT", "admin");
+
+// Convert to prepared statement
+auto prepared = security::query_security::convert_to_prepared_statement(
+    query, {database_value{std::string("param1")}, database_value{int64_t(42)}});
+```
+
+### Role-Based Access Control (RBAC)
+
+Fine-grained permission management:
+
+```cpp
+auto access_ctrl = context->get_access_control();
+
+// Create roles with permissions
+security::access_control::role admin_role;
+admin_role.name = "db_admin";
+admin_role.permissions = {
+    security::access_control::permission::select,
+    security::access_control::permission::insert,
+    security::access_control::permission::update,
+    security::access_control::permission::admin
+};
+admin_role.allowed_tables = {"*"};
+access_ctrl->create_role(admin_role);
+
+// Assign roles and check permissions
+access_ctrl->assign_role_to_user("user_123", "db_admin");
+bool can_delete = access_ctrl->check_permission("user_123", "users", "DELETE");
+
+// Session management
+auto session_id = access_ctrl->create_session("user_123", "192.168.1.100");
+bool valid = access_ctrl->validate_session(session_id);
+access_ctrl->cleanup_expired_sessions();
+```
+
+### Security Audit Logger
+
+Comprehensive security event logging and reporting:
+
+```cpp
+auto audit_log = context->get_audit_logger();
+
+// Log database access events
+audit_log->log_database_access("user_123", session_id, "SELECT", "users", query_hash, true);
+audit_log->log_authentication_event("user_123", "192.168.1.100", true, "password");
+audit_log->log_authorization_failure("user_456", "DROP", "users", "Insufficient privileges");
+
+// Retrieve audit logs
+auto recent_logs = audit_log->get_audit_logs(std::chrono::hours(24));
+auto user_logs = audit_log->get_user_audit_logs("user_123", std::chrono::hours(168));
+
+// Security reporting
+auto report = audit_log->generate_security_report(std::chrono::hours(720));
+auto suspicious = audit_log->detect_suspicious_activity(std::chrono::hours(24));
+
+// Log management
+audit_log->set_log_retention_period(std::chrono::hours(24 * 90));  // 90 days
+audit_log->export_logs_to_file("audit_2026_Q1.log");
+```
+
+### Security Monitor
+
+Real-time threat detection and alerting:
+
+```cpp
+auto sec_monitor = context->get_security_monitor();
+
+// Register alert handler
+sec_monitor->register_security_handler([](const security::security_monitor::security_alert& alert) {
+    if (alert.level == security::security_monitor::threat_level::critical) {
+        send_alert_notification(alert.description);
+    }
+});
+
+// Active monitoring (called automatically by the system)
+sec_monitor->analyze_query_patterns("user_123", query);
+sec_monitor->detect_brute_force_attempts("192.168.1.100");
+sec_monitor->monitor_privilege_escalation("user_456", "ALTER TABLE");
+
+// Security metrics
+auto failed_logins = sec_monitor->get_failed_login_count(std::chrono::hours(1));
+auto suspicious_queries = sec_monitor->get_suspicious_query_count(std::chrono::hours(24));
+double security_score = sec_monitor->calculate_security_score();
+```
+
+### Encryption Manager
+
+Field-level and column-level data encryption:
+
+```cpp
+auto enc_mgr = context->get_encryption_manager();
+
+// Master key management
+enc_mgr->set_master_encryption_key("master-encryption-key-256bit");
+
+// Column-level encryption configuration
+enc_mgr->configure_encrypted_column("users", "ssn", security::encryption_type::aes256);
+enc_mgr->configure_encrypted_column("users", "credit_card", security::encryption_type::aes256);
+
+// Field data encryption/decryption
+auto encrypted_ssn = enc_mgr->encrypt_field_data("123-45-6789", "ssn");
+auto decrypted_ssn = enc_mgr->decrypt_field_data(encrypted_ssn, "ssn");
+
+// Key rotation
+enc_mgr->rotate_field_key("ssn");
+
+// Check encryption status
+bool is_encrypted = enc_mgr->is_column_encrypted("users", "ssn");
+```
+
+For production deployment details, see [PRODUCTION_QUALITY.md](PRODUCTION_QUALITY.md).
 
 ---
 
@@ -1234,6 +1425,241 @@ auto result = future_result.get();
 
 ---
 
+## Proxy Mode
+
+**Status**: ✅ Full Support (Phase 4.1)
+**Implementation**: `proxy/proxy_config.h`, `proxy/proxy_connector.h`
+
+Proxy mode allows database_system clients to connect through a database_server middleware instead of directly to the database. This enables centralized connection management, security enforcement, and load balancing.
+
+### Configuration
+
+```cpp
+#include <database/proxy/proxy_config.h>
+
+database::proxy::proxy_connection_config config;
+config.server_host = "db-gateway.internal";
+config.server_port = 9432;
+config.auth_token = "client-token-xyz";
+config.connection_timeout = std::chrono::milliseconds{5000};
+config.query_timeout = std::chrono::milliseconds{30000};
+config.retry_count = 3;
+config.retry_delay = std::chrono::milliseconds{1000};
+config.use_tls = true;
+config.ca_cert_path = "/etc/ssl/certs/ca.pem";
+
+// Optional: mutual TLS (mTLS)
+config.client_cert_path = "/etc/ssl/client.crt";
+config.client_key_path = "/etc/ssl/client.key";
+
+// Validate configuration
+if (config.is_valid()) {
+    // Use proxy connection
+}
+```
+
+### Connection Modes
+
+The system supports two connection modes:
+- **Direct mode** (default): Direct connection to the database server
+- **Proxy mode**: Connection through database_server middleware
+
+```cpp
+// Set connection mode to proxy
+manager->set_connection_mode(connection_mode::proxy);
+manager->configure_proxy(config);
+```
+
+---
+
+## Unified Database System
+
+**Status**: ✅ Full Support (Phase 6)
+**Implementation**: `integrated/unified_database_system.h`, `integrated/core/database_coordinator.h`
+
+The unified database system provides a zero-configuration entry point that integrates all adapters (logger, monitoring, thread) behind the scenes.
+
+### Zero-Configuration Usage
+
+```cpp
+#include <database/integrated/unified_database_system.h>
+
+using namespace database::integrated;
+
+// Simplest usage - smart defaults
+unified_database_system db;
+auto result = db.connect("postgresql://localhost/mydb");
+if (result.is_ok()) {
+    auto rows = db.execute("SELECT * FROM users WHERE id = $1", 42);
+}
+```
+
+### Builder Pattern Configuration
+
+```cpp
+auto db = unified_database_system::builder()
+    .set_backend(backend_type::postgresql)
+    .set_connection_string("host=localhost dbname=mydb")
+    .set_pool_size(10, 50)
+    .enable_logging(db_log_level::debug, "./logs")
+    .enable_monitoring(true)
+    .enable_async(4)  // 4 worker threads
+    .build();
+
+// Async query execution
+auto future = db->execute_async("SELECT * FROM large_table");
+// Do other work...
+auto result = future.get();
+
+// Transaction management
+auto tx = db->begin_transaction();
+tx->execute("INSERT INTO users (name) VALUES ($1)", "Alice");
+tx->execute("UPDATE accounts SET balance = balance - 100");
+tx->commit();
+```
+
+### Integrated Adapters
+
+The coordinator integrates the following adapter backends:
+- **Logger adapter**: Structured logging with configurable backends (system logger, null logger, fallback)
+- **Monitoring adapter**: Performance metrics collection with optional monitoring_system integration
+- **Thread adapter**: Async operation support with optional thread_system integration
+
+---
+
+## common_system Integration
+
+**Status**: ✅ Full Support
+**Implementation**: `include/kcenon/database/adapters/common_system_database_adapter.h`, `include/kcenon/database/di/service_registration.h`
+
+When built with common_system (via `KCENON_HAS_COMMON_SYSTEM` feature flag), database_system provides adapter and DI integration.
+
+### IDatabase Adapter
+
+Bridges common_system's `IDatabase` interface with database_system's `database_manager`:
+
+```cpp
+#include <kcenon/database/adapters/common_system_database_adapter.h>
+
+using namespace kcenon::database::adapters;
+
+// Create adapter with specific database type
+auto adapter = std::make_shared<common_system_database_adapter>(
+    ::database::database_types::postgresql);
+
+// Use through common_system IDatabase interface
+auto connect_result = adapter->connect("host=localhost dbname=mydb");
+auto query_result = adapter->execute_query("SELECT * FROM users");
+auto cmd_result = adapter->execute_command("INSERT INTO logs VALUES (...)");
+
+// Transaction support
+adapter->begin_transaction();
+adapter->execute_command("UPDATE accounts SET balance = balance - 100");
+adapter->commit();
+
+// Access underlying database_manager for advanced features
+auto manager = adapter->get_manager();
+```
+
+### Service Container Registration
+
+Register database services with common_system's dependency injection container:
+
+```cpp
+#include <kcenon/database/di/service_registration.h>
+
+using namespace kcenon::database::di;
+
+auto& container = common::di::service_container::global();
+
+// Register with default configuration (PostgreSQL, singleton)
+auto result = register_database_services(container);
+
+// Or with custom configuration
+database_registration_config config;
+config.db_type = ::database::database_types::sqlite;
+config.connection_string = "database.db";
+config.connect_on_register = true;
+config.lifetime = common::di::service_lifetime::singleton;
+auto result = register_database_services(container, config);
+
+// Resolve database anywhere in the application
+auto db = container.resolve<common::interfaces::IDatabase>().value();
+db->connect("host=localhost dbname=mydb");
+auto query_result = db->execute_query("SELECT * FROM users");
+```
+
+### Feature Flags
+
+Build configuration is controlled via unified feature flags:
+
+```cpp
+#include <kcenon/database/config/feature_flags.h>
+
+#if KCENON_HAS_COMMON_SYSTEM
+    // Use common_system Result<T>, IDatabase, DI container
+#else
+    // Use local fallbacks
+#endif
+```
+
+---
+
+## C++20 Modules
+
+**Status**: ✅ Full Support
+**Implementation**: `src/modules/database.cppm`
+
+The database_system can be consumed as a C++20 module for faster compilation and better encapsulation.
+
+### Module Structure
+
+| Module | Partition | Contents |
+|--------|-----------|----------|
+| `kcenon.database` | (primary) | Aggregates all partitions |
+| `kcenon.database:core` | Core | Types, context, manager, backend registry, proxy config |
+| `kcenon.database:query` | Query | Query builder, conditions, dialects (SQL, MongoDB, Redis) |
+| `kcenon.database:backends` | Backends | PostgreSQL, MySQL, SQLite, MongoDB, Redis backends |
+
+### Usage
+
+```cpp
+import kcenon.database;
+
+using namespace database;
+
+// Create database context and manager
+auto context = std::make_shared<database_context>();
+auto manager = std::make_shared<database_manager>(context);
+
+// Configure and connect
+manager->set_mode(database_types::postgres);
+auto result = manager->connect_result("host=localhost dbname=test");
+if (result.is_ok()) {
+    auto query_result = manager->select_query_result("SELECT * FROM users");
+}
+
+// Use query builder
+auto builder = manager->create_query_builder();
+auto query = builder
+    .select({"id", "name"})
+    .from("users")
+    .where("active", "=", true)
+    .limit(10)
+    .build();
+```
+
+### Dependencies
+
+```
+kcenon.database
+  ├── kcenon.common (Tier 0) - Result<T>, error handling
+  ├── kcenon.thread (Tier 1) - Thread pool for async operations (optional)
+  └── kcenon.container (Tier 1) - Serialization (optional)
+```
+
+---
+
 ## Technology Stack
 
 ### Dependencies
@@ -1266,5 +1692,5 @@ See [Project Structure](PROJECT_STRUCTURE.md) for build configuration.
 
 ---
 
-**Last Updated**: 2025-12-09
+**Last Updated**: 2026-02-08
 **Maintained by**: kcenon@naver.com

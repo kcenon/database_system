@@ -17,6 +17,7 @@ Complete API reference for the Database System C++20 library with multi-backend 
 - [Database Types](#database-types)
 - [C++20 Concepts](#c20-concepts)
 - [Error Handling](#error-handling)
+- [Proxy Mode](#proxy-mode)
 - [Examples](#examples)
 
 ## Core Classes
@@ -1041,6 +1042,87 @@ database_awaitable<bool> async_operation() {
     auto result = co_await async_db.execute_coro("SELECT * FROM users");
     co_return result;
 }
+```
+
+---
+
+## Proxy Mode
+
+**Status**: Development Preview (Stub Implementation)
+**Headers**: `database/proxy/proxy_config.h`, `database/proxy/proxy_connector.h`
+**Namespace**: `database::proxy`
+
+> Full documentation: [Proxy Layer Guide](guides/PROXY_LAYER.md)
+
+### proxy_connection_config
+
+Configuration structure for connecting to `database_server` middleware.
+
+```cpp
+#include <database/proxy/proxy_config.h>
+
+database::proxy::proxy_connection_config config;
+config.server_host = "db-gateway.internal";
+config.server_port = 9432;
+config.auth_token = "client-token";
+config.connection_timeout = std::chrono::milliseconds{5000};
+config.query_timeout = std::chrono::milliseconds{30000};
+config.use_tls = true;
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `server_host` | `std::string` | `"localhost"` | database_server hostname |
+| `server_port` | `uint16_t` | `9432` | database_server port |
+| `auth_token` | `std::string` | `""` | Authentication token |
+| `connection_timeout` | `milliseconds` | `5000` | Connection timeout |
+| `query_timeout` | `milliseconds` | `30000` | Query execution timeout |
+| `retry_count` | `uint8_t` | `3` | Retry attempts |
+| `retry_delay` | `milliseconds` | `1000` | Delay between retries |
+| `use_tls` | `bool` | `true` | Enable TLS encryption |
+| `ca_cert_path` | `std::string` | `""` | CA certificate path |
+| `client_cert_path` | `std::string` | `""` | Client certificate (mTLS) |
+| `client_key_path` | `std::string` | `""` | Client private key (mTLS) |
+
+### proxy_connector
+
+Implements `database_backend` interface for proxy mode. All queries are sent to a `database_server` middleware.
+
+```cpp
+#include <database/proxy/proxy_connector.h>
+
+auto connector = std::make_unique<database::proxy::proxy_connector>(
+    database::database_types::postgres, config);
+
+// Initialize (connects to database_server)
+database::core::connection_config conn_config;
+auto result = connector->initialize(conn_config);
+
+// Query operations (same interface as direct backends)
+auto rows = connector->select_query("SELECT * FROM users");
+connector->shutdown();
+```
+
+### database_manager Proxy API
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `set_mode_proxy(db_type, proxy_config)` | Switch to proxy mode | `bool` success |
+| `current_connection_mode()` | Get current mode (direct/proxy) | `connection_mode` |
+
+```cpp
+auto db_mgr = std::make_shared<database::database_manager>(context);
+
+// Switch to proxy mode
+db_mgr->set_mode_proxy(database::database_types::postgres, proxy_config);
+
+// Check mode
+if (db_mgr->current_connection_mode() == database::connection_mode::proxy) {
+    // Running in proxy mode
+}
+
+// Switch back to direct mode
+db_mgr->set_mode(database::database_types::postgres);
 ```
 
 ---

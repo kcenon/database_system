@@ -172,7 +172,7 @@ ENTITY_METADATA()
 Enables the metadata system for the entity with lazy initialization.
 
 **What it generates**:
-- `get_metadata()` override with thread-safe lazy initialization
+- `get_metadata()` override with lazy initialization (initialized once on first access; not thread-safe — call from a single thread or synchronize externally)
 - Static `initialize_metadata()` declaration (must be implemented by the user)
 
 **Required implementation**: You must implement `initialize_metadata()` outside the class:
@@ -654,6 +654,7 @@ CREATE INDEX IF NOT EXISTS idx_title ON posts(title);
 | No migration diffing | Cannot detect schema differences | Manually manage ALTER TABLE statements |
 | No connection-aware CRUD | `save()`, `load()`, `update()`, `remove()` do not take a database parameter in the base class | Use `query_builder` for database-aware operations |
 | `AUTO_INCREMENT` syntax | Uses MySQL syntax; PostgreSQL uses `SERIAL`/`BIGSERIAL` | Adjust DDL manually per backend |
+| Metadata init not thread-safe | `ENTITY_METADATA()` lazy init uses non-atomic `static bool` | Call `get_metadata()` from single thread or synchronize externally |
 
 ---
 

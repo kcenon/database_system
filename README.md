@@ -15,6 +15,12 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 **Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, MySQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
 
+> **Connection Mode Status**:
+> - **DirectMode**: Production-ready (stable)
+> - **ProxyMode**: Stub implementation (awaiting `database_server`, not yet available)
+>
+> Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/migration/proxy-mode.md) for details.
+
 ### Latest Updates (2026-01)
 
 - **C++20 Module Support**: Added module files for modern C++20 module imports
@@ -55,15 +61,15 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
-| C++20 Compiler | GCC **13+** / Clang **17+** / MSVC 2022+ / Apple Clang 14+ | Yes | Higher requirements due to thread_system dependency |
+| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required |
 | CMake | 3.20+ | Yes | Build system |
 | [common_system](https://github.com/kcenon/common_system) | latest | Yes | Common interfaces and Result<T> |
-| [thread_system](https://github.com/kcenon/thread_system) | latest | Yes | Thread pool and async operations |
-| [logger_system](https://github.com/kcenon/logger_system) | latest | Yes | Logging infrastructure |
-| [container_system](https://github.com/kcenon/container_system) | latest | Yes | Data container operations |
-| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | Yes | Performance monitoring |
+| [thread_system](https://github.com/kcenon/thread_system) | latest | Optional | Thread pool for async operations (USE_THREAD_SYSTEM) |
+| [logger_system](https://github.com/kcenon/logger_system) | latest | Optional | Logging via ILogger interface |
+| [container_system](https://github.com/kcenon/container_system) | latest | Optional | Data serialization (USE_CONTAINER_SYSTEM) |
+| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | Optional | Performance metrics (USE_MONITORING_SYSTEM) |
 
-> **Note**: Compiler requirements are higher than some other systems due to thread_system dependency. See [thread_system requirements](https://github.com/kcenon/thread_system#requirements) for details.
+> **Note**: When building with thread_system integration (USE_THREAD_SYSTEM=ON, default), compiler requirements increase to GCC 13+ / Clang 17+. See [thread_system requirements](https://github.com/kcenon/thread_system#requirements) for details.
 
 ### Database Backends (at least one required)
 
@@ -80,13 +86,13 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 ```
 database_system
 ├── common_system (required)
-├── thread_system (required)
+├── thread_system (optional, USE_THREAD_SYSTEM=ON)
 │   └── common_system
-├── logger_system (required)
+├── logger_system (optional, via ILogger interface)
 │   └── common_system
-├── container_system (required)
+├── container_system (optional, USE_CONTAINER_SYSTEM=ON)
 │   └── common_system
-└── monitoring_system (required)
+└── monitoring_system (optional, USE_MONITORING_SYSTEM=ON)
     └── common_system, thread_system
 ```
 
@@ -566,7 +572,7 @@ int main() {
 - **[container_system](https://github.com/kcenon/container_system)**: Data serialization for BLOB storage
 - **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Performance monitoring and metrics
 
-[🌐 Ecosystem Integration Guide →](../ECOSYSTEM_INTEGRATION.md)
+[🌐 Ecosystem Integration Guide →](../ECOSYSTEM.md)
 
 ---
 

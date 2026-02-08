@@ -14,6 +14,12 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 > **🏗️ 모듈식 아키텍처**: 다중 백엔드 지원, 엔터프라이즈 보안, 실시간 모니터링을 갖춘 포괄적인 database abstraction layer.
 
+> **연결 모드 상태**:
+> - **DirectMode**: 프로덕션 준비 완료 (안정)
+> - **ProxyMode**: 스텁 구현 (`database_server` 대기 중, 아직 사용 불가)
+>
+> 현재 DirectMode만 프로덕션 옵션입니다. ProxyMode를 통한 서버 측 풀링 준비를 위해 로컬 커넥션 풀링이 제거되었습니다 (Phase 4.3). 자세한 내용은 [마이그레이션 가이드](docs/migration/proxy-mode.md)를 참조하세요.
+
 > **⚠️ 최신 업데이트 (2025-12)**:
 > - **[BREAKING] 커넥션 풀링 제거 (Phase 4.3)**: 모든 로컬 풀링 클래스 제거 완료
 >   - `connection_pool`, `connection_pool_v2`, `connection_pool_v3` 제거
@@ -30,15 +36,15 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 
 | 의존성 | 버전 | 필수 | 설명 |
 |--------|------|------|------|
-| C++20 컴파일러 | GCC **13+** / Clang **17+** / MSVC 2022+ / Apple Clang 14+ | 예 | thread_system 의존성으로 인한 높은 요구사항 |
+| C++20 컴파일러 | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | 예 | C++20 기능 필요 |
 | CMake | 3.20+ | 예 | 빌드 시스템 |
 | [common_system](https://github.com/kcenon/common_system) | latest | 예 | 공통 인터페이스 및 Result<T> |
-| [thread_system](https://github.com/kcenon/thread_system) | latest | 예 | 스레드 풀 및 비동기 작업 |
-| [logger_system](https://github.com/kcenon/logger_system) | latest | 예 | 로깅 인프라 |
-| [container_system](https://github.com/kcenon/container_system) | latest | 예 | 데이터 컨테이너 작업 |
-| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | 예 | 성능 모니터링 |
+| [thread_system](https://github.com/kcenon/thread_system) | latest | 선택 | 비동기 작업용 스레드 풀 (USE_THREAD_SYSTEM) |
+| [logger_system](https://github.com/kcenon/logger_system) | latest | 선택 | ILogger 인터페이스를 통한 로깅 |
+| [container_system](https://github.com/kcenon/container_system) | latest | 선택 | 데이터 직렬화 (USE_CONTAINER_SYSTEM) |
+| [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | 선택 | 성능 메트릭 (USE_MONITORING_SYSTEM) |
 
-> **참고**: thread_system 의존성으로 인해 컴파일러 요구사항이 다른 시스템보다 높습니다. 자세한 내용은 [thread_system 요구사항](https://github.com/kcenon/thread_system#requirements)을 참조하세요.
+> **참고**: thread_system 통합 빌드 시(USE_THREAD_SYSTEM=ON, 기본값) 컴파일러 요구사항이 GCC 13+ / Clang 17+로 상향됩니다. 자세한 내용은 [thread_system 요구사항](https://github.com/kcenon/thread_system#requirements)을 참조하세요.
 
 ### 데이터베이스 백엔드 (최소 하나 필요)
 
@@ -55,13 +61,13 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 ```
 database_system
 ├── common_system (필수)
-├── thread_system (필수)
+├── thread_system (선택, USE_THREAD_SYSTEM=ON)
 │   └── common_system
-├── logger_system (필수)
+├── logger_system (선택, ILogger 인터페이스)
 │   └── common_system
-├── container_system (필수)
+├── container_system (선택, USE_CONTAINER_SYSTEM=ON)
 │   └── common_system
-└── monitoring_system (필수)
+└── monitoring_system (선택, USE_MONITORING_SYSTEM=ON)
     └── common_system, thread_system
 ```
 

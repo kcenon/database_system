@@ -1050,15 +1050,48 @@ AUDIT_LOG_ACCESS("user123", "session456", "SELECT", "users", "query_hash", true,
 
 ### Async Operations
 
+> Full documentation: [Async Operations Guide](guides/ASYNC_OPERATIONS.md)
+
+**Header:** `database/async/async_operations.h`
+**Namespace:** `database::async`
+
 ```cpp
 #include <database/async/async_operations.h>
+using namespace database::async;
 
-// Coroutine support
-database_awaitable<bool> async_operation() {
-    auto result = co_await async_db.execute_coro("SELECT * FROM users");
-    co_return result;
+// async_executor — thread pool with SubmittableTask concept
+async_executor executor(4);
+auto future = executor.submit([]() { return compute(); });
+
+// async_database — async wrapper for database_backend
+async_database db(backend, executor_ptr);
+auto result = db.execute_async("INSERT INTO users (name) VALUES ('Alice')");
+auto rows = db.select_async("SELECT * FROM users");
+
+// Batch operations
+auto batch = db.execute_batch_async({"INSERT ...", "INSERT ..."});
+
+// Callback support
+result.then([](bool ok) { /* success */ });
+result.on_error([](const std::exception& e) { /* error */ });
+
+// C++20 Coroutine support (requires HAS_COROUTINES)
+database_awaitable<bool> async_op() {
+    co_return co_await db.execute_coro("SELECT * FROM users");
 }
+
+// Stream processing
+stream_processor processor(backend);
+processor.start_stream(stream_processor::stream_type::postgresql_notify, "events");
+processor.register_event_handler("events", [](const auto& event) { /* handle */ });
+
+// Saga pattern for distributed transactions
+auto saga = txn_coord.create_saga();
+saga.add_step(forward_action, compensation_action);
+saga.execute();
 ```
+
+**Key classes:** `async_executor`, `async_result<T>`, `async_database`, `database_awaitable<T>`, `stream_processor`, `transaction_coordinator`, `saga_builder`
 
 ---
 

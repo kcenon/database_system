@@ -145,39 +145,52 @@ backend_expectation_builder::backend_expectation_builder(mock_backend* db, backe
 backend_expectation_builder& backend_expectation_builder::will_return(const core::database_result& result) {
     exp_.returning(result);
     db_->expectations_.push_back(exp_);
+    pushed_ = true;
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::will_return_rows(uint64_t count) {
     exp_.returning_rows_affected(count);
     db_->expectations_.push_back(exp_);
+    pushed_ = true;
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::will_fail(const std::string& error_message) {
     exp_.returning_error(error_message);
     db_->expectations_.push_back(exp_);
+    pushed_ = true;
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::will_succeed() {
     exp_.returning_execute_success();
     db_->expectations_.push_back(exp_);
+    pushed_ = true;
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::times(int count) {
     exp_.times(count);
+    if (pushed_) {
+        db_->expectations_.back().times(count);
+    }
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::once() {
     exp_.once();
+    if (pushed_) {
+        db_->expectations_.back().once();
+    }
     return *this;
 }
 
 backend_expectation_builder& backend_expectation_builder::any_times() {
     exp_.at_least(0);
+    if (pushed_) {
+        db_->expectations_.back().at_least(0);
+    }
     return *this;
 }
 

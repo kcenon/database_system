@@ -83,48 +83,6 @@ namespace database
 	};
 
 	/**
-	 * @enum connection_mode
-	 * @brief Represents the connection mode for database operations.
-	 *
-	 * This enumeration specifies how the client connects to the database:
-	 * - direct: Connect directly to the database (legacy mode, uses local pooling)
-	 * - proxy: Connect through database_server middleware (recommended for production)
-	 *
-	 * @since Phase 4.1
-	 */
-	enum class connection_mode : uint8_t {
-		/**
-		 * @brief Direct connection to database (legacy mode).
-		 *
-		 * Uses local connection pooling and direct database driver.
-		 * Suitable for simple applications or development environments.
-		 */
-		direct = 0,
-
-		/**
-		 * @brief Connection through database_server middleware.
-		 *
-		 * Sends queries through database_server for centralized connection
-		 * pooling, load balancing, and monitoring. Recommended for production.
-		 */
-		proxy = 1
-	};
-
-	/**
-	 * @brief Converts connection_mode enum to string representation.
-	 * @param mode The connection mode to convert.
-	 * @return String representation of the connection mode.
-	 */
-	constexpr const char* to_string(connection_mode mode) noexcept
-	{
-		switch (mode) {
-		case connection_mode::direct: return "direct";
-		case connection_mode::proxy: return "proxy";
-		default: return "unknown";
-		}
-	}
-
-	/**
 	 * @brief Converts database_types enum to string representation.
 	 * @param type The database type to convert.
 	 * @return String representation of the database type.

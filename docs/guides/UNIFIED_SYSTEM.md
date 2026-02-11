@@ -1172,7 +1172,6 @@ void demonstrate_builders() {
 
 - [Architecture Overview](../ARCHITECTURE.md) — System-wide architecture and design patterns
 - [API Reference](../API_REFERENCE.md) — Complete API reference for all components
-- [Proxy Layer Guide](PROXY_LAYER.md) — Proxy mode for client-server operation
 - [ORM Guide](../ORM_GUIDE.md) — Object-Relational Mapping framework
 - [FEATURES](../FEATURES.md) — Feature overview and project roadmap
 

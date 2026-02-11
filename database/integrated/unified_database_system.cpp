@@ -468,7 +468,7 @@ public:
             health.thread_pool_healthy = true;
         }
 
-        // Connection pooling is now handled server-side via ProxyMode
+        // Connection pooling not yet implemented on client side
         health.connection_pool_healthy = true;
         health.connection_pool_utilization = 0.0;
 
@@ -502,7 +502,7 @@ public:
     unified_database_system::pool_stats get_pool_stats() const {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        // Connection pooling is now handled server-side via ProxyMode
+        // Connection pooling not yet implemented on client side
         // Return empty stats for client-side
         unified_database_system::pool_stats stats;
         stats.total_connections = connected_ ? 1 : 0;

@@ -34,15 +34,7 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 - **[BREAKING] Connection Pooling Removed (Phase 4.3)**: Migration to ProxyMode completed
   - All local pooling classes removed: `connection_pool`, `connection_pool_v2`, `connection_pool_v3`
   - Resilience classes removed: `connection_health_monitor`, `resilient_database_connection`
-  - Migration guide: [docs/migration/proxy-mode.md](docs/migration/proxy-mode.md)
-  - ProxyMode will require `database_server` (not yet available)
-  - **DirectMode is currently the only production-ready option**
-- **ProxyMode Support (Phase 4.1)**: Connect through database_server middleware *(stub implementation)*
-  - `connection_mode` enum: `direct` (stable) and `proxy` (stub, awaiting database_server)
-  - `proxy_connector` class for middleware communication
-  - `set_mode_proxy()` method in `database_manager`
-  - TLS/mTLS support for secure connections
-  - Centralized connection pooling and monitoring ready
+  - Direct database connections are the current production approach
 - **C++20 Concepts Integration**: Compile-time type validation for async operations
   - `SubmittableTask` concept for `submit()` methods
   - `ErrorHandler`, `QueryCallback` concepts for callbacks
@@ -190,82 +182,16 @@ vcpkg install database-system[mongodb,redis]
 
 For detailed build instructions, see [Build Guide →](docs/guides/BUILD_GUIDE.md#experimental-backends)
 
-### Server-Side Connection Pooling (ProxyMode)
-
-> ⚠️ **Status: Development Preview (Stub Implementation)**
->
-> ProxyMode is currently a stub implementation awaiting `database_server` (Phases 1-3).
-> **For production use, please use DirectMode until ProxyMode is fully released.**
-
-| Mode | Status | Recommended Use |
-|------|--------|-----------------|
-| **DirectMode** | ✅ Stable | Development, Testing, **Current Production** |
-| **ProxyMode** | 🚧 Stub | Future Production (awaiting database_server) |
-
-**ProxyMode Benefits** (via database_server middleware):
-- **Centralized pooling**: No per-application connection pools
-- **Secure credential management**: Database credentials stored server-side only
-- **Load balancing**: Automatic connection distribution
-- **Unified monitoring**: Centralized metrics and health checks
-- **Reduced client complexity**: Lighter client library
+### Quick Start — Database Connection
 
 ```cpp
 #include <database/database_manager.h>
-#include <database/proxy/proxy_config.h>
-
-// ProxyMode - Recommended for production
-database::proxy::proxy_connection_config proxy_config;
-proxy_config.server_host = "db-gateway.internal";
-proxy_config.server_port = 9432;
-proxy_config.auth_token = "your-client-token";
-proxy_config.use_tls = true;
 
 auto context = std::make_shared<database_context>();
 auto db = std::make_shared<database_manager>(context);
-db->set_mode_proxy(database_types::postgres, proxy_config);
-db->connect("");  // Connection managed by server
-
-// DirectMode - For development and testing
 db->set_mode(database_types::postgres);
 db->connect("host=localhost port=5432 dbname=mydb");
 ```
-
-> **Note**: ProxyMode requires [database_server](https://github.com/kcenon/database_server) middleware.
-
-### Connection Modes (Phase 4.1)
-
-Choose between **DirectMode** (direct database connection) and **ProxyMode** (via database_server middleware):
-
-```cpp
-#include <database/database_manager.h>
-#include <database/proxy/proxy_config.h>
-
-auto context = std::make_shared<database_context>();
-auto db = std::make_shared<database_manager>(context);
-
-// DirectMode (legacy, default) - Direct database connection
-db->set_mode(database_types::postgres);
-db->connect("host=localhost port=5432 dbname=mydb");
-
-// ProxyMode (future production) - Through database_server middleware [STUB]
-database::proxy::proxy_connection_config proxy_config;
-proxy_config.server_host = "db-gateway.internal";
-proxy_config.server_port = 9432;
-proxy_config.auth_token = "your-client-token";
-proxy_config.use_tls = true;
-
-db->set_mode_proxy(database_types::postgres, proxy_config);
-db->connect("");  // Connection string ignored in proxy mode
-```
-
-**ProxyMode Benefits** *(when fully implemented)*:
-- Centralized connection pooling (no per-app pools)
-- Secure credential management (DB creds in server only)
-- Load balancing and failover
-- Unified monitoring and metrics
-- Reduced build times (lighter client library)
-
-> ⚠️ **Important**: ProxyMode is currently a **stub implementation**. It requires [database_server](https://github.com/kcenon/database_server) middleware which is not yet available (Phases 1-3). **Use DirectMode for all current deployments.**
 
 ### Type-Safe Query Builders
 

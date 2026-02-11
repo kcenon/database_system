@@ -42,7 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "core/backend_registry.h"
 
 #include "query_builder.h"
-#include "proxy/proxy_config.h"
 
 
 namespace database
@@ -101,48 +100,8 @@ namespace database
 		 * @return @c true on success (e.g., if a corresponding database
 		 *         implementation is available), @c false otherwise.
 		 *
-		 * @note This uses DirectMode (direct database connection) by default.
-		 *       Use set_mode_proxy() for ProxyMode connections.
 		 */
 		bool set_mode(const database_types& database_type);
-
-		/**
-		 * @brief Sets the database mode for proxy connection.
-		 *
-		 * @param database_type The target database type on the server side.
-		 * @param proxy_config Configuration for connecting to database_server.
-		 * @return @c true on success, @c false otherwise.
-		 *
-		 * @details In proxy mode, all queries are sent to the database_server
-		 * middleware instead of directly connecting to the database. This provides:
-		 * - Centralized connection pooling
-		 * - Load balancing
-		 * - Unified monitoring
-		 * - Secure credential management
-		 *
-		 * @example
-		 * @code
-		 * auto db_mgr = std::make_shared<database_manager>(context);
-		 * proxy::proxy_connection_config config;
-		 * config.server_host = "db-gateway.internal";
-		 * config.server_port = 9432;
-		 * config.auth_token = "token";
-		 * if (db_mgr->set_mode_proxy(database_types::postgres, config)) {
-		 *     db_mgr->connect(""); // connect_string ignored in proxy mode
-		 * }
-		 * @endcode
-		 *
-		 * @since Phase 4.1
-		 */
-		bool set_mode_proxy(const database_types& database_type,
-							const proxy::proxy_connection_config& proxy_config);
-
-		/**
-		 * @brief Gets the current connection mode.
-		 * @return The current connection_mode (direct or proxy).
-		 * @since Phase 4.1
-		 */
-		connection_mode current_connection_mode() const noexcept;
 
 		/**
 		 * @brief Retrieves the current database type used by the manager.
@@ -263,8 +222,6 @@ namespace database
 		std::unique_ptr<core::database_backend>
 			database_;	 ///< The underlying database backend.
 		std::shared_ptr<database_context> context_; ///< Dependency injection context
-		connection_mode connection_mode_; ///< Current connection mode (Phase 4.1)
-		proxy::proxy_connection_config proxy_config_; ///< Proxy configuration (Phase 4.1)
 		std::string connect_string_; ///< Cached connection string for initialization
 
 	};

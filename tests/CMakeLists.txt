@@ -705,6 +705,302 @@ if(GTest_FOUND OR gtest_FOUND)
 endif()
 
 ##################################################
+# Backend Registry Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(backend_registry_test
+        backend_registry_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(backend_registry_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(backend_registry_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(backend_registry_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME BackendRegistryTests COMMAND backend_registry_test)
+
+    gtest_discover_tests(backend_registry_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Backend registry tests configured")
+endif()
+
+##################################################
+# Backend Base CRTP Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(backend_base_test
+        backend_base_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(backend_base_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(backend_base_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(backend_base_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME BackendBaseTests COMMAND backend_base_test)
+
+    gtest_discover_tests(backend_base_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Backend base CRTP tests configured")
+endif()
+
+##################################################
+# Backend Interface Contract Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(backend_contract_test
+        backend_contract_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(backend_contract_test PRIVATE
+            database
+            database_mocks
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(backend_contract_test PRIVATE
+            database
+            database_mocks
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(backend_contract_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME BackendContractTests COMMAND backend_contract_test)
+
+    gtest_discover_tests(backend_contract_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Backend interface contract tests configured")
+endif()
+
+##################################################
+# PostgreSQL Backend Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(postgresql_backend_test
+        postgresql_backend_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(postgresql_backend_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(postgresql_backend_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(postgresql_backend_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME PostgreSQLBackendTests COMMAND postgresql_backend_test)
+
+    gtest_discover_tests(postgresql_backend_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "PostgreSQL backend tests configured")
+endif()
+
+##################################################
+# MySQL Backend Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(mysql_backend_test
+        mysql_backend_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(mysql_backend_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(mysql_backend_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(mysql_backend_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME MySQLBackendTests COMMAND mysql_backend_test)
+
+    gtest_discover_tests(mysql_backend_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "MySQL backend tests configured")
+endif()
+
+##################################################
+# MongoDB Backend Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(mongodb_backend_test
+        mongodb_backend_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(mongodb_backend_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(mongodb_backend_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(mongodb_backend_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME MongoDBBackendTests COMMAND mongodb_backend_test)
+
+    gtest_discover_tests(mongodb_backend_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "MongoDB backend tests configured")
+endif()
+
+##################################################
+# Redis Backend Tests
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(redis_backend_test
+        redis_backend_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(redis_backend_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(redis_backend_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(redis_backend_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME RedisBackendTests COMMAND redis_backend_test)
+
+    gtest_discover_tests(redis_backend_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Redis backend tests configured")
+endif()
+
+##################################################
 # Test Data Setup
 ##################################################
 

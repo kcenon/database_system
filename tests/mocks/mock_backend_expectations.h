@@ -110,6 +110,7 @@ public:
 private:
     mock_backend* db_;
     backend_expectation exp_;
+    bool pushed_ = false;
 };
 
 /**

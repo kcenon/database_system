@@ -39,6 +39,8 @@
  */
 
 #include "integrated/unified_database_system.h"
+#include "core/database_backend.h"
+#include "core/backend_registry.h"
 
 #include <iostream>
 #include <cassert>
@@ -74,6 +76,118 @@ static int tests_failed = 0;
         tests_passed++; \
         return true; \
     } while(0)
+
+//==============================================================================
+// Stub Backend for Mock Testing
+//==============================================================================
+
+namespace {
+
+/**
+ * @brief In-memory stub backend for unit testing.
+ *
+ * Implements database_backend interface with deterministic behavior,
+ * allowing unified_database_system tests without a real database.
+ * Uses ::database:: (global scope) to avoid conflict with the
+ * `using database = unified_database_system;` alias.
+ */
+class stub_backend : public ::database::core::database_backend {
+public:
+    stub_backend() = default;
+
+    static std::unique_ptr<::database::core::database_backend> create() {
+        return std::make_unique<stub_backend>();
+    }
+
+    ::database::database_types type() const override {
+        return ::database::database_types::sqlite;
+    }
+
+    kcenon::common::VoidResult initialize(
+        const ::database::core::connection_config& /*config*/) override {
+        initialized_ = true;
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    kcenon::common::VoidResult shutdown() override {
+        initialized_ = false;
+        in_tx_ = false;
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    bool is_initialized() const override { return initialized_; }
+
+    kcenon::common::Result<uint64_t> insert_query(
+        const std::string& /*query_string*/) override {
+        return uint64_t{1};
+    }
+
+    kcenon::common::Result<uint64_t> update_query(
+        const std::string& /*query_string*/) override {
+        return uint64_t{1};
+    }
+
+    kcenon::common::Result<uint64_t> delete_query(
+        const std::string& /*query_string*/) override {
+        return uint64_t{1};
+    }
+
+    kcenon::common::Result<::database::core::database_result> select_query(
+        const std::string& /*query_string*/) override {
+        ::database::core::database_result result;
+        ::database::core::database_row row;
+        row["id"] = int64_t{1};
+        row["name"] = std::string("test_user");
+        result.push_back(row);
+        return result;
+    }
+
+    kcenon::common::VoidResult execute_query(
+        const std::string& /*query_string*/) override {
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    kcenon::common::VoidResult begin_transaction() override {
+        in_tx_ = true;
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    kcenon::common::VoidResult commit_transaction() override {
+        in_tx_ = false;
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    kcenon::common::VoidResult rollback_transaction() override {
+        in_tx_ = false;
+        return kcenon::common::VoidResult(std::monostate{});
+    }
+
+    bool in_transaction() const override { return in_tx_; }
+
+    std::string last_error() const override { return ""; }
+
+    std::map<std::string, std::string> connection_info() const override {
+        return {{"backend", "stub"}, {"version", "1.0"}};
+    }
+
+private:
+    bool initialized_ = false;
+    bool in_tx_ = false;
+};
+
+// Register stub as "sqlite" backend for test use
+void register_stub_backend() {
+    auto& registry = ::database::core::backend_registry::instance();
+    if (!registry.has_backend("sqlite")) {
+        registry.register_backend("sqlite", &stub_backend::create);
+    }
+}
+
+void unregister_stub_backend() {
+    ::database::core::backend_registry::instance().unregister_backend("sqlite");
+}
+
+} // anonymous namespace
 
 //==============================================================================
 // Test 1: Builder Pattern - Default Configuration
@@ -516,6 +630,649 @@ bool test_error_handling_no_connection() {
 }
 
 //==============================================================================
+// Test 16: Connect with Mock Backend
+//==============================================================================
+
+bool test_connect_mock_backend() {
+    TEST_START("Connect with Mock Backend (SQLite stub)");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    auto result = db.connect(backend_type::sqlite, ":memory:");
+    ASSERT_TRUE(result.is_ok(), "Connect with stub backend should succeed");
+    ASSERT_TRUE(db.is_connected(), "Should be connected after successful connect");
+
+    auto disconnect_result = db.disconnect();
+    ASSERT_TRUE(disconnect_result.is_ok(), "Disconnect should succeed");
+    ASSERT_FALSE(db.is_connected(), "Should not be connected after disconnect");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 17: Connect with Typed Backend
+//==============================================================================
+
+bool test_connect_typed_backend() {
+    TEST_START("Connect with Typed Backend");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    auto result = db.connect(backend_type::sqlite, ":memory:");
+    ASSERT_TRUE(result.is_ok(), "Typed connect with stub should succeed");
+    ASSERT_TRUE(db.is_connected(), "Should be connected");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 18: Connect Unsupported Backend
+//==============================================================================
+
+bool test_connect_unsupported_backend() {
+    TEST_START("Connect Unsupported Backend");
+
+    unified_database_system db;
+    auto result = db.connect(backend_type::mongodb, "localhost:27017");
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Connect with unsupported backend should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Connect with unsupported backend should fail");
+#endif
+
+    ASSERT_FALSE(db.is_connected(), "Should not be connected on failure");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 19: Execute Success Path
+//==============================================================================
+
+bool test_execute_success() {
+    TEST_START("Execute Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    auto conn = db.connect(backend_type::sqlite, ":memory:");
+    ASSERT_TRUE(conn.is_ok(), "Connect should succeed");
+
+    auto result = db.execute("SELECT * FROM users WHERE id = 1");
+    ASSERT_TRUE(result.is_ok(), "Execute on connected db should succeed");
+
+    auto& qr = result.value();
+    ASSERT_TRUE(qr.size() == 1, "Should return one row from stub");
+    ASSERT_TRUE(qr[0].at("name") == "test_user", "Row should contain stub data");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 20: Select Success Path
+//==============================================================================
+
+bool test_select_success() {
+    TEST_START("Select Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto result = db.select("SELECT id, name FROM users");
+    ASSERT_TRUE(result.is_ok(), "Select should succeed");
+
+    auto& qr = result.value();
+    ASSERT_FALSE(qr.empty(), "Select should return rows");
+    ASSERT_TRUE(qr[0].count("id") > 0, "Row should have 'id' column");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 21: Select Failure Path (Not Connected)
+//==============================================================================
+
+bool test_select_failure_not_connected() {
+    TEST_START("Select Failure Path - Not Connected");
+
+    unified_database_system db;
+    auto result = db.select("SELECT 1");
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Select without connection should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Select without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 22: Insert Success Path
+//==============================================================================
+
+bool test_insert_success() {
+    TEST_START("Insert Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto result = db.insert("INSERT INTO users (name) VALUES ('Alice')");
+    ASSERT_TRUE(result.is_ok(), "Insert should succeed");
+
+    auto affected = result.value();
+    ASSERT_TRUE(affected > 0, "Insert should affect at least one row");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 23: Insert Failure Path (Not Connected)
+//==============================================================================
+
+bool test_insert_failure_not_connected() {
+    TEST_START("Insert Failure Path - Not Connected");
+
+    unified_database_system db;
+    auto result = db.insert("INSERT INTO users (name) VALUES ('Bob')");
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Insert without connection should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Insert without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 24: Update Success Path
+//==============================================================================
+
+bool test_update_success() {
+    TEST_START("Update Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto result = db.update("UPDATE users SET name = 'Bob' WHERE id = 1");
+    ASSERT_TRUE(result.is_ok(), "Update should succeed");
+
+    auto affected = result.value();
+    ASSERT_TRUE(affected > 0, "Update should affect at least one row");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 25: Update Failure Path (Not Connected)
+//==============================================================================
+
+bool test_update_failure_not_connected() {
+    TEST_START("Update Failure Path - Not Connected");
+
+    unified_database_system db;
+    auto result = db.update("UPDATE users SET name = 'Bob'");
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Update without connection should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Update without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 26: Remove Success Path
+//==============================================================================
+
+bool test_remove_success() {
+    TEST_START("Remove Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto result = db.remove("DELETE FROM users WHERE id = 1");
+    ASSERT_TRUE(result.is_ok(), "Remove should succeed");
+
+    auto affected = result.value();
+    ASSERT_TRUE(affected > 0, "Remove should affect at least one row");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 27: Remove Failure Path (Not Connected)
+//==============================================================================
+
+bool test_remove_failure_not_connected() {
+    TEST_START("Remove Failure Path - Not Connected");
+
+    unified_database_system db;
+    auto result = db.remove("DELETE FROM users WHERE id = 1");
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Remove without connection should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Remove without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 28: Begin Transaction Success Path
+//==============================================================================
+
+bool test_begin_transaction_success() {
+    TEST_START("Begin Transaction Success Path");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto tx_result = db.begin_transaction();
+    ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed when connected");
+
+    auto& tx = tx_result.value();
+    ASSERT_TRUE(tx != nullptr, "Transaction pointer should be valid");
+    ASSERT_TRUE(tx->is_active(), "Transaction should be active after begin");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 29: Begin Transaction Failure Path (Not Connected)
+//==============================================================================
+
+bool test_begin_transaction_failure() {
+    TEST_START("Begin Transaction Failure Path - Not Connected");
+
+    unified_database_system db;
+    auto tx_result = db.begin_transaction();
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(tx_result.is_err(), "Begin transaction without connection should fail");
+#else
+    ASSERT_TRUE(tx_result.is_error(), "Begin transaction without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 30: Transaction Execute
+//==============================================================================
+
+bool test_transaction_execute() {
+    TEST_START("Transaction Execute");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto tx_result = db.begin_transaction();
+    ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed");
+
+    auto& tx = tx_result.value();
+    auto exec_result = tx->execute("INSERT INTO users (name) VALUES ('Alice')");
+    ASSERT_TRUE(exec_result.is_ok(), "Transaction execute should succeed");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 31: Transaction Commit
+//==============================================================================
+
+bool test_transaction_commit() {
+    TEST_START("Transaction Commit");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto tx_result = db.begin_transaction();
+    ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed");
+
+    auto& tx = tx_result.value();
+    ASSERT_TRUE(tx->is_active(), "Transaction should be active before commit");
+
+    auto commit_result = tx->commit();
+    ASSERT_TRUE(commit_result.is_ok(), "Commit should succeed");
+    ASSERT_FALSE(tx->is_active(), "Transaction should not be active after commit");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 32: Transaction Rollback
+//==============================================================================
+
+bool test_transaction_rollback() {
+    TEST_START("Transaction Rollback");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto tx_result = db.begin_transaction();
+    ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed");
+
+    auto& tx = tx_result.value();
+    ASSERT_TRUE(tx->is_active(), "Transaction should be active before rollback");
+
+    auto rollback_result = tx->rollback();
+    ASSERT_TRUE(rollback_result.is_ok(), "Rollback should succeed");
+    ASSERT_FALSE(tx->is_active(), "Transaction should not be active after rollback");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 33: Transaction is_active State Tracking
+//==============================================================================
+
+bool test_transaction_is_active() {
+    TEST_START("Transaction is_active State Tracking");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto tx_result = db.begin_transaction();
+    ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed");
+
+    auto& tx = tx_result.value();
+
+    // Active after begin
+    ASSERT_TRUE(tx->is_active(), "Should be active after begin");
+
+    // Execute should not change active state
+    tx->execute("SELECT 1");
+    ASSERT_TRUE(tx->is_active(), "Should remain active after execute");
+
+    // Inactive after commit
+    tx->commit();
+    ASSERT_FALSE(tx->is_active(), "Should be inactive after commit");
+
+    // Double commit should fail
+    auto double_commit = tx->commit();
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(double_commit.is_err(), "Double commit should fail");
+#else
+    ASSERT_TRUE(double_commit.is_error(), "Double commit should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 34: Transaction RAII Cleanup (Rollback on Scope Exit)
+//==============================================================================
+
+bool test_transaction_raii_cleanup() {
+    TEST_START("Transaction RAII Cleanup");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    {
+        auto tx_result = db.begin_transaction();
+        ASSERT_TRUE(tx_result.is_ok(), "Begin transaction should succeed");
+
+        auto& tx = tx_result.value();
+        tx->execute("INSERT INTO users (name) VALUES ('Alice')");
+
+        // Do not commit - transaction goes out of scope
+        // Destructor should auto-rollback
+    }
+
+    // If we reach here without crash, RAII cleanup worked
+    ASSERT_TRUE(true, "Transaction destructor should auto-rollback without crash");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 35: Execute Transaction (Batch)
+//==============================================================================
+
+bool test_execute_transaction_success() {
+    TEST_START("Execute Transaction - Batch Success");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    std::vector<std::string> queries = {
+        "INSERT INTO users (name) VALUES ('Alice')",
+        "INSERT INTO users (name) VALUES ('Bob')",
+        "UPDATE users SET name = 'Charlie' WHERE id = 1"
+    };
+
+    auto result = db.execute_transaction(queries);
+    ASSERT_TRUE(result.is_ok(), "Batch transaction should succeed");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 36: Execute Transaction Failure (Not Connected)
+//==============================================================================
+
+bool test_execute_transaction_failure() {
+    TEST_START("Execute Transaction - Not Connected");
+
+    unified_database_system db;
+
+    std::vector<std::string> queries = {"INSERT INTO users (name) VALUES ('Alice')"};
+    auto result = db.execute_transaction(queries);
+
+#if defined(USE_COMMON_SYSTEM)
+    ASSERT_TRUE(result.is_err(), "Batch transaction without connection should fail");
+#else
+    ASSERT_TRUE(result.is_error(), "Batch transaction without connection should fail");
+#endif
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 37: get_config Accessor
+//==============================================================================
+
+bool test_get_config() {
+    TEST_START("get_config Accessor");
+
+    unified_db_config config;
+    config.database.type = backend_type::sqlite;
+    config.connection_pool.min_connections = 3;
+    config.connection_pool.max_connections = 15;
+
+    unified_database_system db(config);
+
+    const auto& retrieved = db.get_config();
+    ASSERT_TRUE(retrieved.database.type == backend_type::sqlite,
+                "Config should reflect configured backend type");
+    ASSERT_TRUE(retrieved.connection_pool.min_connections == 3,
+                "Config should reflect configured min connections");
+    ASSERT_TRUE(retrieved.connection_pool.max_connections == 15,
+                "Config should reflect configured max connections");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 38: get_backend_type Accessor
+//==============================================================================
+
+bool test_get_backend_type() {
+    TEST_START("get_backend_type Accessor");
+
+    unified_database_system db;
+    // Default backend type should be postgres (from impl constructor)
+    backend_type bt = db.get_backend_type();
+    ASSERT_TRUE(bt == backend_type::postgres,
+                "Default backend type should be postgres");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 39: get_pool_stats Accessor
+//==============================================================================
+
+bool test_get_pool_stats() {
+    TEST_START("get_pool_stats Accessor");
+
+    unified_database_system db;
+
+    // When not connected
+    auto stats = db.get_pool_stats();
+    ASSERT_TRUE(stats.total_connections == 0,
+                "Not connected: total connections should be 0");
+    ASSERT_TRUE(stats.active_connections == 0,
+                "Not connected: active connections should be 0");
+
+    // When connected
+    register_stub_backend();
+    db.connect(backend_type::sqlite, ":memory:");
+
+    auto connected_stats = db.get_pool_stats();
+    ASSERT_TRUE(connected_stats.total_connections == 1,
+                "Connected: total connections should be 1");
+    ASSERT_TRUE(connected_stats.active_connections == 1,
+                "Connected: active connections should be 1");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 40: reset_metrics
+//==============================================================================
+
+bool test_reset_metrics() {
+    TEST_START("reset_metrics");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+
+    // Execute some queries to accumulate metrics
+    db.execute("SELECT 1");
+    db.execute("SELECT 2");
+
+    auto metrics_before = db.get_metrics();
+    ASSERT_TRUE(metrics_before.total_queries >= 2,
+                "Should have at least 2 queries recorded");
+
+    // Reset
+    db.reset_metrics();
+
+    auto metrics_after = db.get_metrics();
+    ASSERT_TRUE(metrics_after.total_queries == 0,
+                "After reset, total queries should be 0");
+    ASSERT_TRUE(metrics_after.successful_queries == 0,
+                "After reset, successful queries should be 0");
+    ASSERT_TRUE(metrics_after.failed_queries == 0,
+                "After reset, failed queries should be 0");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 41: create_query_builder
+//==============================================================================
+
+bool test_create_query_builder() {
+    TEST_START("create_query_builder");
+
+    unified_database_system db;
+    auto builder = db.create_query_builder();
+
+    // Just verify it returns a valid query_builder without crashing
+    ASSERT_TRUE(true, "create_query_builder should return without error");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 42: Metrics Update on Successful Query
+//==============================================================================
+
+bool test_metrics_update_on_query() {
+    TEST_START("Metrics Update on Successful Query");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+    db.reset_metrics();
+
+    // Execute queries
+    db.execute("SELECT 1");
+    db.execute("SELECT 2");
+    db.execute("SELECT 3");
+
+    auto metrics = db.get_metrics();
+    ASSERT_TRUE(metrics.total_queries == 3, "Should record 3 queries");
+    ASSERT_TRUE(metrics.successful_queries == 3, "All 3 should be successful");
+    ASSERT_TRUE(metrics.failed_queries == 0, "No failures expected");
+
+    TEST_END();
+}
+
+//==============================================================================
+// Test 43: Transaction Metrics
+//==============================================================================
+
+bool test_transaction_metrics() {
+    TEST_START("Transaction Metrics");
+
+    register_stub_backend();
+
+    unified_database_system db;
+    db.connect(backend_type::sqlite, ":memory:");
+    db.reset_metrics();
+
+    // Start and commit a transaction
+    {
+        auto tx_result = db.begin_transaction();
+        ASSERT_TRUE(tx_result.is_ok(), "Begin should succeed");
+        auto& tx = tx_result.value();
+        tx->commit();
+    }
+
+    auto metrics = db.get_metrics();
+    ASSERT_TRUE(metrics.transactions_started >= 1,
+                "Should record at least 1 transaction started");
+
+    TEST_END();
+}
+
+//==============================================================================
 // Main Test Runner
 //==============================================================================
 
@@ -526,6 +1283,8 @@ int main() {
     std::cout << "========================================\n";
 
     // Run all tests
+
+    // Phase 6 original tests (builder, config, state, structures)
     test_builder_default();
     test_builder_custom();
     test_zero_config_construction();
@@ -542,6 +1301,45 @@ int main() {
     test_thread_safety_health_checks();
     test_thread_safety_metrics();
     test_error_handling_no_connection();
+
+    // CRUD and connection tests (with stub backend)
+    test_connect_mock_backend();
+    test_connect_typed_backend();
+    test_connect_unsupported_backend();
+    test_execute_success();
+    test_select_success();
+    test_select_failure_not_connected();
+    test_insert_success();
+    test_insert_failure_not_connected();
+    test_update_success();
+    test_update_failure_not_connected();
+    test_remove_success();
+    test_remove_failure_not_connected();
+
+    // Transaction tests
+    test_begin_transaction_success();
+    test_begin_transaction_failure();
+    test_transaction_execute();
+    test_transaction_commit();
+    test_transaction_rollback();
+    test_transaction_is_active();
+    test_transaction_raii_cleanup();
+    test_execute_transaction_success();
+    test_execute_transaction_failure();
+
+    // Accessor tests
+    test_get_config();
+    test_get_backend_type();
+    test_get_pool_stats();
+    test_reset_metrics();
+    test_create_query_builder();
+
+    // Metrics verification tests
+    test_metrics_update_on_query();
+    test_transaction_metrics();
+
+    // Cleanup stub backend registration
+    unregister_stub_backend();
 
     // Print summary
     std::cout << "\n";

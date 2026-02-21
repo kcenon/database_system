@@ -403,16 +403,21 @@ public:
 	kcenon::common::VoidResult initialize(
 		const ::database::core::connection_config&) override
 	{
+		std::lock_guard<std::mutex> lock(mutex_);
 		initialized_ = true;
 		return kcenon::common::ok();
 	}
 
 	kcenon::common::VoidResult shutdown() override {
+		std::lock_guard<std::mutex> lock(mutex_);
 		initialized_ = false;
 		return kcenon::common::ok();
 	}
 
-	bool is_initialized() const override { return initialized_; }
+	bool is_initialized() const override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return initialized_;
+	}
 
 	kcenon::common::Result<uint64_t> insert_query(
 		const std::string&) override
@@ -447,6 +452,7 @@ public:
 	kcenon::common::VoidResult execute_query(
 		const std::string& query) override
 	{
+		std::lock_guard<std::mutex> lock(mutex_);
 		if (should_fail_execute_) {
 			return kcenon::common::error_info{1, "execute_failed", "stub"};
 		}
@@ -455,21 +461,27 @@ public:
 	}
 
 	kcenon::common::VoidResult begin_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
 		in_transaction_ = true;
 		return kcenon::common::ok();
 	}
 
 	kcenon::common::VoidResult commit_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
 		in_transaction_ = false;
 		return kcenon::common::ok();
 	}
 
 	kcenon::common::VoidResult rollback_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
 		in_transaction_ = false;
 		return kcenon::common::ok();
 	}
 
-	bool in_transaction() const override { return in_transaction_; }
+	bool in_transaction() const override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return in_transaction_;
+	}
 	std::string last_error() const override { return ""; }
 
 	std::map<std::string, std::string> connection_info() const override {
@@ -477,10 +489,17 @@ public:
 	}
 
 	// Test helpers
-	void set_fail_execute(bool fail) { should_fail_execute_ = fail; }
-	std::string get_last_query() const { return last_executed_query_; }
+	void set_fail_execute(bool fail) {
+		std::lock_guard<std::mutex> lock(mutex_);
+		should_fail_execute_ = fail;
+	}
+	std::string get_last_query() const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return last_executed_query_;
+	}
 
 private:
+	mutable std::mutex mutex_;
 	bool initialized_ = false;
 	bool in_transaction_ = false;
 	bool should_fail_execute_ = false;

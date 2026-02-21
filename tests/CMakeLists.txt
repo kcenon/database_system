@@ -506,6 +506,48 @@ if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
 endif()
 
 ##################################################
+# Async Unit Tests (Issue #369)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(async_operations_test
+        async/test_async_operations.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(async_operations_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(async_operations_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(async_operations_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME AsyncOperationsTests COMMAND async_operations_test)
+
+    gtest_discover_tests(async_operations_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Async operations unit tests configured (Issue #369)")
+endif()
+
+##################################################
 # Stress Tests (DB-009)
 ##################################################
 

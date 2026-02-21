@@ -141,10 +141,97 @@ namespace database::async
 
 	private:
 		std::future<T> future_;
-		std::mutex callback_mutex_;
+		mutable std::mutex callback_mutex_;
 		std::function<void(T)> success_callback_;
 		std::function<void(const std::exception&)> error_callback_;
 	};
+
+	// ── async_result<T> template method implementations ──────────────────
+
+	template<typename T>
+	async_result<T>::async_result(std::future<T> future)
+		: future_(std::move(future))
+	{
+	}
+
+	template<typename T>
+	T async_result<T>::get()
+	{
+		std::function<void(T)> on_success;
+		std::function<void(const std::exception&)> on_error_cb;
+		{
+			std::lock_guard<std::mutex> lock(callback_mutex_);
+			on_success = success_callback_;
+			on_error_cb = error_callback_;
+		}
+
+		try {
+			T value = future_.get();
+			if (on_success) {
+				on_success(value);
+			}
+			return value;
+		} catch (const std::exception& e) {
+			if (on_error_cb) {
+				on_error_cb(e);
+			}
+			throw;
+		}
+	}
+
+	template<typename T>
+	T async_result<T>::get_for(std::chrono::milliseconds timeout)
+	{
+		auto status = future_.wait_for(timeout);
+		if (status == std::future_status::timeout) {
+			throw std::runtime_error("async_result::get_for timed out");
+		}
+		return get();
+	}
+
+	template<typename T>
+	bool async_result<T>::is_ready() const
+	{
+		return future_.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready;
+	}
+
+	template<typename T>
+	std::future_status async_result<T>::wait_for(std::chrono::milliseconds timeout) const
+	{
+		return future_.wait_for(timeout);
+	}
+
+	template<typename T>
+	template<concepts::VoidCallable<T> Callback>
+	void async_result<T>::then(Callback&& callback)
+	{
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		success_callback_ = std::forward<Callback>(callback);
+	}
+
+	template<typename T>
+	template<concepts::ErrorHandler Handler>
+	void async_result<T>::on_error(Handler&& error_handler)
+	{
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		error_callback_ = std::forward<Handler>(error_handler);
+	}
+
+	template<typename T>
+	void async_result<T>::then(std::function<void(T)> callback)
+	{
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		success_callback_ = std::move(callback);
+	}
+
+	template<typename T>
+	void async_result<T>::on_error(std::function<void(const std::exception&)> error_handler)
+	{
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		error_callback_ = std::move(error_handler);
+	}
+
+	// ── end async_result<T> implementations ──────────────────────────────
 
 #ifdef HAS_COROUTINES
 	/**

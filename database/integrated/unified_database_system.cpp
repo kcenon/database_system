@@ -40,6 +40,7 @@
 #include "adapters/monitoring_adapter.h"
 #include "adapters/thread_adapter.h"
 #include "../core/database_backend.h"
+#include "../core/backend_registry.h"
 #include "../postgres_manager.h"
 
 #include <mutex>
@@ -73,19 +74,40 @@ inline kcenon::common::Result<T> make_error_result(const std::string& msg, int c
 
 
 /**
+ * @brief Convert backend_type to registry name string
+ */
+static std::string backend_type_to_name(backend_type type) {
+    switch (type) {
+        case backend_type::postgres: return "postgresql";
+        case backend_type::mysql:    return "mysql";
+        case backend_type::sqlite:   return "sqlite";
+        case backend_type::mongodb:  return "mongodb";
+        case backend_type::redis:    return "redis";
+        default:                     return "";
+    }
+}
+
+/**
  * @brief Create database backend instance
+ *
+ * First tries hardcoded backends, then falls back to backend_registry
+ * for dynamically registered backends (including test stubs).
  */
 static std::shared_ptr<core::database_backend> create_backend(backend_type type) {
     switch (type) {
         case backend_type::postgres:
             return std::make_shared<postgres_manager>();
-        // Add other backends when implemented
-        // case backend_type::mysql:
-        //     return std::make_shared<mysql_manager>();
-        // case backend_type::sqlite:
-        //     return std::make_shared<sqlite_manager>();
-        default:
+        default: {
+            // Fall back to backend_registry for other types
+            auto name = backend_type_to_name(type);
+            if (!name.empty()) {
+                auto backend = core::backend_registry::instance().create(name);
+                if (backend) {
+                    return std::shared_ptr<core::database_backend>(std::move(backend));
+                }
+            }
             return nullptr;
+        }
     }
 }
 

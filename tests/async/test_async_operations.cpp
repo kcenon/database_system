@@ -3,12 +3,13 @@
  * Copyright (c) 2025, Database System Project
  *
  * Unit tests for async_result<T>, async_executor, async_database,
- * transaction_coordinator, and saga_builder.
+ * transaction_coordinator, saga_builder, and stream_processor.
  *
  * Part of #366:
  *   Sub-issue #369: async_result<T>, async_executor, helper functions
  *   Sub-issue #371: async_database
  *   Sub-issue #373: transaction_coordinator, saga_builder
+ *   Sub-issue #375: stream_processor
  */
 
 // Force std::thread fallback for unit testing — avoids external thread_system
@@ -1183,4 +1184,349 @@ TEST_F(SagaBuilderTest, AddStepReturnsSelfForChaining) {
 		[]() -> async_result<bool> { return make_ready_result(true); }
 	);
 	EXPECT_EQ(&ref, &saga);
+}
+
+//=============================================================================
+// stream_processor Tests
+//=============================================================================
+
+class StreamProcessorTest : public ::testing::Test {
+protected:
+	void SetUp() override {
+		backend_ = std::make_shared<async_stub_backend>();
+		processor_ = std::make_unique<stream_processor>(backend_);
+	}
+
+	void TearDown() override {
+		processor_.reset();
+	}
+
+	// Wait for an atomic flag to become true, with timeout
+	bool wait_for_flag(const std::atomic<bool>& flag,
+	                   std::chrono::milliseconds timeout = std::chrono::milliseconds(500))
+	{
+		auto deadline = std::chrono::steady_clock::now() + timeout;
+		while (!flag.load() && std::chrono::steady_clock::now() < deadline) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		}
+		return flag.load();
+	}
+
+	// Wait for an atomic counter to reach a target value, with timeout
+	bool wait_for_count(const std::atomic<int>& counter, int target,
+	                    std::chrono::milliseconds timeout = std::chrono::milliseconds(500))
+	{
+		auto deadline = std::chrono::steady_clock::now() + timeout;
+		while (counter.load() < target && std::chrono::steady_clock::now() < deadline) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		}
+		return counter.load() >= target;
+	}
+
+	std::shared_ptr<async_stub_backend> backend_;
+	std::unique_ptr<stream_processor> processor_;
+};
+
+// -- Construction --
+
+TEST_F(StreamProcessorTest, ConstructsWithBackend) {
+	EXPECT_NE(processor_, nullptr);
+}
+
+// -- start_stream / stop_stream --
+
+TEST_F(StreamProcessorTest, StartStreamReturnsTrue) {
+	EXPECT_TRUE(processor_->start_stream(
+		stream_processor::stream_type::custom, "test_channel"));
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, StartStreamDuplicateReturnsFalse) {
+	EXPECT_TRUE(processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1"));
+	EXPECT_FALSE(processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1"));
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, StopStreamReturnsTrue) {
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+	EXPECT_TRUE(processor_->stop_stream("ch1"));
+}
+
+TEST_F(StreamProcessorTest, StopStreamNonExistentReturnsFalse) {
+	EXPECT_FALSE(processor_->stop_stream("no_such_channel"));
+}
+
+TEST_F(StreamProcessorTest, StopAllStreamsStopsMultiple) {
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+	processor_->start_stream(
+		stream_processor::stream_type::redis_pubsub, "ch2");
+	processor_->start_stream(
+		stream_processor::stream_type::postgresql_notify, "ch3");
+
+	// Should not hang or crash
+	processor_->stop_all_streams();
+
+	// All stopped — stopping again returns false
+	EXPECT_FALSE(processor_->stop_stream("ch1"));
+	EXPECT_FALSE(processor_->stop_stream("ch2"));
+	EXPECT_FALSE(processor_->stop_stream("ch3"));
+}
+
+// -- Event handler --
+
+TEST_F(StreamProcessorTest, EventHandlerReceivesConnectedEvent) {
+	std::atomic<bool> received{false};
+	std::string captured_payload;
+	std::mutex capture_mutex;
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event& event) {
+			std::lock_guard<std::mutex> lock(capture_mutex);
+			captured_payload = event.payload;
+			received.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	ASSERT_TRUE(wait_for_flag(received));
+	{
+		std::lock_guard<std::mutex> lock(capture_mutex);
+		EXPECT_EQ(captured_payload, "stream_connected");
+	}
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, EventHandlerReceivesCorrectChannel) {
+	std::atomic<bool> received{false};
+	std::string captured_channel;
+	std::mutex capture_mutex;
+
+	processor_->register_event_handler("notifications",
+		[&](const stream_processor::stream_event& event) {
+			std::lock_guard<std::mutex> lock(capture_mutex);
+			captured_channel = event.channel;
+			received.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::postgresql_notify, "notifications");
+
+	ASSERT_TRUE(wait_for_flag(received));
+	{
+		std::lock_guard<std::mutex> lock(capture_mutex);
+		EXPECT_EQ(captured_channel, "notifications");
+	}
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, EventHandlerReceivesCorrectType) {
+	std::atomic<bool> received{false};
+	stream_processor::stream_type captured_type;
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event& event) {
+			captured_type = event.type;
+			received.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::mongodb_change_stream, "ch1");
+
+	ASSERT_TRUE(wait_for_flag(received));
+	EXPECT_EQ(captured_type,
+		stream_processor::stream_type::mongodb_change_stream);
+	processor_->stop_all_streams();
+}
+
+// -- Global handler --
+
+TEST_F(StreamProcessorTest, GlobalHandlerReceivesAllEvents) {
+	std::atomic<int> event_count{0};
+
+	processor_->register_global_handler(
+		[&](const stream_processor::stream_event&) {
+			event_count.fetch_add(1);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch2");
+
+	ASSERT_TRUE(wait_for_count(event_count, 2));
+	EXPECT_GE(event_count.load(), 2);
+	processor_->stop_all_streams();
+}
+
+// -- Event filter --
+
+TEST_F(StreamProcessorTest, EventFilterRejectsEvent) {
+	std::atomic<bool> handler_called{false};
+
+	processor_->add_event_filter("ch1",
+		[](const stream_processor::stream_event&) {
+			return false;  // Reject all events
+		});
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event&) {
+			handler_called.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	// Give enough time for the event to potentially arrive
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	EXPECT_FALSE(handler_called.load());
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, EventFilterAcceptsEvent) {
+	std::atomic<bool> handler_called{false};
+
+	processor_->add_event_filter("ch1",
+		[](const stream_processor::stream_event& event) {
+			return event.payload == "stream_connected";
+		});
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event&) {
+			handler_called.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	ASSERT_TRUE(wait_for_flag(handler_called));
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, FilterDoesNotAffectGlobalHandler) {
+	std::atomic<bool> global_called{false};
+
+	processor_->add_event_filter("ch1",
+		[](const stream_processor::stream_event&) {
+			return false;  // Reject
+		});
+
+	processor_->register_global_handler(
+		[&](const stream_processor::stream_event&) {
+			global_called.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	// Global handler should NOT be called when filter rejects
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	EXPECT_FALSE(global_called.load());
+	processor_->stop_all_streams();
+}
+
+// -- Per-channel independence --
+
+TEST_F(StreamProcessorTest, StopOneStreamDoesNotAffectOthers) {
+	std::atomic<int> ch1_count{0};
+	std::atomic<int> ch2_count{0};
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event&) {
+			ch1_count.fetch_add(1);
+		});
+	processor_->register_event_handler("ch2",
+		[&](const stream_processor::stream_event&) {
+			ch2_count.fetch_add(1);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch2");
+
+	// Wait for both connected events
+	ASSERT_TRUE(wait_for_count(ch1_count, 1));
+	ASSERT_TRUE(wait_for_count(ch2_count, 1));
+
+	// Stop only ch1 — ch2 should still be alive
+	EXPECT_TRUE(processor_->stop_stream("ch1"));
+
+	// Verify ch1 is stopped
+	EXPECT_FALSE(processor_->stop_stream("ch1"));
+
+	// ch2 stream should still be running (can be stopped)
+	EXPECT_TRUE(processor_->stop_stream("ch2"));
+}
+
+// -- Destructor safety --
+
+TEST_F(StreamProcessorTest, DestructorStopsAllStreams) {
+	auto local_backend = std::make_shared<async_stub_backend>();
+	{
+		stream_processor sp(local_backend);
+		sp.start_stream(
+			stream_processor::stream_type::custom, "ch1");
+		sp.start_stream(
+			stream_processor::stream_type::custom, "ch2");
+		// Destructor runs here — must not crash or hang
+	}
+	SUCCEED();
+}
+
+// -- Template concept overloads --
+
+TEST_F(StreamProcessorTest, TemplateEventHandlerWithLambda) {
+	std::atomic<bool> received{false};
+
+	// Uses the concept-constrained template overload
+	auto handler = [&](const stream_processor::stream_event&) {
+		received.store(true);
+	};
+	processor_->register_event_handler("ch1", handler);
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	ASSERT_TRUE(wait_for_flag(received));
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, TemplateGlobalHandlerWithLambda) {
+	std::atomic<int> count{0};
+
+	auto handler = [&](const stream_processor::stream_event&) {
+		count.fetch_add(1);
+	};
+	processor_->register_global_handler(handler);
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	ASSERT_TRUE(wait_for_count(count, 1));
+	processor_->stop_all_streams();
+}
+
+TEST_F(StreamProcessorTest, TemplateEventFilterWithLambda) {
+	std::atomic<bool> handler_called{false};
+
+	auto filter = [](const stream_processor::stream_event& event) {
+		return event.payload == "stream_connected";
+	};
+	processor_->add_event_filter("ch1", filter);
+
+	processor_->register_event_handler("ch1",
+		[&](const stream_processor::stream_event&) {
+			handler_called.store(true);
+		});
+
+	processor_->start_stream(
+		stream_processor::stream_type::custom, "ch1");
+
+	ASSERT_TRUE(wait_for_flag(handler_called));
+	processor_->stop_all_streams();
 }

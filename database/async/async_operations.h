@@ -615,11 +615,20 @@ namespace database::async
 		void stop_all_streams();
 
 		// Event handling - thread-safe with C++20 concepts
+		// Defined inline to avoid MSVC C2244 with out-of-class concept constraints
 		template<concepts::StreamEventHandler<stream_event> Handler>
-		void register_event_handler(const std::string& channel, Handler&& handler);
+		void register_event_handler(const std::string& channel, Handler&& handler)
+		{
+			std::lock_guard<std::mutex> lock(handlers_mutex_);
+			event_handlers_[channel] = std::forward<Handler>(handler);
+		}
 
 		template<concepts::StreamEventHandler<stream_event> Handler>
-		void register_global_handler(Handler&& handler);
+		void register_global_handler(Handler&& handler)
+		{
+			std::lock_guard<std::mutex> lock(handlers_mutex_);
+			global_handlers_.push_back(std::forward<Handler>(handler));
+		}
 
 		// Legacy overloads for backward compatibility
 		void register_event_handler(const std::string& channel,
@@ -627,8 +636,13 @@ namespace database::async
 		void register_global_handler(std::function<void(const stream_event&)> handler);
 
 		// Filter support - thread-safe with C++20 concepts
+		// Defined inline to avoid MSVC C2244 with out-of-class concept constraints
 		template<concepts::StreamEventFilter<stream_event> Filter>
-		void add_event_filter(const std::string& channel, Filter&& filter);
+		void add_event_filter(const std::string& channel, Filter&& filter)
+		{
+			std::lock_guard<std::mutex> lock(handlers_mutex_);
+			event_filters_[channel] = std::forward<Filter>(filter);
+		}
 
 		// Legacy overload for backward compatibility
 		void add_event_filter(const std::string& channel,
@@ -1233,29 +1247,6 @@ namespace database::async
 	{
 		std::lock_guard<std::mutex> lock(handlers_mutex_);
 		event_filters_[channel] = std::move(filter);
-	}
-
-	template<concepts::StreamEventHandler<stream_processor::stream_event> Handler>
-	void stream_processor::register_event_handler(
-		const std::string& channel, Handler&& handler)
-	{
-		std::lock_guard<std::mutex> lock(handlers_mutex_);
-		event_handlers_[channel] = std::forward<Handler>(handler);
-	}
-
-	template<concepts::StreamEventHandler<stream_processor::stream_event> Handler>
-	void stream_processor::register_global_handler(Handler&& handler)
-	{
-		std::lock_guard<std::mutex> lock(handlers_mutex_);
-		global_handlers_.push_back(std::forward<Handler>(handler));
-	}
-
-	template<concepts::StreamEventFilter<stream_processor::stream_event> Filter>
-	void stream_processor::add_event_filter(
-		const std::string& channel, Filter&& filter)
-	{
-		std::lock_guard<std::mutex> lock(handlers_mutex_);
-		event_filters_[channel] = std::forward<Filter>(filter);
 	}
 
 	inline void stream_processor::stream_thread(

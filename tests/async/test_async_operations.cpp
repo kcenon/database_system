@@ -2,11 +2,13 @@
  * BSD 3-Clause License
  * Copyright (c) 2025, Database System Project
  *
- * Unit tests for async_result<T>, async_executor, and async_database.
+ * Unit tests for async_result<T>, async_executor, async_database,
+ * transaction_coordinator, and saga_builder.
  *
  * Part of #366:
  *   Sub-issue #369: async_result<T>, async_executor, helper functions
  *   Sub-issue #371: async_database
+ *   Sub-issue #373: transaction_coordinator, saga_builder
  */
 
 // Force std::thread fallback for unit testing — avoids external thread_system
@@ -695,4 +697,490 @@ TEST_F(AsyncDatabaseTest, ExecuteAsyncWithOnErrorCallback) {
 
 	EXPECT_THROW(result.get(), std::runtime_error);
 	EXPECT_EQ(error_msg, "execute_failed");
+}
+
+// ============================================================================
+// transaction_coordinator tests
+// ============================================================================
+
+namespace {
+
+// Controllable stub for transaction coordinator testing.
+// Each instance represents one participant in a distributed transaction.
+class txn_stub_backend : public ::database::core::database_backend {
+public:
+	::database::database_types type() const override {
+		return ::database::database_types::sqlite;
+	}
+
+	kcenon::common::VoidResult initialize(
+		const ::database::core::connection_config&) override
+	{
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult shutdown() override {
+		return kcenon::common::ok();
+	}
+
+	bool is_initialized() const override { return true; }
+
+	kcenon::common::Result<uint64_t> insert_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<uint64_t> update_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<uint64_t> delete_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<::database::core::database_result> select_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<::database::core::database_result>(
+			::database::core::database_result{});
+	}
+
+	kcenon::common::VoidResult execute_query(const std::string&) override {
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult begin_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		if (should_fail_begin_) {
+			return kcenon::common::error_info{1, "begin_failed", "stub"};
+		}
+		begin_count_++;
+		in_txn_ = true;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult commit_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		if (should_fail_commit_) {
+			return kcenon::common::error_info{1, "commit_failed", "stub"};
+		}
+		commit_count_++;
+		in_txn_ = false;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult rollback_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		rollback_count_++;
+		in_txn_ = false;
+		return kcenon::common::ok();
+	}
+
+	bool in_transaction() const override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return in_txn_;
+	}
+
+	std::string last_error() const override { return ""; }
+	std::map<std::string, std::string> connection_info() const override {
+		return {{"type", "txn_stub"}};
+	}
+
+	// Test controls
+	void set_fail_begin(bool fail) {
+		std::lock_guard<std::mutex> lock(mutex_);
+		should_fail_begin_ = fail;
+	}
+	void set_fail_commit(bool fail) {
+		std::lock_guard<std::mutex> lock(mutex_);
+		should_fail_commit_ = fail;
+	}
+	int begin_count() const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return begin_count_;
+	}
+	int commit_count() const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return commit_count_;
+	}
+	int rollback_count() const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return rollback_count_;
+	}
+
+private:
+	mutable std::mutex mutex_;
+	bool in_txn_ = false;
+	bool should_fail_begin_ = false;
+	bool should_fail_commit_ = false;
+	int begin_count_ = 0;
+	int commit_count_ = 0;
+	int rollback_count_ = 0;
+};
+
+} // anonymous namespace
+
+class TransactionCoordinatorTest : public ::testing::Test {
+protected:
+	void SetUp() override {
+		p1_ = std::make_shared<txn_stub_backend>();
+		p2_ = std::make_shared<txn_stub_backend>();
+		p3_ = std::make_shared<txn_stub_backend>();
+		participants_ = {p1_, p2_, p3_};
+	}
+
+	transaction_coordinator coord_;
+	std::shared_ptr<txn_stub_backend> p1_;
+	std::shared_ptr<txn_stub_backend> p2_;
+	std::shared_ptr<txn_stub_backend> p3_;
+	std::vector<std::shared_ptr<::database::core::database_backend>> participants_;
+};
+
+// -- begin_distributed_transaction --
+
+TEST_F(TransactionCoordinatorTest, BeginCreatesTransaction) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	EXPECT_FALSE(txn_id.empty());
+
+	auto active = coord_.get_active_transactions();
+	ASSERT_EQ(active.size(), 1u);
+	EXPECT_EQ(active[0].transaction_id, txn_id);
+	EXPECT_EQ(active[0].participants.size(), 3u);
+	EXPECT_EQ(active[0].state, transaction_coordinator::transaction_state::active);
+}
+
+TEST_F(TransactionCoordinatorTest, BeginGeneratesUniqueIds) {
+	auto id1 = coord_.begin_distributed_transaction(participants_);
+	auto id2 = coord_.begin_distributed_transaction(participants_);
+	EXPECT_NE(id1, id2);
+	EXPECT_EQ(coord_.get_active_transactions().size(), 2u);
+}
+
+// -- prepare_phase --
+
+TEST_F(TransactionCoordinatorTest, PreparePhaseSuccess) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	bool result = coord_.prepare_phase(txn_id).get();
+	EXPECT_TRUE(result);
+
+	auto txns = coord_.get_active_transactions();
+	ASSERT_EQ(txns.size(), 1u);
+	EXPECT_EQ(txns[0].state, transaction_coordinator::transaction_state::prepared);
+	EXPECT_EQ(p1_->begin_count(), 1);
+	EXPECT_EQ(p2_->begin_count(), 1);
+	EXPECT_EQ(p3_->begin_count(), 1);
+}
+
+TEST_F(TransactionCoordinatorTest, PreparePhaseThrowsForUnknownTransaction) {
+	EXPECT_THROW(coord_.prepare_phase("nonexistent").get(), std::exception);
+}
+
+TEST_F(TransactionCoordinatorTest, PreparePhaseRollsBackOnPartialFailure) {
+	p2_->set_fail_begin(true);
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	bool result = coord_.prepare_phase(txn_id).get();
+	EXPECT_FALSE(result);
+
+	// p1 was prepared then rolled back; p2 failed; p3 never reached
+	EXPECT_EQ(p1_->begin_count(), 1);
+	EXPECT_EQ(p1_->rollback_count(), 1);
+	EXPECT_EQ(p2_->begin_count(), 0);
+	EXPECT_EQ(p3_->begin_count(), 0);
+
+	auto txns = coord_.get_active_transactions();
+	ASSERT_EQ(txns.size(), 1u);
+	EXPECT_EQ(txns[0].state, transaction_coordinator::transaction_state::aborted);
+}
+
+// -- commit_phase --
+
+TEST_F(TransactionCoordinatorTest, CommitPhaseSuccess) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	coord_.prepare_phase(txn_id).get();
+
+	bool result = coord_.commit_phase(txn_id).get();
+	EXPECT_TRUE(result);
+
+	EXPECT_EQ(p1_->commit_count(), 1);
+	EXPECT_EQ(p2_->commit_count(), 1);
+	EXPECT_EQ(p3_->commit_count(), 1);
+
+	auto txns = coord_.get_active_transactions();
+	EXPECT_EQ(txns[0].state, transaction_coordinator::transaction_state::committed);
+}
+
+TEST_F(TransactionCoordinatorTest, CommitPhaseFailsIfNotPrepared) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	// Skip prepare_phase — state is still "active"
+	bool result = coord_.commit_phase(txn_id).get();
+	EXPECT_FALSE(result);
+	EXPECT_EQ(p1_->commit_count(), 0);
+}
+
+// -- commit_distributed_transaction (full 2PC) --
+
+TEST_F(TransactionCoordinatorTest, CommitDistributedTransactionFull2PC) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	bool result = coord_.commit_distributed_transaction(txn_id).get();
+	EXPECT_TRUE(result);
+
+	EXPECT_EQ(p1_->begin_count(), 1);
+	EXPECT_EQ(p1_->commit_count(), 1);
+	EXPECT_EQ(p2_->begin_count(), 1);
+	EXPECT_EQ(p2_->commit_count(), 1);
+}
+
+TEST_F(TransactionCoordinatorTest, CommitDistributedTransactionFailsOnPrepare) {
+	p3_->set_fail_begin(true);
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	bool result = coord_.commit_distributed_transaction(txn_id).get();
+	EXPECT_FALSE(result);
+
+	// p1, p2 prepared then rolled back
+	EXPECT_EQ(p1_->rollback_count(), 1);
+	EXPECT_EQ(p2_->rollback_count(), 1);
+	EXPECT_EQ(p3_->commit_count(), 0);
+}
+
+// -- rollback_distributed_transaction --
+
+TEST_F(TransactionCoordinatorTest, RollbackDistributedTransaction) {
+	auto txn_id = coord_.begin_distributed_transaction(participants_);
+	coord_.prepare_phase(txn_id).get();
+
+	bool result = coord_.rollback_distributed_transaction(txn_id).get();
+	EXPECT_TRUE(result);
+
+	EXPECT_EQ(p1_->rollback_count(), 1);
+	EXPECT_EQ(p2_->rollback_count(), 1);
+	EXPECT_EQ(p3_->rollback_count(), 1);
+
+	auto txns = coord_.get_active_transactions();
+	EXPECT_EQ(txns[0].state, transaction_coordinator::transaction_state::aborted);
+}
+
+TEST_F(TransactionCoordinatorTest, RollbackThrowsForUnknownTransaction) {
+	EXPECT_THROW(
+		coord_.rollback_distributed_transaction("nonexistent").get(),
+		std::exception);
+}
+
+// -- recover_transactions --
+
+TEST_F(TransactionCoordinatorTest, RecoverCleansUpCompletedTransactions) {
+	auto id1 = coord_.begin_distributed_transaction(participants_);
+	auto id2 = coord_.begin_distributed_transaction(participants_);
+	coord_.commit_distributed_transaction(id1).get();
+
+	EXPECT_EQ(coord_.get_active_transactions().size(), 2u);
+	coord_.recover_transactions();
+
+	// id1 is committed → cleaned up; id2 is still active
+	auto remaining = coord_.get_active_transactions();
+	ASSERT_EQ(remaining.size(), 1u);
+	EXPECT_EQ(remaining[0].transaction_id, id2);
+}
+
+// -- create_saga --
+
+TEST_F(TransactionCoordinatorTest, CreateSagaReturnsSagaBuilder) {
+	auto saga = coord_.create_saga();
+	// Verify the saga builder can execute (empty saga succeeds)
+	bool result = saga.execute().get();
+	EXPECT_TRUE(result);
+}
+
+// ============================================================================
+// saga_builder tests
+// ============================================================================
+
+class SagaBuilderTest : public ::testing::Test {
+protected:
+	transaction_coordinator coord_;
+};
+
+TEST_F(SagaBuilderTest, EmptySagaSucceeds) {
+	auto saga = coord_.create_saga();
+	bool result = saga.execute().get();
+	EXPECT_TRUE(result);
+}
+
+TEST_F(SagaBuilderTest, AllStepsSucceed) {
+	std::vector<int> execution_order;
+
+	auto saga = coord_.create_saga();
+	saga.add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(1);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-1);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(2);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-2);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(3);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-3);
+			return make_ready_result(true);
+		}
+	);
+
+	bool result = saga.execute().get();
+	EXPECT_TRUE(result);
+	EXPECT_EQ(execution_order, (std::vector<int>{1, 2, 3}));
+}
+
+TEST_F(SagaBuilderTest, CompensatesOnActionFailure) {
+	std::vector<int> execution_order;
+
+	auto saga = coord_.create_saga();
+	saga.add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(1);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-1);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(2);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-2);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(3);
+			return make_ready_result(false); // Step 3 fails
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-3);
+			return make_ready_result(true);
+		}
+	);
+
+	bool result = saga.execute().get();
+	EXPECT_FALSE(result);
+	// Steps 1,2 executed; step 3 failed; compensate 2,1 in reverse
+	EXPECT_EQ(execution_order, (std::vector<int>{1, 2, 3, -2, -1}));
+}
+
+TEST_F(SagaBuilderTest, CompensatesOnException) {
+	std::vector<int> execution_order;
+
+	auto saga = coord_.create_saga();
+	saga.add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(1);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-1);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(2);
+			throw std::runtime_error("step 2 exploded");
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-2);
+			return make_ready_result(true);
+		}
+	);
+
+	bool result = saga.execute().get();
+	EXPECT_FALSE(result);
+	// Step 1 executed; step 2 threw; compensate 1 in reverse
+	EXPECT_EQ(execution_order, (std::vector<int>{1, 2, -1}));
+}
+
+TEST_F(SagaBuilderTest, SingleStepSuccess) {
+	bool action_called = false;
+	auto saga = coord_.create_saga();
+	saga.add_step(
+		[&]() -> async_result<bool> {
+			action_called = true;
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			return make_ready_result(true);
+		}
+	);
+
+	bool result = saga.execute().get();
+	EXPECT_TRUE(result);
+	EXPECT_TRUE(action_called);
+}
+
+TEST_F(SagaBuilderTest, CompensationExceptionDoesNotBreakChain) {
+	std::vector<int> execution_order;
+
+	auto saga = coord_.create_saga();
+	saga.add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(1);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-1);
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(2);
+			return make_ready_result(true);
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-2);
+			throw std::runtime_error("compensation 2 failed");
+			return make_ready_result(true);
+		}
+	).add_step(
+		[&]() -> async_result<bool> {
+			execution_order.push_back(3);
+			return make_ready_result(false); // fails
+		},
+		[&]() -> async_result<bool> {
+			execution_order.push_back(-3);
+			return make_ready_result(true);
+		}
+	);
+
+	bool result = saga.execute().get();
+	EXPECT_FALSE(result);
+	// Compensation -2 throws, but -1 still executes
+	EXPECT_EQ(execution_order, (std::vector<int>{1, 2, 3, -2, -1}));
+}
+
+TEST_F(SagaBuilderTest, AddStepReturnsSelfForChaining) {
+	auto saga = coord_.create_saga();
+	auto& ref = saga.add_step(
+		[]() -> async_result<bool> { return make_ready_result(true); },
+		[]() -> async_result<bool> { return make_ready_result(true); }
+	);
+	EXPECT_EQ(&ref, &saga);
 }

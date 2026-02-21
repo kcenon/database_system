@@ -78,6 +78,8 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
     # P1-2 Headers (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
+    # Protocol Serialization Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.h
 )
 
 # Collect all source files
@@ -106,6 +108,8 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.cpp
     # P1-2 Sources (Immutable Query Builder)
     ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.cpp
+    # Protocol Serialization Sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.cpp
 )
 
 # Add container-based protocol serialization if container_system is available

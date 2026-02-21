@@ -105,6 +105,7 @@ namespace database::async
 	template<typename T> class async_result;
 	class async_executor;
 	class transaction_coordinator;
+	class saga_builder;
 
 	/**
 	 * @class async_result
@@ -698,7 +699,6 @@ namespace database::async
 		async_result<bool> commit_phase(const std::string& transaction_id);
 
 		// Saga pattern support
-		class saga_builder;
 		saga_builder create_saga();
 
 		// Transaction recovery
@@ -900,6 +900,256 @@ namespace database::async
 		promise.set_exception(std::make_exception_ptr(error));
 		return async_result<T>(promise.get_future());
 	}
+
+	// ── transaction_coordinator inline implementations ───────────────────
+
+	inline std::string transaction_coordinator::begin_distributed_transaction(
+		const std::vector<std::shared_ptr<core::database_backend>>& participants)
+	{
+		static std::atomic<uint64_t> id_counter{0};
+		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()).count();
+		std::string txn_id = "txn-" + std::to_string(ms) + "-"
+			+ std::to_string(id_counter.fetch_add(1));
+
+		std::lock_guard<std::mutex> lock(transactions_mutex_);
+		distributed_transaction txn;
+		txn.transaction_id = txn_id;
+		txn.participants = participants;
+		txn.state = transaction_state::active;
+		txn.start_time = std::chrono::system_clock::now();
+		txn.last_activity = txn.start_time;
+		active_transactions_[txn_id] = std::move(txn);
+		return txn_id;
+	}
+
+	inline async_result<bool> transaction_coordinator::prepare_phase(
+		const std::string& transaction_id)
+	{
+		std::vector<std::shared_ptr<core::database_backend>> participants;
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it == active_transactions_.end()) {
+				return make_error_result<bool>(
+					std::runtime_error("Transaction not found: " + transaction_id));
+			}
+			it->second.state = transaction_state::preparing;
+			it->second.last_activity = std::chrono::system_clock::now();
+			participants = it->second.participants;
+		}
+
+		std::vector<std::shared_ptr<core::database_backend>> prepared;
+		for (const auto& participant : participants) {
+			auto result = participant->begin_transaction();
+			if (result.is_err()) {
+				for (const auto& p : prepared) {
+					p->rollback_transaction();
+				}
+				std::lock_guard<std::mutex> lock(transactions_mutex_);
+				auto it = active_transactions_.find(transaction_id);
+				if (it != active_transactions_.end()) {
+					it->second.state = transaction_state::aborted;
+				}
+				return make_ready_result(false);
+			}
+			prepared.push_back(participant);
+		}
+
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it != active_transactions_.end()) {
+				it->second.state = transaction_state::prepared;
+			}
+		}
+		return make_ready_result(true);
+	}
+
+	inline async_result<bool> transaction_coordinator::commit_phase(
+		const std::string& transaction_id)
+	{
+		std::vector<std::shared_ptr<core::database_backend>> participants;
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it == active_transactions_.end()) {
+				return make_error_result<bool>(
+					std::runtime_error("Transaction not found: " + transaction_id));
+			}
+			if (it->second.state != transaction_state::prepared) {
+				return make_ready_result(false);
+			}
+			it->second.state = transaction_state::committing;
+			it->second.last_activity = std::chrono::system_clock::now();
+			participants = it->second.participants;
+		}
+
+		bool all_committed = true;
+		for (const auto& participant : participants) {
+			auto result = participant->commit_transaction();
+			if (result.is_err()) {
+				all_committed = false;
+			}
+		}
+
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it != active_transactions_.end()) {
+				it->second.state = all_committed
+					? transaction_state::committed
+					: transaction_state::aborted;
+			}
+		}
+		return make_ready_result(all_committed);
+	}
+
+	inline async_result<bool> transaction_coordinator::commit_distributed_transaction(
+		const std::string& transaction_id)
+	{
+		return two_phase_commit(transaction_id);
+	}
+
+	inline async_result<bool> transaction_coordinator::rollback_distributed_transaction(
+		const std::string& transaction_id)
+	{
+		std::vector<std::shared_ptr<core::database_backend>> participants;
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it == active_transactions_.end()) {
+				return make_error_result<bool>(
+					std::runtime_error("Transaction not found: " + transaction_id));
+			}
+			it->second.state = transaction_state::aborting;
+			it->second.last_activity = std::chrono::system_clock::now();
+			participants = it->second.participants;
+		}
+
+		bool all_rolled_back = true;
+		for (const auto& participant : participants) {
+			auto result = participant->rollback_transaction();
+			if (result.is_err()) {
+				all_rolled_back = false;
+			}
+		}
+
+		{
+			std::lock_guard<std::mutex> lock(transactions_mutex_);
+			auto it = active_transactions_.find(transaction_id);
+			if (it != active_transactions_.end()) {
+				it->second.state = transaction_state::aborted;
+			}
+		}
+		return make_ready_result(all_rolled_back);
+	}
+
+	inline async_result<bool> transaction_coordinator::two_phase_commit(
+		const std::string& transaction_id)
+	{
+		bool prepared = prepare_phase(transaction_id).get();
+		if (!prepared) {
+			return make_ready_result(false);
+		}
+		return commit_phase(transaction_id);
+	}
+
+	inline void transaction_coordinator::recover_transactions()
+	{
+		cleanup_completed_transactions();
+	}
+
+	inline std::vector<transaction_coordinator::distributed_transaction>
+	transaction_coordinator::get_active_transactions() const
+	{
+		std::lock_guard<std::mutex> lock(transactions_mutex_);
+		std::vector<distributed_transaction> result;
+		result.reserve(active_transactions_.size());
+		for (const auto& [id, txn] : active_transactions_) {
+			result.push_back(txn);
+		}
+		return result;
+	}
+
+	inline saga_builder transaction_coordinator::create_saga()
+	{
+		return saga_builder(*this);
+	}
+
+	inline void transaction_coordinator::cleanup_completed_transactions()
+	{
+		std::lock_guard<std::mutex> lock(transactions_mutex_);
+		for (auto it = active_transactions_.begin();
+			 it != active_transactions_.end();) {
+			if (it->second.state == transaction_state::committed
+				|| it->second.state == transaction_state::aborted) {
+				it = active_transactions_.erase(it);
+			} else {
+				++it;
+			}
+		}
+	}
+
+	// ── end transaction_coordinator implementations ──────────────────────
+
+	// ── saga_builder inline implementations ──────────────────────────────
+
+	inline saga_builder::saga_builder(transaction_coordinator& coordinator)
+		: coordinator_(coordinator)
+	{
+	}
+
+	inline saga_builder& saga_builder::add_step(
+		std::function<async_result<bool>()> action,
+		std::function<async_result<bool>()> compensation)
+	{
+		steps_.push_back({std::move(action), std::move(compensation)});
+		return *this;
+	}
+
+	template<concepts::TransactionAction Action,
+			 concepts::CompensationAction Compensation>
+	saga_builder& saga_builder::add_step(
+		Action&& action, Compensation&& compensation)
+	{
+		steps_.push_back({
+			std::function<async_result<bool>()>(std::forward<Action>(action)),
+			std::function<async_result<bool>()>(std::forward<Compensation>(compensation))
+		});
+		return *this;
+	}
+
+	inline async_result<bool> saga_builder::execute()
+	{
+		std::vector<size_t> completed;
+
+		for (size_t i = 0; i < steps_.size(); ++i) {
+			try {
+				bool success = steps_[i].action().get();
+				if (!success) {
+					for (auto it = completed.rbegin();
+						 it != completed.rend(); ++it) {
+						try { steps_[*it].compensation().get(); }
+						catch (...) {}
+					}
+					return make_ready_result(false);
+				}
+				completed.push_back(i);
+			} catch (...) {
+				for (auto it = completed.rbegin();
+					 it != completed.rend(); ++it) {
+					try { steps_[*it].compensation().get(); }
+					catch (...) {}
+				}
+				return make_ready_result(false);
+			}
+		}
+
+		return make_ready_result(true);
+	}
+
+	// ── end saga_builder implementations ─────────────────────────────────
 
 	// Coroutine helpers (C++20 only)
 #ifdef HAS_COROUTINES

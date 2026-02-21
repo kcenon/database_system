@@ -2,14 +2,11 @@
  * BSD 3-Clause License
  * Copyright (c) 2025, Database System Project
  *
- * Unit tests for async_result<T> and async_executor.
+ * Unit tests for async_result<T>, async_executor, and async_database.
  *
- * Part of #366 / Sub-issue #369:
- *   - async_result<T>: constructor, get(), get_for(), is_ready(), wait_for(),
- *     then(), on_error(), legacy overloads
- *   - async_executor: submit(), shutdown(), wait_for_completion(),
- *     pending_tasks(), thread_count()
- *   - Helper functions: make_ready_result(), make_error_result()
+ * Part of #366:
+ *   Sub-issue #369: async_result<T>, async_executor, helper functions
+ *   Sub-issue #371: async_database
  */
 
 // Force std::thread fallback for unit testing — avoids external thread_system
@@ -384,4 +381,318 @@ TEST(AsyncHelpersTest, MakeErrorResultInvokesOnErrorCallback) {
 
 	EXPECT_THROW(result.get(), std::exception);
 	EXPECT_TRUE(error_caught);
+}
+
+//=============================================================================
+// async_database Tests (#371)
+//=============================================================================
+
+#include "database/core/database_backend.h"
+
+namespace {
+
+// Stub backend for async_database testing.
+// Uses global-scope prefix to avoid the namespace alias conflict with
+// 'using database = unified_database_system'.
+class async_stub_backend : public ::database::core::database_backend {
+public:
+	::database::database_types type() const override {
+		return ::database::database_types::sqlite;
+	}
+
+	kcenon::common::VoidResult initialize(
+		const ::database::core::connection_config&) override
+	{
+		std::lock_guard<std::mutex> lock(mutex_);
+		initialized_ = true;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult shutdown() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		initialized_ = false;
+		return kcenon::common::ok();
+	}
+
+	bool is_initialized() const override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return initialized_;
+	}
+
+	kcenon::common::Result<uint64_t> insert_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<uint64_t> update_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<uint64_t> delete_query(
+		const std::string&) override
+	{
+		return kcenon::common::Result<uint64_t>(uint64_t{1});
+	}
+
+	kcenon::common::Result<::database::core::database_result> select_query(
+		const std::string&) override
+	{
+		::database::core::database_result rows;
+		::database::core::database_row row;
+		row["id"] = int64_t{1};
+		row["name"] = std::string("stub_row");
+		rows.push_back(row);
+		return kcenon::common::Result<::database::core::database_result>(
+			std::move(rows));
+	}
+
+	kcenon::common::VoidResult execute_query(
+		const std::string& query) override
+	{
+		std::lock_guard<std::mutex> lock(mutex_);
+		if (should_fail_execute_) {
+			return kcenon::common::error_info{1, "execute_failed", "stub"};
+		}
+		last_executed_query_ = query;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult begin_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		in_transaction_ = true;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult commit_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		in_transaction_ = false;
+		return kcenon::common::ok();
+	}
+
+	kcenon::common::VoidResult rollback_transaction() override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		in_transaction_ = false;
+		return kcenon::common::ok();
+	}
+
+	bool in_transaction() const override {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return in_transaction_;
+	}
+	std::string last_error() const override { return ""; }
+
+	std::map<std::string, std::string> connection_info() const override {
+		return {{"type", "stub"}};
+	}
+
+	// Test helpers
+	void set_fail_execute(bool fail) {
+		std::lock_guard<std::mutex> lock(mutex_);
+		should_fail_execute_ = fail;
+	}
+	std::string get_last_query() const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		return last_executed_query_;
+	}
+
+private:
+	mutable std::mutex mutex_;
+	bool initialized_ = false;
+	bool in_transaction_ = false;
+	bool should_fail_execute_ = false;
+	std::string last_executed_query_;
+};
+
+} // anonymous namespace
+
+class AsyncDatabaseTest : public ::testing::Test {
+protected:
+	void SetUp() override {
+		backend_ = std::make_shared<async_stub_backend>();
+		executor_ = std::make_shared<async_executor>(2);
+		db_ = std::make_unique<async_database>(backend_, executor_);
+	}
+
+	void TearDown() override {
+		db_.reset();
+		if (executor_) {
+			executor_->shutdown();
+		}
+	}
+
+	std::shared_ptr<async_stub_backend> backend_;
+	std::shared_ptr<async_executor> executor_;
+	std::unique_ptr<async_database> db_;
+};
+
+// -- Constructor --
+
+TEST_F(AsyncDatabaseTest, ConstructsWithBackendAndExecutor) {
+	EXPECT_NE(db_, nullptr);
+}
+
+// -- execute_async() --
+
+TEST_F(AsyncDatabaseTest, ExecuteAsyncReturnsTrue) {
+	auto result = db_->execute_async("CREATE TABLE t (id INT)");
+	EXPECT_TRUE(result.get());
+}
+
+TEST_F(AsyncDatabaseTest, ExecuteAsyncDelegatesToBackend) {
+	auto result = db_->execute_async("DROP TABLE IF EXISTS t");
+	result.get();
+	EXPECT_EQ(backend_->get_last_query(), "DROP TABLE IF EXISTS t");
+}
+
+TEST_F(AsyncDatabaseTest, ExecuteAsyncThrowsOnBackendFailure) {
+	backend_->set_fail_execute(true);
+	auto result = db_->execute_async("BAD QUERY");
+	EXPECT_THROW(result.get(), std::runtime_error);
+}
+
+// -- select_async() --
+
+TEST_F(AsyncDatabaseTest, SelectAsyncReturnsRows) {
+	auto result = db_->select_async("SELECT * FROM t");
+	auto rows = result.get();
+	ASSERT_EQ(rows.size(), 1u);
+	EXPECT_EQ(std::get<std::string>(rows[0].at("name")), "stub_row");
+}
+
+// -- execute_batch_async() --
+
+TEST_F(AsyncDatabaseTest, ExecuteBatchAsyncProcessesAllQueries) {
+	std::vector<std::string> queries = {
+		"INSERT INTO t VALUES (1)",
+		"INSERT INTO t VALUES (2)",
+		"INSERT INTO t VALUES (3)"
+	};
+	auto result = db_->execute_batch_async(queries);
+	auto results = result.get();
+
+	ASSERT_EQ(results.size(), 3u);
+	EXPECT_TRUE(results[0]);
+	EXPECT_TRUE(results[1]);
+	EXPECT_TRUE(results[2]);
+}
+
+TEST_F(AsyncDatabaseTest, ExecuteBatchAsyncReportsFailures) {
+	backend_->set_fail_execute(true);
+	std::vector<std::string> queries = {"Q1", "Q2"};
+	auto result = db_->execute_batch_async(queries);
+	auto results = result.get();
+
+	ASSERT_EQ(results.size(), 2u);
+	EXPECT_FALSE(results[0]);
+	EXPECT_FALSE(results[1]);
+}
+
+// -- select_batch_async() --
+
+TEST_F(AsyncDatabaseTest, SelectBatchAsyncReturnsMultipleResults) {
+	std::vector<std::string> queries = {
+		"SELECT * FROM t",
+		"SELECT * FROM t"
+	};
+	auto result = db_->select_batch_async(queries);
+	auto results = result.get();
+
+	ASSERT_EQ(results.size(), 2u);
+	EXPECT_EQ(results[0].size(), 1u);
+	EXPECT_EQ(results[1].size(), 1u);
+}
+
+// -- Transaction methods --
+
+TEST_F(AsyncDatabaseTest, BeginTransactionAsyncSucceeds) {
+	auto result = db_->begin_transaction_async();
+	EXPECT_TRUE(result.get());
+	EXPECT_TRUE(backend_->in_transaction());
+}
+
+TEST_F(AsyncDatabaseTest, CommitTransactionAsyncSucceeds) {
+	db_->begin_transaction_async().get();
+	auto result = db_->commit_transaction_async();
+	EXPECT_TRUE(result.get());
+	EXPECT_FALSE(backend_->in_transaction());
+}
+
+TEST_F(AsyncDatabaseTest, RollbackTransactionAsyncSucceeds) {
+	db_->begin_transaction_async().get();
+	auto result = db_->rollback_transaction_async();
+	EXPECT_TRUE(result.get());
+	EXPECT_FALSE(backend_->in_transaction());
+}
+
+// -- Connection management --
+
+TEST_F(AsyncDatabaseTest, ConnectAsyncInitializesBackend) {
+	auto result = db_->connect_async("host=localhost dbname=test");
+	EXPECT_TRUE(result.get());
+	EXPECT_TRUE(backend_->is_initialized());
+}
+
+TEST_F(AsyncDatabaseTest, DisconnectAsyncShutsDownBackend) {
+	db_->connect_async("host=localhost").get();
+	auto result = db_->disconnect_async();
+	EXPECT_TRUE(result.get());
+	EXPECT_FALSE(backend_->is_initialized());
+}
+
+// -- Concurrent operations --
+
+TEST_F(AsyncDatabaseTest, ConcurrentExecuteAsyncOperations) {
+	// async_result<T> is non-movable (contains std::mutex), so we call
+	// get() immediately per operation rather than collecting into a vector.
+	constexpr int NUM_OPS = 20;
+	std::atomic<int> success_count{0};
+
+	// Submit all operations, each getting its result in a detached context
+	std::vector<std::future<bool>> futures;
+	futures.reserve(NUM_OPS);
+	for (int i = 0; i < NUM_OPS; ++i) {
+		futures.push_back(executor_->submit([this, i]() -> bool {
+			auto result = backend_->execute_query(
+				"INSERT INTO t VALUES (" + std::to_string(i) + ")");
+			return result.is_ok();
+		}));
+	}
+
+	for (auto& f : futures) {
+		if (f.get()) {
+			success_count.fetch_add(1);
+		}
+	}
+	EXPECT_EQ(success_count.load(), NUM_OPS);
+}
+
+// -- Callback integration --
+
+TEST_F(AsyncDatabaseTest, ExecuteAsyncWithThenCallback) {
+	auto result = db_->execute_async("CREATE TABLE t2 (id INT)");
+
+	bool callback_invoked = false;
+	result.then([&callback_invoked](bool success) {
+		callback_invoked = true;
+		EXPECT_TRUE(success);
+	});
+
+	result.get();
+	EXPECT_TRUE(callback_invoked);
+}
+
+TEST_F(AsyncDatabaseTest, ExecuteAsyncWithOnErrorCallback) {
+	backend_->set_fail_execute(true);
+	auto result = db_->execute_async("BAD");
+
+	std::string error_msg;
+	result.on_error([&error_msg](const std::exception& e) {
+		error_msg = e.what();
+	});
+
+	EXPECT_THROW(result.get(), std::runtime_error);
+	EXPECT_EQ(error_msg, "execute_failed");
 }

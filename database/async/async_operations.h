@@ -744,6 +744,148 @@ namespace database::async
 		std::vector<saga_step> steps_;
 	};
 
+	// ── async_database inline implementations ───────────────────────────
+
+	inline async_database::async_database(
+		std::shared_ptr<core::database_backend> db,
+		std::shared_ptr<async_executor> executor)
+		: db_(std::move(db))
+		, executor_(std::move(executor))
+	{
+	}
+
+	inline async_result<bool> async_database::execute_async(const std::string& query)
+	{
+		auto db = db_;
+		auto future = executor_->submit([db, query]() -> bool {
+			auto result = db->execute_query(query);
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	inline async_result<core::database_result> async_database::select_async(const std::string& query)
+	{
+		auto db = db_;
+		auto future = executor_->submit([db, query]() -> core::database_result {
+			auto result = db->select_query(query);
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return result.value();
+		});
+		return async_result<core::database_result>(std::move(future));
+	}
+
+	inline async_result<std::vector<bool>> async_database::execute_batch_async(
+		const std::vector<std::string>& queries)
+	{
+		auto db = db_;
+		auto queries_copy = queries;
+		auto future = executor_->submit([db, queries_copy]() -> std::vector<bool> {
+			std::vector<bool> results;
+			results.reserve(queries_copy.size());
+			for (const auto& q : queries_copy) {
+				auto result = db->execute_query(q);
+				results.push_back(result.is_ok());
+			}
+			return results;
+		});
+		return async_result<std::vector<bool>>(std::move(future));
+	}
+
+	inline async_result<std::vector<core::database_result>> async_database::select_batch_async(
+		const std::vector<std::string>& queries)
+	{
+		auto db = db_;
+		auto queries_copy = queries;
+		auto future = executor_->submit([db, queries_copy]() -> std::vector<core::database_result> {
+			std::vector<core::database_result> results;
+			results.reserve(queries_copy.size());
+			for (const auto& q : queries_copy) {
+				auto result = db->select_query(q);
+				if (result.is_ok()) {
+					results.push_back(result.value());
+				} else {
+					results.push_back(core::database_result{});
+				}
+			}
+			return results;
+		});
+		return async_result<std::vector<core::database_result>>(std::move(future));
+	}
+
+	inline async_result<bool> async_database::begin_transaction_async()
+	{
+		auto db = db_;
+		auto future = executor_->submit([db]() -> bool {
+			auto result = db->begin_transaction();
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	inline async_result<bool> async_database::commit_transaction_async()
+	{
+		auto db = db_;
+		auto future = executor_->submit([db]() -> bool {
+			auto result = db->commit_transaction();
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	inline async_result<bool> async_database::rollback_transaction_async()
+	{
+		auto db = db_;
+		auto future = executor_->submit([db]() -> bool {
+			auto result = db->rollback_transaction();
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	inline async_result<bool> async_database::connect_async(const std::string& connection_string)
+	{
+		auto db = db_;
+		auto future = executor_->submit([db, connection_string]() -> bool {
+			auto config = core::connection_config::from_string(connection_string);
+			auto result = db->initialize(config);
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	inline async_result<bool> async_database::disconnect_async()
+	{
+		auto db = db_;
+		auto future = executor_->submit([db]() -> bool {
+			auto result = db->shutdown();
+			if (result.is_err()) {
+				throw std::runtime_error(result.error().message);
+			}
+			return true;
+		});
+		return async_result<bool>(std::move(future));
+	}
+
+	// ── end async_database implementations ───────────────────────────────
+
 	// Helper functions for async operations
 	template<typename T>
 	async_result<T> make_ready_result(T value) {

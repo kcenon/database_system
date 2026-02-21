@@ -506,6 +506,90 @@ if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
 endif()
 
 ##################################################
+# ORM Entity Metadata Tests (Issue #377)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(entity_metadata_test
+        orm/test_entity_metadata.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(entity_metadata_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(entity_metadata_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(entity_metadata_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME EntityMetadataTests COMMAND entity_metadata_test)
+
+    gtest_discover_tests(entity_metadata_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "ORM entity metadata tests configured (Issue #377)")
+endif()
+
+##################################################
+# Immutable Query Builder Tests (Issue #377)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(immutable_query_builder_test
+        query/test_immutable_query_builder.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(immutable_query_builder_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(immutable_query_builder_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(immutable_query_builder_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME ImmutableQueryBuilderTests COMMAND immutable_query_builder_test)
+
+    gtest_discover_tests(immutable_query_builder_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Immutable query builder tests configured (Issue #377)")
+endif()
+
+##################################################
 # Async Unit Tests (Issue #369)
 ##################################################
 

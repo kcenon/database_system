@@ -1151,6 +1151,157 @@ namespace database::async
 
 	// ── end saga_builder implementations ─────────────────────────────────
 
+	// ── stream_processor inline implementations ──────────────────────────
+
+	inline stream_processor::stream_processor(
+		std::shared_ptr<core::database_backend> db)
+		: db_(std::move(db))
+	{
+	}
+
+	inline stream_processor::~stream_processor()
+	{
+		stop_all_streams();
+	}
+
+	inline bool stream_processor::start_stream(
+		stream_type type, const std::string& channel)
+	{
+		std::lock_guard<std::mutex> lock(threads_mutex_);
+		if (stream_threads_.count(channel) > 0) {
+			return false;
+		}
+		stream_threads_.emplace(
+			channel,
+			std::thread(&stream_processor::stream_thread, this, channel, type));
+		return true;
+	}
+
+	inline bool stream_processor::stop_stream(const std::string& channel)
+	{
+		std::thread t;
+		{
+			std::lock_guard<std::mutex> lock(threads_mutex_);
+			auto it = stream_threads_.find(channel);
+			if (it == stream_threads_.end()) {
+				return false;
+			}
+			t = std::move(it->second);
+			stream_threads_.erase(it);
+		}
+		// Thread detects its channel removal via map-check and exits
+		if (t.joinable()) {
+			t.join();
+		}
+		return true;
+	}
+
+	inline void stream_processor::stop_all_streams()
+	{
+		running_.store(false);
+		std::unordered_map<std::string, std::thread> threads;
+		{
+			std::lock_guard<std::mutex> lock(threads_mutex_);
+			threads.swap(stream_threads_);
+		}
+		for (auto& [channel, t] : threads) {
+			if (t.joinable()) {
+				t.join();
+			}
+		}
+		running_.store(true);
+	}
+
+	inline void stream_processor::register_event_handler(
+		const std::string& channel,
+		std::function<void(const stream_event&)> handler)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		event_handlers_[channel] = std::move(handler);
+	}
+
+	inline void stream_processor::register_global_handler(
+		std::function<void(const stream_event&)> handler)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		global_handlers_.push_back(std::move(handler));
+	}
+
+	inline void stream_processor::add_event_filter(
+		const std::string& channel,
+		std::function<bool(const stream_event&)> filter)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		event_filters_[channel] = std::move(filter);
+	}
+
+	template<concepts::StreamEventHandler<stream_processor::stream_event> Handler>
+	void stream_processor::register_event_handler(
+		const std::string& channel, Handler&& handler)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		event_handlers_[channel] = std::forward<Handler>(handler);
+	}
+
+	template<concepts::StreamEventHandler<stream_processor::stream_event> Handler>
+	void stream_processor::register_global_handler(Handler&& handler)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		global_handlers_.push_back(std::forward<Handler>(handler));
+	}
+
+	template<concepts::StreamEventFilter<stream_processor::stream_event> Filter>
+	void stream_processor::add_event_filter(
+		const std::string& channel, Filter&& filter)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+		event_filters_[channel] = std::forward<Filter>(filter);
+	}
+
+	inline void stream_processor::stream_thread(
+		const std::string& channel, stream_type type)
+	{
+		stream_event connected_event;
+		connected_event.type = type;
+		connected_event.channel = channel;
+		connected_event.payload = "stream_connected";
+		connected_event.timestamp = std::chrono::system_clock::now();
+		process_event(connected_event);
+
+		while (running_.load()) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			{
+				std::lock_guard<std::mutex> lock(threads_mutex_);
+				if (stream_threads_.find(channel) == stream_threads_.end()) {
+					return;
+				}
+			}
+		}
+	}
+
+	inline void stream_processor::process_event(const stream_event& event)
+	{
+		std::lock_guard<std::mutex> lock(handlers_mutex_);
+
+		auto filter_it = event_filters_.find(event.channel);
+		if (filter_it != event_filters_.end()) {
+			if (!filter_it->second(event)) {
+				return;
+			}
+		}
+
+		auto handler_it = event_handlers_.find(event.channel);
+		if (handler_it != event_handlers_.end()) {
+			handler_it->second(event);
+		}
+
+		for (const auto& handler : global_handlers_) {
+			handler(event);
+		}
+	}
+
+	// ── end stream_processor implementations ─────────────────────────────
+
 	// Coroutine helpers (C++20 only)
 #ifdef HAS_COROUTINES
 	inline auto when_all(std::vector<database_awaitable<bool>> awaitables) -> database_awaitable<std::vector<bool>> {

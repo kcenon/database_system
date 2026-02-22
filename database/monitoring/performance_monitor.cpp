@@ -133,19 +133,26 @@ namespace database::monitoring
 	{
 		if (!monitoring_enabled_) return;
 
-		std::lock_guard<std::mutex> lock(metrics_mutex_);
-		query_history_.push_back(metrics);
+		bool slow_query = false;
+		{
+			std::lock_guard<std::mutex> lock(metrics_mutex_);
+			query_history_.push_back(metrics);
 
-		// Update query patterns
-		query_patterns_[metrics.query_hash]++;
+			// Update query patterns
+			query_patterns_[metrics.query_hash]++;
 
-		auto& avg_time = query_avg_times_[metrics.query_hash];
-		auto count = query_patterns_[metrics.query_hash];
-		avg_time = std::chrono::microseconds(
-			(avg_time.count() * (count - 1) + metrics.execution_time.count()) / count);
+			auto& avg_time = query_avg_times_[metrics.query_hash];
+			auto count = query_patterns_[metrics.query_hash];
+			avg_time = std::chrono::microseconds(
+				(avg_time.count() * (count - 1) + metrics.execution_time.count()) / count);
 
-		// Check for slow queries
-		if (metrics.execution_time > latency_threshold_) {
+			// Check for slow queries (evaluate under lock, act outside)
+			slow_query = (metrics.execution_time > latency_threshold_);
+		}
+
+		// emit_alert and check_thresholds acquire metrics_mutex_ internally,
+		// so they must be called outside the lock scope to avoid deadlock
+		if (slow_query) {
 			emit_alert(performance_alert::alert_type::slow_query,
 			          "Slow query detected: " + std::to_string(metrics.execution_time.count()) + "μs");
 		}
@@ -157,20 +164,27 @@ namespace database::monitoring
 	{
 		if (!monitoring_enabled_) return;
 
-		std::lock_guard<std::mutex> lock(metrics_mutex_);
-		auto& stored_metrics = connection_metrics_[db_type];
-		stored_metrics.total_connections.store(metrics.total_connections.load());
-		stored_metrics.active_connections.store(metrics.active_connections.load());
-		stored_metrics.idle_connections.store(metrics.idle_connections.load());
-		stored_metrics.failed_connections.store(metrics.failed_connections.load());
-		stored_metrics.avg_acquisition_time.store(metrics.avg_acquisition_time.load());
-		stored_metrics.max_acquisition_time.store(metrics.max_acquisition_time.load());
-		stored_metrics.last_update = metrics.last_update;
+		bool pool_exhaustion = false;
+		size_t active = 0;
+		size_t total = 0;
+		{
+			std::lock_guard<std::mutex> lock(metrics_mutex_);
+			auto& stored_metrics = connection_metrics_[db_type];
+			stored_metrics.total_connections.store(metrics.total_connections.load());
+			stored_metrics.active_connections.store(metrics.active_connections.load());
+			stored_metrics.idle_connections.store(metrics.idle_connections.load());
+			stored_metrics.failed_connections.store(metrics.failed_connections.load());
+			stored_metrics.avg_acquisition_time.store(metrics.avg_acquisition_time.load());
+			stored_metrics.max_acquisition_time.store(metrics.max_acquisition_time.load());
+			stored_metrics.last_update = metrics.last_update;
 
-		// Check for connection pool exhaustion
-		auto total = metrics.total_connections.load();
-		auto active = metrics.active_connections.load();
-		if (total > 0 && (double(active) / total) > 0.9) {
+			// Check for connection pool exhaustion (evaluate under lock, act outside)
+			total = metrics.total_connections.load();
+			active = metrics.active_connections.load();
+			pool_exhaustion = (total > 0 && (double(active) / total) > 0.9);
+		}
+
+		if (pool_exhaustion) {
 			emit_alert(performance_alert::alert_type::connection_pool_exhaustion,
 			          "Connection pool utilization high: " + std::to_string(active) + "/" + std::to_string(total));
 		}

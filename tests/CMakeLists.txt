@@ -506,6 +506,52 @@ if(USE_CONTAINER_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
 endif()
 
 ##################################################
+# DI Service Registration Tests (Issue #369)
+##################################################
+
+if(BUILD_WITH_COMMON_SYSTEM AND (GTest_FOUND OR gtest_FOUND))
+    add_executable(di_service_registration_test
+        di/test_service_registration.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(di_service_registration_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(di_service_registration_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    target_include_directories(di_service_registration_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    )
+
+    set_target_properties(di_service_registration_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    add_test(NAME DIServiceRegistrationTests COMMAND di_service_registration_test)
+
+    gtest_discover_tests(di_service_registration_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "DI service registration tests configured (Issue #369)")
+endif()
+
+##################################################
 # ORM Entity Metadata Tests (Issue #377)
 ##################################################
 

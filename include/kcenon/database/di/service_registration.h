@@ -25,8 +25,8 @@
 #include <kcenon/common/interfaces/database_interface.h>
 
 #include "../adapters/common_system_database_adapter.h"
-#include "../../database/database_manager.h"
-#include "../../database/core/database_context.h"
+#include "database/database_manager.h"
+#include "database/core/database_context.h"
 
 namespace kcenon::database::di {
 
@@ -35,7 +35,7 @@ namespace kcenon::database::di {
  */
 struct database_registration_config {
     /// Database type (postgresql, mysql, sqlite, etc.)
-    ::database::database_types db_type = ::database::database_types::postgresql;
+    ::database::database_types db_type = ::database::database_types::postgres;
 
     /// Connection string (optional - can be set later via connect())
     std::string connection_string;
@@ -124,7 +124,7 @@ inline common::VoidResult register_database_services(
  * // Create database_manager manually
  * auto context = std::make_shared<::database::database_context>();
  * auto manager = std::make_shared<::database::database_manager>(context);
- * manager->set_mode(::database::database_types::postgresql);
+ * manager->set_mode(::database::database_types::postgres);
  * manager->connect("host=localhost dbname=mydb");
  *
  * // Register the instance

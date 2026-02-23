@@ -27,8 +27,8 @@
 #include <kcenon/common/patterns/result.h>
 
 // Include database_system headers
-#include "../../database/database_manager.h"
-#include "../../database/core/database_context.h"
+#include "database/database_manager.h"
+#include "database/core/database_context.h"
 
 namespace kcenon::database::adapters {
 
@@ -53,7 +53,7 @@ public:
      * @param db_type The database type to use (defaults to PostgreSQL)
      */
     explicit common_system_database_adapter(
-        ::database::database_types db_type = ::database::database_types::postgresql)
+        ::database::database_types db_type = ::database::database_types::postgres)
         : context_(std::make_shared<::database::database_context>())
         , manager_(std::make_shared<::database::database_manager>(context_))
         , db_type_(db_type)
@@ -68,7 +68,7 @@ public:
     explicit common_system_database_adapter(
         std::shared_ptr<::database::database_manager> manager)
         : manager_(std::move(manager))
-        , db_type_(manager_ ? manager_->database_type() : ::database::database_types::postgresql)
+        , db_type_(manager_ ? manager_->database_type() : ::database::database_types::postgres)
         , connected_(false) {}
 
     ~common_system_database_adapter() override {

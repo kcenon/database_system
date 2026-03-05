@@ -43,7 +43,7 @@ This is satisfied by the project's use of dynamic linking when
 | Dependency              | License        | Type     | BSD-3 Compatible |
 |-------------------------|----------------|----------|------------------|
 | fmt                     | MIT            | Required | Yes              |
-| ASIO                    | BSL-1.0        | Required | Yes              |
+| ASIO (>= 1.29.0)       | BSL-1.0        | Required | Yes              |
 | GTest/GMock             | BSD-3-Clause   | Testing  | Yes              |
 | Google Benchmark        | Apache-2.0     | Testing  | Yes              |
 | libpqxx                 | BSD-3-Clause   | Optional | Yes              |

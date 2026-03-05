@@ -159,6 +159,58 @@ include(FindSystemDependency)
 # Find required packages
 find_package(Threads REQUIRED)
 
+##################################################
+# ASIO dependency (required, header-only)
+#
+# SOUP traceability (IEC 62304): ASIO is a critical async I/O dependency.
+# Version must be kept in sync with vcpkg.json "version>=" field.
+#
+# Version history:
+#   1.29.0 - Initial pinned version (aligned with ecosystem)
+##################################################
+set(DATABASE_SYSTEM_ASIO_PINNED_VERSION "1.29.0")
+
+find_package(asio QUIET CONFIG)
+if(TARGET asio::asio)
+    # Detect version from vcpkg-provided headers
+    get_target_property(_asio_inc asio::asio INTERFACE_INCLUDE_DIRECTORIES)
+    if(_asio_inc)
+        list(GET _asio_inc 0 _asio_inc_first)
+        set(_asio_version_file "${_asio_inc_first}/asio/version.hpp")
+        if(EXISTS "${_asio_version_file}")
+            file(STRINGS "${_asio_version_file}" _asio_version_line
+                REGEX "^#define ASIO_VERSION [0-9]+")
+            if(_asio_version_line)
+                string(REGEX MATCH "[0-9]+" _asio_version_int "${_asio_version_line}")
+                math(EXPR _asio_major "${_asio_version_int} / 100000")
+                math(EXPR _asio_minor "(${_asio_version_int} / 100) % 1000")
+                math(EXPR _asio_patch "${_asio_version_int} % 100")
+                set(ASIO_DETECTED_VERSION "${_asio_major}.${_asio_minor}.${_asio_patch}")
+            endif()
+        endif()
+    endif()
+    message(STATUS "ASIO found via CMake package (pinned: ${DATABASE_SYSTEM_ASIO_PINNED_VERSION}, detected: ${ASIO_DETECTED_VERSION})")
+else()
+    find_path(ASIO_INCLUDE_DIR NAMES asio.hpp DOC "Path to standalone ASIO headers")
+    if(ASIO_INCLUDE_DIR)
+        set(_asio_version_file "${ASIO_INCLUDE_DIR}/asio/version.hpp")
+        if(EXISTS "${_asio_version_file}")
+            file(STRINGS "${_asio_version_file}" _asio_version_line
+                REGEX "^#define ASIO_VERSION [0-9]+")
+            if(_asio_version_line)
+                string(REGEX MATCH "[0-9]+" _asio_version_int "${_asio_version_line}")
+                math(EXPR _asio_major "${_asio_version_int} / 100000")
+                math(EXPR _asio_minor "(${_asio_version_int} / 100) % 1000")
+                math(EXPR _asio_patch "${_asio_version_int} % 100")
+                set(ASIO_DETECTED_VERSION "${_asio_major}.${_asio_minor}.${_asio_patch}")
+            endif()
+        endif()
+        message(STATUS "ASIO found at: ${ASIO_INCLUDE_DIR} (pinned: ${DATABASE_SYSTEM_ASIO_PINNED_VERSION}, detected: ${ASIO_DETECTED_VERSION})")
+    else()
+        message(WARNING "ASIO not found - async features may not be available")
+    endif()
+endif()
+
 # common_system integration (REQUIRED for Result<T> pattern)
 message(STATUS "Searching for common_system...")
 find_system_dependency(common_system)
@@ -310,6 +362,14 @@ if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND)
     message(STATUS "  ✓ common_system (Tier 0) - Result<T> pattern")
 else()
     message(FATAL_ERROR "  ✗ common_system - REQUIRED but not found!")
+endif()
+
+message(STATUS "")
+message(STATUS "Third-Party Dependencies:")
+if(ASIO_DETECTED_VERSION)
+    message(STATUS "  ASIO: ${ASIO_DETECTED_VERSION} (pinned >= ${DATABASE_SYSTEM_ASIO_PINNED_VERSION})")
+else()
+    message(STATUS "  ASIO: not detected (pinned >= ${DATABASE_SYSTEM_ASIO_PINNED_VERSION})")
 endif()
 
 

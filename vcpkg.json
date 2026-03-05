@@ -12,7 +12,10 @@
       "name": "fmt",
       "version>=": "10.2.1"
     },
-    "asio"
+    {
+      "name": "asio",
+      "version>=": "1.29.0"
+    }
   ],
   "features": {
     "ecosystem": {

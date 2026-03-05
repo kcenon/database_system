@@ -54,7 +54,7 @@ cd vcpkg && ./bootstrap-vcpkg.sh
 
 # Install database dependencies (optional)
 vcpkg install libpqxx openssl  # PostgreSQL
-vcpkg install libmysql          # MySQL
+vcpkg install libmariadb        # MySQL (via MariaDB Connector/C)
 vcpkg install sqlite3           # SQLite
 vcpkg install mongo-cxx-driver  # MongoDB
 vcpkg install hiredis           # Redis
@@ -913,7 +913,7 @@ for (auto& t : threads) {
 3. **Dependencies**: Ensure all dependencies are installed
    ```bash
    cmake .. -DCMAKE_VERBOSE_MAKEFILE=ON
-   # Check if libpqxx, libmysql, sqlite3, etc. are found
+   # Check if libpqxx, libmariadb, sqlite3, etc. are found
    ```
 
 4. **C++ Standard**: Verify C++17 is enabled

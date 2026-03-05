@@ -385,21 +385,23 @@ if(USE_POSTGRESQL)
     endif()
 endif()
 
-# MySQL dependency (optional)
+# MySQL dependency (optional, uses MariaDB Connector/C for license compatibility)
+# MariaDB Connector/C (LGPL-2.1) is wire-compatible and API-compatible with MySQL.
+# This replaces libmysql (GPL-2.0) to avoid license conflict with BSD-3-Clause.
 if(USE_MYSQL)
-    find_package(unofficial-libmysql CONFIG QUIET)
+    find_package(unofficial-libmariadb CONFIG QUIET)
 
-    if(unofficial-libmysql_FOUND)
+    if(unofficial-libmariadb_FOUND)
         target_link_libraries(${PROJECT_NAME}
             PUBLIC
-                unofficial::libmysql::libmysql
+                unofficial::libmariadb
         )
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_MYSQL)
-        message(STATUS "MySQL support enabled")
-        message(STATUS "  libmysql found: ${unofficial-libmysql_FOUND}")
+        message(STATUS "MySQL support enabled (via MariaDB Connector/C, LGPL-2.1)")
+        message(STATUS "  libmariadb found: ${unofficial-libmariadb_FOUND}")
     else()
-        message(WARNING "MySQL libraries not found, disabling MySQL support")
-        message(STATUS "  libmysql found: ${unofficial-libmysql_FOUND}")
+        message(WARNING "MariaDB Connector/C not found, disabling MySQL support")
+        message(STATUS "  libmariadb found: ${unofficial-libmariadb_FOUND}")
         set(USE_MYSQL OFF CACHE BOOL "MySQL support disabled due to missing libraries" FORCE)
     endif()
 endif()
@@ -616,4 +618,4 @@ endif()
 message(STATUS "Database library configured:")
 message(STATUS "  Version: ${PROJECT_VERSION}")
 message(STATUS "  Headers: ${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "  Dependencies: Threads, libpqxx (if enabled), libmysql (if enabled)")
+message(STATUS "  Dependencies: Threads, libpqxx (if enabled), libmariadb (if enabled)")

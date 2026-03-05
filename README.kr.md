@@ -51,7 +51,7 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 | 백엔드 | 버전 | 선택적 패키지 |
 |--------|------|--------------|
 | PostgreSQL | 12+ | `libpq-dev` |
-| MySQL | 8.0+ | `libmysqlclient-dev` |
+| MySQL | 8.0+ | `libmariadb-dev` (MariaDB Connector/C) |
 | SQLite | 3.35+ | `libsqlite3-dev` |
 | MongoDB | 5.0+ | `libmongoc-dev` |
 | Redis | 6.0+ | `libhiredis-dev` |
@@ -757,7 +757,7 @@ cd database_system
 
 # Install database dependencies via vcpkg (optional)
 vcpkg install libpqxx           # PostgreSQL
-vcpkg install libmysql          # MySQL
+vcpkg install libmariadb        # MySQL (MariaDB Connector/C)
 vcpkg install sqlite3           # SQLite
 vcpkg install mongo-cxx-driver  # MongoDB
 vcpkg install hiredis           # Redis
@@ -1104,8 +1104,8 @@ ninja
 # PostgreSQL support
 vcpkg install libpqxx openssl
 
-# MySQL support
-vcpkg install libmysql
+# MySQL support (via MariaDB Connector/C)
+vcpkg install libmariadb
 
 # SQLite support
 vcpkg install sqlite3

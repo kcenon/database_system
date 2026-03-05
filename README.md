@@ -68,7 +68,7 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 | Backend | Version | Optional Package |
 |---------|---------|------------------|
 | PostgreSQL | 12+ | `libpq-dev` |
-| MySQL | 8.0+ | `libmysqlclient-dev` |
+| MySQL | 8.0+ | `libmariadb-dev` (MariaDB Connector/C) |
 | SQLite | 3.35+ | `libsqlite3-dev` |
 | MongoDB | 5.0+ | `libmongoc-dev` |
 | Redis | 6.0+ | `libhiredis-dev` |
@@ -352,7 +352,7 @@ scripts\dependency.bat   # Windows
 scripts\build.bat        # Windows
 
 # Option 2: Manual CMake build
-vcpkg install libpqxx libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx libmariadb sqlite3 mongo-cxx-driver hiredis
 
 mkdir build && cd build
 cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON

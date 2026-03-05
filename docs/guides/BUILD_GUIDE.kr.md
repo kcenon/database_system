@@ -31,7 +31,7 @@
 데이터베이스 지원은 선택 사항이며 테스트를 위해 비활성화할 수 있습니다:
 
 - **PostgreSQL**: libpqxx, libpq, OpenSSL 3.0+
-- **MySQL**: libmysql 또는 mysql-connector-cpp
+- **MySQL**: MariaDB Connector/C (LGPL-2.1, MySQL 와이어 호환)
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
@@ -80,7 +80,7 @@ ninja
 | 옵션 | 기본값 | 설명 |
 |--------|---------|-------------|
 | `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 (libpqxx 필요) |
-| `USE_MYSQL` | OFF | MySQL 지원 활성화 (libmysql 필요) |
+| `USE_MYSQL` | OFF | MySQL 지원 활성화 (MariaDB Connector/C 필요) |
 | `USE_SQLITE` | OFF | SQLite 지원 활성화 (sqlite3 필요) |
 | `USE_MONGODB` | OFF | MongoDB 지원 활성화 (mongocxx 필요) - **실험적** |
 | `USE_REDIS` | OFF | Redis 지원 활성화 (hiredis 필요) - **실험적** |
@@ -212,8 +212,8 @@ cd vcpkg
 # PostgreSQL 지원
 vcpkg install libpqxx openssl
 
-# MySQL 지원
-vcpkg install libmysql
+# MySQL 지원 (MariaDB Connector/C 사용)
+vcpkg install libmariadb
 
 # SQLite 지원
 vcpkg install sqlite3
@@ -225,7 +225,7 @@ vcpkg install mongo-cxx-driver
 vcpkg install hiredis
 
 # 한 번에 모두 설치
-vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 ```
 
 #### vcpkg로 빌드
@@ -248,8 +248,8 @@ cmake .. \
 # PostgreSQL
 sudo apt-get install libpqxx-dev libpq-dev libssl-dev
 
-# MySQL
-sudo apt-get install libmysqlclient-dev
+# MySQL (MariaDB Connector/C 사용)
+sudo apt-get install libmariadb-dev
 
 # SQLite
 sudo apt-get install libsqlite3-dev
@@ -267,8 +267,8 @@ sudo apt-get install libhiredis-dev
 # PostgreSQL
 sudo dnf install libpqxx-devel postgresql-devel openssl-devel
 
-# MySQL
-sudo dnf install mysql-devel
+# MySQL (MariaDB Connector/C 사용)
+sudo dnf install mariadb-connector-c-devel
 
 # SQLite
 sudo dnf install sqlite-devel
@@ -286,8 +286,8 @@ sudo dnf install hiredis-devel
 # PostgreSQL
 brew install libpqxx postgresql openssl
 
-# MySQL
-brew install mysql
+# MySQL (MariaDB Connector/C 사용)
+brew install mariadb-connector-c
 
 # SQLite
 brew install sqlite
@@ -662,7 +662,7 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     git \
     libpqxx-dev \
-    libmysqlclient-dev \
+    libmariadb-dev \
     libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 

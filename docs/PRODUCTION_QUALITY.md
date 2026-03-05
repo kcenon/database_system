@@ -322,7 +322,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: vcpkg install libpqxx libmysql sqlite3 mongo-cxx-driver hiredis
+        run: vcpkg install libpqxx libmariadb sqlite3 mongo-cxx-driver hiredis
 
       - name: Configure CMake
         run: |

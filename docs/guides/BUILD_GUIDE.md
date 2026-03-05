@@ -31,7 +31,7 @@ Comprehensive guide for building the Database System with multi-backend support,
 Database support is optional and can be disabled for testing:
 
 - **PostgreSQL**: libpqxx, libpq, OpenSSL 3.0+
-- **MySQL**: libmysql or mysql-connector-cpp
+- **MySQL**: MariaDB Connector/C (LGPL-2.1, wire-compatible with MySQL)
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
@@ -80,7 +80,7 @@ ninja
 | Option | Default | Description |
 |--------|---------|-------------|
 | `USE_POSTGRESQL` | ON | Enable PostgreSQL support (requires libpqxx) |
-| `USE_MYSQL` | OFF | Enable MySQL support (requires libmysql) |
+| `USE_MYSQL` | OFF | Enable MySQL support (requires MariaDB Connector/C) |
 | `USE_SQLITE` | OFF | Enable SQLite support (requires sqlite3) |
 | `USE_MONGODB` | OFF | Enable MongoDB support (requires mongocxx) - **Experimental** |
 | `USE_REDIS` | OFF | Enable Redis support (requires hiredis) - **Experimental** |
@@ -212,8 +212,8 @@ cd vcpkg
 # PostgreSQL support
 vcpkg install libpqxx openssl
 
-# MySQL support
-vcpkg install libmysql
+# MySQL support (via MariaDB Connector/C)
+vcpkg install libmariadb
 
 # SQLite support
 vcpkg install sqlite3
@@ -225,7 +225,7 @@ vcpkg install mongo-cxx-driver
 vcpkg install hiredis
 
 # Install all at once
-vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 ```
 
 #### Build with vcpkg
@@ -248,8 +248,8 @@ cmake .. \
 # PostgreSQL
 sudo apt-get install libpqxx-dev libpq-dev libssl-dev
 
-# MySQL
-sudo apt-get install libmysqlclient-dev
+# MySQL (via MariaDB Connector/C)
+sudo apt-get install libmariadb-dev
 
 # SQLite
 sudo apt-get install libsqlite3-dev
@@ -267,8 +267,8 @@ sudo apt-get install libhiredis-dev
 # PostgreSQL
 sudo dnf install libpqxx-devel postgresql-devel openssl-devel
 
-# MySQL
-sudo dnf install mysql-devel
+# MySQL (via MariaDB Connector/C)
+sudo dnf install mariadb-connector-c-devel
 
 # SQLite
 sudo dnf install sqlite-devel
@@ -286,8 +286,8 @@ sudo dnf install hiredis-devel
 # PostgreSQL
 brew install libpqxx postgresql openssl
 
-# MySQL
-brew install mysql
+# MySQL (via MariaDB Connector/C)
+brew install mariadb-connector-c
 
 # SQLite
 brew install sqlite
@@ -662,7 +662,7 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     git \
     libpqxx-dev \
-    libmysqlclient-dev \
+    libmariadb-dev \
     libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 

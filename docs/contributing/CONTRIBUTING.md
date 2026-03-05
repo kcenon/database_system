@@ -46,7 +46,7 @@ Before contributing, ensure you have:
 - Git
 - **Database-specific prerequisites**:
   - PostgreSQL development libraries (libpqxx, libpq, OpenSSL)
-  - MySQL development libraries (libmysql or mysql-connector-cpp)
+  - MySQL development libraries (MariaDB Connector/C, LGPL-2.1)
   - SQLite development library (sqlite3)
   - MongoDB C++ driver (mongocxx, bsoncxx)
   - Redis client library (hiredis)
@@ -100,7 +100,7 @@ cd vcpkg
 bootstrap-vcpkg.bat   # Windows
 
 # Install all database dependencies
-vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 ```
 
 #### Manual Installation
@@ -110,7 +110,7 @@ vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
 sudo apt-get update
 sudo apt-get install \
     libpqxx-dev libpq-dev libssl-dev \
-    libmysqlclient-dev \
+    libmariadb-dev \
     libsqlite3-dev \
     libmongocxx-dev libbsoncxx-dev \
     libhiredis-dev

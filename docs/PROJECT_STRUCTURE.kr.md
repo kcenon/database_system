@@ -511,7 +511,7 @@ endif()
 | 데이터베이스 | 라이브러리 | 버전 | vcpkg 패키지 |
 |----------|---------|---------|---------------|
 | PostgreSQL | libpqxx | 7.7+ | `libpqxx` |
-| MySQL | libmysql | 8.0+ | `libmysql` |
+| MySQL | libmariadb | 3.x+ | `libmariadb` |
 | SQLite | sqlite3 | 3.40+ | `sqlite3` |
 | MongoDB | mongo-cxx-driver | 3.7+ | `mongo-cxx-driver` |
 | Redis | hiredis | 1.1+ | `hiredis` |
@@ -531,7 +531,7 @@ endif()
 **vcpkg 사용**:
 ```bash
 # 데이터베이스 라이브러리 설치
-vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 
 # 선택적 시스템 설치 (가능한 경우)
 vcpkg install kcenon-common-system kcenon-thread-system

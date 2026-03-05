@@ -56,7 +56,8 @@
       "description": "Enable SQLite database support",
       "dependencies": [
         {
-          "name": "sqlite3"
+          "name": "sqlite3",
+          "version>=": "3.45.0"
         }
       ]
     },
@@ -64,7 +65,8 @@
       "description": "Enable MongoDB backend (experimental)",
       "dependencies": [
         {
-          "name": "mongo-cxx-driver"
+          "name": "mongo-cxx-driver",
+          "version>=": "3.8.0"
         }
       ]
     },
@@ -72,7 +74,8 @@
       "description": "Enable Redis backend (experimental)",
       "dependencies": [
         {
-          "name": "hiredis"
+          "name": "hiredis",
+          "version>=": "1.2.0"
         }
       ]
     },

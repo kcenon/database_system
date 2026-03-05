@@ -345,6 +345,8 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew install ninja googletest mariadb-connector-c
+        # mariadb-connector-c is keg-only; export paths for CMake discovery
+        echo "CMAKE_PREFIX_PATH=/opt/homebrew/opt/mariadb-connector-c" >> $GITHUB_ENV
 
     - name: Build and install common_system
       run: |
@@ -361,8 +363,13 @@ jobs:
 
     - name: Configure CMake with MySQL
       run: |
+        CMAKE_EXTRA_ARGS=""
+        if [ -n "$CMAKE_PREFIX_PATH" ]; then
+          CMAKE_EXTRA_ARGS="-DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
+        fi
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
+          $CMAKE_EXTRA_ARGS \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_THREAD_SYSTEM=OFF \
           -DUSE_MONITORING_SYSTEM=OFF \
@@ -393,12 +400,16 @@ jobs:
           DEPS=$(${{ matrix.check-cmd }} "$binary" 2>/dev/null || true)
           echo "$DEPS"
 
-          if echo "$DEPS" | grep -qi "mariadb\|mysql"; then
+          # Skip the first line of otool output (binary name) to avoid
+          # false positives from binary names like mysql_backend_test
+          DEPS_LIBS=$(echo "$DEPS" | tail -n +2)
+
+          if echo "$DEPS_LIBS" | grep -qiE "libmariadb|libmysqlclient"; then
             FOUND_BINARY=true
             echo "  -> libmariadb dependency detected"
 
             # Verify it is a shared library reference (not static)
-            if echo "$DEPS" | grep -qiE "libmariadb.*\.so|libmariadb.*\.dylib|libmysqlclient.*\.so|libmysqlclient.*\.dylib"; then
+            if echo "$DEPS_LIBS" | grep -qiE "libmariadb.*\.so|libmariadb.*\.dylib|libmysqlclient.*\.so|libmysqlclient.*\.dylib"; then
               echo "  -> PASS: dynamically linked (LGPL-2.1 compliant)"
             else
               echo "  -> FAIL: linkage type unclear, manual review needed"

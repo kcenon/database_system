@@ -420,9 +420,42 @@ if(USE_MYSQL)
             message(STATUS "  libmariadb linking: ${_mariadb_type} (verify dynamic linkage in CI)")
         endif()
     else()
-        message(WARNING "MariaDB Connector/C not found, disabling MySQL support")
-        message(STATUS "  libmariadb found: ${unofficial-libmariadb_FOUND}")
-        set(USE_MYSQL OFF CACHE BOOL "MySQL support disabled due to missing libraries" FORCE)
+        # Fallback: find system-installed libmariadb (Homebrew, apt, etc.)
+        # Brew's mariadb-connector-c is keg-only — requires CMAKE_PREFIX_PATH
+        find_library(MARIADB_LIBRARY NAMES mariadb mariadbclient
+            HINTS
+                /opt/homebrew/opt/mariadb-connector-c/lib
+                /usr/lib/x86_64-linux-gnu
+        )
+        find_path(MARIADB_INCLUDE_DIR NAMES mysql.h mariadb/mysql.h
+            HINTS
+                /opt/homebrew/opt/mariadb-connector-c/include/mariadb
+                /usr/include/mariadb
+        )
+
+        if(MARIADB_LIBRARY AND MARIADB_INCLUDE_DIR)
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${MARIADB_LIBRARY})
+            target_include_directories(${PROJECT_NAME} PUBLIC ${MARIADB_INCLUDE_DIR})
+            target_compile_definitions(${PROJECT_NAME} PUBLIC USE_MYSQL)
+            message(STATUS "MySQL support enabled (via system MariaDB Connector/C, LGPL-2.1)")
+            message(STATUS "  libmariadb library: ${MARIADB_LIBRARY}")
+            message(STATUS "  libmariadb include: ${MARIADB_INCLUDE_DIR}")
+
+            # LGPL-2.1 compliance: system-installed libraries are typically shared
+            get_filename_component(_mariadb_ext "${MARIADB_LIBRARY}" EXT)
+            if(_mariadb_ext STREQUAL ".a" OR _mariadb_ext STREQUAL ".lib")
+                message(WARNING
+                    "libmariadb appears to be statically linked (${_mariadb_ext}). "
+                    "LGPL-2.1 compliance requires dynamic linking.")
+            else()
+                message(STATUS "  libmariadb linking: dynamic (${_mariadb_ext}, LGPL-2.1 compliant)")
+            endif()
+        else()
+            message(WARNING "MariaDB Connector/C not found, disabling MySQL support")
+            message(STATUS "  libmariadb found (vcpkg): ${unofficial-libmariadb_FOUND}")
+            message(STATUS "  libmariadb found (system): lib=${MARIADB_LIBRARY} inc=${MARIADB_INCLUDE_DIR}")
+            set(USE_MYSQL OFF CACHE BOOL "MySQL support disabled due to missing libraries" FORCE)
+        endif()
     endif()
 endif()
 

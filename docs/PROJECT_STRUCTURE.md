@@ -193,7 +193,7 @@ database_system/
 - Stored procedures
 
 **Dependencies**:
-- libmysql (MySQL C client library)
+- MariaDB Connector/C (MySQL-compatible C client library, LGPL-2.1)
 - OpenSSL (for TLS/SSL)
 
 #### SQLite Backend
@@ -696,7 +696,7 @@ endif()
 | Database | Library | Version | vcpkg Package |
 |----------|---------|---------|---------------|
 | PostgreSQL | libpqxx | 7.7+ | `libpqxx` |
-| MySQL | libmysql | 8.0+ | `libmysql` |
+| MySQL | libmariadb | 3.x+ | `libmariadb` |
 | SQLite | sqlite3 | 3.40+ | `sqlite3` |
 | MongoDB | mongo-cxx-driver | 3.7+ | `mongo-cxx-driver` |
 | Redis | hiredis | 1.1+ | `hiredis` |
@@ -716,7 +716,7 @@ endif()
 **Using vcpkg**:
 ```bash
 # Install database libraries
-vcpkg install libpqxx openssl libmysql sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 
 # Install optional systems (if available)
 vcpkg install kcenon-common-system kcenon-thread-system

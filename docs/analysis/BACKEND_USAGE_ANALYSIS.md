@@ -57,7 +57,7 @@ This document analyzes the usage patterns and maintenance considerations for Mon
 {
   "features": {
     "postgresql": { "dependencies": ["libpq", "libpqxx", "openssl"] },
-    "mysql": { "dependencies": ["libmysql"] },
+    "mysql": { "dependencies": ["libmariadb"] },
     "sqlite": { "dependencies": ["sqlite3"] }
     // MongoDB and Redis: NOT DEFINED
   }

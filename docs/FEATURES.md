@@ -1670,7 +1670,7 @@ kcenon.database
 
 **Optional** (for specific backends):
 - libpqxx (PostgreSQL)
-- libmysql (MySQL)
+- MariaDB Connector/C (MySQL)
 - sqlite3 (SQLite)
 - mongo-cxx-driver (MongoDB)
 - hiredis (Redis)

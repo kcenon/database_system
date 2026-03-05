@@ -42,10 +42,10 @@
       ]
     },
     "mysql": {
-      "description": "Enable MySQL database support",
+      "description": "Enable MySQL/MariaDB database support (uses MariaDB Connector/C, LGPL-2.1)",
       "dependencies": [
         {
-          "name": "libmysql"
+          "name": "libmariadb"
         }
       ]
     },

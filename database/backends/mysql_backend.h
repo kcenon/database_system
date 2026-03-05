@@ -33,8 +33,8 @@
  * @file mysql_backend.h
  * @brief MySQL database backend plugin implementation
  *
- * This file implements the database_backend interface for MySQL,
- * directly using the MySQL C API without depending on the legacy mysql_manager.
+ * This file implements the database_backend interface for MySQL/MariaDB,
+ * using the MySQL C API via MariaDB Connector/C (LGPL-2.1, wire-compatible).
  *
  * Issue #286: Update backends to use database_backend only
  * Issue #328: Refactored to use backend_base template

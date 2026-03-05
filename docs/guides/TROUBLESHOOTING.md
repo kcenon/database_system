@@ -111,7 +111,7 @@ cmake .. -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 | Backend | Package | Ubuntu | macOS |
 |---------|---------|--------|-------|
 | PostgreSQL | libpqxx | libpqxx-dev | libpqxx |
-| MySQL | libmysql | libmysqlclient-dev | mysql |
+| MySQL | libmariadb | libmariadb-dev | mariadb-connector-c |
 | SQLite | sqlite3 | libsqlite3-dev | sqlite |
 | MongoDB | mongocxx | libmongocxx-dev | mongo-cxx-driver |
 | Redis | hiredis | libhiredis-dev | hiredis |

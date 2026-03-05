@@ -399,6 +399,26 @@ if(USE_MYSQL)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_MYSQL)
         message(STATUS "MySQL support enabled (via MariaDB Connector/C, LGPL-2.1)")
         message(STATUS "  libmariadb found: ${unofficial-libmariadb_FOUND}")
+
+        # LGPL-2.1 compliance: verify libmariadb is dynamically linked.
+        # Static linking of LGPL code may impose copyleft obligations on the
+        # entire binary, conflicting with the project's BSD-3-Clause license.
+        # Dynamic linking satisfies LGPL-2.1 automatically.
+        get_target_property(_mariadb_type unofficial::libmariadb TYPE)
+        if(_mariadb_type STREQUAL "STATIC_LIBRARY")
+            message(WARNING
+                "libmariadb is statically linked. "
+                "LGPL-2.1 compliance requires dynamic linking or providing object files "
+                "for re-linking. Use the custom triplet overlay in triplets/ to force "
+                "shared library builds for libmariadb.")
+        elseif(_mariadb_type STREQUAL "SHARED_LIBRARY")
+            message(STATUS "  libmariadb linking: SHARED (LGPL-2.1 compliant)")
+        elseif(_mariadb_type STREQUAL "INTERFACE_LIBRARY")
+            message(STATUS "  libmariadb linking: INTERFACE (typically dynamic, LGPL-2.1 compliant)")
+        else()
+            # UNKNOWN or IMPORTED — common for vcpkg-provided targets
+            message(STATUS "  libmariadb linking: ${_mariadb_type} (verify dynamic linkage in CI)")
+        endif()
     else()
         message(WARNING "MariaDB Connector/C not found, disabling MySQL support")
         message(STATUS "  libmariadb found: ${unofficial-libmariadb_FOUND}")

@@ -38,6 +38,27 @@ Under LGPL-2.1, users of this software retain the right to:
 This is satisfied by the project's use of dynamic linking when
 `USE_MYSQL=ON` is enabled.
 
+### Dynamic Linking Enforcement
+
+The following mechanisms ensure libmariadb is always dynamically linked:
+
+1. **vcpkg triplet overlay** (`triplets/`): Custom triplet files force
+   `VCPKG_LIBRARY_LINKAGE=dynamic` for the `libmariadb` port while keeping
+   all other ports static. This applies to x64-linux, arm64-osx, and
+   x64-windows triplets.
+
+2. **CMake configuration check**: `database/CMakeLists.txt` inspects the
+   `unofficial::libmariadb` target's `TYPE` property at configure time and
+   emits a WARNING if static linking is detected.
+
+3. **CI linkage verification**: The `mysql-linkage-check` CI job runs
+   `ldd` (Linux) / `otool -L` (macOS) on built binaries to confirm
+   dynamic linkage at build artifact level. The job fails if dynamic
+   linkage cannot be verified.
+
+These three layers provide defense-in-depth: build-system prevention,
+configuration-time detection, and post-build verification.
+
 ## All Dependencies (License Summary)
 
 | Dependency              | License        | Type     | BSD-3 Compatible |
@@ -50,7 +71,7 @@ This is satisfied by the project's use of dynamic linking when
 | libpq (PostgreSQL)      | PostgreSQL     | Optional | Yes              |
 | OpenSSL                 | Apache-2.0     | Optional | Yes              |
 | SQLite                  | Public Domain  | Optional | Yes              |
-| MariaDB Connector/C     | LGPL-2.1       | Optional | Yes              |
+| MariaDB Connector/C     | LGPL-2.1       | Optional | Yes (dynamic)    |
 | mongo-cxx-driver        | Apache-2.0     | Optional | Yes              |
 | hiredis                 | BSD-3-Clause   | Optional | Yes              |
 | spdlog                  | MIT            | Optional | Yes              |

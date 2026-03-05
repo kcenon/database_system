@@ -1,0 +1,56 @@
+# Third-Party License Compliance
+
+This file documents third-party dependencies and their license compatibility
+with the project's BSD-3-Clause license.
+
+## MySQL/MariaDB Connector
+
+| Item               | Value                                              |
+|--------------------|----------------------------------------------------|
+| Component          | MariaDB Connector/C                                |
+| Version            | 3.x                                                |
+| License            | LGPL-2.1-or-later                                  |
+| Usage              | MySQL-protocol database backend (optional feature) |
+| Linking            | Dynamic linking (LGPL-compliant)                   |
+| BSD-3 Compatible   | Yes                                                |
+
+### Migration History
+
+This project previously depended on Oracle MySQL Connector/C (`libmysql`),
+which is licensed under GPL-2.0. GPL-2.0 requires derivative works to be
+distributed under GPL, creating a license conflict with BSD-3-Clause.
+
+MariaDB Connector/C was adopted as a drop-in replacement because:
+
+1. **License compatibility**: LGPL-2.1 permits dynamic linking from
+   BSD-3-Clause code without license propagation requirements.
+2. **API compatibility**: MariaDB Connector/C provides the MySQL C API
+   (`mysql.h`) as a compatibility layer. No source code changes were required.
+3. **Wire compatibility**: MariaDB Connector/C uses the MySQL wire protocol
+   and works with both MariaDB and MySQL servers.
+
+### LGPL-2.1 Compliance
+
+Under LGPL-2.1, users of this software retain the right to:
+- Replace the MariaDB Connector/C library with a modified version
+- Re-link the application with a different version of the library
+
+This is satisfied by the project's use of dynamic linking when
+`USE_MYSQL=ON` is enabled.
+
+## All Dependencies (License Summary)
+
+| Dependency              | License        | Type     | BSD-3 Compatible |
+|-------------------------|----------------|----------|------------------|
+| fmt                     | MIT            | Required | Yes              |
+| ASIO                    | BSL-1.0        | Required | Yes              |
+| GTest/GMock             | BSD-3-Clause   | Testing  | Yes              |
+| Google Benchmark        | Apache-2.0     | Testing  | Yes              |
+| libpqxx                 | BSD-3-Clause   | Optional | Yes              |
+| libpq (PostgreSQL)      | PostgreSQL     | Optional | Yes              |
+| OpenSSL                 | Apache-2.0     | Optional | Yes              |
+| SQLite                  | Public Domain  | Optional | Yes              |
+| MariaDB Connector/C     | LGPL-2.1       | Optional | Yes              |
+| mongo-cxx-driver        | Apache-2.0     | Optional | Yes              |
+| hiredis                 | BSD-3-Clause   | Optional | Yes              |
+| spdlog                  | MIT            | Optional | Yes              |

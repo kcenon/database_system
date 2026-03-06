@@ -58,8 +58,27 @@ option(BUILD_DATABASE_SAMPLES "Build database system samples" ON)
 option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
 option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
-option(USE_MONGODB "Enable MongoDB backend (experimental)" OFF)
-option(USE_REDIS "Enable Redis backend (experimental)" OFF)
+option(USE_MONGODB "Enable MongoDB backend (EXPERIMENTAL - see docs/BACKENDS.md)" OFF)
+option(USE_REDIS "Enable Redis backend (EXPERIMENTAL - see docs/BACKENDS.md)" OFF)
+
+# Experimental backend warnings
+if(USE_MONGODB)
+    message(WARNING
+        "MongoDB support is EXPERIMENTAL and NOT recommended for production use.\n"
+        "  - Test coverage is limited (no dedicated test suite)\n"
+        "  - APIs may change in future releases\n"
+        "  - See docs/BACKENDS.md for stabilization roadmap")
+endif()
+
+if(USE_REDIS)
+    message(WARNING
+        "Redis support is EXPERIMENTAL and NOT recommended for production use.\n"
+        "  - Redis is not intended for persistent data storage\n"
+        "  - Test coverage is limited (no dedicated test suite)\n"
+        "  - APIs may change in future releases\n"
+        "  - See docs/BACKENDS.md for stabilization roadmap")
+endif()
+
 option(BUILD_DATABASE "Build database module" ON)
 option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
 option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)

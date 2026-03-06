@@ -108,7 +108,7 @@ jobs:
       run: |
         echo "# Sanitizer Test Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "## Phase 0: Baseline Establishment" >> $GITHUB_STEP_SUMMARY
+        echo "## Phase 1: Sanitizer Failures Block Merges" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "Sanitizer tests configured and running." >> $GITHUB_STEP_SUMMARY
-        echo "Warnings allowed in Phase 0 for baseline establishment." >> $GITHUB_STEP_SUMMARY
+        echo "Sanitizer failures now block merges (graduated from Phase 0)." >> $GITHUB_STEP_SUMMARY

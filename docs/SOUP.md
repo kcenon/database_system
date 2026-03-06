@@ -52,11 +52,11 @@
 | SOUP-005 | [libpqxx](https://github.com/jtv/libpqxx) | Jeroen T. Vermeulen | 7.9.0 | BSD-3-Clause | PostgreSQL C++ client wrapper | B | None |
 | SOUP-006 | [OpenSSL](https://www.openssl.org/) | OpenSSL Project | 3.3.0 | Apache-2.0 | TLS encryption for PostgreSQL connections | C | CVE tracking via vendor advisories required |
 
-### MySQL Feature (`mysql`)
+### MySQL/MariaDB Feature (`mysql`)
 
 | ID | Name | Manufacturer | Version | License | Usage | Safety Class | Known Anomalies |
 |----|------|-------------|---------|---------|-------|-------------|-----------------|
-| SOUP-007 | [libmysql](https://dev.mysql.com/doc/c-api/en/) | Oracle Corporation | 8.0.34 | GPL-2.0 (with FOSS exception) | MySQL C client library | B | GPL with FOSS License Exception allows linking with BSD-licensed code |
+| SOUP-007 | [libmariadb](https://mariadb.com/kb/en/mariadb-connector-c/) | MariaDB Foundation | vcpkg baseline | LGPL-2.1 | MariaDB Connector/C for MySQL/MariaDB database support | B | Dynamic linking required for LGPL compliance |
 
 ### SQLite Feature (`sqlite`)
 
@@ -152,6 +152,7 @@ When updating any SOUP dependency:
 | BSD-3-Clause | 3 | No | Include copyright + no-endorsement clause |
 | Public Domain | 1 | No | None |
 | PostgreSQL License | 1 | No | Include copyright notice |
-| GPL-2.0 (FOSS exception) | 1 | Conditional | FOSS License Exception permits linking with BSD-3-Clause |
+| LGPL-2.1 | 1 | Weak | Dynamic linking required |
 
-> **GPL contamination**: libmysql (SOUP-007) uses GPL-2.0 with FOSS License Exception, which permits use with BSD-3-Clause licensed projects. Verify FOSS exception applicability when distributing.
+> **GPL contamination**: None detected. All dependencies are permissively licensed or weak copyleft (LGPL).
+> **LGPL note**: libmariadb (SOUP-007) uses LGPL-2.1; dynamic linking ensures compliance.

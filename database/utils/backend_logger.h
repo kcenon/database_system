@@ -41,9 +41,7 @@
 
 #pragma once
 
-#include <kcenon/database/config/feature_flags.h>
-
-#if KCENON_HAS_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 #include <kcenon/common/logging/log_functions.h>
 #else
 #include <iostream>
@@ -99,7 +97,7 @@ public:
 	{
 		std::string formatted
 			= "[" + backend_name_ + ":" + std::string(context) + "] " + std::string(message);
-#if KCENON_HAS_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 		kcenon::common::logging::log_error(formatted);
 #else
 		std::cerr << formatted << std::endl;
@@ -113,7 +111,7 @@ public:
 	void warning(std::string_view message) const
 	{
 		std::string formatted = "[" + backend_name_ + "] " + std::string(message);
-#if KCENON_HAS_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 		kcenon::common::logging::log_warning(formatted);
 #else
 		std::cerr << formatted << std::endl;
@@ -127,7 +125,7 @@ public:
 	void info(std::string_view message) const
 	{
 		std::string formatted = "[" + backend_name_ + "] " + std::string(message);
-#if KCENON_HAS_COMMON_SYSTEM
+#ifdef BUILD_WITH_COMMON_SYSTEM
 		kcenon::common::logging::log_info(formatted);
 #else
 		std::cout << formatted << std::endl;

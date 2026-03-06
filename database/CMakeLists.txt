@@ -364,8 +364,8 @@ endif()
 if(USE_POSTGRESQL)
     find_package(libpqxx CONFIG QUIET)
 
-    # OpenSSL 3.0+ required (1.1.1 reached EOL September 2023)
-    find_package(OpenSSL 3.0 QUIET)
+    # OpenSSL 3.3+ required (ecosystem standard, aligned with logger/network_system)
+    find_package(OpenSSL 3.3 QUIET)
 
     if(libpqxx_FOUND AND OPENSSL_FOUND)
         target_link_libraries(${PROJECT_NAME}

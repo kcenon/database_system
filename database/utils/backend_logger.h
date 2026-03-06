@@ -41,7 +41,12 @@
 
 #pragma once
 
+#ifdef BUILD_WITH_COMMON_SYSTEM
+#include <kcenon/common/logging/log_functions.h>
+#else
 #include <iostream>
+#endif
+
 #include <string>
 #include <string_view>
 
@@ -90,8 +95,13 @@ public:
 	 */
 	void error(std::string_view context, std::string_view message) const
 	{
-		std::cerr << "[" << backend_name_ << ":" << context << "] Error: "
-				  << message << std::endl;
+		std::string formatted
+			= "[" + backend_name_ + ":" + std::string(context) + "] " + std::string(message);
+#ifdef BUILD_WITH_COMMON_SYSTEM
+		kcenon::common::logging::log_error(formatted);
+#else
+		std::cerr << formatted << std::endl;
+#endif
 	}
 
 	/**
@@ -100,8 +110,12 @@ public:
 	 */
 	void warning(std::string_view message) const
 	{
-		std::cerr << "[" << backend_name_ << "] Warning: "
-				  << message << std::endl;
+		std::string formatted = "[" + backend_name_ + "] " + std::string(message);
+#ifdef BUILD_WITH_COMMON_SYSTEM
+		kcenon::common::logging::log_warning(formatted);
+#else
+		std::cerr << formatted << std::endl;
+#endif
 	}
 
 	/**
@@ -110,8 +124,12 @@ public:
 	 */
 	void info(std::string_view message) const
 	{
-		std::cout << "[" << backend_name_ << "] Info: "
-				  << message << std::endl;
+		std::string formatted = "[" + backend_name_ + "] " + std::string(message);
+#ifdef BUILD_WITH_COMMON_SYSTEM
+		kcenon::common::logging::log_info(formatted);
+#else
+		std::cout << formatted << std::endl;
+#endif
 	}
 
 private:

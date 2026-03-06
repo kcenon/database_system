@@ -166,9 +166,10 @@ find_package(Threads REQUIRED)
 # Version must be kept in sync with vcpkg.json "version>=" field.
 #
 # Version history:
-#   1.29.0 - Initial pinned version (aligned with ecosystem)
+#   1.29.0 - Initial pinned version
+#   1.30.2 - Upgraded to ecosystem standard (aligned with network_system)
 ##################################################
-set(DATABASE_SYSTEM_ASIO_PINNED_VERSION "1.29.0")
+set(DATABASE_SYSTEM_ASIO_PINNED_VERSION "1.30.2")
 
 find_package(asio QUIET CONFIG)
 if(TARGET asio::asio)

@@ -310,18 +310,28 @@ For detailed information, see `database/core/result.h`.
 
 ### Benchmarks (Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD)
 
-| Metric | Performance | Notes |
-|--------|-------------|-------|
-| **Simple SELECT (PostgreSQL)** | 1.2ms | Type-safe abstraction |
-| **Complex JOIN (PostgreSQL)** | 15ms | Minimal overhead |
-| **Bulk INSERT (1K rows)** | 45ms | Near-native speed |
-| **Transaction TPS** | 5,000 TPS | PostgreSQL ACID |
-| **Query Builder Overhead** | <20% | vs. raw SQL |
+| Metric | Performance | Measurement | Notes |
+|--------|-------------|-------------|-------|
+| **Simple SELECT (PostgreSQL)** | 1.2ms | Manual (PostgreSQL) | Type-safe abstraction |
+| **Complex JOIN (PostgreSQL)** | 15ms | Manual (PostgreSQL) | Minimal overhead |
+| **Bulk INSERT (1K rows)** | 45ms | Manual (PostgreSQL) | Near-native speed |
+| **Transaction TPS** | 5,000 TPS | Manual (PostgreSQL) | PostgreSQL ACID |
+| **Query Builder Overhead** | <20% | Automated (Synthetic) | vs. raw SQL |
+| **SQLite SELECT** | See benchmarks | Automated (SQLite in-memory) | Real I/O through SQLite engine |
+| **SQLite Batch INSERT** | See benchmarks | Automated (SQLite in-memory) | Includes SQL parsing + B-tree ops |
+| **SQLite Transaction** | See benchmarks | Automated (SQLite in-memory) | BEGIN + INSERT + COMMIT cycle |
 
 **Key Insights**:
 - ⚡ **Query overhead**: Minimal (<20%) for type safety and flexibility
 - 🔒 **ProxyMode**: Centralized pooling via database_server for production
 - 💾 **Memory efficiency**: Lightweight client library with server-side pooling
+
+**Reproducing Real I/O Benchmarks**:
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DDATABASE_BUILD_BENCHMARKS=ON -DUSE_SQLITE=ON
+cmake --build build -j
+./build/benchmarks/database_benchmarks --benchmark_filter=SQLite
+```
 
 [⚡ Complete Benchmarks →](docs/BENCHMARKS.md)
 

@@ -190,11 +190,9 @@ jobs:
           build/CMakeFiles/*.log
           build/Testing/Temporary/
 
-  # Phase 0: Allow failures, just collect data
   sanitizers:
     name: Sanitizers (${{ matrix.sanitizer.name }})
     runs-on: ubuntu-24.04
-    continue-on-error: true
     timeout-minutes: 60
 
     strategy:
@@ -294,7 +292,7 @@ jobs:
         cd build
         export ${{ matrix.sanitizer.env }}
         # Run with timeout to prevent hanging
-        ctest -C Debug --output-on-failure --timeout 60 || echo "${{ matrix.sanitizer.name }} detected issues (expected in Phase 0)"
+        ctest -C Debug --output-on-failure --timeout 60
 
     - name: Upload sanitizer logs
       if: always()

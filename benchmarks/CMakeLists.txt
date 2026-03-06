@@ -18,6 +18,7 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
     add_executable(database_benchmarks
         query_execution_bench.cpp
         transaction_bench.cpp
+        sqlite_io_bench.cpp
         main_bench.cpp
     )
 
@@ -30,6 +31,8 @@ if(benchmark_FOUND OR BENCHMARK_FOUND)
             benchmark::benchmark
             benchmark::benchmark_main
     )
+
+    target_compile_definitions(database_benchmarks PRIVATE USE_SQLITE=1)
 
     target_compile_features(database_benchmarks PRIVATE cxx_std_20)
 

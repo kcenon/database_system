@@ -25,8 +25,8 @@ namespace database::query {
  * - Makes it easy to add new database support
  *
  * Responsibilities:
- * - Placeholder style formatting ($1 vs ? vs ?1)
- * - Identifier quoting ("col" vs `col` vs [col])
+ * - Placeholder style formatting ($1 vs ?1)
+ * - Identifier quoting ("col" vs [col])
  * - LIMIT/OFFSET clause formatting
  * - RETURNING clause support
  * - UPSERT clause formatting
@@ -47,7 +47,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "$1", "$2", "$3"
-     * - MySQL: "?"
      * - SQLite: "?1", "?2", "?3"
      */
     virtual std::string placeholder(int index) const = 0;
@@ -59,7 +58,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "\"column_name\""
-     * - MySQL: "`column_name`"
      * - SQLite: "\"column_name\""
      */
     virtual std::string quote_identifier(std::string_view name) const = 0;
@@ -78,7 +76,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: " RETURNING id"
-     * - MySQL: "" (not supported, use LAST_INSERT_ID())
      * - SQLite: " RETURNING id" (3.35+)
      */
     virtual std::string returning_clause(std::string_view column = "") const = 0;
@@ -91,7 +88,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "ON CONFLICT (id) DO UPDATE SET ..."
-     * - MySQL: "ON DUPLICATE KEY UPDATE ..."
      * - SQLite: "ON CONFLICT (id) DO UPDATE SET ..."
      */
     virtual std::string upsert_clause(
@@ -106,7 +102,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "LIMIT 10 OFFSET 5"
-     * - MySQL: "LIMIT 5, 10"
      * - SQLite: "LIMIT 10 OFFSET 5"
      */
     virtual std::string limit_clause(size_t limit, size_t offset) const = 0;
@@ -117,7 +112,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "SERIAL"
-     * - MySQL: "AUTO_INCREMENT"
      * - SQLite: "AUTOINCREMENT"
      */
     virtual std::string auto_increment() const = 0;
@@ -128,7 +122,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "CURRENT_TIMESTAMP"
-     * - MySQL: "NOW()"
      * - SQLite: "CURRENT_TIMESTAMP"
      */
     virtual std::string current_timestamp() const = 0;
@@ -139,7 +132,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "||"
-     * - MySQL: "CONCAT"
      * - SQLite: "||"
      */
     virtual std::string concat_operator() const = 0;
@@ -164,26 +156,6 @@ public:
  * @brief PostgreSQL-specific SQL dialect
  */
 class postgresql_dialect : public sql_dialect {
-public:
-    std::string placeholder(int index) const override;
-    std::string quote_identifier(std::string_view name) const override;
-    std::string escape_string(std::string_view str) const override;
-    std::string returning_clause(std::string_view column = "") const override;
-    std::string upsert_clause(
-        const std::vector<std::string>& conflict_columns,
-        const std::vector<std::string>& update_columns) const override;
-    std::string limit_clause(size_t limit, size_t offset) const override;
-    std::string auto_increment() const override;
-    std::string current_timestamp() const override;
-    std::string concat_operator() const override;
-    bool supports_feature(const std::string& feature) const override;
-};
-
-/**
- * @class mysql_dialect
- * @brief MySQL-specific SQL dialect
- */
-class mysql_dialect : public sql_dialect {
 public:
     std::string placeholder(int index) const override;
     std::string quote_identifier(std::string_view name) const override;

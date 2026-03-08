@@ -9,7 +9,6 @@ backends to stable status.
 | Backend          | Status         | Since   | Notes                                |
 |------------------|----------------|---------|--------------------------------------|
 | PostgreSQL       | **Stable**     | v0.1.0  | Primary backend, full feature set    |
-| MySQL / MariaDB  | **Stable**     | v0.1.0  | Full feature parity with PostgreSQL  |
 | SQLite           | **Stable**     | v0.1.0  | Embedded / single-file database      |
 | MongoDB          | Experimental   | v0.1.0  | Document-store backend, limited testing |
 | Redis            | Experimental   | v0.1.0  | Key-value store backend, limited testing |
@@ -27,16 +26,6 @@ database\_system project.
 - Connection pooling support
 - Transaction management
 - Comprehensive integration test coverage
-- CI-validated on Linux, macOS, and Windows
-
-### MySQL / MariaDB
-
-MySQL and MariaDB are supported as stable backends with full feature parity.
-
-- Full CRUD operations with parameterized queries
-- Connection pooling support
-- Transaction management
-- Tested against MySQL 8.x and MariaDB 10.x+
 - CI-validated on Linux, macOS, and Windows
 
 ### SQLite
@@ -153,16 +142,16 @@ following criteria must be met:
 
 ## Backend Comparison Table
 
-| Feature                    | PostgreSQL | MySQL / MariaDB | SQLite | MongoDB      | Redis        |
-|----------------------------|:----------:|:---------------:|:------:|:------------:|:------------:|
-| Stability                  | Stable     | Stable          | Stable | Experimental | Experimental |
-| CRUD operations            | Yes        | Yes             | Yes    | Partial      | Partial      |
-| Parameterized queries      | Yes        | Yes             | Yes    | N/A          | N/A          |
-| Connection pooling         | Yes        | Yes             | N/A    | Unvalidated  | Unvalidated  |
-| Transaction support        | Yes        | Yes             | Yes    | Limited      | No           |
-| Dedicated test suite       | Yes        | Yes             | Yes    | No           | No           |
-| CI coverage (all platforms)| Yes        | Yes             | Yes    | No           | No           |
-| Performance benchmarks     | Yes        | Yes             | Yes    | No           | No           |
-| Production references      | Yes        | Yes             | Yes    | No           | No           |
-| Server required            | Yes        | Yes             | No     | Yes          | Yes          |
-| Data model                 | Relational | Relational      | Relational | Document  | Key-Value    |
+| Feature                    | PostgreSQL | SQLite | MongoDB      | Redis        |
+|----------------------------|:----------:|:------:|:------------:|:------------:|
+| Stability                  | Stable     | Stable | Experimental | Experimental |
+| CRUD operations            | Yes        | Yes    | Partial      | Partial      |
+| Parameterized queries      | Yes        | Yes    | N/A          | N/A          |
+| Connection pooling         | Yes        | N/A    | Unvalidated  | Unvalidated  |
+| Transaction support        | Yes        | Yes    | Limited      | No           |
+| Dedicated test suite       | Yes        | Yes    | No           | No           |
+| CI coverage (all platforms)| Yes        | Yes    | No           | No           |
+| Performance benchmarks     | Yes        | Yes    | No           | No           |
+| Production references      | Yes        | Yes    | No           | No           |
+| Server required            | Yes        | No     | Yes          | Yes          |
+| Data model                 | Relational | Relational | Document  | Key-Value    |

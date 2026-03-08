@@ -98,7 +98,7 @@ struct connection_config
  * @class database_backend
  * @brief Abstract base class for database backends
  *
- * All database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) must
+ * All database backends (PostgreSQL, SQLite, MongoDB, Redis) must
  * implement this interface. This enables runtime polymorphism and eliminates
  * conditional compilation.
  *

@@ -17,7 +17,6 @@ REM Default values
 set "INSTALL_SYSTEM=true"
 set "INSTALL_VCPKG=true"
 set "INSTALL_POSTGRESQL=false"
-set "INSTALL_MYSQL=false"
 set "INSTALL_SQLITE=false"
 set "INSTALL_DOCS=false"
 set "INSTALL_DEBUG=false"
@@ -53,11 +52,6 @@ if "%1"=="--with-postgresql" (
     shift
     goto :parse_args
 )
-if "%1"=="--with-mysql" (
-    set "INSTALL_MYSQL=true"
-    shift
-    goto :parse_args
-)
 if "%1"=="--with-sqlite" (
     set "INSTALL_SQLITE=true"
     shift
@@ -65,7 +59,6 @@ if "%1"=="--with-sqlite" (
 )
 if "%1"=="--no-databases" (
     set "INSTALL_POSTGRESQL=false"
-    set "INSTALL_MYSQL=false"
     set "INSTALL_SQLITE=false"
     shift
     goto :parse_args
@@ -117,7 +110,6 @@ echo   Package Manager: chocolatey
 if "%INSTALL_SYSTEM%"=="true" (echo   System Dependencies: YES) else (echo   System Dependencies: NO)
 if "%INSTALL_VCPKG%"=="true" (echo   vcpkg: YES) else (echo   vcpkg: NO)
 if "%INSTALL_POSTGRESQL%"=="true" (echo   PostgreSQL: YES) else (echo   PostgreSQL: NO)
-if "%INSTALL_MYSQL%"=="true" (echo   MySQL: YES) else (echo   MySQL: NO)
 if "%INSTALL_SQLITE%"=="true" (echo   SQLite: YES) else (echo   SQLite: NO)
 if "%INSTALL_DOCS%"=="true" (echo   Documentation: YES) else (echo   Documentation: NO)
 if "%INSTALL_DEBUG%"=="true" (echo   Debugging Tools: YES) else (echo   Debugging Tools: NO)
@@ -153,10 +145,6 @@ REM Database libraries
 if "%INSTALL_POSTGRESQL%"=="true" (
     call :run_command "choco install postgresql" "PostgreSQL"
 )
-if "%INSTALL_MYSQL%"=="true" (
-    call :run_command "choco install mysql" "MySQL"
-)
-
 REM Development tools
 if "%INSTALL_DEBUG%"=="true" (
     call :run_command "choco install windbg" "Windows Debugging Tools"
@@ -212,9 +200,6 @@ if exist "..\vcpkg.json" (
     REM Database packages
     if "%INSTALL_POSTGRESQL%"=="true" (
         call :run_command ".\vcpkg install libpqxx" "PostgreSQL C++ library"
-    )
-    if "%INSTALL_MYSQL%"=="true" (
-        call :run_command ".\vcpkg install libmysql" "MySQL C++ library"
     )
     if "%INSTALL_SQLITE%"=="true" (
         call :run_command ".\vcpkg install sqlite3" "SQLite3 library"
@@ -311,7 +296,6 @@ echo   --all             Install all dependencies (default)
 echo.
 echo Database Options:
 echo   --with-postgresql Install PostgreSQL development libraries
-echo   --with-mysql      Install MySQL development libraries
 echo   --with-sqlite     Install SQLite development libraries
 echo   --no-databases    Skip database-specific dependencies
 echo.

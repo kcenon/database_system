@@ -51,16 +51,6 @@
  *     .build(backend_type::postgres);
  * // Result: "host=localhost port=5432 dbname=mydb user=admin password=secret sslmode=require"
  *
- * // MySQL connection string
- * auto mysql_conn = connection_string_builder()
- *     .host("localhost")
- *     .port(3306)
- *     .database("mydb")
- *     .user("admin")
- *     .password("secret")
- *     .build(backend_type::mysql);
- * // Result: "host=localhost;port=3306;database=mydb;user=admin;password=secret"
- *
  * // SQLite connection string
  * auto sqlite_conn = connection_string_builder()
  *     .database("mydb.db")
@@ -171,7 +161,7 @@ public:
     connection_string_builder& connect_timeout(uint32_t seconds);
 
     /**
-     * @brief Set the application name (for PostgreSQL/MySQL)
+     * @brief Set the application name (for PostgreSQL)
      * @param name Application name
      * @return Reference to this builder for chaining
      */
@@ -197,7 +187,7 @@ public:
      * @return Result containing the connection string or validation error
      *
      * Validates that required fields are set for the backend:
-     * - PostgreSQL/MySQL: host is recommended (defaults to localhost)
+     * - PostgreSQL: host is recommended (defaults to localhost)
      * - SQLite: database path is required (or in_memory must be set)
      * - MongoDB: host is required
      * - Redis: host is required
@@ -223,13 +213,11 @@ private:
     std::vector<std::pair<std::string, std::string>> custom_options_;
 
     [[nodiscard]] kcenon::common::Result<std::string> build_postgres() const;
-    [[nodiscard]] kcenon::common::Result<std::string> build_mysql() const;
     [[nodiscard]] kcenon::common::Result<std::string> build_sqlite() const;
     [[nodiscard]] kcenon::common::Result<std::string> build_mongodb() const;
     [[nodiscard]] kcenon::common::Result<std::string> build_redis() const;
 
     [[nodiscard]] static std::string ssl_mode_to_postgres_string(enum ssl_mode mode);
-    [[nodiscard]] static std::string ssl_mode_to_mysql_string(enum ssl_mode mode);
 };
 
 } // namespace database::integrated

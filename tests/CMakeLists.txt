@@ -1130,48 +1130,6 @@ if(GTest_FOUND OR gtest_FOUND)
 endif()
 
 ##################################################
-# MySQL Backend Tests
-##################################################
-
-if(GTest_FOUND OR gtest_FOUND)
-    add_executable(mysql_backend_test
-        mysql_backend_test.cpp
-    )
-
-    if(GTest_FOUND)
-        target_link_libraries(mysql_backend_test PRIVATE
-            database
-            GTest::gtest
-            GTest::gtest_main
-            Threads::Threads
-        )
-    else()
-        target_link_libraries(mysql_backend_test PRIVATE
-            database
-            gtest
-            gtest_main
-            Threads::Threads
-        )
-    endif()
-
-    set_target_properties(mysql_backend_test PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    )
-
-    add_test(NAME MySQLBackendTests COMMAND mysql_backend_test)
-
-    gtest_discover_tests(mysql_backend_test
-        PROPERTIES
-            TIMEOUT ${TEST_TIMEOUT}
-        DISCOVERY_TIMEOUT 60
-    )
-
-    message(STATUS "MySQL backend tests configured")
-endif()
-
-##################################################
 # MongoDB Backend Tests
 ##################################################
 

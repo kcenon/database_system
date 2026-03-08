@@ -42,7 +42,6 @@ namespace database
 	{
 		switch (type) {
 			case database_types::postgres:
-			case database_types::mysql:
 			case database_types::sqlite:
 				return std::make_unique<detail::sql_dialect>(type);
 #ifdef USE_MONGODB
@@ -332,8 +331,6 @@ namespace database
 		std::string sql_dialect::escape_identifier(const std::string& identifier) const
 		{
 			switch (db_type_) {
-				case database_types::mysql:
-					return "`" + identifier + "`";
 				case database_types::postgres:
 					return "\"" + identifier + "\"";
 				case database_types::sqlite:

@@ -28,7 +28,6 @@ show_help() {
     echo ""
     echo -e "${BOLD}Database Options:${NC}"
     echo "  --with-postgresql Install PostgreSQL development libraries"
-    echo "  --with-mysql      Install MySQL development libraries"
     echo "  --with-sqlite     Install SQLite development libraries"
     echo "  --no-databases    Skip database-specific dependencies"
     echo ""
@@ -55,7 +54,6 @@ show_help() {
 INSTALL_SYSTEM=true
 INSTALL_VCPKG=true
 INSTALL_POSTGRESQL=false
-INSTALL_MYSQL=false
 INSTALL_SQLITE=false
 INSTALL_DOCS=false
 INSTALL_DEBUG=false
@@ -91,17 +89,12 @@ while [[ $# -gt 0 ]]; do
             INSTALL_POSTGRESQL=true
             shift
             ;;
-        --with-mysql)
-            INSTALL_MYSQL=true
-            shift
-            ;;
         --with-sqlite)
             INSTALL_SQLITE=true
             shift
             ;;
         --no-databases)
             INSTALL_POSTGRESQL=false
-            INSTALL_MYSQL=false
             INSTALL_SQLITE=false
             shift
             ;;
@@ -218,9 +211,6 @@ install_system_dependencies() {
             if [[ "$INSTALL_POSTGRESQL" == true ]]; then
                 run_command "brew install postgresql libpq" "PostgreSQL development libraries"
             fi
-            if [[ "$INSTALL_MYSQL" == true ]]; then
-                run_command "brew install mysql mysql-client" "MySQL development libraries"
-            fi
             if [[ "$INSTALL_SQLITE" == true ]]; then
                 run_command "brew install sqlite" "SQLite development libraries"
             fi
@@ -254,9 +244,6 @@ install_system_dependencies() {
             if [[ "$INSTALL_POSTGRESQL" == true ]]; then
                 run_command "sudo apt install -y libpq-dev postgresql-server-dev-all" "PostgreSQL development libraries"
             fi
-            if [[ "$INSTALL_MYSQL" == true ]]; then
-                run_command "sudo apt install -y libmysqlclient-dev" "MySQL development libraries"
-            fi
             if [[ "$INSTALL_SQLITE" == true ]]; then
                 run_command "sudo apt install -y libsqlite3-dev" "SQLite development libraries"
             fi
@@ -279,9 +266,6 @@ install_system_dependencies() {
 
             if [[ "$INSTALL_POSTGRESQL" == true ]]; then
                 run_command "choco install postgresql" "PostgreSQL"
-            fi
-            if [[ "$INSTALL_MYSQL" == true ]]; then
-                run_command "choco install mysql" "MySQL"
             fi
             if [[ "$INSTALL_DOCS" == true ]]; then
                 run_command "choco install doxygen.install graphviz" "Documentation tools"
@@ -337,9 +321,6 @@ install_vcpkg() {
         # Database packages
         if [[ "$INSTALL_POSTGRESQL" == true ]]; then
             run_command "./vcpkg install libpqxx" "PostgreSQL C++ library"
-        fi
-        if [[ "$INSTALL_MYSQL" == true ]]; then
-            run_command "./vcpkg install libmysql" "MySQL C++ library"
         fi
         if [[ "$INSTALL_SQLITE" == true ]]; then
             run_command "./vcpkg install sqlite3" "SQLite3 library"
@@ -404,7 +385,6 @@ main() {
     echo -e "  System Dependencies: ${BOLD}$([ "$INSTALL_SYSTEM" = true ] && echo "YES" || echo "NO")${NC}"
     echo -e "  vcpkg: ${BOLD}$([ "$INSTALL_VCPKG" = true ] && echo "YES" || echo "NO")${NC}"
     echo -e "  PostgreSQL: ${BOLD}$([ "$INSTALL_POSTGRESQL" = true ] && echo "YES" || echo "NO")${NC}"
-    echo -e "  MySQL: ${BOLD}$([ "$INSTALL_MYSQL" = true ] && echo "YES" || echo "NO")${NC}"
     echo -e "  SQLite: ${BOLD}$([ "$INSTALL_SQLITE" = true ] && echo "YES" || echo "NO")${NC}"
     echo -e "  Documentation: ${BOLD}$([ "$INSTALL_DOCS" = true ] && echo "YES" || echo "NO")${NC}"
     echo -e "  Debugging Tools: ${BOLD}$([ "$INSTALL_DEBUG" = true ] && echo "YES" || echo "NO")${NC}"

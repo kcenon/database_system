@@ -96,7 +96,7 @@ namespace database
 		 *
 		 * @param database_type An enum value of @c database_types that
 		 *                      specifies the target database type (e.g.,
-		 *                      PostgreSQL, MySQL, SQLite).
+		 *                      PostgreSQL, SQLite).
 		 * @return @c true on success (e.g., if a corresponding database
 		 *         implementation is available), @c false otherwise.
 		 *

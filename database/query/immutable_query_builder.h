@@ -155,7 +155,7 @@ namespace database
 
 		/**
 		 * @brief Builds the SQL query for a specific database type.
-		 * @param db_type Database type (PostgreSQL, MySQL, SQLite, etc.).
+		 * @param db_type Database type (PostgreSQL, SQLite, etc.).
 		 * @return SQL query string formatted for the specified database.
 		 */
 		std::string build_for_database(database_types db_type) const;

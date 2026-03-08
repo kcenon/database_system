@@ -20,7 +20,7 @@ namespace database::query {
  *
  * Responsibilities:
  * - Format different data types (string, int, double, bool, blob, null)
- * - Database-specific escaping (PostgreSQL, MySQL, SQLite)
+ * - Database-specific escaping (PostgreSQL, SQLite)
  * - Identifier quoting
  * - NULL literal formatting
  *
@@ -85,7 +85,6 @@ private:
 
     // Database-specific escaping
     std::string escape_postgresql_string(const std::string& str) const;
-    std::string escape_mysql_string(const std::string& str) const;
     std::string escape_sqlite_string(const std::string& str) const;
 };
 

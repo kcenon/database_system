@@ -121,7 +121,7 @@ namespace database
 	{
 		/**
 		 * @class sql_dialect
-		 * @brief SQL dialect implementation for PostgreSQL, MySQL, SQLite.
+		 * @brief SQL dialect implementation for PostgreSQL, SQLite.
 		 */
 		class sql_dialect final : public query_dialect
 		{

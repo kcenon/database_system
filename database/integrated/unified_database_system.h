@@ -419,7 +419,6 @@ public:
      *
      * Examples:
      * - PostgreSQL: "host=localhost port=5432 dbname=mydb user=user password=pass"
-     * - MySQL: "host=localhost;database=mydb;user=user;password=pass"
      * - SQLite: "mydb.db" or ":memory:"
      */
     kcenon::common::VoidResult connect(const std::string& connection_string);

@@ -430,17 +430,6 @@ TEST_F(SQLQueryBuilderTest, PostgreSQLSyntax)
     EXPECT_TRUE(query.find("\"users\"") != std::string::npos);
 }
 
-TEST_F(SQLQueryBuilderTest, MySQLSyntax)
-{
-    query_builder mysql_builder(database_types::mysql);
-    auto query = mysql_builder.select({"*"})
-                             .from("users")
-                             .limit(10)
-                             .build();
-
-    EXPECT_TRUE(query.find("`users`") != std::string::npos);
-}
-
 TEST_F(SQLQueryBuilderTest, SQLiteSyntax)
 {
     query_builder sqlite_builder(database_types::sqlite);
@@ -522,13 +511,13 @@ TEST_F(SQLQueryBuilderTest, EmptyConditions)
 
 TEST_F(SQLQueryBuilderTest, SwitchDatabase)
 {
-    builder_->for_database(database_types::mysql);
+    builder_->for_database(database_types::sqlite);
 
     auto query = builder_->select({"*"})
                         .from("users")
                         .build();
 
-    EXPECT_TRUE(query.find("`users`") != std::string::npos);  // MySQL syntax
+    EXPECT_TRUE(query.find("[users]") != std::string::npos);  // SQLite syntax
 }
 
 } // namespace database::tests

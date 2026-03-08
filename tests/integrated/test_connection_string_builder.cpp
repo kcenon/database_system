@@ -192,48 +192,6 @@ bool test_postgres_empty() {
 }
 
 //==============================================================================
-// MySQL Tests
-//==============================================================================
-
-bool test_mysql_basic() {
-    TEST_START("MySQL - Basic Connection String");
-
-    auto result = connection_string_builder()
-        .host("localhost")
-        .port(3306)
-        .database("mydb")
-        .user("admin")
-        .password("secret")
-        .build(backend_type::mysql);
-
-    ASSERT_TRUE(result.is_ok(), "Build should succeed");
-
-    auto conn_str = result.value();
-    ASSERT_TRUE(conn_str.find("host=localhost") != std::string::npos, "Should contain host");
-    ASSERT_TRUE(conn_str.find("port=3306") != std::string::npos, "Should contain port");
-    ASSERT_TRUE(conn_str.find("database=mydb") != std::string::npos, "Should contain database");
-    ASSERT_TRUE(conn_str.find("user=admin") != std::string::npos, "Should contain user");
-    ASSERT_TRUE(conn_str.find("password=secret") != std::string::npos, "Should contain password");
-    ASSERT_TRUE(conn_str.find(";") != std::string::npos, "MySQL should use semicolon separator");
-
-    TEST_END();
-}
-
-bool test_mysql_ssl() {
-    TEST_START("MySQL - SSL Mode");
-
-    auto result = connection_string_builder()
-        .host("localhost")
-        .ssl_mode(ssl_mode::require)
-        .build(backend_type::mysql);
-
-    ASSERT_TRUE(result.is_ok(), "Build should succeed");
-    ASSERT_TRUE(result.value().find("sslmode=REQUIRED") != std::string::npos, "Should contain SSL mode");
-
-    TEST_END();
-}
-
-//==============================================================================
 // SQLite Tests
 //==============================================================================
 
@@ -459,15 +417,11 @@ bool test_builder_reuse() {
     auto pg_result = builder.build(backend_type::postgres);
     ASSERT_TRUE(pg_result.is_ok(), "PostgreSQL build should succeed");
 
-    // Reset and build for MySQL
+    // Reset and build for SQLite
     builder.reset()
-           .host("localhost")
-           .user("admin")
-           .password("secret")
-           .database("mysql_db")
-           .port(3306);
-    auto mysql_result = builder.build(backend_type::mysql);
-    ASSERT_TRUE(mysql_result.is_ok(), "MySQL build should succeed");
+           .database("test.db");
+    auto sqlite_result = builder.build(backend_type::sqlite);
+    ASSERT_TRUE(sqlite_result.is_ok(), "SQLite build should succeed");
 
     TEST_END();
 }
@@ -513,10 +467,6 @@ int main() {
     test_postgres_app_name();
     test_postgres_custom_option();
     test_postgres_empty();
-
-    // MySQL tests
-    test_mysql_basic();
-    test_mysql_ssl();
 
     // SQLite tests
     test_sqlite_file();

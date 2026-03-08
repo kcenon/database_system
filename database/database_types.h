@@ -57,11 +57,6 @@ namespace database
 		postgres = 1,
 
 		/**
-		 * @brief Indicates a MySQL/MariaDB database.
-		 */
-		mysql = 2,
-
-		/**
 		 * @brief Indicates a SQLite database.
 		 */
 		sqlite = 3,
@@ -92,7 +87,6 @@ namespace database
 		switch (type) {
 		case database_types::none: return "none";
 		case database_types::postgres: return "postgres";
-		case database_types::mysql: return "mysql";
 		case database_types::sqlite: return "sqlite";
 		case database_types::oracle: return "oracle";
 		case database_types::mongodb: return "mongodb";

@@ -189,7 +189,7 @@ TEST_F(ErrorHandlingTest, InvalidConnectionStringFormat)
 		"",
 		"invalid://connection",
 		"postgres://",
-		"mysql://"
+		"invalid_no_scheme"
 	};
 
 	for (const auto& conn_str : invalid_strings) {

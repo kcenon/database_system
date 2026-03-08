@@ -116,82 +116,6 @@ TEST_F(PostgreSQLDialectTest, SupportsFeatureReturning)
 }
 
 //=============================================================================
-// MySQL Dialect Tests
-//=============================================================================
-
-class MySQLDialectTest : public ::testing::Test
-{
-protected:
-    void SetUp() override
-    {
-        dialect_ = sql_dialect::create(database_types::mysql);
-    }
-
-    std::unique_ptr<sql_dialect> dialect_;
-};
-
-TEST_F(MySQLDialectTest, PlaceholderStyle)
-{
-    // MySQL uses positional ? placeholders
-    EXPECT_EQ(dialect_->placeholder(1), "?");
-    EXPECT_EQ(dialect_->placeholder(2), "?");
-    EXPECT_EQ(dialect_->placeholder(100), "?");
-}
-
-TEST_F(MySQLDialectTest, QuoteIdentifier)
-{
-    EXPECT_EQ(dialect_->quote_identifier("users"), "`users`");
-    EXPECT_EQ(dialect_->quote_identifier("user_name"), "`user_name`");
-    EXPECT_EQ(dialect_->quote_identifier("SELECT"), "`SELECT`");  // Reserved word
-}
-
-TEST_F(MySQLDialectTest, QuoteIdentifierWithBackticks)
-{
-    // Backticks should be escaped by doubling
-    EXPECT_EQ(dialect_->quote_identifier("user`name"), "`user``name`");
-}
-
-TEST_F(MySQLDialectTest, EscapeString)
-{
-    EXPECT_EQ(dialect_->escape_string("hello"), "hello");
-    EXPECT_EQ(dialect_->escape_string("it's"), "it\\'s");  // MySQL uses backslash escape
-    EXPECT_EQ(dialect_->escape_string("back\\slash"), "back\\\\slash");
-    EXPECT_EQ(dialect_->escape_string("line\nbreak"), "line\\nbreak");
-}
-
-TEST_F(MySQLDialectTest, ReturningClauseNotSupported)
-{
-    // MySQL does not support RETURNING clause
-    EXPECT_EQ(dialect_->returning_clause("id"), "");
-    EXPECT_EQ(dialect_->returning_clause(""), "");
-}
-
-TEST_F(MySQLDialectTest, UpsertClause)
-{
-    std::vector<std::string> conflict_cols = {"id"};  // Ignored in MySQL
-    std::vector<std::string> update_cols = {"name", "email"};
-
-    std::string result = dialect_->upsert_clause(conflict_cols, update_cols);
-
-    EXPECT_TRUE(result.find("ON DUPLICATE KEY UPDATE") != std::string::npos);
-    EXPECT_TRUE(result.find("VALUES(") != std::string::npos);
-}
-
-TEST_F(MySQLDialectTest, SupportsFeatureReturning)
-{
-    EXPECT_FALSE(dialect_->supports_feature("returning"));
-    EXPECT_TRUE(dialect_->supports_feature("upsert"));
-    EXPECT_FALSE(dialect_->supports_feature("full_outer_join"));
-}
-
-TEST_F(MySQLDialectTest, LimitClauseSyntax)
-{
-    // MySQL uses different LIMIT syntax with offset
-    EXPECT_EQ(dialect_->limit_clause(10, 0), "LIMIT 10");
-    EXPECT_EQ(dialect_->limit_clause(10, 20), "LIMIT 20, 10");  // offset, limit
-}
-
-//=============================================================================
 // SQLite Dialect Tests
 //=============================================================================
 
@@ -288,13 +212,6 @@ TEST(SqlDialectFactoryTest, CreatePostgreSQLDialect)
     EXPECT_EQ(dialect->placeholder(1), "$1");
 }
 
-TEST(SqlDialectFactoryTest, CreateMySQLDialect)
-{
-    auto dialect = sql_dialect::create(database_types::mysql);
-    ASSERT_NE(dialect, nullptr);
-    EXPECT_EQ(dialect->placeholder(1), "?");
-}
-
 TEST(SqlDialectFactoryTest, CreateSQLiteDialect)
 {
     auto dialect = sql_dialect::create(database_types::sqlite);
@@ -324,21 +241,17 @@ protected:
     void SetUp() override
     {
         postgres_ = sql_dialect::create(database_types::postgres);
-        mysql_ = sql_dialect::create(database_types::mysql);
         sqlite_ = sql_dialect::create(database_types::sqlite);
     }
 
     std::unique_ptr<sql_dialect> postgres_;
-    std::unique_ptr<sql_dialect> mysql_;
     std::unique_ptr<sql_dialect> sqlite_;
 };
 
 TEST_F(CrossDialectTest, PlaceholderStylesDiffer)
 {
-    // All three dialects should produce different placeholders
-    EXPECT_NE(postgres_->placeholder(1), mysql_->placeholder(1));
+    // Both dialects should produce different placeholders
     EXPECT_NE(postgres_->placeholder(1), sqlite_->placeholder(1));
-    EXPECT_NE(mysql_->placeholder(1), sqlite_->placeholder(1));
 }
 
 TEST_F(CrossDialectTest, QuoteIdentifierStyles)
@@ -348,9 +261,6 @@ TEST_F(CrossDialectTest, QuoteIdentifierStyles)
     // PostgreSQL and SQLite use double quotes
     EXPECT_EQ(postgres_->quote_identifier(col), "\"user_id\"");
     EXPECT_EQ(sqlite_->quote_identifier(col), "\"user_id\"");
-
-    // MySQL uses backticks
-    EXPECT_EQ(mysql_->quote_identifier(col), "`user_id`");
 }
 
 TEST_F(CrossDialectTest, ConcatOperatorDiffers)
@@ -358,22 +268,17 @@ TEST_F(CrossDialectTest, ConcatOperatorDiffers)
     // PostgreSQL and SQLite use ||
     EXPECT_EQ(postgres_->concat_operator(), "||");
     EXPECT_EQ(sqlite_->concat_operator(), "||");
-
-    // MySQL uses CONCAT function
-    EXPECT_EQ(mysql_->concat_operator(), "CONCAT");
 }
 
 TEST_F(CrossDialectTest, AutoIncrementSyntax)
 {
     EXPECT_EQ(postgres_->auto_increment(), "SERIAL");
-    EXPECT_EQ(mysql_->auto_increment(), "AUTO_INCREMENT");
     EXPECT_EQ(sqlite_->auto_increment(), "AUTOINCREMENT");
 }
 
 TEST_F(CrossDialectTest, CurrentTimestampFunction)
 {
     EXPECT_EQ(postgres_->current_timestamp(), "CURRENT_TIMESTAMP");
-    EXPECT_EQ(mysql_->current_timestamp(), "NOW()");
     EXPECT_EQ(sqlite_->current_timestamp(), "CURRENT_TIMESTAMP");
 }
 

@@ -34,7 +34,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "database/core/backend_registry.h"
 #include "database/backends/postgresql_backend.h"
-#include "database/backends/mysql_backend.h"
 #include "database/backends/sqlite_backend.h"
 #ifdef USE_MONGODB
 #include "database/backends/mongodb_backend.h"
@@ -77,9 +76,6 @@ namespace database
 		{
 		case database_types::postgres:
 			database_ = backends::postgresql_backend::create();
-			break;
-		case database_types::mysql:
-			database_ = backends::mysql_backend::create();
 			break;
 		case database_types::sqlite:
 			database_ = backends::sqlite_backend::create();

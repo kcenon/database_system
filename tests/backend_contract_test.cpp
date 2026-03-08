@@ -110,8 +110,8 @@ TEST_F(BackendContractTest, SimulateShutdown)
 
 TEST_F(BackendContractTest, TypeReturnsConfiguredType)
 {
-    backend_.set_database_type(database_types::mysql);
-    EXPECT_EQ(backend_.type(), database_types::mysql);
+    backend_.set_database_type(database_types::sqlite);
+    EXPECT_EQ(backend_.type(), database_types::sqlite);
 }
 
 TEST_F(BackendContractTest, DefaultTypeIsNone)
@@ -561,13 +561,13 @@ TEST_F(BackendContractTest, ConcurrentQueryExecution)
 TEST_F(BackendContractTest, MoveConstructor)
 {
     backend_.initialize(test_config_);
-    backend_.set_database_type(database_types::mysql);
+    backend_.set_database_type(database_types::sqlite);
     backend_.insert_query("q1");
 
     mock_backend moved(std::move(backend_));
 
     EXPECT_TRUE(moved.is_initialized());
-    EXPECT_EQ(moved.type(), database_types::mysql);
+    EXPECT_EQ(moved.type(), database_types::sqlite);
     EXPECT_EQ(moved.get_query_count(), 1u);
 }
 

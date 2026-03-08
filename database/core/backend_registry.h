@@ -113,7 +113,7 @@ public:
 
 	/**
 	 * @brief Register a backend factory function
-	 * @param name Backend name (e.g., "postgresql", "mysql")
+	 * @param name Backend name (e.g., "postgresql", "sqlite")
 	 * @param factory Factory function that creates backend instances
 	 * @return VoidResult::ok() on success, error if name already registered
 	 *
@@ -140,7 +140,7 @@ public:
 
 	/**
 	 * @brief Create a backend instance by name
-	 * @param name Backend name (e.g., "postgresql", "mysql")
+	 * @param name Backend name (e.g., "postgresql", "sqlite")
 	 * @return Unique pointer to backend, or nullptr if not found
 	 *
 	 * Thread Safety: This method is thread-safe

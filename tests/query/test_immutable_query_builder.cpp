@@ -178,14 +178,6 @@ TEST_F(ImmutableQueryBuilderTest, PostgresUsesDoubleQuotes) {
 	EXPECT_NE(sql.find("\"users\""), std::string::npos);
 }
 
-TEST_F(ImmutableQueryBuilderTest, MySqlUsesBackticks) {
-	auto q = builder_.select({"id", "name"});
-	std::string sql = q.build_for_database(database_types::mysql);
-	EXPECT_NE(sql.find("`id`"), std::string::npos);
-	EXPECT_NE(sql.find("`name`"), std::string::npos);
-	EXPECT_NE(sql.find("`users`"), std::string::npos);
-}
-
 TEST_F(ImmutableQueryBuilderTest, SqliteUsesDoubleQuotes) {
 	auto q = builder_.select({"id"});
 	std::string sql = q.build_for_database(database_types::sqlite);

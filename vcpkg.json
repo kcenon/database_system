@@ -18,7 +18,6 @@
     { "name": "openssl", "version": "3.3.0" },
     { "name": "libpq", "version": "16.2" },
     { "name": "libpqxx", "version": "7.9.0" },
-    { "name": "libmysql", "version": "8.0.34" },
     { "name": "sqlite3", "version": "3.45.3" },
     { "name": "mongo-cxx-driver", "version": "3.10.1" },
     { "name": "hiredis", "version": "1.2.0" },
@@ -50,14 +49,6 @@
         {
           "name": "openssl",
           "version>=": "3.3.0"
-        }
-      ]
-    },
-    "mysql": {
-      "description": "Enable MySQL/MariaDB database support (uses MariaDB Connector/C, LGPL-2.1)",
-      "dependencies": [
-        {
-          "name": "libmariadb"
         }
       ]
     },

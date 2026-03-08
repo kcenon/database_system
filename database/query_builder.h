@@ -99,7 +99,7 @@ namespace database
 	 * @brief Universal query builder that adapts to different database types.
 	 *
 	 * This class provides a unified interface for building queries across different
-	 * database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) using the
+	 * database backends (PostgreSQL, SQLite, MongoDB, Redis) using the
 	 * Strategy pattern.
 	 *
 	 * ### Thread Safety
@@ -123,8 +123,8 @@ namespace database
 	 *     .build();
 	 *
 	 * // Switch database type
-	 * builder.for_database(database_types::mysql);
-	 * auto mysql_query = builder.select({"*"}).from("users").build();
+	 * builder.for_database(database_types::sqlite);
+	 * auto sqlite_query = builder.select({"*"}).from("users").build();
 	 * ```
 	 */
 	class query_builder
@@ -142,7 +142,7 @@ namespace database
 		// Set database type
 		query_builder& for_database(database_types db_type);
 
-		// SQL-style interface (works for PostgreSQL, MySQL, SQLite)
+		// SQL-style interface (works for PostgreSQL, SQLite)
 		query_builder& select(const std::vector<std::string>& columns);
 		query_builder& from(const std::string& table);
 		query_builder& where(const std::string& field, const std::string& op, const core::database_value& value);

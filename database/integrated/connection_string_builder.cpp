@@ -89,8 +89,6 @@ kcenon::common::Result<std::string> connection_string_builder::build(backend_typ
     switch (type) {
         case backend_type::postgres:
             return build_postgres();
-        case backend_type::mysql:
-            return build_mysql();
         case backend_type::sqlite:
             return build_sqlite();
         case backend_type::mongodb:
@@ -160,54 +158,6 @@ kcenon::common::Result<std::string> connection_string_builder::build_postgres() 
 
     if (application_name_.has_value()) {
         append("application_name", *application_name_);
-    }
-
-    for (const auto& [key, value] : custom_options_) {
-        append(key, value);
-    }
-
-    return kcenon::common::Result<std::string>::ok(oss.str());
-}
-
-kcenon::common::Result<std::string> connection_string_builder::build_mysql() const {
-    std::ostringstream oss;
-    bool first = true;
-
-    auto append = [&oss, &first](const std::string& key, const std::string& value) {
-        if (!first) {
-            oss << ';';
-        }
-        oss << key << '=' << value;
-        first = false;
-    };
-
-    // MySQL uses semicolon-separated key=value pairs
-    if (host_.has_value()) {
-        append("host", *host_);
-    }
-
-    if (port_.has_value()) {
-        append("port", std::to_string(*port_));
-    }
-
-    if (database_.has_value()) {
-        append("database", *database_);
-    }
-
-    if (user_.has_value()) {
-        append("user", *user_);
-    }
-
-    if (password_.has_value()) {
-        append("password", *password_);
-    }
-
-    if (ssl_mode_.has_value()) {
-        append("sslmode", ssl_mode_to_mysql_string(*ssl_mode_));
-    }
-
-    if (connect_timeout_.has_value()) {
-        append("connect_timeout", std::to_string(*connect_timeout_));
     }
 
     for (const auto& [key, value] : custom_options_) {
@@ -331,24 +281,6 @@ std::string connection_string_builder::ssl_mode_to_postgres_string(enum ssl_mode
             return "verify-full";
         default:
             return "prefer";
-    }
-}
-
-std::string connection_string_builder::ssl_mode_to_mysql_string(enum ssl_mode mode) {
-    switch (mode) {
-        case ssl_mode::disable:
-            return "DISABLED";
-        case ssl_mode::allow:
-        case ssl_mode::prefer:
-            return "PREFERRED";
-        case ssl_mode::require:
-            return "REQUIRED";
-        case ssl_mode::verify_ca:
-            return "VERIFY_CA";
-        case ssl_mode::verify_full:
-            return "VERIFY_IDENTITY";
-        default:
-            return "PREFERRED";
     }
 }
 

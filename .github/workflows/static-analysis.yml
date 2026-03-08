@@ -49,7 +49,6 @@ jobs:
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_POSTGRESQL=OFF \
-          -DUSE_MYSQL=OFF \
           -DUSE_SQLITE=OFF
 
     - name: Run clang-tidy

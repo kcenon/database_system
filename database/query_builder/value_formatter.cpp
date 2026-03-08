@@ -51,8 +51,6 @@ std::string value_formatter::escape_string(const std::string& str) const {
     switch (db_type_) {
         case database_types::postgres:
             return escape_postgresql_string(str);
-        case database_types::mysql:
-            return escape_mysql_string(str);
         case database_types::sqlite:
             return escape_sqlite_string(str);
         case database_types::mongodb:
@@ -68,8 +66,6 @@ std::string value_formatter::escape_identifier(const std::string& identifier) co
     switch (db_type_) {
         case database_types::postgres:
             return "\"" + identifier + "\"";
-        case database_types::mysql:
-            return "`" + identifier + "`";
         case database_types::sqlite:
             return "\"" + identifier + "\"";
         case database_types::mongodb:
@@ -89,8 +85,6 @@ std::string value_formatter::bool_literal(bool val) const {
         case database_types::postgres:
         case database_types::sqlite:
             return val ? "TRUE" : "FALSE";
-        case database_types::mysql:
-            return val ? "1" : "0";
         case database_types::mongodb:
             return val ? "true" : "false";
         case database_types::redis:
@@ -142,17 +136,6 @@ std::string value_formatter::format_blob(const std::vector<uint8_t>& data) const
             oss << "'";
             return oss.str();
         }
-        case database_types::mysql: {
-            // MySQL hex format: X'...'
-            std::ostringstream oss;
-            oss << "X'";
-            for (uint8_t byte : data) {
-                oss << std::hex << std::setw(2) << std::setfill('0')
-                    << static_cast<int>(byte);
-            }
-            oss << "'";
-            return oss.str();
-        }
         case database_types::sqlite: {
             // SQLite hex format: X'...'
             std::ostringstream oss;
@@ -194,44 +177,6 @@ std::string value_formatter::escape_postgresql_string(const std::string& str) co
                 break;
             case '\t':
                 result += "\\t";  // Tab
-                break;
-            default:
-                result += c;
-        }
-    }
-
-    return result;
-}
-
-std::string value_formatter::escape_mysql_string(const std::string& str) const {
-    std::string result;
-    result.reserve(str.length() + 10);
-
-    for (char c : str) {
-        switch (c) {
-            case '\'':
-                result += "\\'";  // Escape single quote
-                break;
-            case '\"':
-                result += "\\\"";  // Escape double quote
-                break;
-            case '\\':
-                result += "\\\\";  // Escape backslash
-                break;
-            case '\0':
-                result += "\\0";  // NULL byte
-                break;
-            case '\n':
-                result += "\\n";  // Newline
-                break;
-            case '\r':
-                result += "\\r";  // Carriage return
-                break;
-            case '\t':
-                result += "\\t";  // Tab
-                break;
-            case '\x1a':
-                result += "\\Z";  // Ctrl-Z (EOF marker)
                 break;
             default:
                 result += c;

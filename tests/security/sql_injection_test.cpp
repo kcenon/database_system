@@ -244,7 +244,7 @@ TEST_F(SQLInjectionTest, ApostropheInValueSafe) {
         .build();
 
     // Check that apostrophe is escaped in built query
-    // Should contain either O''Brien (SQL standard) or O\'Brien (MySQL)
+    // Should contain either O''Brien (SQL standard) or O\'Brien (backslash-escaped)
     bool properly_escaped =
         (query.find("O''Brien") != std::string::npos) ||
         (query.find("O\\'Brien") != std::string::npos) ||

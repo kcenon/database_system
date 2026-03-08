@@ -127,7 +127,7 @@ struct message_header {
  * @brief Client connection request
  */
 struct connect_request {
-    std::string database_type;  // "postgresql", "mysql", etc.
+    std::string database_type;  // "postgresql", "sqlite", etc.
     std::string connection_string;
     std::map<std::string, std::string> options;
 };

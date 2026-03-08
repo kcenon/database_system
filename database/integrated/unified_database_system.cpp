@@ -79,7 +79,6 @@ inline kcenon::common::Result<T> make_error_result(const std::string& msg, int c
 static std::string backend_type_to_name(backend_type type) {
     switch (type) {
         case backend_type::postgres: return "postgresql";
-        case backend_type::mysql:    return "mysql";
         case backend_type::sqlite:   return "sqlite";
         case backend_type::mongodb:  return "mongodb";
         case backend_type::redis:    return "redis";

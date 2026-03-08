@@ -144,16 +144,16 @@ TEST_F(ConnectProtocolTest, ConnectRequestRoundTrip) {
 
 TEST_F(ConnectProtocolTest, ConnectRequestEmptyOptions) {
 	connect_request original;
-	original.database_type = "mysql";
-	original.connection_string = "mysql://localhost/test";
+	original.database_type = "sqlite";
+	original.connection_string = "file:test.db";
 
 	auto bytes = protocol_serializer::serialize(original);
 	auto result = protocol_serializer::deserialize_connect_request(bytes);
 	ASSERT_TRUE(result.is_ok());
 
 	auto recovered = result.value();
-	EXPECT_EQ(recovered.database_type, "mysql");
-	EXPECT_EQ(recovered.connection_string, "mysql://localhost/test");
+	EXPECT_EQ(recovered.database_type, "sqlite");
+	EXPECT_EQ(recovered.connection_string, "file:test.db");
 	EXPECT_TRUE(recovered.options.empty());
 }
 
@@ -555,7 +555,7 @@ TEST_F(SerializerEdgeCaseTest, UnicodeStringPreserved) {
 
 TEST_F(SerializerEdgeCaseTest, ManyOptionsMapPreserved) {
 	connect_request original;
-	original.database_type = "mysql";
+	original.database_type = "postgresql";
 	original.connection_string = "localhost";
 
 	for (int i = 0; i < 50; ++i) {

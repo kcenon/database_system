@@ -7,7 +7,6 @@ param(
     [switch]$VcpkgOnly,
     [switch]$All,
     [switch]$WithPostgreSQL,
-    [switch]$WithMySQL,
     [switch]$WithSQLite,
     [switch]$NoDatabases,
     [switch]$WithDocs,
@@ -37,7 +36,6 @@ function Show-Help {
     Write-Host ""
     Write-Host "Database Options:" -ForegroundColor Yellow
     Write-Host "  -WithPostgreSQL   Install PostgreSQL development libraries"
-    Write-Host "  -WithMySQL        Install MySQL development libraries"
     Write-Host "  -WithSQLite       Install SQLite development libraries"
     Write-Host "  -NoDatabases      Skip database-specific dependencies"
     Write-Host ""
@@ -146,10 +144,6 @@ function Install-SystemDependencies {
     if ($InstallPostgreSQL) {
         Invoke-DependencyCommand -Command "choco install postgresql -y" -Description "PostgreSQL" | Out-Null
     }
-    if ($InstallMySQL) {
-        Invoke-DependencyCommand -Command "choco install mysql -y" -Description "MySQL" | Out-Null
-    }
-
     # Development tools
     if ($InstallDebug) {
         Invoke-DependencyCommand -Command "choco install windbg -y" -Description "Windows Debugging Tools" | Out-Null
@@ -213,9 +207,6 @@ function Install-Vcpkg {
         if ($InstallPostgreSQL) {
             Invoke-DependencyCommand -Command ".\vcpkg install libpqxx" -Description "PostgreSQL C++ library" -WorkingDirectory "vcpkg" | Out-Null
         }
-        if ($InstallMySQL) {
-            Invoke-DependencyCommand -Command ".\vcpkg install libmysql" -Description "MySQL C++ library" -WorkingDirectory "vcpkg" | Out-Null
-        }
         if ($InstallSQLite) {
             Invoke-DependencyCommand -Command ".\vcpkg install sqlite3" -Description "SQLite3 library" -WorkingDirectory "vcpkg" | Out-Null
         }
@@ -277,7 +268,6 @@ if ($Help) {
 $InstallSystem = -not $VcpkgOnly
 $InstallVcpkg = -not $SystemOnly
 $InstallPostgreSQL = $WithPostgreSQL
-$InstallMySQL = $WithMySQL
 $InstallSQLite = $WithSQLite
 $InstallDocs = $WithDocs
 $InstallDebug = $WithDebug
@@ -285,7 +275,6 @@ $InstallProfiling = $WithProfiling
 
 if ($NoDatabases) {
     $InstallPostgreSQL = $false
-    $InstallMySQL = $false
     $InstallSQLite = $false
 }
 
@@ -300,7 +289,6 @@ Write-Host "  Package Manager: chocolatey" -ForegroundColor White
 Write-Host "  System Dependencies: $(if ($InstallSystem) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  vcpkg: $(if ($InstallVcpkg) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  PostgreSQL: $(if ($InstallPostgreSQL) { 'YES' } else { 'NO' })" -ForegroundColor White
-Write-Host "  MySQL: $(if ($InstallMySQL) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  SQLite: $(if ($InstallSQLite) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  Documentation: $(if ($InstallDocs) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  Debugging Tools: $(if ($InstallDebug) { 'YES' } else { 'NO' })" -ForegroundColor White

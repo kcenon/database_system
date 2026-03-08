@@ -30,7 +30,6 @@
 | SOUP-002 | [libpq](https://www.postgresql.org/) | PostgreSQL Global Development Group | 16.2 | PostgreSQL | PostgreSQL C client library (`postgresql` feature) | B | Dynamic | None |
 | SOUP-003 | [libpqxx](https://pqxx.org/) | Jeroen T. Vermeulen | 7.9.0 | BSD-3-Clause | PostgreSQL C++ wrapper (`postgresql` feature) | B | Dynamic | None |
 | SOUP-004 | [OpenSSL](https://www.openssl.org/) | OpenSSL Software Foundation | 3.3.0 | Apache-2.0 | TLS encryption for PostgreSQL connections (`postgresql` feature) | C | Dynamic | None known at pinned version |
-| SOUP-005 | [MariaDB Connector/C](https://mariadb.com/kb/en/mariadb-connector-c/) | MariaDB Corporation | 3.3.8 | LGPL-2.1-or-later | MySQL/MariaDB database connectivity (`mysql` feature) | B | **Dynamic only** (LGPL) | None |
 | SOUP-006 | [SQLite](https://www.sqlite.org/) | D. Richard Hipp | 3.45.3 | Public Domain | Embedded SQL database (`sqlite` feature) | B | Static or dynamic | None |
 | SOUP-007 | [MongoDB C++ Driver](https://github.com/mongodb/mongo-cxx-driver) | MongoDB, Inc. | 3.10.1 | Apache-2.0 | MongoDB database connectivity (`mongodb` feature, experimental) | B | Dynamic | None |
 | SOUP-008 | [Hiredis](https://github.com/redis/hiredis) | Redis Ltd. | 1.2.0 | BSD-3-Clause | Redis client library (`redis` feature, experimental) | A | Dynamic | None |
@@ -40,8 +39,6 @@
 | ID | Name | Manufacturer | Version | License | Usage | Safety Class | Linking | Known Anomalies |
 |----|------|-------------|---------|---------|-------|-------------|---------|-----------------|
 | SOUP-009 | [spdlog](https://github.com/gabime/spdlog) | Gabi Melman | 1.13.0 | MIT | Fast C++ logging library (`logging` feature) | A | Header-only or shared | None |
-
-> **LGPL Compliance**: MariaDB Connector/C (SOUP-005) must be dynamically linked to preserve BSD-3-Clause licensing. vcpkg triplet overlay forces dynamic linking. CMake build-time check and CI `ldd`/`otool -L` verification ensure compliance.
 
 ---
 
@@ -75,7 +72,6 @@ All SOUP versions are pinned in `vcpkg.json` via the `overrides` field:
     { "name": "openssl", "version": "3.3.0" },
     { "name": "libpq", "version": "16.2" },
     { "name": "libpqxx", "version": "7.9.0" },
-    { "name": "libmysql", "version": "8.0.34" },
     { "name": "sqlite3", "version": "3.45.3" },
     { "name": "mongo-cxx-driver", "version": "3.10.1" },
     { "name": "hiredis", "version": "1.2.0" },
@@ -112,6 +108,5 @@ When updating any SOUP dependency:
 | PostgreSQL | 1 | No | Include copyright notice |
 | Public Domain | 1 | None | No obligations |
 | MIT | 1 | No | Include copyright notice |
-| LGPL-2.1-or-later | 1 | Weak | Dynamic linking required; include license text |
 
-> **LGPL contamination**: Avoided by mandatory dynamic linking of MariaDB Connector/C. vcpkg triplet overlay enforces `dynamic` linkage. See LICENSE-THIRD-PARTY for details.
+> All dependencies use permissive licenses. There are no copyleft (GPL, LGPL) dependencies.

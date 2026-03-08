@@ -127,9 +127,9 @@ TEST_F(MonitoringEnabledTest, DisabledDoesNotRecordConnectionMetrics) {
 
 TEST_F(MonitoringEnabledTest, DisabledDoesNotUpdateConnectionCount) {
 	monitor_->set_monitoring_enabled(false);
-	monitor_->update_connection_count(database_types::mysql, 5, 10);
+	monitor_->update_connection_count(database_types::sqlite, 5, 10);
 
-	auto retrieved = monitor_->get_connection_metrics(database_types::mysql);
+	auto retrieved = monitor_->get_connection_metrics(database_types::postgres);
 	EXPECT_EQ(retrieved.total_connections.load(), 0u);
 }
 
@@ -162,10 +162,10 @@ protected:
 		monitor_->record_query_metrics(
 			make_query("pg2", std::chrono::microseconds(2000), true, database_types::postgres));
 		monitor_->record_query_metrics(
-			make_query("my1", std::chrono::microseconds(3000), true, database_types::mysql));
+			make_query("sq1", std::chrono::microseconds(3000), true, database_types::sqlite));
 		monitor_->record_query_metrics(
-			make_query("my2", std::chrono::microseconds(4000), false,
-				database_types::mysql, "connection lost"));
+			make_query("sq2", std::chrono::microseconds(4000), false,
+				database_types::sqlite, "connection lost"));
 	}
 };
 
@@ -176,8 +176,8 @@ TEST_F(FilteredSummaryTest, PostgresSummaryFiltersCorrectly) {
 	EXPECT_EQ(summary.failed_queries, 0u);
 }
 
-TEST_F(FilteredSummaryTest, MysqlSummaryFiltersCorrectly) {
-	auto summary = monitor_->get_performance_summary(database_types::mysql);
+TEST_F(FilteredSummaryTest, SqliteSummaryFiltersCorrectly) {
+	auto summary = monitor_->get_performance_summary(database_types::sqlite);
 	EXPECT_EQ(summary.total_queries, 2u);
 	EXPECT_EQ(summary.successful_queries, 1u);
 	EXPECT_EQ(summary.failed_queries, 1u);
@@ -185,7 +185,7 @@ TEST_F(FilteredSummaryTest, MysqlSummaryFiltersCorrectly) {
 }
 
 TEST_F(FilteredSummaryTest, UnusedDbTypeReturnsZero) {
-	auto summary = monitor_->get_performance_summary(database_types::sqlite);
+	auto summary = monitor_->get_performance_summary(database_types::mongodb);
 	EXPECT_EQ(summary.total_queries, 0u);
 }
 
@@ -251,7 +251,7 @@ TEST_F(QueryHistoryTest, GetSlowQueriesNoneAboveThreshold) {
 
 TEST_F(QueryHistoryTest, GetSlowQueriesPreservesMetadata) {
 	auto original = make_query("slow_hash", std::chrono::microseconds(99999), false,
-		database_types::mysql, "timeout");
+		database_types::sqlite, "timeout");
 	monitor_->record_query_metrics(original);
 
 	auto slow = monitor_->get_slow_queries(std::chrono::microseconds(1000));
@@ -259,7 +259,7 @@ TEST_F(QueryHistoryTest, GetSlowQueriesPreservesMetadata) {
 	EXPECT_EQ(slow[0].query_hash, "slow_hash");
 	EXPECT_FALSE(slow[0].success);
 	EXPECT_EQ(slow[0].error_message, "timeout");
-	EXPECT_EQ(slow[0].db_type, database_types::mysql);
+	EXPECT_EQ(slow[0].db_type, database_types::sqlite);
 }
 
 //=============================================================================
@@ -447,7 +447,7 @@ TEST_F(ConnectionMetricsTest, ConnectionSummaryIncludesMultipleTypes) {
 		make_query("q1", std::chrono::microseconds(100), true));
 
 	monitor_->update_connection_count(database_types::postgres, 3, 10);
-	monitor_->update_connection_count(database_types::mysql, 2, 5);
+	monitor_->update_connection_count(database_types::sqlite, 2, 5);
 
 	auto summary = monitor_->get_performance_summary();
 	EXPECT_EQ(summary.total_connections, 15u);
@@ -728,7 +728,7 @@ TEST_F(QueryTimerTest, SetErrorMarksFailure) {
 
 TEST_F(QueryTimerTest, SetRowsAffected) {
 	{
-		query_timer timer("INSERT INTO test VALUES (1)", database_types::mysql, monitor_);
+		query_timer timer("INSERT INTO test VALUES (1)", database_types::sqlite, monitor_);
 		timer.set_rows_affected(42);
 	}
 

@@ -34,7 +34,7 @@ namespace kcenon::database::di {
  * @brief Configuration for database service registration
  */
 struct database_registration_config {
-    /// Database type (postgresql, mysql, sqlite, etc.)
+    /// Database type (postgresql, sqlite, etc.)
     ::database::database_types db_type = ::database::database_types::postgres;
 
     /// Connection string (optional - can be set later via connect())

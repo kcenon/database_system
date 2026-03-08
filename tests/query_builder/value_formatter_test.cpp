@@ -33,15 +33,6 @@ TEST_F(ValueFormatterTest, PostgreSQLStringEscaping) {
     EXPECT_TRUE(escaped.find("\\\\") != std::string::npos);
 }
 
-TEST_F(ValueFormatterTest, MySQLStringEscaping) {
-    value_formatter fmt(database_types::mysql);
-
-    // Test single quote escaping
-    std::string input = "O'Brien";
-    std::string escaped = fmt.escape_string(input);
-    EXPECT_EQ(escaped, "O\\'Brien");
-}
-
 TEST_F(ValueFormatterTest, SQLiteStringEscaping) {
     value_formatter fmt(database_types::sqlite);
 
@@ -55,9 +46,6 @@ TEST_F(ValueFormatterTest, IdentifierQuoting) {
     value_formatter pg_fmt(database_types::postgres);
     EXPECT_EQ(pg_fmt.escape_identifier("table"), "\"table\"");
 
-    value_formatter mysql_fmt(database_types::mysql);
-    EXPECT_EQ(mysql_fmt.escape_identifier("table"), "`table`");
-
     value_formatter sqlite_fmt(database_types::sqlite);
     EXPECT_EQ(sqlite_fmt.escape_identifier("table"), "\"table\"");
 }
@@ -67,9 +55,6 @@ TEST_F(ValueFormatterTest, BooleanLiterals) {
     EXPECT_EQ(pg_fmt.bool_literal(true), "TRUE");
     EXPECT_EQ(pg_fmt.bool_literal(false), "FALSE");
 
-    value_formatter mysql_fmt(database_types::mysql);
-    EXPECT_EQ(mysql_fmt.bool_literal(true), "1");
-    EXPECT_EQ(mysql_fmt.bool_literal(false), "0");
 }
 
 TEST_F(ValueFormatterTest, NullLiteral) {

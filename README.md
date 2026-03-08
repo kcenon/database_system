@@ -13,7 +13,7 @@
 
 A modern C++20 database abstraction layer providing unified access to multiple database backends with advanced features including ORM framework, real-time performance monitoring, enterprise security, and asynchronous operations.
 
-**Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, MySQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
+**Key Value Proposition**: Eliminate vendor lock-in, maximize performance, and accelerate development with a comprehensive database solution that supports PostgreSQL, SQLite, MongoDB, and Redis through a unified, type-safe interface.
 
 > **Connection Mode Status**:
 > - **DirectMode**: Production-ready (stable)
@@ -68,7 +68,6 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 | Backend | Version | Optional Package |
 |---------|---------|------------------|
 | PostgreSQL | 12+ | `libpq-dev` |
-| MySQL | 8.0+ | `libmariadb-dev` (MariaDB Connector/C) |
 | SQLite | 3.35+ | `libsqlite3-dev` |
 | MongoDB | 5.0+ | `libmongoc-dev` |
 | Redis | 6.0+ | `libhiredis-dev` |
@@ -144,7 +143,6 @@ auto query = builder
 | Database | Status | Key Features | Performance |
 |----------|--------|--------------|-------------|
 | **PostgreSQL** | ✅ Full | JSONB, Arrays, CTEs, FTS | 1.2ms SELECT, 5K TPS |
-| **MySQL** | ✅ Full | Full-text search, Transactions | 1.5ms SELECT, 4.2K TPS |
 | **SQLite** | ✅ Full | WAL mode, FTS5, In-memory | 0.8ms SELECT |
 | **MongoDB** | 🧪 Experimental | Documents, Aggregation, GridFS | 2.1ms insertOne |
 | **Redis** | 🧪 Experimental | All data types, Pub/Sub, Lua | 0.3ms GET/SET |
@@ -343,7 +341,7 @@ cmake --build build -j
 
 - **Compiler**: C++20 capable (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+)
 - **CMake**: 3.20+
-- **Optional**: Database libraries (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- **Optional**: Database libraries (PostgreSQL, SQLite, MongoDB, Redis)
 
 ### Installation
 
@@ -362,7 +360,7 @@ scripts\dependency.bat   # Windows
 scripts\build.bat        # Windows
 
 # Option 2: Manual CMake build
-vcpkg install libpqxx libmariadb sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx sqlite3 mongo-cxx-driver hiredis
 
 mkdir build && cd build
 cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
@@ -464,9 +462,9 @@ int main() {
                        │
 ┌──────────────────────▼──────────────────────────────────────┐
 │             Backend Implementations                         │
-│  ┌──────────┐ ┌──────┐ ┌────────┐ ┌─────────┐ ┌────────┐  │
-│  │PostgreSQL│ │MySQL │ │ SQLite │ │ MongoDB │ │ Redis  │  │
-│  └──────────┘ └──────┘ └────────┘ └─────────┘ └────────┘  │
+│  ┌──────────┐ ┌────────┐ ┌─────────┐ ┌────────┐             │
+│  │PostgreSQL│ │ SQLite │ │ MongoDB │ │ Redis  │             │
+│  └──────────┘ └────────┘ └─────────┘ └────────┘             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -475,7 +473,7 @@ int main() {
 - **ProxyMode**: Centralized pooling via database_server middleware
 - **Query Builders**: Type-safe SQL/NoSQL query construction
 - **ORM Framework**: C++20 concepts-based entity system
-- **Backend Adapters**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **Backend Adapters**: PostgreSQL, SQLite, MongoDB, Redis
 
 [🏛️ Architecture Details →](docs/01-ARCHITECTURE.md)
 
@@ -573,7 +571,6 @@ target_link_libraries(your_target PRIVATE DatabaseSystem::database)
 | Option | Default | Description |
 |--------|---------|-------------|
 | `USE_POSTGRESQL` | ON | Enable PostgreSQL support |
-| `USE_MYSQL` | OFF | Enable MySQL support |
 | `USE_SQLITE` | OFF | Enable SQLite support |
 | `USE_MONGODB` | OFF | Enable MongoDB support |
 | `USE_REDIS` | OFF | Enable Redis support |

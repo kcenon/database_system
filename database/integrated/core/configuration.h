@@ -92,7 +92,6 @@ enum class db_log_level
 enum class backend_type
 {
 	postgres, ///< PostgreSQL database
-	mysql,    ///< MySQL/MariaDB database
 	sqlite,   ///< SQLite embedded database
 	mongodb,  ///< MongoDB NoSQL database
 	redis     ///< Redis key-value store
@@ -325,7 +324,7 @@ struct unified_db_config
 
 	/**
 	 * @brief Set database backend type and connection string
-	 * @param type Backend type (postgres, mysql, etc.)
+	 * @param type Backend type (postgres, sqlite, etc.)
 	 * @param connection_str Connection string in backend-specific format
 	 * @return Reference to this config for chaining
 	 */

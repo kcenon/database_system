@@ -321,8 +321,6 @@ namespace database
 		{
 		case database_types::postgres:
 			return "\"" + identifier + "\"";
-		case database_types::mysql:
-			return "`" + identifier + "`";
 		case database_types::sqlite:
 			return "\"" + identifier + "\"";
 		default:

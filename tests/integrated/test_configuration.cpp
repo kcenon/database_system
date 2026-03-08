@@ -87,7 +87,7 @@ void test_builder_pattern()
 
 	// Test method chaining
 	auto config = unified_db_config{}
-					  .set_backend(backend_type::mysql, "host=192.168.1.100 dbname=myapp")
+					  .set_backend(backend_type::postgres, "host=192.168.1.100 dbname=myapp")
 					  .set_credentials("admin", "secret123")
 					  .set_pool_size(5, 25)
 					  .set_pool_name("myapp_pool")
@@ -103,7 +103,7 @@ void test_builder_pattern()
 					  .set_timeouts(std::chrono::seconds(60), std::chrono::seconds(600));
 
 	// Verify builder results
-	assert(config.database.type == backend_type::mysql);
+	assert(config.database.type == backend_type::postgres);
 	assert(config.database.connection_string == "host=192.168.1.100 dbname=myapp");
 	assert(config.database.username == "admin");
 	assert(config.database.password == "secret123");
@@ -164,15 +164,14 @@ void test_enum_types()
 	// Test backend types
 	backend_type backends[] = {
 		backend_type::postgres,
-		backend_type::mysql,
 		backend_type::sqlite,
 		backend_type::mongodb,
 		backend_type::redis,
 	};
 
-	for (size_t i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 4; ++i)
 	{
-		for (size_t j = i + 1; j < 5; ++j)
+		for (size_t j = i + 1; j < 4; ++j)
 		{
 			assert(backends[i] != backends[j]);
 		}

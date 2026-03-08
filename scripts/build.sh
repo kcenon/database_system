@@ -35,7 +35,6 @@ show_help() {
     echo -e "${BOLD}Database Options:${NC}"
     echo "  --with-postgresql Enable PostgreSQL support (default)"
     echo "  --no-postgresql   Disable PostgreSQL support"
-    echo "  --with-mysql      Enable MySQL support (future)"
     echo "  --with-sqlite     Enable SQLite support (future)"
     echo ""
     echo -e "${BOLD}Feature Options:${NC}"
@@ -70,7 +69,6 @@ VERBOSE=false
 CLEAN=false
 USE_VCPKG=true
 POSTGRESQL=true
-MYSQL=false
 SQLITE=false
 INSTALL=false
 PREFIX="/usr/local"
@@ -135,10 +133,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         --no-postgresql)
             POSTGRESQL=false
-            shift
-            ;;
-        --with-mysql)
-            MYSQL=true
             shift
             ;;
         --with-sqlite)
@@ -211,7 +205,6 @@ echo -e "${CYAN}📋 Build Configuration:${NC}"
 echo -e "  Build Type: ${BOLD}$BUILD_TYPE${NC}"
 echo -e "  Build Target: ${BOLD}$BUILD_TARGET${NC}"
 echo -e "  PostgreSQL: ${BOLD}$([ "$POSTGRESQL" = true ] && echo "ON" || echo "OFF")${NC}"
-echo -e "  MySQL: ${BOLD}$([ "$MYSQL" = true ] && echo "ON" || echo "OFF")${NC}"
 echo -e "  SQLite: ${BOLD}$([ "$SQLITE" = true ] && echo "ON" || echo "OFF")${NC}"
 echo -e "  Use vcpkg: ${BOLD}$([ "$USE_VCPKG" = true ] && echo "YES" || echo "NO")${NC}"
 echo -e "  Cores: ${BOLD}$CORES${NC}"
@@ -230,7 +223,6 @@ mkdir -p "$BUILD_DIR"
 # Configure CMake options
 CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE=$BUILD_TYPE"
 CMAKE_ARGS="$CMAKE_ARGS -DUSE_POSTGRESQL=$([ "$POSTGRESQL" = true ] && echo "ON" || echo "OFF")"
-CMAKE_ARGS="$CMAKE_ARGS -DUSE_MYSQL=$([ "$MYSQL" = true ] && echo "ON" || echo "OFF")"
 CMAKE_ARGS="$CMAKE_ARGS -DUSE_SQLITE=$([ "$SQLITE" = true ] && echo "ON" || echo "OFF")"
 CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 

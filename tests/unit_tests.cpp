@@ -76,11 +76,6 @@ TEST_F(DatabaseTest, DatabaseTypeSettings) {
     EXPECT_EQ(db_mgr_->database_type(), database_types::none);
   }
 
-  // Test that MySQL returns appropriate result
-  bool mysql_result = db_mgr_->set_mode(database_types::mysql);
-  if (!mysql_result) {
-    EXPECT_EQ(db_mgr_->database_type(), database_types::none);
-  }
 }
 
 TEST_F(DatabaseTest, BasicQueryOperations) {
@@ -431,7 +426,7 @@ TEST_F(QueryBuilderTest, RedisQueryBuilder) {
 TEST_F(DatabaseTest, PhaseA4DatabaseTypes) {
   // Test all database types
   std::vector<database_types> types = {
-      database_types::postgres, database_types::mysql, database_types::sqlite,
+      database_types::postgres, database_types::sqlite,
       database_types::mongodb, database_types::redis};
 
   for (auto type : types) {

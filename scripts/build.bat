@@ -22,7 +22,6 @@ set "VERBOSE=false"
 set "CLEAN=false"
 set "USE_VCPKG=true"
 set "POSTGRESQL=true"
-set "MYSQL=false"
 set "SQLITE=false"
 set "INSTALL=false"
 set "PREFIX=C:\Program Files\DatabaseSystem"
@@ -76,11 +75,6 @@ if "%1"=="--with-postgresql" (
 )
 if "%1"=="--no-postgresql" (
     set "POSTGRESQL=false"
-    shift
-    goto :parse_args
-)
-if "%1"=="--with-mysql" (
-    set "MYSQL=true"
     shift
     goto :parse_args
 )
@@ -152,7 +146,6 @@ echo Build Configuration:
 echo   Build Type: %BUILD_TYPE%
 echo   Build Target: %BUILD_TARGET%
 if "%POSTGRESQL%"=="true" (echo   PostgreSQL: ON) else (echo   PostgreSQL: OFF)
-if "%MYSQL%"=="true" (echo   MySQL: ON) else (echo   MySQL: OFF)
 if "%SQLITE%"=="true" (echo   SQLite: ON) else (echo   SQLite: OFF)
 if "%USE_VCPKG%"=="true" (echo   Use vcpkg: YES) else (echo   Use vcpkg: NO)
 echo   Cores: %CORES%
@@ -174,11 +167,6 @@ if "%POSTGRESQL%"=="true" (
     set "CMAKE_ARGS=%CMAKE_ARGS% -DUSE_POSTGRESQL=ON"
 ) else (
     set "CMAKE_ARGS=%CMAKE_ARGS% -DUSE_POSTGRESQL=OFF"
-)
-if "%MYSQL%"=="true" (
-    set "CMAKE_ARGS=%CMAKE_ARGS% -DUSE_MYSQL=ON"
-) else (
-    set "CMAKE_ARGS=%CMAKE_ARGS% -DUSE_MYSQL=OFF"
 )
 if "%SQLITE%"=="true" (
     set "CMAKE_ARGS=%CMAKE_ARGS% -DUSE_SQLITE=ON"
@@ -319,7 +307,6 @@ echo.
 echo Database Options:
 echo   --with-postgresql Enable PostgreSQL support (default)
 echo   --no-postgresql   Disable PostgreSQL support
-echo   --with-mysql      Enable MySQL support (future)
 echo   --with-sqlite     Enable SQLite support (future)
 echo.
 echo Feature Options:

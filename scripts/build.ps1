@@ -12,7 +12,6 @@ param(
     [switch]$Tests,
     [switch]$WithPostgreSQL,
     [switch]$NoPostgreSQL,
-    [switch]$WithMySQL,
     [switch]$WithSQLite,
     [switch]$NoVcpkg,
     [switch]$UseSystemDeps,
@@ -49,7 +48,6 @@ function Show-Help {
     Write-Host "Database Options:" -ForegroundColor Yellow
     Write-Host "  -WithPostgreSQL   Enable PostgreSQL support (default)"
     Write-Host "  -NoPostgreSQL     Disable PostgreSQL support"
-    Write-Host "  -WithMySQL        Enable MySQL support (future)"
     Write-Host "  -WithSQLite       Enable SQLite support (future)"
     Write-Host ""
     Write-Host "Feature Options:" -ForegroundColor Yellow
@@ -120,7 +118,6 @@ $BuildTarget = "all"
 $CMakeArgs = @()
 $UseVcpkg = -not ($NoVcpkg -or $UseSystemDeps)
 $PostgreSQL = -not $NoPostgreSQL
-$MySQL = $WithMySQL
 $SQLite = $WithSQLite
 $Generator = if ($VS2019) { "Visual Studio 16 2019" } else { "Visual Studio 17 2022" }
 
@@ -151,7 +148,6 @@ Write-Host "📋 Build Configuration:" -ForegroundColor Cyan
 Write-Host "  Build Type: $BuildType" -ForegroundColor White
 Write-Host "  Build Target: $BuildTarget" -ForegroundColor White
 Write-Host "  PostgreSQL: $(if ($PostgreSQL) { 'ON' } else { 'OFF' })" -ForegroundColor White
-Write-Host "  MySQL: $(if ($MySQL) { 'ON' } else { 'OFF' })" -ForegroundColor White
 Write-Host "  SQLite: $(if ($SQLite) { 'ON' } else { 'OFF' })" -ForegroundColor White
 Write-Host "  Use vcpkg: $(if ($UseVcpkg) { 'YES' } else { 'NO' })" -ForegroundColor White
 Write-Host "  Cores: $Cores" -ForegroundColor White
@@ -172,7 +168,6 @@ if (-not (Test-Path $BuildDir)) {
 # Configure CMake options
 $CMakeArgs += "-DCMAKE_BUILD_TYPE=$BuildType"
 $CMakeArgs += "-DUSE_POSTGRESQL=$(if ($PostgreSQL) { 'ON' } else { 'OFF' })"
-$CMakeArgs += "-DUSE_MYSQL=$(if ($MySQL) { 'ON' } else { 'OFF' })"
 $CMakeArgs += "-DUSE_SQLITE=$(if ($SQLite) { 'ON' } else { 'OFF' })"
 $CMakeArgs += "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 

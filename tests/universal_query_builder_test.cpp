@@ -46,18 +46,6 @@ TEST_F(UniversalQueryBuilderTest, PostgreSQLBuilder)
     EXPECT_TRUE(query.find("\"users\"") != std::string::npos);  // PostgreSQL uses double quotes
 }
 
-TEST_F(UniversalQueryBuilderTest, MySQLBuilder)
-{
-    query_builder builder(database_types::mysql);
-
-    auto query = builder.select({"*"})
-                        .from("users")
-                        .build();
-
-    EXPECT_TRUE(query.find("SELECT") != std::string::npos);
-    EXPECT_TRUE(query.find("`users`") != std::string::npos);  // MySQL uses backticks
-}
-
 TEST_F(UniversalQueryBuilderTest, SQLiteBuilder)
 {
     query_builder builder(database_types::sqlite);
@@ -103,13 +91,13 @@ TEST_F(UniversalQueryBuilderTest, SwitchDatabase)
 {
     query_builder builder(database_types::postgres);
 
-    builder.for_database(database_types::mysql);
+    builder.for_database(database_types::sqlite);
 
     auto query = builder.select({"*"})
                         .from("users")
                         .build();
 
-    EXPECT_TRUE(query.find("`users`") != std::string::npos);  // MySQL syntax
+    EXPECT_TRUE(query.find("[users]") != std::string::npos);  // SQLite syntax
 }
 
 //=============================================================================
@@ -258,7 +246,6 @@ TEST_F(UniversalQueryBuilderTest, SameSQLAcrossDialects)
     // Build same logical query for different databases
     std::vector<database_types> sql_types = {
         database_types::postgres,
-        database_types::mysql,
         database_types::sqlite
     };
 
@@ -300,7 +287,7 @@ TEST_F(UniversalQueryBuilderTest, MethodChaining)
     query_builder builder(database_types::postgres);
 
     // All methods should return reference for chaining
-    auto& ref1 = builder.for_database(database_types::mysql);
+    auto& ref1 = builder.for_database(database_types::sqlite);
     auto& ref2 = ref1.select({"*"});
     auto& ref3 = ref2.from("users");
     auto& ref4 = ref3.where("active", "=", core::database_value{true});

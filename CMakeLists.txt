@@ -345,13 +345,57 @@ endif()
 
 include(GNUInstallDirs)
 
-# Install header files
 if(BUILD_DATABASE)
+    # Install header files
     install(DIRECTORY database/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system/database
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
         PATTERN "tests" EXCLUDE
         PATTERN "samples" EXCLUDE
+    )
+
+    # Install library target with export set
+    install(TARGETS database
+        EXPORT DatabaseSystemTargets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system
+    )
+
+    # Install export set with DatabaseSystem:: namespace
+    install(EXPORT DatabaseSystemTargets
+        FILE DatabaseSystemTargets.cmake
+        NAMESPACE DatabaseSystem::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+    )
+
+    # Generate and install package config files
+    include(CMakePackageConfigHelpers)
+
+    configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/DatabaseSystemConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfig.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+        PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+    )
+
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY AnyNewerVersion
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+    )
+
+    # Build-tree export for FetchContent/add_subdirectory users
+    export(EXPORT DatabaseSystemTargets
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemTargets.cmake"
+        NAMESPACE DatabaseSystem::
     )
 endif()
 

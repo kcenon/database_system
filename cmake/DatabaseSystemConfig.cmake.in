@@ -2,19 +2,41 @@
 
 ##################################################
 # DatabaseSystem Package Configuration
+#
+# Provides imported targets:
+#   DatabaseSystem::database             - Core DAL library
+#   DatabaseSystem::integrated_database  - Integrated adapter layer (if built)
 ##################################################
 
 include(CMakeFindDependencyMacro)
 
-# Find required dependencies
+# Required dependencies
 find_dependency(Threads REQUIRED)
-find_dependency(PostgreSQL REQUIRED)
 
-# Find container system dependency
-find_dependency(ContainerSystem QUIET)
-if(NOT ContainerSystem_FOUND)
-    # Container system is required
-    message(FATAL_ERROR "DatabaseSystem requires ContainerSystem")
+# Backend-specific dependencies (configured at build time)
+if(@USE_POSTGRESQL@)
+    find_dependency(libpqxx CONFIG)
+    find_dependency(OpenSSL)
+endif()
+
+if(@USE_SQLITE@)
+    find_dependency(unofficial-sqlite3 CONFIG QUIET)
+endif()
+
+if(@USE_MONGODB@)
+    find_dependency(mongocxx CONFIG)
+    find_dependency(bsoncxx CONFIG)
+endif()
+
+if(@USE_REDIS@)
+    find_dependency(hiredis CONFIG)
+endif()
+
+# Ecosystem dependencies (optional)
+find_dependency(common_system CONFIG QUIET)
+
+if(@USE_CONTAINER_SYSTEM@)
+    find_dependency(ContainerSystem CONFIG QUIET)
 endif()
 
 # Include targets

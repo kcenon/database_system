@@ -272,7 +272,7 @@ endif()
 ##################################################
 
 install(TARGETS ${INTEGRATED_DB_TARGET}
-    EXPORT database_system-targets
+    EXPORT DatabaseSystemTargets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin

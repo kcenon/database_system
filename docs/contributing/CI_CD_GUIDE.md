@@ -191,7 +191,6 @@ cmake -B build -G Ninja \
 
 **Backends Tested**:
 - PostgreSQL 15
-- MySQL 8.0
 - SQLite 3
 - MongoDB 6.0
 - Redis 7.0
@@ -385,12 +384,6 @@ docker run -d --name postgres-test \
   -e POSTGRES_PASSWORD=test \
   -p 5432:5432 postgres:15
 
-# MySQL
-docker run -d --name mysql-test \
-  -e MYSQL_ROOT_PASSWORD=test \
-  -e MYSQL_DATABASE=testdb \
-  -p 3306:3306 mysql:8.0
-
 # MongoDB
 docker run -d --name mongo-test \
   -p 27017:27017 mongo:6.0
@@ -405,7 +398,6 @@ docker run -d --name redis-test \
 cmake -B build -G Ninja \
   -DDATABASE_BUILD_INTEGRATION_TESTS=ON \
   -DUSE_POSTGRESQL=ON \
-  -DUSE_MYSQL=ON \
   -DUSE_SQLITE=ON \
   -DUSE_MONGODB=ON \
   -DUSE_REDIS=ON
@@ -417,8 +409,8 @@ ctest -R integration --output-on-failure
 
 **Cleanup**:
 ```bash
-docker stop postgres-test mysql-test mongo-test redis-test
-docker rm postgres-test mysql-test mongo-test redis-test
+docker stop postgres-test mongo-test redis-test
+docker rm postgres-test mongo-test redis-test
 ```
 
 ---

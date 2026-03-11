@@ -4,7 +4,7 @@
 
 ## Overview
 
-This comprehensive guide describes how to integrate database_system with other modules in the ecosystem. Database System provides a unified abstraction layer for multiple database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) that seamlessly integrates with other system components.
+This comprehensive guide describes how to integrate database_system with other modules in the ecosystem. Database System provides a unified abstraction layer for multiple database backends (PostgreSQL, SQLite, MongoDB, Redis) that seamlessly integrates with other system components.
 
 **Version:** 0.1.0.0
 **Last Updated:** 2025-10-22
@@ -113,7 +113,7 @@ add_executable(your_app main.cpp)
 
 target_link_libraries(your_app PRIVATE
     kcenon::database_system
-    PostgreSQL::PostgreSQL  # Or MySQL::MySQL, SQLite::SQLite3
+    PostgreSQL::PostgreSQL  # Or SQLite::SQLite3
 )
 ```
 
@@ -145,7 +145,7 @@ Database System provides a unified interface across multiple database backends:
         ┌──────────────┼──────────────┐
         │              │              │
 ┌───────▼─────┐ ┌──────▼────┐ ┌──────▼────┐
-│ PostgreSQL  │ │   MySQL   │ │  SQLite   │
+│ PostgreSQL  │ │  SQLite   │ │ MongoDB   │
 │  Backend    │ │  Backend  │ │  Backend  │
 └─────────────┘ └───────────┘ └───────────┘
         │              │              │
@@ -709,7 +709,6 @@ target_link_libraries(your_app PRIVATE
 ```cmake
 # Database system options
 option(BUILD_WITH_POSTGRESQL "Enable PostgreSQL support" ON)
-option(BUILD_WITH_MYSQL "Enable MySQL support" OFF)
 option(BUILD_WITH_SQLITE "Enable SQLite support" OFF)
 option(BUILD_WITH_MONGODB "Enable MongoDB support" OFF)
 option(BUILD_WITH_REDIS "Enable Redis support" OFF)
@@ -791,22 +790,6 @@ auto result = db->execute_query(
 auto json_result = db->execute_query(
     "SELECT data FROM products WHERE data->>'category' = $1",
     "electronics"
-);
-```
-
-### MySQL
-
-```cpp
-#include <database/mysql_manager.h>
-
-auto db = database_system::create_mysql_manager(
-    "host=localhost;database=mydb;user=myuser;password=mypass"
-);
-
-// MySQL-specific features
-auto result = db->execute_query(
-    "SELECT * FROM users WHERE id = ?",
-    42
 );
 ```
 

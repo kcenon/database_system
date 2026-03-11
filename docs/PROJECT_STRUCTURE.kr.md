@@ -76,7 +76,6 @@ database_system/
 │   │   └── adapters/              # 어댑터 테스트
 │   ├── integration/               # 통합 테스트
 │   │   ├── postgres/              # PostgreSQL 통합
-│   │   ├── mysql/                 # MySQL 통합
 │   │   ├── sqlite/                # SQLite 통합
 │   │   ├── mongodb/               # MongoDB 통합
 │   │   ├── redis/                 # Redis 통합
@@ -105,7 +104,6 @@ database_system/
 │   └── performance/               # 성능 문서
 ├── cmake/                         # CMake 모듈
 │   ├── FindPostgreSQL.cmake       # PostgreSQL finder
-│   ├── FindMySQL.cmake            # MySQL finder
 │   ├── FindSQLite3.cmake          # SQLite3 finder
 │   ├── FindMongoDB.cmake          # MongoDB finder
 │   ├── FindRedis.cmake            # Redis finder
@@ -177,19 +175,6 @@ database_system/
 **의존성**:
 - libpqxx (PostgreSQL C++ 클라이언트 라이브러리)
 - OpenSSL (TLS/SSL용)
-
-#### MySQL 백엔드
-
-**파일**:
-- `mysql/mysql_manager.h/cpp`: MySQL 구현 (780 LOC)
-- `mysql/mysql_connection.h/cpp`: 커넥션 처리 (300 LOC)
-- `mysql/mysql_prepared_statement.h/cpp`: 준비된 문 (260 LOC)
-
-**기능**:
-- 전문 검색 (MATCH AGAINST)
-- InnoDB 트랜잭션
-- 준비된 문
-- 저장 프로시저
 
 #### SQLite 백엔드
 
@@ -413,7 +398,6 @@ public:
 ```
 database_base (추상)
 ├── postgres_manager
-├── mysql_manager
 ├── sqlite_manager
 ├── mongodb_manager
 └── redis_manager
@@ -469,7 +453,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 옵션
 option(USE_POSTGRESQL "PostgreSQL 지원 활성화" ON)
-option(USE_MYSQL "MySQL 지원 활성화" OFF)
 option(USE_SQLITE "SQLite 지원 활성화" OFF)
 option(USE_MONGODB "MongoDB 지원 활성화" OFF)
 option(USE_REDIS "Redis 지원 활성화" OFF)
@@ -511,7 +494,6 @@ endif()
 | 데이터베이스 | 라이브러리 | 버전 | vcpkg 패키지 |
 |----------|---------|---------|---------------|
 | PostgreSQL | libpqxx | 7.7+ | `libpqxx` |
-| MySQL | libmariadb | 3.x+ | `libmariadb` |
 | SQLite | sqlite3 | 3.40+ | `sqlite3` |
 | MongoDB | mongo-cxx-driver | 3.7+ | `mongo-cxx-driver` |
 | Redis | hiredis | 1.1+ | `hiredis` |
@@ -531,7 +513,7 @@ endif()
 **vcpkg 사용**:
 ```bash
 # 데이터베이스 라이브러리 설치
-vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl sqlite3 mongo-cxx-driver hiredis
 
 # 선택적 시스템 설치 (가능한 경우)
 vcpkg install kcenon-common-system kcenon-thread-system

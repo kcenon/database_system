@@ -10,7 +10,7 @@ This directory contains comprehensive demonstration programs showcasing the capa
 **Purpose**: Demonstrates fundamental database operations and multi-backend support
 **Features Covered**:
 - Basic CRUD operations (Create, Read, Update, Delete)
-- Multi-database backend support (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- Multi-database backend support (PostgreSQL, SQLite, MongoDB, Redis)
 - Connection management and error handling
 - Query result processing
 

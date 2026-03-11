@@ -73,7 +73,7 @@ The Database System is designed as a modular, enterprise-grade database abstract
 │                    Database Manager                        │
 ├─────────────────────────────────────────────────────────────┤
 │                   Database Backends                         │
-│       PostgreSQL │ MySQL │ SQLite │ MongoDB │ Redis         │
+│      PostgreSQL │ SQLite │ MongoDB │ Redis                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -102,7 +102,6 @@ public:
 
 #### Backend Implementations
 - `postgres_manager`: PostgreSQL backend using libpqxx
-- `mysql_manager`: MySQL backend using mysqlclient
 - `sqlite_manager`: SQLite backend using sqlite3
 - `mongodb_manager`: MongoDB backend using mongocxx
 - `redis_manager`: Redis backend using hiredis
@@ -366,7 +365,6 @@ try {
 
 ### Optional Dependencies
 - **libpqxx**: PostgreSQL support
-- **mysqlclient**: MySQL support
 - **sqlite3**: SQLite support
 - **mongocxx**: MongoDB support
 - **hiredis**: Redis support
@@ -376,7 +374,6 @@ try {
 ### CMake Options
 ```cmake
 option(ENABLE_POSTGRESQL "Enable PostgreSQL support" ON)
-option(ENABLE_MYSQL "Enable MySQL support" OFF)
 option(ENABLE_SQLITE "Enable SQLite support" OFF)
 option(ENABLE_MONGODB "Enable MongoDB support" OFF)
 option(ENABLE_REDIS "Enable Redis support" OFF)

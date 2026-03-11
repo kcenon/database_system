@@ -12,7 +12,7 @@ for the Database System across different backends and use cases.
 | Workload Type | Recommended Backend | Rationale |
 |---------------|---------------------|-----------|
 | Read-heavy OLTP | PostgreSQL | Superior indexing, parallel queries |
-| Write-heavy OLTP | MySQL (InnoDB) | Efficient transaction batching |
+| Write-heavy OLTP | PostgreSQL | Strong WAL-based throughput and mature operational tooling |
 | Embedded/Local | SQLite | Zero configuration, in-process |
 | Complex Analytics | PostgreSQL | Advanced query planner |
 | Simple Key-Value | SQLite | Minimal overhead |
@@ -23,7 +23,6 @@ for the Database System across different backends and use cases.
 Benchmark: 10,000 mixed operations (70% read, 30% write)
 
 PostgreSQL:  850 ops/sec  (best for complex queries)
-MySQL:       920 ops/sec  (best for simple writes)
 SQLite:     1200 ops/sec  (best for embedded use)
 ```
 
@@ -117,141 +116,8 @@ checkpoint_completion_target = 0.9
 - Use GIN for full-text search
 - Use BRIN for large, naturally ordered tables
 
-### MySQL
-
-**Key Settings:**
-```ini
-# InnoDB settings
-innodb_buffer_pool_size = 1G  # 70-80% of RAM
-innodb_log_file_size = 256M
-innodb_flush_log_at_trx_commit = 2  # Performance vs durability
-
-# Query cache (MySQL 5.7)
-query_cache_type = 1
-query_cache_size = 64M
-```
-
-**Index Strategy:**
-- Use covering indexes for read-heavy queries
-- Consider composite indexes for multi-column WHERE
-- Use EXPLAIN to verify index usage
-
-### SQLite
-
-**Key Settings:**
-```cpp
-db->execute_query("PRAGMA journal_mode = WAL");
-db->execute_query("PRAGMA synchronous = NORMAL");
-db->execute_query("PRAGMA cache_size = -64000");  // 64MB
-db->execute_query("PRAGMA temp_store = MEMORY");
-```
-
-**Best Practices:**
-- Use WAL mode for concurrent read/write
-- Batch writes in transactions
-- Vacuum periodically for large databases
-
-## Caching Strategy
-
-### Query Result Caching
-
-```cpp
-cache_config cache;
-cache.enabled = true;
-cache.max_entries = 10000;
-cache.default_ttl = std::chrono::seconds(300);
-
-// Cache invalidation patterns
-cache.invalidate_on_write = true;
-cache.table_tracking = true;
-
-gateway.configure_caching(cache);
-```
-
-### Cache Size Guidelines
-
-| Dataset Size | Recommended Cache Size |
-|--------------|------------------------|
-| < 100MB | Cache entire result set |
-| 100MB - 1GB | 10-20% of dataset |
-| > 1GB | Monitor hit rate, adjust |
-
-## Monitoring and Diagnostics
-
-### Key Metrics to Monitor
-
-1. **Connection Pool**
-   - Active connections
-   - Wait time for connections
-   - Connection creation rate
-
-2. **Query Performance**
-   - Average query latency
-   - Slow query count
-   - Query cache hit rate
-
-3. **Resource Utilization**
-   - Memory usage
-   - CPU utilization
-   - Disk I/O
-
-### Example Monitoring Code
-
-```cpp
-auto stats = gateway.get_stats();
-
-std::cout << "Total queries: " << stats.total_queries << std::endl;
-std::cout << "Avg latency: " << stats.avg_latency_ms << "ms" << std::endl;
-std::cout << "Cache hit rate: "
-          << (stats.cache_hits * 100.0 / (stats.cache_hits + stats.cache_misses))
-          << "%" << std::endl;
-```
-
-## Common Performance Issues
-
-### Issue: High Latency
-
-**Symptoms:** Slow query response times
-
-**Solutions:**
-1. Check indexes with EXPLAIN
-2. Increase connection pool size
-3. Enable query caching
-4. Optimize query structure
-
-### Issue: Connection Exhaustion
-
-**Symptoms:** "Too many connections" errors
-
-**Solutions:**
-1. Increase max_connections
-2. Implement connection pooling
-3. Set proper connection timeouts
-4. Close idle connections
-
-### Issue: Memory Pressure
-
-**Symptoms:** OOM errors, swapping
-
-**Solutions:**
-1. Reduce cache size
-2. Limit result set sizes
-3. Use streaming for large results
-4. Optimize queries to reduce memory
-
-## Performance Checklist
-
-- [ ] Connection pool properly sized
-- [ ] Prepared statements used for repeated queries
-- [ ] Appropriate indexes created
-- [ ] Query cache configured
-- [ ] Slow query logging enabled
-- [ ] Monitoring in place
-- [ ] Backend-specific tuning applied
-
 ## See Also
 
 - [POSTGRESQL_TUNING.md](POSTGRESQL_TUNING.md) - PostgreSQL specific tuning
-- [MYSQL_TUNING.md](MYSQL_TUNING.md) - MySQL specific tuning
 - [SQLITE_TUNING.md](SQLITE_TUNING.md) - SQLite specific tuning
 - [BENCHMARKS.md](BENCHMARKS.md) - Performance benchmark results

@@ -72,7 +72,7 @@ Database System은 프로덕션 환경을 위한 고급 기능과 함께 여러 
 ├─────────────────────────────────────────────────────────────┤
 │                  Database Manager                          │
 ├─────────────────────────────────────────────────────────────┤
-│   PostgreSQL │   MySQL   │  SQLite  │ MongoDB │   Redis   │
+│  PostgreSQL │  SQLite  │ MongoDB │  Redis   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -101,7 +101,6 @@ public:
 
 #### 백엔드 구현
 - `postgres_manager`: libpqxx를 사용하는 PostgreSQL 백엔드
-- `mysql_manager`: mysqlclient를 사용하는 MySQL 백엔드
 - `sqlite_manager`: sqlite3를 사용하는 SQLite 백엔드
 - `mongodb_manager`: mongocxx를 사용하는 MongoDB 백엔드
 - `redis_manager`: hiredis를 사용하는 Redis 백엔드
@@ -367,7 +366,6 @@ try {
 
 ### 선택적 의존성
 - **libpqxx**: PostgreSQL 지원
-- **mysqlclient**: MySQL 지원
 - **sqlite3**: SQLite 지원
 - **mongocxx**: MongoDB 지원
 - **hiredis**: Redis 지원
@@ -377,7 +375,6 @@ try {
 ### CMake 옵션
 ```cmake
 option(ENABLE_POSTGRESQL "Enable PostgreSQL support" ON)
-option(ENABLE_MYSQL "Enable MySQL support" OFF)
 option(ENABLE_SQLITE "Enable SQLite support" OFF)
 option(ENABLE_MONGODB "Enable MongoDB support" OFF)
 option(ENABLE_REDIS "Enable Redis support" OFF)

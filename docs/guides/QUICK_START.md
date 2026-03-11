@@ -9,7 +9,7 @@ Get started with database_system in 5 minutes.
 
 - C++17 or higher compiler
 - CMake 3.16+
-- PostgreSQL, MySQL, or SQLite installed (optional for demo)
+- PostgreSQL or SQLite installed (optional for demo)
 
 ## Installation
 
@@ -90,7 +90,7 @@ cmake --build .
 
 ```cpp
 auto db = unified_database_system::create_builder()
-    .set_backend_type(backend_type::postgresql)  // or mysql, sqlite
+    .set_backend_type(backend_type::postgresql)  // or sqlite
     .enable_logging(db_log_level::info, "./logs")
     .set_pool_size(5, 20)
     .build();

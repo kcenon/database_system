@@ -31,7 +31,7 @@ This document serves as both the baseline performance metrics and the benchmark 
 - **Build Type**: Release (-O3)
 - **C++ Standard**: C++20
 - **CMake Version**: 3.16+
-- **Database Backends**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **Database Backends**: PostgreSQL, SQLite, MongoDB, Redis
 
 ### Test Database Setup
 - **Database**: In-memory SQLite (for consistent benchmarks)
@@ -247,7 +247,6 @@ This document serves as both the baseline performance metrics and the benchmark 
 |---------|-------------|-------------|-------------|-------|
 | SQLite | 800 | TBD | TBD | In-memory |
 | PostgreSQL | 1200 | TBD | TBD | Local server |
-| MySQL | TBD | TBD | TBD | Local server |
 | MongoDB | TBD | TBD | TBD | Document store |
 | Redis | 300 | TBD | TBD | Key-value store |
 
@@ -292,7 +291,7 @@ This document serves as both the baseline performance metrics and the benchmark 
 - ✅ **5,000 TPS** (PostgreSQL)
 - ✅ **10,000+ concurrent connections**
 - ✅ **0.1 ms connection pooling**
-- ✅ **Multi-backend support** (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- ✅ **Multi-backend support** (PostgreSQL, SQLite, MongoDB, Redis)
 - ✅ **Enterprise security** (TLS/SSL, RBAC)
 
 ---

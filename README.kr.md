@@ -51,7 +51,6 @@ Database System Project는 프로덕션 수준의 엔터프라이즈급 C++20 da
 | 백엔드 | 버전 | 선택적 패키지 |
 |--------|------|--------------|
 | PostgreSQL | 12+ | `libpq-dev` |
-| MySQL | 8.0+ | `libmariadb-dev` (MariaDB Connector/C) |
 | SQLite | 3.35+ | `libsqlite3-dev` |
 | MongoDB | 5.0+ | `libmongoc-dev` |
 | Redis | 6.0+ | `libhiredis-dev` |
@@ -154,7 +153,7 @@ cmake --build build
 - **대량 작업**: 높은 처리량 시나리오를 위한 최적화된 배치 처리
 
 ### 🛡️ **고품질 안정성**
-- **다중 백엔드 지원**: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **다중 백엔드 지원**: PostgreSQL, SQLite, MongoDB, Redis
 - **자동 failover**: 자동 연결 복구를 통한 상태 모니터링
 - **트랜잭션 관리**: ACID 준수
 - **포괄적인 오류 처리**: 우아한 성능 저하 및 복구 패턴
@@ -222,7 +221,7 @@ cmake --build build
 ## 기능
 
 ### 🎯 핵심 기능
-- **다중 백엔드 지원**: 통합 인터페이스로 PostgreSQL, MySQL, SQLite, MongoDB, Redis
+- **다중 백엔드 지원**: 통합 인터페이스로 PostgreSQL, SQLite, MongoDB, Redis
 - **ORM Framework**: 자동 스키마 관리를 갖춘 C++20 concept 기반 entity system
 - **Connection Pooling**: 적응형 크기 조정을 통한 엔터프라이즈급 연결 관리
 - **Query Builder**: SQL 및 NoSQL database를 위한 타입 안전 쿼리 구성
@@ -266,7 +265,6 @@ if (void_result.is_ok()) {
 | Database | 상태 | 기능 | 성능 | ORM 지원 | 보안 |
 |----------|--------|----------|-------------|-------------|----------|
 | PostgreSQL | ✅ Full | JSONB, Arrays, CTEs, Prepared Statements | Excellent | ✅ | TLS/SSL |
-| MySQL | ✅ Full | Full-text search, Transactions, Prepared Statements | Very Good | ✅ | TLS/SSL |
 | SQLite | ✅ Full | WAL mode, FTS5, In-memory databases | Good | ✅ | Encryption |
 | MongoDB | 🧪 Experimental | Documents, Aggregation, GridFS | Very Good | ✅ | TLS/SSL |
 | Redis | 🧪 Experimental | All data types, Pub/Sub, Transactions | Excellent | ✅ | TLS/SSL |
@@ -309,7 +307,6 @@ enum class database_types : uint8_t
 {
     none = 0,           // No database backend
     postgres = 1,       // PostgreSQL backend
-    mysql = 2,          // MySQL/MariaDB backend
     sqlite = 3,         // SQLite backend
     oracle = 4,         // Oracle backend (future)
     mongodb = 5,        // MongoDB backend
@@ -329,7 +326,6 @@ database_system/
 │   ├── query_builder.h                # Query builder interfaces
 │   ├── postgres_manager.h             # PostgreSQL implementation
 │   ├── backends/                      # Database backends
-│   │   ├── mysql/mysql_manager.h      # MySQL implementation
 │   │   ├── sqlite/sqlite_manager.h    # SQLite implementation
 │   │   ├── mongodb/mongodb_manager.h  # MongoDB implementation
 │   │   └── redis/redis_manager.h      # Redis implementation
@@ -386,7 +382,6 @@ database_system/
 │   │   └── connection_pool.h       # Enterprise connection pooling
 │   ├── 📁 backends/                # Database backend implementations
 │   │   ├── postgres_manager.h      # PostgreSQL implementation
-│   │   ├── mysql/mysql_manager.h   # MySQL implementation
 │   │   ├── sqlite/sqlite_manager.h # SQLite implementation
 │   │   ├── mongodb/mongodb_manager.h # MongoDB implementation
 │   │   └── redis/redis_manager.h   # Redis implementation
@@ -449,7 +444,6 @@ database_system/
 
 #### 백엔드 구현 파일
 - **`postgres_manager.h/cpp`**: 고급 기능 (JSONB, array, CTE)을 갖춘 PostgreSQL 백엔드
-- **`mysql_manager.h/cpp`**: full-text search 및 transaction을 갖춘 MySQL/MariaDB 백엔드
 - **`sqlite_manager.h/cpp`**: WAL 모드 및 FTS5 지원을 갖춘 SQLite 백엔드
 - **`mongodb_manager.h/cpp`**: document 작업 및 aggregation을 갖춘 MongoDB 백엔드
 - **`redis_manager.h/cpp`**: 모든 데이터 타입 및 pub/sub을 갖춘 Redis 백엔드
@@ -464,7 +458,7 @@ database_system/
 ```
 core (database_base, database_manager, database_types)
     │
-    ├──> backends (postgres, mysql, sqlite, mongodb, redis)
+    ├──> backends (postgres, sqlite, mongodb, redis)
     │
     ├──> query (query_builder, sql_builder, nosql_builder)
     │
@@ -757,14 +751,13 @@ cd database_system
 
 # Install database dependencies via vcpkg (optional)
 vcpkg install libpqxx           # PostgreSQL
-vcpkg install libmariadb        # MySQL (MariaDB Connector/C)
 vcpkg install sqlite3           # SQLite
 vcpkg install mongo-cxx-driver  # MongoDB
 vcpkg install hiredis           # Redis
 
 # Build with desired database support
 mkdir build && cd build
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
+cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
 cmake --build .
 
 # Run examples
@@ -1075,7 +1068,7 @@ processor.register_event_handler("user_changes", [](const stream_event& event) {
 ```bash
 # Build with all database support (requires libraries)
 mkdir build && cd build
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
+cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
 ninja  # or make
 
 # Build with specific databases only
@@ -1083,7 +1076,7 @@ cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
 ninja
 
 # Build without any databases (uses mock implementations)
-cmake .. -DUSE_POSTGRESQL=OFF -DUSE_MYSQL=OFF -DUSE_SQLITE=OFF
+cmake .. -DUSE_POSTGRESQL=OFF -DUSE_SQLITE=OFF
 ninja
 
 # Build with samples and tests
@@ -1103,9 +1096,6 @@ ninja
 ```bash
 # PostgreSQL support
 vcpkg install libpqxx openssl
-
-# MySQL support (via MariaDB Connector/C)
-vcpkg install libmariadb
 
 # SQLite support
 vcpkg install sqlite3
@@ -1142,7 +1132,6 @@ export REDIS_PORT=6379
 | 옵션 | 기본값 | 설명 |
 |--------|---------|-------------|
 | `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 |
-| `USE_MYSQL` | OFF | MySQL 지원 활성화 |
 | `USE_SQLITE` | OFF | SQLite 지원 활성화 |
 | `USE_MONGODB` | OFF | MongoDB 지원 활성화 |
 | `USE_REDIS` | OFF | Redis 지원 활성화 |
@@ -1210,12 +1199,12 @@ ctest
 
 ## 성능 벤치마크
 
-| 작업 | PostgreSQL | MySQL | SQLite | MongoDB | Redis |
-|-----------|------------|-------|--------|---------|-------|
-| 단순 SELECT | 1.2ms | 1.5ms | 0.8ms | 2.1ms | 0.3ms |
-| 복잡한 JOIN | 15ms | 18ms | 12ms | N/A | N/A |
-| 대량 INSERT (1K) | 45ms | 52ms | 38ms | 35ms | 28ms |
-| Connection Pool | 0.1ms | 0.1ms | 0.1ms | 0.2ms | 0.05ms |
+| 작업 | PostgreSQL | SQLite | MongoDB | Redis |
+|-----------|------------|--------|---------|-------|
+| 단순 SELECT | 1.2ms | 0.8ms | 2.1ms | 0.3ms |
+| 복잡한 JOIN | 15ms | 12ms | N/A | N/A |
+| 대량 INSERT (1K) | 45ms | 38ms | 35ms | 28ms |
+| Connection Pool | 0.1ms | 0.1ms | 0.2ms | 0.05ms |
 
 *Intel i7-9750H, 16GB RAM, SSD 스토리지에서 벤치마크 수행*
 
@@ -1244,7 +1233,7 @@ using namespace database;
 ## 개발 로드맵
 
 ### ✅ 완료 (Phase 1-3)
-- 다중 database 백엔드 지원 (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- 다중 database 백엔드 지원 (PostgreSQL, SQLite, MongoDB, Redis)
 - 상태 모니터링을 통한 엔터프라이즈급 connection pooling
 - SQL 및 NoSQL database를 위한 포괄적인 query builder
 - Thread 안전 작업 및 RAII 리소스 관리
@@ -1390,7 +1379,7 @@ if (!commit_result) {
 - **Connection Pool 통합**: connection pool 오류 처리와의 원활한 통합
 
 이 하이브리드 접근 방식은 다음을 제공합니다:
-- **호환성**: 모든 표준 database driver (PostgreSQL, MySQL, SQLite, MongoDB, Redis)와 작동
+- **호환성**: 현재 지원되는 표준 database driver (PostgreSQL, SQLite, MongoDB, Redis)와 작동
 - **안전성**: 애플리케이션 코드 및 생태계 통합을 위한 타입 안전 오류 처리
 - **성능**: 내부 database 작업에 대한 오버헤드 제로
 - **안정성**: 포괄적인 오류 처리를 통한 엔터프라이즈급 트랜잭션 지원
@@ -1473,7 +1462,7 @@ auto commit_result = adapter->commit();
 - **-540 ~ -549**: 보안 오류
 
 **디자인 철학**:
-- **호환성**: 모든 표준 database driver (PostgreSQL, MySQL, SQLite, MongoDB, Redis)와 작동
+- **호환성**: 현재 지원되는 표준 database driver (PostgreSQL, SQLite, MongoDB, Redis)와 작동
 - **안전성**: 애플리케이션 코드 및 생태계 통합을 위한 타입 안전 오류 처리
 - **성능**: 내부 database 작업에 대한 오버헤드 제로
 - **안정성**: 포괄적인 오류 처리를 통한 엔터프라이즈급 트랜잭션 지원

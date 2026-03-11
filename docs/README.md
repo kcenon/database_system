@@ -6,7 +6,7 @@
 **Last Updated:** 2025-11-11
 **Status:** Comprehensive
 
-Welcome to the database_system documentation! This unified database abstraction layer supports 5 backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis) with enterprise-grade connection pooling and advanced query builders.
+Welcome to the database_system documentation! This unified database abstraction layer supports 4 backends (PostgreSQL, SQLite, MongoDB, Redis) with enterprise-grade connection pooling and advanced query builders. Legacy MySQL/MariaDB support was removed in Issue #418.
 
 ---
 
@@ -209,15 +209,6 @@ For contributors and maintainers:
 | Performance | [Benchmarks](performance/BENCHMARKS.md) - 1.2ms SELECT |
 | Tips | [Best Practices](guides/BEST_PRACTICES.md) - PostgreSQL-specific |
 
-### 🐬 MySQL
-
-| Topic | Document |
-|-------|----------|
-| Setup | [Build Guide](guides/BUILD_GUIDE.md) - MySQL dependencies |
-| Query Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) - SQL query builder |
-| Performance | [Benchmarks](performance/BENCHMARKS.md) - MySQL metrics |
-| Tips | [Best Practices](guides/BEST_PRACTICES.md) - MySQL-specific |
-
 ### 🗄️ SQLite
 
 | Topic | Document |
@@ -257,13 +248,13 @@ For contributors and maintainers:
 
 ### Supported Databases
 - ✅ **PostgreSQL** - Full support with JSONB, CTEs, prepared statements
-- ✅ **MySQL/MariaDB** - Complete implementation with utf8mb4
+- Removed: **MySQL/MariaDB** backend support was deleted in Issue #418 to align dependency, SOUP, and license inventory.
 - ✅ **SQLite** - File and in-memory with WAL mode, FTS5
 - ✅ **MongoDB** - Document operations and aggregation pipeline
 - ✅ **Redis** - All data types with pipelining
 
 ### Key Features
-- 🔗 **Multi-Backend** - Unified interface for 5 database types
+- 🔗 **Multi-Backend** - Unified interface for 4 database types
 - 🏊 **Connection Pooling** - 0.1ms acquisition, 10K+ connections
 - 🔍 **Query Builders** - Type-safe SQL, MongoDB, Redis builders
 - 🗂️ **ORM Framework** - Entity mapping with type-safe CRUD

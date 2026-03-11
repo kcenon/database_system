@@ -31,10 +31,11 @@ Comprehensive guide for building the Database System with multi-backend support,
 Database support is optional and can be disabled for testing:
 
 - **PostgreSQL**: libpqxx, libpq, OpenSSL 3.0+
-- **MySQL**: MariaDB Connector/C (LGPL-2.1, wire-compatible with MySQL)
 - **SQLite**: sqlite3
 - **MongoDB**: mongo-cxx-driver (mongocxx, bsoncxx)
 - **Redis**: hiredis
+
+> Legacy MySQL/MariaDB support was removed in Issue #418. Current builds do not use `libmariadb` or `USE_MYSQL`.
 
 ## Quick Start
 
@@ -52,7 +53,7 @@ cd database_system
 mkdir build && cd build
 
 # Configure with mock implementations
-cmake .. -DUSE_POSTGRESQL=OFF -DUSE_MYSQL=OFF -DUSE_SQLITE=OFF -DUSE_MONGODB=OFF -DUSE_REDIS=OFF
+cmake .. -DUSE_POSTGRESQL=OFF -DUSE_SQLITE=OFF -DUSE_MONGODB=OFF -DUSE_REDIS=OFF
 
 # Build
 ninja  # or make -j$(nproc)
@@ -67,7 +68,7 @@ ninja  # or make -j$(nproc)
 ```bash
 # Install dependencies (see Database Dependencies section)
 # Then configure with full support
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
+cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON -DUSE_MONGODB=ON -DUSE_REDIS=ON
 
 # Build
 ninja
@@ -80,7 +81,6 @@ ninja
 | Option | Default | Description |
 |--------|---------|-------------|
 | `USE_POSTGRESQL` | ON | Enable PostgreSQL support (requires libpqxx) |
-| `USE_MYSQL` | OFF | Enable MySQL support (requires MariaDB Connector/C) |
 | `USE_SQLITE` | OFF | Enable SQLite support (requires sqlite3) |
 | `USE_MONGODB` | OFF | Enable MongoDB support (requires mongocxx) - **Experimental** |
 | `USE_REDIS` | OFF | Enable Redis support (requires hiredis) - **Experimental** |
@@ -156,7 +156,6 @@ cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel
 cmake .. \
   -DCMAKE_BUILD_TYPE=Debug \
   -DUSE_POSTGRESQL=ON \
-  -DUSE_MYSQL=ON \
   -DUSE_SQLITE=ON \
   -DBUILD_DATABASE_SAMPLES=ON \
   -DUSE_UNIT_TEST=ON
@@ -181,7 +180,6 @@ cmake .. \
 cmake .. \
   -DCMAKE_BUILD_TYPE=Debug \
   -DUSE_POSTGRESQL=OFF \
-  -DUSE_MYSQL=OFF \
   -DUSE_SQLITE=OFF \
   -DUSE_MONGODB=OFF \
   -DUSE_REDIS=OFF \
@@ -212,9 +210,6 @@ cd vcpkg
 # PostgreSQL support
 vcpkg install libpqxx openssl
 
-# MySQL support (via MariaDB Connector/C)
-vcpkg install libmariadb
-
 # SQLite support
 vcpkg install sqlite3
 
@@ -225,7 +220,7 @@ vcpkg install mongo-cxx-driver
 vcpkg install hiredis
 
 # Install all at once
-vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl sqlite3 mongo-cxx-driver hiredis
 ```
 
 #### Build with vcpkg
@@ -234,7 +229,6 @@ vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 cmake .. \
   -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake \
   -DUSE_POSTGRESQL=ON \
-  -DUSE_MYSQL=ON \
   -DUSE_SQLITE=ON \
   -DUSE_MONGODB=ON \
   -DUSE_REDIS=ON
@@ -247,9 +241,6 @@ cmake .. \
 ```bash
 # PostgreSQL
 sudo apt-get install libpqxx-dev libpq-dev libssl-dev
-
-# MySQL (via MariaDB Connector/C)
-sudo apt-get install libmariadb-dev
 
 # SQLite
 sudo apt-get install libsqlite3-dev
@@ -267,9 +258,6 @@ sudo apt-get install libhiredis-dev
 # PostgreSQL
 sudo dnf install libpqxx-devel postgresql-devel openssl-devel
 
-# MySQL (via MariaDB Connector/C)
-sudo dnf install mariadb-connector-c-devel
-
 # SQLite
 sudo dnf install sqlite-devel
 
@@ -285,9 +273,6 @@ sudo dnf install hiredis-devel
 ```bash
 # PostgreSQL
 brew install libpqxx postgresql openssl
-
-# MySQL (via MariaDB Connector/C)
-brew install mariadb-connector-c
 
 # SQLite
 brew install sqlite
@@ -485,7 +470,6 @@ otool -L bin/basic_usage  # macOS
 # Minimal build - only core functionality
 cmake .. \
   -DUSE_POSTGRESQL=OFF \
-  -DUSE_MYSQL=OFF \
   -DUSE_SQLITE=OFF \
   -DUSE_MONGODB=OFF \
   -DUSE_REDIS=OFF \
@@ -507,7 +491,7 @@ ninja install
 cmake .. \
   -DCMAKE_TOOLCHAIN_FILE=arm64-toolchain.cmake \
   -DUSE_POSTGRESQL=OFF \
-  -DUSE_MYSQL=OFF
+  -DUSE_SQLITE=OFF
 ```
 
 ### Environment Variables
@@ -560,7 +544,6 @@ cmake .. \
 {
     "cmake.configureSettings": {
         "USE_POSTGRESQL": "ON",
-        "USE_MYSQL": "ON",
         "USE_SQLITE": "ON",
         "CMAKE_BUILD_TYPE": "Debug"
     },
@@ -573,7 +556,7 @@ cmake .. \
 Configure CMake options in Settings → Build, Execution, Deployment → CMake:
 
 ```
--DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON
+-DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
 ```
 
 #### Visual Studio
@@ -591,7 +574,7 @@ Use the CMake integration with vcpkg:
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\build\\${name}",
       "installRoot": "${projectDir}\\install\\${name}",
-      "cmakeCommandArgs": "-DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON",
+      "cmakeCommandArgs": "-DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON",
       "ctestCommandArgs": "",
       "variables": [
         {
@@ -662,7 +645,6 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     git \
     libpqxx-dev \
-    libmariadb-dev \
     libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -671,7 +653,7 @@ COPY . .
 
 RUN mkdir build && cd build && \
     cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release \
-    -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON && \
+    -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON && \
     ninja
 
 CMD ["./build/bin/basic_usage"]

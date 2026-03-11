@@ -83,7 +83,6 @@ credentials.store_credentials("production_db", creds);
 | Backend | TLS/SSL | Certificate Verification | Client Certificates |
 |---------|---------|-------------------------|-------------------|
 | PostgreSQL | ✅ | ✅ | ✅ |
-| MySQL | ✅ | ✅ | ✅ |
 | MongoDB | ✅ | ✅ | ✅ |
 | Redis | ✅ | ✅ | ✅ |
 | SQLite | N/A (local) | N/A | N/A |
@@ -316,19 +315,18 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         compiler: [gcc, clang, msvc]
-        database: [postgres, mysql, sqlite, mongodb, redis]
+        database: [postgres, sqlite, mongodb, redis]
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: vcpkg install libpqxx libmariadb sqlite3 mongo-cxx-driver hiredis
+        run: vcpkg install libpqxx sqlite3 mongo-cxx-driver hiredis
 
       - name: Configure CMake
         run: |
           cmake -B build \
             -DUSE_POSTGRESQL=ON \
-            -DUSE_MYSQL=ON \
             -DUSE_SQLITE=ON \
             -DUSE_MONGODB=ON \
             -DUSE_REDIS=ON \
@@ -623,7 +621,6 @@ See [BENCHMARKS.md](BENCHMARKS.md) for comprehensive performance data.
 **Key Metrics**:
 - Connection Pool: 77ns acquisition, 1.16M+ ops/s
 - PostgreSQL: 1.2ms simple SELECT, 5,000 TPS
-- MySQL: 1.5ms simple SELECT, 4,200 TPS
 - SQLite: 0.8ms simple SELECT (WAL mode)
 - MongoDB: 2.1ms insertOne
 - Redis: 0.3ms GET/SET

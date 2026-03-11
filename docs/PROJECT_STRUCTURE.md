@@ -72,7 +72,6 @@ database_system/
 │   │   └── adapters/              # Adapter tests
 │   ├── integration/               # Integration tests
 │   │   ├── postgres/              # PostgreSQL integration
-│   │   ├── mysql/                 # MySQL integration
 │   │   ├── sqlite/                # SQLite integration
 │   │   ├── mongodb/               # MongoDB integration
 │   │   ├── redis/                 # Redis integration
@@ -101,7 +100,6 @@ database_system/
 │   └── performance/               # Performance docs
 ├── cmake/                         # CMake modules
 │   ├── FindPostgreSQL.cmake       # PostgreSQL finder
-│   ├── FindMySQL.cmake            # MySQL finder
 │   ├── FindSQLite3.cmake          # SQLite3 finder
 │   ├── FindMongoDB.cmake          # MongoDB finder
 │   ├── FindRedis.cmake            # Redis finder
@@ -177,23 +175,6 @@ database_system/
 
 **Dependencies**:
 - libpqxx (PostgreSQL C++ client library)
-- OpenSSL (for TLS/SSL)
-
-#### MySQL Backend
-
-**Files**:
-- `mysql/mysql_manager.h/cpp`: MySQL implementation (780 LOC)
-- `mysql/mysql_connection.h/cpp`: Connection handling (300 LOC)
-- `mysql/mysql_prepared_statement.h/cpp`: Prepared statements (260 LOC)
-
-**Features**:
-- Full-text search (MATCH AGAINST)
-- InnoDB transactions
-- Prepared statements
-- Stored procedures
-
-**Dependencies**:
-- MariaDB Connector/C (MySQL-compatible C client library, LGPL-2.1)
 - OpenSSL (for TLS/SSL)
 
 #### SQLite Backend
@@ -478,7 +459,6 @@ public:
 ```
 database_base (abstract)
 ├── postgres_manager
-├── mysql_manager
 ├── sqlite_manager
 ├── mongodb_manager
 └── redis_manager
@@ -568,7 +548,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Options
 option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
-option(USE_MYSQL "Enable MySQL support" OFF)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(USE_MONGODB "Enable MongoDB support" OFF)
 option(USE_REDIS "Enable Redis support" OFF)
@@ -579,10 +558,6 @@ option(BUILD_WITH_COMMON_SYSTEM "Build with common_system integration" OFF)
 # Find dependencies
 if(USE_POSTGRESQL)
     find_package(PostgreSQL REQUIRED)
-endif()
-
-if(USE_MYSQL)
-    find_package(MySQL REQUIRED)
 endif()
 
 if(USE_SQLITE)
@@ -670,7 +645,6 @@ endif()
       "inherits": "default",
       "cacheVariables": {
         "USE_POSTGRESQL": "ON",
-        "USE_MYSQL": "ON",
         "USE_SQLITE": "ON",
         "USE_MONGODB": "ON",
         "USE_REDIS": "ON"
@@ -696,7 +670,6 @@ endif()
 | Database | Library | Version | vcpkg Package |
 |----------|---------|---------|---------------|
 | PostgreSQL | libpqxx | 7.7+ | `libpqxx` |
-| MySQL | libmariadb | 3.x+ | `libmariadb` |
 | SQLite | sqlite3 | 3.40+ | `sqlite3` |
 | MongoDB | mongo-cxx-driver | 3.7+ | `mongo-cxx-driver` |
 | Redis | hiredis | 1.1+ | `hiredis` |
@@ -716,7 +689,7 @@ endif()
 **Using vcpkg**:
 ```bash
 # Install database libraries
-vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl sqlite3 mongo-cxx-driver hiredis
 
 # Install optional systems (if available)
 vcpkg install kcenon-common-system kcenon-thread-system

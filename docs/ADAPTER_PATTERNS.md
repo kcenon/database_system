@@ -51,7 +51,7 @@ database_system (Tier 3)
        ├── thread_system (OPTIONAL - adapter pattern)
        ├── container_system (OPTIONAL - protocol container)
        ├── monitoring_system (OPTIONAL - metrics adapter)
-       └── External: PostgreSQL, MySQL, SQLite, MongoDB, Redis
+       └── External: PostgreSQL, SQLite, MongoDB, Redis
 ```
 
 ---

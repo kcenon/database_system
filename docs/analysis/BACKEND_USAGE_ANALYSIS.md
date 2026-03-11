@@ -19,7 +19,7 @@ This document analyzes the usage patterns and maintenance considerations for Mon
 | GitHub Issues/PRs mentioning backends | Primarily maintenance/refactoring |
 | Code contribution to project | ~42% of backend code |
 
-**Recommendation**: Proceed with **Option B** (CMake Optional Modules) as the optimal balance between flexibility and maintenance.
+**Recommendation**: Proceed with **Option B** (CMake Optional Modules) as the optimal balance between flexibility and maintenance. Legacy MySQL backend support was removed in Issue #418; references below are historical unless explicitly tied to current manifests.
 
 ---
 
@@ -30,7 +30,7 @@ This document analyzes the usage patterns and maintenance considerations for Mon
 | Backend | Header (LOC) | Source (LOC) | Total (LOC) | % of Backends |
 |---------|--------------|--------------|-------------|---------------|
 | PostgreSQL | 180 | 630 | 810 | 21.3% |
-| MySQL | 171 | 520 | 691 | 18.1% |
+| Legacy MySQL | 171 | 520 | 691 | 18.1% |
 | SQLite | 178 | 537 | 715 | 18.8% |
 | **MongoDB** | 190 | 635 | 825 | **21.7%** |
 | **Redis** | 177 | 590 | 767 | **20.1%** |
@@ -57,7 +57,6 @@ This document analyzes the usage patterns and maintenance considerations for Mon
 {
   "features": {
     "postgresql": { "dependencies": ["libpq", "libpqxx", "openssl"] },
-    "mysql": { "dependencies": ["libmariadb"] },
     "sqlite": { "dependencies": ["sqlite3"] }
     // MongoDB and Redis: NOT DEFINED
   }
@@ -109,7 +108,6 @@ Files importing MongoDB/Redis backends:
 | Backend | Dedicated Test File | Integration Tests |
 |---------|--------------------|--------------------|
 | PostgreSQL | No | Yes (integration_tests.cpp) |
-| MySQL | No | Yes (integration_tests.cpp) |
 | SQLite | sqlite_backend_test.cpp | Yes |
 | **MongoDB** | **None** | **Partial** |
 | **Redis** | **None** | **Partial** |

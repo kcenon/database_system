@@ -111,7 +111,6 @@ cmake .. -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 | Backend | Package | Ubuntu | macOS |
 |---------|---------|--------|-------|
 | PostgreSQL | libpqxx | libpqxx-dev | libpqxx |
-| MySQL | libmariadb | libmariadb-dev | mariadb-connector-c |
 | SQLite | sqlite3 | libsqlite3-dev | sqlite |
 | MongoDB | mongocxx | libmongocxx-dev | mongo-cxx-driver |
 | Redis | hiredis | libhiredis-dev | hiredis |
@@ -198,7 +197,6 @@ bool success = db.connect("host=localhost port=5432 dbname=testdb");
 ```bash
 # Check if server is running
 psql -U postgres -h localhost -p 5432 -c "SELECT 1"  # PostgreSQL
-mysql -u root -h localhost                            # MySQL
 sqlite3 /path/to/database.db "SELECT 1;"            # SQLite
 
 # Check network connectivity
@@ -210,7 +208,6 @@ sudo netstat -tulpn | grep LISTEN | grep 5432
 
 # View system logs
 journalctl -u postgresql -n 50  # PostgreSQL service logs
-tail -f /var/log/mysql/error.log # MySQL error log
 ```
 
 **Solution**:
@@ -257,20 +254,6 @@ sudo -u postgres psql
 postgres=# ALTER USER postgres WITH PASSWORD 'new_password';
 ```
 
-2. **MySQL**:
-```bash
-# Test connection
-mysql -u root -p -h localhost
-
-# Reset root password
-sudo mysql_secure_installation
-
-# Create new user
-mysql -u root -p
-mysql> CREATE USER 'dbuser'@'localhost' IDENTIFIED BY 'password';
-mysql> GRANT ALL PRIVILEGES ON testdb.* TO 'dbuser'@'localhost';
-mysql> FLUSH PRIVILEGES;
-```
 
 3. **Code Configuration**:
 ```cpp
@@ -520,8 +503,6 @@ std::cout << "Average latency: " << query_latency << "ms" << std::endl;
 CREATE INDEX idx_users_id ON users(id);
 CREATE INDEX idx_orders_user_id ON orders(user_id);
 
--- MySQL
-ALTER TABLE users ADD INDEX idx_id (id);
 
 -- SQLite
 CREATE INDEX idx_users_id ON users(id);
@@ -642,40 +623,6 @@ cat /etc/postgresql/*/main/pg_hba.conf
 std::string grant_sql =
     "GRANT TEMPORARY ON DATABASE testdb TO postgres";
 db.create_query(grant_sql);
-```
-
----
-
-### MySQL Issues
-
-**Lost connection during query**:
-```cpp
-// Implement reconnection logic
-bool execute_with_retry(const std::string& query, int max_retries = 3) {
-    for (int i = 0; i < max_retries; ++i) {
-        try {
-            db.insert_query(query);
-            return true;
-        } catch (const std::exception& e) {
-            if (i < max_retries - 1) {
-                db.disconnect();
-                std::this_thread::sleep_for(std::chrono::milliseconds(500 * i));
-                db.connect(connection_string);
-            }
-        }
-    }
-    return false;
-}
-```
-
-**Incorrect datetime conversion**:
-```cpp
-// Use ISO 8601 format for compatibility
-auto query = "INSERT INTO events(event_time) VALUES('2025-11-11T10:30:00')";
-db.insert_query(query);
-
-// Better: Use prepared statements
-auto formatted_time = std::format("{:%FT%T}", current_time);
 ```
 
 ---
@@ -905,7 +852,6 @@ cmake --version
 
 # Test database connectivity
 psql --version
-mysql --version
 sqlite3 --version
 
 # Check library availability
@@ -927,7 +873,6 @@ make 2>&1 | tee build.log
 
 # Database version
 psql --version
-mysql --version
 ```
 
 3. **Try minimal reproduction**:

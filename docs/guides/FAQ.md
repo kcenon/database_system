@@ -30,7 +30,7 @@
 **A:** database_system requires:
 - C++ compiler with C++17 support or higher (C++20 for async features)
 - CMake 3.16 or higher
-- Optional: Database client libraries (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- Optional: Database client libraries (PostgreSQL, SQLite, MongoDB, Redis)
 
 Supported platforms:
 - macOS 10.15+
@@ -54,7 +54,6 @@ cd vcpkg && ./bootstrap-vcpkg.sh
 
 # Install database dependencies (optional)
 vcpkg install libpqxx openssl  # PostgreSQL
-vcpkg install libmariadb        # MySQL (via MariaDB Connector/C)
 vcpkg install sqlite3           # SQLite
 vcpkg install mongo-cxx-driver  # MongoDB
 vcpkg install hiredis           # Redis
@@ -65,7 +64,7 @@ vcpkg install hiredis           # Redis
 git clone https://github.com/kcenon/database_system.git
 cd database_system
 mkdir build && cd build
-cmake .. -DUSE_POSTGRESQL=ON -DUSE_MYSQL=ON -DUSE_SQLITE=ON
+cmake .. -DUSE_POSTGRESQL=ON -DUSE_SQLITE=ON
 cmake --build .
 sudo cmake --install .
 ```
@@ -102,7 +101,6 @@ cmake -DCMAKE_CXX_COMPILER=g++-7 ..
 ```bash
 cmake .. \
   -DUSE_POSTGRESQL=OFF \
-  -DUSE_MYSQL=OFF \
   -DUSE_SQLITE=OFF \
   -DUSE_MONGODB=OFF \
   -DUSE_REDIS=OFF
@@ -181,7 +179,7 @@ For more details, see [Quick Start Guide](../BUILD_GUIDE.md).
 
 4. **Content management**: Large-scale content storage and retrieval
    - BLOB storage with serialization
-   - Full-text search (MySQL, PostgreSQL)
+   - Full-text search (PostgreSQL)
    - GridFS for large files (MongoDB)
 
 5. **Gaming platforms**: Player data persistence with real-time features
@@ -229,12 +227,11 @@ auto db_mgr = std::make_shared<database_manager>(context);
 
 ### Q: Which database backends are supported?
 
-**A:** database_system supports 5 backends:
+**A:** database_system supports 4 backends. Legacy MySQL/MariaDB support was removed in Issue #418:
 
 | Backend | Use Case | Performance | ORM | TLS/SSL |
 |---------|----------|-------------|-----|---------|
 | **PostgreSQL** | OLTP, Analytics | Excellent | ✅ | ✅ |
-| **MySQL** | Web apps, Full-text | Very Good | ✅ | ✅ |
 | **SQLite** | Embedded, Testing | Good | ✅ | ✅ |
 | **MongoDB** | Documents, NoSQL | Very Good | ✅ | ✅ |
 | **Redis** | Caching, Sessions | Excellent | ✅ | ✅ |
@@ -321,7 +318,7 @@ void migrate_data(database_manager& source_db, database_manager& target_db) {
     auto data = source_db.select_query("SELECT * FROM users");
 
     // Import to target
-    target_db.set_mode(database_types::mysql);
+    target_db.set_mode(database_types::sqlite);
     for (const auto& row : data) {
         // Convert and insert data
         target_db.execute_query(
@@ -625,12 +622,6 @@ db->begin_transaction();
 db->commit();
 ```
 
-**MySQL**:
-- READ UNCOMMITTED
-- READ COMMITTED
-- REPEATABLE READ (default)
-- SERIALIZABLE
-
 **SQLite**:
 - DEFERRED
 - IMMEDIATE
@@ -913,7 +904,7 @@ for (auto& t : threads) {
 3. **Dependencies**: Ensure all dependencies are installed
    ```bash
    cmake .. -DCMAKE_VERBOSE_MAKEFILE=ON
-   # Check if libpqxx, libmariadb, sqlite3, etc. are found
+   # Check if libpqxx, sqlite3, mongo-cxx-driver, and hiredis are found
    ```
 
 4. **C++ Standard**: Verify C++17 is enabled
@@ -1202,7 +1193,6 @@ backend_registry (Singleton)
     │
     ├── backend_factory (Factory Pattern)
     │   ├── "postgresql" → postgresql_backend
-    │   ├── "mysql" → mysql_backend
     │   ├── "sqlite" → sqlite_backend
     │   ├── "mongodb" → mongodb_backend
     │   └── "redis" → redis_backend
@@ -1419,7 +1409,6 @@ cmake .. \
 cmake .. \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DUSE_POSTGRESQL=OFF \
-  -DUSE_MYSQL=OFF \
   -DUSE_SQLITE=ON \
   -DBUILD_DATABASE_SAMPLES=OFF
 ```
@@ -1455,18 +1444,18 @@ cmake .. \
 
 1. database_system version
 2. Compiler and platform (GCC 7, Ubuntu 20.04, etc.)
-3. Database backend (PostgreSQL 13, MySQL 8, etc.)
+3. Database backend (PostgreSQL 13, SQLite 3, MongoDB 6, etc.)
 4. Minimal reproduction case
 5. Expected vs actual behavior
 
 **Example bug report**:
 ```
-Title: Connection pool deadlock with MySQL backend
+Title: Connection pool deadlock with PostgreSQL backend
 
 Environment:
 - database_system: v1.0
 - Compiler: GCC 10.2, Ubuntu 20.04
-- Database: MySQL 8.0
+- Database: PostgreSQL 15
 
 Reproduction:
 1. Create connection pool with max_connections=5

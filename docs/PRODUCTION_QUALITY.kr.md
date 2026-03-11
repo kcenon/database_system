@@ -72,7 +72,6 @@ credentials.store_credentials("production_db", creds);
 | 백엔드 | TLS/SSL | 인증서 검증 | 클라이언트 인증서 |
 |-------|---------|-----------|-----------------|
 | PostgreSQL | ✅ | ✅ | ✅ |
-| MySQL | ✅ | ✅ | ✅ |
 | MongoDB | ✅ | ✅ | ✅ |
 | Redis | ✅ | ✅ | ✅ |
 | SQLite | N/A (로컬) | N/A | N/A |
@@ -321,7 +320,6 @@ All heap blocks were freed -- no leaks are possible
 **핵심 메트릭**:
 - 연결 풀: 77ns 획득, 1.16M+ ops/s
 - PostgreSQL: 1.2ms 단순 SELECT, 5,000 TPS
-- MySQL: 1.5ms 단순 SELECT, 4,200 TPS
 - SQLite: 0.8ms 단순 SELECT (WAL 모드)
 - MongoDB: 2.1ms insertOne
 - Redis: 0.3ms GET/SET

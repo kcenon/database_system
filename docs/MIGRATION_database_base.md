@@ -7,7 +7,7 @@ As of Issue #287, `database_base` is deprecated in favor of the new `database_ba
 ## Timeline
 
 - **v0.4.x**: `database_base` deprecated, `database_backend` recommended
-- **v0.4.4**: Legacy manager implementations removed (sqlite_manager, mysql_manager, mongodb_manager, redis_manager)
+- **v0.4.4**: Legacy manager implementations removed (sqlite_manager, legacy mysql_manager, mongodb_manager, redis_manager)
 - **v0.5.0.0**: `database_base` interface will be removed completely
 
 ## Removed Legacy Managers
@@ -17,7 +17,7 @@ As of v0.4.4 (#304), the following legacy manager implementations have been remo
 | Removed File | Replacement |
 |--------------|-------------|
 | `database/backends/sqlite/sqlite_manager.{h,cpp}` | `sqlite_backend` |
-| `database/backends/mysql/mysql_manager.{h,cpp}` | `mysql_backend` |
+| `database/backends/mysql/mysql_manager.{h,cpp}` | `legacy mysql_backend` |
 | `database/backends/mongodb/mongodb_manager.{h,cpp}` | `mongodb_backend` |
 | `database/backends/redis/redis_manager.{h,cpp}` | `redis_backend` |
 

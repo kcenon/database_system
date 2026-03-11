@@ -26,7 +26,6 @@ Database System을 5분 만에 시작하세요.
 ### 데이터베이스 백엔드 (최소 하나 필요)
 
 - PostgreSQL 12+
-- MySQL 8.0+
 - SQLite 3.35+
 - MongoDB 5.0+
 - Redis 6.0+
@@ -107,7 +106,7 @@ int main() {
 
 ```cpp
 auto db = unified_database_system::create_builder()
-    .set_backend_type(backend_type::postgresql)  // 또는 mysql, sqlite
+    .set_backend_type(backend_type::postgresql)  // 또는 sqlite
     .enable_logging(db_log_level::info, "./logs")
     .set_pool_size(5, 20)
     .build();

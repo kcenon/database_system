@@ -8,7 +8,7 @@
 
 ## 📋 Overview
 
-The database_system uses a flexible type system to handle values across different database backends (PostgreSQL, MySQL, SQLite, MongoDB, Redis). This document explains when to use each type, how to convert between them, best practices, and performance implications.
+The database_system uses a flexible type system to handle values across different database backends (PostgreSQL, SQLite, MongoDB, Redis). This document explains when to use each type, how to convert between them, best practices, and performance implications.
 
 ---
 
@@ -143,12 +143,6 @@ PGresult* pg_result = ...;
 database_row row = convert_postgres_row(pg_result, row_index);
 ```
 
-#### MySQL
-```cpp
-// Uses MYSQL_ROW internally
-MYSQL_ROW mysql_row = ...;
-database_row row = convert_mysql_row(mysql_row, field_count);
-```
 
 #### SQLite
 ```cpp

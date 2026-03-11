@@ -103,7 +103,7 @@ The **unified database system** (`database/integrated/`) is the top-level integr
 ├──────────────────┴──────────────────┴───────────────────────────┤
 │           connection_string_builder  │  connection_pool         │
 ├─────────────────────────────────────────────────────────────────┤
-│           Database Backends (postgres, mysql, sqlite, ...)      │
+│           Database Backends (postgres, sqlite, mongodb, redis)  │
 ├─────────────────────────────────────────────────────────────────┤
 │           Protocol Layer (binary message serialization)         │
 └─────────────────────────────────────────────────────────────────┘
@@ -194,7 +194,6 @@ auto config = unified_db_config{}
 | Value | Description |
 |-------|-------------|
 | `postgres` | PostgreSQL database |
-| `mysql` | MySQL/MariaDB database |
 | `sqlite` | SQLite embedded database |
 | `mongodb` | MongoDB NoSQL database |
 | `redis` | Redis key-value store |
@@ -300,7 +299,6 @@ The `connection_string_builder` provides a type-safe, fluent API for constructin
 | Backend | Required Fields | Output Format |
 |---------|-----------------|---------------|
 | PostgreSQL | host (recommended) | `host=... port=... dbname=... user=... password=...` |
-| MySQL | host (recommended) | `host=...;port=...;database=...;user=...;password=...` |
 | SQLite | database (or `in_memory()`) | `path/to/db.sqlite` or `:memory:` |
 | MongoDB | host | MongoDB URI format |
 | Redis | host | Redis connection format |
@@ -1073,16 +1071,6 @@ void demonstrate_builders() {
     //    password=secret sslmode=verify-full connect_timeout=10
     //    application_name=my-service"
 
-    // MySQL
-    auto mysql = connection_string_builder()
-        .host("mysql.example.com")
-        .port(3306)
-        .database("appdb")
-        .user("root")
-        .password("secret")
-        .build(backend_type::mysql);
-    // → "host=mysql.example.com;port=3306;database=appdb;user=root;
-    //    password=secret"
 
     // SQLite file-based
     auto sqlite_file = connection_string_builder()

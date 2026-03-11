@@ -593,7 +593,6 @@ void multi_database_example()
 
         switch (db_type) {
             case database::database_types::postgres:
-            case database::database_types::mysql:
             case database::database_types::sqlite:
                 query.select({"id", "name", "email"})
                      .from("users")
@@ -621,7 +620,6 @@ void multi_database_example()
 
     // Demonstrate across all database types
     demonstrate_select(database::database_types::postgres, "PostgreSQL");
-    demonstrate_select(database::database_types::mysql, "MySQL");
     demonstrate_select(database::database_types::sqlite, "SQLite");
     demonstrate_select(database::database_types::mongodb, "MongoDB");
     demonstrate_select(database::database_types::redis, "Redis");
@@ -633,9 +631,6 @@ void multi_database_example()
 ```
 --- PostgreSQL Example ---
 Query: SELECT "id", "name", "email" FROM "users" WHERE status = 'active' LIMIT 5
-
---- MySQL Example ---
-Query: SELECT `id`, `name`, `email` FROM `users` WHERE status = 'active' LIMIT 5
 
 --- SQLite Example ---
 Query: SELECT [id], [name], [email] FROM [users] WHERE status = 'active' LIMIT 5
@@ -734,8 +729,6 @@ void query_builder_best_practices()
     // 3. Use appropriate database-specific features
     if (db.database_type() == database::database_types::postgres) {
         query.where_raw("metadata @> '{\"premium\": true}'");  // PostgreSQL JSON
-    } else if (db.database_type() == database::database_types::mysql) {
-        query.where_raw("JSON_EXTRACT(metadata, '$.premium') = true");  // MySQL JSON
     }
 
     // 4. Reset and reuse builders

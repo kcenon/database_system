@@ -1071,44 +1071,6 @@ auto fts_result = db.create_query_builder(database::database_types::postgres)
     .execute(&db);
 ```
 
-### MySQL Best Practices
-
-**DO:** Use MySQL-specific optimizations and features.
-
-```cpp
-// Connection pooling for MySQL (similar to PostgreSQL)
-database::connection_pool_config mysql_config;
-mysql_config.min_connections = 5;
-mysql_config.max_connections = 50;
-mysql_config.connection_string = "host=localhost user=app dbname=mydb";
-db.create_connection_pool(database::database_types::mysql, mysql_config);
-
-// Use LOAD DATA for bulk inserts (fastest method)
-db.create_query(
-    "LOAD DATA LOCAL INFILE '/tmp/users.csv' "
-    "INTO TABLE users "
-    "FIELDS TERMINATED BY ',' "
-    "LINES TERMINATED BY '\\n' "
-    "(id, username, email)"
-);
-
-// Full-text search with MATCH/AGAINST
-db.create_query("CREATE FULLTEXT INDEX idx_content ON articles(content)");
-
-auto fts = db.create_query_builder(database::database_types::mysql)
-    .select({"id", "title", "MATCH(content) AGAINST('database' IN BOOLEAN MODE) as score"})
-    .from("articles")
-    .where_raw("MATCH(content) AGAINST('database' IN BOOLEAN MODE)")
-    .order_by("score", database::sort_order::desc)
-    .execute(&db);
-
-// JSON support
-db.create_query("CREATE TABLE configs (id INT, settings JSON)");
-db.insert_query(
-    "INSERT INTO configs VALUES (1, JSON_OBJECT('theme', 'dark', 'lang', 'en'))"
-);
-```
-
 ### SQLite Best Practices
 
 **DO:** Optimize SQLite for embedded and small-scale use cases.

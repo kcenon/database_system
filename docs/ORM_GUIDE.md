@@ -76,7 +76,6 @@ The ORM works with all `database_backend` implementations:
 | Backend | ORM Support | Notes |
 |---------|-------------|-------|
 | PostgreSQL | Full | Recommended for production |
-| MySQL | Full | |
 | SQLite | Full | Good for development/testing |
 | MongoDB | Limited | Relational features may not apply |
 | Redis | Limited | Key-value model differs from relational |
@@ -653,7 +652,7 @@ CREATE INDEX IF NOT EXISTS idx_title ON posts(title);
 | Destructive sync_schema | `sync_schema()` drops and recreates tables | Use `create_tables()` with `IF NOT EXISTS` |
 | No migration diffing | Cannot detect schema differences | Manually manage ALTER TABLE statements |
 | No connection-aware CRUD | `save()`, `load()`, `update()`, `remove()` do not take a database parameter in the base class | Use `query_builder` for database-aware operations |
-| `AUTO_INCREMENT` syntax | Uses MySQL syntax; PostgreSQL uses `SERIAL`/`BIGSERIAL` | Adjust DDL manually per backend |
+| Auto-increment syntax | Backends use different auto-increment syntax (`SERIAL`/`BIGSERIAL` in PostgreSQL, `AUTOINCREMENT` in SQLite) | Adjust DDL manually per backend |
 | Metadata init not thread-safe | `ENTITY_METADATA()` lazy init uses non-atomic `static bool` | Call `get_metadata()` from single thread or synchronize externally |
 
 ---

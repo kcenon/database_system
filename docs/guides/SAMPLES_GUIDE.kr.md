@@ -593,7 +593,6 @@ void multi_database_example()
 
         switch (db_type) {
             case database::database_types::postgres:
-            case database::database_types::mysql:
             case database::database_types::sqlite:
                 query.select({"id", "name", "email"})
                      .from("users")
@@ -621,7 +620,6 @@ void multi_database_example()
 
     // 모든 데이터베이스 유형에 대해 시연
     demonstrate_select(database::database_types::postgres, "PostgreSQL");
-    demonstrate_select(database::database_types::mysql, "MySQL");
     demonstrate_select(database::database_types::sqlite, "SQLite");
     demonstrate_select(database::database_types::mongodb, "MongoDB");
     demonstrate_select(database::database_types::redis, "Redis");
@@ -633,9 +631,6 @@ void multi_database_example()
 ```
 --- PostgreSQL Example ---
 Query: SELECT "id", "name", "email" FROM "users" WHERE status = 'active' LIMIT 5
-
---- MySQL Example ---
-Query: SELECT `id`, `name`, `email` FROM `users` WHERE status = 'active' LIMIT 5
 
 --- SQLite Example ---
 Query: SELECT [id], [name], [email] FROM [users] WHERE status = 'active' LIMIT 5
@@ -734,8 +729,6 @@ void query_builder_best_practices()
     // 3. 적절한 데이터베이스별 기능 사용
     if (db.database_type() == database::database_types::postgres) {
         query.where_raw("metadata @> '{\"premium\": true}'");  // PostgreSQL JSON
-    } else if (db.database_type() == database::database_types::mysql) {
-        query.where_raw("JSON_EXTRACT(metadata, '$.premium') = true");  // MySQL JSON
     }
 
     // 4. 빌더 재설정 및 재사용

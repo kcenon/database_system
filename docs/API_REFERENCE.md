@@ -295,7 +295,7 @@ public:
     // Database type selection
     query_builder& for_database(database_types db_type);
 
-    // SQL-style interface (PostgreSQL, MySQL, SQLite)
+    // SQL-style interface (PostgreSQL, SQLite)
     query_builder& select(const std::vector<std::string>& columns);
     query_builder& from(const std::string& table);
     query_builder& where(const std::string& field, const std::string& op, const database_value& value);
@@ -556,7 +556,6 @@ enum class database_types : uint8_t
 {
     none = 0,           // No database backend
     postgres = 1,       // PostgreSQL backend
-    mysql = 2,          // MySQL/MariaDB backend
     sqlite = 3,         // SQLite backend
     oracle = 4,         // Oracle backend (future)
     mongodb = 5,        // MongoDB backend
@@ -959,14 +958,6 @@ int main() {
 
     std::cout << "PostgreSQL: " << pg_query.build() << std::endl;
 
-    // MySQL operations (different identifier quoting)
-    auto mysql_query = db.create_query_builder(database_types::mysql)
-        .select({"id", "name"})
-        .from("users")
-        .where("status", "=", database_value{std::string("active")});
-
-    std::cout << "MySQL: " << mysql_query.build() << std::endl;
-
     // MongoDB operations
     auto mongo_query = db.create_query_builder(database_types::mongodb)
         .collection("users")
@@ -1223,7 +1214,7 @@ coordinator.initialize();
 
 | Enum | Values |
 |------|--------|
-| `backend_type` | `postgres`, `mysql`, `sqlite`, `mongodb`, `redis` |
+| `backend_type` | `postgres`, `sqlite`, `mongodb`, `redis` |
 | `db_log_level` | `trace`, `debug`, `info`, `warning`, `error`, `critical`, `fatal` |
 | `thread_pool_type` | `standard`, `typed` |
 | `ssl_mode` | `disable`, `allow`, `prefer`, `require`, `verify_ca`, `verify_full` |

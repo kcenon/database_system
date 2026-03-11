@@ -46,7 +46,6 @@ Before contributing, ensure you have:
 - Git
 - **Database-specific prerequisites**:
   - PostgreSQL development libraries (libpqxx, libpq, OpenSSL)
-  - MySQL development libraries (MariaDB Connector/C, LGPL-2.1)
   - SQLite development library (sqlite3)
   - MongoDB C++ driver (mongocxx, bsoncxx)
   - Redis client library (hiredis)
@@ -100,7 +99,7 @@ cd vcpkg
 bootstrap-vcpkg.bat   # Windows
 
 # Install all database dependencies
-vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
+vcpkg install libpqxx openssl sqlite3 mongo-cxx-driver hiredis
 ```
 
 #### Manual Installation
@@ -110,7 +109,6 @@ vcpkg install libpqxx openssl libmariadb sqlite3 mongo-cxx-driver hiredis
 sudo apt-get update
 sudo apt-get install \
     libpqxx-dev libpq-dev libssl-dev \
-    libmariadb-dev \
     libsqlite3-dev \
     libmongocxx-dev libbsoncxx-dev \
     libhiredis-dev
@@ -118,7 +116,7 @@ sudo apt-get install \
 
 **macOS:**
 ```bash
-brew install libpqxx postgresql openssl mysql sqlite mongo-cxx-driver hiredis
+brew install libpqxx postgresql openssl sqlite mongo-cxx-driver hiredis
 ```
 
 **Windows:**
@@ -133,7 +131,6 @@ mkdir build && cd build
 # Configure with desired backends
 cmake .. \
     -DUSE_POSTGRESQL=ON \
-    -DUSE_MYSQL=ON \
     -DUSE_SQLITE=ON \
     -DUSE_MONGODB=ON \
     -DUSE_REDIS=ON \
@@ -238,7 +235,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 **Scopes** (database_system specific):
 - `core`: Core database abstraction layer
-- `backend`: Database backend implementations (postgres, mysql, sqlite, mongodb, redis)
+- `backend`: Database backend implementations (postgres, sqlite, mongodb, redis)
 - `orm`: ORM framework
 - `pool`: Connection pooling
 - `query`: Query builders
@@ -324,7 +321,7 @@ public:
 
     /**
      * @brief Set the database backend type
-     * @param database_type Type of database (postgres, mysql, sqlite, etc.)
+     * @param database_type Type of database (postgres, sqlite, mongodb, redis, etc.)
      * @return true if successful, false otherwise
      */
     bool set_mode(const database_types& database_type);
@@ -413,10 +410,6 @@ cppcheck --enable=all --std=c++17 database/
 - Leverage JSONB for semi-structured data
 - Use CTEs for complex queries
 
-#### MySQL Backend
-- Use proper charset/collation (utf8mb4)
-- Implement connection pooling
-- Handle AUTO_INCREMENT properly
 
 #### SQLite Backend
 - Enable WAL mode for concurrent access
@@ -537,16 +530,6 @@ docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=test postgres
 ctest -R postgres_test
 ```
 
-#### MySQL Tests
-```bash
-# Ensure MySQL is running
-sudo systemctl start mysql
-# OR
-docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=test mysql
-
-# Run MySQL-specific tests
-ctest -R mysql_test
-```
 
 #### SQLite Tests
 ```bash
@@ -727,7 +710,6 @@ Brief description of changes
 
 ## Backend Impact
 - [ ] PostgreSQL
-- [ ] MySQL
 - [ ] SQLite
 - [ ] MongoDB
 - [ ] Redis
@@ -884,11 +866,6 @@ Follows [Semantic Versioning](https://semver.org/):
 - Partition table support
 - Replication support
 
-#### MySQL
-- Full-text search enhancements
-- JSON column operations
-- Partition management
-- Replication support
 
 #### SQLite
 - Virtual table support

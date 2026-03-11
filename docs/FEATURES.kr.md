@@ -85,21 +85,6 @@ auto cte_result = db.create_query_builder(database_types::postgres)
     .execute(&db);
 ```
 
-### MySQL 백엔드
-
-**상태**: ✅ 완전 지원
-**구현**: `mysql/mysql_manager.h/cpp`
-
-**기능**:
-- MATCH AGAINST를 통한 전문 검색
-- ACID 준수를 통한 InnoDB 트랜잭션
-- 플레이스홀더를 통한 준비된 문
-- 저장 프로시저 및 함수
-- 트리거 및 이벤트
-- 파티셔닝 지원
-- 복제 인식
-- JSON 컬럼 타입 (MySQL 5.7+)
-
 ### SQLite 백엔드
 
 **상태**: ✅ 완전 지원
@@ -1082,7 +1067,7 @@ C++20 모듈을 통한 빠른 컴파일 및 향상된 캡슐화:
 | `kcenon.database` | (주 모듈) | 모든 파티션 집계 |
 | `kcenon.database:core` | Core | 타입, 컨텍스트, 매니저, 백엔드 레지스트리 |
 | `kcenon.database:query` | Query | 쿼리 빌더, 조건, 방언 (SQL, MongoDB, Redis) |
-| `kcenon.database:backends` | Backends | PostgreSQL, MySQL, SQLite, MongoDB, Redis |
+| `kcenon.database:backends` | Backends | PostgreSQL, SQLite, MongoDB, Redis |
 
 ```cpp
 import kcenon.database;

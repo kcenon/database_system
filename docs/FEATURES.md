@@ -90,53 +90,6 @@ auto cte_result = db.create_query_builder(database_types::postgres)
 - Statement timeout configuration
 - Work memory and shared buffers tuning
 
-### MySQL Backend
-
-**Status**: ✅ Full Support
-**Implementation**: `mysql/mysql_manager.h/cpp`
-
-**Features**:
-- Full-text search with MATCH AGAINST
-- InnoDB transactions with ACID compliance
-- Prepared statements with placeholders
-- Stored procedures and functions
-- Triggers and events
-- Partitioning support
-- Replication awareness
-- JSON column type (MySQL 5.7+)
-
-**Advanced Capabilities**:
-```cpp
-// Full-text search
-auto fts_result = db.create_query_builder(database_types::mysql)
-    .select({"id", "title", "content", "MATCH(title, content) AGAINST('database' IN NATURAL LANGUAGE MODE) as score"})
-    .from("articles")
-    .where("MATCH(title, content) AGAINST('database' IN NATURAL LANGUAGE MODE)")
-    .order_by("score", sort_order::desc)
-    .execute(&db);
-
-// Transaction with savepoints
-auto tx_result = db.begin_transaction();
-db.execute_command("INSERT INTO accounts (id, balance) VALUES (1, 1000)");
-db.execute_command("SAVEPOINT sp1");
-db.execute_command("UPDATE accounts SET balance = balance - 100 WHERE id = 1");
-// Can rollback to sp1 if needed
-db.commit();
-
-// Stored procedure call
-auto sp_result = db.create_query_builder(database_types::mysql)
-    .raw_sql("CALL calculate_monthly_sales(@result)")
-    .execute(&db);
-```
-
-**Configuration Options**:
-- Connection string: `host=localhost;port=3306;database=mydb;user=admin;password=secret;ssl=1`
-- SSL/TLS encryption
-- Character set (utf8mb4 recommended)
-- Connection pool size
-- Auto-reconnect settings
-- Query cache configuration
-
 ### SQLite Backend
 
 **Status**: ✅ Full Support
@@ -1619,7 +1572,7 @@ The database_system can be consumed as a C++20 module for faster compilation and
 | `kcenon.database` | (primary) | Aggregates all partitions |
 | `kcenon.database:core` | Core | Types, context, manager, backend registry, proxy config |
 | `kcenon.database:query` | Query | Query builder, conditions, dialects (SQL, MongoDB, Redis) |
-| `kcenon.database:backends` | Backends | PostgreSQL, MySQL, SQLite, MongoDB, Redis backends |
+| `kcenon.database:backends` | Backends | PostgreSQL, SQLite, MongoDB, Redis backends |
 
 ### Usage
 
@@ -1670,7 +1623,6 @@ kcenon.database
 
 **Optional** (for specific backends):
 - libpqxx (PostgreSQL)
-- MariaDB Connector/C (MySQL)
 - sqlite3 (SQLite)
 - mongo-cxx-driver (MongoDB)
 - hiredis (Redis)

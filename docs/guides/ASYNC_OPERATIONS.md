@@ -560,7 +560,7 @@ auto txn_coord = context->get_transaction_coordinator();
 ```cpp
 // Participants: multiple database backends
 std::vector<std::shared_ptr<core::database_backend>> participants = {
-    postgres_backend, mysql_backend
+    postgres_backend, sqlite_backend
 };
 
 // Begin distributed transaction

@@ -62,7 +62,7 @@
 - ✅ **5,000 TPS** (PostgreSQL)
 - ✅ **10,000+ 동시 연결**
 - ✅ **0.1 ms connection pooling**
-- ✅ **Multi-backend 지원** (PostgreSQL, MySQL, SQLite, MongoDB, Redis)
+- ✅ **Multi-backend 지원** (PostgreSQL, SQLite, MongoDB, Redis)
 - ✅ **Enterprise 보안** (TLS/SSL, RBAC)
 
 ---

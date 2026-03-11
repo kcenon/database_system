@@ -71,7 +71,7 @@
 
 ### 지원 데이터베이스
 - ✅ **PostgreSQL** - 고급 기능 완전 지원
-- ✅ **MySQL/MariaDB** - 완전한 구현
+- 제거됨: **MySQL/MariaDB** 백엔드는 Issue #418에서 삭제되었으며 현재 빌드에서는 사용할 수 없습니다.
 - ✅ **SQLite** - 파일 및 인메모리 데이터베이스
 - ✅ **MongoDB** - 문서 작업 및 집계
 - ✅ **Redis** - 모든 데이터 타입 및 작업
@@ -194,11 +194,6 @@ Database System을 빌드하고 배포하는 데 필요한 모든 것:
 - API: [postgres_manager](API_REFERENCE.kr.md#database_base)
 - 예제: [PostgreSQL Advanced](SAMPLES_GUIDE.kr.md#postgresql-advanced-sample)
 - 성능: [PostgreSQL Benchmarks](PERFORMANCE_BENCHMARKS.kr.md#database-performance)
-
-**MySQL**
-- 빌드: [MySQL Dependencies](BUILD_GUIDE.kr.md#manual-installation)
-- 예제: [SQL Query Builder](SAMPLES_GUIDE.kr.md#sql-query-builder-examples)
-- 성능: [MySQL Performance](PERFORMANCE_BENCHMARKS.kr.md#database-performance)
 
 **SQLite**
 - 빌드: [SQLite Support](BUILD_GUIDE.kr.md#build-configurations)

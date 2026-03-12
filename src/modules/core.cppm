@@ -52,9 +52,11 @@ import kcenon.common;
 
 export namespace database {
 
-// Re-export core type aliases from core namespace
+/// @brief Variant type for individual database cell values
 using core::database_value;
+/// @brief A single row of database values (ordered by column)
 using core::database_row;
+/// @brief Collection of rows returned from a database query
 using core::database_result;
 
 } // namespace database

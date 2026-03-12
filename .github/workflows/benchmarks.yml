@@ -116,7 +116,7 @@ jobs:
           --benchmark_filter="QueryBuilder_Create|QueryBuilder_Select|Database_SingleSelect"
 
     - name: Upload benchmark results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: benchmark-results-${{ matrix.os }}
         path: build/bin/benchmark_results_${{ matrix.os }}.json
@@ -157,7 +157,7 @@ jobs:
 
     - name: Upload comparison report
       if: hashFiles('comparison_${{ matrix.os }}.md') != ''
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: comparison-report-${{ matrix.os }}
         path: comparison_${{ matrix.os }}.md

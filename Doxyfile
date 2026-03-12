@@ -1,6 +1,6 @@
 PROJECT_NAME           = "Database System"
 PROJECT_BRIEF          = "Advanced C++20 Database System with Multi-Backend Support"
-PROJECT_VERSION        = 1.0.0
+PROJECT_NUMBER         = 1.0.0
 OUTPUT_DIRECTORY       = documents
 CREATE_SUBDIRS         = YES
 ALLOW_UNICODE_NAMES    = NO
@@ -87,7 +87,7 @@ QUIET                  = NO
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
-WARN_NO_PARAMDOC       = NO
+WARN_NO_PARAMDOC       = YES
 WARN_AS_ERROR          = NO
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
@@ -105,6 +105,7 @@ FILE_PATTERNS          = *.c \
                          *.hh \
                          *.hpp \
                          *.tpp \
+                         *.cppm \
                          *.md
 RECURSIVE              = YES
 EXCLUDE                = ./build \

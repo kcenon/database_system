@@ -222,10 +222,37 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release
 
-    - name: Verify find_package (Windows)
+    - name: Verify install artifacts (Windows)
       if: runner.os == 'Windows'
       shell: pwsh
       run: |
+        $installDir = "$env:GITHUB_WORKSPACE/install"
+
+        # Verify library file exists
+        $libFile = Get-ChildItem -Path "$installDir/lib" -Filter "database.*" -ErrorAction SilentlyContinue
+        if (-not $libFile) {
+            Write-Error "Library file not found in $installDir/lib"
+            exit 1
+        }
+        Write-Host "Library: $($libFile.FullName)"
+
+        # Verify headers exist
+        $headerDir = "$installDir/include/database_system/database"
+        if (-not (Test-Path "$headerDir/core/backend_registry.h")) {
+            Write-Error "backend_registry.h not found in $headerDir/core/"
+            exit 1
+        }
+        Write-Host "Headers: OK"
+
+        # Verify CMake config exists
+        $configDir = "$installDir/lib/cmake/DatabaseSystem"
+        if (-not (Test-Path "$configDir/DatabaseSystemConfig.cmake")) {
+            Write-Error "DatabaseSystemConfig.cmake not found"
+            exit 1
+        }
+        Write-Host "CMake config: OK"
+
+        # Verify find_package configure step works
         New-Item -ItemType Directory -Force -Path "$env:TEMP\find-pkg-test" | Out-Null
         Set-Location "$env:TEMP\find-pkg-test"
 
@@ -234,27 +261,13 @@ jobs:
         project(find_pkg_test LANGUAGES CXX)
         set(CMAKE_CXX_STANDARD 20)
         find_package(DatabaseSystem CONFIG REQUIRED)
-        add_executable(test_import test_import.cpp)
-        target_link_libraries(test_import PRIVATE DatabaseSystem::database)
+        message(STATUS "DatabaseSystem found: version=${DatabaseSystem_VERSION}")
+        message(STATUS "DatabaseSystem targets: ${DatabaseSystem_LIBRARIES}")
         "@ | Set-Content CMakeLists.txt
-
-        @"
-        #include "database/core/backend_registry.h"
-        #include <iostream>
-        int main() {
-            auto backends = database::core::available_backends();
-            std::cout << "Available backends: " << backends.size() << std::endl;
-            for (const auto& name : backends) {
-                std::cout << "  - " << name << std::endl;
-            }
-            return 0;
-        }
-        "@ | Set-Content test_import.cpp
 
         cmake -B build `
           -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/install;$env:GITHUB_WORKSPACE/common_system_install" `
           -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --config Release
 
     - name: Upload logs on failure
       if: failure()

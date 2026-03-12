@@ -46,6 +46,7 @@ compile_commands.json
 !cmake/*.cmake
 !cmake/*.cmake.in
 !triplets/*.cmake
+!vcpkg-ports/**/*.cmake
 
 # Test results
 Testing/

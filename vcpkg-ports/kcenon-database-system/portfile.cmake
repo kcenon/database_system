@@ -1,15 +1,24 @@
 # kcenon-database-system portfile
 # Pure, lightweight C++20 Core DAL library with multi-backend support
+#
+# Features:
+#   postgresql - Enable PostgreSQL backend via libpqxx
+#   sqlite     - Enable SQLite backend
+#   mongodb    - Enable MongoDB backend (experimental)
+#   redis      - Enable Redis backend (experimental)
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO kcenon/database_system
-    REF 26ad04ca3ebe28a64e23aa95d4f0104aac019c3e
-    SHA512 0  # TODO: Update with actual SHA512 hash after release
+    REF 23c999eb68bab535d436251d5e1bfcaad84f2868
+    SHA512 0  # TODO: Update with actual SHA512 hash after release tag
     HEAD_REF main
 )
 
 # Feature-based backend selection
+# Maps vcpkg features to upstream CMake USE_* options.
+# When a feature is selected, its dependencies (declared in vcpkg.json)
+# are resolved automatically by vcpkg.
 set(DB_USE_POSTGRESQL OFF)
 if("postgresql" IN_LIST FEATURES)
     set(DB_USE_POSTGRESQL ON)
@@ -33,18 +42,23 @@ endif()
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
+        # Backend feature flags
         -DUSE_POSTGRESQL=${DB_USE_POSTGRESQL}
         -DUSE_SQLITE=${DB_USE_SQLITE}
         -DUSE_MONGODB=${DB_USE_MONGODB}
         -DUSE_REDIS=${DB_USE_REDIS}
+        # Disable non-library build targets
         -DUSE_UNIT_TEST=OFF
         -DBUILD_DATABASE_SAMPLES=OFF
         -DDATABASE_BUILD_BENCHMARKS=OFF
         -DDATABASE_BUILD_INTEGRATION_TESTS=OFF
         -DBUILD_SHARED_LIBS=OFF
+        # Disable ecosystem integrations not available via vcpkg dependencies
         -DUSE_THREAD_SYSTEM=OFF
         -DUSE_MONITORING_SYSTEM=OFF
         -DUSE_CONTAINER_SYSTEM=OFF
+        # Disable integrated database adapter layer (requires ecosystem packages)
+        -DBUILD_INTEGRATED_DATABASE=OFF
 )
 
 vcpkg_cmake_install()

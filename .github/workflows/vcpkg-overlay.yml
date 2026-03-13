@@ -1,0 +1,279 @@
+name: vcpkg Overlay Port
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'vcpkg-ports/**'
+      - 'database/**'
+      - 'cmake/**'
+      - 'CMakeLists.txt'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'vcpkg-ports/**'
+      - 'database/**'
+      - 'cmake/**'
+      - 'CMakeLists.txt'
+
+jobs:
+  # Validate overlay port manifest and portfile syntax
+  validate-port:
+    name: Validate port manifest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Validate vcpkg.json syntax
+      run: python3 -c "import json; json.load(open('vcpkg-ports/kcenon-database-system/vcpkg.json'))"
+
+    - name: Check required feature definitions
+      run: |
+        for feature in postgresql sqlite mongodb redis; do
+          if ! python3 -c "
+        import json, sys
+        data = json.load(open('vcpkg-ports/kcenon-database-system/vcpkg.json'))
+        if '$feature' not in data.get('features', {}):
+            print(f'Missing feature: $feature')
+            sys.exit(1)
+        print(f'Feature $feature: OK')
+        "; then
+            echo "FAIL: Feature $feature not found in vcpkg.json"
+            exit 1
+          fi
+        done
+
+    - name: Verify portfile feature mapping
+      run: |
+        portfile="vcpkg-ports/kcenon-database-system/portfile.cmake"
+        for feature in postgresql sqlite mongodb redis; do
+          if ! grep -q "\"$feature\" IN_LIST FEATURES" "$portfile"; then
+            echo "FAIL: Feature $feature not mapped in portfile.cmake"
+            exit 1
+          fi
+        done
+        echo "All features correctly mapped in portfile"
+
+  # Test CMake build with vcpkg-equivalent feature options
+  feature-build:
+    name: Build ${{ matrix.feature }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Core-only (no backends) on all platforms
+          - os: ubuntu-24.04
+            feature: core
+            compiler: gcc
+            cmake_backend_flags: >-
+              -DUSE_POSTGRESQL=OFF
+              -DUSE_SQLITE=OFF
+              -DUSE_MONGODB=OFF
+              -DUSE_REDIS=OFF
+
+          # Core-only on Windows
+          - os: windows-2022
+            feature: core
+            compiler: msvc
+            cmake_backend_flags: >-
+              -DUSE_POSTGRESQL=OFF
+              -DUSE_SQLITE=OFF
+              -DUSE_MONGODB=OFF
+              -DUSE_REDIS=OFF
+
+          # Core-only on macOS
+          - os: macos-14
+            feature: core
+            compiler: clang
+            cmake_backend_flags: >-
+              -DUSE_POSTGRESQL=OFF
+              -DUSE_SQLITE=OFF
+              -DUSE_MONGODB=OFF
+              -DUSE_REDIS=OFF
+
+    steps:
+    - name: Checkout database_system
+      uses: actions/checkout@v6
+
+    - name: Checkout common_system
+      uses: actions/checkout@v6
+      with:
+        repository: kcenon/common_system
+        path: common_system
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++-13 pkg-config
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: brew install ninja
+
+    - name: Set up compiler (GCC)
+      if: matrix.compiler == 'gcc'
+      run: |
+        echo "CC=gcc-13" >> $GITHUB_ENV
+        echo "CXX=g++-13" >> $GITHUB_ENV
+
+    - name: Set up compiler (Clang - macOS)
+      if: matrix.compiler == 'clang' && runner.os == 'macOS'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Set up compiler (MSVC)
+      if: matrix.compiler == 'msvc'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Build and install common_system (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        sudo cmake --install build --prefix /usr/local
+
+    - name: Build and install common_system (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cd common_system
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+        cmake --build build --config Release
+        cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
+
+    - name: Configure (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          ${{ matrix.cmake_backend_flags }} \
+          -DUSE_UNIT_TEST=OFF \
+          -DBUILD_DATABASE_SAMPLES=OFF \
+          -DDATABASE_BUILD_BENCHMARKS=OFF \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
+          -DUSE_THREAD_SYSTEM=OFF \
+          -DUSE_MONITORING_SYSTEM=OFF \
+          -DUSE_CONTAINER_SYSTEM=OFF \
+          -DBUILD_INTEGRATED_DATABASE=OFF \
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
+
+    - name: Configure (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cmake -B build -G Ninja `
+          -DCMAKE_BUILD_TYPE=Release `
+          ${{ matrix.cmake_backend_flags }} `
+          -DUSE_UNIT_TEST=OFF `
+          -DBUILD_DATABASE_SAMPLES=OFF `
+          -DDATABASE_BUILD_BENCHMARKS=OFF `
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
+          -DUSE_THREAD_SYSTEM=OFF `
+          -DUSE_MONITORING_SYSTEM=OFF `
+          -DUSE_CONTAINER_SYSTEM=OFF `
+          -DBUILD_INTEGRATED_DATABASE=OFF `
+          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/common_system_install" `
+          -DCMAKE_INSTALL_PREFIX="$env:GITHUB_WORKSPACE/install"
+
+    - name: Build
+      run: cmake --build build --config Release --parallel
+
+    - name: Install
+      run: cmake --install build --config Release
+
+    - name: Verify find_package (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        mkdir -p /tmp/find-pkg-test && cd /tmp/find-pkg-test
+
+        cat > CMakeLists.txt << 'EOF'
+        cmake_minimum_required(VERSION 3.16)
+        project(find_pkg_test LANGUAGES CXX)
+        set(CMAKE_CXX_STANDARD 20)
+        find_package(DatabaseSystem CONFIG REQUIRED)
+        add_executable(test_import test_import.cpp)
+        target_link_libraries(test_import PRIVATE DatabaseSystem::database)
+        EOF
+
+        cat > test_import.cpp << 'EOF'
+        #include "database/core/backend_registry.h"
+        #include <iostream>
+        int main() {
+            auto backends = database::core::available_backends();
+            std::cout << "Available backends: " << backends.size() << std::endl;
+            for (const auto& name : backends) {
+                std::cout << "  - " << name << std::endl;
+            }
+            return 0;
+        }
+        EOF
+
+        cmake -B build \
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/install" \
+          -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+
+    - name: Verify install artifacts (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $installDir = "$env:GITHUB_WORKSPACE/install"
+
+        # Verify library file exists
+        $libFile = Get-ChildItem -Path "$installDir/lib" -Filter "database.*" -ErrorAction SilentlyContinue
+        if (-not $libFile) {
+            Write-Error "Library file not found in $installDir/lib"
+            exit 1
+        }
+        Write-Host "Library: $($libFile.FullName)"
+
+        # Verify headers exist
+        $headerDir = "$installDir/include/database_system/database"
+        if (-not (Test-Path "$headerDir/core/backend_registry.h")) {
+            Write-Error "backend_registry.h not found in $headerDir/core/"
+            exit 1
+        }
+        Write-Host "Headers: OK"
+
+        # Verify CMake config exists
+        $configDir = "$installDir/lib/cmake/DatabaseSystem"
+        if (-not (Test-Path "$configDir/DatabaseSystemConfig.cmake")) {
+            Write-Error "DatabaseSystemConfig.cmake not found"
+            exit 1
+        }
+        Write-Host "CMake config: OK"
+
+        # Verify find_package configure step works
+        New-Item -ItemType Directory -Force -Path "$env:TEMP\find-pkg-test" | Out-Null
+        Set-Location "$env:TEMP\find-pkg-test"
+
+        @"
+        cmake_minimum_required(VERSION 3.16)
+        project(find_pkg_test LANGUAGES CXX)
+        set(CMAKE_CXX_STANDARD 20)
+        find_package(DatabaseSystem CONFIG REQUIRED)
+        message(STATUS "DatabaseSystem found: version=${DatabaseSystem_VERSION}")
+        message(STATUS "DatabaseSystem targets: ${DatabaseSystem_LIBRARIES}")
+        "@ | Set-Content CMakeLists.txt
+
+        cmake -B build `
+          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/install;$env:GITHUB_WORKSPACE/common_system_install" `
+          -DCMAKE_BUILD_TYPE=Release
+
+    - name: Upload logs on failure
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: vcpkg-overlay-${{ matrix.feature }}-${{ matrix.os }}-logs
+        path: |
+          build/CMakeFiles/*.log
+        retention-days: 7

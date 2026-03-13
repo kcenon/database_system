@@ -1,0 +1,299 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v0.1.0)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  # Build for Linux x64
+  build-linux:
+    name: Build Linux x64
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system
+        uses: actions/checkout@v6
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Build
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
+            -DUSE_THREAD_SYSTEM=OFF \
+            -DUSE_MONITORING_SYSTEM=OFF \
+            -DUSE_CONTAINER_SYSTEM=OFF \
+            -DUSE_UNIT_TEST=OFF \
+            -DBUILD_DATABASE_SAMPLES=OFF \
+            -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
+            -DUSE_POSTGRESQL=OFF
+          cmake --build build
+
+      - name: Package
+        run: |
+          mkdir -p artifacts
+          VERSION=${{ github.ref_name || inputs.tag }}
+          tar -czvf artifacts/database-system-${VERSION}-linux-x64.tar.gz \
+            -C build/lib . || true
+          tar -czvf artifacts/database-system-${VERSION}-headers.tar.gz \
+            -C . include database || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-x64
+          path: artifacts/
+          retention-days: 7
+
+  # Build for macOS ARM64
+  build-macos:
+    name: Build macOS ARM64
+    runs-on: macos-14
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system
+        uses: actions/checkout@v6
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: brew install ninja
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Build
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
+            -DUSE_THREAD_SYSTEM=OFF \
+            -DUSE_MONITORING_SYSTEM=OFF \
+            -DUSE_CONTAINER_SYSTEM=OFF \
+            -DUSE_UNIT_TEST=OFF \
+            -DBUILD_DATABASE_SAMPLES=OFF \
+            -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
+            -DUSE_POSTGRESQL=OFF
+          cmake --build build
+
+      - name: Package
+        run: |
+          mkdir -p artifacts
+          VERSION=${{ github.ref_name || inputs.tag }}
+          tar -czvf artifacts/database-system-${VERSION}-macos-arm64.tar.gz \
+            -C build/lib . || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-arm64
+          path: artifacts/
+          retention-days: 7
+
+  # Build for Windows x64
+  build-windows:
+    name: Build Windows x64
+    runs-on: windows-2022
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system
+        uses: actions/checkout@v6
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build and install common_system
+        shell: pwsh
+        run: |
+          cd common_system
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+          cmake --build build --config Release
+          cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
+
+      - name: Build
+        run: |
+          cmake -B build -G "Visual Studio 17 2022" -A x64 `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/common_system_install" `
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
+            -DUSE_THREAD_SYSTEM=OFF `
+            -DUSE_MONITORING_SYSTEM=OFF `
+            -DUSE_CONTAINER_SYSTEM=OFF `
+            -DUSE_UNIT_TEST=OFF `
+            -DBUILD_DATABASE_SAMPLES=OFF `
+            -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
+            -DUSE_POSTGRESQL=OFF
+          cmake --build build --config Release
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts
+          $version = "${{ github.ref_name }}"
+          if ([string]::IsNullOrEmpty($version)) { $version = "${{ inputs.tag }}" }
+          Compress-Archive -Path build/lib/Release/* -DestinationPath "artifacts/database-system-$version-windows-x64.zip" -Force
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-x64
+          path: artifacts/
+          retention-days: 7
+
+  # Create GitHub Release
+  create-release:
+    name: Create Release
+    needs: [build-linux, build-macos, build-windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: |
+          echo "Downloaded artifacts:"
+          find artifacts -type f -ls
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          VERSION=${{ github.ref_name || inputs.tag }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          cat > changelog.md << 'HEADER'
+          ## What's Changed
+
+          HEADER
+
+          if [ -n "$PREV_TAG" ]; then
+            echo "Generating changelog from $PREV_TAG to $VERSION"
+            git log $PREV_TAG..HEAD --pretty=format:"- %s (%h)" >> changelog.md
+          else
+            echo "- Initial release" >> changelog.md
+          fi
+
+          cat >> changelog.md << 'FOOTER'
+
+
+          ## Downloads
+
+          | Platform | Architecture | File |
+          |----------|--------------|------|
+          | Linux | x64 | `database-system-*-linux-x64.tar.gz` |
+          | macOS | ARM64 | `database-system-*-macos-arm64.tar.gz` |
+          | Windows | x64 | `database-system-*-windows-x64.zip` |
+          | Headers | All | `database-system-*-headers.tar.gz` |
+
+          ## Installation
+
+          **CMake FetchContent** — pin to this release:
+          ```cmake
+          FetchContent_Declare(
+            database_system
+            GIT_REPOSITORY https://github.com/kcenon/database_system.git
+            GIT_TAG        ${VERSION}
+          )
+          ```
+
+          ## Requirements
+
+          - C++20 compatible compiler (GCC 13+, Clang 18+, MSVC 2022)
+          - CMake 3.16+
+          - common_system (required dependency)
+          FOOTER
+
+          echo "Changelog generated:"
+          cat changelog.md
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Database System ${{ steps.changelog.outputs.version }}
+          body_path: changelog.md
+          draft: false
+          prerelease: ${{ contains(github.ref_name || inputs.tag, '-rc') || contains(github.ref_name || inputs.tag, '-beta') || contains(github.ref_name || inputs.tag, '-alpha') }}
+          files: |
+            artifacts/linux-x64/*
+            artifacts/macos-arm64/*
+            artifacts/windows-x64/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate summary
+        run: |
+          echo "## Release Created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ steps.changelog.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | File |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|------|" >> $GITHUB_STEP_SUMMARY
+          for f in artifacts/*/*.tar.gz artifacts/*/*.zip; do
+            if [ -f "$f" ]; then
+              echo "| $(basename $(dirname $f)) | $(basename $f) |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

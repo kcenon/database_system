@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # Project definition
 project(database_system
-    VERSION 0.1.0.0
+    VERSION 0.1.0
     DESCRIPTION "Pure, Lightweight C++20 Core DAL Library"
     LANGUAGES CXX
 )
@@ -352,6 +352,12 @@ if(BUILD_DATABASE)
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
         PATTERN "tests" EXCLUDE
         PATTERN "samples" EXCLUDE
+    )
+
+    # Install kcenon-namespaced facade headers
+    install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
     )
 
     # Install library target with export set

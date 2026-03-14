@@ -58,7 +58,7 @@ include(FetchContent)
 
 FetchContent_Declare(database_system
   GIT_REPOSITORY https://github.com/kcenon/database_system.git
-  GIT_TAG main
+  GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
 )
 FetchContent_MakeAvailable(database_system)
 

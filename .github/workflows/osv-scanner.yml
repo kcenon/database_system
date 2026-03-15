@@ -31,46 +31,10 @@ permissions:
 
 jobs:
   osv-scan:
-    name: OSV Scanner
-    runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/gh-pages'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Run OSV-Scanner on vcpkg manifest
-        uses: google/osv-scanner-action/osv-scanner-action@v2
-        with:
-          scan-args: |-
-            --lockfile=vcpkg.json
-            --format=sarif
-            --output=osv-results.sarif
-        continue-on-error: true
-
-      - name: Run OSV-Scanner filesystem scan (fallback)
-        if: hashFiles('osv-results.sarif') == ''
-        uses: google/osv-scanner-action/osv-scanner-action@v2
-        with:
-          scan-args: |-
-            --recursive
-            .
-            --format=sarif
-            --output=osv-results.sarif
-        continue-on-error: true
-
-      - name: Upload OSV SARIF to GitHub Security
-        uses: github/codeql-action/upload-sarif@v4
-        if: always() && hashFiles('osv-results.sarif') != ''
-        continue-on-error: true
-        with:
-          sarif_file: osv-results.sarif
-          category: osv-scanner
-
-      - name: Upload OSV results artifact
-        uses: actions/upload-artifact@v7
-        if: always() && hashFiles('osv-results.sarif') != ''
-        with:
-          name: osv-scan-results-${{ github.sha }}
-          path: osv-results.sarif
-          retention-days: 30
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.3
+    permissions:
+      contents: read
+      security-events: write
+    with:
+      scan-args: |-
+        --lockfile=vcpkg.json

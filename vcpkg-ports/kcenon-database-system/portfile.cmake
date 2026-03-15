@@ -10,8 +10,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO kcenon/database_system
-    REF 23c999eb68bab535d436251d5e1bfcaad84f2868
-    SHA512 0  # TODO: Update with actual SHA512 hash after release tag
+    REF v0.1.0
+    SHA512 7207570689fad1ae2afc96b4b7c79be3690a174e6f7e9c704ec470fa71f74e18ab872becbbd4a15bb3ace5a7d5eb9d5d7a5125ccca49062abab7f61b2d06185f
     HEAD_REF main
 )
 

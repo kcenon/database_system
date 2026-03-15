@@ -4,58 +4,17 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'vcpkg-ports/**'
       - 'database/**'
       - 'cmake/**'
       - 'CMakeLists.txt'
   pull_request:
     branches: [ main ]
     paths:
-      - 'vcpkg-ports/**'
       - 'database/**'
       - 'cmake/**'
       - 'CMakeLists.txt'
 
 jobs:
-  # Validate overlay port manifest and portfile syntax
-  validate-port:
-    name: Validate port manifest
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-
-    - name: Validate vcpkg.json syntax
-      run: python3 -c "import json; json.load(open('vcpkg-ports/kcenon-database-system/vcpkg.json'))"
-
-    - name: Check required feature definitions
-      run: |
-        for feature in postgresql sqlite mongodb redis; do
-          if ! python3 -c "
-        import json, sys
-        data = json.load(open('vcpkg-ports/kcenon-database-system/vcpkg.json'))
-        if '$feature' not in data.get('features', {}):
-            print(f'Missing feature: $feature')
-            sys.exit(1)
-        print(f'Feature $feature: OK')
-        "; then
-            echo "FAIL: Feature $feature not found in vcpkg.json"
-            exit 1
-          fi
-        done
-
-    - name: Verify portfile feature mapping
-      run: |
-        portfile="vcpkg-ports/kcenon-database-system/portfile.cmake"
-        for feature in postgresql sqlite mongodb redis; do
-          if ! grep -q "\"$feature\" IN_LIST FEATURES" "$portfile"; then
-            echo "FAIL: Feature $feature not mapped in portfile.cmake"
-            exit 1
-          fi
-        done
-        echo "All features correctly mapped in portfile"
-
   # Test CMake build with vcpkg-equivalent feature options
   feature-build:
     name: Build ${{ matrix.feature }} / ${{ matrix.os }}

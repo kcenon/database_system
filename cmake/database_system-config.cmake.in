@@ -1,7 +1,7 @@
 @PACKAGE_INIT@
 
 ##################################################
-# DatabaseSystem Package Configuration
+# database_system Package Configuration
 #
 # Provides imported targets:
 #   DatabaseSystem::database             - Core DAL library
@@ -36,27 +36,31 @@ endif()
 find_dependency(common_system CONFIG QUIET)
 
 if(@USE_CONTAINER_SYSTEM@)
-    find_dependency(ContainerSystem CONFIG QUIET)
+    find_dependency(container_system CONFIG QUIET)
 endif()
 
 # Include targets
-include("${CMAKE_CURRENT_LIST_DIR}/DatabaseSystemTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/database_system-targets.cmake")
 
 # Verify targets exist
-check_required_components(DatabaseSystem)
+check_required_components(database_system)
 
 # Set variables for compatibility
-set(DatabaseSystem_FOUND TRUE)
-set(DATABASESYSTEM_FOUND TRUE)
+set(database_system_FOUND TRUE)
 
 # Provide information about the package
-set(DatabaseSystem_VERSION @PROJECT_VERSION@)
-set(DatabaseSystem_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
-set(DatabaseSystem_LIBRARIES DatabaseSystem::database)
+set(database_system_VERSION @PROJECT_VERSION@)
+set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
+set(database_system_LIBRARIES DatabaseSystem::database)
 
 # Legacy variables for backward compatibility
-set(DATABASESYSTEM_VERSION ${DatabaseSystem_VERSION})
-set(DATABASESYSTEM_INCLUDE_DIRS ${DatabaseSystem_INCLUDE_DIRS})
-set(DATABASESYSTEM_LIBRARIES ${DatabaseSystem_LIBRARIES})
+set(DatabaseSystem_FOUND TRUE)
+set(DATABASESYSTEM_FOUND TRUE)
+set(DatabaseSystem_VERSION ${database_system_VERSION})
+set(DatabaseSystem_INCLUDE_DIRS ${database_system_INCLUDE_DIRS})
+set(DatabaseSystem_LIBRARIES ${database_system_LIBRARIES})
+set(DATABASESYSTEM_VERSION ${database_system_VERSION})
+set(DATABASESYSTEM_INCLUDE_DIRS ${database_system_INCLUDE_DIRS})
+set(DATABASESYSTEM_LIBRARIES ${database_system_LIBRARIES})
 
-message(STATUS "Found DatabaseSystem: ${DatabaseSystem_VERSION}")
+message(STATUS "Found database_system: ${database_system_VERSION}")

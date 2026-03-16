@@ -53,7 +53,7 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
-| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required |
+| C++20 Compiler | GCC 13+ / Clang 17+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required (see note below) |
 | CMake | 3.20+ | Yes | Build system |
 | [common_system](https://github.com/kcenon/common_system) | latest | Yes | Common interfaces and Result<T> |
 | [thread_system](https://github.com/kcenon/thread_system) | latest | Optional | Thread pool for async operations (USE_THREAD_SYSTEM) |
@@ -61,7 +61,7 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 | [container_system](https://github.com/kcenon/container_system) | latest | Optional | Data serialization (USE_CONTAINER_SYSTEM) |
 | [monitoring_system](https://github.com/kcenon/monitoring_system) | latest | Optional | Performance metrics (USE_MONITORING_SYSTEM) |
 
-> **Note**: When building with thread_system integration (USE_THREAD_SYSTEM=ON, default), compiler requirements increase to GCC 13+ / Clang 17+. See [thread_system requirements](https://github.com/kcenon/thread_system#requirements) for details.
+> **Note**: The GCC 13+ / Clang 17+ requirement comes from [thread_system](https://github.com/kcenon/thread_system), which is enabled by default (`USE_THREAD_SYSTEM=ON`). If you disable all optional ecosystem dependencies, GCC 11+ / Clang 14+ may suffice for core-only builds. See [thread_system requirements](https://github.com/kcenon/thread_system#requirements) for details.
 
 ### Database Backends (at least one required)
 

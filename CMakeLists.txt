@@ -362,7 +362,7 @@ if(BUILD_DATABASE)
 
     # Install library target with export set
     install(TARGETS database
-        EXPORT DatabaseSystemTargets
+        EXPORT database_system-targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -370,37 +370,37 @@ if(BUILD_DATABASE)
     )
 
     # Install export set with DatabaseSystem:: namespace
-    install(EXPORT DatabaseSystemTargets
-        FILE DatabaseSystemTargets.cmake
+    install(EXPORT database_system-targets
+        FILE database_system-targets.cmake
         NAMESPACE DatabaseSystem::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
     )
 
     # Generate and install package config files
     include(CMakePackageConfigHelpers)
 
     configure_package_config_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/DatabaseSystemConfig.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfig.cmake"
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/database_system-config.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/database_system-config.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
         PATH_VARS CMAKE_INSTALL_INCLUDEDIR
     )
 
     write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfigVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/database_system-config-version.cmake"
         VERSION ${PROJECT_VERSION}
         COMPATIBILITY AnyNewerVersion
     )
 
     install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DatabaseSystem
+        "${CMAKE_CURRENT_BINARY_DIR}/database_system-config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/database_system-config-version.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
     )
 
     # Build-tree export for FetchContent/add_subdirectory users
-    export(EXPORT DatabaseSystemTargets
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/DatabaseSystemTargets.cmake"
+    export(EXPORT database_system-targets
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/database_system-targets.cmake"
         NAMESPACE DatabaseSystem::
     )
 endif()

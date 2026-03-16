@@ -8,6 +8,7 @@
   "license": "BSD-3-Clause",
   "supports": "!(uwp | xbox)",
   "dependencies": [
+    "kcenon-common-system",
     {
       "name": "asio",
       "version>=": "1.30.2"
@@ -29,7 +30,6 @@
     "ecosystem": {
       "description": "Enable kcenon ecosystem integration (requires ecosystem packages in vcpkg registry)",
       "dependencies": [
-        "kcenon-common-system",
         "kcenon-thread-system",
         "kcenon-logger-system",
         "kcenon-container-system",

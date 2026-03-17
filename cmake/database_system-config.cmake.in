@@ -4,8 +4,12 @@
 # database_system Package Configuration
 #
 # Provides imported targets:
-#   DatabaseSystem::database             - Core DAL library
-#   DatabaseSystem::integrated_database  - Integrated adapter layer (if built)
+#   database_system::database             - Core DAL library
+#   database_system::integrated_database  - Integrated adapter layer (if built)
+#
+# Legacy aliases (backward compatibility):
+#   DatabaseSystem::database             → database_system::database
+#   DatabaseSystem::integrated_database  → database_system::integrated_database
 ##################################################
 
 include(CMakeFindDependencyMacro)
@@ -51,7 +55,15 @@ set(database_system_FOUND TRUE)
 # Provide information about the package
 set(database_system_VERSION @PROJECT_VERSION@)
 set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
-set(database_system_LIBRARIES DatabaseSystem::database)
+set(database_system_LIBRARIES database_system::database)
+
+# Backward compatibility aliases: DatabaseSystem:: → database_system::
+if(TARGET database_system::database AND NOT TARGET DatabaseSystem::database)
+    add_library(DatabaseSystem::database ALIAS database_system::database)
+endif()
+if(TARGET database_system::integrated_database AND NOT TARGET DatabaseSystem::integrated_database)
+    add_library(DatabaseSystem::integrated_database ALIAS database_system::integrated_database)
+endif()
 
 # Legacy variables for backward compatibility
 set(DatabaseSystem_FOUND TRUE)

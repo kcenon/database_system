@@ -1,6 +1,6 @@
 PROJECT_NAME           = "Database System"
 PROJECT_BRIEF          = "Advanced C++20 Database System with Multi-Backend Support"
-PROJECT_NUMBER         = 1.0.0
+PROJECT_NUMBER         = 0.1.0
 OUTPUT_DIRECTORY       = documents
 CREATE_SUBDIRS         = YES
 ALLOW_UNICODE_NAMES    = NO

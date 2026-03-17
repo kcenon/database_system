@@ -369,10 +369,10 @@ if(BUILD_DATABASE)
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system
     )
 
-    # Install export set with DatabaseSystem:: namespace
+    # Install export set with database_system:: namespace
     install(EXPORT database_system-targets
         FILE database_system-targets.cmake
-        NAMESPACE DatabaseSystem::
+        NAMESPACE database_system::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
     )
 
@@ -401,7 +401,7 @@ if(BUILD_DATABASE)
     # Build-tree export for FetchContent/add_subdirectory users
     export(EXPORT database_system-targets
         FILE "${CMAKE_CURRENT_BINARY_DIR}/database_system-targets.cmake"
-        NAMESPACE DatabaseSystem::
+        NAMESPACE database_system::
     )
 endif()
 

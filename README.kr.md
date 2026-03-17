@@ -774,12 +774,12 @@ ctest
 ```cmake
 # Using as a subdirectory
 add_subdirectory(database_system)
-target_link_libraries(your_target PRIVATE DatabaseSystem::database)
+target_link_libraries(your_target PRIVATE database_system::database)
 
 # Optional: Add container system integration
 add_subdirectory(container_system)
 target_link_libraries(your_target PRIVATE
-    DatabaseSystem::database
+    database_system::database
     ContainerSystem::container
 )
 

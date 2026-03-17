@@ -32,11 +32,11 @@ if(@USE_REDIS@)
     find_dependency(hiredis CONFIG)
 endif()
 
-# Ecosystem dependencies (optional)
-find_dependency(common_system CONFIG QUIET)
+# Ecosystem dependencies
+find_dependency(common_system CONFIG REQUIRED)
 
 if(@USE_CONTAINER_SYSTEM@)
-    find_dependency(container_system CONFIG QUIET)
+    find_dependency(container_system CONFIG REQUIRED)
 endif()
 
 # Include targets

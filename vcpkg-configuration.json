@@ -14,9 +14,6 @@
       ]
     }
   ],
-  "overlay-triplets": [
-    "triplets"
-  ],
   "overrides": [
     {
       "name": "asio",

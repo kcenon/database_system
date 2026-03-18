@@ -337,6 +337,18 @@ cmake --build build -j
 
 ## Quick Start
 
+### Installation via vcpkg
+
+```bash
+vcpkg install kcenon-database-system
+```
+
+In your `CMakeLists.txt`:
+```cmake
+find_package(database_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::database_system)
+```
+
 ### Prerequisites
 
 - **Compiler**: C++20 capable (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+)

@@ -148,28 +148,36 @@ namespace database
 		 * @brief Result-based wrapper for insert_query().
 		 * @param query_string The SQL INSERT statement.
 		 * @return Number of rows inserted, or error.
+		 * @deprecated Use parameterized query API instead to prevent SQL injection
 		 */
+		[[deprecated("Use parameterized query API instead")]]
 		kcenon::common::Result<uint64_t> insert_query_result(const std::string& query_string);
 
 		/**
 		 * @brief Result-based wrapper for update_query().
 		 * @param query_string The SQL UPDATE statement.
 		 * @return Number of rows updated, or error.
+		 * @deprecated Use parameterized query API instead to prevent SQL injection
 		 */
+		[[deprecated("Use parameterized query API instead")]]
 		kcenon::common::Result<uint64_t> update_query_result(const std::string& query_string);
 
 		/**
 		 * @brief Result-based wrapper for delete_query().
 		 * @param query_string The SQL DELETE statement.
 		 * @return Number of rows deleted, or error.
+		 * @deprecated Use parameterized query API instead to prevent SQL injection
 		 */
+		[[deprecated("Use parameterized query API instead")]]
 		kcenon::common::Result<uint64_t> delete_query_result(const std::string& query_string);
 
 		/**
 		 * @brief Result-based wrapper for select_query().
 		 * @param query_string The SQL SELECT statement.
 		 * @return Query results, or error.
+		 * @deprecated Use parameterized query API instead to prevent SQL injection
 		 */
+		[[deprecated("Use parameterized query API instead")]]
 		kcenon::common::Result<core::database_result> select_query_result(const std::string& query_string);
 
 		/**

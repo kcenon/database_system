@@ -781,6 +781,15 @@ namespace database::async
 		return async_result<bool>(std::move(future));
 	}
 
+// Suppress deprecation: async wrappers delegate to raw query API until parameterized support is added
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 	inline async_result<core::database_result> async_database::select_async(const std::string& query)
 	{
 		auto db = db_;
@@ -831,6 +840,12 @@ namespace database::async
 		});
 		return async_result<std::vector<core::database_result>>(std::move(future));
 	}
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 	inline async_result<bool> async_database::begin_transaction_async()
 	{

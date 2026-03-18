@@ -156,6 +156,13 @@ public:
      * @param query SQL query string
      * @return Result containing query results or error
      */
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
     common::Result<common::database_result> execute_query(const std::string& query) override {
         if (!manager_) {
             return common::make_error<common::database_result>(
@@ -188,6 +195,11 @@ public:
 
         return common::Result<common::database_result>::ok(std::move(common_result));
     }
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
     /**
      * @brief Execute a command without returning results

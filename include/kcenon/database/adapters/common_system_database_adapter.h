@@ -45,6 +45,18 @@ namespace kcenon::database::adapters {
  * - execute_query()/execute_command() thread-safety delegated to database_manager
  * - Multiple threads may safely check connection state concurrently
  * - Connection state transitions are protected against race conditions
+ *
+ * @code
+ * // Create adapter with default PostgreSQL backend
+ * kcenon::database::adapters::common_system_database_adapter adapter;
+ *
+ * // Connect and execute queries through the IDatabase interface
+ * auto conn_result = adapter.connect("host=localhost dbname=mydb");
+ * if (conn_result.is_ok()) {
+ *     auto query_result = adapter.execute_query("SELECT * FROM users");
+ *     adapter.disconnect();
+ * }
+ * @endcode
  */
 class common_system_database_adapter : public common::interfaces::IDatabase {
 public:

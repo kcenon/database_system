@@ -6,12 +6,16 @@ backends to stable status.
 
 ## Status Summary
 
-| Backend          | Status         | Since   | Notes                                |
-|------------------|----------------|---------|--------------------------------------|
-| PostgreSQL       | **Stable**     | v0.1.0  | Primary backend, full feature set    |
-| SQLite           | **Stable**     | v0.1.0  | Embedded / single-file database      |
-| MongoDB          | Experimental   | v0.1.0  | Document-store backend, limited testing |
-| Redis            | Experimental   | v0.1.0  | Key-value store backend, limited testing |
+| Backend          | Status         | Since   | vcpkg Feature    | Notes                                |
+|------------------|----------------|---------|------------------|--------------------------------------|
+| PostgreSQL       | **Stable**     | v0.1.0  | `postgresql`     | Primary backend, full feature set    |
+| SQLite           | **Stable**     | v0.1.0  | `sqlite`         | Embedded / single-file database      |
+| MongoDB          | Experimental   | v0.1.0  | `mongodb`        | Document-store backend, limited testing |
+| Redis            | Experimental   | v0.1.0  | `redis`          | Key-value store backend, limited testing |
+
+> Experimental status is also declared in `vcpkg.json` feature descriptions
+> (e.g., `"Enable MongoDB backend (experimental)"`). Both sources must be
+> updated together when a backend is promoted.
 
 ---
 
@@ -106,6 +110,22 @@ following criteria must be met:
 | 4  | Error handling completeness audit  | All driver/client error codes mapped to database\_system error types with appropriate recovery or reporting |
 | 5  | CI platform coverage               | Tests passing on **Linux, macOS, and Windows** in the CI pipeline |
 | 6  | Production deployment reference    | At least **one documented production deployment** demonstrating real-world viability |
+
+### Stabilization Progress
+
+Current status of each experimental backend against the stabilization
+criteria listed above:
+
+| Criterion                        | MongoDB | Redis |
+|----------------------------------|:-------:|:-----:|
+| Dedicated integration test suite | --      | --    |
+| Performance benchmarks           | --      | --    |
+| Connection pooling validation    | --      | --    |
+| Error handling audit             | --      | --    |
+| CI platform coverage             | --      | --    |
+| Production deployment reference  | --      | --    |
+
+Legend: done = met, partial = in progress, -- = not started.
 
 ---
 

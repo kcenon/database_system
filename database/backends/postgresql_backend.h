@@ -164,6 +164,20 @@ private:
 	std::string build_connection_string(const core::connection_config& config) const;
 
 	/**
+	 * @brief Build a connection string with password masked for safe logging
+	 * @param config Structured connection configuration
+	 * @return Connection string with password replaced by "***"
+	 */
+	std::string build_safe_connection_string(const core::connection_config& config) const;
+
+	/**
+	 * @brief Remove password from an error message that may contain the connection string
+	 * @param error_message The error message to sanitize
+	 * @return Error message with password masked
+	 */
+	std::string sanitize_error(const std::string& error_message) const;
+
+	/**
 	 * @brief Execute a modification query (INSERT, UPDATE, DELETE)
 	 * @param query_string SQL query to execute
 	 * @return Number of affected rows

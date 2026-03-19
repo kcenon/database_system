@@ -74,7 +74,7 @@ kcenon::common::VoidResult postgresql_backend::do_initialize(const core::connect
 			return kcenon::common::ok();
 		}
 	} catch (const std::exception& e) {
-		last_error_ = std::string("Connection error: ") + e.what();
+		last_error_ = std::string("Connection error: ") + sanitize_error(e.what());
 		logger_.error("do_initialize", last_error_);
 	}
 #elif defined(HAVE_LIBPQ)
@@ -84,15 +84,15 @@ kcenon::common::VoidResult postgresql_backend::do_initialize(const core::connect
 			last_error_.clear();
 			return kcenon::common::ok();
 		}
-		last_error_ = PQerrorMessage(static_cast<PGconn*>(connection_));
+		last_error_ = sanitize_error(PQerrorMessage(static_cast<PGconn*>(connection_)));
 		PQfinish(static_cast<PGconn*>(connection_));
 		connection_ = nullptr;
 	} catch (const std::exception& e) {
-		last_error_ = std::string("Connection error: ") + e.what();
+		last_error_ = std::string("Connection error: ") + sanitize_error(e.what());
 		logger_.error("do_initialize", last_error_);
 	}
 #else
-	logger_.warning("PostgreSQL support not compiled. Connection: " + conn_str.substr(0, 20) + "...");
+	logger_.warning("PostgreSQL support not compiled. Connection: " + build_safe_connection_string(config));
 	// Mock mode for testing without PostgreSQL
 	last_error_.clear();
 	return kcenon::common::ok();
@@ -617,6 +617,53 @@ std::string postgresql_backend::build_connection_string(const core::connection_c
 	}
 
 	return oss.str();
+}
+
+std::string postgresql_backend::build_safe_connection_string(const core::connection_config& config) const
+{
+	std::ostringstream oss;
+
+	if (!config.host.empty()) {
+		oss << "host=" << config.host << " ";
+	}
+
+	if (config.port > 0) {
+		oss << "port=" << config.port << " ";
+	}
+
+	if (!config.database.empty()) {
+		oss << "dbname=" << config.database << " ";
+	}
+
+	if (!config.username.empty()) {
+		oss << "user=" << config.username << " ";
+	}
+
+	if (!config.password.empty()) {
+		oss << "password=*** ";
+	}
+
+	for (const auto& [key, value] : config.options) {
+		oss << key << "=" << value << " ";
+	}
+
+	return oss.str();
+}
+
+std::string postgresql_backend::sanitize_error(const std::string& error_message) const
+{
+	if (connection_config_.password.empty()) {
+		return error_message;
+	}
+
+	std::string sanitized = error_message;
+	std::string::size_type pos = 0;
+	while ((pos = sanitized.find(connection_config_.password, pos)) != std::string::npos) {
+		sanitized.replace(pos, connection_config_.password.length(), "***");
+		pos += 3;
+	}
+
+	return sanitized;
 }
 
 } // namespace backends

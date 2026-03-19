@@ -75,6 +75,7 @@ namespace database
 	{
 	public:
 		query_condition(const std::string& field, const std::string& op, const core::database_value& value);
+		[[deprecated("Use parameterized query_condition(field, op, value) instead")]]
 		query_condition(const std::string& raw_condition);
 
 		std::string to_sql() const;

@@ -161,6 +161,15 @@ namespace database
 		return database_->execute_query(query_string);
 	}
 
+// Suppress deprecation warnings for internal delegation to deprecated raw query API
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 	kcenon::common::Result<uint64_t> database_manager::insert_query_result(const std::string& query_string)
 	{
 		if (!database_)
@@ -200,6 +209,12 @@ namespace database
 		}
 		return database_->select_query(query_string);
 	}
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 	kcenon::common::VoidResult database_manager::execute_query_result(const std::string& query_string)
 	{

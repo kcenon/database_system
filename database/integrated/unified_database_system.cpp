@@ -49,6 +49,16 @@
 #include <stdexcept>
 #include <sstream>
 
+// Suppress deprecation warnings: this file intentionally uses raw query API
+// until parameterized query support is implemented
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 namespace database::integrated {
 
 // ============================================================================
@@ -832,3 +842,9 @@ unified_database_system::builder unified_database_system::create_builder() {
 }
 
 } // namespace database::integrated
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif

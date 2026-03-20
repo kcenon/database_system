@@ -117,21 +117,6 @@ public:
 
     bool is_initialized() const override { return initialized_; }
 
-    kcenon::common::Result<uint64_t> insert_query(
-        const std::string& /*query_string*/) override {
-        return uint64_t{1};
-    }
-
-    kcenon::common::Result<uint64_t> update_query(
-        const std::string& /*query_string*/) override {
-        return uint64_t{1};
-    }
-
-    kcenon::common::Result<uint64_t> delete_query(
-        const std::string& /*query_string*/) override {
-        return uint64_t{1};
-    }
-
     kcenon::common::Result<::database::core::database_result> select_query(
         const std::string& /*query_string*/) override {
         ::database::core::database_result result;

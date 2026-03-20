@@ -43,8 +43,7 @@ namespace database
 	{
 	}
 
-	query_condition::query_condition(const std::string& raw_condition)
-		: raw_condition_(raw_condition)
+	query_condition::query_condition()
 	{
 	}
 
@@ -170,18 +169,9 @@ namespace database
 		return raw_condition_;
 	}
 
-// Suppress deprecation: logical operators use raw constructor internally for composite conditions
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
 	query_condition query_condition::operator&&(const query_condition& other) const
 	{
-		query_condition result("");
+		query_condition result;
 		result.sub_conditions_.push_back(*this);
 		result.sub_conditions_.push_back(other);
 		result.logical_operator_ = "AND";
@@ -190,18 +180,12 @@ namespace database
 
 	query_condition query_condition::operator||(const query_condition& other) const
 	{
-		query_condition result("");
+		query_condition result;
 		result.sub_conditions_.push_back(*this);
 		result.sub_conditions_.push_back(other);
 		result.logical_operator_ = "OR";
 		return result;
 	}
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 	// query_builder implementation using Strategy pattern
 	query_builder::query_builder(database_types db_type)
@@ -406,15 +390,6 @@ namespace database
 		return "";
 	}
 
-// Suppress deprecation: execute() is itself a transitional API that delegates to raw select_query
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
 	core::database_result query_builder::execute(core::database_backend* db) const
 	{
 		if (!db) {
@@ -432,12 +407,6 @@ namespace database
 		}
 		return result.value();
 	}
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 	void query_builder::reset()
 	{

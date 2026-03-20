@@ -221,21 +221,6 @@ namespace database
 #endif
 	}
 
-	kcenon::common::Result<uint64_t> postgres_manager::insert_query(const std::string& query_string)
-	{
-		return execute_modification_query(query_string);
-	}
-
-	kcenon::common::Result<uint64_t> postgres_manager::update_query(const std::string& query_string)
-	{
-		return execute_modification_query(query_string);
-	}
-
-	kcenon::common::Result<uint64_t> postgres_manager::delete_query(const std::string& query_string)
-	{
-		return execute_modification_query(query_string);
-	}
-
 	kcenon::common::Result<core::database_result> postgres_manager::select_query(const std::string& query_string)
 	{
 		if (!initialized_) {

@@ -113,12 +113,6 @@ public:
 
 	// database_backend interface implementation
 
-	kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
-
-	kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
-
-	kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
-
 	kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
 
 	kcenon::common::VoidResult execute_query(const std::string& query_string) override;

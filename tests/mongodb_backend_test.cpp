@@ -82,33 +82,15 @@ TEST_F(MongoDBBackendTest, InitiallyNotInTransaction)
 // Operations Without Initialization Tests
 // =============================================================================
 
-TEST_F(MongoDBBackendTest, InsertQueryFailsWithoutInit)
+TEST_F(MongoDBBackendTest, ExecuteQueryFailsWithoutInit)
 {
-    auto result = backend_->insert_query("users:{\"name\":\"John\"}");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(MongoDBBackendTest, UpdateQueryFailsWithoutInit)
-{
-    auto result = backend_->update_query("users:{\"id\":1}:{\"$set\":{\"name\":\"Jane\"}}");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(MongoDBBackendTest, DeleteQueryFailsWithoutInit)
-{
-    auto result = backend_->delete_query("users:{\"id\":1}");
+    auto result = backend_->execute_query("users:{\"name\":\"John\"}");
     EXPECT_FALSE(result.is_ok());
 }
 
 TEST_F(MongoDBBackendTest, SelectQueryFailsWithoutInit)
 {
     auto result = backend_->select_query("users:{\"name\":\"John\"}");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(MongoDBBackendTest, ExecuteQueryFailsWithoutInit)
-{
-    auto result = backend_->execute_query("users:{}");
     EXPECT_FALSE(result.is_ok());
 }
 
@@ -203,7 +185,7 @@ TEST_F(MongoDBBackendTest, CRUDOperationsOnMongoDB)
     }
 
     // Insert document
-    auto insert_result = backend_->insert_query(
+    auto insert_result = backend_->execute_query(
         "mongo_test:{\"name\":\"test_item\",\"value\":42}");
     EXPECT_TRUE(insert_result.is_ok());
 
@@ -214,12 +196,12 @@ TEST_F(MongoDBBackendTest, CRUDOperationsOnMongoDB)
     EXPECT_GE(select_result.value().size(), 1u);
 
     // Update document
-    auto update_result = backend_->update_query(
+    auto update_result = backend_->execute_query(
         "mongo_test:{\"name\":\"test_item\"}:{\"$set\":{\"value\":99}}");
     EXPECT_TRUE(update_result.is_ok());
 
     // Delete document
-    auto delete_result = backend_->delete_query(
+    auto delete_result = backend_->execute_query(
         "mongo_test:{\"name\":\"test_item\"}");
     EXPECT_TRUE(delete_result.is_ok());
 }

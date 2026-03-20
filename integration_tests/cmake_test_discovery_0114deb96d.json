@@ -8,57 +8,57 @@
       "testsuite": [
         {
           "name": "InvalidQuerySyntax",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 54
         },
         {
           "name": "NonExistentTable",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 65
         },
         {
           "name": "PrimaryKeyConstraintViolation",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 75
         },
         {
           "name": "UniqueConstraintViolation",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 93
         },
         {
           "name": "NotNullConstraintViolation",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 110
         },
         {
           "name": "TransactionRollbackOnError",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 123
         },
         {
           "name": "InvalidDatabaseFile",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 150
         },
         {
           "name": "QueryOnDisconnectedDatabase",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 170
         },
         {
           "name": "InvalidConnectionStringFormat",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 186
         },
         {
           "name": "ConcurrentConstraintViolations",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 204
         },
         {
           "name": "EmptyQueryString",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/failures\/error_handling_test.cpp",
           "line": 239
         }
       ]
@@ -69,32 +69,32 @@
       "testsuite": [
         {
           "name": "QueryExecutionLatency",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 60
         },
         {
           "name": "BatchInsertPerformance",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 93
         },
         {
           "name": "TransactionCommitLatency",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 112
         },
         {
           "name": "MemoryUsageUnderLoad",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 143
         },
         {
           "name": "QueryThroughputConcurrent",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 158
         },
         {
           "name": "PreparedStatementAdvantage",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/performance\/database_performance_test.cpp",
           "line": 193
         }
       ]
@@ -105,68 +105,68 @@
       "testsuite": [
         {
           "name": "SimpleSelectQuery",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
           "line": 104
         },
         {
           "name": "SimpleInsertQuery",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
           "line": 115
         },
         {
           "name": "SimpleUpdateQuery",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
           "line": 128
         },
         {
           "name": "SimpleDeleteQuery",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 145
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 144
         },
         {
           "name": "PreparedStatementPattern",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 159
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 158
         },
         {
           "name": "TransactionBeginCommit",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 176
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 175
         },
         {
           "name": "TransactionRollback",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 195
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 194
         },
         {
           "name": "BatchInsertOperations",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 212
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 211
         },
         {
           "name": "ParameterizedQueryMultipleParams",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 224
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 223
         },
         {
           "name": "ResultSetIterationAndAccess",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 243
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 242
         },
         {
           "name": "QueryWithWhereClause",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 259
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 258
         },
         {
           "name": "QueryWithOrderBy",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 277
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 276
         },
         {
           "name": "ConcurrentQueryExecution",
-          "file": "\/Users\/raphaelshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
-          "line": 294
+          "file": "\/Users\/dongcheolshin\/Sources\/database_system\/integration_tests\/scenarios\/query_execution_test.cpp",
+          "line": 293
         }
       ]
     }

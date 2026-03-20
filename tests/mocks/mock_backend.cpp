@@ -82,36 +82,6 @@ bool mock_backend::is_initialized() const {
     return initialized_;
 }
 
-kcenon::common::Result<uint64_t> mock_backend::insert_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
-kcenon::common::Result<uint64_t> mock_backend::update_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
-kcenon::common::Result<uint64_t> mock_backend::delete_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        return exp->get_rows_affected();
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
 kcenon::common::Result<core::database_result> mock_backend::select_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);

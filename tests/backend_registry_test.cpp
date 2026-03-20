@@ -48,21 +48,6 @@ class test_backend
 public:
     static constexpr const char* backend_name() { return "test_backend"; }
 
-    kcenon::common::Result<uint64_t> insert_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
-    kcenon::common::Result<uint64_t> update_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
-    kcenon::common::Result<uint64_t> delete_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
         return kcenon::common::Result<database_result>::ok(database_result{});
@@ -114,21 +99,6 @@ class test_backend_alt
 {
 public:
     static constexpr const char* backend_name() { return "test_backend_alt"; }
-
-    kcenon::common::Result<uint64_t> insert_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
-    kcenon::common::Result<uint64_t> update_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
-    kcenon::common::Result<uint64_t> delete_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {

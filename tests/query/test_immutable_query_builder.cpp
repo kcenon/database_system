@@ -60,11 +60,11 @@ TEST_F(ImmutableQueryBuilderTest, WhereMultipleConditionsJoinedByAnd) {
 }
 
 TEST_F(ImmutableQueryBuilderTest, WhereWithQueryCondition) {
-	query_condition cond("status = 'active'");
+	query_condition cond("status", "=", std::string("active"));
 	auto q = builder_.where(cond);
 	std::string sql = q.build();
 	EXPECT_NE(sql.find("WHERE"), std::string::npos);
-	EXPECT_NE(sql.find("status = 'active'"), std::string::npos);
+	EXPECT_NE(sql.find("status"), std::string::npos);
 }
 
 // -- order_by() --

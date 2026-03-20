@@ -75,8 +75,6 @@ namespace database
 	{
 	public:
 		query_condition(const std::string& field, const std::string& op, const core::database_value& value);
-		[[deprecated("Use parameterized query_condition(field, op, value) instead")]]
-		query_condition(const std::string& raw_condition);
 
 		std::string to_sql() const;
 		std::string to_mongodb() const;
@@ -87,6 +85,9 @@ namespace database
 		query_condition operator||(const query_condition& other) const;
 
 	private:
+		// Private default constructor for internal use by logical operators
+		query_condition();
+
 		std::string field_;
 		std::string operator_;
 		core::database_value value_;

@@ -44,24 +44,6 @@ public:
     int init_call_count = 0;
     int shutdown_call_count = 0;
 
-    kcenon::common::Result<uint64_t> insert_query(const std::string&) override
-    {
-        if (!is_initialized()) {
-            return kcenon::common::error_info{-1, "Not initialized"};
-        }
-        return kcenon::common::Result<uint64_t>::ok(1);
-    }
-
-    kcenon::common::Result<uint64_t> update_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
-    kcenon::common::Result<uint64_t> delete_query(const std::string&) override
-    {
-        return kcenon::common::Result<uint64_t>::ok(0);
-    }
-
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
         return kcenon::common::Result<database_result>::ok(database_result{});
@@ -117,21 +99,6 @@ public:
     static constexpr const char* backend_name() { return "failing_backend"; }
 
     int init_call_count = 0;
-
-    kcenon::common::Result<uint64_t> insert_query(const std::string&) override
-    {
-        return kcenon::common::error_info{-1, "Not initialized"};
-    }
-
-    kcenon::common::Result<uint64_t> update_query(const std::string&) override
-    {
-        return kcenon::common::error_info{-1, "Not initialized"};
-    }
-
-    kcenon::common::Result<uint64_t> delete_query(const std::string&) override
-    {
-        return kcenon::common::error_info{-1, "Not initialized"};
-    }
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
@@ -383,7 +350,7 @@ TEST_F(BackendBaseTest, FullLifecycleCycle)
     EXPECT_TRUE(backend.is_initialized());
 
     // Use (simple operation)
-    auto result = backend.insert_query("INSERT INTO test VALUES (1)");
+    auto result = backend.execute_query("INSERT INTO test VALUES (1)");
     EXPECT_TRUE(result.is_ok());
 
     // Shutdown

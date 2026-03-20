@@ -422,24 +422,6 @@ public:
 		return initialized_;
 	}
 
-	kcenon::common::Result<uint64_t> insert_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
-
-	kcenon::common::Result<uint64_t> update_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
-
-	kcenon::common::Result<uint64_t> delete_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
-
 	kcenon::common::Result<::database::core::database_result> select_query(
 		const std::string&) override
 	{
@@ -725,24 +707,6 @@ public:
 	}
 
 	bool is_initialized() const override { return true; }
-
-	kcenon::common::Result<uint64_t> insert_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
-
-	kcenon::common::Result<uint64_t> update_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
-
-	kcenon::common::Result<uint64_t> delete_query(
-		const std::string&) override
-	{
-		return kcenon::common::Result<uint64_t>(uint64_t{1});
-	}
 
 	kcenon::common::Result<::database::core::database_result> select_query(
 		const std::string&) override

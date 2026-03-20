@@ -53,13 +53,12 @@ protected:
         ).is_ok());
 
         // Insert test sensitive data
-        auto insert_result = db_->insert_query(
+        auto insert_result = db_->execute_query(
             "INSERT INTO sensitive_data "
             "(id, ssn, credit_card, bank_account, password_hash) VALUES "
             "(1, '123-45-6789', '4111111111111111', 'ACC123456789', 'hash_secret_123')"
         );
         ASSERT_TRUE(insert_result.is_ok());
-        ASSERT_GT(insert_result.value(), 0u);
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
@@ -314,7 +313,7 @@ TEST_F(DataMaskingTest, LargeDataSetDoesNotLeakOnError) {
             std::to_string(i) + ", '" +
             std::to_string(100 + i) + "-45-6789', '4" +
             std::string(15, '1' + (i % 9)) + "')";
-        db_->insert_query(query);
+        db_->execute_query(query);
     }
 
     // Query all data

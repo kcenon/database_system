@@ -82,24 +82,6 @@ TEST_F(PostgreSQLBackendTest, InitiallyNotInTransaction)
 // Operations Without Initialization Tests
 // =============================================================================
 
-TEST_F(PostgreSQLBackendTest, InsertQueryFailsWithoutInit)
-{
-    auto result = backend_->insert_query("INSERT INTO test VALUES (1)");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(PostgreSQLBackendTest, UpdateQueryFailsWithoutInit)
-{
-    auto result = backend_->update_query("UPDATE test SET x = 1");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(PostgreSQLBackendTest, DeleteQueryFailsWithoutInit)
-{
-    auto result = backend_->delete_query("DELETE FROM test WHERE id = 1");
-    EXPECT_FALSE(result.is_ok());
-}
-
 TEST_F(PostgreSQLBackendTest, SelectQueryFailsWithoutInit)
 {
     auto result = backend_->select_query("SELECT * FROM test");
@@ -228,7 +210,7 @@ TEST_F(PostgreSQLBackendTest, CRUDOperationsOnPostgres)
         "CREATE TEMP TABLE pg_test (id SERIAL PRIMARY KEY, name TEXT)").is_ok());
 
     // Insert
-    auto insert_result = backend_->insert_query(
+    auto insert_result = backend_->execute_query(
         "INSERT INTO pg_test (name) VALUES ('test_item')");
     EXPECT_TRUE(insert_result.is_ok());
 
@@ -239,12 +221,12 @@ TEST_F(PostgreSQLBackendTest, CRUDOperationsOnPostgres)
     EXPECT_GE(select_result.value().size(), 1u);
 
     // Update
-    auto update_result = backend_->update_query(
+    auto update_result = backend_->execute_query(
         "UPDATE pg_test SET name = 'updated' WHERE name = 'test_item'");
     EXPECT_TRUE(update_result.is_ok());
 
     // Delete
-    auto delete_result = backend_->delete_query(
+    auto delete_result = backend_->execute_query(
         "DELETE FROM pg_test WHERE name = 'updated'");
     EXPECT_TRUE(delete_result.is_ok());
 }
@@ -268,13 +250,13 @@ TEST_F(PostgreSQLBackendTest, TransactionsOnPostgres)
     // Test commit
     EXPECT_TRUE(backend_->begin_transaction().is_ok());
     EXPECT_TRUE(backend_->in_transaction());
-    backend_->insert_query("INSERT INTO pg_tx_test (val) VALUES ('committed')");
+    backend_->execute_query("INSERT INTO pg_tx_test (val) VALUES ('committed')");
     EXPECT_TRUE(backend_->commit_transaction().is_ok());
     EXPECT_FALSE(backend_->in_transaction());
 
     // Test rollback
     EXPECT_TRUE(backend_->begin_transaction().is_ok());
-    backend_->insert_query("INSERT INTO pg_tx_test (val) VALUES ('rolled_back')");
+    backend_->execute_query("INSERT INTO pg_tx_test (val) VALUES ('rolled_back')");
     EXPECT_TRUE(backend_->rollback_transaction().is_ok());
 
     // Verify rolled back data doesn't exist

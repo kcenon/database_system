@@ -564,6 +564,62 @@ kcenon::common::VoidResult postgresql_backend::rollback_transaction()
 	return kcenon::common::ok();
 }
 
+kcenon::common::Result<uint64_t> postgresql_backend::execute_batch(
+	const std::vector<std::string>& queries)
+{
+	if (!is_initialized()) {
+		last_error_ = "Backend not initialized";
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::invalid_state),
+			last_error_,
+			"postgresql_backend"
+		};
+	}
+
+	if (queries.empty()) {
+		return static_cast<uint64_t>(0);
+	}
+
+	// Use existing transaction API for atomicity
+	auto begin_result = begin_transaction();
+	if (begin_result.is_err()) {
+		return kcenon::common::error_info{
+			begin_result.error().code,
+			"Batch begin failed: " + begin_result.error().message,
+			"postgresql_backend"
+		};
+	}
+
+	uint64_t total_affected = 0;
+	for (size_t i = 0; i < queries.size(); ++i) {
+		unsigned int affected = execute_modification_query(queries[i]);
+		if (!last_error_.empty()) {
+			std::string batch_error = "Batch query " + std::to_string(i) +
+				" failed: " + last_error_;
+			rollback_transaction();
+			last_error_ = batch_error;
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::query_failed),
+				last_error_,
+				"postgresql_backend"
+			};
+		}
+		total_affected += affected;
+	}
+
+	auto commit_result = commit_transaction();
+	if (commit_result.is_err()) {
+		return kcenon::common::error_info{
+			commit_result.error().code,
+			"Batch commit failed: " + commit_result.error().message,
+			"postgresql_backend"
+		};
+	}
+
+	last_error_.clear();
+	return total_affected;
+}
+
 bool postgresql_backend::in_transaction() const
 {
 	return in_transaction_;

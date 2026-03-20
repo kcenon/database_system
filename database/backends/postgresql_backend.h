@@ -51,6 +51,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <atomic>
 
 namespace database
@@ -136,6 +137,16 @@ public:
 	std::string last_error() const override;
 
 	std::map<std::string, std::string> connection_info() const override;
+
+	/**
+	 * @brief Execute multiple queries in a single transaction (batch mode).
+	 * @param queries Vector of SQL statements to execute atomically.
+	 * @return Result containing total affected rows on success, or error on failure.
+	 *
+	 * All queries run inside a single BEGIN/COMMIT block. If any query fails,
+	 * the entire batch is rolled back and the error is returned.
+	 */
+	kcenon::common::Result<uint64_t> execute_batch(const std::vector<std::string>& queries);
 
 protected:
 	friend class core::backend_base<postgresql_backend, database_types::postgres>;

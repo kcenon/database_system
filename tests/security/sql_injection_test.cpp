@@ -44,18 +44,16 @@ protected:
             "  password_hash TEXT"
             ")").is_ok());
         // Insert test data
-        auto r1 = db_->insert_query(
+        auto r1 = db_->execute_query(
             "INSERT INTO users (id, name, email, password_hash) "
             "VALUES (1, 'Alice', 'alice@test.com', 'hash123')"
         );
         ASSERT_TRUE(r1.is_ok());
-        ASSERT_GT(r1.value(), 0u);
-        auto r2 = db_->insert_query(
+        auto r2 = db_->execute_query(
             "INSERT INTO users (id, name, email, password_hash) "
             "VALUES (2, 'Bob', 'bob@test.com', 'hash456')"
         );
         ASSERT_TRUE(r2.is_ok());
-        ASSERT_GT(r2.value(), 0u);
 #else
         GTEST_SKIP() << "SQLite not available";
 #endif
@@ -179,7 +177,7 @@ TEST_F(SQLInjectionTest, UnionInjectionAttempt) {
     db_->execute_query(
         "CREATE TABLE sensitive_data (secret TEXT)"
     );
-    db_->insert_query(
+    db_->execute_query(
         "INSERT INTO sensitive_data VALUES ('top_secret_value')"
     );
 
@@ -228,7 +226,7 @@ TEST_F(SQLInjectionTest, UnionInjectionAttempt) {
 TEST_F(SQLInjectionTest, ApostropheInValueSafe) {
 #ifdef USE_SQLITE
     // Insert a user with apostrophe in name
-    auto insert_result = db_->insert_query(
+    auto insert_result = db_->execute_query(
         "INSERT INTO users (id, name, email, password_hash) "
         "VALUES (3, 'O''Brien', 'obrien@test.com', 'hash789')"
     );

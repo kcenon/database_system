@@ -78,10 +78,10 @@ TEST_F(ErrorHandlingTest, PrimaryKeyConstraintViolation)
 	CreateTestTable("pk_test", "id INTEGER PRIMARY KEY, value TEXT");
 
 	// Insert first row
-	manager_->insert_query_result("INSERT INTO pk_test (id, value) VALUES (1, 'first')");
+	manager_->execute_query_result("INSERT INTO pk_test (id, value) VALUES (1, 'first')");
 
 	// Try to insert duplicate primary key
-	auto result = manager_->insert_query_result(
+	auto result = manager_->execute_query_result(
 		"INSERT INTO pk_test (id, value) VALUES (1, 'duplicate')");
 
 	EXPECT_FALSE(result.is_ok()) << "Duplicate primary key should fail";
@@ -93,11 +93,11 @@ TEST_F(ErrorHandlingTest, PrimaryKeyConstraintViolation)
 TEST_F(ErrorHandlingTest, UniqueConstraintViolation)
 {
 	// Users table has UNIQUE constraint on email
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User1', 'unique@test.com', 25)");
 
 	// Try to insert duplicate email
-	auto result = manager_->insert_query_result(
+	auto result = manager_->execute_query_result(
 		"INSERT INTO users (name, email, age) VALUES "
 		"('User2', 'unique@test.com', 30)");
 
@@ -113,7 +113,7 @@ TEST_F(ErrorHandlingTest, NotNullConstraintViolation)
 	std::string query = "INSERT INTO users (name, email) VALUES "
 	                    "('User', NULL)"; // email is NOT NULL
 
-	auto result = manager_->insert_query_result(query);
+	auto result = manager_->execute_query_result(query);
 	EXPECT_FALSE(result.is_ok()) << "NULL in NOT NULL column should fail";
 }
 
@@ -126,11 +126,11 @@ TEST_F(ErrorHandlingTest, TransactionRollbackOnError)
 	ASSERT_TRUE(txn.Begin());
 
 	// Insert valid row
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User1', 'user1@test.com', 25)");
 
 	// Try to insert invalid row (duplicate email)
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('User2', 'user1@test.com', 30)");
 
 	// Rollback transaction
@@ -211,11 +211,11 @@ TEST_F(ErrorHandlingTest, ConcurrentConstraintViolations)
 		futures.push_back(std::async(std::launch::async,
 			[this, &failed_inserts]() {
 				// Try to insert same email (UNIQUE constraint)
-				auto result = manager_->insert_query_result(
+				auto result = manager_->execute_query_result(
 					"INSERT INTO users (name, email, age) VALUES "
 					"('User', 'concurrent@test.com', 25)");
 
-				if (!result.is_ok() || result.value() == 0) {
+				if (!result.is_ok()) {
 					++failed_inserts;
 				}
 			}));

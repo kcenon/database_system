@@ -116,11 +116,9 @@ TEST_F(QueryExecutionTest, SimpleInsertQuery)
 {
 	std::string query = "INSERT INTO users (name, email, age) VALUES "
 	                    "('John Doe', 'john@test.com', 30)";
-	auto result = manager_->insert_query_result(query);
+	auto result = manager_->execute_query_result(query);
 	ASSERT_TRUE(result.is_ok()) << "Insert should succeed";
-	uint64_t affected = result.value();
 
-	EXPECT_GT(affected, 0u) << "Should insert at least 1 row";
 	EXPECT_TRUE(VerifyRowCount("users", 1)) << "Table should have 1 row";
 }
 
@@ -132,11 +130,8 @@ TEST_F(QueryExecutionTest, SimpleUpdateQuery)
 	InsertTestUsers(1);
 
 	std::string update_query = "UPDATE users SET age = 35 WHERE name = 'User0'";
-	auto update_result = manager_->update_query_result(update_query);
+	auto update_result = manager_->execute_query_result(update_query);
 	ASSERT_TRUE(update_result.is_ok()) << "Update should succeed";
-	uint64_t affected = update_result.value();
-
-	EXPECT_GT(affected, 0u) << "Should update at least 1 row";
 
 	auto result = ExecuteQuery("SELECT age FROM users WHERE name = 'User0'");
 	ASSERT_FALSE(result.empty());
@@ -151,11 +146,9 @@ TEST_F(QueryExecutionTest, SimpleDeleteQuery)
 	InsertTestUsers(3);
 
 	std::string delete_query = "DELETE FROM users WHERE name = 'User1'";
-	auto delete_result = manager_->delete_query_result(delete_query);
+	auto delete_result = manager_->execute_query_result(delete_query);
 	ASSERT_TRUE(delete_result.is_ok()) << "Delete should succeed";
-	uint64_t affected = delete_result.value();
 
-	EXPECT_GT(affected, 0u) << "Should delete at least 1 row";
 	EXPECT_TRUE(VerifyRowCount("users", 2)) << "Should have 2 users remaining";
 }
 
@@ -170,7 +163,7 @@ TEST_F(QueryExecutionTest, PreparedStatementPattern)
 		                   "'User" + std::to_string(i) + "', "
 		                   "'user" + std::to_string(i) + "@test.com', "
 		                   + std::to_string(25 + i) + ")";
-		manager_->insert_query_result(query);
+		manager_->execute_query_result(query);
 	}
 
 	EXPECT_TRUE(VerifyRowCount("users", 5)) << "Should insert 5 users";
@@ -185,9 +178,9 @@ TEST_F(QueryExecutionTest, TransactionBeginCommit)
 
 	ASSERT_TRUE(txn.Begin()) << "Should begin transaction";
 
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('TxnUser1', 'txn1@test.com', 40)");
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('TxnUser2', 'txn2@test.com', 41)");
 
 	ASSERT_TRUE(txn.Commit()) << "Should commit transaction";
@@ -204,7 +197,7 @@ TEST_F(QueryExecutionTest, TransactionRollback)
 
 	ASSERT_TRUE(txn.Begin()) << "Should begin transaction";
 
-	manager_->insert_query_result("INSERT INTO users (name, email, age) VALUES "
+	manager_->execute_query_result("INSERT INTO users (name, email, age) VALUES "
 	                       "('RollbackUser', 'rollback@test.com', 45)");
 
 	ASSERT_TRUE(txn.Rollback()) << "Should rollback transaction";
@@ -235,7 +228,7 @@ TEST_F(QueryExecutionTest, ParameterizedQueryMultipleParams)
 
 	std::string query = "INSERT INTO users (name, email, age) VALUES ("
 	                   "'" + name + "', '" + email + "', " + std::to_string(age) + ")";
-	manager_->insert_query_result(query);
+	manager_->execute_query_result(query);
 
 	auto result = ExecuteQuery("SELECT * FROM users WHERE email = '" + email + "'");
 	ASSERT_FALSE(result.empty());

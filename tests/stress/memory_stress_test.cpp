@@ -108,9 +108,9 @@ TEST_F(MemoryStressTest, LargeResultSetMemory) {
 
     for (int i = 0; i < NUM_ROWS; ++i) {
         std::string query = "INSERT INTO large_data (data) VALUES ('" + data_value + "')";
-        auto insert_result = db_->insert_query(query);
+        auto insert_result = db_->execute_query(query);
         ASSERT_TRUE(insert_result.is_ok());
-        ASSERT_GT(insert_result.value(), 0u);
+        // VoidResult - success is enough
     }
 
     size_t before_query = getCurrentMemoryUsage();
@@ -160,7 +160,7 @@ TEST_F(MemoryStressTest, RepeatedQueryMemoryStability) {
         "CREATE TABLE test_table (id INTEGER PRIMARY KEY, value TEXT)").is_ok());
 
     for (int i = 0; i < 100; ++i) {
-        db_->insert_query("INSERT INTO test_table (value) VALUES ('test_value_" +
+        db_->execute_query("INSERT INTO test_table (value) VALUES ('test_value_" +
                          std::to_string(i) + "')");
     }
 
@@ -261,7 +261,7 @@ TEST_F(MemoryStressTest, ResultSetProperCleanup) {
     // Insert some data
     std::string data(500, 'A');
     for (int i = 0; i < 50; ++i) {
-        db_->insert_query("INSERT INTO cleanup_test (data) VALUES ('" + data + "')");
+        db_->execute_query("INSERT INTO cleanup_test (data) VALUES ('" + data + "')");
     }
 
     // Query and clear in a loop
@@ -292,7 +292,7 @@ TEST_F(MemoryStressTest, PartialResultConsumption) {
 
     std::string data(200, 'B');
     for (int i = 0; i < 100; ++i) {
-        db_->insert_query("INSERT INTO partial_test (data) VALUES ('" + data + "')");
+        db_->execute_query("INSERT INTO partial_test (data) VALUES ('" + data + "')");
     }
 
     size_t initial_memory = getCurrentMemoryUsage();
@@ -338,7 +338,7 @@ TEST_F(MemoryStressTest, MixedOperationsMemoryStability) {
 
     for (int i = 0; i < ITERATIONS; ++i) {
         // Insert
-        db_->insert_query("INSERT INTO mixed_test (value) VALUES ('test_" +
+        db_->execute_query("INSERT INTO mixed_test (value) VALUES ('test_" +
                          std::to_string(i) + "')");
 
         // Select
@@ -346,12 +346,12 @@ TEST_F(MemoryStressTest, MixedOperationsMemoryStability) {
         (void)result;
 
         // Update
-        db_->update_query("UPDATE mixed_test SET value = 'updated_" +
+        db_->execute_query("UPDATE mixed_test SET value = 'updated_" +
                          std::to_string(i) + "' WHERE id = " + std::to_string(i + 1));
 
         // Delete (delete old entries to prevent table growth)
         if (i > 10) {
-            db_->delete_query("DELETE FROM mixed_test WHERE id = " +
+            db_->execute_query("DELETE FROM mixed_test WHERE id = " +
                              std::to_string(i - 10));
         }
     }
@@ -395,7 +395,7 @@ TEST_F(MemoryStressTest, VeryLongStringHandling) {
         std::string query = "INSERT INTO long_string_test (data) VALUES ('" + long_data + "')";
 
         EXPECT_NO_THROW({
-            db_->insert_query(query);
+            db_->execute_query(query);
         }) << "Failed to insert string of size " << size;
     }
 
@@ -425,7 +425,7 @@ TEST_F(MemoryStressTest, ManySmallStrings) {
 
     for (int i = 0; i < NUM_STRINGS; ++i) {
         std::string small_data(STRING_SIZE, static_cast<char>('A' + (i % 26)));
-        db_->insert_query("INSERT INTO small_strings (data) VALUES ('" + small_data + "')");
+        db_->execute_query("INSERT INTO small_strings (data) VALUES ('" + small_data + "')");
     }
 
     // Query all

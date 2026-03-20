@@ -190,74 +190,7 @@ unsigned int postgresql_backend::execute_modification_query(const std::string& q
 	return 0;
 }
 
-kcenon::common::Result<uint64_t> postgresql_backend::insert_query(const std::string& query_string)
-{
-	if (!is_initialized()) {
-		last_error_ = "Backend not initialized";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
 
-	unsigned int affected = execute_modification_query(query_string);
-	if (!last_error_.empty()) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
-	last_error_.clear();
-	return static_cast<uint64_t>(affected);
-}
-
-kcenon::common::Result<uint64_t> postgresql_backend::update_query(const std::string& query_string)
-{
-	if (!is_initialized()) {
-		last_error_ = "Backend not initialized";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
-
-	unsigned int affected = execute_modification_query(query_string);
-	if (!last_error_.empty()) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
-	last_error_.clear();
-	return static_cast<uint64_t>(affected);
-}
-
-kcenon::common::Result<uint64_t> postgresql_backend::delete_query(const std::string& query_string)
-{
-	if (!is_initialized()) {
-		last_error_ = "Backend not initialized";
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::invalid_state),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
-
-	unsigned int affected = execute_modification_query(query_string);
-	if (!last_error_.empty()) {
-		return kcenon::common::error_info{
-			static_cast<int>(database::error_code::query_failed),
-			last_error_,
-			"postgresql_backend"
-		};
-	}
-	last_error_.clear();
-	return static_cast<uint64_t>(affected);
-}
 
 kcenon::common::Result<core::database_result> postgresql_backend::select_query(const std::string& query_string)
 {

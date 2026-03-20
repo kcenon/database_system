@@ -89,8 +89,8 @@ TEST_F(AsyncStressTest, HighConcurrencyInserts) {
                                     std::to_string(t) + ", 'value_" +
                                     std::to_string(t * OPS_PER_THREAD + i) + "')";
                 try {
-                    auto result = db_->insert_query(query);
-                    if (result.is_ok() && result.value() > 0) {
+                    auto result = db_->execute_query(query);
+                    if (result.is_ok()) {
                         success_count++;
                     } else {
                         failure_count++;
@@ -158,8 +158,8 @@ TEST_F(AsyncStressTest, MixedReadWriteWorkload) {
                     std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (" +
                                         std::to_string(i) + ", 'write_" +
                                         std::to_string(counter++) + "')";
-                    auto result = db_->insert_query(query);
-                    if (result.is_ok() && result.value() > 0) {
+                    auto result = db_->execute_query(query);
+                    if (result.is_ok()) {
                         write_ops++;
                     } else {
                         write_errors++;
@@ -283,8 +283,8 @@ TEST_F(AsyncStressTest, RapidQueryExecution) {
         try {
             std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (0, 'rapid_" +
                                 std::to_string(i) + "')";
-            auto result = db_->insert_query(query);
-            if (result.is_ok() && result.value() > 0) {
+            auto result = db_->execute_query(query);
+            if (result.is_ok()) {
                 success++;
             } else {
                 failure++;
@@ -324,7 +324,7 @@ TEST_F(AsyncStressTest, SystemRemainResponsiveAfterLoad) {
 #ifdef USE_SQLITE
     // Generate load
     for (int i = 0; i < 100; ++i) {
-        db_->insert_query("INSERT INTO stress_test (thread_id, value) VALUES (" +
+        db_->execute_query("INSERT INTO stress_test (thread_id, value) VALUES (" +
                          std::to_string(i % 10) + ", 'load_test')");
     }
 
@@ -363,8 +363,8 @@ TEST_F(AsyncStressTest, NoDataCorruptionUnderConcurrency) {
                                           "_op_" + std::to_string(i);
                 std::string query = "INSERT INTO stress_test (thread_id, value) VALUES (" +
                                     std::to_string(t) + ", '" + unique_value + "')";
-                auto insert_result = db_->insert_query(query);
-                if (insert_result.is_ok() && insert_result.value() > 0) {
+                auto insert_result = db_->execute_query(query);
+                if (insert_result.is_ok()) {
                     actual_inserts++;
                 }
             }

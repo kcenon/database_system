@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include "../database_types.h"
+#include "../core/database_backend.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -300,6 +301,14 @@ namespace database::security
 		 */
 		audit_logger() = default;
 
+		/**
+		 * @brief Constructor with persistent log file path.
+		 * @param log_file_path Path to the audit log file for durable storage.
+		 *
+		 * When a log file path is provided, all audit events are appended
+		 * to the file immediately (with flush) in addition to the in-memory vector.
+		 */
+		explicit audit_logger(const std::string& log_file_path);
 
 		// Audit logging
 		void log_database_access(const std::string& user_id, const std::string& session_id,
@@ -328,9 +337,12 @@ namespace database::security
 		bool export_logs_to_file(const std::string& filename) const;
 
 	private:
+		void persist_entry(const audit_log_entry& entry);
+
 		mutable std::mutex audit_mutex_;
 		std::vector<audit_log_entry> audit_logs_;
 		std::chrono::hours retention_period_{24 * 30}; // 30 days
+		std::string log_file_path_;
 	};
 
 	/**

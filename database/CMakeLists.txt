@@ -95,6 +95,7 @@ set(SOURCE_FILES
     # Phase 4 Sources
     ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/security/secure_connection.cpp
     # Sprint 5 Sources (Backend Plugin System)
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.cpp

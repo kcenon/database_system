@@ -53,7 +53,7 @@ namespace database
 	 * The @c database_manager class provides a high-level interface for
 	 * controlling database connections and executing queries. It wraps
 	 * a @c database_backend instance and exposes methods such as @c connect,
-	 * @c disconnect, @c create_query, @c insert_query, etc.
+	 * @c disconnect, @c create_query, @c execute_query, etc.
 	 *
 	 * @note As of Issue #287, this class uses database_backend internally
 	 * instead of the deprecated database_base interface. The public API
@@ -142,42 +142,13 @@ namespace database
 		 */
 		kcenon::common::VoidResult create_query_result(const std::string& query_string);
 
-		// Result-based query methods (new API)
+		// Result-based query methods
 
 		/**
-		 * @brief Result-based wrapper for insert_query().
-		 * @param query_string The SQL INSERT statement.
-		 * @return Number of rows inserted, or error.
-		 * @deprecated Use parameterized query API instead to prevent SQL injection
-		 */
-		[[deprecated("Use parameterized query API instead")]]
-		kcenon::common::Result<uint64_t> insert_query_result(const std::string& query_string);
-
-		/**
-		 * @brief Result-based wrapper for update_query().
-		 * @param query_string The SQL UPDATE statement.
-		 * @return Number of rows updated, or error.
-		 * @deprecated Use parameterized query API instead to prevent SQL injection
-		 */
-		[[deprecated("Use parameterized query API instead")]]
-		kcenon::common::Result<uint64_t> update_query_result(const std::string& query_string);
-
-		/**
-		 * @brief Result-based wrapper for delete_query().
-		 * @param query_string The SQL DELETE statement.
-		 * @return Number of rows deleted, or error.
-		 * @deprecated Use parameterized query API instead to prevent SQL injection
-		 */
-		[[deprecated("Use parameterized query API instead")]]
-		kcenon::common::Result<uint64_t> delete_query_result(const std::string& query_string);
-
-		/**
-		 * @brief Result-based wrapper for select_query().
+		 * @brief Execute a SELECT query and return results.
 		 * @param query_string The SQL SELECT statement.
 		 * @return Query results, or error.
-		 * @deprecated Use parameterized query API instead to prevent SQL injection
 		 */
-		[[deprecated("Use parameterized query API instead")]]
 		kcenon::common::Result<core::database_result> select_query_result(const std::string& query_string);
 
 		/**

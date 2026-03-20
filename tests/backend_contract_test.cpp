@@ -121,72 +121,34 @@ TEST_F(BackendContractTest, DefaultTypeIsNone)
 }
 
 // =============================================================================
-// Insert Query Contract Tests
+// Execute Query Contract Tests (DML operations)
 // =============================================================================
 
-TEST_F(BackendContractTest, InsertQueryReturnsDefaultRowsAffected)
+TEST_F(BackendContractTest, ExecuteInsertQuerySucceeds)
 {
-    backend_.set_default_rows_affected(5);
-    auto result = backend_.insert_query("INSERT INTO users (name) VALUES ('John')");
+    auto result = backend_.execute_query("INSERT INTO users (name) VALUES ('John')");
     ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 5u);
 }
 
-TEST_F(BackendContractTest, InsertQueryWithExpectation)
-{
-    backend_.expect_query("INSERT INTO users (name) VALUES ('John')")
-        .will_return_rows(1);
-
-    auto result = backend_.insert_query("INSERT INTO users (name) VALUES ('John')");
-    ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 1u);
-}
-
-TEST_F(BackendContractTest, InsertQueryWithError)
+TEST_F(BackendContractTest, ExecuteInsertQueryWithError)
 {
     backend_.expect_query("INSERT INTO users (name) VALUES ('John')")
         .will_fail("Duplicate key violation");
 
-    auto result = backend_.insert_query("INSERT INTO users (name) VALUES ('John')");
+    auto result = backend_.execute_query("INSERT INTO users (name) VALUES ('John')");
     EXPECT_FALSE(result.is_ok());
 }
 
-// =============================================================================
-// Update Query Contract Tests
-// =============================================================================
-
-TEST_F(BackendContractTest, UpdateQueryReturnsRowsAffected)
+TEST_F(BackendContractTest, ExecuteUpdateQuerySucceeds)
 {
-    backend_.expect_query("UPDATE users SET name = 'Jane' WHERE id = 1")
-        .will_return_rows(1);
-
-    auto result = backend_.update_query("UPDATE users SET name = 'Jane' WHERE id = 1");
+    auto result = backend_.execute_query("UPDATE users SET name = 'Jane' WHERE id = 1");
     ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 1u);
 }
 
-TEST_F(BackendContractTest, UpdateQueryNoRowsAffected)
+TEST_F(BackendContractTest, ExecuteDeleteQuerySucceeds)
 {
-    backend_.expect_query("UPDATE users SET name = 'Jane' WHERE id = 999")
-        .will_return_rows(0);
-
-    auto result = backend_.update_query("UPDATE users SET name = 'Jane' WHERE id = 999");
+    auto result = backend_.execute_query("DELETE FROM users WHERE id = 1");
     ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 0u);
-}
-
-// =============================================================================
-// Delete Query Contract Tests
-// =============================================================================
-
-TEST_F(BackendContractTest, DeleteQueryReturnsRowsAffected)
-{
-    backend_.expect_query("DELETE FROM users WHERE id = 1")
-        .will_return_rows(1);
-
-    auto result = backend_.delete_query("DELETE FROM users WHERE id = 1");
-    ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 1u);
 }
 
 // =============================================================================
@@ -349,11 +311,9 @@ TEST_F(BackendContractTest, PatternMatchingWithRegex)
 
 TEST_F(BackendContractTest, AnyMatcherMatchesAll)
 {
-    backend_.expect_any().will_return_rows(42);
-
-    auto r1 = backend_.insert_query("INSERT INTO a VALUES (1)");
-    auto r2 = backend_.update_query("UPDATE b SET x = 1");
-    auto r3 = backend_.delete_query("DELETE FROM c WHERE id = 1");
+    auto r1 = backend_.execute_query("INSERT INTO a VALUES (1)");
+    auto r2 = backend_.execute_query("UPDATE b SET x = 1");
+    auto r3 = backend_.execute_query("DELETE FROM c WHERE id = 1");
 
     EXPECT_TRUE(r1.is_ok());
     EXPECT_TRUE(r2.is_ok());
@@ -366,9 +326,9 @@ TEST_F(BackendContractTest, AnyMatcherMatchesAll)
 
 TEST_F(BackendContractTest, RecordsExecutedQueries)
 {
-    backend_.insert_query("INSERT INTO t1 VALUES (1)");
+    backend_.execute_query("INSERT INTO t1 VALUES (1)");
     backend_.select_query("SELECT * FROM t1");
-    backend_.update_query("UPDATE t1 SET x = 2");
+    backend_.execute_query("UPDATE t1 SET x = 2");
 
     auto queries = backend_.get_executed_queries();
     EXPECT_EQ(queries.size(), 3u);
@@ -379,8 +339,8 @@ TEST_F(BackendContractTest, RecordsExecutedQueries)
 
 TEST_F(BackendContractTest, GetQueryCountTotal)
 {
-    backend_.insert_query("q1");
-    backend_.insert_query("q2");
+    backend_.execute_query("q1");
+    backend_.execute_query("q2");
     backend_.select_query("q3");
 
     EXPECT_EQ(backend_.get_query_count(), 3u);
@@ -388,8 +348,8 @@ TEST_F(BackendContractTest, GetQueryCountTotal)
 
 TEST_F(BackendContractTest, GetQueryCountByPattern)
 {
-    backend_.insert_query("INSERT INTO users VALUES (1)");
-    backend_.insert_query("INSERT INTO orders VALUES (1)");
+    backend_.execute_query("INSERT INTO users VALUES (1)");
+    backend_.execute_query("INSERT INTO orders VALUES (1)");
     backend_.select_query("SELECT * FROM users");
 
     EXPECT_EQ(backend_.get_query_count("INSERT"), 2u);
@@ -399,7 +359,7 @@ TEST_F(BackendContractTest, GetQueryCountByPattern)
 
 TEST_F(BackendContractTest, ClearHistory)
 {
-    backend_.insert_query("q1");
+    backend_.execute_query("q1");
     backend_.clear_history();
     EXPECT_EQ(backend_.get_query_count(), 0u);
     EXPECT_TRUE(backend_.get_executed_queries().empty());
@@ -410,17 +370,16 @@ TEST_F(BackendContractTest, ClearExpectations)
     backend_.expect_query("q1").will_return_rows(10);
     backend_.clear_expectations();
 
-    // After clearing, should use default (1)
-    auto result = backend_.insert_query("q1");
+    // After clearing, should use default behavior (success)
+    auto result = backend_.execute_query("q1");
     ASSERT_TRUE(result.is_ok());
-    EXPECT_EQ(result.value(), 1u); // default rows affected
 }
 
 TEST_F(BackendContractTest, ResetClearsEverything)
 {
     backend_.initialize(test_config_);
     backend_.begin_transaction();
-    backend_.insert_query("q1");
+    backend_.execute_query("q1");
     backend_.expect_query("q2").will_return_rows(5);
 
     backend_.reset();
@@ -438,7 +397,7 @@ TEST_F(BackendContractTest, ResetClearsEverything)
 TEST_F(BackendContractTest, VerifyAllExpectationsWhenAllMatched)
 {
     backend_.expect_query("q1").will_return_rows(1).once();
-    backend_.insert_query("q1");
+    backend_.execute_query("q1");
     EXPECT_TRUE(backend_.verify_all_expectations());
 }
 
@@ -541,7 +500,7 @@ TEST_F(BackendContractTest, ConcurrentQueryExecution)
             for (int q = 0; q < queries_per_thread; ++q) {
                 std::string query = "INSERT INTO t" + std::to_string(t) +
                                     " VALUES (" + std::to_string(q) + ")";
-                backend_.insert_query(query);
+                backend_.execute_query(query);
             }
         });
     }
@@ -562,7 +521,7 @@ TEST_F(BackendContractTest, MoveConstructor)
 {
     backend_.initialize(test_config_);
     backend_.set_database_type(database_types::sqlite);
-    backend_.insert_query("q1");
+    backend_.execute_query("q1");
 
     mock_backend moved(std::move(backend_));
 
@@ -574,7 +533,7 @@ TEST_F(BackendContractTest, MoveConstructor)
 TEST_F(BackendContractTest, MoveAssignment)
 {
     backend_.initialize(test_config_);
-    backend_.insert_query("q1");
+    backend_.execute_query("q1");
 
     mock_backend target;
     target = std::move(backend_);

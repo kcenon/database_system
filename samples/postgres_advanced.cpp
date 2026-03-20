@@ -76,8 +76,8 @@ int main() {
             };
 
             for (const auto& query : insert_queries) {
-                auto insert_result = pg_manager->insert_query(query);
-                if (insert_result.is_ok() && insert_result.value() > 0) {
+                auto insert_result = pg_manager->execute_query(query);
+                if (insert_result.is_ok()) {
                     std::cout << "Product inserted successfully" << std::endl;
                 } else {
                     std::cout << "Failed to insert product (may already exist)" << std::endl;
@@ -132,9 +132,9 @@ int main() {
 
             // Optionally clean up test data
             // std::string cleanup_sql = "DELETE FROM products WHERE name LIKE '%Gaming%' OR name LIKE '%Office%'";
-            // auto delete_result = pg_manager->delete_query(cleanup_sql);
+            // auto delete_result = pg_manager->execute_query(cleanup_sql);
             // if (delete_result.is_ok()) {
-            //     std::cout << "Cleaned up " << delete_result.value() << " test records" << std::endl;
+            //     std::cout << "Cleaned up test records" << std::endl;
             // }
 
             // Shutdown

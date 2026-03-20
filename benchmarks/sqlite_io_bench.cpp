@@ -93,7 +93,7 @@ public:
                 "'User" + std::to_string(i) + "', "
                 "'user" + std::to_string(i) + "@bench.com', " +
                 std::to_string(20 + (i % 50)) + ")";
-            manager_->insert_query_result(query);
+            manager_->execute_query_result(query);
         }
     }
 
@@ -161,7 +161,7 @@ BENCHMARK_DEFINE_F(SQLiteBenchFixture, SQLite_BatchInsert)(benchmark::State& sta
     {
         for (int64_t i = 0; i < batch_size; ++i)
         {
-            auto result = manager_->insert_query_result(
+            auto result = manager_->execute_query_result(
                 "INSERT INTO bench_insert (name, value) VALUES ("
                 "'item" + std::to_string(i) + "', " + std::to_string(i) + ")");
             benchmark::DoNotOptimize(result);
@@ -171,7 +171,7 @@ BENCHMARK_DEFINE_F(SQLiteBenchFixture, SQLite_BatchInsert)(benchmark::State& sta
     state.SetItemsProcessed(state.iterations() * batch_size);
 
     // Cleanup
-    manager_->delete_query_result("DELETE FROM bench_insert");
+    manager_->execute_query_result("DELETE FROM bench_insert");
 }
 BENCHMARK_REGISTER_F(SQLiteBenchFixture, SQLite_BatchInsert)
     ->Arg(10)
@@ -200,14 +200,14 @@ BENCHMARK_DEFINE_F(SQLiteBenchFixture, SQLite_TransactionCommit)(benchmark::Stat
     for (auto _ : state)
     {
         manager_->begin_transaction();
-        auto result = manager_->insert_query_result(
+        auto result = manager_->execute_query_result(
             "INSERT INTO bench_txn (data) VALUES ('txn_test')");
         benchmark::DoNotOptimize(result);
         manager_->commit_transaction();
     }
 
     // Cleanup
-    manager_->delete_query_result("DELETE FROM bench_txn");
+    manager_->execute_query_result("DELETE FROM bench_txn");
 }
 BENCHMARK_REGISTER_F(SQLiteBenchFixture, SQLite_TransactionCommit);
 

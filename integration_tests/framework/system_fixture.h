@@ -179,8 +179,8 @@ protected:
                           "'user" +
                           std::to_string(i) + "@test.com', " +
                           std::to_string(20 + (i % 50)) + ")";
-      auto result = manager_->insert_query_result(query);
-      if (result.is_ok() && result.value() > 0) {
+      auto result = manager_->execute_query_result(query);
+      if (result.is_ok()) {
         ++inserted;
       }
     }
@@ -231,7 +231,7 @@ protected:
    * @param table_name Table name
    */
   void ClearTable(const std::string &table_name) {
-    manager_->delete_query_result("DELETE FROM " + table_name);
+    manager_->execute_query_result("DELETE FROM " + table_name);
   }
 
 protected:

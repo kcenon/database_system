@@ -85,30 +85,6 @@ namespace database
 		bool is_initialized() const override;
 
 		/**
-		 * @brief Executes an INSERT query on the connected PostgreSQL database.
-		 *
-		 * @param query_string The SQL INSERT query to be executed.
-		 * @return Number of rows inserted, or error
-		 */
-		kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
-
-		/**
-		 * @brief Executes an UPDATE query on the connected PostgreSQL database.
-		 *
-		 * @param query_string The SQL UPDATE query to be executed.
-		 * @return Number of rows updated, or error
-		 */
-		kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
-
-		/**
-		 * @brief Executes a DELETE query on the connected PostgreSQL database.
-		 *
-		 * @param query_string The SQL DELETE query to be executed.
-		 * @return Number of rows deleted, or error
-		 */
-		kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
-
-		/**
 		 * @brief Executes a SELECT query on the connected PostgreSQL database
 		 *        and returns the resulting data.
 		 *

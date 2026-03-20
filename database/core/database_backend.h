@@ -118,6 +118,7 @@ struct connection_config
  *       // Handle initialization error
  *   }
  *   auto rows = backend->select_query("SELECT * FROM users");
+ *   backend->execute_query("INSERT INTO users (name) VALUES ('John')");
  *   backend->shutdown();
  * @endcode
  */
@@ -164,39 +165,10 @@ public:
 	virtual bool is_initialized() const = 0;
 
 	/**
-	 * @brief Execute an INSERT query
-	 * @param query_string SQL INSERT statement
-	 * @return Number of rows inserted, or error
-	 * @deprecated Use parameterized query API instead to prevent SQL injection
-	 */
-	[[deprecated("Use parameterized query API instead")]]
-	virtual kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) = 0;
-
-	/**
-	 * @brief Execute an UPDATE query
-	 * @param query_string SQL UPDATE statement
-	 * @return Number of rows updated, or error
-	 * @deprecated Use parameterized query API instead to prevent SQL injection
-	 */
-	[[deprecated("Use parameterized query API instead")]]
-	virtual kcenon::common::Result<uint64_t> update_query(const std::string& query_string) = 0;
-
-	/**
-	 * @brief Execute a DELETE query
-	 * @param query_string SQL DELETE statement
-	 * @return Number of rows deleted, or error
-	 * @deprecated Use parameterized query API instead to prevent SQL injection
-	 */
-	[[deprecated("Use parameterized query API instead")]]
-	virtual kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) = 0;
-
-	/**
 	 * @brief Execute a SELECT query
 	 * @param query_string SQL SELECT statement
 	 * @return Query results as rows, or error
-	 * @deprecated Use parameterized query API instead to prevent SQL injection
 	 */
-	[[deprecated("Use parameterized query API instead")]]
 	virtual kcenon::common::Result<database_result> select_query(const std::string& query_string) = 0;
 
 	/**

@@ -78,8 +78,8 @@ int main() {
         };
         
         for (const auto& query : insert_queries) {
-            auto insert_result = db_manager->insert_query_result(query);
-            if (insert_result.is_ok() && insert_result.value() > 0) {
+            auto insert_result = db_manager->execute_query_result(query);
+            if (insert_result.is_ok()) {
                 std::cout << "✓ User inserted successfully" << std::endl;
             } else {
                 std::cout << "✗ Failed to insert user (may already exist)" << std::endl;
@@ -133,9 +133,9 @@ int main() {
         std::cout << "\n6. Data Updates:" << std::endl;
 
         std::string update_query = "UPDATE users SET age = 31 WHERE username = 'john_doe'";
-        auto update_result = db_manager->update_query_result(update_query);
+        auto update_result = db_manager->execute_query_result(update_query);
 
-        if (update_result.is_ok() && update_result.value() > 0) {
+        if (update_result.is_ok()) {
             std::cout << "✓ John's age updated successfully" << std::endl;
 
             // Verify update
@@ -159,9 +159,9 @@ int main() {
         std::cout << "\n7. Data Deletion:" << std::endl;
 
         std::string delete_query = "DELETE FROM users WHERE username LIKE 'temp_user%'";
-        auto delete_result = db_manager->delete_query_result(delete_query);
+        auto delete_result = db_manager->execute_query_result(delete_query);
 
-        if (delete_result.is_ok() && delete_result.value() > 0) {
+        if (delete_result.is_ok()) {
             std::cout << "✓ Temporary users deleted successfully" << std::endl;
         } else {
             std::cout << "✗ No temporary users to delete" << std::endl;

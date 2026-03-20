@@ -67,9 +67,6 @@ public:
     kcenon::common::VoidResult shutdown() override;
     bool is_initialized() const override;
 
-    kcenon::common::Result<uint64_t> insert_query(const std::string& query_string) override;
-    kcenon::common::Result<uint64_t> update_query(const std::string& query_string) override;
-    kcenon::common::Result<uint64_t> delete_query(const std::string& query_string) override;
     kcenon::common::Result<core::database_result> select_query(const std::string& query_string) override;
     kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 

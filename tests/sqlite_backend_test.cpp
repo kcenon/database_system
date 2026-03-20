@@ -140,7 +140,7 @@ TEST_F(SQLiteBackendTest, CreateTableQuery) {
 //=============================================================================
 
 TEST_F(SQLiteBackendTest, InsertQueryWithoutConnection) {
-  auto result = backend_->insert_query("INSERT INTO test VALUES (1, 'test')");
+  auto result = backend_->execute_query("INSERT INTO test VALUES (1, 'test')");
   EXPECT_FALSE(result.is_ok());
 }
 
@@ -149,10 +149,9 @@ TEST_F(SQLiteBackendTest, InsertSingleRow) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  auto result = backend_->insert_query(
+  auto result = backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item1', 10.5)");
   EXPECT_TRUE(result.is_ok());
-  EXPECT_EQ(result.value(), 1u);
 #else
   GTEST_SKIP() << "SQLite support not compiled";
 #endif
@@ -185,11 +184,11 @@ TEST_F(SQLiteBackendTest, SelectWithCondition) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item1', 10.0)");
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item2', 20.0)");
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item3', 30.0)");
 
   auto result =
@@ -206,7 +205,7 @@ TEST_F(SQLiteBackendTest, SelectWithCondition) {
 //=============================================================================
 
 TEST_F(SQLiteBackendTest, UpdateQueryWithoutConnection) {
-  auto result = backend_->update_query("UPDATE test SET name = 'new'");
+  auto result = backend_->execute_query("UPDATE test SET name = 'new'");
   EXPECT_FALSE(result.is_ok());
 }
 
@@ -215,13 +214,12 @@ TEST_F(SQLiteBackendTest, UpdateSingleRow) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('old_name', 10.0)");
 
-  auto result = backend_->update_query(
+  auto result = backend_->execute_query(
       "UPDATE test_table SET name = 'new_name' WHERE id = 1");
   EXPECT_TRUE(result.is_ok());
-  EXPECT_EQ(result.value(), 1u);
 #else
   GTEST_SKIP() << "SQLite support not compiled";
 #endif
@@ -232,7 +230,7 @@ TEST_F(SQLiteBackendTest, UpdateSingleRow) {
 //=============================================================================
 
 TEST_F(SQLiteBackendTest, DeleteQueryWithoutConnection) {
-  auto result = backend_->delete_query("DELETE FROM test WHERE id = 1");
+  auto result = backend_->execute_query("DELETE FROM test WHERE id = 1");
   EXPECT_FALSE(result.is_ok());
 }
 
@@ -241,15 +239,14 @@ TEST_F(SQLiteBackendTest, DeleteSingleRow) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item1', 10.0)");
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('item2', 20.0)");
 
   auto result =
-      backend_->delete_query("DELETE FROM test_table WHERE id = 1");
+      backend_->execute_query("DELETE FROM test_table WHERE id = 1");
   EXPECT_TRUE(result.is_ok());
-  EXPECT_EQ(result.value(), 1u);
 #else
   GTEST_SKIP() << "SQLite support not compiled";
 #endif
@@ -266,7 +263,7 @@ TEST_F(SQLiteBackendTest, TransactionCommit) {
 
   EXPECT_TRUE(backend_->begin_transaction().is_ok());
   EXPECT_TRUE(backend_->in_transaction());
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('trans_item', 50.0)");
   EXPECT_TRUE(backend_->commit_transaction().is_ok());
   EXPECT_FALSE(backend_->in_transaction());
@@ -286,7 +283,7 @@ TEST_F(SQLiteBackendTest, TransactionRollback) {
   EXPECT_TRUE(createTestTable());
 
   EXPECT_TRUE(backend_->begin_transaction().is_ok());
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('rollback_item', 50.0)");
   EXPECT_TRUE(backend_->rollback_transaction().is_ok());
 
@@ -309,7 +306,7 @@ TEST_F(SQLiteBackendTest, ConcurrentReads) {
   EXPECT_TRUE(createTestTable());
 
   for (int i = 0; i < 100; ++i) {
-    backend_->insert_query(
+    backend_->execute_query(
         "INSERT INTO test_table (name, value) VALUES ('item" +
         std::to_string(i) + "', " + std::to_string(i * 1.5) + ")");
   }
@@ -348,7 +345,7 @@ TEST_F(SQLiteBackendTest, SpecialCharactersInData) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('test''s data', 10.0)");
 
   auto result = backend_->select_query("SELECT name FROM test_table");
@@ -365,7 +362,7 @@ TEST_F(SQLiteBackendTest, UnicodeData) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(createTestTable());
 
-  backend_->insert_query(
+  backend_->execute_query(
       "INSERT INTO test_table (name, value) VALUES ('한글테스트', 10.0)");
 
   auto result = backend_->select_query("SELECT name FROM test_table");

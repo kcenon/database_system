@@ -82,33 +82,15 @@ TEST_F(RedisBackendTest, InitiallyNotInTransaction)
 // Operations Without Initialization Tests
 // =============================================================================
 
-TEST_F(RedisBackendTest, InsertQueryFailsWithoutInit)
+TEST_F(RedisBackendTest, ExecuteQueryFailsWithoutInit)
 {
-    auto result = backend_->insert_query("mykey:myvalue");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(RedisBackendTest, UpdateQueryFailsWithoutInit)
-{
-    auto result = backend_->update_query("mykey:newvalue");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(RedisBackendTest, DeleteQueryFailsWithoutInit)
-{
-    auto result = backend_->delete_query("mykey");
+    auto result = backend_->execute_query("mykey:myvalue");
     EXPECT_FALSE(result.is_ok());
 }
 
 TEST_F(RedisBackendTest, SelectQueryFailsWithoutInit)
 {
     auto result = backend_->select_query("mykey");
-    EXPECT_FALSE(result.is_ok());
-}
-
-TEST_F(RedisBackendTest, ExecuteQueryFailsWithoutInit)
-{
-    auto result = backend_->execute_query("PING");
     EXPECT_FALSE(result.is_ok());
 }
 
@@ -199,7 +181,7 @@ TEST_F(RedisBackendTest, KeyValueOperationsOnRedis)
     }
 
     // SET (insert)
-    auto insert_result = backend_->insert_query("redis_test_key:test_value");
+    auto insert_result = backend_->execute_query("redis_test_key:test_value");
     EXPECT_TRUE(insert_result.is_ok());
 
     // GET (select)
@@ -208,11 +190,11 @@ TEST_F(RedisBackendTest, KeyValueOperationsOnRedis)
     EXPECT_FALSE(select_result.value().empty());
 
     // SET (update - same key, new value)
-    auto update_result = backend_->update_query("redis_test_key:updated_value");
+    auto update_result = backend_->execute_query("redis_test_key:updated_value");
     EXPECT_TRUE(update_result.is_ok());
 
     // DEL (delete)
-    auto delete_result = backend_->delete_query("redis_test_key");
+    auto delete_result = backend_->execute_query("redis_test_key");
     EXPECT_TRUE(delete_result.is_ok());
 
     // Verify deletion
@@ -236,13 +218,13 @@ TEST_F(RedisBackendTest, TransactionsOnRedis)
     EXPECT_TRUE(backend_->begin_transaction().is_ok());
     EXPECT_TRUE(backend_->in_transaction());
 
-    backend_->insert_query("redis_tx_key:tx_value");
+    backend_->execute_query("redis_tx_key:tx_value");
 
     EXPECT_TRUE(backend_->commit_transaction().is_ok());
     EXPECT_FALSE(backend_->in_transaction());
 
     // Cleanup
-    backend_->delete_query("redis_tx_key");
+    backend_->execute_query("redis_tx_key");
 }
 
 TEST_F(RedisBackendTest, TransactionRollbackOnRedis)
@@ -257,7 +239,7 @@ TEST_F(RedisBackendTest, TransactionRollbackOnRedis)
 
     // Redis DISCARD
     EXPECT_TRUE(backend_->begin_transaction().is_ok());
-    backend_->insert_query("redis_discard_key:value");
+    backend_->execute_query("redis_discard_key:value");
     EXPECT_TRUE(backend_->rollback_transaction().is_ok());
     EXPECT_FALSE(backend_->in_transaction());
 }

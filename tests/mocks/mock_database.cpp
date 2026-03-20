@@ -80,48 +80,6 @@ bool mock_database::is_initialized() const {
     return initialized_;
 }
 
-kcenon::common::Result<uint64_t> mock_database::insert_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        if (exp->should_throw()) {
-            last_error_ = exp->get_error_message();
-            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
-        }
-        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
-kcenon::common::Result<uint64_t> mock_database::update_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        if (exp->should_throw()) {
-            last_error_ = exp->get_error_message();
-            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
-        }
-        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
-kcenon::common::Result<uint64_t> mock_database::delete_query(const std::string& query_string) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    record_query(query_string);
-
-    if (auto* exp = find_expectation(query_string)) {
-        if (exp->should_throw()) {
-            last_error_ = exp->get_error_message();
-            return kcenon::common::Result<uint64_t>::err(kcenon::common::error_info{last_error_});
-        }
-        return kcenon::common::Result<uint64_t>::ok(exp->get_rows_affected());
-    }
-    return kcenon::common::Result<uint64_t>::ok(default_rows_affected_);
-}
-
 kcenon::common::Result<core::database_result> mock_database::select_query(const std::string& query_string) {
     std::lock_guard<std::mutex> lock(mutex_);
     record_query(query_string);

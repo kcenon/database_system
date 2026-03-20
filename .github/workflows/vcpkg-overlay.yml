@@ -98,7 +98,9 @@ jobs:
         cd common_system
         cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
         cmake --build build --config Release
-        sudo cmake --install build --prefix /usr/local
+        cmake --install build --prefix ${{ github.workspace }}/common_system_install
+        cd ..
+        mv common_system common_system_src
 
     - name: Build and install common_system (Windows)
       if: runner.os == 'Windows'
@@ -108,6 +110,8 @@ jobs:
         cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
         cmake --build build --config Release
         cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
+        cd ..
+        Rename-Item common_system common_system_src
 
     - name: Configure (Unix)
       if: runner.os != 'Windows'
@@ -123,6 +127,7 @@ jobs:
           -DUSE_MONITORING_SYSTEM=OFF \
           -DUSE_CONTAINER_SYSTEM=OFF \
           -DBUILD_INTEGRATED_DATABASE=OFF \
+          -DCMAKE_PREFIX_PATH=${{ github.workspace }}/common_system_install \
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install
 
     - name: Configure (Windows)
@@ -177,7 +182,7 @@ jobs:
         EOF
 
         cmake -B build \
-          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/install" \
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/install;${{ github.workspace }}/common_system_install" \
           -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release
 

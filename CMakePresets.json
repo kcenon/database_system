@@ -104,6 +104,23 @@
                 "DATABASE_BUILD_BENCHMARKS": "ON",
                 "DATABASE_BUILD_INTEGRATION_TESTS": "ON"
             }
+        },
+        {
+            "name": "vcpkg",
+            "displayName": "vcpkg Release",
+            "description": "Release build using vcpkg for dependency management",
+            "binaryDir": "${sourceDir}/build/vcpkg",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": {
+                    "type": "FILEPATH",
+                    "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+                },
+                "CMAKE_BUILD_TYPE": "Release",
+                "USE_UNIT_TEST": "OFF",
+                "BUILD_DATABASE_SAMPLES": "OFF",
+                "DATABASE_BUILD_BENCHMARKS": "OFF",
+                "DATABASE_BUILD_INTEGRATION_TESTS": "OFF"
+            }
         }
     ],
     "buildPresets": [
@@ -138,6 +155,10 @@
         {
             "name": "ci",
             "configurePreset": "ci"
+        },
+        {
+            "name": "vcpkg",
+            "configurePreset": "vcpkg"
         }
     ],
     "testPresets": [

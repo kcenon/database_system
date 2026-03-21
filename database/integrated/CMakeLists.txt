@@ -271,17 +271,23 @@ endif()
 # Installation
 ##################################################
 
-install(TARGETS ${INTEGRATED_DB_TARGET}
-    EXPORT database_system-targets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-)
+# Only add to export set when database_system is the top-level project.
+# In subdirectory builds (e.g., via pacs_system), the parent project handles
+# installation and the transitive dependencies (thread_base, etc.) may not
+# be in any export set.
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    install(TARGETS ${INTEGRATED_DB_TARGET}
+        EXPORT database_system-targets
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
 
-# Install headers
-install(DIRECTORY core/ adapters/
-    DESTINATION include/database_system/database/integrated
-    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
-)
+    # Install headers
+    install(DIRECTORY core/ adapters/
+        DESTINATION include/database_system/database/integrated
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+    )
+endif()
 
 message(STATUS "Integrated database system configured")

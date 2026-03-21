@@ -341,11 +341,16 @@ endif()
 
 ##################################################
 # Installation Rules
+#
+# Only generate install/export rules when database_system is the top-level
+# project. In subdirectory builds (e.g., via pacs_system), transitive
+# dependencies (thread_base, simdutf, etc.) may not be in any export set,
+# which causes CMake generation errors.
 ##################################################
 
 include(GNUInstallDirs)
 
-if(BUILD_DATABASE)
+if(BUILD_DATABASE AND CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     # Install header files
     install(DIRECTORY database/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system/database

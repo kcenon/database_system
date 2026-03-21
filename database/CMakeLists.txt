@@ -166,7 +166,7 @@ if(BUILD_WITH_COMMON_SYSTEM)
 
     if(_DATABASE_COMMON_TARGET)
         target_link_libraries(${PROJECT_NAME} PUBLIC ${_DATABASE_COMMON_TARGET})
-        target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM KCENON_HAS_COMMON_SYSTEM=1)
         message(STATUS "Database: common_system integration enabled via target ${_DATABASE_COMMON_TARGET}")
     else()
         find_system_dependency_include(common_system)
@@ -176,7 +176,7 @@ if(BUILD_WITH_COMMON_SYSTEM)
             target_include_directories(${PROJECT_NAME} PUBLIC
                 $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
             )
-            target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM)
+            target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM KCENON_HAS_COMMON_SYSTEM=1)
             message(STATUS "Database: common_system integration enabled")
         else()
             message(WARNING "common_system not found - integration disabled. Install common_system or set BUILD_WITH_COMMON_SYSTEM=OFF to suppress this warning.")

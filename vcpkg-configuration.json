@@ -13,11 +13,5 @@
         "kcenon-*"
       ]
     }
-  ],
-  "overrides": [
-    {
-      "name": "asio",
-      "version": "1.30.2"
-    }
   ]
 }

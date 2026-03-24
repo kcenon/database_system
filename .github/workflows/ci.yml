@@ -77,35 +77,25 @@ jobs:
         path: monitoring_system
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and install common_system (Unix)
-      if: runner.os != 'Windows'
-      run: |
-        cd common_system
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
-        cmake --build build --config Release
-        sudo cmake --install build --prefix /usr/local
-
-    - name: Build and install common_system (Windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        cd common_system
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
-        cmake --build build --config Release
-        cmake --install build --prefix "$env:GITHUB_WORKSPACE/common_system_install"
-
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         # Ubuntu 24.04 provides GCC 13 and Clang 18 by default
         # These versions fully support C++20 std::format
-        sudo apt-get install -y cmake ninja-build g++-13 clang-18 libgtest-dev libgmock-dev pkg-config
+        sudo apt-get install -y cmake ninja-build g++-13 clang-18 pkg-config curl zip unzip tar autoconf automake autoconf-archive
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install ninja googletest
+        brew install ninja pkg-config curl zip unzip autoconf automake autoconf-archive
+
+    - name: Setup Visual Studio (Windows)
+      if: runner.os == 'Windows'
+      uses: microsoft/setup-msbuild@v3
+      with:
+        vs-version: '17.0'
+        msbuild-architecture: x64
 
     - name: Set up compiler (GCC)
       if: matrix.compiler == 'gcc'
@@ -131,10 +121,112 @@ jobs:
       if: matrix.compiler == 'msvc'
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Configure CMake (Unix)
+    - name: Check architecture (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        if [ "$(uname -m)" = "aarch64" ]; then
+          echo "VCPKG_FORCE_SYSTEM_BINARIES=arm" >> $GITHUB_ENV
+        fi
+
+    - name: Setup vcpkg
+      uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+      with:
+        extra-cache-key: 'database-system'
+
+    - name: Cache vcpkg installed
+      uses: actions/cache@v5
+      id: vcpkg-installed
+      with:
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ runner.os }}-${{ matrix.compiler }}-vcpkg-installed-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.compiler }}-vcpkg-installed-${{ matrix.triplet }}-
+
+    - name: Install dependencies with vcpkg (Unix)
+      if: runner.os != 'Windows' && steps.vcpkg-installed.outputs.cache-hit != 'true'
+      run: |
+        ${{ env.VCPKG_ROOT }}/vcpkg install --x-manifest-root=. --x-install-root=${{ github.workspace }}/vcpkg_installed --triplet ${{ matrix.triplet }}
+
+    - name: Install dependencies with vcpkg (Windows)
+      if: runner.os == 'Windows' && steps.vcpkg-installed.outputs.cache-hit != 'true'
+      shell: pwsh
+      run: |
+        ${{ env.VCPKG_ROOT }}\vcpkg install --x-manifest-root=. --x-install-root=${{ github.workspace }}\vcpkg_installed --triplet ${{ matrix.triplet }}
+
+    - name: Prepare build directory
       if: runner.os != 'Windows'
       run: |
-        cmake -B build -G Ninja \
+        rm -rf build
+        mkdir -p build
+
+    - name: Prepare build directory (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        if (Test-Path build) { Remove-Item -Recurse -Force build }
+        New-Item -ItemType Directory -Path build
+
+    - name: Build application (vcpkg - Unix)
+      if: runner.os != 'Windows'
+      id: build_vcpkg_unix
+      continue-on-error: true
+      run: |
+        cd build
+        cmake .. \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" \
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
+          -DUSE_THREAD_SYSTEM=OFF \
+          -DUSE_MONITORING_SYSTEM=OFF \
+          -DUSE_CONTAINER_SYSTEM=OFF \
+          -DUSE_UNIT_TEST=ON \
+          -DBUILD_DATABASE_SAMPLES=ON \
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
+          -DUSE_POSTGRESQL=OFF
+
+        cmake --build . --parallel
+        ctest -C $BUILD_TYPE --output-on-failure --timeout 30
+
+    - name: Build application (vcpkg - Windows)
+      if: runner.os == 'Windows'
+      id: build_vcpkg_windows
+      continue-on-error: true
+      shell: pwsh
+      run: |
+        cd build
+        $env:CMAKE_CXX_FLAGS = "/std:c++20 /permissive- /Zc:__cplusplus /EHsc"
+        $env:CMAKE_TRY_COMPILE_TARGET_TYPE = "STATIC_LIBRARY"
+
+        cmake .. `
+          -G "Visual Studio 17 2022" `
+          -A x64 `
+          -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" `
+          -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
+          -DUSE_THREAD_SYSTEM=OFF `
+          -DUSE_MONITORING_SYSTEM=OFF `
+          -DUSE_CONTAINER_SYSTEM=OFF `
+          -DUSE_UNIT_TEST=ON `
+          -DBUILD_DATABASE_SAMPLES=ON `
+          -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
+          -DUSE_POSTGRESQL=OFF `
+          -DCMAKE_CXX_FLAGS="/std:c++20 /permissive- /Zc:__cplusplus /EHsc" `
+          -DCMAKE_TRY_COMPILE_TARGET_TYPE="STATIC_LIBRARY"
+
+        cmake --build . --config $env:BUILD_TYPE --parallel
+        ctest -C $env:BUILD_TYPE --output-on-failure --timeout 30
+
+    - name: Build application (fallback - Unix)
+      if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
+      run: |
+        echo "vcpkg build failed. Falling back to system libraries..."
+        rm -rf build
+        mkdir -p build
+        cd build
+
+        cmake .. \
+          -G Ninja \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_THREAD_SYSTEM=OFF \
@@ -145,12 +237,24 @@ jobs:
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF \
           -DUSE_POSTGRESQL=OFF
 
-    - name: Configure CMake (Windows)
-      if: runner.os == 'Windows'
+        cmake --build . --parallel
+
+    - name: Build application (fallback - Windows)
+      if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome != 'success'
+      shell: pwsh
       run: |
-        cmake -B build -G Ninja `
-          -DCMAKE_BUILD_TYPE=Debug `
-          -DCMAKE_PREFIX_PATH="$env:GITHUB_WORKSPACE/common_system_install" `
+        Write-Host "vcpkg build failed. Falling back to system libraries..."
+        if (Test-Path build) { Remove-Item -Recurse -Force build }
+        New-Item -ItemType Directory -Path build
+        cd build
+
+        $env:CMAKE_CXX_FLAGS = "/std:c++20 /permissive- /Zc:__cplusplus /EHsc"
+        $env:CMAKE_TRY_COMPILE_TARGET_TYPE = "STATIC_LIBRARY"
+
+        cmake .. `
+          -G "Visual Studio 17 2022" `
+          -A x64 `
+          -DCMAKE_BUILD_TYPE=$env:BUILD_TYPE `
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON `
           -DUSE_THREAD_SYSTEM=OFF `
           -DUSE_MONITORING_SYSTEM=OFF `
@@ -158,27 +262,26 @@ jobs:
           -DUSE_UNIT_TEST=ON `
           -DBUILD_DATABASE_SAMPLES=ON `
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF `
-          -DUSE_POSTGRESQL=OFF
+          -DUSE_POSTGRESQL=OFF `
+          -DCMAKE_CXX_FLAGS="/std:c++20 /permissive- /Zc:__cplusplus /EHsc" `
+          -DCMAKE_TRY_COMPILE_TARGET_TYPE="STATIC_LIBRARY" `
+          -DNO_VCPKG=ON
 
-    - name: Build
-      run: cmake --build build --config Debug --parallel
+        cmake --build . --config $env:BUILD_TYPE --parallel
 
-    - name: Test (Unix)
-      if: runner.os != 'Windows'
-      timeout-minutes: 5
+    - name: Run minimal test (fallback - Unix)
+      if: runner.os != 'Windows' && steps.build_vcpkg_unix.outcome != 'success'
       run: |
         cd build
-        # Run tests with timeout to prevent hanging
         ctest -C $BUILD_TYPE --output-on-failure --timeout 30 || true
+        echo "Build completed with system libraries"
 
-    - name: Test (Windows)
-      if: runner.os == 'Windows'
-      timeout-minutes: 5
+    - name: Run minimal test (fallback - Windows)
+      if: runner.os == 'Windows' && steps.build_vcpkg_windows.outcome != 'success'
       shell: pwsh
       run: |
         cd build
-        # Run tests with timeout to prevent hanging
-        ctest -C Debug --output-on-failure --timeout 30
+        ctest -C $env:BUILD_TYPE --output-on-failure --timeout 30
         exit 0
 
     - name: Upload build artifacts

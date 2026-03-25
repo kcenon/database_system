@@ -9,44 +9,28 @@ vcpkg_from_github(
     HEAD_REF main
 )
 
-# Feature-based backend selection
-set(DB_USE_POSTGRESQL OFF)
-if("postgresql" IN_LIST FEATURES)
-    set(DB_USE_POSTGRESQL ON)
-endif()
-
-set(DB_USE_SQLITE OFF)
-if("sqlite" IN_LIST FEATURES)
-    set(DB_USE_SQLITE ON)
-endif()
-
-set(DB_USE_MONGODB OFF)
-if("mongodb" IN_LIST FEATURES)
-    set(DB_USE_MONGODB ON)
-endif()
-
-set(DB_USE_REDIS OFF)
-if("redis" IN_LIST FEATURES)
-    set(DB_USE_REDIS ON)
-endif()
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        postgresql  USE_POSTGRESQL
+        sqlite      USE_SQLITE
+        mongodb     USE_MONGODB
+        redis       USE_REDIS
+        ecosystem   USE_THREAD_SYSTEM
+        ecosystem   USE_MONITORING_SYSTEM
+        ecosystem   USE_CONTAINER_SYSTEM
+        ecosystem   BUILD_INTEGRATED_DATABASE
+)
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        -DUSE_POSTGRESQL=${DB_USE_POSTGRESQL}
-        -DUSE_SQLITE=${DB_USE_SQLITE}
-        -DUSE_MONGODB=${DB_USE_MONGODB}
-        -DUSE_REDIS=${DB_USE_REDIS}
         -DUSE_UNIT_TEST=OFF
         -DBUILD_DATABASE_SAMPLES=OFF
         -DDATABASE_BUILD_BENCHMARKS=OFF
         -DDATABASE_BUILD_INTEGRATION_TESTS=OFF
         -DBUILD_SHARED_LIBS=OFF
-        -DUSE_THREAD_SYSTEM=OFF
-        -DUSE_MONITORING_SYSTEM=OFF
-        -DUSE_CONTAINER_SYSTEM=OFF
-        -DBUILD_INTEGRATED_DATABASE=OFF
         -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()

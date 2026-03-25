@@ -1,7 +1,7 @@
 {
   "name": "kcenon-database-system",
   "version-semver": "0.1.0",
-  "port-version": 4,
+  "port-version": 5,
   "description": "Pure, lightweight C++20 Core DAL library with unified access to PostgreSQL, SQLite, MongoDB, and Redis",
   "homepage": "https://github.com/kcenon/database_system",
   "license": "BSD-3-Clause",
@@ -49,7 +49,7 @@
       ]
     },
     "mongodb": {
-      "description": "Enable MongoDB backend (experimental)",
+      "description": "Enable MongoDB backend (EXPERIMENTAL: no dedicated test suite, API may change without notice, not for production)",
       "dependencies": [
         {
           "name": "mongo-cxx-driver",
@@ -58,12 +58,21 @@
       ]
     },
     "redis": {
-      "description": "Enable Redis backend (experimental)",
+      "description": "Enable Redis backend (EXPERIMENTAL: not for persistent storage, no dedicated test suite, API may change without notice)",
       "dependencies": [
         {
           "name": "hiredis",
           "version>=": "1.2.0"
         }
+      ]
+    },
+    "ecosystem": {
+      "description": "Full kcenon ecosystem integration (thread pool, monitoring, container, integrated database adapter)",
+      "dependencies": [
+        "kcenon-thread-system",
+        "kcenon-logger-system",
+        "kcenon-container-system",
+        "kcenon-monitoring-system"
       ]
     }
   }

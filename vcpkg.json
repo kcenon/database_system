@@ -14,6 +14,9 @@
       "version>=": "1.30.2"
     }
   ],
+  "default-features": [
+    "postgresql"
+  ],
   "overrides": [
     { "name": "asio", "version": "1.30.2" },
     { "name": "openssl", "version": "3.4.1" },

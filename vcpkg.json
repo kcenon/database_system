@@ -14,11 +14,14 @@
       "version>=": "1.30.2"
     }
   ],
+  "default-features": [
+    "postgresql"
+  ],
   "overrides": [
     { "name": "asio", "version": "1.30.2" },
     { "name": "openssl", "version": "3.4.1" },
     { "name": "libpq", "version": "16.2" },
-    { "name": "libpqxx", "version": "7.9.0" },
+    { "name": "libpqxx", "version": "7.9.2" },
     { "name": "sqlite3", "version": "3.45.3" },
     { "name": "mongo-cxx-driver", "version": "3.10.1" },
     { "name": "hiredis", "version": "1.2.0" },

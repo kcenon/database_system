@@ -1,7 +1,7 @@
 {
   "name": "kcenon-database-system",
   "version-semver": "0.1.0",
-  "port-version": 5,
+  "port-version": 6,
   "description": "Pure, lightweight C++20 Core DAL library with unified access to PostgreSQL, SQLite, MongoDB, and Redis",
   "homepage": "https://github.com/kcenon/database_system",
   "license": "BSD-3-Clause",

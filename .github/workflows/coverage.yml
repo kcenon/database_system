@@ -64,28 +64,51 @@ jobs:
 
     - name: Generate coverage report
       run: |
-        cd build
-        # Capture coverage data
-        # Ubuntu 22.04 lcov 1.14 only supports --ignore-errors source
-        lcov --directory . --capture --output-file coverage.info --ignore-errors source --rc lcov_branch_coverage=0 2>/dev/null || \
-          lcov --directory . --capture --output-file coverage.info 2>/dev/null || true
+        WORKSPACE="${GITHUB_WORKSPACE}"
 
-        # Filter out system headers and test files
-        if [ -f coverage.info ]; then
-          lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' '*/examples/*' '*/samples/*' '*/googletest/*' \
-            --output-file coverage_filtered.info --ignore-errors source 2>/dev/null || true
+        # Capture coverage data with base directory set to workspace root
+        lcov --directory build --capture \
+          --output-file build/coverage_raw.info \
+          --base-directory "${WORKSPACE}" \
+          --ignore-errors source \
+          --rc lcov_branch_coverage=0 2>/dev/null || \
+        lcov --directory build --capture \
+          --output-file build/coverage_raw.info \
+          --base-directory "${WORKSPACE}" 2>/dev/null || true
+
+        if [ -f build/coverage_raw.info ]; then
+          # Extract only project source files (database/ directory)
+          lcov --extract build/coverage_raw.info \
+            "${WORKSPACE}/database/*" \
+            --output-file build/coverage.info \
+            --ignore-errors source 2>/dev/null || true
+
+          if [ -f build/coverage.info ]; then
+            # Remove test helpers that may be under database/
+            lcov --remove build/coverage.info \
+              '*/test/*' '*/tests/*' '*/mock/*' '*/mocks/*' \
+              --output-file build/coverage_filtered.info \
+              --ignore-errors source 2>/dev/null || \
+            cp build/coverage.info build/coverage_filtered.info
+          fi
 
           # Generate HTML report
-          if [ -f coverage_filtered.info ]; then
-            genhtml coverage_filtered.info --output-directory coverage_html --ignore-errors source 2>/dev/null || \
-              echo "⚠️  HTML coverage report generation skipped"
+          if [ -f build/coverage_filtered.info ]; then
+            genhtml build/coverage_filtered.info \
+              --output-directory build/coverage_html \
+              --ignore-errors source 2>/dev/null || \
+              echo "HTML coverage report generation skipped"
 
             # Print summary
-            lcov --list coverage_filtered.info --ignore-errors source 2>/dev/null || \
-              echo "⚠️  Coverage summary generation skipped"
+            echo "=== Coverage Summary ==="
+            lcov --summary build/coverage_filtered.info \
+              --ignore-errors source 2>/dev/null || true
+            echo ""
+            lcov --list build/coverage_filtered.info \
+              --ignore-errors source 2>/dev/null || true
           fi
         else
-          echo "⚠️  Coverage data file not created"
+          echo "Coverage data file not created"
         fi
 
     - name: Upload coverage to Codecov
@@ -96,6 +119,7 @@ jobs:
         name: database_system-coverage
         fail_ci_if_error: false
         verbose: true
+        root_dir: ${{ github.workspace }}
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -105,6 +129,7 @@ jobs:
       with:
         name: coverage-report
         path: |
+          build/coverage_raw.info
           build/coverage.info
           build/coverage_filtered.info
           build/coverage_html/

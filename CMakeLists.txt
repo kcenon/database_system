@@ -55,6 +55,7 @@ endif()
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 option(USE_UNIT_TEST "Use unit test" ON)
 option(BUILD_DATABASE_SAMPLES "Build database system samples" ON)
+option(BUILD_DATABASE_EXAMPLES "Build database system usage examples" OFF)
 option(USE_POSTGRESQL "Enable PostgreSQL support" ON)
 option(USE_SQLITE "Enable SQLite support" OFF)
 option(USE_MONGODB "Enable MongoDB backend (EXPERIMENTAL - see docs/BACKENDS.md)" OFF)
@@ -112,6 +113,7 @@ if(ENABLE_COVERAGE)
                     --exclude '.*tests/.*'
                     --exclude '.*third_party/.*'
                     --exclude '.*samples/.*'
+                    --exclude '.*examples/.*'
                     --exclude '.*benchmarks/.*'
                     --html --html-details
                     --output ${CMAKE_BINARY_DIR}/coverage/index.html
@@ -128,6 +130,7 @@ if(ENABLE_COVERAGE)
                     --exclude '.*tests/.*'
                     --exclude '.*third_party/.*'
                     --exclude '.*samples/.*'
+                    --exclude '.*examples/.*'
                     --exclude '.*benchmarks/.*'
                     --fail-under-line 80
                     --print-summary
@@ -311,6 +314,15 @@ if(BUILD_DATABASE_SAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/samples)
 endif()
 
 ##################################################
+# Examples
+##################################################
+
+if(BUILD_DATABASE_EXAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+    add_subdirectory(examples)
+    message(STATUS "Database examples will be built")
+endif()
+
+##################################################
 # Testing
 ##################################################
 
@@ -478,6 +490,7 @@ message(STATUS "  Integrated database: ${BUILD_INTEGRATED_DATABASE}")
 message(STATUS "")
 message(STATUS "Build Options:")
 message(STATUS "  Build samples: ${BUILD_DATABASE_SAMPLES}")
+message(STATUS "  Build examples: ${BUILD_DATABASE_EXAMPLES}")
 message(STATUS "  Build tests: ${USE_UNIT_TEST}")
 message(STATUS "  Build integration tests: ${DATABASE_BUILD_INTEGRATION_TESTS}")
 message(STATUS "  Build benchmarks: ${DATABASE_BUILD_BENCHMARKS}")

@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, Database System Project
- *
  * Async Operation Stress Tests (DB-009)
  *
  * Tests for high concurrency and async operations:

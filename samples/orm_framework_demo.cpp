@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, Database System Project
- *
  * ORM Framework Demonstration
  * Shows C++20 concepts-based entity definitions and type-safe operations
  */

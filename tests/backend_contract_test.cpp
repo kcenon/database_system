@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, Database System Project
- *
  * Backend Interface Contract Tests
  *
  * Tests the database_backend interface contract using mock_backend to verify:

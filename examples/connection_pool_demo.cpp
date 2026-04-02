@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, kcenon
- *
  * @file connection_pool_demo.cpp
  * @brief Demonstrates multi-threaded database usage with independent
  *        database_manager instances.

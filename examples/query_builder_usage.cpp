@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, kcenon
- *
  * @file query_builder_usage.cpp
  * @brief Demonstrates the fluent query builder API for constructing SQL queries.
  *

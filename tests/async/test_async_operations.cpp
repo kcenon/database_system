@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, Database System Project
- *
  * Unit tests for async_result<T>, async_executor, async_database,
  * transaction_coordinator, saga_builder, and stream_processor.
  *

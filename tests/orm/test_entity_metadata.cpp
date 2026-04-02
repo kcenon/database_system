@@ -1,7 +1,8 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
+
 /**
- * BSD 3-Clause License
- * Copyright (c) 2025, Database System Project
- *
  * Unit tests for ORM entity metadata: field_metadata, entity_metadata.
  * Part of #367, sub-issue #377.
  */

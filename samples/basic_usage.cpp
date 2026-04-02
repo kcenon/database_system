@@ -1,7 +1,6 @@
-/**
- * BSD 3-Clause License
- * Copyright (c) 2024, Database System Project
- */
+// BSD 3-Clause License
+// Copyright (c) 2024, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
 
 #include <iostream>
 #include <string>

@@ -1,9 +1,6 @@
-/*****************************************************************************
-BSD 3-Clause License
-
-Copyright (c) 2025, Database System
-All rights reserved.
-*****************************************************************************/
+// BSD 3-Clause License
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
 
 #include "mock_backend_expectations.h"
 #include "mock_backend.h"

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Backend Usage Analysis Report
 
+> **SSOT**: This document is the single source of truth for **Backend Usage Analysis Report**.
+
 ## Overview
 
 This document analyzes the usage patterns and maintenance considerations for MongoDB and Redis backends in database_system, as part of the evaluation for Issue #333.

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System Build Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Build Guide**.
+
 > **Language:** **English** | [한국어](BUILD_GUIDE.kr.md)
 
 Comprehensive guide for building the Database System with multi-backend support, connection pooling, and query builders.

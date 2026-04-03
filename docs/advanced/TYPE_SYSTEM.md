@@ -10,6 +10,8 @@ category: "API"
 
 # Database System Type System Documentation
 
+> **SSOT**: This document is the single source of truth for **Database System Type System Documentation**.
+
 **Version**: 0.1.0.0
 **Created**: 2025-11-11  
 **Last Updated**: 2025-11-11

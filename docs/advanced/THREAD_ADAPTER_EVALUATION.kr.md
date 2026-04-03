@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Thread Adapter 통합 평가
 
+> **SSOT**: This document is the single source of truth for **Thread Adapter 통합 평가**.
+
 이 문서는 단일 백그라운드 스레드를 사용하는 모듈에 `thread_adapter`를 통합하는 것에 대한 평가 결과를 기록합니다.
 
 ## 관련 이슈

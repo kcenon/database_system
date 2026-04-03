@@ -10,6 +10,8 @@ category: "API"
 
 # Database System API Reference
 
+> **SSOT**: This document is the single source of truth for **Database System API Reference**.
+
 > **Language:** **English** | [한국어](API_REFERENCE.kr.md)
 
 Complete API reference for the Database System C++20 library with multi-backend support, connection pooling, and query builders.

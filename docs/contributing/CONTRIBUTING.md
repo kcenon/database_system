@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Contributing to Database System
 
+> **SSOT**: This document is the single source of truth for **Contributing to Database System**.
+
 **Version:** 0.1.0.0
 **Last Updated:** 2025-11-11
 

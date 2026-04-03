@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Database System Architecture
 
+> **SSOT**: This document is the single source of truth for **Database System Architecture**.
+
 > **Language:** **English** | [한국어](ARCHITECTURE.kr.md)
 
 ## Table of Contents

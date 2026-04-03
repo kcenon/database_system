@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System Troubleshooting Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Troubleshooting Guide**.
+
 **Version**: 0.1.0.0
 **Last Updated**: 2025-11-11
 **Status**: Stable

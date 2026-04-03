@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Thread Adapter Integration Evaluation
 
+> **SSOT**: This document is the single source of truth for **Thread Adapter Integration Evaluation**.
+
 This document records the evaluation outcome for integrating `thread_adapter` into modules that use single background threads.
 
 ## Related Issues

@@ -1,6 +1,6 @@
 ---
 doc_id: "DBS-GUID-005"
-doc_title: "Database System Documentation"
+doc_title: "Database System Documentation Registry"
 doc_version: "1.0.0"
 doc_date: "2026-04-04"
 doc_status: "Released"
@@ -8,348 +8,177 @@ project: "database_system"
 category: "GUID"
 ---
 
-# Database System Documentation
+# Database System — Documentation Registry
 
-> **Language:** **English** | [한국어](README.kr.md)
+> **SSOT**: This file is the single source of truth for the documentation index
+> of **database_system**.
 
-**Version:** 0.1.0.0
-**Last Updated:** 2025-11-11
-**Status:** Comprehensive
+Total documents: **56**
 
-Welcome to the database_system documentation! This unified database abstraction layer supports 4 backends (PostgreSQL, SQLite, MongoDB, Redis) with enterprise-grade connection pooling and advanced query builders. Legacy MySQL/MariaDB support was removed in Issue #418.
+## Document Index
 
----
+| # | doc_id | Topic | Authority Document | Status |
+|---|--------|-------|-------------------|--------|
+| 1 | DBS-ARCH-001 | Database System Architecture | [ARCHITECTURE.kr.md](./ARCHITECTURE.kr.md) | Released |
+| 2 | DBS-ARCH-002 | Database System Architecture | [ARCHITECTURE.md](./ARCHITECTURE.md) | Released |
+| 3 | DBS-ARCH-003 | Database System Architecture | [ARCHITECTURE.md](./advanced/ARCHITECTURE.md) | Released |
+| 4 | DBS-ARCH-004 | Architecture Issues - Phase 0 식별 | [ARCHITECTURE_ISSUES.kr.md](./advanced/ARCHITECTURE_ISSUES.kr.md) | Released |
+| 5 | DBS-ARCH-005 | Architecture Issues - Phase 0 Identification | [ARCHITECTURE_ISSUES.md](./advanced/ARCHITECTURE_ISSUES.md) | Released |
+| 6 | DBS-ARCH-006 | Database System Project Structure | [STRUCTURE.md](./advanced/STRUCTURE.md) | Released |
+| 7 | DBS-API-001 | Database System API Reference | [API_REFERENCE.kr.md](./API_REFERENCE.kr.md) | Released |
+| 8 | DBS-API-002 | Database System API Reference | [API_REFERENCE.md](./API_REFERENCE.md) | Released |
+| 9 | DBS-API-003 | Database System Type System Documentation | [TYPE_SYSTEM.md](./advanced/TYPE_SYSTEM.md) | Released |
+| 10 | DBS-FEAT-001 | Database System 기능 | [FEATURES.kr.md](./FEATURES.kr.md) | Released |
+| 11 | DBS-FEAT-002 | Database System Features | [FEATURES.md](./FEATURES.md) | Released |
+| 12 | DBS-GUID-001 | Adapter Pattern Best Practices | [ADAPTER_PATTERNS.md](./ADAPTER_PATTERNS.md) | Released |
+| 13 | DBS-GUID-002 | Backend Stability Overview | [BACKENDS.md](./BACKENDS.md) | Released |
+| 14 | DBS-GUID-003 | ORM Framework Guide | [ORM_GUIDE.md](./ORM_GUIDE.md) | Released |
+| 15 | DBS-GUID-004 | Database System 문서 | [README.kr.md](./README.kr.md) | Released |
+| 16 | DBS-GUID-006 | 시스템 현재 상태 - Phase 0 베이스라인 | [CURRENT_STATE.kr.md](./advanced/CURRENT_STATE.kr.md) | Released |
+| 17 | DBS-GUID-007 | System Current State - Phase 0 Baseline | [CURRENT_STATE.md](./advanced/CURRENT_STATE.md) | Released |
+| 18 | DBS-GUID-008 | Backend Usage Analysis Report | [BACKEND_USAGE_ANALYSIS.md](./analysis/BACKEND_USAGE_ANALYSIS.md) | Released |
+| 19 | DBS-GUID-009 | CI/CD Guide for database_system | [CI_CD_GUIDE.md](./contributing/CI_CD_GUIDE.md) | Released |
+| 20 | DBS-GUID-010 | Async Database Operations Guide | [ASYNC_OPERATIONS.md](./guides/ASYNC_OPERATIONS.md) | Released |
+| 21 | DBS-GUID-011 | Database System - Best Practices Guide | [BEST_PRACTICES.md](./guides/BEST_PRACTICES.md) | Released |
+| 22 | DBS-GUID-012 | Database System Build Guide | [BUILD_GUIDE.kr.md](./guides/BUILD_GUIDE.kr.md) | Released |
+| 23 | DBS-GUID-013 | Database System Build Guide | [BUILD_GUIDE.md](./guides/BUILD_GUIDE.md) | Released |
+| 24 | DBS-GUID-014 | Database System - Frequently Asked Questions | [FAQ.md](./guides/FAQ.md) | Released |
+| 25 | DBS-GUID-015 | Database System 빠른 시작 가이드 | [QUICK_START.kr.md](./guides/QUICK_START.kr.md) | Released |
+| 26 | DBS-GUID-016 | Database System Quick Start Guide | [QUICK_START.md](./guides/QUICK_START.md) | Released |
+| 27 | DBS-GUID-017 | Database System Samples Guide | [SAMPLES_GUIDE.kr.md](./guides/SAMPLES_GUIDE.kr.md) | Released |
+| 28 | DBS-GUID-018 | Database System Samples Guide | [SAMPLES_GUIDE.md](./guides/SAMPLES_GUIDE.md) | Released |
+| 29 | DBS-GUID-019 | Database System Troubleshooting Guide | [TROUBLESHOOTING.md](./guides/TROUBLESHOOTING.md) | Released |
+| 30 | DBS-GUID-020 | Unified Database System Guide | [UNIFIED_SYSTEM.md](./guides/UNIFIED_SYSTEM.md) | Released |
+| 31 | DBS-GUID-021 | Database System Integration Guide | [README.md](./integration/README.md) | Released |
+| 32 | DBS-GUID-022 | database_base Migration Guide | [database_base.md](./migration/database_base.md) | Released |
+| 33 | DBS-GUID-023 | Migrating from Legacy Bool-Returning API to Result-Based API | [legacy_api.md](./migration/legacy_api.md) | Released |
+| 34 | DBS-PERF-001 | Database System 성능 벤치마크 | [BENCHMARKS.kr.md](./BENCHMARKS.kr.md) | Released |
+| 35 | DBS-PERF-002 | Database System Performance Benchmarks | [BENCHMARKS.md](./BENCHMARKS.md) | Released |
+| 36 | DBS-PERF-003 | Database System - 성능 기준 메트릭 | [BASELINE.kr.md](./performance/BASELINE.kr.md) | Released |
+| 37 | DBS-PERF-004 | Database System - Performance Baseline Metrics | [BASELINE.md](./performance/BASELINE.md) | Released |
+| 38 | DBS-PERF-005 | Database System 성능 벤치마크 | [BENCHMARKS.kr.md](./performance/BENCHMARKS.kr.md) | Released |
+| 39 | DBS-PERF-006 | Database System Performance Benchmarks | [BENCHMARKS.md](./performance/BENCHMARKS.md) | Released |
+| 40 | DBS-PERF-007 | 정적 분석 베이스라인 - database_system | [STATIC_ANALYSIS_BASELINE.kr.md](./performance/STATIC_ANALYSIS_BASELINE.kr.md) | Released |
+| 41 | DBS-PERF-008 | Static Analysis Baseline - database_system | [STATIC_ANALYSIS_BASELINE.md](./performance/STATIC_ANALYSIS_BASELINE.md) | Released |
+| 42 | DBS-PERF-009 | Database System Performance Tuning Guide | [TUNING_GUIDE.md](./performance/TUNING_GUIDE.md) | Released |
+| 43 | DBS-MIGR-001 | Migrating from database_base to database_backend | [MIGRATION_database_base.md](./MIGRATION_database_base.md) | Released |
+| 44 | DBS-MIGR-002 | Database System Migration Guide | [MIGRATION.md](./advanced/MIGRATION.md) | Released |
+| 45 | DBS-MIGR-003 | thread_system Migration Guide | [THREAD_SYSTEM_MIGRATION.md](./advanced/THREAD_SYSTEM_MIGRATION.md) | Released |
+| 46 | DBS-INTR-001 | Integration Guide - Database System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
+| 47 | DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
+| 48 | DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
+| 49 | DBS-PROJ-001 | 📜 Database System - 개발 히스토리 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| 50 | DBS-PROJ-002 | 📜 Database System - Development History | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| 51 | DBS-PROJ-003 | Database System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| 52 | DBS-PROJ-004 | Database System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| 53 | DBS-PROJ-005 | SOUP List &mdash; database_system | [SOUP.md](./SOUP.md) | Released |
+| 54 | DBS-PROJ-006 | Thread Adapter 통합 평가 | [THREAD_ADAPTER_EVALUATION.kr.md](./advanced/THREAD_ADAPTER_EVALUATION.kr.md) | Released |
+| 55 | DBS-PROJ-007 | Thread Adapter Integration Evaluation | [THREAD_ADAPTER_EVALUATION.md](./advanced/THREAD_ADAPTER_EVALUATION.md) | Released |
+| 56 | DBS-PROJ-008 | Contributing to Database System | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
 
-## 🚀 Quick Navigation
+## Documents by Category
 
-| I want to... | Document |
-|--------------|----------|
-| ⚡ Get started in 5 minutes | [Quick Start](guides/QUICK_START.md) |
-| 🏗️ Understand the architecture | [Architecture](01-ARCHITECTURE.md) |
-| 📖 Look up an API | [API Reference](02-API_REFERENCE.md) |
-| 🔧 Build from source | [Build Guide](guides/BUILD_GUIDE.md) |
-| ❓ Find answers to common questions | [FAQ](guides/FAQ.md) (20+ Q&A) |
-| 🐛 Troubleshoot an issue | [Troubleshooting](guides/TROUBLESHOOTING.md) |
-| ✨ Learn best practices | [Best Practices](guides/BEST_PRACTICES.md) |
-| 🤝 Contribute to the project | [Contributing](contributing/CONTRIBUTING.md) |
+### Architecture (6)
 
----
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-ARCH-001 | Database System Architecture | [ARCHITECTURE.kr.md](./ARCHITECTURE.kr.md) | Released |
+| DBS-ARCH-002 | Database System Architecture | [ARCHITECTURE.md](./ARCHITECTURE.md) | Released |
+| DBS-ARCH-003 | Database System Architecture | [ARCHITECTURE.md](./advanced/ARCHITECTURE.md) | Released |
+| DBS-ARCH-004 | Architecture Issues - Phase 0 식별 | [ARCHITECTURE_ISSUES.kr.md](./advanced/ARCHITECTURE_ISSUES.kr.md) | Released |
+| DBS-ARCH-005 | Architecture Issues - Phase 0 Identification | [ARCHITECTURE_ISSUES.md](./advanced/ARCHITECTURE_ISSUES.md) | Released |
+| DBS-ARCH-006 | Database System Project Structure | [STRUCTURE.md](./advanced/STRUCTURE.md) | Released |
 
-## Table of Contents
+### API Reference (3)
 
-- [Documentation Structure](#documentation-structure)
-- [Documentation by Role](#documentation-by-role)
-- [By Feature](#by-feature)
-- [By Database Type](#by-database-type)
-- [Contributing to Documentation](#contributing-to-documentation)
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-API-001 | Database System API Reference | [API_REFERENCE.kr.md](./API_REFERENCE.kr.md) | Released |
+| DBS-API-002 | Database System API Reference | [API_REFERENCE.md](./API_REFERENCE.md) | Released |
+| DBS-API-003 | Database System Type System Documentation | [TYPE_SYSTEM.md](./advanced/TYPE_SYSTEM.md) | Released |
 
----
+### Features (2)
 
-## Documentation Structure
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-FEAT-001 | Database System 기능 | [FEATURES.kr.md](./FEATURES.kr.md) | Released |
+| DBS-FEAT-002 | Database System Features | [FEATURES.md](./FEATURES.md) | Released |
 
-### 📘 Core Documentation
+### Guides (22)
 
-Essential documents for understanding the system:
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-GUID-001 | Adapter Pattern Best Practices | [ADAPTER_PATTERNS.md](./ADAPTER_PATTERNS.md) | Released |
+| DBS-GUID-002 | Backend Stability Overview | [BACKENDS.md](./BACKENDS.md) | Released |
+| DBS-GUID-003 | ORM Framework Guide | [ORM_GUIDE.md](./ORM_GUIDE.md) | Released |
+| DBS-GUID-004 | Database System 문서 | [README.kr.md](./README.kr.md) | Released |
+| DBS-GUID-006 | 시스템 현재 상태 - Phase 0 베이스라인 | [CURRENT_STATE.kr.md](./advanced/CURRENT_STATE.kr.md) | Released |
+| DBS-GUID-007 | System Current State - Phase 0 Baseline | [CURRENT_STATE.md](./advanced/CURRENT_STATE.md) | Released |
+| DBS-GUID-008 | Backend Usage Analysis Report | [BACKEND_USAGE_ANALYSIS.md](./analysis/BACKEND_USAGE_ANALYSIS.md) | Released |
+| DBS-GUID-009 | CI/CD Guide for database_system | [CI_CD_GUIDE.md](./contributing/CI_CD_GUIDE.md) | Released |
+| DBS-GUID-010 | Async Database Operations Guide | [ASYNC_OPERATIONS.md](./guides/ASYNC_OPERATIONS.md) | Released |
+| DBS-GUID-011 | Database System - Best Practices Guide | [BEST_PRACTICES.md](./guides/BEST_PRACTICES.md) | Released |
+| DBS-GUID-012 | Database System Build Guide | [BUILD_GUIDE.kr.md](./guides/BUILD_GUIDE.kr.md) | Released |
+| DBS-GUID-013 | Database System Build Guide | [BUILD_GUIDE.md](./guides/BUILD_GUIDE.md) | Released |
+| DBS-GUID-014 | Database System - Frequently Asked Questions | [FAQ.md](./guides/FAQ.md) | Released |
+| DBS-GUID-015 | Database System 빠른 시작 가이드 | [QUICK_START.kr.md](./guides/QUICK_START.kr.md) | Released |
+| DBS-GUID-016 | Database System Quick Start Guide | [QUICK_START.md](./guides/QUICK_START.md) | Released |
+| DBS-GUID-017 | Database System Samples Guide | [SAMPLES_GUIDE.kr.md](./guides/SAMPLES_GUIDE.kr.md) | Released |
+| DBS-GUID-018 | Database System Samples Guide | [SAMPLES_GUIDE.md](./guides/SAMPLES_GUIDE.md) | Released |
+| DBS-GUID-019 | Database System Troubleshooting Guide | [TROUBLESHOOTING.md](./guides/TROUBLESHOOTING.md) | Released |
+| DBS-GUID-020 | Unified Database System Guide | [UNIFIED_SYSTEM.md](./guides/UNIFIED_SYSTEM.md) | Released |
+| DBS-GUID-021 | Database System Integration Guide | [README.md](./integration/README.md) | Released |
+| DBS-GUID-022 | database_base Migration Guide | [database_base.md](./migration/database_base.md) | Released |
+| DBS-GUID-023 | Migrating from Legacy Bool-Returning API to Result-Based API | [legacy_api.md](./migration/legacy_api.md) | Released |
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | System architecture, design decisions, backend plugin system | [🇰🇷](01-ARCHITECTURE.kr.md) | 600+ |
-| [02-API_REFERENCE.md](02-API_REFERENCE.md) | Complete API docs: database_manager, connection_pool, ORM, query builders | [🇰🇷](02-API_REFERENCE.kr.md) | 1000+ |
+### Performance (9)
 
-### 📗 User Guides
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-PERF-001 | Database System 성능 벤치마크 | [BENCHMARKS.kr.md](./BENCHMARKS.kr.md) | Released |
+| DBS-PERF-002 | Database System Performance Benchmarks | [BENCHMARKS.md](./BENCHMARKS.md) | Released |
+| DBS-PERF-003 | Database System - 성능 기준 메트릭 | [BASELINE.kr.md](./performance/BASELINE.kr.md) | Released |
+| DBS-PERF-004 | Database System - Performance Baseline Metrics | [BASELINE.md](./performance/BASELINE.md) | Released |
+| DBS-PERF-005 | Database System 성능 벤치마크 | [BENCHMARKS.kr.md](./performance/BENCHMARKS.kr.md) | Released |
+| DBS-PERF-006 | Database System Performance Benchmarks | [BENCHMARKS.md](./performance/BENCHMARKS.md) | Released |
+| DBS-PERF-007 | 정적 분석 베이스라인 - database_system | [STATIC_ANALYSIS_BASELINE.kr.md](./performance/STATIC_ANALYSIS_BASELINE.kr.md) | Released |
+| DBS-PERF-008 | Static Analysis Baseline - database_system | [STATIC_ANALYSIS_BASELINE.md](./performance/STATIC_ANALYSIS_BASELINE.md) | Released |
+| DBS-PERF-009 | Database System Performance Tuning Guide | [TUNING_GUIDE.md](./performance/TUNING_GUIDE.md) | Released |
 
-Step-by-step guides for users:
+### Migration (3)
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [QUICK_START.md](guides/QUICK_START.md) | 5-minute getting started guide | - | 170 |
-| [BUILD_GUIDE.md](guides/BUILD_GUIDE.md) | Build instructions, dependencies, troubleshooting | [🇰🇷](guides/BUILD_GUIDE.kr.md) | 500+ |
-| [FAQ.md](guides/FAQ.md) | 20+ frequently asked questions with answers | - | 484 |
-| [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) | Common problems and solutions | - | 964 |
-| [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) | Recommended patterns for connection, queries, security | - | 1255 |
-| [SAMPLES_GUIDE.md](guides/SAMPLES_GUIDE.md) | Walkthrough of example applications | [🇰🇷](guides/SAMPLES_GUIDE.kr.md) | 800+ |
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-MIGR-001 | Migrating from database_base to database_backend | [MIGRATION_database_base.md](./MIGRATION_database_base.md) | Released |
+| DBS-MIGR-002 | Database System Migration Guide | [MIGRATION.md](./advanced/MIGRATION.md) | Released |
+| DBS-MIGR-003 | thread_system Migration Guide | [THREAD_SYSTEM_MIGRATION.md](./advanced/THREAD_SYSTEM_MIGRATION.md) | Released |
 
-### 📙 Advanced Topics
+### Integration (1)
 
-For experienced users and contributors:
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-INTR-001 | Integration Guide - Database System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [ADAPTER_PATTERNS.md](ADAPTER_PATTERNS.md) | Adapter pattern best practices for dependency management | [🇰🇷](ADAPTER_PATTERNS.kr.md) | 500+ |
-| [TYPE_SYSTEM.md](advanced/TYPE_SYSTEM.md) | database_value, type mapping, ORM integration | - | 484 |
-| [THREAD_SYSTEM_MIGRATION.md](advanced/THREAD_SYSTEM_MIGRATION.md) | Thread system integration guide | - | 300+ |
-| [CURRENT_STATE.md](advanced/CURRENT_STATE.md) | Current implementation status | [🇰🇷](advanced/CURRENT_STATE.kr.md) | 100+ |
-| [ARCHITECTURE_ISSUES.md](advanced/ARCHITECTURE_ISSUES.md) | Known architectural issues | [🇰🇷](advanced/ARCHITECTURE_ISSUES.kr.md) | 50+ |
+### Quality (2)
 
-### 📊 Performance
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
+| DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
 
-Performance metrics and optimization:
+### Project (8)
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [BASELINE.md](performance/BASELINE.md) | Performance baseline: 1.2ms queries, 5K TPS, 1.16M ops/s | [🇰🇷](performance/BASELINE.kr.md) | 300+ |
-| [BENCHMARKS.md](performance/BENCHMARKS.md) | Detailed benchmark results by backend | [🇰🇷](performance/BENCHMARKS.kr.md) | 600+ |
-| [STATIC_ANALYSIS_BASELINE.md](performance/STATIC_ANALYSIS_BASELINE.md) | Static analysis results (Clang-Tidy, Cppcheck) | [🇰🇷](performance/STATIC_ANALYSIS_BASELINE.kr.md) | 100+ |
-
-### 🤝 Contributing
-
-For contributors and maintainers:
-
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [CONTRIBUTING.md](contributing/CONTRIBUTING.md) | Contribution guidelines, code style, testing | - | 955 |
-| [CI_CD_GUIDE.md](contributing/CI_CD_GUIDE.md) | CI/CD pipeline, sanitizers, benchmarks | - | 530 |
-
----
-
-## Documentation by Role
-
-### 👤 For New Users
-
-**Getting Started Path**:
-1. **⚡ Quick Start** - [5-minute guide](guides/QUICK_START.md) to first program
-2. **🏗️ Architecture** - [System overview](01-ARCHITECTURE.md) and design
-3. **📖 API Reference** - [Complete API](02-API_REFERENCE.md) documentation
-4. **💡 Examples** - [Samples guide](guides/SAMPLES_GUIDE.md) with walkthroughs
-
-**When You Have Issues**:
-- Check [FAQ](guides/FAQ.md) first (20+ common questions)
-- Use [Troubleshooting](guides/TROUBLESHOOTING.md) for problems
-- Search [GitHub Issues](https://github.com/kcenon/database_system/issues)
-
-### 💻 For Experienced Developers
-
-**Advanced Usage Path**:
-1. **🏗️ Architecture** - Understand [backend plugin system](01-ARCHITECTURE.md)
-2. **📖 API Reference** - Study [advanced APIs](02-API_REFERENCE.md)
-3. **✨ Best Practices** - Learn [optimization patterns](guides/BEST_PRACTICES.md)
-4. **📊 Performance** - Review [benchmarks](performance/BENCHMARKS.md)
-
-**Deep Dive Topics**:
-- [Adapter Patterns](ADAPTER_PATTERNS.md) - Optional dependency management
-- [Type System](advanced/TYPE_SYSTEM.md) - Type mapping and ORM
-- [Thread Integration](advanced/THREAD_SYSTEM_MIGRATION.md) - Multi-threading
-- [Security Best Practices](guides/BEST_PRACTICES.md#security-best-practices)
-
-### 🔧 For DevOps Engineers
-
-**Deployment Path**:
-1. **🔧 Build Guide** - [Build and install](guides/BUILD_GUIDE.md)
-2. **📊 Benchmarks** - [Performance baselines](performance/BENCHMARKS.md)
-3. **✨ Best Practices** - [Connection tuning](guides/BEST_PRACTICES.md#connection-management)
-4. **🐛 Troubleshooting** - [Common issues](guides/TROUBLESHOOTING.md)
-
-**Monitoring and Tuning**:
-- [Connection Pool Performance](performance/BASELINE.md) - 0.1ms acquisition
-- [Query Performance](performance/BENCHMARKS.md) - Backend-specific metrics
-- [CI/CD Pipeline](contributing/CI_CD_GUIDE.md) - Automation
-
-### 🤝 For Contributors
-
-**Contribution Path**:
-1. **🤝 Contributing** - [How to contribute](contributing/CONTRIBUTING.md)
-2. **🔧 Build Guide** - [Development setup](guides/BUILD_GUIDE.md)
-3. **🚀 CI/CD** - [Pipeline documentation](contributing/CI_CD_GUIDE.md)
-4. **🏗️ Architecture** - [System internals](01-ARCHITECTURE.md)
-
-**Development Resources**:
-- [Code Style](contributing/CONTRIBUTING.md#code-style-guidelines)
-- [Testing Guide](contributing/CI_CD_GUIDE.md#running-checks-locally)
-- [Current Status](advanced/CURRENT_STATE.md) - Implementation status
-
----
-
-## By Feature
-
-### 🔗 Connection Management
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| API | [API Reference](02-API_REFERENCE.md) | database_manager |
-| Pooling | [Best Practices](guides/BEST_PRACTICES.md) | Connection Management |
-| Performance | [Benchmarks](performance/BENCHMARKS.md) | Connection Pool |
-| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) | Connection Pool Demo |
-
-### 🏊 Connection Pooling
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| API | [API Reference](02-API_REFERENCE.md) | connection_pool |
-| Configuration | [FAQ](guides/FAQ.md) | Connection Pooling |
-| Tuning | [Best Practices](guides/BEST_PRACTICES.md) | Performance Optimization |
-| Benchmarks | [Baseline](performance/BASELINE.md) | 0.1ms acquisition |
-
-### 🔍 Query Building
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| API | [API Reference](02-API_REFERENCE.md) | Query Builders |
-| SQL Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | SQL Query Builder |
-| MongoDB Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | MongoDB Query Builder |
-| Redis Builder | [Samples Guide](guides/SAMPLES_GUIDE.md) | Redis Query Builder |
-
-### 🗂️ ORM Framework
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| API | [API Reference](02-API_REFERENCE.md) | entity_manager |
-| Type System | [Type System](advanced/TYPE_SYSTEM.md) | ORM Integration |
-| Examples | [FAQ](guides/FAQ.md) | ORM Framework |
-| Best Practices | [Best Practices](guides/BEST_PRACTICES.md) | Entity Mapping |
-
-### 🔐 Security
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| Credentials | [Best Practices](guides/BEST_PRACTICES.md) | Security Best Practices |
-| SQL Injection | [FAQ](guides/FAQ.md) | Security |
-| Access Control | [Architecture](01-ARCHITECTURE.md) | RBAC |
-| Audit Logging | [Best Practices](guides/BEST_PRACTICES.md) | Audit Logging |
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-PROJ-001 | 📜 Database System - 개발 히스토리 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| DBS-PROJ-002 | 📜 Database System - Development History | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| DBS-PROJ-003 | Database System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| DBS-PROJ-004 | Database System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| DBS-PROJ-005 | SOUP List &mdash; database_system | [SOUP.md](./SOUP.md) | Released |
+| DBS-PROJ-006 | Thread Adapter 통합 평가 | [THREAD_ADAPTER_EVALUATION.kr.md](./advanced/THREAD_ADAPTER_EVALUATION.kr.md) | Released |
+| DBS-PROJ-007 | Thread Adapter Integration Evaluation | [THREAD_ADAPTER_EVALUATION.md](./advanced/THREAD_ADAPTER_EVALUATION.md) | Released |
+| DBS-PROJ-008 | Contributing to Database System | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
 
 ---
 
-## By Database Type
-
-### 🐘 PostgreSQL
-
-| Topic | Document |
-|-------|----------|
-| Setup | [Build Guide](guides/BUILD_GUIDE.md) - PostgreSQL dependencies |
-| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - PostgreSQL advanced |
-| Performance | [Benchmarks](performance/BENCHMARKS.md) - 1.2ms SELECT |
-| Tips | [Best Practices](guides/BEST_PRACTICES.md) - PostgreSQL-specific |
-
-### 🗄️ SQLite
-
-| Topic | Document |
-|-------|----------|
-| Setup | [Quick Start](guides/QUICK_START.md) - Easiest to start |
-| Usage | [Samples Guide](guides/SAMPLES_GUIDE.md) - Local database |
-| Performance | [Benchmarks](performance/BENCHMARKS.md) - 0.8ms SELECT |
-| Tips | [Best Practices](guides/BEST_PRACTICES.md) - SQLite-specific |
-
-### 🍃 MongoDB
-
-| Topic | Document |
-|-------|----------|
-| Setup | [Build Guide](guides/BUILD_GUIDE.md) - MongoDB dependencies |
-| Query Builder | [API Reference](02-API_REFERENCE.md) - mongodb_query_builder |
-| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - MongoDB examples |
-| Tips | [Best Practices](guides/BEST_PRACTICES.md) - MongoDB-specific |
-
-### 🔴 Redis
-
-| Topic | Document |
-|-------|----------|
-| Setup | [Build Guide](guides/BUILD_GUIDE.md) - Redis dependencies |
-| Query Builder | [API Reference](02-API_REFERENCE.md) - redis_query_builder |
-| Examples | [Samples Guide](guides/SAMPLES_GUIDE.md) - Redis examples |
-| Performance | [Benchmarks](performance/BENCHMARKS.md) - 0.3ms operations |
-
----
-
-## Project Information
-
-### Current Status
-- **Version**: 0.1.0 (Phase 3 C++17 Migration Complete)
-- **C++ Standard**: C++17 (C++20 for async/coroutines)
-- **License**: BSD 3-Clause
-- **Test Status**: 22/23 passing (95.7%)
-
-### Supported Databases
-- ✅ **PostgreSQL** - Full support with JSONB, CTEs, prepared statements
-- Removed: **MySQL/MariaDB** backend support was deleted in Issue #418 to align dependency, SOUP, and license inventory.
-- ✅ **SQLite** - File and in-memory with WAL mode, FTS5
-- ✅ **MongoDB** - Document operations and aggregation pipeline
-- ✅ **Redis** - All data types with pipelining
-
-### Key Features
-- 🔗 **Multi-Backend** - Unified interface for 4 database types
-- 🏊 **Connection Pooling** - 0.1ms acquisition, 10K+ connections
-- 🔍 **Query Builders** - Type-safe SQL, MongoDB, Redis builders
-- 🗂️ **ORM Framework** - Entity mapping with type-safe CRUD
-- 🔐 **Security** - Credential encryption, RBAC, audit logging
-- 🧵 **Thread Safe** - Concurrent operations verified with TSan
-- 🛡️ **Production Ready** - Mock fallbacks, dependency injection
-
----
-
-## Contributing to Documentation
-
-### Documentation Standards
-Follow the [Documentation Standard](/Users/raphaelshin/Sources/template_document/DOCUMENTATION_STANDARD.md):
-- Front matter on all documents
-- Code examples must compile
-- Bilingual support (English/Korean)
-- Cross-references with relative links
-
-### Areas for Improvement
-- [ ] Korean translations for new guides (FAQ, TROUBLESHOOTING, BEST_PRACTICES)
-- [ ] Video tutorials
-- [ ] Interactive examples
-- [ ] More troubleshooting scenarios
-
-### Submission Process
-1. Read [Contributing Guide](contributing/CONTRIBUTING.md)
-2. Edit markdown files
-3. Test all code examples
-4. Update Korean translations
-5. Submit pull request
-
----
-
-## 📞 Getting Help
-
-### Documentation Issues
-- **Missing info**: [Open documentation issue](https://github.com/kcenon/database_system/issues/new?labels=documentation)
-- **Incorrect examples**: Report with details
-- **Unclear instructions**: Suggest improvements
-
-### Technical Support
-1. Check [FAQ](guides/FAQ.md) - 20+ common questions
-2. Read [Troubleshooting](guides/TROUBLESHOOTING.md) - Solutions to common problems
-3. Search [GitHub Issues](https://github.com/kcenon/database_system/issues)
-4. Ask on [GitHub Discussions](https://github.com/kcenon/database_system/discussions)
-
-### Support Resources
-- **Issues**: Bug reports and feature requests
-- **Discussions**: Questions and support
-- **Pull Requests**: Code and documentation contributions
-
----
-
-## External Resources
-
-- **GitHub Repository**: [kcenon/database_system](https://github.com/kcenon/database_system)
-- **Issue Tracker**: [GitHub Issues](https://github.com/kcenon/database_system/issues)
-- **Main README**: [../README.md](../README.md)
-- **Improvement Plan**: [../IMPROVEMENT_PLAN.md](../IMPROVEMENT_PLAN.md)
-- **Changelog**: [../CHANGELOG.md](../CHANGELOG.md)
-
----
-
-## Documentation Roadmap
-
-### ✅ Current (v1.0 - 2025-11-11)
-- ✅ Complete API reference with examples
-- ✅ Comprehensive build guide
-- ✅ 20+ FAQ questions
-- ✅ Detailed troubleshooting guide
-- ✅ Best practices documentation
-- ✅ Performance benchmarks
-- ✅ CI/CD documentation
-- ✅ Type system documentation
-
-### 📋 Future Enhancements
-- 📝 Korean translations for new guides
-- 🎥 Video tutorials
-- 📊 Interactive performance dashboard
-- 🌐 Multi-language support (Japanese, Chinese)
-- 📖 Migration guides for major versions
-
----
-
-**Database System Documentation** - Enterprise-grade database abstraction for C++17/20
-
-**Last Updated**: 2025-11-11
-**Next Review**: 2026-02-11
+*Registry generated for issue [#563](https://github.com/kcenon/database_system/issues/563).*

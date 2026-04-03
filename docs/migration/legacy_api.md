@@ -10,6 +10,8 @@ category: "GUID"
 
 # Migrating from Legacy Bool-Returning API to Result-Based API
 
+> **SSOT**: This document is the single source of truth for **Migrating from Legacy Bool-Returning API to Result-Based API**.
+
 ## Overview
 
 The `database_manager` class previously had two sets of API methods:

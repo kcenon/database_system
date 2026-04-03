@@ -10,6 +10,8 @@ category: "PERF"
 
 # Database System Performance Benchmarks
 
+> **SSOT**: This document is the single source of truth for **Database System Performance Benchmarks**.
+
 **Last Updated**: 2025-11-15
 **Version**: 0.3.0.0
 **Test Platform**: Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD storage

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System Integration Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Integration Guide**.
+
 ## Overview
 
 This directory contains integration guides for using database_system with other KCENON systems.

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-INTR-001"
+doc_title: "Integration Guide - Database System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "INTR"
+---
+
 # Integration Guide - Database System
 
 > **Language:** **English** | [한국어](INTEGRATION.kr.md)

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PROJ-007"
+doc_title: "Thread Adapter Integration Evaluation"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PROJ"
+---
+
 # Thread Adapter Integration Evaluation
 
 This document records the evaluation outcome for integrating `thread_adapter` into modules that use single background threads.

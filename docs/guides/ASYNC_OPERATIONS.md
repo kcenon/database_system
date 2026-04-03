@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-010"
+doc_title: "Async Database Operations Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Async Database Operations Guide
 
 > **Language:** **English** | [한국어](ASYNC_OPERATIONS.kr.md)

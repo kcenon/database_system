@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-FEAT-002"
+doc_title: "Database System Features"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "FEAT"
+---
+
 # Database System Features
 
 **Last Updated**: 2026-02-08

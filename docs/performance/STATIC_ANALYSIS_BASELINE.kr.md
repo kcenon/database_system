@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PERF-007"
+doc_title: "정적 분석 베이스라인 - database_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PERF"
+---
+
 # 정적 분석 베이스라인 - database_system
 
 > **Language:** [English](STATIC_ANALYSIS_BASELINE.md) | **한국어**

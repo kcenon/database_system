@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-FEAT-001"
+doc_title: "Database System 기능"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "FEAT"
+---
+
 # Database System 기능
 
 **언어:** [English](FEATURES.md) | **한국어**

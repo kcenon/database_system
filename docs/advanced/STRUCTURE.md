@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-ARCH-006"
+doc_title: "Database System Project Structure"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "ARCH"
+---
+
 # Database System Project Structure
 
 > **Version:** 0.1.0.0

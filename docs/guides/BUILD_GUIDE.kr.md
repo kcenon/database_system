@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-012"
+doc_title: "Database System Build Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Database System Build Guide
 
 > **Language:** [English](BUILD_GUIDE.md) | **한국어**

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PROJ-008"
+doc_title: "Contributing to Database System"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PROJ"
+---
+
 # Contributing to Database System
 
 **Version:** 0.1.0.0

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-001"
+doc_title: "Adapter Pattern Best Practices"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Adapter Pattern Best Practices
 
 > **Language:** **English** | [한국어](ADAPTER_PATTERNS.kr.md)

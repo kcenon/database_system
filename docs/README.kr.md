@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-004"
+doc_title: "Database System 문서"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Database System 문서
 
 > **Language:** [English](README.md) | **한국어**

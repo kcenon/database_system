@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-022"
+doc_title: "database_base Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # database_base Migration Guide
 
 ## Overview

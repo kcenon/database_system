@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PROJ-006"
+doc_title: "Thread Adapter 통합 평가"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PROJ"
+---
+
 # Thread Adapter 통합 평가
 
 이 문서는 단일 백그라운드 스레드를 사용하는 모듈에 `thread_adapter`를 통합하는 것에 대한 평가 결과를 기록합니다.

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-QUAL-002"
+doc_title: "Database System Production Quality"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "QUAL"
+---
+
 # Database System Production Quality
 
 **Last Updated**: 2025-11-15

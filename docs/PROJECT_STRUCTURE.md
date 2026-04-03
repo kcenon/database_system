@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PROJ-004"
+doc_title: "Database System Project Structure"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PROJ"
+---
+
 # Database System Project Structure
 
 **Last Updated**: 2025-11-15

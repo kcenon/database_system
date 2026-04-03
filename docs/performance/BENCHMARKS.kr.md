@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PERF-005"
+doc_title: "Database System 성능 벤치마크"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PERF"
+---
+
 # Database System 성능 벤치마크
 
 > **Language:** [English](PERFORMANCE_BENCHMARKS.md) | **한국어**

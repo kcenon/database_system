@@ -13,7 +13,7 @@ category: "GUID"
 > **SSOT**: This file is the single source of truth for the documentation index
 > of **database_system**.
 
-Total documents: **56**
+Total documents: **59**
 
 ## Document Index
 
@@ -67,14 +67,17 @@ Total documents: **56**
 | 46 | DBS-INTR-001 | Integration Guide - Database System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 | 47 | DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | 48 | DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| 49 | DBS-PROJ-001 | 📜 Database System - 개발 히스토리 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
-| 50 | DBS-PROJ-002 | 📜 Database System - Development History | [CHANGELOG.md](./CHANGELOG.md) | Released |
-| 51 | DBS-PROJ-003 | Database System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
-| 52 | DBS-PROJ-004 | Database System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
-| 53 | DBS-PROJ-005 | SOUP List &mdash; database_system | [SOUP.md](./SOUP.md) | Released |
-| 54 | DBS-PROJ-006 | Thread Adapter 통합 평가 | [THREAD_ADAPTER_EVALUATION.kr.md](./advanced/THREAD_ADAPTER_EVALUATION.kr.md) | Released |
-| 55 | DBS-PROJ-007 | Thread Adapter Integration Evaluation | [THREAD_ADAPTER_EVALUATION.md](./advanced/THREAD_ADAPTER_EVALUATION.md) | Released |
-| 56 | DBS-PROJ-008 | Contributing to Database System | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
+| 49 | DBS-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| 50 | DBS-ADR-001 | ADR-001: Multi-Backend Database Abstraction | [ADR-001-multi-backend-abstraction.md](./adr/ADR-001-multi-backend-abstraction.md) | Accepted |
+| 51 | DBS-ADR-002 | ADR-002: Connection Pool Architecture | [ADR-002-connection-pool-architecture.md](./adr/ADR-002-connection-pool-architecture.md) | Accepted |
+| 52 | DBS-PROJ-001 | 📜 Database System - 개발 히스토리 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| 53 | DBS-PROJ-002 | 📜 Database System - Development History | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| 54 | DBS-PROJ-003 | Database System 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| 55 | DBS-PROJ-004 | Database System Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| 56 | DBS-PROJ-005 | SOUP List &mdash; database_system | [SOUP.md](./SOUP.md) | Released |
+| 57 | DBS-PROJ-006 | Thread Adapter 통합 평가 | [THREAD_ADAPTER_EVALUATION.kr.md](./advanced/THREAD_ADAPTER_EVALUATION.kr.md) | Released |
+| 58 | DBS-PROJ-007 | Thread Adapter Integration Evaluation | [THREAD_ADAPTER_EVALUATION.md](./advanced/THREAD_ADAPTER_EVALUATION.md) | Released |
+| 59 | DBS-PROJ-008 | Contributing to Database System | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
 
 ## Documents by Category
 
@@ -159,12 +162,20 @@ Total documents: **56**
 |--------|-------|----------|--------|
 | DBS-INTR-001 | Integration Guide - Database System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 
-### Quality (2)
+### Quality (3)
 
 | doc_id | Topic | Document | Status |
 |--------|-------|----------|--------|
 | DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
+| DBS-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+
+### Architecture Decision Records (2)
+
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| DBS-ADR-001 | ADR-001: Multi-Backend Database Abstraction | [ADR-001-multi-backend-abstraction.md](./adr/ADR-001-multi-backend-abstraction.md) | Accepted |
+| DBS-ADR-002 | ADR-002: Connection Pool Architecture | [ADR-002-connection-pool-architecture.md](./adr/ADR-002-connection-pool-architecture.md) | Accepted |
 
 ### Project (8)
 

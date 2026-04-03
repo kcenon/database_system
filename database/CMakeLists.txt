@@ -223,7 +223,7 @@ if(USE_THREAD_SYSTEM)
     set(_DATABASE_THREAD_HANDLED FALSE)
 
     if(_DATABASE_IS_UNIFIED_BUILD)
-        foreach(_candidate ThreadSystem thread_system)
+        foreach(_candidate thread_system ThreadSystem)
             if(TARGET ${_candidate})
                 target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
                 set(_DATABASE_THREAD_HANDLED TRUE)

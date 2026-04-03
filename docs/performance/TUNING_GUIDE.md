@@ -10,6 +10,8 @@ category: "PERF"
 
 # Database System Performance Tuning Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Performance Tuning Guide**.
+
 ## Overview
 
 This guide provides comprehensive performance tuning recommendations

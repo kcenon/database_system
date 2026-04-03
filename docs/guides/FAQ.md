@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System - Frequently Asked Questions
 
+> **SSOT**: This document is the single source of truth for **Database System - Frequently Asked Questions**.
+
 **Version:** 0.1.0
 **Last Updated:** 2025-11-11
 **Status:** Stable

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System 문서
 
+> **SSOT**: This document is the single source of truth for **Database System 문서**.
+
 > **Language:** [English](README.md) | **한국어**
 
 ## 목차

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System Build Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Build Guide**.
+
 > **Language:** [English](BUILD_GUIDE.md) | **한국어**
 
 멀티 백엔드 지원, 연결 풀링 및 쿼리 빌더를 갖춘 Database System 빌드를 위한 종합 가이드입니다.

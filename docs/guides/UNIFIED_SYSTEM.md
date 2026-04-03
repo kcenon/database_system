@@ -10,6 +10,8 @@ category: "GUID"
 
 # Unified Database System Guide
 
+> **SSOT**: This document is the single source of truth for **Unified Database System Guide**.
+
 > **Language:** **English** | [한국어](UNIFIED_SYSTEM.kr.md)
 
 ## Table of Contents

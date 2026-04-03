@@ -10,6 +10,8 @@ category: "GUID"
 
 # Async Database Operations Guide
 
+> **SSOT**: This document is the single source of truth for **Async Database Operations Guide**.
+
 > **Language:** **English** | [한국어](ASYNC_OPERATIONS.kr.md)
 
 ## Table of Contents

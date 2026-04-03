@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Database System Production Quality
 
+> **SSOT**: This document is the single source of truth for **Database System Production Quality**.
+
 **Last Updated**: 2025-11-15
 **Version**: 0.3.0.0
 **Status**: Under Development

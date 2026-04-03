@@ -11,6 +11,8 @@ category: "PERF"
 <<<<<<< HEAD
 # Database System - 성능 기준 메트릭
 
+> **SSOT**: This document is the single source of truth for **Database System - 성능 기준 메트릭**.
+
 [English](BASELINE.md) | **한국어**
 
 **버전**: 0.1.0.0

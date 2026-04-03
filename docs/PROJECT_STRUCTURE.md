@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Database System Project Structure
 
+> **SSOT**: This document is the single source of truth for **Database System Project Structure**.
+
 **Last Updated**: 2025-11-15
 **Version**: 0.3.0.0
 

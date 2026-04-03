@@ -10,6 +10,8 @@ category: "PROJ"
 
 # 📜 Database System - Development History
 
+> **SSOT**: This document is the single source of truth for **📜 Database System - Development History**.
+
 **English** | [한국어](CHANGELOG.kr.md)
 
 <div align="center">

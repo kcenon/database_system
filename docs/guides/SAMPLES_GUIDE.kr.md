@@ -10,6 +10,8 @@ category: "GUID"
 
 # Database System Samples Guide
 
+> **SSOT**: This document is the single source of truth for **Database System Samples Guide**.
+
 > **Language:** [English](SAMPLES_GUIDE.md) | **한국어**
 
 Database System의 다양한 기능을 보여주는 샘플 프로그램에 대한 종합 가이드입니다.

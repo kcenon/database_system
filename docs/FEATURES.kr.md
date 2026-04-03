@@ -10,6 +10,8 @@ category: "FEAT"
 
 # Database System 기능
 
+> **SSOT**: This document is the single source of truth for **Database System 기능**.
+
 **언어:** [English](FEATURES.md) | **한국어**
 
 **최종 업데이트**: 2026-02-08

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PROJ-001"
+doc_title: "📜 Database System - 개발 히스토리"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PROJ"
+---
+
 # 📜 Database System - 개발 히스토리
 
 [English](CHANGELOG.md) | **한국어**

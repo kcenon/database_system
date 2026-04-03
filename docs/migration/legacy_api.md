@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-023"
+doc_title: "Migrating from Legacy Bool-Returning API to Result-Based API"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Migrating from Legacy Bool-Returning API to Result-Based API
 
 ## Overview

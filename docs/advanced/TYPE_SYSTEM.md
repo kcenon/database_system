@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-API-003"
+doc_title: "Database System Type System Documentation"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "API"
+---
+
 # Database System Type System Documentation
 
 **Version**: 0.1.0.0

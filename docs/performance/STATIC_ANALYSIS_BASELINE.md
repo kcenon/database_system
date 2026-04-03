@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PERF-008"
+doc_title: "Static Analysis Baseline - database_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PERF"
+---
+
 # Static Analysis Baseline - database_system
 
 > **Language:** **English** | [한국어](STATIC_ANALYSIS_BASELINE.kr.md)

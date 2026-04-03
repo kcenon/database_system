@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-QUAL-001"
+doc_title: "Database System 프로덕션 품질"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "QUAL"
+---
+
 # Database System 프로덕션 품질
 
 **언어:** [English](PRODUCTION_QUALITY.md) | **한국어**

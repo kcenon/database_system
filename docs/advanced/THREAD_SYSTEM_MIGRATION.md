@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-MIGR-003"
+doc_title: "thread_system Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "MIGR"
+---
+
 # thread_system Migration Guide
 
 > **Version**: 0.1.0.0

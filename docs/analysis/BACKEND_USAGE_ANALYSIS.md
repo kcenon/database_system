@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-008"
+doc_title: "Backend Usage Analysis Report"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Backend Usage Analysis Report
 
 ## Overview

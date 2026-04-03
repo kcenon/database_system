@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-API-002"
+doc_title: "Database System API Reference"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "API"
+---
+
 # Database System API Reference
 
 > **Language:** **English** | [한국어](API_REFERENCE.kr.md)

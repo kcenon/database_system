@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-PERF-004"
+doc_title: "Database System - Performance Baseline Metrics"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "PERF"
+---
+
 # Database System - Performance Baseline Metrics
 
 **English** | [한국어](BASELINE.kr.md)

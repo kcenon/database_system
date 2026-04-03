@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-MIGR-002"
+doc_title: "Database System Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "MIGR"
+---
+
 # Database System Migration Guide
 
 > **Version:** 0.1.0.0

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-002"
+doc_title: "Backend Stability Overview"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Backend Stability Overview
 
 This document describes the maturity level of each database backend in the

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-011"
+doc_title: "Database System - Best Practices Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Database System - Best Practices Guide
 
 > **Version:** 0.1.0

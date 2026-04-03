@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-MIGR-001"
+doc_title: "Migrating from database_base to database_backend"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "MIGR"
+---
+
 # Migrating from database_base to database_backend
 
 ## Overview

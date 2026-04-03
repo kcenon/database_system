@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-003"
+doc_title: "ORM Framework Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # ORM Framework Guide
 
 > **Status**: Full Support (C++17 SFINAE-based)

@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-GUID-020"
+doc_title: "Unified Database System Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "GUID"
+---
+
 # Unified Database System Guide
 
 > **Language:** **English** | [한국어](UNIFIED_SYSTEM.kr.md)

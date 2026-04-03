@@ -1,3 +1,13 @@
+---
+doc_id: "DBS-ARCH-001"
+doc_title: "Database System Architecture"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "database_system"
+category: "ARCH"
+---
+
 # Database System Architecture
 
 > **Language:** [English](ARCHITECTURE.md) | **한국어**

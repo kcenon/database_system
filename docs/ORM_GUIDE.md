@@ -10,6 +10,8 @@ category: "GUID"
 
 # ORM Framework Guide
 
+> **SSOT**: This document is the single source of truth for **ORM Framework Guide**.
+
 > **Status**: Full Support (C++17 SFINAE-based)
 > **Header**: `database/orm/entity.h`
 > **Namespace**: `database::orm`

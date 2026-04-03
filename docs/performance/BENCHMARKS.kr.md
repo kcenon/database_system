@@ -10,6 +10,8 @@ category: "PERF"
 
 # Database System 성능 벤치마크
 
+> **SSOT**: This document is the single source of truth for **Database System 성능 벤치마크**.
+
 > **Language:** [English](PERFORMANCE_BENCHMARKS.md) | **한국어**
 
 멀티 백엔드 지원, 연결 풀링, 쿼리 빌더를 갖춘 Database System에 대한 종합적인 성능 분석 및 벤치마크입니다.

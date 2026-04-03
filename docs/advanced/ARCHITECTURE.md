@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Database System Architecture
 
+> **SSOT**: This document is the single source of truth for **Database System Architecture**.
+
 > **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English

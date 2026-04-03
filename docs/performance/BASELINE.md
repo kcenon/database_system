@@ -10,6 +10,8 @@ category: "PERF"
 
 # Database System - Performance Baseline Metrics
 
+> **SSOT**: This document is the single source of truth for **Database System - Performance Baseline Metrics**.
+
 **English** | [한국어](BASELINE.kr.md)
 
 **Document Version**: 2.0

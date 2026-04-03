@@ -10,6 +10,8 @@ category: "GUID"
 
 # Adapter Pattern Best Practices
 
+> **SSOT**: This document is the single source of truth for **Adapter Pattern Best Practices**.
+
 > **Language:** **English** | [한국어](ADAPTER_PATTERNS.kr.md)
 
 **Version:** 1.0.0

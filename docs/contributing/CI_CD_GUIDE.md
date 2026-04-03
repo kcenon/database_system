@@ -10,6 +10,8 @@ category: "GUID"
 
 # CI/CD Guide for database_system
 
+> **SSOT**: This document is the single source of truth for **CI/CD Guide for database_system**.
+
 **Version:** 0.1.0
 **Last Updated:** 2025-11-11
 **Status:** Stable

@@ -10,6 +10,8 @@ category: "API"
 
 # Database System API Reference
 
+> **SSOT**: This document is the single source of truth for **Database System API Reference**.
+
 > **Language:** [English](API_REFERENCE.md) | **한국어**
 
 멀티 백엔드 지원, 연결 풀링, 쿼리 빌더를 갖춘 Database System C++20 라이브러리의 완전한 API 레퍼런스입니다.

@@ -10,6 +10,8 @@ category: "PERF"
 
 # Database System Performance Benchmarks
 
+> **SSOT**: This document is the single source of truth for **Database System Performance Benchmarks**.
+
 > **Language:** **English** | [한국어](PERFORMANCE_BENCHMARKS.kr.md)
 
 Comprehensive performance analysis and benchmarks for the Database System with multi-backend support, connection pooling, and query builders.

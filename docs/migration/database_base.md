@@ -10,6 +10,8 @@ category: "GUID"
 
 # database_base Migration Guide
 
+> **SSOT**: This document is the single source of truth for **database_base Migration Guide**.
+
 ## Overview
 
 This guide helps you migrate from the legacy `database_base` interface to the modern `database_backend` interface introduced in Sprint 5.

@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Migrating from database_base to database_backend
 
+> **SSOT**: This document is the single source of truth for **Migrating from database_base to database_backend**.
+
 ## Overview
 
 As of Issue #287, `database_base` is deprecated in favor of the new `database_backend` interface. This guide helps you migrate your code.

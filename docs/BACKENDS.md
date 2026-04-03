@@ -10,6 +10,8 @@ category: "GUID"
 
 # Backend Stability Overview
 
+> **SSOT**: This document is the single source of truth for **Backend Stability Overview**.
+
 This document describes the maturity level of each database backend in the
 database\_system project and outlines the process for graduating experimental
 backends to stable status.

@@ -66,6 +66,18 @@ This document describes the architecture and design patterns of the Database Sys
 
 ## Overview
 
+> **Cross-reference**:
+> [API Reference](./API_REFERENCE.md) — Database backend, query builder, and ORM APIs
+> [Benchmarks](./BENCHMARKS.md) — Connection pool and query performance data
+> [Backends Guide](./BACKENDS.md) — PostgreSQL, SQLite, MongoDB, and Redis backend details
+> [Adapter Patterns](./ADAPTER_PATTERNS.md) — Backend-agnostic adapter implementations
+
+> **Ecosystem reference**:
+> [common_system API](https://github.com/kcenon/common_system/blob/main/docs/API_REFERENCE.md) — Result&lt;T&gt; and IExecutor interfaces
+> [thread_system Architecture](https://github.com/kcenon/thread_system/blob/main/docs/ARCHITECTURE.md) — Thread pool for async database operations
+> [container_system API](https://github.com/kcenon/container_system/blob/main/docs/API_REFERENCE.md) — Data serialization for database records
+> [monitoring_system Architecture](https://github.com/kcenon/monitoring_system/blob/main/docs/ARCHITECTURE.md) — Performance monitoring integration
+
 The Database System is designed as a modular, enterprise-grade database abstraction layer that provides unified access to multiple database backends with advanced features for production environments.
 
 ## Architecture Layers
@@ -380,6 +392,34 @@ try {
 - **sqlite3**: SQLite support
 - **mongocxx**: MongoDB support
 - **hiredis**: Redis support
+
+## Ecosystem Dependencies
+
+database_system sits at **Tier 3** in the kcenon ecosystem, providing database abstraction.
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style F fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [common_system](https://github.com/kcenon/common_system) — Tier 0: Result&lt;T&gt;, IExecutor
+> [thread_system](https://github.com/kcenon/thread_system) — Tier 1: Async operations (optional)
+> [container_system](https://github.com/kcenon/container_system) — Tier 1: Data serialization (optional)
+> [monitoring_system](https://github.com/kcenon/monitoring_system) — Tier 3: Performance monitoring (optional)
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Transport layer (consumer)
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: DICOM database (consumer)
+
+---
 
 ## Build Configuration
 

@@ -511,6 +511,30 @@ int main() {
 
 ## Ecosystem Integration
 
+### Ecosystem Dependency Map
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style F fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [common_system](https://github.com/kcenon/common_system) — Tier 0: Result&lt;T&gt; and IExecutor interfaces
+> [thread_system](https://github.com/kcenon/thread_system) — Tier 1: Thread pool for async operations (optional)
+> [container_system](https://github.com/kcenon/container_system) — Tier 1: Data serialization (optional)
+> [monitoring_system](https://github.com/kcenon/monitoring_system) — Tier 3: Performance monitoring (optional)
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Transport layer (consumer)
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: DICOM database (consumer)
+
 ### Project Dependencies
 
 ```

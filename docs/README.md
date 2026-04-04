@@ -67,7 +67,7 @@ Total documents: **59**
 | 46 | DBS-INTR-001 | Integration Guide - Database System | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
 | 47 | DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | 48 | DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| 49 | DBS-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| 49 | DBS-QUAL-003 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 | 50 | DBS-ADR-001 | ADR-001: Multi-Backend Database Abstraction | [ADR-001-multi-backend-abstraction.md](./adr/ADR-001-multi-backend-abstraction.md) | Accepted |
 | 51 | DBS-ADR-002 | ADR-002: Connection Pool Architecture | [ADR-002-connection-pool-architecture.md](./adr/ADR-002-connection-pool-architecture.md) | Accepted |
 | 52 | DBS-PROJ-001 | 📜 Database System - 개발 히스토리 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
@@ -168,7 +168,7 @@ Total documents: **59**
 |--------|-------|----------|--------|
 | DBS-QUAL-001 | Database System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | DBS-QUAL-002 | Database System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| DBS-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| DBS-QUAL-003 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 
 ### Architecture Decision Records (2)
 

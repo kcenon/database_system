@@ -2,6 +2,22 @@
 // Copyright (c) 2024, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file postgres_advanced.cpp
+ * @brief PostgreSQL-specific advanced features including arrays and JSONB
+ * @example postgres_advanced.cpp
+ *
+ * Demonstrates PostgreSQL-specific capabilities beyond standard SQL:
+ * - Direct postgres_manager usage with connection_config
+ * - Table creation with PostgreSQL-native types (TEXT[], JSONB, SERIAL)
+ * - Array operations using ANY() for tag-based filtering
+ * - JSONB operations with arrow operators (->> and ->)
+ * - Result<T> error handling for all database operations
+ *
+ * @note Requires a running PostgreSQL server. Update the connection string
+ *       to match your database configuration.
+ */
+
 #include <iostream>
 #include <string>
 #include <memory>

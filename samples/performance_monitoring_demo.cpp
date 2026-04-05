@@ -3,8 +3,18 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * Performance Monitoring Demonstration
- * Shows real-time metrics collection, analysis, and alerting capabilities
+ * @file performance_monitoring_demo.cpp
+ * @brief Performance monitoring with real-time metrics, analysis, and alerting
+ * @example performance_monitoring_demo.cpp
+ *
+ * Demonstrates the performance monitoring framework:
+ * - Basic system metrics collection (CPU, memory, disk I/O, network I/O)
+ * - Query performance tracking with slow-query detection
+ * - Connection pool monitoring and utilization analysis
+ * - Real-time performance dashboards with periodic snapshots
+ * - Performance report generation with optimization recommendations
+ * - Multi-format metrics export (Prometheus, JSON, CSV)
+ * - Configurable alerting system with severity levels
  */
 
 #include <iostream>

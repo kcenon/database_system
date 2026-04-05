@@ -3,8 +3,19 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * Security Framework Demonstration
- * Shows TLS encryption, RBAC, audit logging, and threat detection capabilities
+ * @file security_framework_demo.cpp
+ * @brief Enterprise security framework with TLS, RBAC, audit logging, and threat detection
+ * @example security_framework_demo.cpp
+ *
+ * Demonstrates comprehensive security features for database operations:
+ * - TLS/SSL secure connection configuration with cipher suite selection
+ * - Credential management with master-key encryption
+ * - Role-Based Access Control (RBAC) with fine-grained permissions
+ * - Comprehensive audit logging with tamper-proof event storage
+ * - SQL injection detection and prevention
+ * - Brute force attack detection with IP blocking
+ * - Session management with timeout and validation
+ * - Compliance support (GDPR, SOX, HIPAA, PCI DSS)
  */
 
 #include <iostream>

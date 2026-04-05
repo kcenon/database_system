@@ -4,7 +4,8 @@
 
 /**
  * @file async_queries.cpp
- * @brief Async query execution example
+ * @brief Async query execution example with unified_database_system
+ * @example integrated/async_queries.cpp
  *
  * This example demonstrates:
  * - Async query submission

@@ -3,11 +3,13 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * @file migration_from_legacy_simple.cpp
- * @brief Simplified migration guide from legacy API to integrated system
+ * @file migration_from_legacy.cpp
+ * @brief Migration guide from legacy database_manager API to unified_database_system
+ * @example integrated/migration_from_legacy.cpp
  *
  * This example demonstrates the key differences between the legacy and
- * integrated APIs with working code examples.
+ * integrated APIs with working code examples, covering connection setup,
+ * query execution, async operations, monitoring, and configuration.
  */
 
 #include "integrated/unified_database_system.h"

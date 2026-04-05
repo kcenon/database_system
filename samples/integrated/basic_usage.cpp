@@ -5,6 +5,7 @@
 /**
  * @file basic_usage.cpp
  * @brief Basic usage example of unified_database_system
+ * @example integrated/basic_usage.cpp
  *
  * This example demonstrates:
  * - Zero-config database initialization

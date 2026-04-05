@@ -3,8 +3,18 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * ORM Framework Demonstration
- * Shows C++20 concepts-based entity definitions and type-safe operations
+ * @file orm_framework_demo.cpp
+ * @brief ORM framework demonstration with C++20 concepts-based entities
+ * @example orm_framework_demo.cpp
+ *
+ * Demonstrates the ORM framework features:
+ * - Entity definition using ENTITY_TABLE, ENTITY_FIELD, and ENTITY_METADATA macros
+ * - Field constraints (primary_key, auto_increment, not_null, unique, index)
+ * - Compile-time type safety with field_accessor<T>
+ * - Automatic schema generation (CREATE TABLE SQL)
+ * - Entity metadata introspection
+ * - Query builder integration for type-safe queries
+ * - Entity lifecycle management (save, load, update, remove)
  */
 
 #include <iostream>

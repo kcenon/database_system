@@ -2,6 +2,21 @@
 // Copyright (c) 2024, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file basic_usage.cpp
+ * @brief Basic database operations example using database_manager
+ * @example basic_usage.cpp
+ *
+ * Demonstrates fundamental database operations with the database_manager API:
+ * - Database manager creation and configuration
+ * - Connection management with Result<T> error handling
+ * - Table creation, data insertion, selection, updates, and deletion
+ * - Connection health checks and cleanup
+ *
+ * @note Requires a running PostgreSQL server. Update the connection string
+ *       to match your database configuration.
+ */
+
 #include <iostream>
 #include <string>
 #include <memory>

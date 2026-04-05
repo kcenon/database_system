@@ -1,0 +1,230 @@
+/**
+@mainpage Database System
+
+@tableofcontents
+
+@section overview System Overview
+
+Database System is an advanced C++20 database abstraction layer providing unified
+access to multiple database backends. It eliminates vendor lock-in through a
+type-safe, backend-agnostic interface with zero-configuration setup and
+RAII-based resource management.
+
+As a Tier 3 system in the kcenon ecosystem, it builds on common_system for
+error handling (Result\<T\>), thread_system for async execution, and
+monitoring_system for performance observability.
+
+@section features Key Features
+
+| Category | Feature | Description |
+|----------|---------|-------------|
+| **Backends** | PostgreSQL | Full-featured relational backend via libpqxx |
+| **Backends** | SQLite | Lightweight embedded database backend |
+| **Backends** | MongoDB | Document-oriented NoSQL backend (experimental) |
+| **Backends** | Redis | Key-value store backend (experimental) |
+| **ORM** | Entity Macros | ENTITY_TABLE, ENTITY_FIELD, ENTITY_METADATA with C++20 concepts |
+| **Query** | Immutable Builder | Thread-safe, functional-style query construction |
+| **Query** | SQL Dialect | Backend-aware SQL generation with condition and join builders |
+| **Integration** | Unified System | Zero-config entry point with builder pattern |
+| **Integration** | Connection Pool | Health-checked connection pooling |
+| **Async** | Async Operations | Asynchronous database operations via Asio |
+| **Security** | Secure Connection | TLS/SSL encrypted connections with audit logging |
+| **Monitoring** | Performance Monitor | Real-time query metrics and pool statistics |
+
+@section architecture Architecture Diagram
+
+The system is organized in layers. The core backend interface defines the
+contract, concrete backends implement it, and higher-level modules (query, ORM,
+integrated) compose functionality on top.
+
+@dot
+digraph architecture {
+    rankdir=TB;
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=11];
+    edge [color="#555555"];
+
+    subgraph cluster_core {
+        label="Core";
+        style="dashed";
+        color="#1a73e8";
+        fontcolor="#1a73e8";
+        BackendIF  [label="database_backend\n(interface)", fillcolor="#e8f0fe"];
+        BackendBase[label="backend_base<Derived>\n(CRTP)", fillcolor="#e8f0fe"];
+        Registry   [label="backend_registry\n(factory)", fillcolor="#e8f0fe"];
+        Context    [label="database_context", fillcolor="#e8f0fe"];
+    }
+
+    subgraph cluster_backends {
+        label="Backends";
+        style="dashed";
+        color="#34a853";
+        fontcolor="#34a853";
+        PostgreSQL [label="PostgreSQL", fillcolor="#e6f4ea"];
+        SQLite     [label="SQLite", fillcolor="#e6f4ea"];
+        MongoDB    [label="MongoDB", fillcolor="#e6f4ea"];
+        Redis      [label="Redis", fillcolor="#e6f4ea"];
+    }
+
+    subgraph cluster_query {
+        label="Query / ORM";
+        style="dashed";
+        color="#ea8600";
+        fontcolor="#ea8600";
+        ImmutableQB[label="immutable_query_builder", fillcolor="#fef7e0"];
+        QueryBuild [label="condition_builder\njoin_builder\nsql_dialect", fillcolor="#fef7e0"];
+        ORM        [label="entity_base\nENTITY_TABLE / ENTITY_FIELD", fillcolor="#fef7e0"];
+    }
+
+    subgraph cluster_integrated {
+        label="Integrated";
+        style="dashed";
+        color="#9334e6";
+        fontcolor="#9334e6";
+        Unified    [label="unified_database_system", fillcolor="#f3e8fd"];
+        Async      [label="async_operations", fillcolor="#f3e8fd"];
+        Monitor    [label="performance_monitor", fillcolor="#f3e8fd"];
+        Security   [label="secure_connection", fillcolor="#f3e8fd"];
+    }
+
+    BackendBase -> BackendIF;
+    Registry    -> BackendIF;
+    PostgreSQL  -> BackendBase;
+    SQLite      -> BackendBase;
+    MongoDB     -> BackendBase;
+    Redis       -> BackendBase;
+    ImmutableQB -> Context;
+    QueryBuild  -> Context;
+    ORM         -> Context;
+    Unified     -> Registry;
+    Unified     -> ImmutableQB;
+    Unified     -> ORM;
+    Async       -> Unified;
+    Monitor     -> Unified;
+    Security    -> Unified;
+}
+@enddot
+
+@section quickstart Quick Start
+
+A minimal example connecting to SQLite and executing a query:
+
+@code{.cpp}
+#include "database/database_manager.h"
+#include "database/core/database_context.h"
+
+using namespace database;
+
+int main() {
+    // Create context for SQLite
+    auto context = std::make_shared<database_context>();
+    context->set_backend_type(backend_type::sqlite);
+    context->set_connection_string("file:mydb.sqlite3");
+
+    // Connect via database_manager
+    database_manager manager(context);
+    auto connect_result = manager.connect();
+    if (!connect_result.is_ok()) {
+        std::cerr << "Connection failed: "
+                  << connect_result.error().message() << "\n";
+        return 1;
+    }
+
+    // Execute a query
+    auto result = manager.execute(
+        "CREATE TABLE IF NOT EXISTS users ("
+        "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "  name TEXT NOT NULL,"
+        "  email TEXT UNIQUE"
+        ")");
+
+    if (result.is_ok()) {
+        std::cout << "Table created successfully\n";
+    }
+
+    manager.disconnect();
+    return 0;
+}
+@endcode
+
+@section installation Installation
+
+@subsection install_fetchcontent CMake FetchContent (Recommended)
+
+@code{.cmake}
+include(FetchContent)
+FetchContent_Declare(
+    database_system
+    GIT_REPOSITORY https://github.com/kcenon/database_system.git
+    GIT_TAG        v0.1.0
+)
+FetchContent_MakeAvailable(database_system)
+
+target_link_libraries(your_target PRIVATE database)
+@endcode
+
+@subsection install_vcpkg vcpkg
+
+@code{.bash}
+vcpkg install kcenon-database-system
+@endcode
+
+@code{.cmake}
+find_package(database_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::database)
+@endcode
+
+@subsection install_manual Manual Build
+
+@code{.bash}
+git clone https://github.com/kcenon/database_system.git
+cd database_system
+./scripts/dependency.sh
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_POSTGRESQL=ON
+cmake --build build
+@endcode
+
+@section modules Module Overview
+
+| Module | Directory | Key Headers | Description |
+|--------|-----------|-------------|-------------|
+| **Core** | `core/` | database_backend.h, backend_base.h, backend_registry.h | Backend interface, CRTP base, factory registry |
+| **PostgreSQL** | `backends/postgresql/` | postgresql_backend.h | Full-featured PostgreSQL backend via libpqxx |
+| **SQLite** | `backends/sqlite/` | sqlite_backend.h | Lightweight embedded SQLite backend |
+| **MongoDB** | `backends/mongodb/` | mongodb_backend.h | Document-oriented NoSQL backend (experimental) |
+| **Redis** | `backends/redis/` | redis_backend.h | Key-value store backend (experimental) |
+| **Query** | `query/` | immutable_query_builder.h | Thread-safe, immutable query construction |
+| **Query Builder** | `query_builder/` | condition_builder.h, join_builder.h, sql_dialect.h | SQL generation with conditions, joins, and dialect awareness |
+| **ORM** | `orm/` | entity.h | ENTITY_TABLE, ENTITY_FIELD macros with C++20 concepts |
+| **Integrated** | `integrated/` | unified_database_system.h | Zero-config unified entry point with builder pattern |
+| **Async** | `async/` | async_operations.h | Asynchronous database operations via Asio |
+| **Monitoring** | `monitoring/` | performance_monitor.h, pool_metrics.h | Real-time query and pool performance metrics |
+| **Security** | `security/` | secure_connection.h | TLS/SSL encrypted connections and audit logging |
+| **Protocol** | `protocol/` | database_protocol.h | Database protocol and serialization |
+
+@section examples Examples
+
+| Example | Source | Description |
+|---------|--------|-------------|
+| Basic Connection | @ref basic_connection.cpp | Database connection and simple query execution |
+| Query Builder | @ref query_builder_usage.cpp | Fluent query construction with the immutable builder |
+| Transactions | @ref transaction_management.cpp | Transaction begin, commit, and rollback patterns |
+| ORM Entities | @ref orm_entity_demo.cpp | Entity mapping with ENTITY_TABLE and ENTITY_FIELD macros |
+| Error Handling | @ref error_handling.cpp | Result\<T\> error handling and recovery strategies |
+| Connection Pool | @ref connection_pool_demo.cpp | Connection pooling with health checks |
+
+@section related Related Systems
+
+Database System is a Tier 3 system in the kcenon ecosystem, sitting between
+the monitoring layer and the application layer:
+
+| System | Tier | Relationship | Repository |
+|--------|------|--------------|------------|
+| common_system | 0 | Foundation: Result\<T\>, IExecutor, ILogger | https://github.com/kcenon/common_system |
+| thread_system | 1 | Async execution and thread pooling | https://github.com/kcenon/thread_system |
+| container_system | 1 | Data serialization format | https://github.com/kcenon/container_system |
+| monitoring_system | 2 | Performance observability | https://github.com/kcenon/monitoring_system |
+| **database_system** | **3** | **This project** | https://github.com/kcenon/database_system |
+| network_system | 4 | Network communication layer | https://github.com/kcenon/network_system |
+| pacs_system | 5 | Full ecosystem consumer | https://github.com/kcenon/pacs_system |
+
+*/

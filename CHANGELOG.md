@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- Modernize Doxygen with doxygen-awesome-css theme, dark mode toggle, and standardized mainpage ([#537](https://github.com/kcenon/database_system/issues/537))
+
 ### Security
 
 - Implement credential encryption and audit log file persistence ([#485](https://github.com/kcenon/database_system/issues/485), [#486](https://github.com/kcenon/database_system/issues/486))

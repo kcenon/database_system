@@ -3,10 +3,20 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * Asynchronous Operations Demonstration
- * Shows C++20 coroutines, async database operations, and distributed transactions
+ * @file async_operations_demo.cpp
+ * @brief Asynchronous database operations with C++20 coroutines and distributed transactions
+ * @example async_operations_demo.cpp
  *
- * NOTE: This demo requires C++20 coroutines. Build with -DCMAKE_CXX_STANDARD=20
+ * Demonstrates advanced asynchronous patterns for database operations:
+ * - Basic async query execution with std::future
+ * - C++20 coroutine-based non-blocking operations
+ * - Asynchronous connection pool management
+ * - Real-time data streams (PostgreSQL NOTIFY/LISTEN, MongoDB Change Streams)
+ * - Distributed transaction coordination with two-phase commit
+ * - Saga pattern for long-running transactions with compensation
+ * - Asynchronous batch processing with progress tracking
+ *
+ * @note Requires C++20 coroutine support. Build with -DCMAKE_CXX_STANDARD=20
  */
 
 #ifndef HAS_COROUTINES

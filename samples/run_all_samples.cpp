@@ -2,6 +2,23 @@
 // Copyright (c) 2024, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file run_all_samples.cpp
+ * @brief Sample runner that executes all available database system samples
+ * @example run_all_samples.cpp
+ *
+ * Provides a unified entry point for running database system samples:
+ * - Registers and discovers all available sample programs
+ * - Supports running all samples sequentially or a specific sample by name
+ * - Reports execution time for each sample and overall
+ * - Graceful error handling per sample (one failure does not stop others)
+ *
+ * Usage:
+ *   ./run_all_samples                    - Run all samples
+ *   ./run_all_samples basic_usage        - Run specific sample
+ *   ./run_all_samples --list             - List available samples
+ */
+
 #include <iostream>
 #include <string>
 #include <vector>

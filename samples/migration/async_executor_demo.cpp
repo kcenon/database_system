@@ -3,8 +3,19 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * async_executor Demonstration
- * Shows high-performance async_executor with thread_system integration
+ * @file async_executor_demo.cpp
+ * @brief High-performance async_executor with thread_system integration
+ * @example async_executor_demo.cpp
+ *
+ * Demonstrates the async_executor for efficient task scheduling:
+ * - Basic async task submission and result collection via std::future
+ * - High-throughput performance testing (10,000+ tasks)
+ * - Exception propagation through futures
+ * - Graceful shutdown with pending task completion
+ * - Performance comparison between async_executor and std::async
+ *
+ * @note When thread_system is available, the executor achieves ~77ns latency
+ *       per task; otherwise it falls back to ~2-5us per task.
  */
 
 #include <iostream>

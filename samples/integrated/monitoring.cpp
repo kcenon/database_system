@@ -4,7 +4,8 @@
 
 /**
  * @file monitoring.cpp
- * @brief Monitoring and observability example
+ * @brief Monitoring and observability example with unified_database_system
+ * @example integrated/monitoring.cpp
  *
  * This example demonstrates:
  * - Metrics collection and access

@@ -100,7 +100,7 @@ INPUT                  = ./database \
                          ./examples \
                          ./tests \
                          ./README.md \
-                         ./mainpage.dox
+                         ./docs/mainpage.dox
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \

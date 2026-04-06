@@ -1,0 +1,196 @@
+/**
+@page troubleshooting Troubleshooting Guide
+
+@tableofcontents
+
+This page lists the runtime errors developers see most often when working
+with @c database_system, with concrete fixes. If your problem is not
+listed here, see @ref faq or open an issue at
+https://github.com/kcenon/database_system/issues.
+
+@section ts_connect Connection Failures
+
+@subsection ts_connect_refused Symptom: connect_result returns "connection refused"
+
+The driver could not reach the database host or the credentials were
+rejected. Check, in order:
+
+1. **Is the server running?** @c pg_isready -h @c localhost,
+   @c systemctl @c status @c mysql, @c mongo --eval @c "db.runCommand('ping')".
+2. **Is the host/port correct?** Compare your connection string against
+   the server's bind address.
+3. **Are the credentials valid?** Try the same connection string with
+   the native CLI (@c psql, @c mysql, @c mongosh).
+4. **Is the backend compiled in?** @c set_mode() returns @c false if the
+   backend was not built. Re-run CMake with @c -DUSE_POSTGRESQL=ON or the
+   equivalent flag for your backend.
+5. **TLS/SSL mismatch?** PostgreSQL refuses connections when the server
+   requires SSL but the client did not request it. Add
+   @c sslmode=require to the connection string.
+
+@code{.cpp}
+auto r = mgr->connect_result(conn);
+if (!r.is_ok())
+{
+    std::cerr << "code=" << r.error().code
+              << " message=" << r.error().message << "\n";
+}
+@endcode
+
+@subsection ts_connect_timeout Symptom: connection hangs forever
+
+A firewall is silently dropping the SYN packet, or the host name resolves
+to an unreachable address. Set an explicit timeout in the connection
+string (@c connect_timeout=5 for libpqxx, @c connectTimeoutMS=5000 for
+mongo-cxx-driver) so failures surface quickly, and verify the route with
+@c nc -vz @c host @c port.
+
+@section ts_transactions Transaction Deadlocks and Locking Errors
+
+@subsection ts_tx_deadlock Symptom: "deadlock detected" or "Lock wait timeout exceeded"
+
+Two transactions are waiting on each other's locks. The fix is one or
+more of:
+
+- **Acquire locks in a deterministic order.** If transaction A always
+  updates @c users before @c orders, transaction B must do the same.
+- **Shorten the transaction.** Move read-only work outside @c BEGIN /
+  @c COMMIT, and avoid user-input prompts inside a transaction.
+- **Retry on conflict.** Wrap the transaction in a loop that retries up
+  to N times when @c result.error() reports a serialization or deadlock
+  code.
+- **Lower isolation when safe.** Switch from @c SERIALIZABLE to
+  @c READ @c COMMITTED if your invariants allow it.
+
+@code{.cpp}
+for (int attempt = 0; attempt < 3; ++attempt)
+{
+    transaction_guard tx(mgr);
+    auto r = do_work(mgr);
+    if (r.is_ok()) { tx.commit(); break; }
+    if (!is_retryable(r.error())) throw std::runtime_error(r.error().message);
+}
+@endcode
+
+@subsection ts_tx_busy SQLite-specific: SQLITE_BUSY / "database is locked"
+
+SQLite serialises writers. The error means another connection holds the
+write lock when yours tried to upgrade. Mitigations:
+
+- Open the database with @c PRAGMA @c journal_mode=WAL to allow readers
+  while a writer is active.
+- Use @c BEGIN @c IMMEDIATE instead of plain @c BEGIN to acquire the
+  write lock at transaction start.
+- Avoid sharing a single SQLite connection across threads — give each
+  thread its own @c database_manager.
+
+@section ts_orm ORM Entity Mapping Errors
+
+@subsection ts_orm_metadata Symptom: empty fields() or missing columns in CREATE TABLE
+
+The static @c metadata_ instance was never populated. Causes and fixes:
+
+1. **Forgot to call @c add_field**. Every @c ENTITY_FIELD has a matching
+   @c \<name\>_metadata_ member that must be added inside
+   @c initialize_metadata().
+2. **Two entities sharing the same static metadata**. Each subclass needs
+   its own @c "static @c inline @c entity_metadata @c metadata_{...}"
+   member with a unique table name.
+3. **@c initialize_metadata() never ran**. Make sure you used the
+   @c ENTITY_METADATA() macro inside the class — it wires up the static
+   initializer that calls @c initialize_metadata().
+
+@code{.cpp}
+class user_entity : public entity_base
+{
+public:
+    ENTITY_FIELD(int64_t,     id,
+                 field_constraint::primary_key | field_constraint::auto_increment)
+    ENTITY_FIELD(std::string, email, field_constraint::not_null | field_constraint::unique)
+    ENTITY_METADATA()
+private:
+    static inline entity_metadata metadata_{"users"};
+};
+
+void user_entity::initialize_metadata()
+{
+    metadata_.add_field(id_metadata_);
+    metadata_.add_field(email_metadata_);   // <-- easy to forget
+}
+@endcode
+
+@subsection ts_orm_constraint Symptom: "NOT NULL constraint failed" on insert
+
+A field marked @c not_null was left unset, or its value defaulted to
+@c null because the entity was constructed without assignment. Always
+assign every required field before calling save/insert, and consider
+adding a static factory that takes mandatory fields as constructor
+arguments.
+
+@section ts_perf Query Performance Issues
+
+@subsection ts_perf_slow Symptom: a SELECT that "should be fast" is slow
+
+Run the backend's @c EXPLAIN tool to see the execution plan. Common
+fixes:
+
+- **Missing index.** Add @c field_constraint::index to the entity field
+  used in the @c WHERE clause and re-run @c create_indexes_sql().
+- **Implicit type conversion.** Comparing an indexed @c BIGINT column
+  against a string literal forces a sequential scan. Use the typed
+  query builder values (@c int64_t{...}) so the dialect formats them
+  correctly.
+- **Returning too many columns.** Replace @c SELECT @c * with an
+  explicit projection. The query builder makes this trivial.
+- **N+1 problem.** If you call @c select_query_result inside a loop,
+  rewrite the work as a single JOIN or @c IN query.
+
+@subsection ts_perf_pool Symptom: throughput drops as concurrency rises
+
+You are likely contending on the driver-level pool. Increase
+@c max_connections / @c maximumPoolSize on the driver, distribute the
+load across more @c database_manager instances, or move the workload
+behind the proxy mode (when available).
+
+Use @c monitoring_system metrics from
+@c database/monitoring/performance_monitor.h to confirm where time is
+being spent.
+
+@section ts_migrate Migration Conflicts
+
+@subsection ts_migrate_drift Symptom: "column already exists" or "relation does not exist"
+
+Your migration script and the live schema are out of sync. To recover:
+
+1. Inspect the schema (@c "\\d @c users" in psql, @c DESCRIBE @c users
+   in MySQL, @c db.users.findOne() in mongosh).
+2. Compare against the migration that should have produced it.
+3. Either re-run the missing migration or write a corrective migration
+   that brings the live schema back in line.
+4. If you regenerate DDL with @c entity::get_metadata().create_table_sql(),
+   prefer @c CREATE @c TABLE @c IF @c NOT @c EXISTS so the script remains
+   idempotent.
+
+@subsection ts_migrate_dialect Symptom: works on PostgreSQL, fails on MySQL or SQLite
+
+The DDL is using a dialect-specific feature. Examples:
+
+- @c JSONB exists only in PostgreSQL.
+- @c SERIAL is PostgreSQL-only; use @c BIGSERIAL or per-backend
+  auto-increment.
+- @c "CREATE @c INDEX @c IF @c NOT @c EXISTS" is supported by SQLite and
+  PostgreSQL but not by older MySQL versions.
+
+When you want a single script to run everywhere, drive the schema from
+the ORM (@c create_table_sql) so the dialect translation happens
+centrally, or keep separate per-backend migration files.
+
+@section ts_more Still stuck?
+
+- @ref faq — General-purpose answers
+- @ref tutorial_quickstart — Verified end-to-end example
+- File an issue at https://github.com/kcenon/database_system/issues with
+  the failing call site, the @c result.error() output, and your CMake
+  flags.
+
+*/

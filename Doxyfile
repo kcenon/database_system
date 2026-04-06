@@ -100,7 +100,12 @@ INPUT                  = ./database \
                          ./examples \
                          ./tests \
                          ./README.md \
-                         ./docs/mainpage.dox
+                         ./docs/mainpage.dox \
+                         ./docs/tutorial_quickstart.dox \
+                         ./docs/tutorial_orm.dox \
+                         ./docs/tutorial_backends.dox \
+                         ./docs/faq.dox \
+                         ./docs/troubleshooting.dox
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \

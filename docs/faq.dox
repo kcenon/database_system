@@ -1,0 +1,167 @@
+/**
+@page faq Frequently Asked Questions
+
+@tableofcontents
+
+This page collects the questions external developers ask most often when
+adopting @c database_system. For step-by-step walkthroughs, follow the
+@ref tutorial_quickstart, @ref tutorial_orm, and @ref tutorial_backends
+pages. For diagnostics, see @ref troubleshooting.
+
+@section faq_backend_choice Which backend should I choose?
+
+It depends on the deployment shape and the workload:
+
+| Scenario | Recommended backend |
+|----------|---------------------|
+| Embedded app, CLI tool, single-user desktop | **SQLite** — zero-configuration, file-based |
+| Unit tests for code that talks to a database | **SQLite** (`:memory:`) |
+| Web/server OLTP, JSON-heavy workloads, analytics | **PostgreSQL** — most feature-complete |
+| Existing MySQL infrastructure | **MySQL** — drop-in via the MySQL backend |
+| Document-shaped or schemaless data | **MongoDB** (experimental) |
+| Cache-style key/value lookups | **Redis** (experimental) |
+
+PostgreSQL is the safest default for new server applications. SQLite is
+the safest default for tests and embedded scenarios.
+
+@section faq_pooling How do I configure connection pooling?
+
+Local in-process connection pooling was removed in Phase 4.3 to make room
+for the upcoming proxy mode. Today there are two practical options:
+
+1. **Driver-level pooling** — All supported drivers (libpqxx, MySQL
+   connector, mongo-cxx-driver) provide their own pool / session manager.
+   Configure the pool size through the connection string or driver
+   options, then let @c database_manager open one logical handle per
+   request.
+2. **Wait for proxy mode** — A future @c database_server process will
+   centralise pooling and expose it through the same client API. The
+   client code does not change.
+
+For high-throughput services, treat the @c database_manager as a
+short-lived facade and rely on the driver pool underneath.
+
+@section faq_isolation What about transaction isolation levels?
+
+@c database_manager exposes @c begin_transaction(), @c commit_transaction(),
+and @c rollback_transaction() helpers. These open a transaction at the
+backend default isolation level:
+
+- **PostgreSQL**: @c READ @c COMMITTED by default; raise per-transaction
+  with @c "BEGIN @c TRANSACTION @c ISOLATION @c LEVEL @c SERIALIZABLE".
+- **MySQL (InnoDB)**: @c REPEATABLE @c READ by default; change with
+  @c "SET @c TRANSACTION @c ISOLATION @c LEVEL @c READ @c COMMITTED".
+- **SQLite**: serialised single-writer; use @c "BEGIN @c IMMEDIATE" to
+  acquire the write lock up front and avoid @c SQLITE_BUSY surprises.
+- **MongoDB**: per-document atomicity, with multi-document transactions
+  available on replica sets.
+
+To customise, issue the appropriate @c SET / @c BEGIN statement before
+your work, then call @c commit_transaction() as usual.
+
+@section faq_migrations How do I handle schema migrations?
+
+@c database_system does not ship a migration runner today. The recommended
+patterns are:
+
+1. **Idempotent DDL** — Use @c "CREATE @c TABLE @c IF @c NOT @c EXISTS"
+   and @c "ALTER @c TABLE ... @c IF @c NOT @c EXISTS" so the same script
+   can run repeatedly.
+2. **Versioned scripts** — Keep numbered SQL files alongside your code
+   (e.g. @c migrations/0001_init.sql) and run them at startup with a
+   simple loop that records the current version in a @c schema_versions
+   table.
+3. **Generated DDL from entities** — Call
+   @c entity::get_metadata().create_table_sql() to bootstrap a schema
+   directly from your ORM declarations. See @ref tutorial_orm.
+
+@section faq_querybuilder Query builder vs raw SQL — when should I use which?
+
+| Use the query builder when... | Use raw SQL when... |
+|-------------------------------|---------------------|
+| Column lists or filters are dynamic | The statement is fixed and well-understood |
+| You target multiple backends | You need a backend-specific feature (e.g. @c JSONB, @c LATERAL @c JOIN) |
+| You want compile-time-ish safety on identifier names | You are running a one-off DDL script |
+| You need to compose conditions programmatically | The query is short and the SQL is clearer than the builder calls |
+
+The two are not exclusive — many apps build the SELECT clause with the
+query builder and pass complex CTEs as raw text.
+
+@section faq_orm_perf Does the ORM hurt performance?
+
+The ORM is metadata-driven, not reflective. @c ENTITY_FIELD generates a
+small @c field_metadata struct at compile time and a static initializer
+adds it to a per-class @c entity_metadata instance. There is no runtime
+parsing, no virtual call per field, and no extra allocation per row read.
+
+Practical guidance:
+
+- Hot paths can read columns directly from the row map and bypass the
+  ORM entirely.
+- The ORM is most valuable for schema generation, validation, and
+  mapping returned rows to typed objects.
+- For very wide rows, prefer projection (@c SELECT only the columns you
+  need) over @c SELECT @c *.
+
+@section faq_prepared Does database_system support prepared statements?
+
+Each backend supports prepared statements at the driver layer. The
+@c database_manager helpers currently accept finished SQL strings, so
+parameterisation happens via the query builder (which formats values
+through @c value_formatter) or by calling backend-specific prepare APIs.
+
+For high-volume queries, prefer the query builder so values are escaped
+correctly per dialect and so the same code keeps working when you switch
+backends.
+
+@section faq_async How do async operations work?
+
+The @c database/async/ module exposes asynchronous wrappers built on
+Asio. They run blocking driver calls on a worker pool and return
+@c std::future-style handles, so you can integrate database calls with
+the rest of an Asio-based application without spawning ad-hoc threads.
+
+If you already have a thread pool from @c thread_system, hand it to the
+async layer rather than letting it create its own.
+
+@section faq_recovery How should I handle errors and recovery?
+
+Every high-level call returns @c kcenon::common::Result<T>, so error
+handling is explicit:
+
+- Check @c result.is_ok() before reading @c result.value().
+- Inspect @c result.error().message and @c result.error().code for
+  diagnostics.
+- For transient connection drops, wrap the operation in a retry loop
+  that re-establishes the connection on a fresh @c database_manager
+  before retrying.
+- Always wrap multi-statement work in a transaction so a partial failure
+  rolls back cleanly.
+
+See @ref error_handling.cpp for the canonical patterns.
+
+@section faq_multitenant How do I implement multi-tenancy?
+
+There are three common shapes; pick the one that matches your isolation
+requirements:
+
+1. **Schema per tenant** — Each tenant gets its own schema (PostgreSQL)
+   or database (MySQL/MongoDB). Switch by setting the schema/search_path
+   on connection. Strongest isolation, biggest operational cost.
+2. **Database per tenant** — Open a separate @c database_manager per
+   tenant. Use the upcoming proxy mode to share connections.
+3. **Row-level tenancy** — Add a @c tenant_id column to every table and
+   include it in every @c WHERE clause. Cheapest, but requires
+   discipline; consider enforcing it with row-level security on
+   PostgreSQL.
+
+@section faq_more More questions?
+
+If your question is not answered here, check:
+
+- @ref troubleshooting — Common runtime errors and fixes
+- @ref tutorial_quickstart — End-to-end walkthrough
+- The GitHub issue tracker at
+  https://github.com/kcenon/database_system/issues
+
+*/

@@ -6,10 +6,6 @@
 # Provides imported targets:
 #   database_system::database             - Core DAL library
 #   database_system::integrated_database  - Integrated adapter layer (if built)
-#
-# Legacy aliases (backward compatibility):
-#   DatabaseSystem::database             → database_system::database
-#   DatabaseSystem::integrated_database  → database_system::integrated_database
 ##################################################
 
 include(CMakeFindDependencyMacro)
@@ -56,23 +52,5 @@ set(database_system_FOUND TRUE)
 set(database_system_VERSION @PROJECT_VERSION@)
 set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
 set(database_system_LIBRARIES database_system::database)
-
-# Backward compatibility aliases: DatabaseSystem:: → database_system::
-if(TARGET database_system::database AND NOT TARGET DatabaseSystem::database)
-    add_library(DatabaseSystem::database ALIAS database_system::database)
-endif()
-if(TARGET database_system::integrated_database AND NOT TARGET DatabaseSystem::integrated_database)
-    add_library(DatabaseSystem::integrated_database ALIAS database_system::integrated_database)
-endif()
-
-# Legacy variables for backward compatibility
-set(DatabaseSystem_FOUND TRUE)
-set(DATABASESYSTEM_FOUND TRUE)
-set(DatabaseSystem_VERSION ${database_system_VERSION})
-set(DatabaseSystem_INCLUDE_DIRS ${database_system_INCLUDE_DIRS})
-set(DatabaseSystem_LIBRARIES ${database_system_LIBRARIES})
-set(DATABASESYSTEM_VERSION ${database_system_VERSION})
-set(DATABASESYSTEM_INCLUDE_DIRS ${database_system_INCLUDE_DIRS})
-set(DATABASESYSTEM_LIBRARIES ${database_system_LIBRARIES})
 
 message(STATUS "Found database_system: ${database_system_VERSION}")

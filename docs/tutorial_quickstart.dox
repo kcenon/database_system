@@ -1,0 +1,210 @@
+/**
+@page tutorial_quickstart Quick Start Tutorial
+
+@tableofcontents
+
+This tutorial walks through the minimum code required to integrate
+@c database_system into a C++20 application: configuring a backend, opening
+a connection, performing CRUD operations, reading results, and managing
+transactions.
+
+By the end you will have a working program that creates a table, inserts
+rows, reads them back, and protects a multi-statement update inside a
+transaction.
+
+@section qs_prereq Prerequisites
+
+- A C++20 toolchain (GCC 11+, Clang 14+, or MSVC 19.30+)
+- CMake 3.20 or newer
+- One available backend installed (SQLite is the easiest to start with)
+- @c database_system available via FetchContent, vcpkg, or a local build
+
+@section qs_link Linking the Library
+
+Add @c database_system to your CMake project:
+
+@code{.cmake}
+include(FetchContent)
+FetchContent_Declare(
+    database_system
+    GIT_REPOSITORY https://github.com/kcenon/database_system.git
+    GIT_TAG        main
+)
+FetchContent_MakeAvailable(database_system)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE database)
+target_compile_features(my_app PRIVATE cxx_std_20)
+@endcode
+
+@section qs_connect Step 1: Connection Setup
+
+The recommended workflow uses @c database_context to share configuration
+and @c database_manager to drive the connection. The example below opens
+a SQLite database, but the API is identical for other backends.
+
+@code{.cpp}
+#include "database/database_manager.h"
+#include "database/core/database_context.h"
+
+#include <iostream>
+#include <memory>
+
+using namespace database;
+
+int main()
+{
+    auto context = std::make_shared<database_context>();
+    auto manager = std::make_shared<database_manager>(context);
+
+    // Pick the backend to drive
+    if (!manager->set_mode(database_types::sqlite))
+    {
+        std::cerr << "SQLite backend not available\n";
+        return 1;
+    }
+
+    // Connect using a backend-specific connection string
+    auto connect = manager->connect_result("file:quickstart.sqlite3");
+    if (!connect.is_ok())
+    {
+        std::cerr << "Connect failed: " << connect.error().message << "\n";
+        return 1;
+    }
+
+    std::cout << "Connected\n";
+    manager->disconnect_result();
+    return 0;
+}
+@endcode
+
+@note For PostgreSQL the connection string looks like
+@c "host=localhost port=5432 dbname=app user=u password=p". For MongoDB it
+follows the @c "mongodb://host:port/db" URI format.
+
+@section qs_crud Step 2: Basic CRUD
+
+Once the manager is connected, run DDL and DML statements directly. The
+high-level helpers return @c kcenon::common::Result<T>, so every call can
+be checked without exceptions.
+
+@code{.cpp}
+// CREATE TABLE
+auto created = manager->create_query_result(R"sql(
+    CREATE TABLE IF NOT EXISTS contacts (
+        id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        name  TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE
+    )
+)sql");
+if (!created.is_ok()) { /* handle error */ }
+
+// INSERT
+manager->execute_query_result(
+    "INSERT INTO contacts (name, email) VALUES "
+    "('Alice', 'alice@example.com'), "
+    "('Bob',   'bob@example.com')");
+
+// UPDATE
+manager->execute_query_result(
+    "UPDATE contacts SET email = 'alice@new.example.com' WHERE name = 'Alice'");
+
+// DELETE
+manager->execute_query_result("DELETE FROM contacts WHERE name = 'Bob'");
+@endcode
+
+@section qs_results Step 3: Result Handling
+
+@c select_query_result returns rows as a vector of column-to-value maps.
+Each value is a @c std::variant of the supported SQL types, so use
+@c std::visit (or a small helper) to print or convert it.
+
+@code{.cpp}
+#include <variant>
+
+auto rows = manager->select_query_result(
+    "SELECT id, name, email FROM contacts ORDER BY id");
+
+if (rows.is_ok())
+{
+    for (const auto& row : rows.value())
+    {
+        for (const auto& [column, value] : row)
+        {
+            std::cout << column << "=";
+            std::visit([](const auto& v) { std::cout << v; }, value);
+            std::cout << "  ";
+        }
+        std::cout << "\n";
+    }
+}
+else
+{
+    std::cerr << "Query failed: " << rows.error().message << "\n";
+}
+@endcode
+
+@section qs_tx Step 4: Transaction Management
+
+For any sequence of writes that must succeed or fail together, wrap the
+work in a transaction. The example below also shows the recommended RAII
+guard pattern: if the function returns early or throws, the destructor
+rolls back automatically.
+
+@code{.cpp}
+class transaction_guard
+{
+public:
+    explicit transaction_guard(std::shared_ptr<database_manager> m)
+        : mgr_(std::move(m))
+    {
+        if (!mgr_->begin_transaction().is_ok())
+            throw std::runtime_error("begin failed");
+    }
+    ~transaction_guard()
+    {
+        if (!committed_ && mgr_->in_transaction())
+            mgr_->rollback_transaction();
+    }
+    void commit()
+    {
+        if (mgr_->commit_transaction().is_ok())
+            committed_ = true;
+        else
+            throw std::runtime_error("commit failed");
+    }
+private:
+    std::shared_ptr<database_manager> mgr_;
+    bool committed_ = false;
+};
+
+void transfer_credits(std::shared_ptr<database_manager> mgr,
+                      int from_id, int to_id, int amount)
+{
+    transaction_guard tx(mgr);
+
+    auto debit  = mgr->execute_query_result(
+        "UPDATE accounts SET balance = balance - " +
+        std::to_string(amount) + " WHERE id = " + std::to_string(from_id));
+
+    auto credit = mgr->execute_query_result(
+        "UPDATE accounts SET balance = balance + " +
+        std::to_string(amount) + " WHERE id = " + std::to_string(to_id));
+
+    if (!debit.is_ok() || !credit.is_ok())
+        return;        // ~transaction_guard rolls back
+
+    tx.commit();
+}
+@endcode
+
+@section qs_next Next Steps
+
+- @ref tutorial_orm — Map C++ classes to tables with the ORM macros
+- @ref tutorial_backends — Choose between SQLite, PostgreSQL, MySQL, MongoDB
+- @ref faq — Frequently asked questions
+- @ref troubleshooting — Diagnose connection, transaction, and query problems
+- @ref basic_connection.cpp — Full runnable example
+- @ref transaction_management.cpp — Full transaction sample
+
+*/

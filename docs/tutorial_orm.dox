@@ -1,0 +1,216 @@
+/**
+@page tutorial_orm ORM Entity Mapping Tutorial
+
+@tableofcontents
+
+The @c database_system ORM lets you describe a table as a C++ class using
+two macros, @c ENTITY_FIELD and @c ENTITY_METADATA. The result is a
+type-safe entity that can generate its own @c CREATE @c TABLE statement,
+expose typed field accessors, and integrate with the query builders.
+
+This tutorial walks through defining an entity, attaching constraints,
+modelling relationships, and feeding entity metadata into a query.
+
+@section orm_concepts Core Concepts
+
+| Concept | Description |
+|---------|-------------|
+| @c entity_base | Abstract base class with virtual @c table_name(), @c save(), @c load(), @c update(), @c remove() |
+| @c ENTITY_FIELD(type, name, constraints) | Declares a typed field with metadata |
+| @c ENTITY_METADATA() | Hooks @c initialize_metadata() into the entity |
+| @c entity_metadata | Runtime container for fields, used to generate SQL |
+| @c field_constraint | Bitset enum: @c primary_key, @c auto_increment, @c not_null, @c unique, @c index, @c default_value |
+
+@note The library currently exposes the @c ENTITY_FIELD macro plus a manual
+@c table_name() override. The optional @c ENTITY_TABLE() form simply wraps
+the same idiom.
+
+@section orm_define Step 1: Define an Entity
+
+The example below defines a @c user_entity with a primary key, a unique
+username and email, and a not-null age. The @c ENTITY_FIELD macro creates
+a typed accessor (e.g. @c user.username.get(), @c user.username = "alice")
+and registers a @c field_metadata entry.
+
+@code{.cpp}
+#include "database/orm/entity.h"
+
+using namespace database;
+using namespace database::orm;
+
+class user_entity : public entity_base
+{
+public:
+    using primary_key_type = int64_t;
+
+    std::string table_name() const override { return "users"; }
+
+    ENTITY_FIELD(int64_t,     id,
+                 field_constraint::primary_key | field_constraint::auto_increment)
+    ENTITY_FIELD(std::string, username,
+                 field_constraint::not_null | field_constraint::unique)
+    ENTITY_FIELD(std::string, email,
+                 field_constraint::not_null | field_constraint::unique)
+    ENTITY_FIELD(int32_t,     age,       field_constraint::not_null)
+    ENTITY_FIELD(bool,        is_active, field_constraint::not_null)
+
+    ENTITY_METADATA()
+
+    bool save()   override { return false; }   // implement against your manager
+    bool load()   override { return false; }
+    bool update() override { return false; }
+    bool remove() override { return false; }
+
+private:
+    static inline entity_metadata metadata_{"users"};
+};
+
+void user_entity::initialize_metadata()
+{
+    metadata_.add_field(id_metadata_);
+    metadata_.add_field(username_metadata_);
+    metadata_.add_field(email_metadata_);
+    metadata_.add_field(age_metadata_);
+    metadata_.add_field(is_active_metadata_);
+}
+@endcode
+
+Once defined, you can ask the entity to generate its own DDL:
+
+@code{.cpp}
+user_entity u;
+std::string ddl = u.get_metadata().create_table_sql();
+manager->create_query_result(ddl);
+@endcode
+
+@section orm_constraints Step 2: Constraints
+
+Constraints are bitwise OR'd onto each field. The most common combinations
+are summarized below.
+
+| Constraint | Effect |
+|------------|--------|
+| @c primary_key | Marks the column as @c PRIMARY @c KEY |
+| @c auto_increment | Backend-specific auto-increment (@c SERIAL, @c AUTOINCREMENT, @c AUTO_INCREMENT) |
+| @c not_null | Adds @c NOT @c NULL |
+| @c unique | Adds @c UNIQUE |
+| @c index | Generates a secondary index in @c create_indexes_sql() |
+| @c default_value | Field uses its default expression |
+
+@code{.cpp}
+class product_entity : public entity_base
+{
+public:
+    std::string table_name() const override { return "products"; }
+
+    ENTITY_FIELD(int64_t,     id,
+                 field_constraint::primary_key | field_constraint::auto_increment)
+    ENTITY_FIELD(std::string, sku,         field_constraint::not_null | field_constraint::unique)
+    ENTITY_FIELD(std::string, description, field_constraint::none)
+    ENTITY_FIELD(double,      price,       field_constraint::not_null)
+    ENTITY_FIELD(int32_t,     category_id, field_constraint::not_null | field_constraint::index)
+
+    ENTITY_METADATA()
+    /* save/load/update/remove omitted */
+private:
+    static inline entity_metadata metadata_{"products"};
+};
+@endcode
+
+@section orm_relationships Step 3: Relationships
+
+The ORM models relationships through foreign-key columns plus indexes;
+join logic lives in the query builder. The example below pairs a
+@c post_entity with the @c user_entity from above using @c author_id.
+
+@code{.cpp}
+class post_entity : public entity_base
+{
+public:
+    std::string table_name() const override { return "posts"; }
+
+    ENTITY_FIELD(int64_t,     id,
+                 field_constraint::primary_key | field_constraint::auto_increment)
+    ENTITY_FIELD(std::string, title,     field_constraint::not_null)
+    ENTITY_FIELD(std::string, body,      field_constraint::none)
+    ENTITY_FIELD(int64_t,     author_id, field_constraint::not_null | field_constraint::index)
+    ENTITY_FIELD(int64_t,     created_at, field_constraint::not_null)
+
+    ENTITY_METADATA()
+    /* save/load/update/remove omitted */
+private:
+    static inline entity_metadata metadata_{"posts"};
+};
+@endcode
+
+You can then materialize both schemas in dependency order:
+
+@code{.cpp}
+manager->create_query_result(user_entity{}.get_metadata().create_table_sql());
+manager->create_query_result(post_entity{}.get_metadata().create_table_sql());
+manager->create_query_result(post_entity{}.get_metadata().create_indexes_sql());
+@endcode
+
+@note The @c index constraint on @c author_id triggers
+@c create_indexes_sql() to emit @c CREATE @c INDEX statements that
+accelerate join lookups.
+
+@section orm_querybuilder Step 4: Query Builder Integration
+
+Entity metadata pairs naturally with the @c query_builder to construct
+type-safe queries without hard-coded column lists.
+
+@code{.cpp}
+#include "database/query_builder.h"
+
+query_builder qb(database_types::postgres);
+
+// Use the metadata-driven table name to avoid stringly-typed bugs
+auto sql = qb.select({"id", "username", "email"})
+             .from(user_entity{}.table_name())
+             .where("is_active", "=", true)
+             .order_by("username", sort_order::asc)
+             .limit(50)
+             .build();
+
+auto rows = manager->select_query_result(sql);
+@endcode
+
+To join @c posts and @c users:
+
+@code{.cpp}
+auto sql = qb.select({"posts.id", "posts.title", "users.username"})
+             .from("posts")
+             .join("users", "posts.author_id", "users.id")
+             .where("posts.created_at", ">=", int64_t{1700000000})
+             .order_by("posts.created_at", sort_order::desc)
+             .limit(20)
+             .build();
+@endcode
+
+@section orm_inspect Inspecting Metadata at Runtime
+
+Iterating over @c entity_metadata::fields() is useful for diagnostics,
+schema migration tools, and serialization helpers.
+
+@code{.cpp}
+const auto& meta = user_entity{}.get_metadata();
+for (const auto& field : meta.fields())
+{
+    std::cout << field.name() << " : " << field.type_name();
+    if (field.is_primary_key()) std::cout << " [PK]";
+    if (field.is_unique())      std::cout << " [UNIQUE]";
+    if (field.is_not_null())    std::cout << " [NOT NULL]";
+    if (field.has_index())      std::cout << " [INDEX]";
+    std::cout << "\n";
+}
+@endcode
+
+@section orm_next Next Steps
+
+- @ref tutorial_quickstart — CRUD basics if you skipped them
+- @ref tutorial_backends — How constraints translate per backend
+- @ref orm_entity_demo.cpp — Full runnable ORM example
+- @ref query_builder_usage.cpp — Query builder reference patterns
+
+*/

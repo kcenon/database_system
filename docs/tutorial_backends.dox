@@ -1,0 +1,229 @@
+/**
+@page tutorial_backends Multi-Backend Tutorial
+
+@tableofcontents
+
+@c database_system targets four backends — SQLite, PostgreSQL, MySQL, and
+MongoDB — through a single @c database_backend interface plus a runtime
+@c backend_registry. Application code stays the same; only the connection
+string and the @c set_mode() argument change.
+
+This tutorial covers backend-specific features, the difference between
+direct and proxy connection modes, and a portable migration path between
+backends.
+
+@section be_matrix Backend Capability Matrix
+
+| Feature | SQLite | PostgreSQL | MySQL | MongoDB |
+|---------|--------|------------|-------|---------|
+| ACID transactions | yes | yes | yes (InnoDB) | per-document |
+| Concurrent writers | single | many | many | many |
+| SQL dialect | SQLite | ANSI + extensions | MySQL | n/a (BSON) |
+| Auto-increment | @c INTEGER @c PRIMARY @c KEY @c AUTOINCREMENT | @c SERIAL / @c IDENTITY | @c AUTO_INCREMENT | @c _id |
+| Server-side pooling | n/a (file) | yes | yes | yes |
+| Recommended use | embedded, tests, edge | OLTP, analytics, JSON | OLTP, web | document store |
+
+@section be_select Selecting a Backend
+
+The same client code drives any backend; only the @c database_types value
+and the connection string change.
+
+@code{.cpp}
+#include "database/database_manager.h"
+#include "database/core/database_context.h"
+
+using namespace database;
+
+std::shared_ptr<database_manager> open_db(database_types type, std::string conn)
+{
+    auto ctx = std::make_shared<database_context>();
+    auto mgr = std::make_shared<database_manager>(ctx);
+
+    if (!mgr->set_mode(type))
+        throw std::runtime_error("Backend not compiled in");
+
+    auto r = mgr->connect_result(conn);
+    if (!r.is_ok())
+        throw std::runtime_error(r.error().message);
+
+    return mgr;
+}
+
+// SQLite (embedded, file-backed)
+auto sqlite_db = open_db(database_types::sqlite, "file:app.sqlite3");
+
+// PostgreSQL (libpqxx connection string)
+auto pg_db = open_db(database_types::postgres,
+    "host=localhost port=5432 dbname=app user=app password=secret");
+
+// MySQL
+auto mysql_db = open_db(database_types::mysql,
+    "host=localhost;port=3306;dbname=app;user=app;password=secret");
+
+// MongoDB
+auto mongo_db = open_db(database_types::mongodb,
+    "mongodb://localhost:27017/app");
+@endcode
+
+@warning Some backends are gated behind CMake options. Build with
+@c -DUSE_POSTGRESQL=ON, @c -DUSE_SQLITE=ON, @c -DUSE_MONGODB=ON, or
+@c -DUSE_REDIS=ON depending on which adapters you need.
+
+@section be_features Backend-Specific Features
+
+@subsection be_sqlite SQLite
+
+Best for embedded apps, unit tests, and edge devices. The "connection
+string" is just the file path (or @c :memory: for an in-memory database).
+
+@code{.cpp}
+auto sqlite_db = open_db(database_types::sqlite, ":memory:");
+
+sqlite_db->execute_query_result("PRAGMA journal_mode=WAL");
+sqlite_db->execute_query_result("PRAGMA foreign_keys=ON");
+@endcode
+
+Use SQLite for tests so they do not need an external server. Pair with
+@c PRAGMA @c journal_mode=WAL for higher concurrency.
+
+@subsection be_pg PostgreSQL
+
+The reference relational backend, built on @c libpqxx. Supports schemas,
+@c JSONB, partial indexes, @c RETURNING clauses, and prepared statements.
+
+@code{.cpp}
+pg_db->execute_query_result(
+    "CREATE TABLE IF NOT EXISTS audit ("
+    "  id    BIGSERIAL PRIMARY KEY,"
+    "  data  JSONB     NOT NULL,"
+    "  ts    TIMESTAMPTZ DEFAULT now()"
+    ")");
+
+auto inserted = pg_db->select_query_result(
+    "INSERT INTO audit (data) VALUES ('{\"k\":1}'::jsonb) RETURNING id, ts");
+@endcode
+
+@subsection be_mysql MySQL
+
+Use InnoDB tables for transactional safety. The backend honors
+backtick-quoted identifiers and the standard @c AUTO_INCREMENT semantics.
+
+@code{.cpp}
+mysql_db->create_query_result(
+    "CREATE TABLE IF NOT EXISTS sessions ("
+    "  id        BIGINT AUTO_INCREMENT PRIMARY KEY,"
+    "  user_id   BIGINT NOT NULL,"
+    "  token     VARCHAR(64) NOT NULL UNIQUE,"
+    "  expires   DATETIME NOT NULL,"
+    "  INDEX idx_user (user_id)"
+    ") ENGINE=InnoDB");
+@endcode
+
+@subsection be_mongo MongoDB
+
+The MongoDB adapter exposes the same @c execute / @c select API but maps
+each statement to a BSON command. Use it when your data is naturally
+document-shaped or schemaless.
+
+@code{.cpp}
+mongo_db->execute_query_result(
+    R"({ "insert": "events",
+         "documents": [ { "type":"login", "ts":1700000000 } ] })");
+
+auto rows = mongo_db->select_query_result(
+    R"({ "find": "events", "filter": { "type":"login" } })");
+@endcode
+
+@note MongoDB and Redis are currently experimental. They are disabled by
+default and have limited test coverage. Treat them as preview backends.
+
+@section be_modes Connection Modes: Direct vs Proxy
+
+@c database_system supports two conceptual connection modes.
+
+| Mode | When to use | Notes |
+|------|-------------|-------|
+| **Direct mode** (default) | Process talks straight to the database driver. | Lowest latency, simplest deployment, fewest moving parts. |
+| **Proxy mode** | Many client processes share a centralised pool. | Reduces driver-side connection counts, enables centralised auth and metrics. |
+
+In direct mode the @c database_manager owns its driver handle and any
+connection pooling happens at the driver layer. Choose this when:
+
+- The process is long-lived (servers, daemons)
+- You only need a single application sharing the database
+- You want the smallest deployment
+
+@code{.cpp}
+auto ctx = std::make_shared<database_context>();
+auto mgr = std::make_shared<database_manager>(ctx);
+mgr->set_mode(database_types::postgres);
+mgr->connect_result("host=db.internal port=5432 dbname=app user=svc password=...");
+// Direct mode: this process owns the libpqxx connection
+@endcode
+
+Proxy mode is the planned alternative where many clients share an
+external @c database_server pool. The client API is identical — the
+runtime simply marshals requests to the proxy instead of the driver.
+
+@warning Proxy mode is currently a stub. Local connection pooling was
+removed in Phase 4.3 in anticipation of the proxy implementation. Until
+then, rely on direct mode plus driver-level pooling.
+
+@section be_migration Migrating Between Backends
+
+Because every backend implements the same @c database_backend interface,
+moving an application from SQLite to PostgreSQL (or any other pair) only
+requires three changes: the @c database_types argument, the connection
+string, and any backend-specific DDL.
+
+A typical migration follows this pattern:
+
+@code{.cpp}
+// 1. Open both connections
+auto src = open_db(database_types::sqlite, "file:legacy.sqlite3");
+auto dst = open_db(database_types::postgres,
+    "host=localhost port=5432 dbname=app user=app password=secret");
+
+// 2. Re-create the schema on the destination using portable DDL
+dst->create_query_result(R"(
+    CREATE TABLE IF NOT EXISTS users (
+        id    BIGSERIAL PRIMARY KEY,
+        name  TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE
+    )
+)");
+
+// 3. Stream rows from source to destination inside a transaction
+auto rows = src->select_query_result("SELECT id, name, email FROM users");
+if (rows.is_ok())
+{
+    dst->begin_transaction();
+    for (const auto& row : rows.value())
+    {
+        std::string name, email;
+        for (const auto& [col, val] : row)
+        {
+            if (col == "name")  name  = std::get<std::string>(val);
+            if (col == "email") email = std::get<std::string>(val);
+        }
+
+        dst->execute_query_result(
+            "INSERT INTO users (name, email) VALUES ('" + name + "','" + email + "')");
+    }
+    dst->commit_transaction();
+}
+@endcode
+
+@note Production migrations should use parameterised statements or the
+query builder to avoid string-concatenation injection risks. See
+@ref query_builder_usage.cpp for parameterised patterns.
+
+@section be_next Next Steps
+
+- @ref tutorial_quickstart — CRUD primer
+- @ref tutorial_orm — Map C++ classes to portable schemas
+- @ref faq — Backend selection and pooling questions
+- @ref troubleshooting — Connection failures and dialect mismatches
+- @ref basic_connection.cpp — Runnable connection sample
+
+*/

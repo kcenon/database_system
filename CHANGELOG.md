@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING**: Unified CMake package name from `DatabaseSystem` to `database_system` for vcpkg consumption; use `find_package(database_system CONFIG REQUIRED)` ([#547](https://github.com/kcenon/database_system/issues/547))
+
 ### Documentation
 
 - Modernize Doxygen with doxygen-awesome-css theme, dark mode toggle, and standardized mainpage ([#537](https://github.com/kcenon/database_system/issues/537))

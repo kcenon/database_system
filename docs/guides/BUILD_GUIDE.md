@@ -674,7 +674,7 @@ CMD ["./build/bin/basic_usage"]
 ---
 
 For additional help or issues not covered here, please:
-1. Check the [troubleshooting section](README.md#troubleshooting) in the main README
+1. Check the [troubleshooting guide](TROUBLESHOOTING.md)
 2. Search existing [GitHub issues](https://github.com/kcenon/database_system/issues)
 3. Create a new issue with your build configuration and error details
 ---

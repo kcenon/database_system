@@ -36,8 +36,8 @@ vcpkg_cmake_configure(
 vcpkg_cmake_install()
 
 vcpkg_cmake_config_fixup(
-    PACKAGE_NAME DatabaseSystem
-    CONFIG_PATH lib/cmake/DatabaseSystem
+    PACKAGE_NAME database_system
+    CONFIG_PATH lib/cmake/database_system
 )
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")

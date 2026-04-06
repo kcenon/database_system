@@ -201,6 +201,19 @@ cmake --build build
 | **Security** | `security/` | secure_connection.h | TLS/SSL encrypted connections and audit logging |
 | **Protocol** | `protocol/` | database_protocol.h | Database protocol and serialization |
 
+@section learning Learning Resources
+
+New to @c database_system? Start with the tutorials below, then dig into
+the FAQ and troubleshooting guide as questions come up.
+
+| Resource | Description |
+|----------|-------------|
+| @ref tutorial_quickstart | Connection setup, basic CRUD, result handling, transactions |
+| @ref tutorial_orm | ENTITY_FIELD / ENTITY_METADATA, constraints, relationships, query builder integration |
+| @ref tutorial_backends | SQLite vs PostgreSQL vs MySQL vs MongoDB, connection modes, migration patterns |
+| @ref faq | Backend selection, pooling, isolation levels, multi-tenancy, async, and more |
+| @ref troubleshooting | Connection failures, deadlocks, ORM mistakes, slow queries, migration drift |
+
 @section examples Examples
 
 | Example | Source | Description |

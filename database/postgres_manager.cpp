@@ -22,6 +22,16 @@
 #define POSTGRES_LOG_INFO(message) \
 	std::cout << "[PostgreSQL] Info: " << message << std::endl
 
+namespace
+{
+// PostgreSQL type OIDs (from pg_type.h)
+constexpr unsigned int PG_INT4OID = 23;
+constexpr unsigned int PG_INT8OID = 20;
+constexpr unsigned int PG_FLOAT4OID = 700;
+constexpr unsigned int PG_FLOAT8OID = 701;
+constexpr unsigned int PG_BOOLOID = 16;
+}
+
 namespace database
 {
 	postgres_manager::postgres_manager(void)
@@ -215,13 +225,13 @@ namespace database
 					if (row[i].is_null()) {
 						db_row[column_name] = nullptr;
 					} else {
-						if (row[i].type() == pqxx::oid::int8_oid ||
-							row[i].type() == pqxx::oid::int4_oid) {
+						if (row[i].type() == PG_INT8OID ||
+							row[i].type() == PG_INT4OID) {
 							db_row[column_name] = row[i].as<int64_t>();
-						} else if (row[i].type() == pqxx::oid::float8_oid ||
-								   row[i].type() == pqxx::oid::float4_oid) {
+						} else if (row[i].type() == PG_FLOAT8OID ||
+								   row[i].type() == PG_FLOAT4OID) {
 							db_row[column_name] = row[i].as<double>();
-						} else if (row[i].type() == pqxx::oid::bool_oid) {
+						} else if (row[i].type() == PG_BOOLOID) {
 							db_row[column_name] = row[i].as<bool>();
 						} else {
 							db_row[column_name] = row[i].as<std::string>();

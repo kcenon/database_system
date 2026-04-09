@@ -354,16 +354,71 @@ endif()
 ##################################################
 # Installation Rules
 #
-# Only generate install/export rules when database_system is the top-level
-# project. In subdirectory builds (e.g., via pacs_system), transitive
-# dependencies (thread_base, simdutf, etc.) may not be in any export set,
-# which causes CMake generation errors.
+# Uses Tiered Install Degradation: headers and config files are always
+# installed, but install(EXPORT) / export(EXPORT) are conditional on all
+# PUBLIC dependencies being IMPORTED targets (i.e., already in an export
+# set). This allows subdirectory builds to get headers + library + config
+# while avoiding CMake generation errors from non-IMPORTED transitive deps.
 ##################################################
 
 include(GNUInstallDirs)
 
-if(BUILD_DATABASE AND CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    # Install header files
+if(BUILD_DATABASE)
+    # --- Determine export capability via IMPORTED property detection ------
+    set(_DB_CAN_EXPORT TRUE)
+    set(_DB_NON_IMPORTED_DEPS "")
+
+    # Check common_system (required dependency)
+    foreach(_target common_system::common_system common_system)
+        if(TARGET ${_target})
+            get_target_property(_imp ${_target} IMPORTED)
+            if(NOT _imp)
+                set(_DB_CAN_EXPORT FALSE)
+                list(APPEND _DB_NON_IMPORTED_DEPS "${_target}")
+            endif()
+            break()
+        endif()
+    endforeach()
+
+    # Check thread_system (optional ecosystem dependency)
+    foreach(_target thread_system::thread_system thread_system)
+        if(TARGET ${_target})
+            get_target_property(_imp ${_target} IMPORTED)
+            if(NOT _imp)
+                set(_DB_CAN_EXPORT FALSE)
+                list(APPEND _DB_NON_IMPORTED_DEPS "${_target}")
+            endif()
+            break()
+        endif()
+    endforeach()
+
+    # Check monitoring_system (optional ecosystem dependency)
+    foreach(_target monitoring_system::monitoring_system monitoring_system)
+        if(TARGET ${_target})
+            get_target_property(_imp ${_target} IMPORTED)
+            if(NOT _imp)
+                set(_DB_CAN_EXPORT FALSE)
+                list(APPEND _DB_NON_IMPORTED_DEPS "${_target}")
+            endif()
+            break()
+        endif()
+    endforeach()
+
+    # Check container_system (optional ecosystem dependency)
+    foreach(_target container_system::container_system container_system)
+        if(TARGET ${_target})
+            get_target_property(_imp ${_target} IMPORTED)
+            if(NOT _imp)
+                set(_DB_CAN_EXPORT FALSE)
+                list(APPEND _DB_NON_IMPORTED_DEPS "${_target}")
+            endif()
+            break()
+        endif()
+    endforeach()
+
+    list(REMOVE_DUPLICATES _DB_NON_IMPORTED_DEPS)
+
+    # --- Tier 1: Headers (ALWAYS) ----------------------------------------
     install(DIRECTORY database/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system/database
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
@@ -371,29 +426,46 @@ if(BUILD_DATABASE AND CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         PATTERN "samples" EXCLUDE
     )
 
-    # Install kcenon-namespaced facade headers
     install(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
     )
 
-    # Install library target with export set
-    install(TARGETS database
-        EXPORT database_system-targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system
-    )
+    # --- Tier 2+3: Targets + conditional export --------------------------
+    if(_DB_CAN_EXPORT)
+        # Tier 2: Install library target with export set
+        install(TARGETS database
+            EXPORT database_system-targets
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system
+        )
 
-    # Install export set with database_system:: namespace
-    install(EXPORT database_system-targets
-        FILE database_system-targets.cmake
-        NAMESPACE database_system::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
-    )
+        # Tier 3: Install + build-tree export sets
+        install(EXPORT database_system-targets
+            FILE database_system-targets.cmake
+            NAMESPACE database_system::
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
+        )
 
-    # Generate and install package config files
+        export(EXPORT database_system-targets
+            FILE "${CMAKE_CURRENT_BINARY_DIR}/database_system-targets.cmake"
+            NAMESPACE database_system::
+        )
+    else()
+        # Tier 2 only: Install library without EXPORT (no export set)
+        install(TARGETS database
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )
+
+        message(STATUS "database_system: install(EXPORT) skipped — non-IMPORTED deps: "
+            "${_DB_NON_IMPORTED_DEPS}. Headers and library are installed.")
+    endif()
+
+    # --- Tier 4: Config + version files (ALWAYS) -------------------------
     include(CMakePackageConfigHelpers)
 
     configure_package_config_file(
@@ -413,12 +485,6 @@ if(BUILD_DATABASE AND CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         "${CMAKE_CURRENT_BINARY_DIR}/database_system-config.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/database_system-config-version.cmake"
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/database_system
-    )
-
-    # Build-tree export for FetchContent/add_subdirectory users
-    export(EXPORT database_system-targets
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/database_system-targets.cmake"
-        NAMESPACE database_system::
     )
 endif()
 

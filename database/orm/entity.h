@@ -13,6 +13,7 @@
 #include <chrono>
 #include <unordered_map>
 #include <functional>
+#include <mutex>
 #include <optional>
 
 namespace database::orm
@@ -288,11 +289,8 @@ namespace database::orm
 	#define ENTITY_METADATA() \
 		public: \
 			const entity_metadata& get_metadata() const override { \
-				static bool initialized = false; \
-				if (!initialized) { \
-					initialize_metadata(); \
-					initialized = true; \
-				} \
+				static std::once_flag init_flag; \
+				std::call_once(init_flag, [this]() { initialize_metadata(); }); \
 				return metadata_; \
 			} \
 		private: \

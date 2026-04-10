@@ -93,6 +93,14 @@ public:
 
 	kcenon::common::VoidResult execute_query(const std::string& query_string) override;
 
+	[[nodiscard]] kcenon::common::Result<core::database_result> select_prepared(
+		const std::string& query,
+		const std::vector<core::database_value>& params) override;
+
+	[[nodiscard]] kcenon::common::VoidResult execute_prepared(
+		const std::string& query,
+		const std::vector<core::database_value>& params) override;
+
 	kcenon::common::VoidResult begin_transaction() override;
 
 	kcenon::common::VoidResult commit_transaction() override;

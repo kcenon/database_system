@@ -348,6 +348,118 @@ TEST_F(SQLInjectionTest, BooleanValueHandling) {
 }
 
 //=============================================================================
+// Prepared Statement Tests (Wire-Level Parameterization)
+//=============================================================================
+
+/**
+ * @test PreparedSelectReturnsCorrectResults
+ * @brief Tests that prepared SELECT queries bind parameters correctly
+ */
+TEST_F(SQLInjectionTest, PreparedSelectReturnsCorrectResults) {
+#ifdef USE_SQLITE
+    std::vector<core::database_value> params = {std::string("Alice")};
+    auto result = db_->select_prepared(
+        "SELECT * FROM users WHERE name = ?", params);
+
+    ASSERT_TRUE(result.is_ok());
+    ASSERT_EQ(result.value().size(), 1u);
+
+    const auto& row = result.value()[0];
+    auto it = row.find("email");
+    ASSERT_NE(it, row.end());
+    EXPECT_EQ(std::get<std::string>(it->second), "alice@test.com");
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
+}
+
+/**
+ * @test PreparedSelectBlocksInjection
+ * @brief Tests that prepared statements prevent SQL injection at wire level
+ */
+TEST_F(SQLInjectionTest, PreparedSelectBlocksInjection) {
+#ifdef USE_SQLITE
+    std::string malicious = "' OR '1'='1";
+    std::vector<core::database_value> params = {malicious};
+    auto result = db_->select_prepared(
+        "SELECT * FROM users WHERE name = ?", params);
+
+    ASSERT_TRUE(result.is_ok());
+    EXPECT_EQ(result.value().size(), 0u)
+        << "Prepared statement should treat malicious input as literal string";
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
+}
+
+/**
+ * @test PreparedExecuteWithTypedParams
+ * @brief Tests that execute_prepared handles typed parameters
+ */
+TEST_F(SQLInjectionTest, PreparedExecuteWithTypedParams) {
+#ifdef USE_SQLITE
+    std::vector<core::database_value> params = {
+        int64_t(10),
+        std::string("Charlie"),
+        std::string("charlie@test.com"),
+        std::string("hash_prep")
+    };
+    auto exec_result = db_->execute_prepared(
+        "INSERT INTO users (id, name, email, password_hash) VALUES (?, ?, ?, ?)",
+        params);
+    ASSERT_TRUE(exec_result.is_ok());
+
+    // Verify the row was inserted
+    std::vector<core::database_value> select_params = {int64_t(10)};
+    auto select_result = db_->select_prepared(
+        "SELECT name FROM users WHERE id = ?", select_params);
+    ASSERT_TRUE(select_result.is_ok());
+    ASSERT_EQ(select_result.value().size(), 1u);
+    EXPECT_EQ(std::get<std::string>(select_result.value()[0].at("name")), "Charlie");
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
+}
+
+/**
+ * @test PreparedBatchStatementInjectionBlocked
+ * @brief Tests that prepared statements block batch statement injection
+ */
+TEST_F(SQLInjectionTest, PreparedBatchStatementInjectionBlocked) {
+#ifdef USE_SQLITE
+    std::string malicious = "'; DROP TABLE users; --";
+    std::vector<core::database_value> params = {malicious};
+    db_->select_prepared("SELECT * FROM users WHERE name = ?", params);
+
+    // Verify the table still exists
+    auto check = db_->select_query("SELECT COUNT(*) as cnt FROM users");
+    ASSERT_TRUE(check.is_ok());
+    EXPECT_FALSE(check.value().empty())
+        << "CRITICAL: Table dropped via prepared statement injection!";
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
+}
+
+/**
+ * @test PreparedNullParameterHandling
+ * @brief Tests that NULL parameters bind correctly in prepared statements
+ */
+TEST_F(SQLInjectionTest, PreparedNullParameterHandling) {
+#ifdef USE_SQLITE
+    std::vector<core::database_value> params = {nullptr};
+    auto result = db_->select_prepared(
+        "SELECT * FROM users WHERE name = ?", params);
+
+    ASSERT_TRUE(result.is_ok());
+    EXPECT_EQ(result.value().size(), 0u)
+        << "NULL comparison should match no rows (NULL != NULL in SQL)";
+#else
+    GTEST_SKIP() << "SQLite not available";
+#endif
+}
+
+//=============================================================================
 // Query Builder State Tests
 //=============================================================================
 

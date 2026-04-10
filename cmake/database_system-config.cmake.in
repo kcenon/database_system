@@ -4,7 +4,8 @@
 # database_system Package Configuration
 #
 # Provides imported targets:
-#   database_system::database             - Core DAL library
+#   database_system::database_system      - Core DAL library (canonical)
+#   database_system::database             - Backward compatibility alias
 #   database_system::integrated_database  - Integrated adapter layer (if built)
 ##################################################
 
@@ -44,6 +45,11 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/database_system-targets.cmake")
     include("${CMAKE_CURRENT_LIST_DIR}/database_system-targets.cmake")
 endif()
 
+# Backward compatibility alias
+if(NOT TARGET database_system::database)
+    add_library(database_system::database ALIAS database_system::database_system)
+endif()
+
 # Verify targets exist
 check_required_components(database_system)
 
@@ -53,6 +59,6 @@ set(database_system_FOUND TRUE)
 # Provide information about the package
 set(database_system_VERSION @PROJECT_VERSION@)
 set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
-set(database_system_LIBRARIES database_system::database)
+set(database_system_LIBRARIES database_system::database_system)
 
 message(STATUS "Found database_system: ${database_system_VERSION}")

@@ -326,6 +326,202 @@ kcenon::common::VoidResult sqlite_backend::execute_query(const std::string& quer
 #endif
 }
 
+kcenon::common::Result<core::database_result> sqlite_backend::select_prepared(
+	const std::string& query,
+	const std::vector<core::database_value>& params)
+{
+	if (!is_initialized()) {
+		last_error_ = "Backend not initialized";
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::invalid_state),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	core::database_result result;
+
+#ifdef USE_SQLITE
+	if (!connection_) {
+		last_error_ = "No active connection";
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::connection_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
+	sqlite3* db = static_cast<sqlite3*>(connection_);
+	sqlite3_stmt* stmt = nullptr;
+
+	int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+	if (rc != SQLITE_OK) {
+		last_error_ = std::string("Prepare error: ") + sqlite3_errmsg(db);
+		logger_.error("select_prepared", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	// Bind parameters
+	for (size_t i = 0; i < params.size(); ++i) {
+		int bind_idx = static_cast<int>(i + 1); // SQLite uses 1-based indexing
+		int bind_rc = SQLITE_OK;
+
+		std::visit([&bind_rc, stmt, bind_idx](const auto& v) {
+			using T = std::decay_t<decltype(v)>;
+			if constexpr (std::is_same_v<T, std::nullptr_t>) {
+				bind_rc = sqlite3_bind_null(stmt, bind_idx);
+			} else if constexpr (std::is_same_v<T, bool>) {
+				bind_rc = sqlite3_bind_int(stmt, bind_idx, v ? 1 : 0);
+			} else if constexpr (std::is_same_v<T, int64_t>) {
+				bind_rc = sqlite3_bind_int64(stmt, bind_idx, v);
+			} else if constexpr (std::is_same_v<T, double>) {
+				bind_rc = sqlite3_bind_double(stmt, bind_idx, v);
+			} else if constexpr (std::is_same_v<T, std::string>) {
+				bind_rc = sqlite3_bind_text(stmt, bind_idx, v.c_str(),
+					static_cast<int>(v.size()), SQLITE_TRANSIENT);
+			}
+		}, params[i]);
+
+		if (bind_rc != SQLITE_OK) {
+			last_error_ = std::string("Bind error at param ") + std::to_string(i + 1)
+				+ ": " + sqlite3_errmsg(db);
+			logger_.error("select_prepared", last_error_);
+			sqlite3_finalize(stmt);
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::query_failed),
+				last_error_,
+				"sqlite_backend"
+			};
+		}
+	}
+
+	// Execute and collect results
+	int col_count = sqlite3_column_count(stmt);
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+		core::database_row db_row;
+		for (int col = 0; col < col_count; ++col) {
+			std::string column_name = sqlite3_column_name(stmt, col);
+			db_row[column_name] = convert_sqlite_value(stmt, col);
+		}
+		result.push_back(std::move(db_row));
+	}
+
+	sqlite3_finalize(stmt);
+
+	if (rc != SQLITE_DONE) {
+		last_error_ = std::string("Step error: ") + sqlite3_errmsg(db);
+		logger_.error("select_prepared", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+#else
+	return database_backend::select_prepared(query, params);
+#endif
+
+	last_error_.clear();
+	return result;
+}
+
+kcenon::common::VoidResult sqlite_backend::execute_prepared(
+	const std::string& query,
+	const std::vector<core::database_value>& params)
+{
+	if (!is_initialized()) {
+		last_error_ = "Backend not initialized";
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::invalid_state),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+#ifdef USE_SQLITE
+	if (!connection_) {
+		last_error_ = "No active SQLite connection";
+		logger_.error("execute_prepared", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::connection_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	std::lock_guard<std::recursive_mutex> lock(sqlite_mutex_);
+	sqlite3* db = static_cast<sqlite3*>(connection_);
+	sqlite3_stmt* stmt = nullptr;
+
+	int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+	if (rc != SQLITE_OK) {
+		last_error_ = std::string("Prepare error: ") + sqlite3_errmsg(db);
+		logger_.error("execute_prepared", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	for (size_t i = 0; i < params.size(); ++i) {
+		int bind_idx = static_cast<int>(i + 1);
+		int bind_rc = SQLITE_OK;
+
+		std::visit([&bind_rc, stmt, bind_idx](const auto& v) {
+			using T = std::decay_t<decltype(v)>;
+			if constexpr (std::is_same_v<T, std::nullptr_t>) {
+				bind_rc = sqlite3_bind_null(stmt, bind_idx);
+			} else if constexpr (std::is_same_v<T, bool>) {
+				bind_rc = sqlite3_bind_int(stmt, bind_idx, v ? 1 : 0);
+			} else if constexpr (std::is_same_v<T, int64_t>) {
+				bind_rc = sqlite3_bind_int64(stmt, bind_idx, v);
+			} else if constexpr (std::is_same_v<T, double>) {
+				bind_rc = sqlite3_bind_double(stmt, bind_idx, v);
+			} else if constexpr (std::is_same_v<T, std::string>) {
+				bind_rc = sqlite3_bind_text(stmt, bind_idx, v.c_str(),
+					static_cast<int>(v.size()), SQLITE_TRANSIENT);
+			}
+		}, params[i]);
+
+		if (bind_rc != SQLITE_OK) {
+			last_error_ = std::string("Bind error at param ") + std::to_string(i + 1)
+				+ ": " + sqlite3_errmsg(db);
+			logger_.error("execute_prepared", last_error_);
+			sqlite3_finalize(stmt);
+			return kcenon::common::error_info{
+				static_cast<int>(database::error_code::query_failed),
+				last_error_,
+				"sqlite_backend"
+			};
+		}
+	}
+
+	rc = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (rc != SQLITE_DONE && rc != SQLITE_ROW) {
+		last_error_ = std::string("Execute prepared error: ") + sqlite3_errmsg(db);
+		logger_.error("execute_prepared", last_error_);
+		return kcenon::common::error_info{
+			static_cast<int>(database::error_code::query_failed),
+			last_error_,
+			"sqlite_backend"
+		};
+	}
+
+	last_error_.clear();
+	return kcenon::common::ok();
+#else
+	return database_backend::execute_prepared(query, params);
+#endif
+}
+
 kcenon::common::VoidResult sqlite_backend::begin_transaction()
 {
 	if (!is_initialized()) {

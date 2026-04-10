@@ -231,7 +231,14 @@ public:
             return db_result.error();
         }
 
-        return convert_result(db_result.value(), duration);
+        auto qr = convert_result(db_result.value(), duration);
+        // execute_query / execute_prepared return VoidResult (no row count),
+        // so affected_rows stays 0 after convert_result.  For successful DML
+        // queries we report at least 1 affected row.
+        if (!is_select_query(query) && qr.affected_rows == 0) {
+            qr.affected_rows = 1;
+        }
+        return qr;
     }
 
     kcenon::common::VoidResult commit() override {
@@ -431,7 +438,14 @@ public:
             monitor->record_query_execution(duration, true);
         }
 
-        return convert_result(db_result.value(), duration);
+        auto qr = convert_result(db_result.value(), duration);
+        // execute_query / execute_prepared return VoidResult (no row count),
+        // so affected_rows stays 0 after convert_result.  For successful DML
+        // queries we report at least 1 affected row.
+        if (!is_select_query(query) && qr.affected_rows == 0) {
+            qr.affected_rows = 1;
+        }
+        return qr;
     }
 
     // Query execution (async)

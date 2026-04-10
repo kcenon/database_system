@@ -152,6 +152,47 @@ public:
 	virtual kcenon::common::VoidResult execute_query(const std::string& query_string) = 0;
 
 	/**
+	 * @brief Execute a parameterized SELECT query (prepared statement)
+	 *
+	 * Parameters are bound at the wire-protocol level, providing stronger
+	 * SQL injection protection than string escaping. Backends that support
+	 * native prepared statements (PostgreSQL, SQLite) should override this.
+	 *
+	 * @param query SQL with positional placeholders ($1, $2, ... or ?, ?, ...)
+	 * @param params Parameter values to bind
+	 * @return Query results as rows, or error
+	 *
+	 * @note Default implementation falls back to string interpolation via
+	 *       execute_query/select_query for backends that have not yet
+	 *       implemented native prepared statement support.
+	 */
+	[[nodiscard]] virtual kcenon::common::Result<database_result> select_prepared(
+		const std::string& query,
+		const std::vector<database_value>& params)
+	{
+		// Default fallback: substitute params inline (less secure, but functional)
+		auto expanded = expand_params(query, params);
+		return select_query(expanded);
+	}
+
+	/**
+	 * @brief Execute a parameterized DML/DDL query (prepared statement)
+	 *
+	 * @param query SQL with positional placeholders ($1, $2, ... or ?, ?, ...)
+	 * @param params Parameter values to bind
+	 * @return VoidResult::ok() on success, error on failure
+	 *
+	 * @see select_prepared for details on parameterized queries
+	 */
+	[[nodiscard]] virtual kcenon::common::VoidResult execute_prepared(
+		const std::string& query,
+		const std::vector<database_value>& params)
+	{
+		auto expanded = expand_params(query, params);
+		return execute_query(expanded);
+	}
+
+	/**
 	 * @brief Begin a transaction
 	 * @return VoidResult::ok() on success, error on failure
 	 */
@@ -188,6 +229,71 @@ public:
 	 * Example keys: "server_version", "connection_id", "protocol_version"
 	 */
 	virtual std::map<std::string, std::string> connection_info() const = 0;
+
+protected:
+	/**
+	 * @brief Expand positional parameters into a SQL string (fallback)
+	 *
+	 * Substitutes $1, $2, ... or ?, ?, ... placeholders with stringified
+	 * parameter values. Used by the default select_prepared/execute_prepared
+	 * implementations. Backends with native prepared statements should
+	 * override the virtual methods instead of relying on this.
+	 *
+	 * @warning This performs string interpolation, NOT wire-level binding.
+	 *          Override select_prepared/execute_prepared for true security.
+	 */
+	static std::string expand_params(
+		const std::string& query,
+		const std::vector<database_value>& params)
+	{
+		std::string result = query;
+
+		// Replace $N placeholders (PostgreSQL-style, 1-indexed)
+		for (size_t i = params.size(); i > 0; --i) {
+			auto placeholder = "$" + std::to_string(i);
+			auto pos = result.find(placeholder);
+			if (pos != std::string::npos) {
+				result.replace(pos, placeholder.size(), value_to_sql(params[i - 1]));
+			}
+		}
+
+		// Replace ? placeholders (SQLite-style, left-to-right)
+		size_t param_idx = 0;
+		auto pos = result.find('?');
+		while (pos != std::string::npos && param_idx < params.size()) {
+			auto val = value_to_sql(params[param_idx++]);
+			result.replace(pos, 1, val);
+			pos = result.find('?', pos + val.size());
+		}
+
+		return result;
+	}
+
+private:
+	static std::string value_to_sql(const database_value& val)
+	{
+		return std::visit([](const auto& v) -> std::string {
+			using T = std::decay_t<decltype(v)>;
+			if constexpr (std::is_same_v<T, std::nullptr_t>) {
+				return "NULL";
+			} else if constexpr (std::is_same_v<T, bool>) {
+				return v ? "TRUE" : "FALSE";
+			} else if constexpr (std::is_same_v<T, std::string>) {
+				// Basic escaping — backends should override for proper security
+				std::string escaped;
+				escaped.reserve(v.size() + 2);
+				escaped += '\'';
+				for (char c : v) {
+					if (c == '\'') escaped += "''";
+					else escaped += c;
+				}
+				escaped += '\'';
+				return escaped;
+			} else {
+				return std::to_string(v);
+			}
+		}, val);
+	}
 };
 
 /**

@@ -192,6 +192,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
+    EXPORT_NAME database_system
 )
 
 # Add HAS_COROUTINES definition if C++20 coroutines are available

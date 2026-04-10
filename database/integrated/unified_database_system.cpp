@@ -19,6 +19,7 @@
 #include <mutex>
 #include <chrono>
 #include <algorithm>
+#include <cctype>
 #include <stdexcept>
 #include <sstream>
 
@@ -130,6 +131,43 @@ static query_result convert_result(
 }
 
 // ============================================================================
+// Prepared Statement Helpers
+// ============================================================================
+
+namespace {
+
+/**
+ * @brief Convert query_param vector to database_value vector for prepared statements
+ */
+std::vector<core::database_value> convert_params(const std::vector<query_param>& params) {
+    std::vector<core::database_value> values;
+    values.reserve(params.size());
+    for (const auto& p : params) {
+        if (p.is_null()) {
+            values.emplace_back(nullptr);
+        } else {
+            values.emplace_back(p.get_value());
+        }
+    }
+    return values;
+}
+
+/**
+ * @brief Check if a SQL query is a SELECT statement
+ */
+bool is_select_query(const std::string& query) {
+    // Skip leading whitespace and find the first keyword
+    auto pos = query.find_first_not_of(" \t\n\r");
+    if (pos == std::string::npos) return false;
+    // Case-insensitive check for SELECT (or WITH which precedes CTEs)
+    auto keyword = query.substr(pos, 6);
+    for (auto& c : keyword) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    return keyword.substr(0, 6) == "select" || keyword.substr(0, 4) == "with";
+}
+
+} // anonymous namespace
+
+// ============================================================================
 // Transaction Implementation
 // ============================================================================
 
@@ -162,10 +200,30 @@ public:
             return make_error_result<query_result>("Transaction not active", -1, "transaction");
         }
 
-        // Note: Parameterized queries are not yet supported.
-        // For now, params are ignored and query is executed as-is (ensure query is pre-sanitized).
         auto start = std::chrono::steady_clock::now();
-        auto db_result = backend_->select_query(query);
+
+        kcenon::common::Result<core::database_result> db_result = [&]() {
+            if (params.empty()) {
+                if (is_select_query(query)) {
+                    return backend_->select_query(query);
+                }
+                auto exec_res = backend_->execute_query(query);
+                if (exec_res.is_err()) {
+                    return kcenon::common::Result<core::database_result>(exec_res.error());
+                }
+                return kcenon::common::Result<core::database_result>(core::database_result{});
+            }
+            auto values = convert_params(params);
+            if (is_select_query(query)) {
+                return backend_->select_prepared(query, values);
+            }
+            auto exec_res = backend_->execute_prepared(query, values);
+            if (exec_res.is_err()) {
+                return kcenon::common::Result<core::database_result>(exec_res.error());
+            }
+            return kcenon::common::Result<core::database_result>(core::database_result{});
+        }();
+
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::steady_clock::now() - start);
 
@@ -325,8 +383,28 @@ public:
         // Record query start
         auto start = std::chrono::steady_clock::now();
 
-        // Execute query
-        auto db_result = backend_->select_query(query);
+        // Execute query — use prepared statements when params are provided
+        kcenon::common::Result<core::database_result> db_result = [&]() {
+            if (params.empty()) {
+                if (is_select_query(query)) {
+                    return backend_->select_query(query);
+                }
+                auto exec_res = backend_->execute_query(query);
+                if (exec_res.is_err()) {
+                    return kcenon::common::Result<core::database_result>(exec_res.error());
+                }
+                return kcenon::common::Result<core::database_result>(core::database_result{});
+            }
+            auto values = convert_params(params);
+            if (is_select_query(query)) {
+                return backend_->select_prepared(query, values);
+            }
+            auto exec_res = backend_->execute_prepared(query, values);
+            if (exec_res.is_err()) {
+                return kcenon::common::Result<core::database_result>(exec_res.error());
+            }
+            return kcenon::common::Result<core::database_result>(core::database_result{});
+        }();
 
         // Calculate execution time
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(

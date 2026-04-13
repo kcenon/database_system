@@ -1,0 +1,27 @@
+# Database System Query Router — match query to minimum document set.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+intent_routes:
+  - {keywords: [getting started, tutorial, install, 시작], bundle: quickstart}
+  - {keywords: [api, reference, 레퍼런스], bundle: api-core}
+  - {keywords: [architecture, design, 아키텍처], bundle: architecture}
+  - {keywords: [orm, model, mapping, entity], bundle: orm}
+  - {keywords: [query, builder, select, insert, update, delete, 쿼리], bundle: query-builder}
+  - {keywords: [connection pool, pooling, pool, 연결 풀], bundle: connection-pool}
+  - {keywords: [security, tls, encryption, 보안], bundle: security}
+  - {keywords: [adapter, pattern, integration, 어댑터], bundle: adapter}
+  - {keywords: [backend, postgres, mysql, sqlite, driver, 백엔드], bundle: backends}
+  - {keywords: [transaction, tx, commit, rollback, 트랜잭션], bundle: transactions}
+  - {keywords: [migration, upgrade, legacy, 마이그레이션], bundle: migration}
+  - {keywords: [benchmark, performance, latency, throughput, 성능], bundle: performance}
+  - {keywords: [quality, sanitizer, 품질], bundle: quality-assurance}
+
+fallback:
+  primary: DB-DOC-IDX
+  secondary: [DB-API-QR, DB-FEAT-ORM]
+
+skip:
+  - ECOSYSTEM.md
+  - SOUP.md
+  - TRACEABILITY.md
+  - FEATURES.md  # 28 lines, index-only

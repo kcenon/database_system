@@ -1,0 +1,59 @@
+# Database System Document Bundles — load a bundle to get all context for a feature.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+quickstart:
+  name: "Quickstart"
+  files: [README.md, GETTING_STARTED.md, API_QUICK_REFERENCE.md]
+
+api-core:
+  name: "Core API Reference"
+  files: [API_REFERENCE.md, API_QUICK_REFERENCE.md, FEATURES_ORM_QUERY.md, FEATURES_POOLING_SECURITY.md]
+
+architecture:
+  name: "Architecture"
+  files: [ARCHITECTURE.md, PROJECT_STRUCTURE.md, FEATURES_BACKENDS.md]
+
+orm:
+  name: "ORM (Object-Relational Mapping)"
+  files: [ORM_GUIDE.md, FEATURES_ORM_QUERY.md, API_REFERENCE.md]
+
+query-builder:
+  name: "Query Builder"
+  files: [FEATURES_ORM_QUERY.md, API_REFERENCE.md, API_QUICK_REFERENCE.md]
+
+connection-pool:
+  name: "Connection Pool"
+  files: [FEATURES_POOLING_SECURITY.md, API_REFERENCE.md]
+
+security:
+  name: "Security (TLS / auth / encryption)"
+  files: [FEATURES_POOLING_SECURITY.md]
+
+adapter:
+  name: "Adapter Patterns"
+  files: [ADAPTER_PATTERNS.md, BACKENDS.md, FEATURES_BACKENDS.md]
+
+backends:
+  name: "Supported Backends"
+  desc: "PostgreSQL, MySQL, SQLite, and more"
+  files: [BACKENDS.md, FEATURES_BACKENDS.md, ADAPTER_PATTERNS.md]
+
+transactions:
+  name: "Transactions"
+  files: [API_REFERENCE.md, FEATURES_ORM_QUERY.md]
+
+migration:
+  name: "Migration from database_base"
+  files: [MIGRATION_database_base.md, CHANGELOG.md]
+
+performance:
+  name: "Performance & Benchmarks"
+  files: [BENCHMARKS.md]
+
+quality-assurance:
+  name: "Quality Assurance"
+  files: [PRODUCTION_QUALITY.md, BENCHMARKS.md]
+
+compliance:
+  name: "Compliance (SOUP / Traceability)"
+  files: [SOUP.md, TRACEABILITY.md]

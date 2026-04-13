@@ -1,0 +1,58 @@
+# Database System Change Impact Graph — when X changes, review Y.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+cascade:
+  DB-ARCH-001:
+    targets:
+      - {doc: DB-API-001,  why: "API surface depends on architecture"}
+      - {doc: DB-PROJ-001, why: "Directory mirrors architecture"}
+      - {doc: DB-FEAT-BE,  why: "Backend features align with architecture"}
+      - {doc: DB-G-ADPT,   why: "Adapter patterns derived from architecture"}
+
+  DB-API-001:
+    targets:
+      - {doc: DB-API-QR,    why: "Quick reference"}
+      - {doc: DB-API-KR,    why: "Korean mirror"}
+      - {doc: DB-FEAT-ORM,  why: "ORM features implemented via API"}
+      - {doc: DB-FEAT-PS,   why: "Pooling/security features via API"}
+      - {doc: DB-GS-001,    why: "Getting Started uses API"}
+
+  DB-FEAT-ORM:
+    targets:
+      - {doc: DB-G-ORM,     why: "ORM guide references ORM features"}
+      - {doc: DB-API-001,   why: "ORM uses query/transaction API"}
+      - {doc: DB-FEAT-KR,   why: "Korean features mirror"}
+
+  DB-FEAT-BE:
+    targets:
+      - {doc: DB-G-BE,      why: "Backend guide references backend features"}
+      - {doc: DB-G-ADPT,    why: "Adapter patterns handle backend differences"}
+
+  DB-FEAT-PS:
+    targets:
+      - {doc: DB-API-001,   why: "Pool and security API"}
+      - {doc: DB-QUAL-001,  why: "Security validated in quality report"}
+
+  DB-G-MIG:
+    targets:
+      - {doc: DB-CHG-001,   why: "Migration notes in changelog"}
+      - {doc: DB-API-001,   why: "Migration may affect API"}
+
+  DB-QUAL-001:
+    targets:
+      - {doc: DB-QUAL-KR,   why: "Korean mirror"}
+      - {doc: DB-BENCH,     why: "Quality references benchmarks"}
+
+korean_pairs:
+  - {en: DB-DOC-IDX,  kr: DB-DOC-KR}
+  - {en: DB-ARCH-001, kr: DB-ARCH-KR}
+  - {en: DB-API-001,  kr: DB-API-KR}
+  - {en: DB-FEAT-ORM, kr: DB-FEAT-KR}
+  - {en: DB-PROJ-001, kr: DB-PROJ-KR}
+  - {en: DB-CHG-001,  kr: DB-CHG-KR}
+  - {en: DB-QUAL-001, kr: DB-QUAL-KR}
+  - {en: DB-BENCH,    kr: DB-BENCH-KR}
+
+external_deps:
+  - {source: common_system, target: DB-ARCH-001, why: "database_system depends on common_system"}
+  - {source: thread_system, target: DB-ARCH-001, why: "async connections use thread pool"}

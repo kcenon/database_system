@@ -1,0 +1,49 @@
+# Database System Document Manifest — read this FIRST, then load only needed sections.
+_meta: {schema: "1.0.0", generated: "2026-04-12", docs: 29, project: "database_system", tier: 3}
+
+core:
+  - {id: DB-DOC-IDX,  file: README.md,                 title: "Project README",          keywords: [index, overview], lines: 195}
+  - {id: DB-DOC-KR,   file: README.kr.md,              title: "README (한국어)",           keywords: [index, korean], lines: 287, mirrors: DB-DOC-IDX}
+  - {id: DB-ARCH-001, file: ARCHITECTURE.md,           title: "Architecture",            keywords: [architecture, adapters, orm, pooling, layers], lines: 445}
+  - {id: DB-ARCH-KR,  file: ARCHITECTURE.kr.md,        title: "아키텍처 (한국어)",          keywords: [architecture, korean], lines: 406, mirrors: DB-ARCH-001}
+  - {id: DB-API-001,  file: API_REFERENCE.md,          title: "API Reference",           keywords: [api, query, transaction, connection, pool], lines: 1245}
+  - {id: DB-API-KR,   file: API_REFERENCE.kr.md,       title: "API 참조 (한국어)",          keywords: [api, korean], lines: 978, mirrors: DB-API-001}
+  - {id: DB-API-QR,   file: API_QUICK_REFERENCE.md,    title: "API Quick Reference",     keywords: [api, cheatsheet], lines: 360}
+  - {id: DB-FEAT-IDX, file: FEATURES.md,               title: "Features (index)",        keywords: [features, index], lines: 28}
+  - {id: DB-FEAT-KR,  file: FEATURES.kr.md,            title: "기능 (한국어)",              keywords: [features, korean], lines: 1127, mirrors: DB-FEAT-ORM}
+  - {id: DB-FEAT-BE,  file: FEATURES_BACKENDS.md,      title: "Features — Backends",     keywords: [features, backends, postgres, sqlite, mysql], lines: 299}
+  - {id: DB-FEAT-ORM, file: FEATURES_ORM_QUERY.md,     title: "Features — ORM & Query",  keywords: [features, orm, query, builder], lines: 594}
+  - {id: DB-FEAT-PS,  file: FEATURES_POOLING_SECURITY.md, title: "Features — Pooling & Security", keywords: [features, pool, connection, security, tls], lines: 855}
+  - {id: DB-PROJ-001, file: PROJECT_STRUCTURE.md,      title: "Project Structure",       keywords: [structure, directory], lines: 898}
+  - {id: DB-PROJ-KR,  file: PROJECT_STRUCTURE.kr.md,   title: "프로젝트 구조 (한국어)",       keywords: [structure, korean], lines: 653, mirrors: DB-PROJ-001}
+  - {id: DB-CHG-001,  file: CHANGELOG.md,              title: "Changelog",               keywords: [changelog], lines: 1110}
+  - {id: DB-CHG-KR,   file: CHANGELOG.kr.md,           title: "변경 이력 (한국어)",          keywords: [changelog, korean], lines: 1007, mirrors: DB-CHG-001}
+  - {id: DB-GS-001,   file: GETTING_STARTED.md,        title: "Getting Started",         keywords: [getting-started], lines: 434}
+
+guides:
+  - {id: DB-G-ORM,    file: ORM_GUIDE.md,              title: "ORM Guide",               keywords: [orm, guide, model, mapping], lines: 676}
+  - {id: DB-G-ADPT,   file: ADAPTER_PATTERNS.md,       title: "Adapter Patterns",        keywords: [adapter, patterns, integration], lines: 720}
+  - {id: DB-G-BE,     file: BACKENDS.md,               title: "Backends",                keywords: [backends, database-types, drivers], lines: 189}
+  - {id: DB-G-MIG,    file: MIGRATION_database_base.md, title: "Migration from database_base", keywords: [migration, upgrade, legacy], lines: 305}
+
+quality:
+  - {id: DB-QUAL-001, file: PRODUCTION_QUALITY.md,     title: "Production Quality",      keywords: [quality, sanitizers], lines: 685}
+  - {id: DB-QUAL-KR,  file: PRODUCTION_QUALITY.kr.md,  title: "프로덕션 품질 (한국어)",       keywords: [quality, korean], lines: 387, mirrors: DB-QUAL-001}
+  - {id: DB-BENCH,    file: BENCHMARKS.md,             title: "Benchmarks",              keywords: [benchmarks, performance, latency], lines: 663}
+  - {id: DB-BENCH-KR, file: BENCHMARKS.kr.md,          title: "벤치마크 (한국어)",          keywords: [benchmarks, korean], lines: 558, mirrors: DB-BENCH}
+
+reference:
+  - {id: DB-ECO,      file: ECOSYSTEM.md,              title: "Ecosystem",               keywords: [ecosystem], lines: 28}
+  - {id: DB-SOUP,     file: SOUP.md,                   title: "SOUP",                    keywords: [soup], lines: 124}
+  - {id: DB-TRACE,    file: TRACEABILITY.md,           title: "Traceability",            keywords: [traceability], lines: 133}
+
+load_patterns:
+  quick_start:         [DB-DOC-IDX, DB-GS-001, DB-API-QR]
+  architecture_review: [DB-ARCH-001, DB-PROJ-001, DB-FEAT-BE]
+  api_deep:            [DB-API-001, DB-FEAT-ORM, DB-FEAT-PS]
+  orm_work:            [DB-G-ORM, DB-FEAT-ORM, DB-API-001]
+  pool_work:           [DB-FEAT-PS, DB-API-001]
+  backend_work:        [DB-G-BE, DB-FEAT-BE, DB-G-ADPT]
+  security_work:       [DB-FEAT-PS]
+  quality_audit:       [DB-QUAL-001, DB-BENCH]
+  migration_work:      [DB-G-MIG, DB-CHG-001]

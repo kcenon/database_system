@@ -12,13 +12,12 @@
 #include <sstream>
 #include <stdexcept>
 
-#if __has_include(<openssl/evp.h>)
-#define DATABASE_HAS_OPENSSL 1
+// DATABASE_HAS_OPENSSL is defined by CMake when OpenSSL is found and linked.
+// Do not use __has_include — it detects headers but not library availability.
+#ifdef DATABASE_HAS_OPENSSL
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <openssl/err.h>
-#else
-#define DATABASE_HAS_OPENSSL 0
 #endif
 
 namespace database::security
@@ -180,7 +179,7 @@ namespace database::security
 			return {};
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// PBKDF2-HMAC-SHA256: cryptographically secure password hashing
 		constexpr int iterations = 100000;
 		constexpr int salt_len = 16;
@@ -234,7 +233,7 @@ namespace database::security
 			return false;
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// Parse format: "pbkdf2:<iterations>:<salt_hex>:<hash_hex>"
 		if (hash.substr(0, 7) == "pbkdf2:")
 		{
@@ -287,7 +286,7 @@ namespace database::security
 			return {};
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM encryption
 		std::string key = master_key_.empty() ? "default_key_placeholder!!" : master_key_;
 		// Pad or truncate key to 32 bytes for AES-256
@@ -357,7 +356,7 @@ namespace database::security
 			return {};
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM decryption: parse "aes:<iv_hex>:<ciphertext_hex>:<tag_hex>"
 		if (encrypted_data.substr(0, 4) == "aes:")
 		{
@@ -447,7 +446,7 @@ namespace database::security
 			return {};
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM field encryption with derived key
 		key.resize(32, '\0');  // Ensure 256-bit key
 
@@ -513,7 +512,7 @@ namespace database::security
 			return {};
 		}
 
-#if DATABASE_HAS_OPENSSL
+#ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM decryption
 		if (encrypted_data.substr(0, 4) == "aes:")
 		{

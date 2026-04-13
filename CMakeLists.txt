@@ -180,6 +180,14 @@ include(FindSystemDependency)
 # Find required packages
 find_package(Threads REQUIRED)
 
+# Optional: OpenSSL for real cryptography in secure_connection
+find_package(OpenSSL QUIET)
+if(OPENSSL_FOUND)
+    message(STATUS "OpenSSL ${OPENSSL_VERSION} found — secure_connection will use PBKDF2/AES-256-GCM")
+else()
+    message(STATUS "OpenSSL not found — secure_connection will use placeholder crypto (NOT for production)")
+endif()
+
 ##################################################
 # ASIO dependency (required, header-only)
 #

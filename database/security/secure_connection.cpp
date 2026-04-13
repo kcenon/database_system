@@ -12,6 +12,14 @@
 #include <sstream>
 #include <stdexcept>
 
+// DATABASE_HAS_OPENSSL is defined by CMake when OpenSSL is found and linked.
+// Do not use __has_include — it detects headers but not library availability.
+#ifdef DATABASE_HAS_OPENSSL
+#include <openssl/evp.h>
+#include <openssl/rand.h>
+#include <openssl/err.h>
+#endif
+
 namespace database::security
 {
 
@@ -96,36 +104,178 @@ namespace database::security
 			return false;
 		}
 
-		// Decrypt all credentials with old key, then re-encrypt with new key
-		// For now, this is a placeholder — actual rotation requires a new key input
+		// Generate new key
+		std::string old_key = master_key_;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> dist(33, 126);  // printable ASCII
+		std::string new_key;
+		new_key.reserve(32);
+		for (int i = 0; i < 32; ++i)
+		{
+			new_key.push_back(static_cast<char>(dist(gen)));
+		}
+
+		// Re-encrypt all stored credentials with new key
+		std::unordered_map<std::string, std::string> rotated;
+		for (const auto& [id, encrypted] : encrypted_credentials_)
+		{
+			// Decrypt with old key
+			std::string decrypted = decrypt_data(encrypted);
+			if (decrypted.empty())
+			{
+				return false;  // Rotation failed — abort to preserve data
+			}
+
+			// Re-encrypt with new key (temporarily set new key)
+			master_key_ = new_key;
+			std::string re_encrypted = encrypt_data(decrypted);
+			master_key_ = old_key;  // Restore old key in case of further failures
+
+			if (re_encrypted.empty())
+			{
+				return false;
+			}
+			rotated[id] = re_encrypted;
+		}
+
+		// Commit: swap all credentials and update key
+		encrypted_credentials_ = std::move(rotated);
+		master_key_ = new_key;
 		return true;
 	}
 
+	namespace
+	{
+		std::string bytes_to_hex(const std::vector<uint8_t>& bytes)
+		{
+			std::ostringstream oss;
+			for (uint8_t b : bytes)
+			{
+				oss << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(b);
+			}
+			return oss.str();
+		}
+
+		std::vector<uint8_t> hex_to_bytes(const std::string& hex)
+		{
+			std::vector<uint8_t> bytes;
+			bytes.reserve(hex.size() / 2);
+			for (size_t i = 0; i + 1 < hex.size(); i += 2)
+			{
+				unsigned int val = 0;
+				std::istringstream iss(hex.substr(i, 2));
+				iss >> std::hex >> val;
+				bytes.push_back(static_cast<uint8_t>(val));
+			}
+			return bytes;
+		}
+	} // anonymous namespace
+
 	std::string credential_manager::hash_password(const std::string& password) const
 	{
-		// XOR-based obfuscation as a placeholder.
-		// Production systems should use bcrypt/Argon2 via a cryptographic library.
 		if (password.empty())
 		{
 			return {};
 		}
 
-		// Simple hash: SHA-256-like mixing (deterministic, NOT cryptographically secure)
-		uint64_t hash = 0xcbf29ce484222325ULL; // FNV offset basis
+#ifdef DATABASE_HAS_OPENSSL
+		// PBKDF2-HMAC-SHA256: cryptographically secure password hashing
+		constexpr int iterations = 100000;
+		constexpr int salt_len = 16;
+		constexpr int hash_len = 32;
+
+		std::vector<uint8_t> salt(salt_len);
+		RAND_bytes(salt.data(), salt_len);
+
+		std::vector<uint8_t> hash(hash_len);
+		PKCS5_PBKDF2_HMAC(
+			password.c_str(), static_cast<int>(password.size()),
+			salt.data(), salt_len,
+			iterations,
+			EVP_sha256(),
+			hash_len, hash.data()
+		);
+
+		// Format: "pbkdf2:<iterations>:<salt_hex>:<hash_hex>"
+		std::ostringstream oss;
+		oss << "pbkdf2:" << iterations << ":" << bytes_to_hex(salt) << ":" << bytes_to_hex(hash);
+		return oss.str();
+#else
+		// WARNING: FNV1a is NOT cryptographically secure.
+		// Build with OpenSSL to enable PBKDF2-HMAC-SHA256 password hashing.
+		static bool warned = false;
+		if (!warned)
+		{
+			std::cerr << "[database_system] WARNING: Using FNV1a placeholder for password hashing. "
+			          << "Build with OpenSSL for PBKDF2-HMAC-SHA256 support.\n";
+			warned = true;
+		}
+
+		uint64_t hash = 0xcbf29ce484222325ULL;
 		for (char c : password)
 		{
 			hash ^= static_cast<uint64_t>(c);
-			hash *= 0x100000001b3ULL; // FNV prime
+			hash *= 0x100000001b3ULL;
 		}
 
 		std::ostringstream oss;
 		oss << std::hex << std::setfill('0') << std::setw(16) << hash;
 		return "fnv1a:" + oss.str();
+#endif
 	}
 
 	bool credential_manager::verify_password(const std::string& password,
 	                                          const std::string& hash) const
 	{
+		if (password.empty() || hash.empty())
+		{
+			return false;
+		}
+
+#ifdef DATABASE_HAS_OPENSSL
+		// Parse format: "pbkdf2:<iterations>:<salt_hex>:<hash_hex>"
+		if (hash.substr(0, 7) == "pbkdf2:")
+		{
+			auto first_colon = hash.find(':', 7);
+			auto second_colon = hash.find(':', first_colon + 1);
+			if (first_colon == std::string::npos || second_colon == std::string::npos)
+			{
+				return false;
+			}
+
+			int iterations = std::stoi(hash.substr(7, first_colon - 7));
+			auto salt = hex_to_bytes(hash.substr(first_colon + 1, second_colon - first_colon - 1));
+			auto expected_hash = hex_to_bytes(hash.substr(second_colon + 1));
+
+			std::vector<uint8_t> computed(expected_hash.size());
+			PKCS5_PBKDF2_HMAC(
+				password.c_str(), static_cast<int>(password.size()),
+				salt.data(), static_cast<int>(salt.size()),
+				iterations,
+				EVP_sha256(),
+				static_cast<int>(computed.size()), computed.data()
+			);
+
+			return computed == expected_hash;
+		}
+
+		// Legacy FNV1a format migration: verify with old algorithm
+		if (hash.substr(0, 6) == "fnv1a:")
+		{
+			uint64_t h = 0xcbf29ce484222325ULL;
+			for (char c : password)
+			{
+				h ^= static_cast<uint64_t>(c);
+				h *= 0x100000001b3ULL;
+			}
+			std::ostringstream oss;
+			oss << std::hex << std::setfill('0') << std::setw(16) << h;
+			return hash == ("fnv1a:" + oss.str());
+		}
+#endif
+
+		// Fallback: direct comparison (covers fnv1a format without OpenSSL)
 		return hash_password(password) == hash;
 	}
 
@@ -136,25 +286,67 @@ namespace database::security
 			return {};
 		}
 
-		// XOR-based obfuscation with master key.
-		// This is NOT cryptographically secure — it prevents plaintext storage
-		// but should be replaced with AES-256-GCM when a crypto backend is integrated.
+#ifdef DATABASE_HAS_OPENSSL
+		// AES-256-GCM encryption
+		std::string key = master_key_.empty() ? "default_key_placeholder!!" : master_key_;
+		// Pad or truncate key to 32 bytes for AES-256
+		key.resize(32, '\0');
+
+		constexpr int iv_len = 12;
+		constexpr int tag_len = 16;
+
+		std::vector<uint8_t> iv(iv_len);
+		RAND_bytes(iv.data(), iv_len);
+
+		EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+		if (!ctx) return {};
+
+		std::vector<uint8_t> ciphertext(data.size() + EVP_MAX_BLOCK_LENGTH);
+		std::vector<uint8_t> tag(tag_len);
+		int len = 0, ciphertext_len = 0;
+
+		EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr);
+		EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, iv_len, nullptr);
+		EVP_EncryptInit_ex(ctx, nullptr, nullptr,
+		                   reinterpret_cast<const unsigned char*>(key.data()), iv.data());
+		EVP_EncryptUpdate(ctx, ciphertext.data(), &len,
+		                  reinterpret_cast<const unsigned char*>(data.data()),
+		                  static_cast<int>(data.size()));
+		ciphertext_len = len;
+		EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len);
+		ciphertext_len += len;
+		EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, tag_len, tag.data());
+		EVP_CIPHER_CTX_free(ctx);
+
+		ciphertext.resize(ciphertext_len);
+
+		// Format: "aes:<iv_hex>:<ciphertext_hex>:<tag_hex>"
+		return "aes:" + bytes_to_hex(iv) + ":" + bytes_to_hex(ciphertext) + ":" + bytes_to_hex(tag);
+#else
+		// WARNING: XOR obfuscation is NOT cryptographically secure.
+		static bool warned = false;
+		if (!warned)
+		{
+			std::cerr << "[database_system] WARNING: Using XOR placeholder for data encryption. "
+			          << "Build with OpenSSL for AES-256-GCM support.\n";
+			warned = true;
+		}
+
 		std::string key = master_key_.empty() ? "default_key" : master_key_;
 		std::string result = data;
-
 		for (size_t i = 0; i < result.size(); ++i)
 		{
 			result[i] ^= key[i % key.size()];
 		}
 
-		// Encode as hex string for safe storage
 		std::ostringstream oss;
 		for (unsigned char c : result)
 		{
 			oss << std::hex << std::setfill('0') << std::setw(2)
 			    << static_cast<int>(c);
 		}
-		return oss.str();
+		return "xor:" + oss.str();
+#endif
 	}
 
 	std::string credential_manager::decrypt_data(const std::string& encrypted_data) const
@@ -164,18 +356,67 @@ namespace database::security
 			return {};
 		}
 
-		// Decode hex string
+#ifdef DATABASE_HAS_OPENSSL
+		// AES-256-GCM decryption: parse "aes:<iv_hex>:<ciphertext_hex>:<tag_hex>"
+		if (encrypted_data.substr(0, 4) == "aes:")
+		{
+			auto first = encrypted_data.find(':', 4);
+			auto second = encrypted_data.find(':', first + 1);
+			if (first == std::string::npos || second == std::string::npos)
+			{
+				return {};
+			}
+
+			auto iv = hex_to_bytes(encrypted_data.substr(4, first - 4));
+			auto ciphertext = hex_to_bytes(encrypted_data.substr(first + 1, second - first - 1));
+			auto tag = hex_to_bytes(encrypted_data.substr(second + 1));
+
+			std::string key = master_key_.empty() ? "default_key_placeholder!!" : master_key_;
+			key.resize(32, '\0');
+
+			EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+			if (!ctx) return {};
+
+			std::vector<uint8_t> plaintext(ciphertext.size() + EVP_MAX_BLOCK_LENGTH);
+			int len = 0, plaintext_len = 0;
+
+			EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr);
+			EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, static_cast<int>(iv.size()), nullptr);
+			EVP_DecryptInit_ex(ctx, nullptr, nullptr,
+			                   reinterpret_cast<const unsigned char*>(key.data()), iv.data());
+			EVP_DecryptUpdate(ctx, plaintext.data(), &len,
+			                  ciphertext.data(), static_cast<int>(ciphertext.size()));
+			plaintext_len = len;
+			EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, static_cast<int>(tag.size()),
+			                    const_cast<uint8_t*>(tag.data()));
+
+			int ret = EVP_DecryptFinal_ex(ctx, plaintext.data() + len, &len);
+			EVP_CIPHER_CTX_free(ctx);
+
+			if (ret <= 0) return {};  // Authentication failed
+			plaintext_len += len;
+
+			return std::string(plaintext.begin(), plaintext.begin() + plaintext_len);
+		}
+#endif
+
+		// Legacy XOR format (with or without "xor:" prefix)
+		std::string hex_data = encrypted_data;
+		if (hex_data.substr(0, 4) == "xor:")
+		{
+			hex_data = hex_data.substr(4);
+		}
+
 		std::string decoded;
-		decoded.reserve(encrypted_data.size() / 2);
-		for (size_t i = 0; i + 1 < encrypted_data.size(); i += 2)
+		decoded.reserve(hex_data.size() / 2);
+		for (size_t i = 0; i + 1 < hex_data.size(); i += 2)
 		{
 			unsigned int byte = 0;
-			std::istringstream iss(encrypted_data.substr(i, 2));
+			std::istringstream iss(hex_data.substr(i, 2));
 			iss >> std::hex >> byte;
 			decoded.push_back(static_cast<char>(byte));
 		}
 
-		// XOR decrypt with master key
 		std::string key = master_key_.empty() ? "default_key" : master_key_;
 		for (size_t i = 0; i < decoded.size(); ++i)
 		{
@@ -205,21 +446,54 @@ namespace database::security
 			return {};
 		}
 
-		// XOR-based field encryption (placeholder for AES-256)
+#ifdef DATABASE_HAS_OPENSSL
+		// AES-256-GCM field encryption with derived key
+		key.resize(32, '\0');  // Ensure 256-bit key
+
+		constexpr int iv_len = 12;
+		constexpr int tag_len = 16;
+
+		std::vector<uint8_t> iv(iv_len);
+		RAND_bytes(iv.data(), iv_len);
+
+		EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+		if (!ctx) return {};
+
+		std::vector<uint8_t> ciphertext(data.size() + EVP_MAX_BLOCK_LENGTH);
+		std::vector<uint8_t> tag(tag_len);
+		int len = 0, ct_len = 0;
+
+		EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr);
+		EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, iv_len, nullptr);
+		EVP_EncryptInit_ex(ctx, nullptr, nullptr,
+		                   reinterpret_cast<const unsigned char*>(key.data()), iv.data());
+		EVP_EncryptUpdate(ctx, ciphertext.data(), &len,
+		                  reinterpret_cast<const unsigned char*>(data.data()),
+		                  static_cast<int>(data.size()));
+		ct_len = len;
+		EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len);
+		ct_len += len;
+		EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, tag_len, tag.data());
+		EVP_CIPHER_CTX_free(ctx);
+
+		ciphertext.resize(ct_len);
+		return "aes:" + bytes_to_hex(iv) + ":" + bytes_to_hex(ciphertext) + ":" + bytes_to_hex(tag);
+#else
+		// XOR-based field encryption (placeholder)
 		std::string result = data;
 		for (size_t i = 0; i < result.size(); ++i)
 		{
 			result[i] ^= key[i % key.size()];
 		}
 
-		// Hex-encode
 		std::ostringstream oss;
 		for (unsigned char c : result)
 		{
 			oss << std::hex << std::setfill('0') << std::setw(2)
 			    << static_cast<int>(c);
 		}
-		return oss.str();
+		return "xor:" + oss.str();
+#endif
 	}
 
 	std::string encryption_manager::decrypt_field_data(const std::string& encrypted_data,
@@ -238,18 +512,62 @@ namespace database::security
 			return {};
 		}
 
-		// Hex-decode
+#ifdef DATABASE_HAS_OPENSSL
+		// AES-256-GCM decryption
+		if (encrypted_data.substr(0, 4) == "aes:")
+		{
+			key.resize(32, '\0');
+
+			auto first = encrypted_data.find(':', 4);
+			auto second = encrypted_data.find(':', first + 1);
+			if (first == std::string::npos || second == std::string::npos) return {};
+
+			auto iv = hex_to_bytes(encrypted_data.substr(4, first - 4));
+			auto ciphertext = hex_to_bytes(encrypted_data.substr(first + 1, second - first - 1));
+			auto tag = hex_to_bytes(encrypted_data.substr(second + 1));
+
+			EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+			if (!ctx) return {};
+
+			std::vector<uint8_t> plaintext(ciphertext.size() + EVP_MAX_BLOCK_LENGTH);
+			int len = 0, pt_len = 0;
+
+			EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr);
+			EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, static_cast<int>(iv.size()), nullptr);
+			EVP_DecryptInit_ex(ctx, nullptr, nullptr,
+			                   reinterpret_cast<const unsigned char*>(key.data()), iv.data());
+			EVP_DecryptUpdate(ctx, plaintext.data(), &len,
+			                  ciphertext.data(), static_cast<int>(ciphertext.size()));
+			pt_len = len;
+			EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, static_cast<int>(tag.size()),
+			                    const_cast<uint8_t*>(tag.data()));
+
+			int ret = EVP_DecryptFinal_ex(ctx, plaintext.data() + len, &len);
+			EVP_CIPHER_CTX_free(ctx);
+
+			if (ret <= 0) return {};
+			pt_len += len;
+			return std::string(plaintext.begin(), plaintext.begin() + pt_len);
+		}
+#endif
+
+		// Legacy XOR format
+		std::string hex_data = encrypted_data;
+		if (hex_data.substr(0, 4) == "xor:")
+		{
+			hex_data = hex_data.substr(4);
+		}
+
 		std::string decoded;
-		decoded.reserve(encrypted_data.size() / 2);
-		for (size_t i = 0; i + 1 < encrypted_data.size(); i += 2)
+		decoded.reserve(hex_data.size() / 2);
+		for (size_t i = 0; i + 1 < hex_data.size(); i += 2)
 		{
 			unsigned int byte = 0;
-			std::istringstream iss(encrypted_data.substr(i, 2));
+			std::istringstream iss(hex_data.substr(i, 2));
 			iss >> std::hex >> byte;
 			decoded.push_back(static_cast<char>(byte));
 		}
 
-		// XOR decrypt
 		for (size_t i = 0; i < decoded.size(); ++i)
 		{
 			decoded[i] ^= key[i % key.size()];

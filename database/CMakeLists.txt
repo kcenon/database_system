@@ -219,6 +219,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 
+# OpenSSL for real cryptography in secure_connection (optional)
+# Use BUILD_INTERFACE to avoid requiring consumers to find_package(OpenSSL)
+if(OPENSSL_FOUND)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DATABASE_HAS_OPENSSL)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<BUILD_INTERFACE:OpenSSL::Crypto>)
+endif()
+
 # thread_system integration (optional)
 if(USE_THREAD_SYSTEM)
     set(_DATABASE_THREAD_HANDLED FALSE)

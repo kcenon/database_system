@@ -21,7 +21,7 @@ from prerequisites through advanced ORM patterns.
 
 | Requirement | Minimum Version |
 |---|---|
-| C++ compiler | C++20 (GCC 12+, Clang 15+, MSVC 17.4+) |
+| C++ compiler | C++20 (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+) |
 | CMake | 3.20+ |
 | common_system | latest (Tier 0 dependency) |
 | vcpkg (optional) | latest, for backend-specific libraries |

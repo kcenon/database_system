@@ -36,12 +36,12 @@ This document provides comprehensive details on the ORM framework (entity defini
 
 ## ORM Framework
 
-**Status**: Full Support (C++17 SFINAE-based)
+**Status**: Full Support (C++20 concepts-based)
 **Implementation**: `orm/entity.h`, `orm/entity_manager.h`, `orm/schema_manager.h`
 
 ### Entity Definition
 
-Define database entities using C++17 SFINAE-based macros:
+Define database entities using C++20 concepts-based macros:
 
 ```cpp
 #include <database/orm/entity.h>

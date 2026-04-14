@@ -39,10 +39,11 @@ PostgreSQL is the primary backend and reference implementation for the
 database\_system project.
 
 - Full CRUD operations with parameterized queries
-- Connection pooling support
 - Transaction management
 - Comprehensive integration test coverage
 - CI-validated on Linux, macOS, and Windows
+
+> **Note (Phase 4.3)**: Local client-side connection pooling has been removed. Production pooling is handled server-side via ProxyMode with `database_server` middleware. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview).
 
 ### SQLite
 

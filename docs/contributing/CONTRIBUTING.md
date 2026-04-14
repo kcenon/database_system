@@ -77,8 +77,8 @@ New to open source? Start here:
 2. **Read the documentation**:
    - [Architecture Guide](../ARCHITECTURE.md)
    - [API Reference](../API_REFERENCE.md)
-   - [Build Guide](../BUILD_GUIDE.md)
-   - [Improvement Plan](../../IMPROVEMENT_PLAN.md)
+   - [Build Guide](../guides/BUILD_GUIDE.md)
+   - Improvement Plan <!-- TODO: IMPROVEMENT_PLAN.md -->
 
 3. **Join discussions**:
    - [GitHub Discussions](https://github.com/kcenon/database_system/discussions)
@@ -905,10 +905,10 @@ Follows [Semantic Versioning](https://semver.org/):
 
 - **Documentation**: [docs/](../)
 - **Examples**: [samples/](../../samples/)
-- **Build Guide**: [docs/BUILD_GUIDE.md](../BUILD_GUIDE.md)
+- **Build Guide**: [docs/guides/BUILD_GUIDE.md](../guides/BUILD_GUIDE.md)
 - **Architecture**: [docs/ARCHITECTURE.md](../ARCHITECTURE.md)
 - **API Reference**: [docs/API_REFERENCE.md](../API_REFERENCE.md)
-- **Improvement Plan**: [IMPROVEMENT_PLAN.md](../../IMPROVEMENT_PLAN.md)
+- **Improvement Plan**: Improvement Plan <!-- TODO: IMPROVEMENT_PLAN.md -->
 
 ### Communication
 

@@ -12,8 +12,10 @@ category: "FEAT"
 
 > **SSOT**: This document is a focused sub-document of **Database System Features**, covering backend implementations.
 
-**Last Updated**: 2026-02-08
-**Version**: 0.4.0.0
+> **See also**: [ADAPTER_PATTERNS.md](ADAPTER_PATTERNS.md) — the adapter pattern used to keep backend integration decoupled from optional dependencies.
+
+**Last Updated**: 2026-04-15
+**Version**: 0.4.1.0
 
 This document provides comprehensive details on all supported database backends: PostgreSQL, SQLite, MongoDB, and Redis.
 

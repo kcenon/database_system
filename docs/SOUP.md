@@ -40,8 +40,8 @@ category: "PROJ"
 | ID | Name | Manufacturer | Version | License | Usage | Safety Class | Linking | Known Anomalies |
 |----|------|-------------|---------|---------|-------|-------------|---------|-----------------|
 | SOUP-002 | [libpq](https://www.postgresql.org/) | PostgreSQL Global Development Group | 16.2 | PostgreSQL | PostgreSQL C client library (`postgresql` feature) | B | Dynamic | None |
-| SOUP-003 | [libpqxx](https://pqxx.org/) | Jeroen T. Vermeulen | 7.9.0 | BSD-3-Clause | PostgreSQL C++ wrapper (`postgresql` feature) | B | Dynamic | None |
-| SOUP-004 | [OpenSSL](https://www.openssl.org/) | OpenSSL Software Foundation | 3.3.0 | Apache-2.0 | TLS encryption for PostgreSQL connections (`postgresql` feature) | C | Dynamic | None known at pinned version |
+| SOUP-003 | [libpqxx](https://pqxx.org/) | Jeroen T. Vermeulen | 7.9.2 | BSD-3-Clause | PostgreSQL C++ wrapper (`postgresql` feature) | B | Dynamic | None |
+| SOUP-004 | [OpenSSL](https://www.openssl.org/) | OpenSSL Software Foundation | 3.4.1 | Apache-2.0 | TLS encryption for PostgreSQL connections (`postgresql` feature) | C | Dynamic | None known at pinned version |
 | SOUP-006 | [SQLite](https://www.sqlite.org/) | D. Richard Hipp | 3.45.3 | Public Domain | Embedded SQL database (`sqlite` feature) | B | Static or dynamic | None |
 | SOUP-007 | [MongoDB C++ Driver](https://github.com/mongodb/mongo-cxx-driver) | MongoDB, Inc. | 3.10.1 | Apache-2.0 | MongoDB database connectivity (`mongodb` feature, experimental) | B | Dynamic | None |
 | SOUP-008 | [Hiredis](https://github.com/redis/hiredis) | Redis Ltd. | 1.2.0 | BSD-3-Clause | Redis client library (`redis` feature, experimental) | A | Dynamic | None |
@@ -81,9 +81,9 @@ All SOUP versions are pinned in `vcpkg.json` via the `overrides` field:
 {
   "overrides": [
     { "name": "asio", "version": "1.30.2" },
-    { "name": "openssl", "version": "3.3.0" },
+    { "name": "openssl", "version": "3.4.1" },
     { "name": "libpq", "version": "16.2" },
-    { "name": "libpqxx", "version": "7.9.0" },
+    { "name": "libpqxx", "version": "7.9.2" },
     { "name": "sqlite3", "version": "3.45.3" },
     { "name": "mongo-cxx-driver", "version": "3.10.1" },
     { "name": "hiredis", "version": "1.2.0" },

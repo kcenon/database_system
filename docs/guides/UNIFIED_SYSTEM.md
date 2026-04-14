@@ -12,7 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **Unified Database System Guide**.
 
-> **Language:** **English** | [한국어](UNIFIED_SYSTEM.kr.md)
+> **Language:** **English** | 한국어 <!-- TODO: UNIFIED_SYSTEM.kr.md translation -->
 
 ## Table of Contents
 

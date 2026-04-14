@@ -18,11 +18,14 @@ This directory contains integration guides for using database_system with other 
 
 ## Integration Guides
 
-- [With Common System](with-common-system.md) - Foundation interfaces and error handling
-- [With Logger System](with-logger.md) - Database query and error logging
-- [With Monitoring System](with-monitoring.md) - Database metrics and performance monitoring
-- [With Thread System](with-thread-system.md) - Connection pooling and async queries
-- [With Network System](with-network-system.md) - Network-based database protocols
+<!-- TODO: sub-guides below are not yet written; see docs/guides/INTEGRATION.md for the current consolidated guide -->
+- With Common System - Foundation interfaces and error handling
+- With Logger System - Database query and error logging
+- With Monitoring System - Database metrics and performance monitoring
+- With Thread System - Connection pooling and async queries
+- With Network System - Network-based database protocols
+
+Until the per-system guides are split out, see the consolidated [Integration Guide](../guides/INTEGRATION.md).
 
 ## Quick Start
 
@@ -219,8 +222,8 @@ TRY(transaction->commit());
 
 - [Database System API Reference](../API_REFERENCE.md)
 - [Database System Architecture](../ARCHITECTURE.md)
-- [Ecosystem Integration Guide](../../../ECOSYSTEM.md)
-- [Example Applications](../../../examples/database/)
+- [Ecosystem Integration Guide](../ECOSYSTEM.md)
+- [Example Applications](../../examples/)
 
 ## Support
 

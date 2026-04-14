@@ -130,6 +130,6 @@ checkpoint_completion_target = 0.9
 
 ## See Also
 
-- [POSTGRESQL_TUNING.md](POSTGRESQL_TUNING.md) - PostgreSQL specific tuning
-- [SQLITE_TUNING.md](SQLITE_TUNING.md) - SQLite specific tuning
+- POSTGRESQL_TUNING.md <!-- TODO: PostgreSQL specific tuning -->
+- SQLITE_TUNING.md <!-- TODO: SQLite specific tuning -->
 - [BENCHMARKS.md](BENCHMARKS.md) - Performance benchmark results

@@ -12,7 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **ORM Framework Guide**.
 
-> **Status**: Full Support (C++17 SFINAE-based)
+> **Status**: Full Support (C++20 concepts-based)
 > **Header**: `database/orm/entity.h`
 > **Namespace**: `database::orm`
 
@@ -77,7 +77,7 @@ C++ Class (Entity)          ←→    Database Table
 
 Key design principles:
 - **Declarative mapping**: Use macros to define entity-to-table relationships
-- **Type safety**: SFINAE-based compile-time checks ensure only valid types are used as fields
+- **Type safety**: C++20 concepts-based compile-time checks ensure only valid types are used as fields
 - **Constraint composition**: Combine field constraints using the `|` operator (bitwise OR)
 - **Zero-cost abstractions**: Metadata is computed once via lazy initialization
 
@@ -247,7 +247,7 @@ The `is_field_type_v<T>` trait validates types at compile time. Only these types
 | `bool` | `BOOLEAN` | True/false |
 | `std::chrono::system_clock::time_point` | `TIMESTAMP` | Date/time |
 
-Any other type used in `ENTITY_FIELD` will cause a compile-time error via SFINAE.
+Any other type used in `ENTITY_FIELD` will cause a compile-time error via C++20 concepts.
 
 ---
 
@@ -410,7 +410,7 @@ auto results = entity_mgr.query<User>(db)
 .left_join<Post>("users.id = posts.user_id")
 ```
 
-Join methods use SFINAE to ensure `OtherEntity` is a valid entity type.
+Join methods use C++20 concepts to ensure `OtherEntity` is a valid entity type.
 
 ### Aggregations
 
@@ -672,5 +672,8 @@ CREATE INDEX IF NOT EXISTS idx_title ON posts(title);
 ## Related Documentation
 
 - [API Reference](API_REFERENCE.md) - Complete API documentation including ORM section
-- [Features Overview](FEATURES.md) - All database_system features
+- [API Quick Reference](API_QUICK_REFERENCE.md) - Short cheat-sheet for common ORM/query calls
+- [Features - ORM and Query Builders](FEATURES_ORM_QUERY.md) - Feature-level description
+- [Features Overview](FEATURES.md) - All database_system features (index)
+- [Type System](advanced/TYPE_SYSTEM.md) - Type-mapping internals used by ENTITY_FIELD
 - [Architecture Overview](ARCHITECTURE.md) - System architecture and design patterns

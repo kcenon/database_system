@@ -14,7 +14,7 @@ Thank you for considering contributing to Database System\! This document provid
 
 ### Prerequisites
 
-- C++20 compatible compiler (GCC 13+, Clang 16+, MSVC 2022+)
+- C++20 compatible compiler (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+)
 - CMake 3.20 or higher
 - Git
 - vcpkg (recommended)

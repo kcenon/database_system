@@ -12,8 +12,10 @@ category: "PROJ"
 
 > **SSOT**: This document is the single source of truth for **Database System Project Structure**.
 
-**Last Updated**: 2025-11-15
-**Version**: 0.3.0.0
+> **See also**: [advanced/STRUCTURE.md](advanced/STRUCTURE.md) — implementation-detail companion (deferred).
+
+**Last Updated**: 2026-04-15
+**Version**: 0.3.1.0
 
 This document provides a comprehensive guide to the database_system directory organization, module descriptions, and build configuration.
 
@@ -681,10 +683,10 @@ endif()
 
 | Database | Library | Version | vcpkg Package |
 |----------|---------|---------|---------------|
-| PostgreSQL | libpqxx | 7.7+ | `libpqxx` |
-| SQLite | sqlite3 | 3.40+ | `sqlite3` |
-| MongoDB | mongo-cxx-driver | 3.7+ | `mongo-cxx-driver` |
-| Redis | hiredis | 1.1+ | `hiredis` |
+| PostgreSQL | libpqxx | 7.9.2 (vcpkg override) | `libpqxx` |
+| SQLite | sqlite3 | 3.45.3 (vcpkg override) | `sqlite3` |
+| MongoDB | mongo-cxx-driver | 3.10.1 (vcpkg override) | `mongo-cxx-driver` |
+| Redis | hiredis | 1.2.0 (vcpkg override) | `hiredis` |
 
 ### Optional System Dependencies
 

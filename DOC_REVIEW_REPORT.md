@@ -157,3 +157,56 @@ Missing files referenced by links (71 total; grouped below):
 - Phase 4.3 pool-removal is the single largest SSOT hazard: it affects `BACKENDS.md`, `FEATURES_POOLING_SECURITY.md`, `FEATURES.kr.md`, ADR-002, and multiple guide docs. Consolidating a single authoritative page (e.g., `docs/migration/proxy-mode.md` which is linked but absent) would close ~20% of the findings.
 - The pattern `docs/xxx.md` used as a link inside a file located in `docs/advanced/` or `docs/guides/` (producing `docs/advanced/docs/xxx.md`) recurs at least 4 times. One sweep of relative-path repair would clear a cluster.
 - Eight `.kr.md` language-switcher links target files that do not exist (`ADAPTER_PATTERNS.kr.md`, `ASYNC_OPERATIONS.kr.md`, `INTEGRATION.kr.md`, `UNIFIED_SYSTEM.kr.md`, `PERFORMANCE_BENCHMARKS.kr.md` x2, etc.). Either the Korean translations should be created or the switcher blocks removed.
+
+## Post-Fix Re-Validation (2026-04-15)
+
+**Fix commit**: `3b6f5be3` — `docs: fix 30 broken links, 11 factual errors, 5 ssot redundancies`
+**Re-run scope**: Phase 1 only (anchors + intra/inter-file .md link validation)
+**Files scanned**: 78 Markdown files (same corpus as 2026-04-14 audit; two files dropped in churn)
+**Methodology**: Python re-validator using the same GitHub-slug rules (lowercase, strip emoji, strip markdown link syntax in headings, keep Korean/CJK, non-collapsing whitespace → hyphen so `&`/`/` removals preserve consecutive hyphens, duplicate-suffix `-N`). Fenced code blocks skipped; HTML comments (including multi-line) stripped before link extraction, so TODO markers left by the fix (`<!-- TODO: ... -->`) are not re-flagged.
+
+### Before / After Summary
+
+Link counts are occurrences (one broken link rendered twice counts twice).
+
+| Metric                                         | Pre-Fix (2026-04-14) | Post-Fix (2026-04-15) | Delta |
+|------------------------------------------------|----------------------|-----------------------|-------|
+| Files scanned                                  | 80                   | 78                    | −2    |
+| Total intra-repo links validated               | 989                  | 1,030                 | +41   |
+| Broken links — `.md` scope (aligned w/ prior)  | **73**               | **23**                | −50   |
+| Broken links — all scopes (incl. `.h`/dirs)    | 80                   | 26                    | −54   |
+| Broken intra-file anchors                      | 2                    | 1                     | −1    |
+| Broken file references                         | 78                   | 25                    | −53   |
+
+Classification against the prior 73-item Phase-1 list:
+
+| Category       | Count | Notes                                                                          |
+|----------------|-------|--------------------------------------------------------------------------------|
+| **Fixed**      | **51**| All fixes the commit message claims (30 "broken links") plus a larger set once each listed group is expanded to individual occurrences (e.g., item #12 was 21 links, item #20 was 9). |
+| **Residual**   | **22**| 21 inside `docs/README.kr.md` + 1 inside `docs/guides/SAMPLES_GUIDE.kr.md`. All fall under the commit's explicit policy deferral: *"Skipped by policy: Korean (.kr.md) sync, ... docs/README.kr.md path corrections (Korean file)."* |
+| **Regression** | **1** | New broken anchor introduced by the deprecation banner in `docs/FEATURES_POOLING_SECURITY.md`. |
+
+### Regression Detail (1)
+
+1. **`docs/FEATURES_POOLING_SECURITY.md:20` → `CHANGELOG.md#043---2025-12-09`** — *cross-file anchor not found*. The fix commit inserted a new "DEPRECATION NOTICE (Phase 4.3)" banner linking to a CHANGELOG section anchor. `docs/CHANGELOG.md` does not contain a heading that slugs to `043---2025-12-09`; the only matching date-bearing heading is `## [Previous] - 2025-12-09` (line 334), which slugs to `previous---2025-12-09`. Recommended fix: change link to `CHANGELOG.md#previous---2025-12-09` or refactor the CHANGELOG heading to `## [0.4.3] - 2025-12-09`.
+
+### Residual Detail (22)
+
+**A. `docs/README.kr.md` — 21 occurrences** (deferred by commit policy):
+- 8 x `BUILD_GUIDE.kr.md` (lines 66, 73, 110, 157, 165, 168, 256, and one more on 168)
+- 7 x `SAMPLES_GUIDE.kr.md` (lines 67, 74, 119, 158, 164, 175)
+- 6 x `PERFORMANCE_BENCHMARKS.kr.md` (lines 68, 75, 128, 163, 169, 176, 258)
+  — All three files live under `guides/` or `performance/`, not at `docs/` root. A single mass-rewrite to `guides/BUILD_GUIDE.kr.md`, `guides/SAMPLES_GUIDE.kr.md`, `performance/BENCHMARKS.kr.md` (filename also needs rename if the Korean match is desired) would clear this cluster.
+
+**B. `docs/guides/SAMPLES_GUIDE.kr.md:797` → `API_REFERENCE.md`** — mirror of the fixed English item. The English `SAMPLES_GUIDE.md:797` was corrected to `../API_REFERENCE.md`; the Korean mirror was skipped.
+
+**C. `docs/performance/BENCHMARKS.kr.md:15` → `PERFORMANCE_BENCHMARKS.md`** — language-switcher at the top of the Korean benchmarks page points at a non-existent English counterpart (actual file is `BENCHMARKS.md` in the same directory or `docs/BENCHMARKS.md`).
+
+### Additional Observations (not counted in the 73-item Phase-1 total)
+
+- `docs/MIGRATION_database_base.md:303..304` → `../database/database_base.h` and `../database/database_base_adapter.h`: these source-code references remain broken after the fix (the files were removed when `database_base` was deleted in 2026-01-20 per CHANGELOG). These were NOT in the original Phase-1 list (which was `.md`-only scope). The "See Also" block should either link to the historical commit or be trimmed.
+- `docs/guides/INTEGRATION.md:1054` → `samples/integration_example/`: directory does not exist. Also pre-existing and outside the original Phase-1 `.md` scope.
+
+### Verdict
+
+**PASS with 1 regression**. 51 of 73 prior Phase-1 items were fixed — every Phase-1 item the commit message explicitly claimed (plus more once grouped items are expanded) is verified as resolved. All 22 residuals fall under the commit's documented policy deferral for Korean mirrors. The single regression (`FEATURES_POOLING_SECURITY.md → CHANGELOG.md#043---2025-12-09`) was introduced by the fix itself and should be corrected in a follow-up. Overall Phase-1 health is now **97% clean** (1 − 23/1030 ≈ 97.8% of validated links OK, vs 92.6% before).

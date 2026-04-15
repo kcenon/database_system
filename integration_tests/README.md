@@ -282,4 +282,4 @@ When adding new integration tests:
 - [Google Test Documentation](https://google.github.io/googletest/)
 - [SQLite Documentation](https://www.sqlite.org/docs.html)
 - [database_system API Documentation](../docs/)
-- [Performance Tuning Guide](../docs/performance.md)
+- [Performance Tuning Guide](../docs/performance/TUNING_GUIDE.md)

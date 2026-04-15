@@ -12,8 +12,12 @@ category: "FEAT"
 
 > **SSOT**: This document is a focused sub-document of **Database System Features**, covering connection pooling, resilient connections, enterprise security, performance monitoring, asynchronous operations, proxy mode, the unified database system, common_system integration, C++20 modules, and the technology stack.
 
-**Last Updated**: 2026-02-08
-**Version**: 0.4.0.0
+**Last Updated**: 2026-04-15
+**Version**: 0.5.0.0
+
+---
+
+> **DEPRECATION NOTICE (Phase 4.3)**: Local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) and the resilience classes (`connection_health_monitor`, `resilient_database_connection`) **have been removed**. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview) for details. <!-- TODO: CHANGELOG.md has no 0.4.3 entry yet; pool-removal record should be added under [Unreleased] --> The sections below are retained as historical reference only; **they do not describe current behavior**. Production deployments should rely on ProxyMode with `database_server` middleware for server-side pooling.
 
 ---
 
@@ -34,10 +38,12 @@ category: "FEAT"
 
 ## Connection Pooling
 
-**Status**: Well-Tested (v3)
-**Implementation**: `connection_pool.h/cpp`
+**Status**: **REMOVED (Phase 4.3)** — kept below for historical reference only.
+**Implementation**: Previously `connection_pool.h/cpp` (removed). ProxyMode with `database_server` middleware is the forward path.
 
-### Connection Pool v3 Features
+> The subsections that follow document the legacy local pool design. They are **not** the current behavior. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview).
+
+### Connection Pool v3 Features (Historical)
 
 **Performance Improvements**:
 - **77ns latency**: 65x faster than v2 (5μs → 77ns)
@@ -159,8 +165,8 @@ pool->shutdown();  // Waits for active connections, rejects new requests
 
 ## Resilient Connections
 
-**Status**: Well-Tested
-**Implementation**: `resilient/resilient_connection.h`
+**Status**: **REMOVED (Phase 4.3)** — `connection_health_monitor` and `resilient_database_connection` classes were removed alongside the local connection pool. Kept below for historical reference. See [CHANGELOG](CHANGELOG.md).
+**Implementation**: Previously `resilient/resilient_connection.h` (removed).
 
 ### Automatic Reconnection
 

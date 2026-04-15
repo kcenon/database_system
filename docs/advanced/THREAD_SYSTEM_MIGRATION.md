@@ -395,8 +395,8 @@ if constexpr (database::async::using_thread_system) {
 
 - [thread_system Repository](https://github.com/kcenon/thread_system)
 - [thread_system Documentation](https://github.com/kcenon/thread_system/tree/main/docs)
-- [database_system Integration Guide](./INTEGRATION.md)
-- [API Reference](./API_REFERENCE.md)
+- [database_system Integration Guide](../guides/INTEGRATION.md)
+- [API Reference](../API_REFERENCE.md)
 
 ## Contact
 

@@ -10,11 +10,12 @@ category: "ARCH"
 
 # Database System Project Structure
 
-> **SSOT**: This document is the single source of truth for **Database System Project Structure**.
+> **Deferred to**: The canonical SSOT for **Database System Project Structure** is [`docs/PROJECT_STRUCTURE.md`](../PROJECT_STRUCTURE.md). Where facts conflict, `docs/PROJECT_STRUCTURE.md` wins.
 
 > **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English
+> **See also**: [docs/PROJECT_STRUCTURE.md](../PROJECT_STRUCTURE.md) (canonical SSOT)
 
 ## Table of Contents
 

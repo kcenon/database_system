@@ -12,7 +12,7 @@ category: "INTR"
 
 > **SSOT**: This document is the single source of truth for **Integration Guide - Database System**.
 
-> **Language:** **English** | [한국어](INTEGRATION.kr.md)
+> **Language:** **English** | 한국어 <!-- TODO: INTEGRATION.kr.md translation -->
 
 ## Overview
 
@@ -1072,9 +1072,9 @@ make
 
 ## Support
 
-- **Documentation**: [docs/](docs/)
-- **API Reference**: [docs/API_REFERENCE.md](docs/API_REFERENCE.md)
-- **Build Guide**: [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md)
+- **Documentation**: [docs/](../)
+- **API Reference**: [API_REFERENCE.md](../API_REFERENCE.md)
+- **Build Guide**: [BUILD_GUIDE.md](BUILD_GUIDE.md)
 - **Issues**: [GitHub Issues](https://github.com/kcenon/database_system/issues)
 - **Email**: kcenon@naver.com
 

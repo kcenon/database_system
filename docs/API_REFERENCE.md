@@ -1104,7 +1104,7 @@ saga.execute();
 **Headers**: `database/proxy/proxy_config.h`, `database/proxy/proxy_connector.h`
 **Namespace**: `database::proxy`
 
-> Full documentation: [Proxy Layer Guide](guides/PROXY_LAYER.md)
+> Full documentation: Proxy Layer Guide <!-- TODO: guides/PROXY_LAYER.md -->
 
 ### proxy_connection_config
 
@@ -1242,4 +1242,4 @@ coordinator.initialize();
 For the latest API updates and changes, see the [CHANGELOG](../CHANGELOG.md).
 ---
 
-*Last Updated: 2025-12-09*
+*Last Updated: 2026-04-15*

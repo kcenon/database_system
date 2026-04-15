@@ -11,6 +11,9 @@ category: "GUID"
 # database_base Migration Guide
 
 > **SSOT**: This document is the single source of truth for **database_base Migration Guide**.
+>
+> **Related**: [../MIGRATION_database_base.md](../MIGRATION_database_base.md) also covers this topic from a `MIGR` perspective. Canonical has not yet been chosen; treat both as authoritative and keep them in sync. <!-- TODO: name one canonical SSOT -->
+
 
 ## Overview
 
@@ -313,7 +316,7 @@ error: cannot convert 'Result<uint64_t>' to 'unsigned int'
 
 - [API Reference](../API_REFERENCE.md)
 - [Architecture Overview](../ARCHITECTURE.md)
-- [Backend Registry Guide](../guides/backend_registry.md)
+- Backend Registry Guide <!-- TODO: docs/guides/backend_registry.md -->
 
 ---
 

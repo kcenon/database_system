@@ -209,8 +209,8 @@ task async_database_operation() {
 ## Building the Samples
 
 ### Prerequisites
-- C++20 compatible compiler (GCC 10+, Clang 12+, MSVC 2019+)
-- CMake 3.16 or later
+- C++20 compatible compiler (GCC 13+, Clang 17+, MSVC 2022+, Apple Clang 14+)
+- CMake 3.20 or later
 - Database System library
 - PostgreSQL client library (libpq)
 - PostgreSQL server (for actual database operations)

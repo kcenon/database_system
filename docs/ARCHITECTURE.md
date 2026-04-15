@@ -14,6 +14,8 @@ category: "ARCH"
 
 > **Language:** **English** | [한국어](ARCHITECTURE.kr.md)
 
+> **See also**: [advanced/ARCHITECTURE.md](advanced/ARCHITECTURE.md) — implementation-detail companion (deferred).
+
 ## Table of Contents
 
 - [Overview](#overview)

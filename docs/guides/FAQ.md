@@ -168,7 +168,7 @@ int main() {
 }
 ```
 
-For more details, see [Quick Start Guide](../BUILD_GUIDE.md).
+For more details, see [Quick Start Guide](QUICK_START.md) or [Build Guide](BUILD_GUIDE.md).
 
 ### Q: What are the most common use cases?
 
@@ -792,7 +792,7 @@ auto result = db->create_query_builder(database_types::postgres)
 - **95%+ pool efficiency** under load
 - **1.16M ops/s** with thread_system integration
 
-See [Performance Benchmarks](../PERFORMANCE_BENCHMARKS.md) for detailed results.
+See [Performance Benchmarks](../BENCHMARKS.md) for detailed results.
 
 ### Q: How can I optimize performance?
 
@@ -925,7 +925,7 @@ for (auto& t : threads) {
    set(CMAKE_CXX_STANDARD_REQUIRED ON)
    ```
 
-If issue persists, see [Build Guide](../BUILD_GUIDE.md) and [Troubleshooting Guide](TROUBLESHOOTING.md).
+If issue persists, see [Build Guide](BUILD_GUIDE.md) and [Troubleshooting Guide](TROUBLESHOOTING.md).
 
 ### Q: Runtime crash with segmentation fault. What should I check?
 
@@ -1123,7 +1123,7 @@ auto summary = perf_monitor->get_performance_summary();
 exporter.export_metrics(summary);
 ```
 
-See [Integration Guide](../INTEGRATION.md) for detailed examples.
+See [Integration Guide](INTEGRATION.md) for detailed examples.
 
 ### Q: Can I use database_system without other KCENON systems?
 
@@ -1374,7 +1374,7 @@ auto perf_mon = context->get_performance_monitor();
 - Thread-safe by design (no global state)
 - Better separation of concerns
 
-See [IMPROVEMENT_PLAN.md](../../IMPROVEMENT_PLAN.md) for migration guide.
+See [Migration Guide](../advanced/MIGRATION.md) for migration details. <!-- TODO: IMPROVEMENT_PLAN.md -->
 
 ---
 
@@ -1487,12 +1487,12 @@ Code:
 
 - [README](../../README.md) - Project overview and features
 - [Architecture](../ARCHITECTURE.md) - System architecture and design patterns
-- [Build Guide](../BUILD_GUIDE.md) - Comprehensive build instructions
+- [Build Guide](BUILD_GUIDE.md) - Comprehensive build instructions
 - [API Reference](../API_REFERENCE.md) - Complete API documentation
 - [Troubleshooting](TROUBLESHOOTING.md) - Detailed troubleshooting guide
-- [Integration](../INTEGRATION.md) - Integration with KCENON ecosystem
-- [Performance Benchmarks](../PERFORMANCE_BENCHMARKS.md) - Detailed performance metrics
-- [Improvement Plan](../../IMPROVEMENT_PLAN.md) - Roadmap and recent improvements
+- [Integration](INTEGRATION.md) - Integration with KCENON ecosystem
+- [Performance Benchmarks](../BENCHMARKS.md) - Detailed performance metrics
+- Improvement Plan <!-- TODO: IMPROVEMENT_PLAN.md -->
 
 ---
 

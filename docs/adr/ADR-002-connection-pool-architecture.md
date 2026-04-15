@@ -1,20 +1,22 @@
 ---
 doc_id: "DBS-ADR-002"
 doc_title: "ADR-002: Connection Pool Architecture"
-doc_version: "1.0.0"
-doc_date: "2026-04-04"
-doc_status: "Accepted"
+doc_version: "1.1.0"
+doc_date: "2026-04-15"
+doc_status: "Superseded"
 project: "database_system"
 category: "ADR"
 ---
 
 # ADR-002: Connection Pool Architecture
 
-> **SSOT**: This document is the single source of truth for **ADR-002: Connection Pool Architecture**.
+> **SUPERSEDED (Phase 4.3, 2025-12-09)**: The local connection pool described in this ADR has been **removed**. Production pooling is now handled server-side via ProxyMode / `database_server` middleware. This ADR is retained for historical context only. See [CHANGELOG](../CHANGELOG.md) and the discussion in [README](../../README.md#overview). <!-- TODO: ADR-003 superseding this decision -->
+
+> **SSOT**: This document is the single source of truth for **ADR-002: Connection Pool Architecture** (historical).
 
 | Field | Value |
 |-------|-------|
-| Status | Accepted |
+| Status | Superseded (Phase 4.3, 2025-12-09) |
 | Date | 2025-04-01 |
 | Decision Makers | kcenon ecosystem maintainers |
 

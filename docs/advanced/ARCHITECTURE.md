@@ -10,11 +10,12 @@ category: "ARCH"
 
 # Database System Architecture
 
-> **SSOT**: This document is the single source of truth for **Database System Architecture**.
+> **Deferred to**: The canonical SSOT for **Database System Architecture** is [`docs/ARCHITECTURE.md`](../ARCHITECTURE.md). This advanced document covers implementation-detail aspects (multi-backend internals, connection pooling strategy, query builder patterns). Where facts conflict, `docs/ARCHITECTURE.md` wins.
 
 > **Version:** 0.1.0.0
 > **Last Updated:** 2025-10-22
 > **Language:** English
+> **See also**: [docs/ARCHITECTURE.md](../ARCHITECTURE.md) (canonical SSOT)
 
 ## Table of Contents
 

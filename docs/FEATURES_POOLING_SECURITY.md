@@ -17,7 +17,7 @@ category: "FEAT"
 
 ---
 
-> **DEPRECATION NOTICE (Phase 4.3)**: Local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) and the resilience classes (`connection_health_monitor`, `resilient_database_connection`) **have been removed**. See [CHANGELOG](CHANGELOG.md#043---2025-12-09) and [README](../README.md#overview) for details. The sections below are retained as historical reference only; **they do not describe current behavior**. Production deployments should rely on ProxyMode with `database_server` middleware for server-side pooling.
+> **DEPRECATION NOTICE (Phase 4.3)**: Local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) and the resilience classes (`connection_health_monitor`, `resilient_database_connection`) **have been removed**. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview) for details. <!-- TODO: CHANGELOG.md has no 0.4.3 entry yet; pool-removal record should be added under [Unreleased] --> The sections below are retained as historical reference only; **they do not describe current behavior**. Production deployments should rely on ProxyMode with `database_server` middleware for server-side pooling.
 
 ---
 

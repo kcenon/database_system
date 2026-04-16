@@ -51,14 +51,15 @@ int main() {
     std::cout << "  - Result<T> for explicit error handling\n\n";
 
     std::cout << "Example:\n";
-    auto db = unified_database_system::create_builder()
+    auto db_result = unified_database_system::create_builder()
         .enable_logging(db_log_level::info, "./logs")
         .enable_monitoring(true)
         .set_pool_size(2, 10)
         .build();
 
-    if (db) {
-        std::cout << "✅ Database instance created with integrated API\n";
+    if (db_result.is_ok()) {
+        auto db = std::move(db_result.value());
+        std::cout << "Database instance created with integrated API\n";
     }
 
     // ========================================

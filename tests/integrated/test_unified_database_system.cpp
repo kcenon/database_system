@@ -155,8 +155,10 @@ bool test_builder_default() {
     TEST_START("Builder Pattern - Default Configuration");
 
     auto builder = unified_database_system::create_builder();
-    auto db = builder.build();
+    auto db_result = builder.build();
 
+    ASSERT_TRUE(db_result.is_ok(), "Builder should succeed");
+    auto db = std::move(db_result.value());
     ASSERT_TRUE(db != nullptr, "Builder should create database instance");
 
     TEST_END();
@@ -169,27 +171,23 @@ bool test_builder_default() {
 bool test_builder_custom() {
     TEST_START("Builder Pattern - Custom Configuration");
 
-    try {
-        auto db = unified_database_system::create_builder()
-            .set_backend(backend_type::postgres)
-            .set_connection_string("host=localhost dbname=test")
-            .set_pool_size(5, 20)
-            .enable_logging(db_log_level::debug, "./test_logs")
-            .enable_monitoring(true)
-            .enable_async(8)
-            .set_slow_query_threshold(std::chrono::milliseconds(500))
-            .build();
+    auto db_result = unified_database_system::create_builder()
+        .set_backend(backend_type::postgres)
+        .set_connection_string("host=localhost dbname=test")
+        .set_pool_size(5, 20)
+        .enable_logging(db_log_level::debug, "./test_logs")
+        .enable_monitoring(true)
+        .enable_async(8)
+        .set_slow_query_threshold(std::chrono::milliseconds(500))
+        .build();
 
-        ASSERT_TRUE(db != nullptr, "Builder with custom config should create instance");
-
-        // Note: Connection is not established yet, just configuration
-        // Actual connection would happen on connect() or first query
-
-    } catch (const std::exception& e) {
+    if (db_result.is_err()) {
         // If PostgreSQL is not available or not compiled in, that's acceptable
         // This test is just verifying the builder API works
-        std::cout << "  ℹ️  Note: Database connection not available: " << e.what() << "\n";
-        std::cout << "  ℹ️  Builder API test passed (connection test skipped)\n";
+        std::cout << "  Note: Database connection not available: " << db_result.error().message << "\n";
+        std::cout << "  Builder API test passed (connection test skipped)\n";
+    } else {
+        ASSERT_TRUE(db_result.value() != nullptr, "Builder with custom config should create instance");
     }
 
     TEST_END();
@@ -239,10 +237,12 @@ bool test_config_construction() {
 bool test_move_semantics() {
     TEST_START("Move Semantics");
 
-    auto db1 = unified_database_system::create_builder()
+    auto db1_result = unified_database_system::create_builder()
         .set_backend(backend_type::postgres)
         .build();
 
+    ASSERT_TRUE(db1_result.is_ok(), "Builder should succeed");
+    auto db1 = std::move(db1_result.value());
     ASSERT_TRUE(db1 != nullptr, "Original instance should be valid");
 
     // Move construction
@@ -250,7 +250,9 @@ bool test_move_semantics() {
     ASSERT_TRUE(db2 != nullptr, "Moved instance should be valid");
 
     // Move assignment
-    auto db3 = unified_database_system::create_builder().build();
+    auto db3_result = unified_database_system::create_builder().build();
+    ASSERT_TRUE(db3_result.is_ok(), "Builder should succeed");
+    auto db3 = std::move(db3_result.value());
     db3 = std::move(db2);
     ASSERT_TRUE(db3 != nullptr, "Move-assigned instance should be valid");
 

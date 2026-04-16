@@ -221,17 +221,18 @@ int main(int argc, char* argv[]) {
     // Create database instance
     std::cout << "Creating database instance with async support...\n";
 
-    auto db = unified_database_system::create_builder()
+    auto db_result = unified_database_system::create_builder()
         .enable_logging(db_log_level::info, "./logs")
         .enable_monitoring(true)
         .enable_async(8)  // 8 async worker threads
         .set_pool_size(2, 10)
         .build();
 
-    if (!db) {
-        std::cerr << "❌ Failed to create database instance\n";
+    if (db_result.is_err()) {
+        std::cerr << "Failed to create database instance: " << db_result.error().message << "\n";
         return 1;
     }
+    auto db = std::move(db_result.value());
 
     std::cout << "✅ Database instance created with async support\n";
 

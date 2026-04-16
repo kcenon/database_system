@@ -652,9 +652,9 @@ inline std::unique_ptr<unified_database_system> create_database() {
  * @brief Create a database with builder configuration
  * @param backend Database backend type
  * @param connection_string Connection string
- * @return Unique pointer to configured database system
+ * @return Result containing configured database system or error
  */
-inline std::unique_ptr<unified_database_system> create_database(
+inline kcenon::common::Result<std::unique_ptr<unified_database_system>> create_database(
     backend_type backend,
     const std::string& connection_string) {
 

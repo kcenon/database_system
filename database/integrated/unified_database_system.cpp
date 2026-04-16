@@ -902,7 +902,7 @@ kcenon::common::Result<std::unique_ptr<unified_database_system>> unified_databas
             return kcenon::common::error_info{
                 result.error().code,
                 "Failed to connect: " + result.error().message,
-                result.error().source
+                result.error().context
             };
         }
     }

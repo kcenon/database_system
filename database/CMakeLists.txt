@@ -7,7 +7,7 @@
 
 # Project definition
 project(database
-    VERSION 0.1.0.0
+    VERSION 1.0.0.0
     DESCRIPTION "Database abstraction layer with PostgreSQL support"
     LANGUAGES CXX
 )

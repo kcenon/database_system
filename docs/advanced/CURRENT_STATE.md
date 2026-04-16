@@ -27,31 +27,31 @@ This document captures the current state of the `database_system` at the beginni
 
 ## System Overview
 
-**Purpose**: Database system provides multi-backend database abstraction with PostgreSQL, MySQL, SQLite support.
+**Purpose**: Database system provides multi-backend database abstraction with PostgreSQL, SQLite, MongoDB, and Redis support.
 
 **Key Components**:
-- Connection pooling
-- Query builder
+- Query builder (immutable, thread-safe)
 - Transaction management
-- Multiple backend support (PostgreSQL, MySQL, SQLite)
-- IDatabase interface implementation
+- Multiple backend support (PostgreSQL, SQLite, MongoDB, Redis)
+- IDatabase / `database_backend` interface implementation
+- ProxyMode entry point (local connection pooling removed in Phase 4.3 — see [CHANGELOG](../CHANGELOG.md))
 
-**Architecture**: Modular backend abstraction layer with pluggable database drivers.
+**Architecture**: Modular backend abstraction layer with pluggable backends.
 
 ---
 
 ## Build Configuration
 
 ### Supported Platforms
-- ✅ Ubuntu 22.04 (GCC 12, Clang 15)
-- ✅ macOS 13 (Apple Clang)
-- ✅ Windows Server 2022 (MSVC 2022)
+- ✅ Ubuntu 22.04+ (GCC 13+, Clang 17+)
+- ✅ macOS 13+ (Apple Clang 14+)
+- ✅ Windows Server 2022 (MSVC 2022+)
 
 ### Dependencies
-- C++20 compiler
-- common_system (optional): IDatabase interface, Result<T>
+- C++20 compiler (see `README.md` for authoritative compiler baseline)
+- common_system (required): IDatabase interface, Result<T>
 - container_system (optional): Query results
-- Database drivers (PostgreSQL, MySQL, SQLite)
+- Database backends (PostgreSQL, SQLite, MongoDB, Redis)
 
 ---
 
@@ -71,20 +71,21 @@ This document captures the current state of the `database_system` at the beginni
 
 #### High Priority (P0)
 - [ ] Test coverage at ~65%, needs improvement
-- [ ] MySQL and SQLite backends need more testing
+- [ ] SQLite, MongoDB, Redis backends need more testing
 
 #### Medium Priority (P1)
 - [ ] Performance benchmarks missing
-- [ ] Connection pool optimization
+- [ ] ProxyMode integration (local connection pool removed in Phase 4.3)
 
 ---
 
 ## Next Steps (Phase 1)
 
-1. Enable and test MySQL backend
-2. Enable and test SQLite backend
-3. Add performance benchmarks
-4. Improve test coverage to 80%+
+1. Enable and test SQLite backend
+2. Enable and test MongoDB backend
+3. Enable and test Redis backend
+4. Add performance benchmarks
+5. Improve test coverage to 80%+
 
 ---
 

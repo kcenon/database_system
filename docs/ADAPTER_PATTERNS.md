@@ -12,7 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **Adapter Pattern Best Practices**.
 
-> **Language:** **English** | [한국어](ADAPTER_PATTERNS.kr.md)
+> **Language:** **English** | 한국어 <!-- TODO: ADAPTER_PATTERNS.kr.md translation -->
 
 **Version:** 1.0.0
 **Last Updated:** 2025-12-27

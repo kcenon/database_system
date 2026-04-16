@@ -37,9 +37,16 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 > - **DirectMode**: Production-ready (stable)
 > - **ProxyMode**: Stub implementation (awaiting `database_server`, not yet available)
 >
-> Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/migration/proxy-mode.md) for details.
+> Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/migration/database_base.md) for details. <!-- TODO: dedicated proxy-mode.md migration doc -->
 
-### Latest Updates (2026-01)
+### v1.0.0 Release (2026-04)
+
+- **API Frozen**: All synchronous public APIs use `Result<T>` for error propagation — no `throw` in public API paths
+- **BREAKING**: `builder::build()` now returns `Result<std::unique_ptr<unified_database_system>>` instead of raw pointer
+- **BREAKING**: CMake package name unified to `database_system`; use `find_package(database_system CONFIG REQUIRED)`
+- **Migration from 0.x**: Update `builder::build()` call sites to handle `Result` (see [CHANGELOG](CHANGELOG.md))
+
+### Previous Updates (2026-01)
 
 - **C++20 Module Support**: Added module files for modern C++20 module imports
   - Primary module: `kcenon.database`
@@ -150,7 +157,7 @@ auto query = builder
     .build();
 ```
 
-📖 **[Quick Start Guide →](docs/guides/QUICK_START.md)** | **[빠른 시작 가이드 →](docs/guides/QUICK_START_KO.md)**
+📖 **[Quick Start Guide →](docs/guides/QUICK_START.md)** | **[빠른 시작 가이드 →](docs/guides/QUICK_START.kr.md)**
 
 ---
 
@@ -260,7 +267,7 @@ auto redis_query = db.create_query_builder(database_types::redis)
     .hset("user:1000", {{"username", "john"}, {"email", "john@example.com"}});
 ```
 
-[📘 Complete Query Builder Guide →](docs/FEATURES.md#query-builders)
+[📘 Complete Query Builder Guide →](docs/FEATURES_ORM_QUERY.md#query-builders)
 
 ### ORM Framework (C++20 Concepts-based)
 
@@ -290,7 +297,7 @@ auto users = User::query(db)
 entity_manager::instance().create_tables(db);
 ```
 
-[🏗️ ORM Framework Guide →](docs/FEATURES.md#orm-framework)
+[🏗️ ORM Framework Guide →](docs/FEATURES_ORM_QUERY.md#orm-framework)
 
 ### Result Types
 
@@ -505,7 +512,7 @@ int main() {
 - **ORM Framework**: C++20 concepts-based entity system
 - **Backend Adapters**: PostgreSQL, SQLite, MongoDB, Redis
 
-[🏛️ Architecture Details →](docs/01-ARCHITECTURE.md)
+[🏛️ Architecture Details →](docs/ARCHITECTURE.md)
 
 ---
 
@@ -560,7 +567,7 @@ graph TD
 - **[container_system](https://github.com/kcenon/container_system)**: Data serialization for BLOB storage
 - **[monitoring_system](https://github.com/kcenon/monitoring_system)**: Performance monitoring and metrics
 
-[🌐 Ecosystem Integration Guide →](../ECOSYSTEM.md)
+[🌐 Ecosystem Integration Guide →](docs/ECOSYSTEM.md)
 
 ---
 
@@ -578,10 +585,10 @@ graph TD
 - ✅ [Production Quality](docs/PRODUCTION_QUALITY.md) - Enterprise features, CI/CD, thread safety
 
 ### Advanced Topics
-- 🏛️ [Architecture](docs/01-ARCHITECTURE.md) - System design and patterns
-- 📘 [API Reference](docs/02-API_REFERENCE.md) - Complete API documentation
-- 🔐 [Security Guide](docs/advanced/SECURITY.md) - TLS/SSL, RBAC, audit logging
-- 🔄 [Migration Guide](docs/guides/MIGRATION_GUIDE.md) - Upgrading from previous versions
+- 🏛️ [Architecture](docs/ARCHITECTURE.md) - System design and patterns
+- 📘 [API Reference](docs/API_REFERENCE.md) - Complete API documentation
+- 🔐 [Security Guide](SECURITY.md) - Security policy and reporting <!-- TODO: dedicated docs/advanced/SECURITY.md for TLS/SSL, RBAC, audit logging -->
+- 🔄 [Migration Guide](docs/advanced/MIGRATION.md) - Upgrading from previous versions
 
 ### Development
 - 🤝 [Contributing](docs/contributing/CONTRIBUTING.md)

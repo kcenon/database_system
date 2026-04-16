@@ -12,8 +12,10 @@ category: "PERF"
 
 > **SSOT**: This document is the single source of truth for **Database System Performance Benchmarks**.
 
-**Last Updated**: 2025-11-15
-**Version**: 0.3.0.0
+> **See also**: [performance/BENCHMARKS.md](performance/BENCHMARKS.md) — performance-folder mirror (deferred).
+
+**Last Updated**: 2026-04-15
+**Version**: 0.3.1.0
 **Test Platform**: Intel i7-9750H @ 2.6GHz, 16GB RAM, SSD storage
 
 This document provides comprehensive performance benchmarks for database_system across all supported backends and features.

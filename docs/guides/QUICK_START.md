@@ -156,7 +156,7 @@ if (result.is_ok()) {
 
 - [API Reference](../API_REFERENCE.md) - Comprehensive API documentation
 - [Architecture Guide](../ARCHITECTURE.md) - System design and patterns
-- [Integration Guide](../../INTEGRATION.md) - Advanced integration scenarios
+- [Integration Guide](./INTEGRATION.md) - Advanced integration scenarios
 - [FAQ](./FAQ.md) - Frequently asked questions
 - [Examples](../../samples/) - Complete sample applications
 

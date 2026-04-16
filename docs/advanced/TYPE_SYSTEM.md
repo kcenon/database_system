@@ -431,10 +431,10 @@ if (auto it = row.find("optional_field"); it != row.end()) {
 
 ## 📚 Related Documentation
 
-- [API Reference](API_REFERENCE.md)
-- [Query Builder Guide](../database/query_builder.h)
-- [ORM Guide](ORM.md)
-- [Backend Integration](BACKEND_INTEGRATION.md)
+- [API Reference](../API_REFERENCE.md)
+- [Query Builder Guide](../../database/query_builder.h)
+- [ORM Guide](../ORM_GUIDE.md)
+- [Backend Integration](../BACKENDS.md)
 
 ---
 

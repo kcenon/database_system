@@ -10,11 +10,12 @@ category: "PERF"
 
 # Database System Performance Benchmarks
 
-> **SSOT**: This document is the single source of truth for **Database System Performance Benchmarks**.
+> **Deferred to**: The canonical SSOT for **Database System Performance Benchmarks** is [`docs/BENCHMARKS.md`](../BENCHMARKS.md). This document is retained as the performance-folder mirror. Where facts conflict, `docs/BENCHMARKS.md` wins.
 
-> **Language:** **English** | [한국어](PERFORMANCE_BENCHMARKS.kr.md)
+> **Language:** **English** | [한국어](BENCHMARKS.kr.md)
+> **See also**: [docs/BENCHMARKS.md](../BENCHMARKS.md) (canonical SSOT)
 
-Comprehensive performance analysis and benchmarks for the Database System with multi-backend support, connection pooling, and query builders.
+Comprehensive performance analysis and benchmarks for the Database System with multi-backend support and query builders.
 
 ## Table of Contents
 

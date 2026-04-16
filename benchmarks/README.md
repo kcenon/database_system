@@ -296,6 +296,6 @@ When adding new benchmarks:
 
 ---
 
-**Last Updated**: 2025-10-07
+**Last Updated**: 2026-04-15
 **Phase**: 0 - Foundation and Tooling
 **Status**: Baseline measurement in progress

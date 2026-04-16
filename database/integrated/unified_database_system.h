@@ -338,9 +338,9 @@ public:
 
         /**
          * @brief Build and return the configured database system
-         * @return Unique pointer to configured unified_database_system
+         * @return Result containing unique pointer to configured system, or error
          */
-        std::unique_ptr<unified_database_system> build();
+        kcenon::common::Result<std::unique_ptr<unified_database_system>> build();
 
     private:
         unified_db_config config_;
@@ -652,9 +652,9 @@ inline std::unique_ptr<unified_database_system> create_database() {
  * @brief Create a database with builder configuration
  * @param backend Database backend type
  * @param connection_string Connection string
- * @return Unique pointer to configured database system
+ * @return Result containing configured database system or error
  */
-inline std::unique_ptr<unified_database_system> create_database(
+inline kcenon::common::Result<std::unique_ptr<unified_database_system>> create_database(
     backend_type backend,
     const std::string& connection_string) {
 

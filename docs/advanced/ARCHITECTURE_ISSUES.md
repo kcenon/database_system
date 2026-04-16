@@ -29,8 +29,8 @@ This document catalogs known architectural issues in database_system identified 
 
 ## Key Issues
 
-### ARC-001: MySQL/SQLite Backend Testing (P0, Phase 1)
-- Enable and validate MySQL and SQLite backends
+### ARC-001: SQLite/MongoDB/Redis Backend Testing (P0, Phase 1)
+- Enable and validate SQLite, MongoDB, and Redis backends (MongoDB and Redis are experimental)
 
 ### ARC-002: Test Coverage (P0, Phase 5)
 - Improve from ~65% to 80%+
@@ -38,8 +38,8 @@ This document catalogs known architectural issues in database_system identified 
 ### ARC-003: Performance Benchmarks (P1, Phase 2)
 - Create comprehensive benchmark suite
 
-### ARC-004: Connection Pool Optimization (P1, Phase 2)
-- Optimize connection pooling performance
+### ARC-004: ProxyMode Integration (P1, Phase 2)
+- Integrate with `database_server` middleware (local connection pool removed in Phase 4.3; see [CHANGELOG](../CHANGELOG.md))
 
 ---
 

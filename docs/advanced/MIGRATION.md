@@ -391,7 +391,7 @@ std::optional<User> get_user(int64_t user_id) {
 }
 ```
 
-> **Note**: For production deployments with multiple database types, use ProxyMode with `database_server` middleware for centralized connection management. See [docs/migration/proxy-mode.md](../migration/proxy-mode.md).
+> **Note**: For production deployments with multiple database types, use ProxyMode with `database_server` middleware for centralized connection management. See [migration/database_base.md](../migration/database_base.md). <!-- TODO: dedicated proxy-mode.md -->
 
 ---
 
@@ -866,8 +866,8 @@ Database migrations are critical operations that require careful planning, testi
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture overview
 - [STRUCTURE.md](STRUCTURE.md) - Project directory structure
-- [docs/API_REFERENCE.md](docs/API_REFERENCE.md) - Complete API documentation
-- [samples/](samples/) - Example migrations and usage patterns
+- [API_REFERENCE.md](../API_REFERENCE.md) - Complete API documentation
+- [samples/](../../samples/) - Example migrations and usage patterns
 
 ---
 

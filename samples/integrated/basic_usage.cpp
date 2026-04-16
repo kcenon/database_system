@@ -89,16 +89,17 @@ int main(int argc, char* argv[]) {
     // Step 1: Create database instance with zero-config
     std::cout << "Step 1: Creating database instance...\n";
 
-    auto db = unified_database_system::create_builder()
+    auto db_result = unified_database_system::create_builder()
         .enable_logging(db_log_level::info, "./logs")
         .enable_monitoring(true)
         .set_pool_size(2, 10)
         .build();
 
-    if (!db) {
-        std::cerr << "❌ Failed to create database instance\n";
+    if (db_result.is_err()) {
+        std::cerr << "Failed to create database instance: " << db_result.error().message << "\n";
         return 1;
     }
+    auto db = std::move(db_result.value());
 
     std::cout << "✅ Database instance created\n";
 

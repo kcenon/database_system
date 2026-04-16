@@ -289,15 +289,10 @@ public:
         , coordinator_(std::make_unique<database_coordinator>(config))
         , backend_type_(backend_type::postgres)
         , connected_(false)
+        , initialized_(false)
     {
-        // Initialize coordinator
-        auto init_result = coordinator_->initialize();
-        if (!init_result.is_ok()) {
-            throw std::runtime_error("Failed to initialize database coordinator: " +
-                init_result.error().message);
-        }
-
-        // Initialize metrics
+        // Coordinator initialization is deferred to ensure_initialized()
+        // to maintain the no-throw guarantee documented in the public API.
         metrics_.measurement_start = std::chrono::steady_clock::now();
     }
 
@@ -310,6 +305,11 @@ public:
 
     kcenon::common::VoidResult connect(backend_type backend, const std::string& connection_string) {
         std::lock_guard<std::mutex> lock(mutex_);
+
+        auto init_result = ensure_initialized();
+        if (!init_result.is_ok()) {
+            return init_result;
+        }
 
         if (connected_) {
             return make_error("Already connected", -1, "unified_database_system");
@@ -607,6 +607,19 @@ public:
     }
 
 private:
+    kcenon::common::VoidResult ensure_initialized() {
+        if (initialized_) {
+            return kcenon::common::ok();
+        }
+        auto init_result = coordinator_->initialize();
+        if (!init_result.is_ok()) {
+            return make_error("Failed to initialize database coordinator: " +
+                init_result.error().message, -10, "unified_database_system");
+        }
+        initialized_ = true;
+        return kcenon::common::ok();
+    }
+
     void update_metrics(std::chrono::microseconds latency, bool success) {
         ++metrics_.total_queries;
 
@@ -659,6 +672,7 @@ private:
     backend_type backend_type_;
     std::string connection_string_;
     bool connected_;
+    bool initialized_;
 
     std::shared_ptr<core::database_backend> backend_; // shared_ptr for transaction support
 
@@ -878,18 +892,22 @@ unified_database_system::builder& unified_database_system::builder::set_slow_que
     return *this;
 }
 
-std::unique_ptr<unified_database_system> unified_database_system::builder::build() {
+kcenon::common::Result<std::unique_ptr<unified_database_system>> unified_database_system::builder::build() {
     auto system = std::make_unique<unified_database_system>(config_);
 
     // Auto-connect if connection string provided
     if (!connection_string_.empty()) {
         auto result = system->connect(config_.database.type, connection_string_);
         if (!result.is_ok()) {
-            throw std::runtime_error("Failed to connect: " + result.error().message);
+            return kcenon::common::error_info{
+                result.error().code,
+                "Failed to connect: " + result.error().message,
+                result.error().source
+            };
         }
     }
 
-    return system;
+    return std::move(system);
 }
 
 unified_database_system::builder unified_database_system::create_builder() {

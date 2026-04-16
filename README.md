@@ -39,7 +39,14 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 >
 > Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/migration/database_base.md) for details. <!-- TODO: dedicated proxy-mode.md migration doc -->
 
-### Latest Updates (2026-01)
+### v1.0.0 Release (2026-04)
+
+- **API Frozen**: All synchronous public APIs use `Result<T>` for error propagation — no `throw` in public API paths
+- **BREAKING**: `builder::build()` now returns `Result<std::unique_ptr<unified_database_system>>` instead of raw pointer
+- **BREAKING**: CMake package name unified to `database_system`; use `find_package(database_system CONFIG REQUIRED)`
+- **Migration from 0.x**: Update `builder::build()` call sites to handle `Result` (see [CHANGELOG](CHANGELOG.md))
+
+### Previous Updates (2026-01)
 
 - **C++20 Module Support**: Added module files for modern C++20 module imports
   - Primary module: `kcenon.database`

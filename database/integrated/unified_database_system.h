@@ -338,9 +338,9 @@ public:
 
         /**
          * @brief Build and return the configured database system
-         * @return Unique pointer to configured unified_database_system
+         * @return Result containing unique pointer to configured system, or error
          */
-        std::unique_ptr<unified_database_system> build();
+        kcenon::common::Result<std::unique_ptr<unified_database_system>> build();
 
     private:
         unified_db_config config_;

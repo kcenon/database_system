@@ -17,7 +17,7 @@ category: "FEAT"
 
 ---
 
-> **DEPRECATION NOTICE (Phase 4.3)**: Local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) and the resilience classes (`connection_health_monitor`, `resilient_database_connection`) **have been removed**. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview) for details. <!-- TODO: CHANGELOG.md has no 0.4.3 entry yet; pool-removal record should be added under [Unreleased] --> The sections below are retained as historical reference only; **they do not describe current behavior**. Production deployments should rely on ProxyMode with `database_server` middleware for server-side pooling.
+> **DEPRECATION NOTICE (Phase 4.3)**: Local connection pooling (`connection_pool`, `connection_pool_v2`, `connection_pool_v3`) and the resilience classes (`connection_health_monitor`, `resilient_database_connection`) **have been removed**. See [CHANGELOG](CHANGELOG.md) and [README](../README.md) for details. <!-- TODO: CHANGELOG.md has no 0.4.3 entry yet; pool-removal record should be added under [Unreleased] --> The sections below are retained as historical reference only; **they do not describe current behavior**. Production deployments should rely on ProxyMode with `database_server` middleware for server-side pooling.
 
 ---
 
@@ -41,7 +41,7 @@ category: "FEAT"
 **Status**: **REMOVED (Phase 4.3)** — kept below for historical reference only.
 **Implementation**: Previously `connection_pool.h/cpp` (removed). ProxyMode with `database_server` middleware is the forward path.
 
-> The subsections that follow document the legacy local pool design. They are **not** the current behavior. See [CHANGELOG](CHANGELOG.md) and [README](../README.md#overview).
+> The subsections that follow document the legacy local pool design. They are **not** the current behavior. See [CHANGELOG](CHANGELOG.md) and [README](../README.md).
 
 ### Connection Pool v3 Features (Historical)
 

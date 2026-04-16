@@ -57,8 +57,9 @@ int main() {
         .set_pool_size(2, 10)
         .build();
 
+    std::unique_ptr<unified_database_system> db;
     if (db_result.is_ok()) {
-        auto db = std::move(db_result.value());
+        db = std::move(db_result.value());
         std::cout << "Database instance created with integrated API\n";
     }
 

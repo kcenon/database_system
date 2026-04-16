@@ -1,0 +1,5 @@
+<map id="database::postgres_manager::select_query" name="database::postgres_manager::select_query">
+<area shape="rect" id="Node000001" title="Executes a SELECT query on the connected PostgreSQL database and returns the resulting data." alt="" coords="5,5,184,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1postgres__manager.html#ada0263f53b47e0eab9a87d225cdd0708" title="Returns the specific type of the database." alt="" coords="232,5,379,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,23,218,23,218,28,184,28"/>
+</map>

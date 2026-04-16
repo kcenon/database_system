@@ -1,0 +1,18 @@
+<map id="database::tests::SQLQueryBuilderTest" name="database::tests::SQLQueryBuilderTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="89,1095,275,1195"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="114,959,207,1025"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,1038,178,1094,172,1095,164,1039"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="231,952,418,1032"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,1034,242,1084,238,1080,286,1031"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query__builder.html" title="Universal query builder that adapts to different database types." alt="" coords="139,604,310,889"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="285,888,305,936,300,938,281,891"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="65,461,251,541"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="171,541,184,587,179,589,166,542"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,133,183,399"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="87,398,98,436,103,447,98,449,93,438,82,400"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="250,233,399,299"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="337,312,353,422,361,565,360,676,352,786,338,928,335,952,330,951,333,928,347,786,355,675,356,565,347,423,331,312"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="290,311,247,355,197,401,176,411,168,416,162,424,156,442,154,461,149,461,150,441,157,421,165,411,174,407,194,396,243,352,286,307"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="313,5,336,71"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="327,71,327,217,322,217,322,71"/>
+</map>

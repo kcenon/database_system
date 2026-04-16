@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::common_logger_backend::shutdown" name="database::integrated::adapters::backends::common_logger_backend::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the logger backend gracefully." alt="" coords="5,5,201,75"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="249,27,352,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,37,235,37,235,43,201,43"/>
+</map>

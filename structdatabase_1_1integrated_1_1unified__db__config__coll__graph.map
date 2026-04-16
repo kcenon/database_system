@@ -1,0 +1,21 @@
+<map id="database::integrated::unified_db_config" name="database::integrated::unified_db_config">
+<area shape="rect" id="Node000001" title=" " alt="" coords="439,619,657,1043"/>
+<area shape="rect" id="Node000002" href="$structdatabase_1_1integrated_1_1database__config.html" title="Database&#45;specific configuration." alt="" coords="5,359,224,519"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,517,238,554,428,723,424,727,234,558,195,521"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="509,135,587,200"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="508,170,457,172,395,180,329,197,297,210,268,226,236,251,208,281,162,346,158,343,204,277,233,247,265,222,295,205,327,192,394,175,456,167,508,165"/>
+<area shape="rect" id="Node000005" href="$structdatabase_1_1integrated_1_1pool__config.html" title="Connection pool configuration." alt="" coords="248,339,421,539"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="510,188,482,205,457,226,418,273,386,325,382,323,414,270,453,222,479,201,507,184"/>
+<area shape="rect" id="Node000006" href="$structdatabase_1_1integrated_1_1db__thread__config.html" title="Thread pool configuration for async operations." alt="" coords="446,369,650,509"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="551,200,551,352,545,352,545,200"/>
+<area shape="rect" id="Node000007" href="$structdatabase_1_1integrated_1_1db__logger__config.html" title="Logger configuration." alt="" coords="675,329,880,549"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="589,185,617,201,643,222,682,266,715,313,711,317,678,269,639,226,614,205,586,189"/>
+<area shape="rect" id="Node000008" href="$structdatabase_1_1integrated_1_1db__monitoring__config.html" title="Monitoring and metrics configuration." alt="" coords="905,321,1111,556"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="588,167,634,172,691,181,750,197,807,222,863,261,912,307,908,311,859,265,804,226,748,202,689,186,634,177,587,173"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="483,5,613,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="551,99,551,134,545,134,545,99"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="391,537,433,614,429,617,386,540"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="551,509,551,602,545,602,545,509"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="715,550,668,631,663,628,711,548"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="906,547,894,558,781,653,672,740,669,736,778,649,890,554,902,543"/>
+</map>

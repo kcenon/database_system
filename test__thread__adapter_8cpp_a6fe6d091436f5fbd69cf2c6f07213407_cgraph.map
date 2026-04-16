@@ -1,0 +1,10 @@
+<map id="test_destructor_safety" name="test_destructor_safety">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,173,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a33baa28caab09669406a7f42a097639d" title="Initialize thread pool." alt="" coords="221,29,416,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,81,207,73,208,79,163,87"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a06da8bc9ef54d9ff0ff477ad550bc15a" title="Submit a task and get a future." alt="" coords="221,108,416,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="166,107,208,114,208,119,165,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="274,29,274,19,282,10,297,5,319,3,345,6,359,14,357,18,343,11,319,8,298,10,285,15,279,21,279,29"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#ab1002e7afa86e4422ba132dd16a5e812" title="Execute a task (fire&#45;and&#45;forget)" alt="" coords="464,108,659,163"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="416,133,450,133,450,138,416,138"/>
+</map>

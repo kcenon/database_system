@@ -1,0 +1,7 @@
+<map id="database::async::async_executor::wait_for_completion" name="database::async::async_executor::wait_for_completion">
+<area shape="rect" id="Node000001" title="Waits for all pending tasks to complete." alt="" coords="375,5,601,45"/>
+<area shape="rect" id="Node000002" href="$async__executor__demo_8cpp.html#aaafe1f0be510149fc165122633274691" title=" " alt="" coords="108,13,327,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,28,327,28,327,23,361,23"/>
+<area shape="rect" id="Node000003" href="$async__executor__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

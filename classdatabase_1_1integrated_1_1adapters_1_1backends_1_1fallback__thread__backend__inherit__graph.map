@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::fallback_thread_backend" name="database::integrated::adapters::backends::fallback_thread_backend">
+<area shape="rect" id="Node000001" title="Simple thread pool using std::thread." alt="" coords="5,343,217,932"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1thread__backend.html" title="Abstract base class for thread pool backends." alt="" coords="25,5,197,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,308,114,342,109,342,109,308"/>
+</map>

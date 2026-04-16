@@ -1,0 +1,119 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,1264,107,1289"/>
+<area shape="rect" id="Node000001" href="$classAlertSystemTest.html" title=" " alt="" coords="201,5,329,31"/>
+<area shape="poly" id="edge37_Node000000_Node000001" title=" " alt="" coords="55,1250,59,1003,73,617,86,421,102,246,124,113,138,68,153,40,174,24,200,16,201,21,177,29,157,44,143,70,130,115,108,247,91,421,79,618,65,1003,60,1250"/>
+<area shape="rect" id="Node000002" href="$classAsyncDatabaseTest.html" title=" " alt="" coords="190,55,339,80"/>
+<area shape="poly" id="edge38_Node000000_Node000002" title=" " alt="" coords="55,1250,60,1012,75,642,87,454,104,287,125,160,138,116,153,90,169,76,189,68,191,73,172,81,157,93,143,118,131,161,109,287,93,454,80,642,65,1012,60,1250"/>
+<area shape="rect" id="Node000003" href="$classAsyncExecutorTest.html" title=" " alt="" coords="193,104,336,129"/>
+<area shape="poly" id="edge39_Node000000_Node000003" title=" " alt="" coords="55,1250,61,1021,76,667,89,487,105,327,126,206,139,165,153,139,171,125,192,116,194,121,173,129,157,142,144,167,132,207,111,328,94,487,82,667,66,1021,60,1250"/>
+<area shape="rect" id="Node000004" href="$classAsyncOperationsTest.html" title=" " alt="" coords="185,153,344,179"/>
+<area shape="poly" id="edge40_Node000000_Node000004" title=" " alt="" coords="55,1250,62,1029,78,691,91,519,107,368,127,252,139,213,153,188,167,176,184,168,186,173,170,181,157,192,144,215,132,253,112,368,96,520,83,691,67,1029,61,1250"/>
+<area shape="rect" id="Node000005" href="$classAsyncResultTest.html" title=" " alt="" coords="201,203,329,228"/>
+<area shape="poly" id="edge41_Node000000_Node000005" title=" " alt="" coords="55,1250,62,1038,79,716,92,553,108,408,128,298,140,261,153,238,174,222,200,213,201,219,177,226,157,241,145,263,133,300,114,409,97,553,85,717,68,1039,61,1250"/>
+<area shape="rect" id="Node000006" href="$classAsyncStressTest.html" title="Test fixture for async operation stress tests." alt="" coords="201,252,328,277"/>
+<area shape="poly" id="edge42_Node000000_Node000006" title=" " alt="" coords="55,1250,63,1047,81,741,94,586,110,449,129,344,140,309,153,287,175,271,200,263,202,268,177,276,157,290,145,311,134,346,115,449,99,586,86,741,69,1047,61,1250"/>
+<area shape="rect" id="Node000007" href="$classBackendBaseTest.html" title=" " alt="" coords="197,301,332,327"/>
+<area shape="poly" id="edge43_Node000000_Node000007" title=" " alt="" coords="56,1250,64,1056,82,766,95,619,111,489,130,391,141,357,153,336,173,321,196,313,198,318,175,326,157,340,146,359,135,392,117,490,101,619,88,766,69,1056,61,1250"/>
+<area shape="rect" id="Node000008" href="$classBackendContractTest.html" title=" " alt="" coords="185,351,344,376"/>
+<area shape="poly" id="edge44_Node000000_Node000008" title=" " alt="" coords="56,1250,65,1065,84,791,97,652,113,530,131,437,141,405,153,386,167,374,184,366,186,371,170,378,157,389,146,407,136,438,118,531,102,653,89,791,70,1066,61,1250"/>
+<area shape="rect" id="Node000009" href="$classBackendRegistryTest.html" title=" " alt="" coords="186,400,343,425"/>
+<area shape="poly" id="edge45_Node000000_Node000009" title=" " alt="" coords="56,1250,66,1075,85,816,99,685,114,571,132,483,142,453,153,435,167,423,185,415,187,420,170,427,157,438,147,456,137,485,120,571,104,686,91,816,71,1075,61,1251"/>
+<area shape="rect" id="Node000010" href="$classConnectProtocolTest.html" title=" " alt="" coords="187,449,342,475"/>
+<area shape="poly" id="edge46_Node000000_Node000010" title=" " alt="" coords="56,1250,67,1083,87,840,101,718,116,611,133,529,143,502,153,484,168,472,186,464,188,469,171,476,157,488,147,504,138,531,121,612,106,719,92,841,72,1083,61,1250"/>
+<area shape="rect" id="Node000011" href="$classConnectionMetricsTest.html" title=" " alt="" coords="180,499,349,524"/>
+<area shape="poly" id="edge47_Node000000_Node000011" title=" " alt="" coords="54,1250,55,1103,66,888,78,777,95,675,120,591,135,558,153,533,178,516,181,521,157,537,140,561,125,593,100,676,83,777,71,888,60,1103,60,1250"/>
+<area shape="rect" id="Node000012" href="$classCredentialSecurityTest.html" title="Test fixture for credential security tests." alt="" coords="181,548,349,573"/>
+<area shape="poly" id="edge48_Node000000_Node000012" title=" " alt="" coords="55,1250,57,1112,69,912,81,809,98,714,122,636,136,606,153,583,179,565,182,570,157,587,141,609,127,638,103,715,86,809,74,912,62,1112,60,1250"/>
+<area shape="rect" id="Node000013" href="$classDataMaskingTest.html" title="Test fixture for data masking security tests." alt="" coords="197,597,332,623"/>
+<area shape="poly" id="edge49_Node000000_Node000013" title=" " alt="" coords="55,1250,59,1120,72,935,84,840,101,753,124,681,137,653,153,632,173,617,196,609,198,614,175,622,157,636,142,656,129,683,106,754,89,840,77,935,64,1120,60,1250"/>
+<area shape="rect" id="Node000014" href="$classDatabaseTest.html" title=" " alt="" coords="209,647,320,672"/>
+<area shape="poly" id="edge50_Node000000_Node000014" title=" " alt="" coords="55,1250,60,1129,75,959,87,871,104,792,125,726,138,701,153,681,179,664,208,657,210,662,181,669,157,685,143,704,130,728,109,793,93,872,80,959,66,1129,61,1250"/>
+<area shape="rect" id="Node000015" href="$classEntityMetadataTest.html" title=" " alt="" coords="191,696,339,721"/>
+<area shape="poly" id="edge51_Node000000_Node000015" title=" " alt="" coords="56,1250,62,1138,78,983,91,903,107,831,127,772,139,748,153,731,170,718,190,710,192,715,172,723,157,735,144,751,132,774,112,832,96,904,83,983,68,1139,61,1250"/>
+<area shape="rect" id="Node000016" href="$classErrorProtocolTest.html" title=" " alt="" coords="199,745,331,771"/>
+<area shape="poly" id="edge52_Node000000_Node000016" title=" " alt="" coords="56,1250,64,1147,81,1007,94,935,110,870,129,817,153,780,174,765,198,757,199,763,176,770,157,784,134,819,115,872,99,936,87,1007,70,1148,61,1251"/>
+<area shape="rect" id="Node000017" href="$classFieldMetadataTest.html" title=" " alt="" coords="194,795,335,820"/>
+<area shape="poly" id="edge53_Node000000_Node000017" title=" " alt="" coords="57,1250,66,1156,85,1030,98,967,113,909,131,862,153,829,171,816,193,808,195,813,174,821,157,833,136,864,118,911,103,968,90,1031,72,1157,62,1250"/>
+<area shape="rect" id="Node000018" href="$classFilteredSummaryTest.html" title=" " alt="" coords="185,844,345,869"/>
+<area shape="poly" id="edge54_Node000000_Node000018" title=" " alt="" coords="58,1250,69,1166,88,1055,116,949,133,907,153,879,167,868,183,861,185,866,170,873,157,883,138,910,121,950,93,1056,74,1167,63,1251"/>
+<area shape="rect" id="Node000019" href="$classImmutableQueryBuilderTest.html" title=" " alt="" coords="163,893,367,919"/>
+<area shape="poly" id="edge55_Node000000_Node000019" title=" " alt="" coords="54,1250,55,1185,68,1098,80,1052,98,1007,122,965,153,928,169,917,172,921,156,932,126,968,102,1009,85,1054,73,1099,61,1186,59,1251"/>
+<area shape="rect" id="Node000020" href="$classIntegrationTestBase.html" title=" " alt="" coords="189,943,340,968"/>
+<area shape="poly" id="edge56_Node000000_Node000020" title=" " alt="" coords="55,1250,60,1193,74,1119,87,1081,104,1043,125,1008,153,977,169,966,188,959,190,964,172,971,156,981,130,1011,108,1045,92,1082,80,1121,65,1194,60,1250"/>
+<area shape="rect" id="Node000027" href="$classMemoryStressTest.html" title="Test fixture for memory stress tests." alt="" coords="193,992,336,1017"/>
+<area shape="poly" id="edge63_Node000000_Node000027" title=" " alt="" coords="57,1249,65,1201,82,1141,110,1079,129,1051,153,1027,172,1015,192,1007,194,1012,174,1020,156,1031,133,1054,114,1082,87,1143,70,1202,62,1250"/>
+<area shape="rect" id="Node000028" href="$classMessageHeaderTest.html" title=" " alt="" coords="188,1041,341,1067"/>
+<area shape="poly" id="edge64_Node000000_Node000028" title=" " alt="" coords="60,1250,71,1211,89,1164,116,1117,133,1096,153,1077,186,1060,189,1065,156,1082,137,1099,120,1120,94,1167,76,1213,65,1251"/>
+<area shape="rect" id="Node000029" href="$classMetricLifecycleTest.html" title=" " alt="" coords="191,1091,338,1116"/>
+<area shape="poly" id="edge65_Node000000_Node000029" title=" " alt="" coords="65,1250,97,1187,122,1154,153,1126,190,1110,192,1114,156,1131,126,1158,102,1190,70,1252"/>
+<area shape="rect" id="Node000030" href="$classMetricsOutputTest.html" title=" " alt="" coords="195,1140,335,1165"/>
+<area shape="poly" id="edge66_Node000000_Node000030" title=" " alt="" coords="72,1251,107,1212,129,1192,153,1176,194,1160,195,1165,156,1180,132,1197,110,1216,76,1255"/>
+<area shape="rect" id="Node000031" href="$classMongoDBBackendTest.html" title=" " alt="" coords="181,1189,348,1215"/>
+<area shape="poly" id="edge67_Node000000_Node000031" title=" " alt="" coords="89,1255,154,1225,196,1212,198,1217,156,1230,92,1260"/>
+<area shape="rect" id="Node000032" href="$classMonitoringEnabledTest.html" title=" " alt="" coords="179,1239,350,1264"/>
+<area shape="poly" id="edge68_Node000000_Node000032" title=" " alt="" coords="120,1266,179,1259,179,1264,121,1272"/>
+<area shape="rect" id="Node000033" href="$classORMTest.html" title=" " alt="" coords="225,1288,304,1313"/>
+<area shape="poly" id="edge69_Node000000_Node000033" title=" " alt="" coords="121,1281,225,1294,224,1299,120,1287"/>
+<area shape="rect" id="Node000034" href="$classPerformanceAlertTest.html" title=" " alt="" coords="183,1337,346,1363"/>
+<area shape="poly" id="edge70_Node000000_Node000034" title=" " alt="" coords="92,1294,156,1324,194,1335,192,1340,154,1328,89,1299"/>
+<area shape="rect" id="Node000035" href="$classPerformanceMonitorQueryTest.html" title=" " alt="" coords="155,1387,375,1412"/>
+<area shape="poly" id="edge71_Node000000_Node000035" title=" " alt="" coords="76,1299,110,1338,132,1357,156,1373,182,1384,180,1389,153,1378,129,1361,107,1341,72,1302"/>
+<area shape="rect" id="Node000036" href="$classPerformanceMonitorTest.html" title=" " alt="" coords="174,1436,355,1461"/>
+<area shape="poly" id="edge72_Node000000_Node000036" title=" " alt="" coords="69,1301,102,1363,126,1395,156,1422,177,1433,175,1438,153,1427,122,1399,97,1366,65,1303"/>
+<area shape="rect" id="Node000037" href="$classPoolMetricsTest.html" title=" " alt="" coords="203,1485,327,1511"/>
+<area shape="poly" id="edge73_Node000000_Node000037" title=" " alt="" coords="65,1302,76,1341,94,1387,120,1433,137,1454,156,1472,178,1484,203,1492,201,1497,176,1489,153,1476,133,1458,116,1436,89,1389,71,1342,60,1304"/>
+<area shape="rect" id="Node000038" href="$classPostgreSQLBackendTest.html" title=" " alt="" coords="176,1535,353,1560"/>
+<area shape="poly" id="edge74_Node000000_Node000038" title=" " alt="" coords="62,1303,70,1351,87,1410,115,1471,133,1498,156,1521,177,1534,175,1539,153,1525,129,1501,110,1473,82,1412,65,1352,57,1304"/>
+<area shape="rect" id="Node000039" href="$classPrometheusExporterTest.html" title=" " alt="" coords="174,1584,355,1609"/>
+<area shape="poly" id="edge75_Node000000_Node000039" title=" " alt="" coords="60,1303,65,1359,80,1432,92,1470,109,1507,130,1541,156,1571,175,1583,172,1587,153,1575,126,1544,104,1510,87,1472,75,1433,60,1360,55,1303"/>
+<area shape="rect" id="Node000040" href="$classQueryBuilderTest.html" title=" " alt="" coords="198,1633,331,1659"/>
+<area shape="poly" id="edge76_Node000000_Node000040" title=" " alt="" coords="59,1303,61,1368,73,1454,85,1499,103,1543,126,1584,156,1620,176,1633,198,1640,197,1646,173,1638,153,1624,122,1587,98,1546,80,1501,68,1455,56,1368,54,1303"/>
+<area shape="rect" id="Node000041" href="$classQueryHistoryTest.html" title=" " alt="" coords="197,1683,332,1708"/>
+<area shape="poly" id="edge77_Node000000_Node000041" title=" " alt="" coords="63,1302,74,1386,93,1497,121,1602,138,1642,157,1669,176,1682,198,1690,196,1695,173,1687,153,1673,133,1645,116,1604,88,1498,69,1387,58,1303"/>
+<area shape="rect" id="Node000042" href="$classQueryProtocolTest.html" title=" " alt="" coords="195,1732,335,1757"/>
+<area shape="poly" id="edge78_Node000000_Node000042" title=" " alt="" coords="62,1303,72,1396,90,1521,103,1584,118,1641,136,1688,157,1719,174,1731,195,1739,193,1744,172,1736,153,1723,131,1690,113,1643,98,1586,85,1522,66,1397,57,1303"/>
+<area shape="rect" id="Node000043" href="$classQueryTimerTest.html" title=" " alt="" coords="202,1781,327,1807"/>
+<area shape="poly" id="edge79_Node000000_Node000043" title=" " alt="" coords="61,1303,70,1405,87,1545,99,1616,115,1681,134,1733,157,1768,178,1782,203,1790,201,1795,175,1787,153,1772,129,1735,110,1682,94,1617,81,1546,64,1406,56,1303"/>
+<area shape="rect" id="Node000044" href="$classRedisBackendTest.html" title=" " alt="" coords="195,1831,334,1856"/>
+<area shape="poly" id="edge80_Node000000_Node000044" title=" " alt="" coords="61,1303,68,1414,83,1569,96,1648,112,1720,132,1778,144,1801,157,1817,174,1830,196,1838,194,1843,172,1835,153,1821,139,1804,127,1781,107,1721,91,1649,78,1570,62,1415,56,1303"/>
+<area shape="rect" id="Node000045" href="$classSQLInjectionTest.html" title="Test fixture for SQL injection prevention tests." alt="" coords="200,1880,329,1905"/>
+<area shape="poly" id="edge81_Node000000_Node000045" title=" " alt="" coords="61,1303,66,1424,80,1593,93,1680,109,1759,130,1824,143,1848,157,1867,176,1881,200,1889,199,1894,174,1886,153,1871,138,1851,126,1826,104,1761,87,1681,75,1594,60,1424,55,1303"/>
+<area shape="rect" id="Node000046" href="$classSQLiteBackendTest.html" title="Test fixture for SQLite backend tests." alt="" coords="192,1929,337,1955"/>
+<area shape="poly" id="edge82_Node000000_Node000046" title=" " alt="" coords="60,1303,64,1433,77,1617,89,1712,106,1798,129,1869,142,1896,157,1916,173,1928,192,1936,190,1941,170,1933,153,1920,137,1899,124,1871,101,1800,84,1713,72,1618,59,1433,55,1303"/>
+<area shape="rect" id="Node000047" href="$classSagaBuilderTest.html" title=" " alt="" coords="201,1979,328,2004"/>
+<area shape="poly" id="edge83_Node000000_Node000047" title=" " alt="" coords="60,1303,62,1441,74,1641,86,1743,103,1837,127,1914,141,1943,157,1965,177,1980,202,1988,200,1993,175,1985,153,1969,136,1946,122,1916,98,1838,81,1744,69,1641,57,1441,55,1303"/>
+<area shape="rect" id="Node000048" href="$classSecurityTest.html" title=" " alt="" coords="214,2028,315,2053"/>
+<area shape="poly" id="edge84_Node000000_Node000048" title=" " alt="" coords="60,1303,61,1450,71,1664,83,1775,100,1876,125,1959,140,1991,157,2015,169,2025,183,2032,214,2039,213,2044,181,2037,166,2029,153,2018,135,1994,120,1961,95,1877,78,1776,66,1665,55,1450,54,1303"/>
+<area shape="rect" id="Node000049" href="$classSerializerEdgeCaseTest.html" title=" " alt="" coords="178,2077,351,2103"/>
+<area shape="poly" id="edge85_Node000000_Node000049" title=" " alt="" coords="61,1303,72,1470,92,1712,106,1834,121,1940,138,2021,147,2048,157,2064,179,2080,176,2084,153,2068,143,2050,133,2023,116,1941,101,1834,87,1712,67,1470,56,1304"/>
+<area shape="rect" id="Node000050" href="$classStreamProcessorTest.html" title=" " alt="" coords="185,2127,344,2152"/>
+<area shape="poly" id="edge86_Node000000_Node000050" title=" " alt="" coords="61,1303,71,1478,91,1736,104,1866,120,1981,137,2067,147,2096,157,2114,170,2124,186,2132,184,2137,167,2129,153,2117,142,2099,132,2069,114,1982,99,1867,86,1737,66,1478,56,1303"/>
+<area shape="rect" id="Node000051" href="$classTransactionCoordinatorTest.html" title=" " alt="" coords="165,2176,364,2201"/>
+<area shape="poly" id="edge87_Node000000_Node000051" title=" " alt="" coords="61,1303,70,1487,89,1762,102,1900,118,2022,136,2114,146,2145,157,2163,170,2174,167,2178,153,2166,141,2147,131,2115,113,2022,97,1900,84,1762,65,1488,56,1303"/>
+<area shape="rect" id="Node000052" href="$classTransactionProtocolTest.html" title=" " alt="" coords="177,2225,352,2251"/>
+<area shape="poly" id="edge88_Node000000_Node000052" title=" " alt="" coords="61,1303,69,1497,88,1787,101,1933,117,2062,135,2160,146,2193,157,2212,178,2228,175,2232,153,2216,141,2195,130,2161,111,2063,95,1934,82,1787,64,1497,56,1303"/>
+<area shape="rect" id="Node000053" href="$classValueFormatterTest.html" title=" " alt="" coords="191,2275,339,2300"/>
+<area shape="poly" id="edge89_Node000000_Node000053" title=" " alt="" coords="61,1303,69,1506,86,1811,99,1966,115,2103,134,2206,145,2241,157,2262,172,2274,191,2282,189,2287,170,2279,153,2265,140,2243,129,2208,110,2104,94,1967,81,1812,63,1506,55,1303"/>
+<area shape="rect" id="Node000054" href="$classdatabase_1_1query_1_1tests_1_1CrossDialectTest.html" title=" " alt="" coords="181,2325,348,2365"/>
+<area shape="poly" id="edge90_Node000000_Node000054" title=" " alt="" coords="61,1303,68,1514,86,1835,99,1998,115,2142,134,2252,145,2289,157,2311,182,2330,179,2334,153,2314,140,2291,129,2253,110,2143,94,1999,81,1835,63,1514,55,1303"/>
+<area shape="rect" id="Node000055" href="$classdatabase_1_1query_1_1tests_1_1PostgreSQLDialectTest.html" title=" " alt="" coords="177,2389,353,2429"/>
+<area shape="poly" id="edge91_Node000000_Node000055" title=" " alt="" coords="61,1303,67,1526,84,1867,97,2041,113,2195,133,2312,145,2351,157,2375,178,2392,175,2396,153,2378,140,2353,128,2313,108,2195,92,2041,79,1868,62,1526,55,1303"/>
+<area shape="rect" id="Node000056" href="$classdatabase_1_1query_1_1tests_1_1SQLiteDialectTest.html" title=" " alt="" coords="181,2453,348,2493"/>
+<area shape="poly" id="edge92_Node000000_Node000056" title=" " alt="" coords="60,1303,66,1537,82,1899,95,2084,111,2247,132,2372,144,2414,157,2439,168,2450,183,2458,180,2463,165,2454,153,2442,139,2416,127,2373,106,2248,89,2084,77,1899,61,1537,55,1303"/>
+<area shape="rect" id="Node000057" href="$classdatabase_1_1tests_1_1SQLQueryBuilderTest.html" title=" " alt="" coords="167,2517,362,2557"/>
+<area shape="poly" id="edge93_Node000000_Node000057" title=" " alt="" coords="60,1303,65,1549,80,1932,93,2127,109,2300,131,2432,143,2476,157,2503,169,2515,166,2519,153,2506,138,2478,126,2433,104,2301,88,2127,75,1932,60,1550,55,1303"/>
+<area shape="rect" id="Node000058" href="$classdatabase_1_1tests_1_1UniversalQueryBuilderTest.html" title=" " alt="" coords="169,2581,361,2621"/>
+<area shape="poly" id="edge94_Node000000_Node000058" title=" " alt="" coords="60,1303,64,1560,78,1963,91,2169,108,2352,129,2492,142,2539,157,2567,170,2579,167,2583,153,2570,138,2541,124,2493,102,2353,85,2170,73,1963,59,1560,55,1303"/>
+<area shape="rect" id="Node000021" href="$classConcurrentOperationsIntegrationTest.html" title=" " alt="" coords="423,819,684,844"/>
+<area shape="poly" id="edge57_Node000020_Node000021" title=" " alt="" coords="352,939,373,928,389,910,396,891,404,872,421,853,443,842,445,847,424,857,408,875,401,893,393,913,376,932,354,944"/>
+<area shape="rect" id="Node000022" href="$classErrorHandlingIntegrationTest.html" title=" " alt="" coords="449,868,657,893"/>
+<area shape="poly" id="edge58_Node000020_Node000022" title=" " alt="" coords="345,937,374,928,397,915,422,902,463,891,464,896,424,907,400,919,376,932,347,942"/>
+<area shape="rect" id="Node000023" href="$classFullSystemIntegrationTest.html" title=" " alt="" coords="458,917,649,943"/>
+<area shape="poly" id="edge59_Node000020_Node000023" title=" " alt="" coords="353,945,458,936,458,941,354,950"/>
+<area shape="rect" id="Node000024" href="$classORMSecurityIntegrationTest.html" title=" " alt="" coords="452,967,655,992"/>
+<area shape="poly" id="edge60_Node000020_Node000024" title=" " alt="" coords="354,960,452,968,452,974,353,965"/>
+<area shape="rect" id="Node000025" href="$classPerformanceAsyncIntegrationTest.html" title=" " alt="" coords="433,1016,674,1041"/>
+<area shape="poly" id="edge61_Node000020_Node000025" title=" " alt="" coords="349,969,376,977,400,989,424,1001,470,1013,469,1019,422,1006,397,994,374,982,348,974"/>
+<area shape="rect" id="Node000026" href="$classSecurityMonitoringIntegrationTest.html" title=" " alt="" coords="432,1065,675,1091"/>
+<area shape="poly" id="edge62_Node000020_Node000026" title=" " alt="" coords="355,966,376,977,393,996,401,1016,408,1035,424,1052,445,1063,443,1068,421,1056,404,1038,396,1018,389,999,373,981,352,970"/>
+</map>

@@ -1,0 +1,33 @@
+<map id="database/integrated/adapters/backends/common_logger_backend.cpp" name="database/integrated/adapters/backends/common_logger_backend.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="319,5,529,60"/>
+<area shape="rect" id="Node000002" href="$common__logger__backend_8h.html" title="Logger backend using common_system&#39;s ILogger and GlobalLoggerRegistry." alt="" coords="137,108,337,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="368,62,276,105,273,100,366,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="383,335,441,361"/>
+<area shape="poly" id="edge17_Node000001_Node000007" title=" " alt="" coords="426,60,416,322,410,322,420,60"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="462,108,549,133"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="451,58,487,96,483,100,447,62"/>
+<area shape="rect" id="Node000003" href="$logger__backend_8h.html" title="Abstract interface for logger backends." alt="" coords="251,181,387,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="252,131,297,170,293,174,249,135"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,328,181,368"/>
+<area shape="poly" id="edge15_Node000002_Node000005" title=" " alt="" coords="207,136,171,155,154,168,139,183,121,215,109,250,97,315,92,314,103,249,116,213,135,180,150,164,168,150,204,131"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="149,181,227,207"/>
+<area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="231,135,206,172,202,169,227,132"/>
+<area shape="rect" id="Node000004" href="$common__result_8h.html" title="Common Result&lt;T&gt; pattern for integrated database system." alt="" coords="145,255,335,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="308,209,265,247,261,244,304,205"/>
+<area shape="poly" id="edge13_Node000003_Node000007" title=" " alt="" coords="328,205,400,322,395,325,323,208"/>
+<area shape="rect" id="Node000009" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="462,255,637,280"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="357,204,500,248,498,253,355,209"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="220,283,142,324,139,319,217,278"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="206,335,274,361"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="243,280,243,321,237,321,237,280"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="266,278,376,327,373,332,264,282"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="298,335,358,361"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="255,278,307,324,303,328,251,282"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="530,282,445,331,443,326,528,278"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="465,335,532,361"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="544,282,516,325,511,322,540,279"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="557,335,627,361"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="558,279,582,322,577,325,553,281"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="652,335,719,361"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="571,278,655,326,652,331,568,282"/>
+</map>

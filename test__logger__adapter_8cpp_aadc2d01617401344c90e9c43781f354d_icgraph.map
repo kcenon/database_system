@@ -1,0 +1,32 @@
+<map id="cleanup_test_logs" name="cleanup_test_logs">
+<area shape="rect" id="Node000001" title="Clean up test log directory." alt="" coords="352,226,491,252"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,226,60,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="411,214,398,173,376,125,345,79,325,59,303,43,251,18,227,11,204,8,182,10,159,16,110,43,89,61,72,84,60,110,50,137,40,189,37,227,32,226,35,188,45,136,55,108,68,82,85,58,106,38,157,11,181,5,205,3,228,6,253,13,305,38,329,55,349,75,381,123,403,171,416,212"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="135,53,277,78"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="405,216,365,153,336,120,303,92,277,80,279,75,305,88,340,116,370,150,410,213"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#a4a0ed92e00e1363eb8d953775fc1357d" title="Test connection event logging." alt="" coords="116,102,296,128"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="398,218,356,178,330,158,303,141,275,130,277,125,305,137,333,154,360,174,401,214"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#a3ab20a0e2fee045d5e283db9b8315a0c" title="Test error logging." alt="" coords="136,152,276,177"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="381,223,303,191,265,180,266,175,305,186,383,218"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#a55fa9354578d0d36b1b01c28590a45a9" title="Test logger initialization and shutdown." alt="" coords="139,201,273,226"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="337,232,273,224,274,219,338,227"/>
+<area shape="rect" id="Node000007" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,250,291,276"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="338,251,292,256,291,251,338,246"/>
+<area shape="rect" id="Node000008" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,300,279,325"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="381,260,305,290,262,302,261,297,303,285,379,255"/>
+<area shape="rect" id="Node000009" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,349,304,374"/>
+<area shape="poly" id="edge14_Node000001_Node000009" title=" " alt="" coords="401,264,359,302,305,339,273,351,271,347,303,334,356,298,397,260"/>
+<area shape="rect" id="Node000010" href="$test__logger__adapter_8cpp.html#acae8ee2c7c5718208ab603c907647606" title="Test thread safety (basic concurrency test)" alt="" coords="134,398,278,424"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="409,266,369,327,340,360,305,388,279,401,277,396,303,384,336,356,364,324,405,263"/>
+<area shape="rect" id="Node000011" href="$test__logger__adapter_8cpp.html#a3d1ab1e178130cddadaaef26af764dcc" title="Test transaction logging." alt="" coords="115,448,297,473"/>
+<area shape="poly" id="edge18_Node000001_Node000011" title=" " alt="" coords="414,266,400,304,377,351,346,397,306,437,283,450,280,445,302,433,342,394,372,348,395,302,409,264"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="124,83,110,92,81,124,60,162,47,199,39,227,34,226,41,197,55,160,76,121,106,88,121,78"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="119,136,110,141,87,161,67,184,42,227,38,225,63,181,83,157,106,137,116,131"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="127,184,109,191,77,209,51,228,48,224,74,204,107,186,126,179"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="125,228,60,238,60,233,124,223"/>
+<area shape="poly" id="edge11_Node000007_Node000002" title=" " alt="" coords="107,252,60,245,61,240,107,247"/>
+<area shape="poly" id="edge13_Node000008_Node000002" title=" " alt="" coords="130,298,107,290,75,272,49,254,52,250,78,268,109,285,132,293"/>
+<area shape="poly" id="edge15_Node000009_Node000002" title=" " alt="" coords="120,346,106,339,83,319,64,295,38,253,42,251,68,292,87,315,110,334,122,342"/>
+<area shape="poly" id="edge17_Node000010_Node000002" title=" " alt="" coords="120,397,106,388,77,355,56,317,42,281,34,253,39,251,47,279,61,315,81,352,110,384,123,392"/>
+<area shape="poly" id="edge19_Node000011_Node000002" title=" " alt="" coords="114,443,106,437,87,416,71,391,49,338,37,289,32,252,38,251,42,288,54,337,76,389,91,412,110,433,117,439"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="database::integrated::adapters::backends::common_logger_backend" name="database::integrated::adapters::backends::common_logger_backend">
+<area shape="rect" id="Node000001" title="Logger backend using common_system&#39;s ILogger interface." alt="" coords="35,545,251,840"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="5,275,157,470"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,483,117,545,112,546,100,484"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1integrated_1_1db__logger__config.html" title="Logger configuration." alt="" coords="181,263,387,483"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,484,217,531,212,529,233,482"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="245,135,323,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="287,200,287,246,281,246,281,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="219,5,349,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="287,99,287,134,281,134,281,99"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="database::integrated::database_coordinator::get_monitor" name="database::integrated::database_coordinator::get_monitor">
+<area shape="rect" id="Node000001" title="Get monitoring adapter." alt="" coords="268,40,439,95"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab9a4da242976f9a340b77cd2aaba8203" title=" " alt="" coords="35,5,190,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,50,175,33,176,28,255,44"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="36,55,189,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,70,189,70,189,65,254,65"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html#a177316b4e79eac2939d378a4420b7115" title=" " alt="" coords="5,104,220,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,90,176,107,175,101,254,85"/>
+</map>

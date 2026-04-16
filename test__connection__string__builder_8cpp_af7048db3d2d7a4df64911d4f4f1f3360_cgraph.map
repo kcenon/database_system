@@ -1,0 +1,19 @@
+<map id="test_sqlite_memory_overrides_file" name="test_sqlite_memory_overrides_file">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,209,157,249"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#af5b10f03c2d51e45e12a68ce6fa78cb2" title="Build the connection string for the specified backend." alt="" coords="205,123,403,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,206,212,179,214,184,140,211"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a25d67cb063eeb003646cc83b04c2df1a" title="Set the database name." alt="" coords="205,201,403,256"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="158,226,192,226,192,231,158,231"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ab44b0b64e25b5ce86239d222e12fc980" title="Configure SQLite to use in&#45;memory database." alt="" coords="205,280,403,335"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="140,246,214,273,212,278,138,251"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ac6e8733c2e83bdb66c76bdd608dbe64f" title=" " alt="" coords="451,5,648,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,120,449,69,463,63,465,68,452,74,354,125"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4bd1398d87ea731bc51749b695aa2737" title=" " alt="" coords="451,84,648,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="403,132,437,126,438,132,403,137"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a650997c9db48a30a939bad19e177b947" title=" " alt="" coords="451,163,648,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="403,163,438,169,437,174,403,169"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a1d9e84b4f875cb0f7565d5f934fb7b0c" title=" " alt="" coords="451,241,648,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,175,404,186,428,207,452,226,464,233,461,238,449,231,425,211,401,191,380,180"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a61a02a0b6e169ee0f53ae9e54cb4d731" title=" " alt="" coords="696,84,915,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="648,109,682,109,682,114,648,114"/>
+</map>

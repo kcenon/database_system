@@ -1,0 +1,13 @@
+<map id="database::integrated::adapters::logger_adapter::log_slow_query" name="database::integrated::adapters::logger_adapter::log_slow_query">
+<area shape="rect" id="Node000001" title="Log a slow query with warning." alt="" coords="593,39,787,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#a1ad4a5b39766093311b9c3a602d1c3df" title="Log a SQL query execution." alt="" coords="352,5,545,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="580,53,545,49,546,43,580,48"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,69,304,95"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="580,74,545,75,304,82,304,77,545,70,579,69"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,20,279,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,35,280,35,280,30,338,30"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="339,58,270,72,269,67,338,52"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,45,60,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="119,48,61,57,60,51,119,43"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="101,70,60,64,61,59,101,65"/>
+</map>

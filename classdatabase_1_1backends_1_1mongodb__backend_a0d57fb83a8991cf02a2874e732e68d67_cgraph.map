@@ -1,0 +1,5 @@
+<map id="database::backends::mongodb_backend::rollback_transaction" name="database::backends::mongodb_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="5,13,217,67"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="265,5,467,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,37,252,37,252,43,217,43"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="example_performance_profiling" name="example_performance_profiling">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,175,163"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a8514005627786ed1bd071d5f385d3b63" title=" " alt="" coords="223,5,419,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,121,221,69,234,63,236,68,224,74,127,126"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a7ab0d61849248a9662f3cf634f39d1bf" title="Get current performance metrics." alt="" coords="223,84,419,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,129,209,124,210,129,175,134"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="269,163,373,188"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,152,256,164,255,169,175,158"/>
+<area shape="rect" id="Node000005" href="$monitoring_8cpp.html#ac1c57fa77126b78c71abd37839ce3cef" title=" " alt="" coords="260,212,381,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="135,161,224,197,253,206,251,211,222,202,133,166"/>
+</map>

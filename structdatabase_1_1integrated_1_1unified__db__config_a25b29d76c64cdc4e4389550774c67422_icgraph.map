@@ -1,0 +1,10 @@
+<map id="database::integrated::unified_db_config::set_pool_size" name="database::integrated::unified_db_config::set_pool_size">
+<area shape="rect" id="Node000001" title="Configure connection pool size." alt="" coords="321,16,479,71"/>
+<area shape="rect" id="Node000002" href="$test__configuration_8cpp.html#ab7a22d1086e3b64a5ce0f2f0bdb17459" title="Test builder pattern methods." alt="" coords="114,5,267,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="307,35,267,30,268,25,308,30"/>
+<area shape="rect" id="Node000004" href="$test__configuration_8cpp.html#aa93184475c90e37740fad2326d3e6bdd" title="Test struct copy and move semantics." alt="" coords="108,55,273,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="308,57,274,61,273,55,308,51"/>
+<area shape="rect" id="Node000003" href="$test__configuration_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main test runner." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,35,61,42,60,36,100,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,55,60,50,60,45,95,50"/>
+</map>

@@ -1,0 +1,25 @@
+var classdatabase_1_1backends_1_1redis__backend =
+[
+    [ "redis_backend", "classdatabase_1_1backends_1_1redis__backend.html#a783be09aaf06f4e1fe498b78731a5539", null ],
+    [ "~redis_backend", "classdatabase_1_1backends_1_1redis__backend.html#a38f20ae9585ff8ec64b638382e66020c", null ],
+    [ "backend_name", "classdatabase_1_1backends_1_1redis__backend.html#ad1f6531a1affb464973397317ab89b17", null ],
+    [ "begin_transaction", "classdatabase_1_1backends_1_1redis__backend.html#a4b2387f20aa7056bd952e4b371c5fda0", null ],
+    [ "commit_transaction", "classdatabase_1_1backends_1_1redis__backend.html#a363020a319e94538f9a1af9a30194d21", null ],
+    [ "connection_info", "classdatabase_1_1backends_1_1redis__backend.html#ac77179e8230d0765e831ed43e78e7a96", null ],
+    [ "do_initialize", "classdatabase_1_1backends_1_1redis__backend.html#af41381c15b601f5453490d35240a6f61", null ],
+    [ "do_shutdown", "classdatabase_1_1backends_1_1redis__backend.html#a3068157c5503cf11fc85537e02c4e581", null ],
+    [ "execute_query", "classdatabase_1_1backends_1_1redis__backend.html#a2e8bfd39d52a3a2ff11f0bc1cb732694", null ],
+    [ "in_transaction", "classdatabase_1_1backends_1_1redis__backend.html#ab8848524de36d108361d474019a2cda1", null ],
+    [ "last_error", "classdatabase_1_1backends_1_1redis__backend.html#a15d22ff330d961c863882ece5d0f5f51", null ],
+    [ "parse_redis_query", "classdatabase_1_1backends_1_1redis__backend.html#a7d1afa771441a661f560f69a60d9f433", null ],
+    [ "rollback_transaction", "classdatabase_1_1backends_1_1redis__backend.html#a1747349a167dbf32f6037b135f2c9143", null ],
+    [ "select_query", "classdatabase_1_1backends_1_1redis__backend.html#a7c63bd9a15e630699b052b68a5fe156e", null ],
+    [ "core::backend_base< redis_backend, database_types::redis >", "classdatabase_1_1backends_1_1redis__backend.html#a53902b41c9949141d5665787f2697724", null ],
+    [ "connection_config_", "classdatabase_1_1backends_1_1redis__backend.html#af58372faa61d054a72ced0d36f2d5638", null ],
+    [ "context_", "classdatabase_1_1backends_1_1redis__backend.html#a404504d03ee9bc81103551e430e1d1ae", null ],
+    [ "host_", "classdatabase_1_1backends_1_1redis__backend.html#a34e02cb20d93b1725e6e659b38ccdd02", null ],
+    [ "in_transaction_", "classdatabase_1_1backends_1_1redis__backend.html#a6cc4b4e180a881e4cc4a0c1f4c75160d", null ],
+    [ "last_error_", "classdatabase_1_1backends_1_1redis__backend.html#a9565bee1783830990f4b32eb11dffaa4", null ],
+    [ "port_", "classdatabase_1_1backends_1_1redis__backend.html#a5ff794f708d4050d713dd329f25dfd8f", null ],
+    [ "redis_mutex_", "classdatabase_1_1backends_1_1redis__backend.html#a8ab8e9ee3175ba13fe78b9cc266bd8d6", null ]
+];

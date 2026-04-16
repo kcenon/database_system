@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::system_monitoring_backend::calculate_derived_metrics" name="database::integrated::adapters::backends::system_monitoring_backend::calculate_derived_metrics">
+<area shape="rect" id="Node000001" title="Calculate derived metrics from collected data." alt="" coords="271,5,488,75"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html#a4ae9be5a46bd4e90bf9838b8a220e839" title="Record query execution." alt="" coords="5,5,223,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,43,223,43,223,37,257,37"/>
+</map>

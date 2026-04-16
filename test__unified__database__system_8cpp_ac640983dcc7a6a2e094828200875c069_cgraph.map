@@ -1,0 +1,8 @@
+<map id="test_connect_typed_backend" name="test_connect_typed_backend">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,155,117"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a95f409a4b7abc3f421d0cba5e3501b31" title="Connect to database." alt="" coords="203,29,399,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,81,188,74,189,80,156,86"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#af3a85fe850d58e8dd368e23e19d934d8" title="Check if connected to database." alt="" coords="203,108,399,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="156,107,189,113,189,118,155,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="258,29,258,19,266,10,280,5,301,3,326,6,340,14,337,18,324,11,301,8,281,10,269,15,263,21,263,29"/>
+</map>

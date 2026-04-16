@@ -1,0 +1,26 @@
+<map id="database/protocol/database_protocol.cpp" name="database/protocol/database_protocol.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="231,5,434,45"/>
+<area shape="rect" id="Node000002" href="$database__protocol_8h.html" title=" " alt="" coords="188,93,343,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,47,286,84,282,81,314,44"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="367,93,434,119"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="351,44,383,81,379,84,347,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="232,247,299,273"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="188,118,86,137,44,151,18,169,11,180,8,191,10,200,14,208,34,223,65,234,143,249,218,255,218,260,142,254,63,239,32,227,10,212,4,202,3,190,6,178,14,165,42,146,85,132,187,113"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="28,167,87,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="233,121,101,166,100,161,231,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="112,167,174,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="247,121,176,162,173,157,245,116"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="199,167,250,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="261,120,240,156,236,153,257,118"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="274,167,342,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="275,118,297,154,292,156,270,120"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="367,167,442,192"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="289,116,371,158,368,163,287,121"/>
+<area shape="rect" id="Node000009" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="466,167,615,192"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="310,116,483,161,482,166,309,121"/>
+<area shape="rect" id="Node000010" href="$result_8h.html" title="Result&lt;T&gt; type for database_system error handling." alt="" coords="639,167,754,192"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="335,116,625,164,624,169,334,121"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="501,195,313,248,311,243,500,189"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="602,240,790,280"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="699,192,699,226,694,226,694,192"/>
+</map>

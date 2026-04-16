@@ -1,0 +1,19 @@
+<map id="database/core/database_backend.h" name="database/core/database_backend.h">
+<area shape="rect" id="Node000001" title="Abstract interface for database backends." alt="" coords="433,5,612,45"/>
+<area shape="rect" id="Node000002" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="5,101,155,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,45,169,96,146,100,145,95,167,91,433,40"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="179,93,367,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="469,48,342,91,340,86,467,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="392,101,469,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="504,48,455,93,452,89,500,44"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="493,101,552,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="525,46,525,87,520,87,520,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="577,101,639,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="543,44,588,89,585,92,540,47"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="664,101,715,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="560,43,656,92,654,97,558,48"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="739,101,807,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="584,43,728,91,734,93,732,98,726,96,582,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="47,181,113,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,126,83,167,77,167,77,126"/>
+</map>

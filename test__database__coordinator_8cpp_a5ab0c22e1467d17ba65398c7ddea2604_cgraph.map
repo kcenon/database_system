@@ -1,0 +1,10 @@
+<map id="test_health_check" name="test_health_check">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,145,148"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a0c27fa5a0f96c016d99d313cb460a30c" title="Perform aggregate health check of all adapters." alt="" coords="193,5,364,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,120,192,69,203,63,206,68,195,74,100,125"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="193,108,364,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,133,180,133,180,138,146,138"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="193,187,364,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="110,146,196,179,194,184,108,151"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="239,108,239,98,246,89,259,83,279,81,302,84,315,92,312,97,300,89,279,87,261,89,249,93,244,100,244,108"/>
+</map>

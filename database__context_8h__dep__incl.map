@@ -1,0 +1,42 @@
+<map id="database/core/database_context.h" name="database/core/database_context.h">
+<area shape="rect" id="Node000001" title="Dependency injection container for database system components." alt="" coords="1197,5,1376,45"/>
+<area shape="rect" id="Node000002" href="$database__context_8cpp.html" title=" " alt="" coords="720,93,899,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1184,48,899,99,898,93,1183,42"/>
+<area shape="rect" id="Node000003" href="$database__manager_8h.html" title=" " alt="" coords="1175,101,1398,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1289,59,1289,100,1284,100,1284,59"/>
+<area shape="rect" id="Node000005" href="$basic__connection_8cpp.html" title="Demonstrates basic database connection and simple query execution." alt="" coords="5,189,235,214"/>
+<area shape="poly" id="edge15_Node000001_Node000005" title=" " alt="" coords="1184,36,1130,43,1071,55,1012,72,956,96,943,105,935,116,926,126,912,136,850,154,771,166,680,173,583,176,393,178,247,184,191,191,191,186,246,179,393,173,583,170,679,167,770,161,849,149,910,131,923,122,931,112,939,101,953,91,1010,67,1070,50,1129,38,1183,30"/>
+<area shape="rect" id="Node000006" href="$connection__pool__demo_8cpp.html" title="Demonstrates multi&#45;threaded database usage with independent database_manager instances." alt="" coords="259,181,421,221"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="1184,43,1096,63,1050,77,1007,96,992,105,982,116,972,126,956,136,880,161,815,175,756,180,699,180,582,174,513,176,434,184,421,186,420,181,433,179,513,171,582,169,699,174,755,175,814,170,879,156,954,131,969,122,978,112,989,101,1004,91,1048,72,1094,58,1183,37"/>
+<area shape="rect" id="Node000007" href="$error__handling_8cpp.html" title="Demonstrates the Result&lt;T&gt; error handling pattern used throughout the database_system API." alt="" coords="445,189,656,214"/>
+<area shape="poly" id="edge17_Node000001_Node000007" title=" " alt="" coords="1185,50,1120,69,1057,96,1043,106,1033,116,1022,126,1006,136,958,154,915,165,841,174,764,175,668,184,621,191,620,186,668,179,764,170,840,169,914,160,956,149,1004,131,1019,122,1029,112,1039,101,1055,91,1119,64,1183,45"/>
+<area shape="rect" id="Node000008" href="$transaction__management_8cpp.html" title="Demonstrates transaction management with commit and rollback." alt="" coords="680,181,843,221"/>
+<area shape="poly" id="edge18_Node000001_Node000008" title=" " alt="" coords="1209,52,1158,71,1108,96,1083,116,1073,126,1057,136,973,158,843,186,842,181,972,153,1055,131,1070,122,1080,112,1105,91,1156,66,1208,47"/>
+<area shape="rect" id="Node000009" href="$basic__usage_8cpp.html" title="Basic database operations example using database_manager." alt="" coords="867,189,1055,214"/>
+<area shape="poly" id="edge19_Node000001_Node000009" title=" " alt="" coords="1238,54,1164,96,1136,116,1108,136,1046,167,992,191,989,186,1044,162,1105,131,1133,111,1161,91,1235,50"/>
+<area shape="rect" id="Node000010" href="$orm__framework__demo_8cpp.html" title="ORM framework demonstration with C++20 concepts&#45;based entities." alt="" coords="1342,181,1527,221"/>
+<area shape="poly" id="edge20_Node000001_Node000010" title=" " alt="" coords="1357,49,1386,67,1411,92,1424,114,1432,138,1437,181,1432,181,1426,139,1419,116,1407,95,1383,72,1354,54"/>
+<area shape="rect" id="Node000011" href="$performance__monitoring__demo_8cpp.html" title="Performance monitoring with real&#45;time metrics, analysis, and alerting." alt="" coords="1552,181,1723,221"/>
+<area shape="poly" id="edge21_Node000001_Node000011" title=" " alt="" coords="1345,48,1439,91,1605,179,1603,184,1436,96,1343,53"/>
+<area shape="rect" id="Node000012" href="$security__framework__demo_8cpp.html" title="Enterprise security framework with TLS, RBAC, audit logging, and threat detection." alt="" coords="1747,181,1957,221"/>
+<area shape="poly" id="edge22_Node000001_Node000012" title=" " alt="" coords="1361,47,1792,179,1790,184,1360,52"/>
+<area shape="rect" id="Node000013" href="$benchmark__tests_8cpp.html" title=" " alt="" coords="1981,189,2179,214"/>
+<area shape="poly" id="edge23_Node000001_Node000013" title=" " alt="" coords="1386,46,2029,186,2027,191,1385,51"/>
+<area shape="rect" id="Node000014" href="$integration__tests_8cpp.html" title=" " alt="" coords="2203,189,2397,214"/>
+<area shape="poly" id="edge24_Node000001_Node000014" title=" " alt="" coords="1390,40,1703,91,2239,186,2238,191,1702,96,1389,45"/>
+<area shape="rect" id="Node000015" href="$unit__tests_8cpp.html" title=" " alt="" coords="2421,189,2571,214"/>
+<area shape="poly" id="edge25_Node000001_Node000015" title=" " alt="" coords="1390,35,1834,89,2121,130,2410,179,2446,186,2445,191,2409,184,2120,136,1833,95,1389,40"/>
+<area shape="rect" id="Node000004" href="$database__manager_8cpp.html" title=" " alt="" coords="1080,189,1317,214"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1267,137,1213,190,1209,186,1263,134"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="1162,125,641,157,247,184,191,191,190,186,246,179,641,151,1161,119"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="1162,126,742,157,434,184,421,186,420,181,433,179,741,152,1161,121"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="1162,129,932,152,668,184,619,191,618,186,668,179,932,147,1162,124"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="1193,131,855,184,843,186,842,181,854,179,1192,125"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="1231,132,1005,191,1004,186,1229,127"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="1320,131,1403,179,1401,183,1317,135"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="1347,127,1561,179,1560,184,1346,132"/>
+<area shape="poly" id="edge11_Node000003_Node000012" title=" " alt="" coords="1379,125,1735,179,1747,181,1746,186,1734,184,1378,131"/>
+<area shape="poly" id="edge12_Node000003_Node000013" title=" " alt="" coords="1412,122,1669,145,1970,179,2017,186,2017,191,1969,184,1669,150,1411,127"/>
+<area shape="poly" id="edge13_Node000003_Node000014" title=" " alt="" coords="1412,117,1763,139,1977,156,2191,179,2240,186,2239,191,2190,184,1976,161,1763,144,1412,123"/>
+<area shape="poly" id="edge14_Node000003_Node000015" title=" " alt="" coords="1412,113,1605,118,1854,129,2131,148,2410,179,2450,186,2449,191,2409,184,2131,154,1853,134,1605,123,1412,119"/>
+</map>

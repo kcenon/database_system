@@ -1,0 +1,9 @@
+<map id="database::core::database_backend::execute_prepared" name="database::core::database_backend::execute_prepared">
+<area shape="rect" id="Node000001" title="Execute a parameterized DML/DDL query (prepared statement)" alt="" coords="5,37,212,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html#aecc9b51a29cb47fc4f3724eded7c4331" title="Execute a general SQL query (DDL, DML)" alt="" coords="264,5,451,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,41,250,36,251,42,213,47"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html#a202da813a3a1ff3bf3dda00b28533098" title="Expand positional parameters into a SQL string (fallback)" alt="" coords="260,69,455,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,68,247,72,246,78,212,73"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1database__backend.html#af9c26f159b1a170152df7295ad6334c1" title=" " alt="" coords="503,69,689,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="455,87,489,87,489,92,455,92"/>
+</map>

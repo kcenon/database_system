@@ -1,0 +1,11 @@
+<map id="database::protocol::protocol_serializer::deserialize_header" name="database::protocol::protocol_serializer::deserialize_header">
+<area shape="rect" id="Node000001" title="Deserialize message header from bytes." alt="" coords="5,110,159,165"/>
+<area shape="rect" id="Node000002" href="$structdatabase_1_1protocol_1_1message__header.html#a885eec5dad461f86f041320d528af2e9" title="Validate message header." alt="" coords="207,5,405,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,108,159,80,205,55,221,48,224,53,208,60,162,85,122,112"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ae5be53a79b786db5b0ee8a6a9e89c69c" title=" " alt="" coords="231,70,381,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,121,217,110,218,116,159,126"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#a3d280764c889182a545f83ba129e8e10" title=" " alt="" coords="231,149,381,203"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="159,148,218,158,217,163,158,153"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#af7ce288df19e36f6403472578a9a7c38" title=" " alt="" coords="231,227,381,282"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="125,163,208,212,222,219,220,224,205,217,122,167"/>
+</map>

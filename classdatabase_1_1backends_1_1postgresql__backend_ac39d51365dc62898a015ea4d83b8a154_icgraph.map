@@ -1,0 +1,5 @@
+<map id="database::backends::postgresql_backend::build_safe_connection_string" name="database::backends::postgresql_backend::build_safe_connection_string">
+<area shape="rect" id="Node000001" title="Build a connection string with password masked for safe logging." alt="" coords="212,5,387,75"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a49e80129ca6cf6f45b8ce8edd16daeef" title="Database&#45;specific initialization logic." alt="" coords="5,13,164,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,43,164,43,164,37,198,37"/>
+</map>

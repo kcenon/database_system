@@ -1,0 +1,25 @@
+<map id="test_postgres_basic" name="test_postgres_basic">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,324,156,349"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#af5b10f03c2d51e45e12a68ce6fa78cb2" title="Build the connection string for the specified backend." alt="" coords="222,123,419,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,322,130,258,163,220,202,187,209,182,212,186,206,191,167,224,134,261,91,325"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a25d67cb063eeb003646cc83b04c2df1a" title="Set the database name." alt="" coords="222,201,419,256"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="101,322,147,295,203,266,221,259,223,263,205,271,149,299,104,326"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a2c2c2341f0951a37c0b6e2fcf2a120f0" title="Set the database host." alt="" coords="204,281,437,321"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="156,323,190,318,191,323,157,328"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#abadfd6129089f53beb5e5bca30df1f6c" title="Set the password for authentication." alt="" coords="222,345,419,400"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="157,345,209,353,208,358,156,351"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a2729cf7f82ad1d1a96495d86e56a0a6b" title="Set the database port." alt="" coords="205,425,436,465"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="100,347,146,378,205,410,224,418,222,423,203,415,144,383,97,352"/>
+<area shape="rect" id="Node000012" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a271ba52e9bf2294d4aa80467fcdf8c08" title="Set the username for authentication." alt="" coords="204,489,437,529"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="92,348,135,409,168,444,205,474,216,481,214,485,203,479,164,448,131,413,87,351"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ac6e8733c2e83bdb66c76bdd608dbe64f" title=" " alt="" coords="485,5,683,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,120,484,69,498,63,500,68,486,74,378,125"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4bd1398d87ea731bc51749b695aa2737" title=" " alt="" coords="485,84,683,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="419,133,471,125,472,131,420,138"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a650997c9db48a30a939bad19e177b947" title=" " alt="" coords="485,163,683,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="420,162,472,170,471,176,419,168"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a1d9e84b4f875cb0f7565d5f934fb7b0c" title=" " alt="" coords="485,241,683,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="415,175,439,186,463,206,487,226,498,233,496,238,484,231,460,210,436,191,413,180"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a61a02a0b6e169ee0f53ae9e54cb4d731" title=" " alt="" coords="731,84,949,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="683,109,717,109,717,114,683,114"/>
+</map>

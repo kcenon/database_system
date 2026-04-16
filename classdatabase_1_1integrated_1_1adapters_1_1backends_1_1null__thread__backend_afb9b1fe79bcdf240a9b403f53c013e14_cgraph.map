@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::null_thread_backend::shutdown" name="database::integrated::adapters::backends::null_thread_backend::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the thread backend gracefully." alt="" coords="5,5,169,75"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="217,27,320,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,37,204,37,204,43,170,43"/>
+</map>

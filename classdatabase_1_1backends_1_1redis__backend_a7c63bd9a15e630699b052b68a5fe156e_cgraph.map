@@ -1,0 +1,5 @@
+<map id="database::backends::redis_backend::select_query" name="database::backends::redis_backend::select_query">
+<area shape="rect" id="Node000001" title="Execute a SELECT query." alt="" coords="5,20,220,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="268,5,448,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,37,254,37,254,43,220,43"/>
+</map>

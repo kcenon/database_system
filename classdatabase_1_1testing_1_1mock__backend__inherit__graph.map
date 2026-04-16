@@ -1,0 +1,5 @@
+<map id="database::testing::mock_backend" name="database::testing::mock_backend">
+<area shape="rect" id="Node000001" title="Configurable mock for database_backend interface." alt="" coords="5,453,185,993"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="6,5,185,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,419,98,453,93,453,93,419"/>
+</map>

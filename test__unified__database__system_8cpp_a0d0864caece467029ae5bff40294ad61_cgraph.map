@@ -1,0 +1,8 @@
+<map id="test_select_success" name="test_select_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,156,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a95f409a4b7abc3f421d0cba5e3501b31" title="Connect to database." alt="" coords="204,29,400,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,81,190,74,191,79,152,87"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#ac1a113f0287e77ab83cf963a93f96abb" title="Execute a SELECT query." alt="" coords="204,108,400,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="155,107,191,113,190,118,154,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="259,29,259,19,267,10,281,5,302,3,327,6,341,14,339,18,325,11,302,8,282,10,270,15,264,21,264,29"/>
+</map>

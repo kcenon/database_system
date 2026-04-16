@@ -1,0 +1,17 @@
+<map id="database::security::access_control::role" name="database::security::access_control::role">
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,419,391,519"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="369,148,448,213"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="432,213,442,236,449,248,459,253,471,257,482,264,487,278,483,302,467,340,436,396,423,414,406,429,402,425,419,411,432,393,462,337,478,300,482,278,478,267,469,262,457,258,445,251,437,239,427,215"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="226,276,405,341"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="383,215,364,239,347,264,342,261,360,236,379,212"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="343,5,474,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="411,99,411,148,406,148,406,99"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,276,191,341"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="143,339,236,407,233,411,140,344"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="101,148,223,213"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="105,225,96,238,92,257,92,276,87,276,87,256,92,236,100,222"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="212,220,249,250,278,274,275,278,246,254,209,224"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="151,13,173,78"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="165,78,165,131,159,131,159,78"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="318,341,318,402,313,402,313,341"/>
+</map>

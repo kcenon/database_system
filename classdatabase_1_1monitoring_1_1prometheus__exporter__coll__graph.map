@@ -1,0 +1,9 @@
+<map id="database::monitoring::prometheus_exporter" name="database::monitoring::prometheus_exporter">
+<area shape="rect" id="Node000001" title="Export metrics in Prometheus format." alt="" coords="21,317,245,457"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1monitoring_1_1metrics__exporter.html" title="Export metrics to external monitoring systems." alt="" coords="5,135,167,255"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,268,118,317,113,318,101,269"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="191,162,269,227"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,229,178,304,173,302,212,226"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="165,5,295,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="233,100,233,162,227,162,227,100"/>
+</map>

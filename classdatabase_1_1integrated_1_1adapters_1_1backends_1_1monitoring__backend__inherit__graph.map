@@ -1,0 +1,9 @@
+<map id="database::integrated::adapters::backends::monitoring_backend" name="database::integrated::adapters::backends::monitoring_backend">
+<area shape="rect" id="Node000001" title="Abstract base class for monitoring backends." alt="" coords="209,5,403,300"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__monitoring__backend.html" title="Basic monitoring backend using internal metrics storage." alt="" coords="5,376,175,904"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,313,190,349,177,377,172,375,185,347,203,311"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1null__monitoring__backend.html" title="No&#45;op monitoring backend." alt="" coords="199,493,413,787"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="309,313,309,492,303,492,303,313"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html" title="Monitoring backend using monitoring_system library." alt="" coords="437,348,663,932"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="408,311,427,347,440,372,435,374,422,349,403,314"/>
+</map>

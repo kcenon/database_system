@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::system_monitoring_backend::record_metric" name="database::integrated::adapters::backends::system_monitoring_backend::record_metric">
+<area shape="rect" id="Node000001" title="Record a metric value." alt="" coords="5,5,223,75"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="271,27,373,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,37,257,37,257,43,223,43"/>
+</map>

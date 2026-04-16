@@ -1,0 +1,5 @@
+<map id="database::core::create_backend" name="database::core::create_backend">
+<area shape="rect" id="Node000001" title="Convenience function for creating backends (static method style)" alt="" coords="123,5,289,45"/>
+<area shape="rect" id="Node000002" href="$backend__registry__test_8cpp.html#a2f4b0da00ea8ff8e268802555a44ef53" title=" " alt="" coords="5,13,75,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,28,75,28,75,23,109,23"/>
+</map>

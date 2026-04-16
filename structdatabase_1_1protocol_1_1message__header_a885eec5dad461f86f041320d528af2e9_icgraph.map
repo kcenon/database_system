@@ -1,0 +1,23 @@
+<map id="database::protocol::message_header::is_valid" name="database::protocol::message_header::is_valid">
+<area shape="rect" id="Node000001" title="Validate message header." alt="" coords="324,210,523,250"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#a1a37c7a43edd1714db2359efa3fda220" title="Deserialize message header from bytes." alt="" coords="123,113,276,168"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,207,268,171,270,166,361,202"/>
+<area shape="rect" id="Node000009" href="$test__protocol__serializer_8cpp.html#ae34c740525c4d8b51d147e9478612b81" title=" " alt="" coords="165,192,234,217"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="310,220,234,211,234,206,310,215"/>
+<area shape="rect" id="Node000010" href="$test__protocol__serializer_8cpp.html#a7c04787a7d48cd2fa4989ba8f66e4bc0" title=" " alt="" coords="165,241,234,267"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="310,245,234,253,234,248,310,239"/>
+<area shape="rect" id="Node000011" href="$test__protocol__serializer_8cpp.html#a14a0529467faead43f02c63dbb67bb9f" title=" " alt="" coords="165,291,234,316"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="350,257,235,295,233,290,348,252"/>
+<area shape="rect" id="Node000003" href="$test__protocol__serializer_8cpp.html#a5e09627a57cc9e663e79dabfcc2048a4" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="152,106,73,44,58,33,61,29,76,40,155,102"/>
+<area shape="rect" id="Node000004" href="$test__protocol__serializer_8cpp.html#ada8665a4c18e1b23b22071526a96e35b" title=" " alt="" coords="5,55,75,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="126,110,67,82,70,78,128,105"/>
+<area shape="rect" id="Node000005" href="$test__protocol__serializer_8cpp.html#ad216dc75df5d2d686a8a63efd9ab0912" title=" " alt="" coords="5,104,75,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="109,130,74,124,75,119,110,124"/>
+<area shape="rect" id="Node000006" href="$test__protocol__serializer_8cpp.html#a96b294f0226a05bfa19beec151015205" title=" " alt="" coords="5,153,75,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="110,158,75,163,74,158,109,152"/>
+<area shape="rect" id="Node000007" href="$test__protocol__serializer_8cpp.html#a701bebba283906165afc1a416f74350d" title=" " alt="" coords="5,203,75,228"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="129,176,69,205,67,200,127,172"/>
+<area shape="rect" id="Node000008" href="$test__protocol__serializer_8cpp.html#af9884507f832517739901361a4233fce" title=" " alt="" coords="5,252,75,277"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="129,178,124,181,110,196,100,210,77,241,62,254,58,250,73,238,96,207,105,193,121,177,126,174"/>
+</map>

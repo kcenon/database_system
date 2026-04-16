@@ -1,0 +1,8 @@
+<map id="database::core::has_backend" name="database::core::has_backend">
+<area shape="rect" id="Node000001" title="Convenience function for checking backend availability." alt="" coords="5,49,155,89"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__registry.html#ae2eeb77f5975cfb706b96225d67d0a24" title="Check if a backend is registered." alt="" coords="203,5,383,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,51,189,44,190,49,155,57"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__registry.html#acbb12b577a2f87abe52a6e93d48216d0" title="Get the singleton instance." alt="" coords="203,93,383,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,82,190,89,189,95,154,87"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="253,94,251,84,257,74,271,69,293,67,317,70,331,77,328,82,316,75,293,72,272,74,260,79,256,85,258,92"/>
+</map>

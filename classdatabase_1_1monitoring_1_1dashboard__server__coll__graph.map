@@ -1,0 +1,15 @@
+<map id="database::monitoring::dashboard_server" name="database::monitoring::dashboard_server">
+<area shape="rect" id="Node000001" title="Simple HTTP server for performance dashboard." alt="" coords="122,404,311,604"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,276,151,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,340,138,389,134,392,98,343"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="15,141,141,206"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="81,220,81,276,75,276,75,220"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="67,5,89,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="81,71,81,124,75,124,75,71"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="175,276,259,341"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="219,341,219,387,214,387,214,341"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="315,276,393,341"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="346,343,327,381,320,392,316,389,322,379,341,340"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="289,133,419,213"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="357,227,357,276,351,276,351,227"/>
+</map>

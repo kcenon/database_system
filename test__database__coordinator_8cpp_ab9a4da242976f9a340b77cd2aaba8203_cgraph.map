@@ -1,0 +1,14 @@
+<map id="test_adapter_access" name="test_adapter_access">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,177,160,203"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a33047d2d2d53e124a71f57b1961acad5" title="Get logger adapter." alt="" coords="208,5,379,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,175,139,126,172,96,206,69,213,65,216,69,210,74,175,100,143,129,97,179"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af13bb0ed7e9bd43ac054421483d64d7e" title="Get monitoring adapter." alt="" coords="208,84,379,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,175,206,141,208,146,119,180"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a867911af10c373039e53e0da58ae1e7f" title="Get thread adapter." alt="" coords="208,163,379,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,187,194,187,194,193,160,193"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="208,265,379,320"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="111,200,225,257,223,262,109,205"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="208,344,379,399"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="95,201,140,261,173,297,210,329,217,334,214,339,206,333,169,301,136,264,90,204"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="252,265,252,255,260,246,273,241,293,239,317,242,331,250,328,254,316,247,293,244,275,246,263,251,257,257,257,265"/>
+</map>

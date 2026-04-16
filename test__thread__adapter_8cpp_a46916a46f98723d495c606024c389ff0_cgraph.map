@@ -1,0 +1,14 @@
+<map id="test_api_availability_priority" name="test_api_availability_priority">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,160,155"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a33baa28caab09669406a7f42a097639d" title="Initialize thread pool." alt="" coords="208,29,403,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,113,214,86,216,91,141,118"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a134b75ec1d87a053627e91ee31256e80" title="Shutdown thread pool gracefully." alt="" coords="208,108,403,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="160,133,194,133,194,138,160,138"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a06da8bc9ef54d9ff0ff477ad550bc15a" title="Submit a task and get a future." alt="" coords="208,187,403,241"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="141,153,216,180,214,185,139,158"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="262,29,262,19,270,10,284,5,305,3,330,6,345,14,342,18,329,11,305,8,286,10,273,15,267,21,267,29"/>
+<area shape="rect" id="Node000004" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="497,123,599,148"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="403,133,483,133,483,138,403,138"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#ab1002e7afa86e4422ba132dd16a5e812" title="Execute a task (fire&#45;and&#45;forget)" alt="" coords="451,187,645,241"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="403,211,437,211,437,217,403,217"/>
+</map>

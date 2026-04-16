@@ -1,0 +1,16 @@
+<map id="database::tests::TEST_F" name="database::tests::TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,109,183,134"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query__builder.html#a18793153f0142daa401ae19ab8ded0f8" title=" " alt="" coords="231,5,409,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,106,230,55,248,48,250,53,232,60,122,111"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query__builder.html#a382f8fd7028421facc01ae82c38536f9" title=" " alt="" coords="231,69,409,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,106,217,101,218,107,183,111"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1query__builder.html#a6f7f9e40e79d09ffd423ac6975e6e6cd" title=" " alt="" coords="231,133,409,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="183,131,218,136,217,141,183,137"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1query__builder.html#a0527a3ee82907d27e91181eac1c4054b" title=" " alt="" coords="231,197,409,237"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="122,132,232,183,250,190,248,195,230,188,119,136"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query__builder.html#a0ea3e9e154999569c1415555ea4d595f" title=" " alt="" coords="457,133,636,173"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="392,107,463,127,461,132,391,112"/>
+<area shape="rect" id="Node000005" href="$namespacedatabase.html#a6dd17cffcacbbf4a1c98e789971c9501" title="Factory function to create appropriate dialect for database type." alt="" coords="684,141,867,166"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="636,151,671,151,671,156,636,156"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="391,195,461,175,463,180,392,200"/>
+</map>

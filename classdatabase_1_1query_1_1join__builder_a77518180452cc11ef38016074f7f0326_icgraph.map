@@ -1,0 +1,9 @@
+<map id="database::query::join_builder::join" name="database::query::join_builder::join">
+<area shape="rect" id="Node000001" title="Add an INNER JOIN." alt="" coords="419,35,577,75"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1join__builder.html#abe0b4905d0e2c4d980259bbbc9cc3ea9" title="Build the JOIN clauses." alt="" coords="212,5,371,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="405,44,370,39,371,34,405,39"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1join__builder.html#ab6ff80bee4571bdb3db19fe43ea0d213" title=" " alt="" coords="5,35,164,75"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="405,60,371,60,212,60,164,59,164,54,212,55,371,55,405,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="199,41,164,46,164,41,198,36"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="119,23,107,16,85,13,65,15,53,20,49,26,51,34,46,35,44,25,50,16,64,10,85,8,109,11,122,18"/>
+</map>

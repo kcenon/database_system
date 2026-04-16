@@ -1,0 +1,8 @@
+<map id="database::backends::sqlite_backend::commit_transaction" name="database::backends::sqlite_backend::commit_transaction">
+<area shape="rect" id="Node000001" title="Commit the current transaction." alt="" coords="5,27,191,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a7e9e1a779389b4fa00a6aa8bc4682d52" title="Execute a general SQL query (DDL, DML)" alt="" coords="239,5,469,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,41,225,37,225,43,191,47"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="517,20,697,89"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="191,54,239,55,469,55,504,54,504,60,469,60,239,60,191,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="470,36,504,40,503,45,469,41"/>
+</map>

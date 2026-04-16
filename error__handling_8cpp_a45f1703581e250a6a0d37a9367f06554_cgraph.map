@@ -1,0 +1,5 @@
+<map id="demonstrate_query_errors" name="demonstrate_query_errors">
+<area shape="rect" id="Node000001" title="Demonstrates handling query errors with Result&lt;T&gt;." alt="" coords="5,5,200,31"/>
+<area shape="rect" id="Node000002" href="$error__handling_8cpp.html#a673f805efc47720638fe620a751d62b9" title="Helper to print a Result error." alt="" coords="248,5,339,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,15,234,15,234,21,200,21"/>
+</map>

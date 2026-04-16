@@ -1,0 +1,18 @@
+<map id="database::async::transaction_coordinator::commit_distributed_transaction" name="database::async::transaction_coordinator::commit_distributed_transaction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,91,244,146"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada609b1ea097d56a24354eebbe0c395b" title=" " alt="" coords="292,99,531,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,116,278,116,278,121,244,121"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1async_1_1transaction__coordinator.html#a8016f7eebdeef2aaa2c17b2c544e0d70" title=" " alt="" coords="579,5,788,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="464,96,578,55,601,47,603,52,580,60,466,101"/>
+<area shape="rect" id="Node000005" href="$namespacedatabase_1_1async.html#ad93d8cee7647b0ce3fd5cf67f6206dd2" title=" " alt="" coords="836,69,1008,109"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="531,124,655,127,788,119,838,110,838,115,788,124,655,132,531,130"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1async_1_1async__result.html#a0a62a324296fca5161497f800806e31f" title=" " alt="" coords="596,184,771,224"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="477,136,607,177,605,182,475,141"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1async_1_1transaction__coordinator.html#a39f8bf721b5c24dd2834c3598ff69fb7" title=" " alt="" coords="579,69,788,109"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="531,103,564,99,565,105,531,108"/>
+<area shape="rect" id="Node000004" href="$namespacedatabase_1_1async.html#af1c9ab27b919341f983143041b2ad297" title=" " alt="" coords="836,5,1008,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="788,23,822,23,822,28,788,28"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="759,43,835,63,833,68,758,48"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="758,67,833,46,835,51,759,72"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="788,87,822,87,822,92,788,92"/>
+</map>

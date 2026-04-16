@@ -1,0 +1,8 @@
+<map id="test_insert_success" name="test_insert_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,155,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a95f409a4b7abc3f421d0cba5e3501b31" title="Connect to database." alt="" coords="203,29,399,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,81,189,74,190,80,151,87"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#ab24f589ac426ec16a14702460e5a752c" title="Execute an INSERT query." alt="" coords="203,108,399,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="154,107,190,113,189,118,153,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="258,29,258,19,266,10,280,5,301,3,326,6,340,14,337,18,324,11,301,8,281,10,269,15,263,21,263,29"/>
+</map>

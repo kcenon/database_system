@@ -1,0 +1,7 @@
+<map id="database::immutable_query_builder::build_for_database" name="database::immutable_query_builder::build_for_database">
+<area shape="rect" id="Node000001" title="Builds the SQL query for a specific database type." alt="" coords="332,5,493,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1immutable__query__builder.html#a816766eaf0495a20480af79e00e2bdea" title="Builds the final SQL query string." alt="" coords="123,13,284,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,35,284,35,284,30,318,30"/>
+<area shape="rect" id="Node000003" href="$test__immutable__query__builder_8cpp.html#a2dbd0b148eca3e10b1e81bdf5586d1c0" title=" " alt="" coords="5,20,75,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,35,75,35,75,30,109,30"/>
+</map>

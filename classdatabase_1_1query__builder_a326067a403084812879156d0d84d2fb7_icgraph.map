@@ -1,0 +1,37 @@
+<map id="database::query_builder::where" name="database::query_builder::where">
+<area shape="rect" id="Node000001" title=" " alt="" coords="231,393,409,433"/>
+<area shape="rect" id="Node000002" href="$query__builder__usage_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="67,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="314,379,304,309,282,218,265,171,242,125,215,82,181,44,152,28,121,22,122,16,154,23,184,40,219,78,247,122,270,169,287,217,309,308,319,378"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1tests.html#a9cba370a495d67a213b373c219bcefa4" title=" " alt="" coords="5,55,183,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="312,380,299,318,275,241,258,200,237,161,211,125,181,93,164,82,167,78,184,89,215,122,241,158,263,198,280,239,304,317,317,379"/>
+<area shape="rect" id="Node000004" href="$namespacedatabase_1_1tests.html#a0c7d20d437697b25aa2df18178155e31" title=" " alt="" coords="5,104,183,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="309,380,293,327,268,263,231,198,208,168,181,143,163,132,165,127,184,139,212,165,235,195,273,261,299,326,314,378"/>
+<area shape="rect" id="Node000005" href="$namespacedatabase_1_1tests.html#a6bf432916b39d62bc333851cda0288dc" title=" " alt="" coords="5,153,183,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="305,381,287,338,261,287,225,235,181,192,161,181,164,176,184,188,229,232,265,284,292,336,310,379"/>
+<area shape="rect" id="Node000006" href="$async__stress__test_8cpp.html#a0b9118c4cbc9abd59fa2756c113ea916" title="Tests that query builders work correctly under concurrent use." alt="" coords="59,203,129,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="300,382,253,311,220,273,181,242,155,229,128,222,130,217,157,224,184,237,223,269,257,308,304,379"/>
+<area shape="rect" id="Node000007" href="$data__masking__test_8cpp.html#a5bc8d3063bac2710cfafdea6726a2f9a" title="Tests that query builder operations don&#39;t log sensitive values." alt="" coords="59,252,129,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="291,384,243,336,213,312,181,291,155,280,128,273,129,267,157,275,184,286,216,307,247,332,295,380"/>
+<area shape="rect" id="Node000008" href="$memory__stress__test_8cpp.html#aeaf05524e8bf191f529a10f7478c290f" title="Tests query builder memory usage with many operations." alt="" coords="59,301,129,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="274,388,230,363,182,340,128,324,129,319,184,336,232,358,276,383"/>
+<area shape="rect" id="Node000009" href="$sql__injection__test_8cpp.html#a2f4cb1f4712821c8493778a555770793" title="Tests that apostrophes in values are properly handled." alt="" coords="59,351,129,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="217,393,128,373,130,368,218,388"/>
+<area shape="rect" id="Node000010" href="$sql__injection__test_8cpp.html#af792f13c6cd71d1ccd25a6b7ba81ceea" title="Tests that basic OR injection is properly escaped." alt="" coords="59,400,129,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="217,415,129,415,129,410,217,410"/>
+<area shape="rect" id="Node000011" href="$sql__injection__test_8cpp.html#a3d0a5924745c5bf4c3c0f41c3b3e6944" title="Tests that batch statement injection is prevented." alt="" coords="59,449,129,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="218,438,130,457,128,452,217,432"/>
+<area shape="rect" id="Node000012" href="$sql__injection__test_8cpp.html#a43d7835735b08e55d08b6bff0b6b3f8d" title="Tests that boolean values are handled safely." alt="" coords="59,499,129,524"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="276,442,232,466,184,488,130,506,128,501,182,484,229,461,273,437"/>
+<area shape="rect" id="Node000013" href="$sql__injection__test_8cpp.html#ad2ab9b35e1253e470c019914979b15b6" title="Tests that comment&#45;based injection is handled." alt="" coords="59,548,129,573"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="295,445,246,492,216,517,184,538,157,549,130,557,128,552,155,544,181,533,213,512,243,488,291,441"/>
+<area shape="rect" id="Node000014" href="$sql__injection__test_8cpp.html#a5473b9640596c0e07aa3a1e8b7fc48a0" title="Tests that numeric value fields handle string injection." alt="" coords="59,597,129,623"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="304,447,256,518,223,555,184,587,157,600,130,608,128,603,155,595,181,582,219,551,252,514,299,444"/>
+<area shape="rect" id="Node000015" href="$sql__injection__test_8cpp.html#af893fd945d6871e7af3e9844918a1d37" title="Tests that reset() properly clears all builder state." alt="" coords="59,647,129,672"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="310,447,291,490,265,541,229,592,184,636,158,650,130,658,128,653,156,645,181,632,225,589,260,538,287,488,305,445"/>
+<area shape="rect" id="Node000016" href="$sql__injection__test_8cpp.html#ac77844444fc6d2b61a0cc4538dab8685" title="Tests handling of various special characters." alt="" coords="59,696,129,721"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="314,447,298,499,272,563,235,629,211,659,184,685,158,700,130,708,128,703,156,695,181,681,207,655,231,626,268,561,293,497,309,445"/>
+<area shape="rect" id="Node000017" href="$sql__injection__test_8cpp.html#aa18aac5694fa7438a2bfde413c997ab7" title="Tests handling of Unicode characters that might bypass filters." alt="" coords="59,745,129,771"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="317,447,304,508,280,586,262,626,241,666,215,702,184,735,158,750,130,758,128,753,156,745,181,731,211,699,236,663,257,624,275,584,299,507,311,446"/>
+<area shape="rect" id="Node000018" href="$sql__injection__test_8cpp.html#a71bb5f8fc7e19b6292df7c648a8e9ca0" title="Tests that UNION&#45;based injection is prevented." alt="" coords="59,795,129,820"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="319,447,309,517,286,607,269,655,247,702,219,746,184,784,158,800,129,807,128,802,156,795,181,780,214,742,242,699,264,653,281,606,304,516,314,446"/>
+</map>

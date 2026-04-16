@@ -1,0 +1,7 @@
+<map id="database::testing::mock_database::select_query" name="database::testing::mock_database::select_query">
+<area shape="rect" id="Node000001" title="Execute a SELECT query." alt="" coords="5,49,221,89"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__database.html#add011f469540e23a49152b5845b45f56" title=" " alt="" coords="300,5,457,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,51,286,42,287,48,222,57"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1testing_1_1mock__database.html#a3aaa6476516ff59dce3c46bf08839838" title=" " alt="" coords="269,85,488,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,81,256,85,256,91,221,86"/>
+</map>

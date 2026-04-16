@@ -1,0 +1,9 @@
+<map id="database::monitoring::prometheus_exporter::format_prometheus_metrics" name="database::monitoring::prometheus_exporter::format_prometheus_metrics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="341,37,556,92"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1monitoring_1_1prometheus__exporter.html#aa700c8a6833e9fe05a3f51722408b000" title=" " alt="" coords="123,5,293,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="327,51,293,47,294,41,328,46"/>
+<area shape="rect" id="Node000004" href="$test__performance__monitor_8cpp.html#ada68fbc4fe4e30adf99d9b846a349542" title=" " alt="" coords="173,84,243,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,83,243,95,243,89,328,78"/>
+<area shape="rect" id="Node000003" href="$test__performance__monitor_8cpp.html#a1b639133d9a8368eda0d0f54a00a9908" title=" " alt="" coords="5,20,75,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,35,75,35,75,30,109,30"/>
+</map>

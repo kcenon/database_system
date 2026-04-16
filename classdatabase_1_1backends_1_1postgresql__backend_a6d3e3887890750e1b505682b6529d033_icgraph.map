@@ -1,0 +1,7 @@
+<map id="database::backends::postgresql_backend::rollback_transaction" name="database::backends::postgresql_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="212,45,375,100"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a9e2f3043ce3cd9c28cb0cce6d1d8bf7b" title="Database&#45;specific shutdown logic." alt="" coords="5,5,164,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,57,164,50,165,45,199,52"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a3063720a9b43c3f026f88e3932a9da2f" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,84,164,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,93,165,99,164,94,198,88"/>
+</map>

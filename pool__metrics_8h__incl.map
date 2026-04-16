@@ -1,0 +1,13 @@
+<map id="database/monitoring/pool_metrics.h" name="database/monitoring/pool_metrics.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="137,5,295,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,48,78,90,76,85,172,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,93,163,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,48,154,86,151,82,193,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="187,93,245,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="219,46,219,79,213,79,213,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="269,93,320,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="237,44,275,82,271,85,233,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="344,93,408,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="255,43,341,85,339,90,253,48"/>
+</map>

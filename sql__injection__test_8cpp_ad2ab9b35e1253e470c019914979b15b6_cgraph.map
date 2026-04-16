@@ -1,0 +1,14 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title="Tests that comment&#45;based injection is handled." alt="" coords="5,77,75,102"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query__builder.html#a18793153f0142daa401ae19ab8ded0f8" title=" " alt="" coords="123,5,301,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,74,122,55,141,48,143,53,124,60,74,79"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query__builder.html#a0527a3ee82907d27e91181eac1c4054b" title=" " alt="" coords="123,69,301,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="75,87,109,87,109,92,75,92"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1query__builder.html#a326067a403084812879156d0d84d2fb7" title=" " alt="" coords="123,133,301,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="74,100,124,119,143,126,141,131,122,124,72,105"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query__builder.html#a0ea3e9e154999569c1415555ea4d595f" title=" " alt="" coords="349,101,528,141"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="302,99,336,104,335,109,301,105"/>
+<area shape="rect" id="Node000005" href="$namespacedatabase.html#a6dd17cffcacbbf4a1c98e789971c9501" title="Factory function to create appropriate dialect for database type." alt="" coords="576,109,759,134"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="528,119,563,119,563,124,528,124"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="301,138,335,133,336,138,302,143"/>
+</map>

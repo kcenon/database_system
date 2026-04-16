@@ -1,0 +1,9 @@
+<map id="database::postgres_manager" name="database::postgres_manager">
+<area shape="rect" id="Node000001" title="Manages PostgreSQL database operations." alt="" coords="31,627,201,1041"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,135,184,535"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,548,110,626,104,626,101,548"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="209,302,287,367"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,368,199,535,178,611,173,610,193,534,237,367"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="183,5,313,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="251,99,251,302,245,302,245,99"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="test_sqlite_memory" name="test_sqlite_memory">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,179,157,204"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#af5b10f03c2d51e45e12a68ce6fa78cb2" title="Build the connection string for the specified backend." alt="" coords="205,124,403,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,176,191,169,192,174,153,181"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ab44b0b64e25b5ce86239d222e12fc980" title="Configure SQLite to use in&#45;memory database." alt="" coords="205,203,403,257"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="156,201,192,208,191,213,155,207"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ac6e8733c2e83bdb66c76bdd608dbe64f" title=" " alt="" coords="451,5,648,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,122,449,69,462,63,465,68,452,74,353,126"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4bd1398d87ea731bc51749b695aa2737" title=" " alt="" coords="451,84,648,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="403,133,437,127,438,132,403,138"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a650997c9db48a30a939bad19e177b947" title=" " alt="" coords="451,163,648,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="403,164,438,170,437,175,403,170"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a1d9e84b4f875cb0f7565d5f934fb7b0c" title=" " alt="" coords="451,241,648,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="382,176,404,188,428,207,452,226,464,233,461,237,449,231,425,211,401,192,380,181"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a61a02a0b6e169ee0f53ae9e54cb4d731" title=" " alt="" coords="696,84,915,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="648,109,682,109,682,114,648,114"/>
+</map>

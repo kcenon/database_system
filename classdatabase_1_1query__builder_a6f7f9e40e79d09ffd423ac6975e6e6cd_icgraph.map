@@ -1,0 +1,9 @@
+<map id="database::query_builder::reset" name="database::query_builder::reset">
+<area shape="rect" id="Node000001" title=" " alt="" coords="231,47,409,87"/>
+<area shape="rect" id="Node000002" href="$query__builder__usage_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="67,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,47,121,26,122,21,218,42"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1tests.html#a4e1ff0d76ece4f2bc51f91a543b1d2e3" title=" " alt="" coords="5,55,183,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,70,183,70,183,65,217,65"/>
+<area shape="rect" id="Node000004" href="$sql__injection__test_8cpp.html#af893fd945d6871e7af3e9844918a1d37" title="Tests that reset() properly clears all builder state." alt="" coords="59,104,129,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,92,130,112,128,107,217,87"/>
+</map>

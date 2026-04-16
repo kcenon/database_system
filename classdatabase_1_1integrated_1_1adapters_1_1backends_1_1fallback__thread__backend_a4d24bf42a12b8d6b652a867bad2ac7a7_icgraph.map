@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::fallback_thread_backend::worker_count" name="database::integrated::adapters::backends::fallback_thread_backend::worker_count">
+<area shape="rect" id="Node000001" title="Get number of worker threads." alt="" coords="245,5,437,75"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a7e3ca058d14f76adf88ac4faa787a2cf" title="Initialize the thread backend." alt="" coords="5,5,197,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,43,197,43,197,37,232,37"/>
+</map>

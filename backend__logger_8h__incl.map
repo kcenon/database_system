@@ -1,0 +1,9 @@
+<map id="database/utils/backend_logger.h" name="database/utils/backend_logger.h">
+<area shape="rect" id="Node000001" title="Centralized logging utility for database backends." alt="" coords="53,5,225,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,85,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,48,72,86,68,82,114,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,93,168,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,46,141,79,136,79,136,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="193,93,290,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="165,43,217,83,214,87,162,48"/>
+</map>

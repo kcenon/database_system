@@ -1,0 +1,6 @@
+<map id="test_automatic_shutdown_in_destructor" name="test_automatic_shutdown_in_destructor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,196,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="244,29,415,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,54,230,54,230,59,197,59"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="285,29,285,19,293,10,308,5,329,3,355,6,370,14,367,18,353,11,329,8,309,10,296,15,290,21,290,29"/>
+</map>

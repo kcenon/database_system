@@ -1,0 +1,21 @@
+<map id="thread_print" name="thread_print">
+<area shape="rect" id="Node000001" title="Thread&#45;safe print helper." alt="" coords="716,84,817,109"/>
+<area shape="rect" id="Node000002" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="601,84,668,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,99,668,99,668,94,702,94"/>
+<area shape="rect" id="Node000003" href="$connection__pool__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="430,27,485,52"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="590,81,553,67,484,48,486,43,554,62,592,76"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1async_1_1async__executor.html#a71b543a4d274904f8d672cacc8086894" title="Gracefully shuts down the executor." alt="" coords="370,77,545,117"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="588,99,545,99,545,94,588,94"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a9fe9d51e52ff0999a1e1200c77f151dc" title="Shutdown the thread backend gracefully." alt="" coords="361,141,553,210"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="594,117,537,143,535,138,592,113"/>
+<area shape="rect" id="Node000005" href="$async__executor__demo_8cpp.html#a5180e6d40012fbd2f5c89663a41c8dd6" title=" " alt="" coords="123,5,298,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="380,75,360,67,312,46,270,33,271,28,314,41,362,62,382,70"/>
+<area shape="rect" id="Node000007" href="$test__async__operations_8cpp.html#a40158301d7297498c2db67a5448757fa" title=" " alt="" coords="176,55,245,80"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="356,87,246,74,246,69,357,82"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1async_1_1async__executor.html#a279b6568757f469e33a10293f1518ae8" title=" " alt="" coords="108,105,313,145"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="357,111,314,116,313,110,356,105"/>
+<area shape="rect" id="Node000006" href="$async__executor__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="110,21,60,21,60,15,110,15"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a2453bfa80eef6b83bcfab7ffaf6f1395" title=" " alt="" coords="109,169,312,238"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="348,190,313,194,312,189,348,185"/>
+</map>

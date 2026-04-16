@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::fallback_monitoring_backend::update_avg_latency" name="database::integrated::adapters::backends::fallback_monitoring_backend::update_avg_latency">
+<area shape="rect" id="Node000001" title="Update average query latency." alt="" coords="229,13,452,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__monitoring__backend.html#a7d9a2ddd9d177df24493e29218e22b0a" title="Record query execution." alt="" coords="5,5,181,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,50,181,50,181,45,216,45"/>
+</map>

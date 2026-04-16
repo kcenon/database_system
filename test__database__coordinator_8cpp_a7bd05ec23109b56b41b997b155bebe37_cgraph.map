@@ -1,0 +1,10 @@
+<map id="test_statistics" name="test_statistics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,119,148"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a8908fd74a0c49e3ce12e1b211dc37d36" title=" " alt="" coords="167,5,337,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,120,165,69,175,64,178,69,168,74,84,125"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="167,108,337,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="119,133,153,133,153,138,119,138"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="167,187,337,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="95,146,174,179,172,184,93,151"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="215,108,215,98,221,89,234,83,252,81,274,84,286,92,283,97,272,89,252,87,235,89,225,93,220,100,220,108"/>
+</map>

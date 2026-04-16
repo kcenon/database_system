@@ -1,0 +1,44 @@
+<map id="SQLInjectionTest" name="SQLInjectionTest">
+<area shape="rect" id="Node000001" title="Test fixture for SQL injection prevention tests." alt="" coords="583,2139,704,2224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="575,2003,669,2069"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="631,2082,640,2138,634,2139,626,2083"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="693,1996,895,2076"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="755,2078,701,2129,697,2125,751,2074"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1sqlite__backend.html" title="SQLite implementation of database_backend interface." alt="" coords="435,1519,609,1933"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="611,1824,751,1982,747,1985,607,1827"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="165,1161,345,1456"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="355,1461,437,1588,433,1591,351,1464"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="178,327,357,727"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="344,739,377,854,403,967,410,1020,413,1067,410,1107,400,1139,393,1148,385,1153,368,1163,348,1185,344,1181,364,1159,382,1148,390,1144,396,1136,405,1106,408,1067,405,1020,398,968,372,855,339,741"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="125,804,297,1084"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="241,741,233,804,227,803,236,740"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,494,151,559"/>
+<area shape="poly" id="edge12_Node000004_Node000007" title=" " alt="" coords="79,560,76,739,79,1004,88,1143,102,1271,124,1379,138,1421,155,1455,181,1491,211,1526,280,1587,353,1637,422,1676,419,1681,350,1642,277,1591,208,1530,177,1495,150,1457,133,1423,119,1380,97,1272,82,1143,74,1005,70,739,74,560"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="73,560,49,668,29,804,18,944,19,1006,29,1084,33,1111,44,1136,68,1166,95,1194,154,1242,150,1247,91,1198,64,1170,40,1139,28,1113,23,1084,14,1006,12,944,23,804,44,667,67,559"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="87,559,111,658,146,779,149,788,144,789,141,781,105,659,82,560"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="119,141,245,206"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="171,220,90,495,85,493,166,219"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="377,5,400,71"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="378,49,246,134,243,130,376,45"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="383,494,509,559"/>
+<area shape="poly" id="edge21_Node000015_Node000009" title=" " alt="" coords="393,71,405,213,423,358,441,478,436,479,418,359,399,214,388,71"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="793,237,942,303"/>
+<area shape="poly" id="edge24_Node000018_Node000009" title=" " alt="" coords="400,37,460,40,554,53,608,65,663,82,716,103,766,131,791,151,812,174,846,221,841,224,808,177,787,155,763,136,714,108,661,87,607,70,553,59,460,46,400,42"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="212,1097,215,1137,219,1161,214,1162,210,1138,206,1098"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="648,494,727,559"/>
+<area shape="poly" id="edge13_Node000004_Node000011" title=" " alt="" coords="700,559,731,666,747,734,758,804,770,947,777,1131,775,1315,769,1394,758,1457,736,1514,704,1566,665,1613,623,1653,620,1649,661,1609,699,1563,732,1512,753,1455,763,1393,770,1315,772,1131,765,947,753,804,741,735,726,668,695,560"/>
+<area shape="rect" id="Node000013" href="$structdatabase_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="554,1269,743,1349"/>
+<area shape="poly" id="edge16_Node000013_Node000011" title=" " alt="" coords="688,560,654,1252,649,1252,683,559"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="467,904,622,984"/>
+<area shape="poly" id="edge18_Node000014_Node000011" title=" " alt="" coords="674,561,635,646,594,752,573,823,558,889,553,888,568,821,589,750,630,644,669,558"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="622,133,753,213"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="690,227,690,494,685,494,685,227"/>
+<area shape="poly" id="edge15_Node000004_Node000013" title=" " alt="" coords="639,1350,592,1504,587,1502,634,1348"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="554,984,569,1055,590,1137,630,1252,625,1254,585,1138,564,1056,549,985"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="442,573,436,669,440,725,450,779,462,813,479,846,515,902,511,905,474,849,457,815,445,781,434,726,431,669,437,573"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="491,141,513,206"/>
+<area shape="poly" id="edge20_Node000015_Node000016" title=" " alt="" coords="500,207,456,478,451,477,494,206"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="379,1276,529,1341"/>
+<area shape="poly" id="edge22_Node000004_Node000017" title=" " alt="" coords="460,1341,481,1494,482,1502,477,1503,475,1495,455,1342"/>
+<area shape="poly" id="edge23_Node000003_Node000018" title=" " alt="" coords="874,316,888,511,894,637,897,764,897,1727,894,1766,888,1804,868,1879,843,1945,818,1997,813,1995,838,1943,863,1877,883,1803,889,1765,891,1727,891,764,889,637,883,511,869,317"/>
+</map>

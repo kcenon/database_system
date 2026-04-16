@@ -1,0 +1,16 @@
+<map id="database::monitoring::performance_monitor::emit_alert" name="database::monitoring::performance_monitor::emit_alert">
+<area shape="rect" id="Node000001" title=" " alt="" coords="696,117,867,172"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a5e5957db23db4a588191f4e206fe2e57" title=" " alt="" coords="460,19,631,73"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,114,610,76,612,71,704,109"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#ad7f30f7fbfd8e9d72f433240f27d4d5c" title=" " alt="" coords="224,84,395,139"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="682,140,395,120,395,115,682,135"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a251a6624947441e9ab623b0a8d9eacd2" title=" " alt="" coords="443,149,648,204"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="683,161,649,165,648,160,682,155"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a1c52596f071f111602ae2f8b55c48772" title=" " alt="" coords="460,228,631,283"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="722,181,649,219,623,230,621,226,647,214,720,177"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a7d276774dfa14f8ae3e2504f5fa777bb" title=" " alt="" coords="224,5,395,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="446,43,395,40,395,35,446,38"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="447,76,396,90,394,85,446,71"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a86075ed741ec62b22bbd0684bfcc32d7" title="Constructor &#45; now public for dependency injection." alt="" coords="5,5,176,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="210,35,176,35,176,30,210,30"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="database::integrated::unified_database_system::execute_transaction" name="database::integrated::unified_database_system::execute_transaction">
+<area shape="rect" id="Node000001" title="Execute multiple queries in a transaction." alt="" coords="341,30,537,85"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#ae65c3d51c5063567ac869646a3d5d1b9" title=" " alt="" coords="108,5,293,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,45,293,40,294,35,328,40"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#ad45738ce5c2bb376d35d85b65fc9e913" title=" " alt="" coords="108,69,293,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,75,294,80,293,74,328,70"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,45,60,70"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,48,61,55,60,50,94,43"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,72,60,65,61,60,95,66"/>
+</map>

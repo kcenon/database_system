@@ -1,0 +1,27 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,285,192,325"/>
+<area shape="rect" id="Node000001" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="240,5,453,60"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="109,270,128,226,156,172,193,117,238,69,255,58,258,62,242,73,197,120,160,175,133,228,114,273"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="243,84,451,139"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="119,271,169,209,202,176,239,148,258,136,261,141,241,152,206,180,173,213,124,275"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="255,163,439,217"/>
+<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="146,275,239,228,268,215,271,220,241,232,148,280"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="253,241,441,296"/>
+<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="205,287,252,280,253,285,206,292"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="257,321,437,361"/>
+<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="206,318,257,325,256,330,205,323"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1postgres__manager.html" title="Manages PostgreSQL database operations." alt="" coords="273,385,420,425"/>
+<area shape="poly" id="edge10_Node000000_Node000010" title=" " alt="" coords="150,329,241,370,275,382,273,387,239,375,148,333"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1testing_1_1mock__backend.html" title="Configurable mock for database_backend interface." alt="" coords="275,449,418,489"/>
+<area shape="poly" id="edge11_Node000000_Node000011" title=" " alt="" coords="127,333,176,385,208,412,241,434,276,450,274,455,239,439,204,416,173,389,123,337"/>
+<area shape="rect" id="Node000012" href="$classdatabase_1_1testing_1_1mock__database.html" title="Configurable mock for database_backend interface." alt="" coords="275,513,418,553"/>
+<area shape="poly" id="edge12_Node000000_Node000012" title=" " alt="" coords="117,336,138,374,165,418,200,461,242,498,276,516,274,521,238,503,196,465,161,421,133,377,113,339"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1mongodb__backend.html" title="MongoDB implementation of database_backend interface." alt="" coords="505,13,657,53"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="467,30,504,30,504,35,467,35"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1postgresql__backend.html" title="PostgreSQL implementation of database_backend interface." alt="" coords="501,91,660,131"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="464,109,501,109,501,114,464,114"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1backends_1_1redis__backend.html" title="Redis implementation of database_backend interface." alt="" coords="505,170,656,210"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="452,187,505,187,505,193,452,193"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1backends_1_1sqlite__backend.html" title="SQLite implementation of database_backend interface." alt="" coords="505,249,656,289"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="454,266,505,266,505,271,454,271"/>
+</map>

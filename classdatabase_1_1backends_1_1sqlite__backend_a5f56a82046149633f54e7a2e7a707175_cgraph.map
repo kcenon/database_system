@@ -1,0 +1,8 @@
+<map id="database::backends::sqlite_backend::rollback_transaction" name="database::backends::sqlite_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="5,27,192,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a7e9e1a779389b4fa00a6aa8bc4682d52" title="Execute a general SQL query (DDL, DML)" alt="" coords="240,5,471,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,41,226,37,227,43,192,47"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="519,20,699,89"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="192,54,240,55,471,55,505,54,505,60,471,60,240,60,192,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="471,36,505,40,505,45,471,41"/>
+</map>

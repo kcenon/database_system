@@ -1,0 +1,5 @@
+<map id="database::query::sqlite_dialect::upsert_clause" name="database::query::sqlite_dialect::upsert_clause">
+<area shape="rect" id="Node000001" title="Generate UPSERT (INSERT OR UPDATE) clause." alt="" coords="5,5,176,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1sqlite__dialect.html#a3946960602f15c16dfc97f2b08d9c643" title="Quote an identifier (table or column name)" alt="" coords="224,5,407,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,23,210,23,210,28,177,28"/>
+</map>

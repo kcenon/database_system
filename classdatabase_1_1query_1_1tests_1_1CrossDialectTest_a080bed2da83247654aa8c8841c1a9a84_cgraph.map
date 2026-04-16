@@ -1,0 +1,5 @@
+<map id="database::query::tests::CrossDialectTest::SetUp" name="database::query::tests::CrossDialectTest::SetUp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,191,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1sql__dialect.html#aef95f4cd733a457b03554f279b8b04a4" title="Factory method to create appropriate dialect." alt="" coords="239,5,392,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,23,225,23,225,28,191,28"/>
+</map>

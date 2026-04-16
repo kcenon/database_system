@@ -1,0 +1,9 @@
+<map id="example_alerting" name="example_alerting">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,99,141,124"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a8ae583be5d348e13dca0fcf1160e1fbf" title="Perform health check." alt="" coords="189,5,385,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,96,199,62,201,67,110,101"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a7ab0d61849248a9662f3cf634f39d1bf" title="Get current performance metrics." alt="" coords="189,84,385,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,109,175,109,175,114,142,114"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="235,163,339,188"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="111,122,190,147,223,157,221,162,189,153,110,127"/>
+</map>

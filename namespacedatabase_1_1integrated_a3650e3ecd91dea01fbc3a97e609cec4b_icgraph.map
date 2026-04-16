@@ -1,0 +1,7 @@
+<map id="database::integrated::backend_type_to_name" name="database::integrated::backend_type_to_name">
+<area shape="rect" id="Node000001" title="Convert backend_type to registry name string." alt="" coords="455,13,639,53"/>
+<area shape="rect" id="Node000002" href="$namespacedatabase_1_1integrated.html#ab5cce7fcf7d52fab70046a9602b0182e" title="Create database backend instance." alt="" coords="249,13,407,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,35,407,35,407,30,441,30"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1impl.html#a4d85329d5409d1d0f93915096fb3ff2d" title=" " alt="" coords="5,5,201,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,35,201,35,201,30,235,30"/>
+</map>

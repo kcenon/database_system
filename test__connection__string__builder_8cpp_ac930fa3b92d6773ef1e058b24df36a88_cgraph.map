@@ -1,0 +1,28 @@
+<map id="test_builder_reuse" name="test_builder_reuse">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,360,148,385"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#af5b10f03c2d51e45e12a68ce6fa78cb2" title="Build the connection string for the specified backend." alt="" coords="214,123,411,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,359,95,325,119,278,152,229,194,187,200,182,203,187,198,191,156,233,123,281,100,327,85,361"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a25d67cb063eeb003646cc83b04c2df1a" title="Set the database name." alt="" coords="214,201,411,256"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="88,358,132,314,162,289,195,266,207,260,210,264,197,271,165,293,135,318,91,362"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a2c2c2341f0951a37c0b6e2fcf2a120f0" title="Set the database host." alt="" coords="196,281,429,321"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="115,357,195,331,227,322,228,327,197,337,116,363"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#abadfd6129089f53beb5e5bca30df1f6c" title="Set the password for authentication." alt="" coords="214,345,411,400"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="148,370,200,370,200,375,148,375"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a2729cf7f82ad1d1a96495d86e56a0a6b" title="Set the database port." alt="" coords="197,425,428,465"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="115,383,197,410,224,418,222,423,195,415,113,388"/>
+<area shape="rect" id="Node000012" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4dcb9d43ca9fd8fcd5acbaaed9e6831d" title="Reset the builder to initial state." alt="" coords="214,513,411,568"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="93,384,138,426,198,474,245,504,242,509,194,479,134,430,89,388"/>
+<area shape="rect" id="Node000013" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a271ba52e9bf2294d4aa80467fcdf8c08" title="Set the username for authentication." alt="" coords="196,593,429,633"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="84,385,97,423,120,476,153,531,174,557,198,579,205,584,202,588,194,583,170,560,149,534,115,478,92,425,79,387"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ac6e8733c2e83bdb66c76bdd608dbe64f" title=" " alt="" coords="477,5,675,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,120,476,69,490,63,492,68,478,74,370,125"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4bd1398d87ea731bc51749b695aa2737" title=" " alt="" coords="477,84,675,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="411,133,463,125,464,131,412,138"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a650997c9db48a30a939bad19e177b947" title=" " alt="" coords="477,163,675,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="412,162,464,170,463,176,411,168"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a1d9e84b4f875cb0f7565d5f934fb7b0c" title=" " alt="" coords="477,241,675,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="407,175,431,186,455,206,479,226,490,233,488,238,476,231,452,210,428,191,405,180"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a61a02a0b6e169ee0f53ae9e54cb4d731" title=" " alt="" coords="723,84,941,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="675,109,709,109,709,114,675,114"/>
+<area shape="poly" id="edge12_Node000012_Node000012" title=" " alt="" coords="267,513,267,503,275,494,291,489,313,487,339,490,354,498,352,502,338,495,313,492,292,494,278,499,272,505,272,513"/>
+</map>

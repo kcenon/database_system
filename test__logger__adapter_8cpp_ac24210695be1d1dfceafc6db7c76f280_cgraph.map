@@ -1,0 +1,18 @@
+<map id="test_basic_logging" name="test_basic_logging">
+<area shape="rect" id="Node000001" title="Test basic logging functionality." alt="" coords="5,208,148,233"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#aadc2d01617401344c90e9c43781f354d" title="Clean up test log directory." alt="" coords="237,5,376,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,207,94,173,118,127,151,80,172,58,195,40,223,26,226,31,197,44,175,62,155,83,123,130,99,175,85,209"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#abd3dbd2b493f98a1238248b91a25f8a0" title="Flush pending log messages." alt="" coords="210,55,403,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="88,206,133,164,162,140,195,118,204,113,207,118,197,123,166,144,136,168,92,210"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#a23835148e8c242f95b6e53a9a762a3c7" title="Initialize the logger." alt="" coords="210,157,403,212"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="148,207,196,199,197,204,148,212"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#aab442b5d904178357c81875b74ba423c" title="Generic log message." alt="" coords="196,237,417,277"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="148,229,183,235,182,240,148,234"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#a8e1c5c853009c223e5247a6ccb3eb382" title="Check if a log file contains a specific string." alt="" coords="241,301,372,327"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="98,231,142,259,197,286,229,296,227,302,195,291,139,264,95,236"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#a8b731e5ca0153a0ab6eef3b24f9dc025" title="Shutdown the logger gracefully." alt="" coords="210,351,403,405"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="90,232,133,282,164,310,197,336,208,342,205,347,195,340,160,314,129,285,86,235"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="266,157,266,147,273,138,287,133,307,131,330,134,344,142,341,146,329,139,307,136,288,138,276,143,271,149,271,157"/>
+<area shape="rect" id="Node000008" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="465,365,568,391"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="404,375,452,375,452,381,404,381"/>
+</map>

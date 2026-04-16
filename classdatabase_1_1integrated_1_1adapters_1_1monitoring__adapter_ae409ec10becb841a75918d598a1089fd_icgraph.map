@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::monitoring_adapter::export_prometheus_metrics" name="database::integrated::adapters::monitoring_adapter::export_prometheus_metrics">
+<area shape="rect" id="Node000001" title="Export metrics in Prometheus format." alt="" coords="208,5,423,75"/>
+<area shape="rect" id="Node000002" href="$test__monitoring__adapter_8cpp.html#a0bf198443710f5dfa1b8c38e32d30f76" title=" " alt="" coords="5,20,160,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,43,160,43,160,37,194,37"/>
+</map>

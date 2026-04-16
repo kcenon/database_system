@@ -1,0 +1,11 @@
+<map id="database::integrated::create_database" name="database::integrated::create_database">
+<area shape="rect" id="Node000001" title="Create a database with builder configuration." alt="" coords="5,131,163,171"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a7f57e267b96199e1ffe2656760d866fc" title="Build and return the configured database system." alt="" coords="225,5,421,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,129,156,99,209,69,222,63,225,68,212,74,159,103,114,133"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#aaf4ac9ec1dfd6c14baa50d1a29864225" title="Create a builder for custom configuration." alt="" coords="225,84,421,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,136,212,127,212,133,163,141"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#af748ad2a4931521dbea3ccd840ee8e31" title="Set the database backend type." alt="" coords="225,163,421,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,161,212,169,212,175,162,167"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a102ff9a5f694a3c331e63ae4321cff68" title="Set the connection string." alt="" coords="211,241,436,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="116,169,160,198,212,226,228,234,226,239,209,231,157,202,113,174"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="database::core::backend_registrar::backend_registrar" name="database::core::backend_registrar::backend_registrar">
+<area shape="rect" id="Node000001" title="Constructor that registers the backend." alt="" coords="5,61,213,101"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__registry.html#acbb12b577a2f87abe52a6e93d48216d0" title="Get the singleton instance." alt="" coords="270,29,450,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,65,256,60,257,65,214,71"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__registry.html#aea5b0e83188341608db3fc0d433ff2d7" title="Register a backend factory function." alt="" coords="261,93,459,133"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="214,92,248,96,248,102,213,97"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="313,30,311,20,318,10,335,5,360,3,389,6,405,13,403,18,388,11,360,8,336,10,321,15,316,21,318,28"/>
+</map>

@@ -1,0 +1,35 @@
+<map id="database::async::async_database" name="database::async::async_database">
+<area shape="rect" id="Node000001" title="Asynchronous database interface wrapper." alt="" coords="173,1024,373,1313"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,881,264,961"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,960,207,1008,202,1010,181,963"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,404,184,804"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,804,106,856,112,867,107,870,102,858,85,805"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="208,571,357,637"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="272,651,244,726,223,767,198,806,182,818,175,822,169,829,162,855,162,881,157,881,157,854,164,827,171,818,179,813,194,802,218,765,239,724,267,649"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="288,881,475,961"/>
+<area shape="poly" id="edge18_Node000006_Node000004" title=" " alt="" coords="299,649,372,880,367,882,294,651"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="447,5,470,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="448,47,391,78,357,103,329,135,300,186,281,242,269,300,263,359,262,416,265,469,276,555,270,555,260,469,257,416,258,359,264,300,276,241,296,184,324,132,354,100,388,73,446,42"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="662,133,783,199"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="471,42,648,126,646,131,469,47"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="339,133,459,199"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="450,65,423,119,419,117,445,62"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="508,133,633,199"/>
+<area shape="poly" id="edge17_Node000015_Node000005" title=" " alt="" coords="472,49,515,93,538,119,534,122,511,96,468,52"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="367,963,346,1010,341,1008,362,960"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1async_1_1async__executor.html" title="High&#45;performance asynchronous executor using thread_system." alt="" coords="483,434,679,774"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="549,775,529,819,502,859,488,873,484,869,498,856,524,817,545,773"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="786,269,969,334"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="848,336,803,382,693,494,689,490,799,378,844,332"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="835,133,919,199"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="880,199,880,252,875,252,875,199"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="747,209,769,235,811,266,808,271,765,239,743,212"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="305,261,484,341"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="421,340,477,430,472,432,417,343"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="380,212,377,223,376,242,380,261,375,262,371,242,372,222,375,211"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="678,269,762,334"/>
+<area shape="poly" id="edge14_Node000007_Node000013" title=" " alt="" coords="708,335,669,420,664,418,703,333"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="509,269,654,334"/>
+<area shape="poly" id="edge15_Node000007_Node000014" title=" " alt="" coords="584,334,584,417,579,417,579,334"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="577,212,581,268,576,269,572,212"/>
+</map>

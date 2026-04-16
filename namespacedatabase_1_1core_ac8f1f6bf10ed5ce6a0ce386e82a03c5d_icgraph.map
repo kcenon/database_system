@@ -1,0 +1,7 @@
+<map id="database::core::available_backends" name="database::core::available_backends">
+<area shape="rect" id="Node000001" title="Convenience function for getting available backends." alt="" coords="123,23,309,63"/>
+<area shape="rect" id="Node000002" href="$backend__registry__test_8cpp.html#a860a8a63432cd87a8a2a885172910dc7" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,31,75,26,75,20,109,25"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a30878636966576ce9691886e141725e3" title=" " alt="" coords="5,55,75,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,61,75,65,75,60,109,55"/>
+</map>

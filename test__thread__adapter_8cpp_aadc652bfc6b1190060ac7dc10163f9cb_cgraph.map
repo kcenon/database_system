@@ -1,0 +1,10 @@
+<map id="test_double_initialization" name="test_double_initialization">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,192,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a33baa28caab09669406a7f42a097639d" title="Initialize thread pool." alt="" coords="240,29,435,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,81,226,73,227,78,176,87"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a134b75ec1d87a053627e91ee31256e80" title="Shutdown thread pool gracefully." alt="" coords="240,108,435,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="178,107,226,115,226,120,177,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="299,29,299,19,306,10,319,5,337,3,360,6,372,14,369,18,358,11,337,8,320,10,309,15,304,21,304,29"/>
+<area shape="rect" id="Node000004" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="483,123,585,148"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="435,133,469,133,469,138,435,138"/>
+</map>

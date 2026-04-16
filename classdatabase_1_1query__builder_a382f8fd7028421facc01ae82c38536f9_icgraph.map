@@ -1,0 +1,21 @@
+<map id="database::query_builder::limit" name="database::query_builder::limit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="231,195,409,235"/>
+<area shape="rect" id="Node000002" href="$query__builder__usage_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="67,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="300,185,253,113,220,76,181,44,151,30,121,23,122,18,153,25,184,40,223,72,257,110,304,182"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1tests.html#afb4ff34b9493b92f261cab87bc737668" title=" " alt="" coords="5,55,183,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="291,187,243,139,213,114,181,94,155,83,158,78,184,89,216,110,247,135,295,183"/>
+<area shape="rect" id="Node000004" href="$namespacedatabase_1_1tests.html#a3514392b2cc48341ee68a95f7f0bd574" title=" " alt="" coords="5,104,183,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,190,230,166,182,143,149,132,150,127,184,138,232,161,276,186"/>
+<area shape="rect" id="Node000005" href="$namespacedatabase_1_1tests.html#a441eb46fe0155cdddfb2448c828f5285" title=" " alt="" coords="5,153,183,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="216,195,152,181,153,176,217,190"/>
+<area shape="rect" id="Node000006" href="$namespacedatabase_1_1tests.html#a9cba370a495d67a213b373c219bcefa4" title=" " alt="" coords="5,203,183,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="217,218,183,218,183,213,217,213"/>
+<area shape="rect" id="Node000007" href="$namespacedatabase_1_1tests.html#a4e1ff0d76ece4f2bc51f91a543b1d2e3" title=" " alt="" coords="5,252,183,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="217,240,153,255,152,249,216,235"/>
+<area shape="rect" id="Node000008" href="$namespacedatabase_1_1tests.html#a6bf432916b39d62bc333851cda0288dc" title=" " alt="" coords="5,301,183,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="276,245,232,269,184,291,147,304,145,299,182,286,229,264,273,240"/>
+<area shape="rect" id="Node000009" href="$async__stress__test_8cpp.html#a0b9118c4cbc9abd59fa2756c113ea916" title="Tests that query builders work correctly under concurrent use." alt="" coords="59,351,129,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="295,247,246,295,216,319,184,340,157,352,130,360,128,355,155,347,181,336,213,315,243,291,291,243"/>
+<area shape="rect" id="Node000010" href="$memory__stress__test_8cpp.html#aeaf05524e8bf191f529a10f7478c290f" title="Tests query builder memory usage with many operations." alt="" coords="59,400,129,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="304,249,256,320,223,358,184,390,157,403,130,411,128,405,155,398,181,385,219,354,252,317,299,246"/>
+</map>

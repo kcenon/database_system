@@ -1,0 +1,59 @@
+<map id="database::integrated::database_coordinator::impl" name="database::integrated::database_coordinator::impl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="619,1535,819,1815"/>
+<area shape="rect" id="Node000002" href="$structdatabase_1_1integrated_1_1unified__db__config.html" title=" " alt="" coords="1315,891,1533,1315"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1316,1197,1170,1317,833,1586,830,1582,1166,1313,1312,1193"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1integrated_1_1database__config.html" title="Database&#45;specific configuration." alt="" coords="1597,601,1816,761"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1656,763,1545,927,1540,924,1651,760"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="1431,263,1510,328"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1492,327,1652,586,1648,589,1488,329"/>
+<area shape="rect" id="Node000006" href="$structdatabase_1_1integrated_1_1pool__config.html" title="Connection pool configuration." alt="" coords="1840,581,2013,781"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="1512,313,1625,374,1691,416,1754,465,1804,514,1849,566,1845,570,1800,517,1750,469,1688,421,1622,378,1509,318"/>
+<area shape="rect" id="Node000007" href="$structdatabase_1_1integrated_1_1db__thread__config.html" title="Thread pool configuration for async operations." alt="" coords="1369,611,1573,751"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="1473,328,1473,595,1468,595,1468,328"/>
+<area shape="rect" id="Node000008" href="$structdatabase_1_1integrated_1_1db__logger__config.html" title="Logger configuration." alt="" coords="1139,571,1344,791"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="1453,330,1366,468,1313,558,1309,556,1362,465,1448,327"/>
+<area shape="rect" id="Node000009" href="$structdatabase_1_1integrated_1_1db__monitoring__config.html" title="Monitoring and metrics configuration." alt="" coords="907,564,1114,799"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="1432,314,1375,338,1306,373,1232,416,1163,469,1125,508,1090,552,1086,549,1121,505,1160,465,1229,412,1303,368,1373,333,1430,309"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1405,5,1536,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1473,100,1473,262,1468,262,1468,100"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="1847,783,1830,801,1760,862,1687,921,1549,1022,1545,1018,1684,917,1757,858,1826,797,1843,780"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="1466,752,1452,874,1447,874,1460,752"/>
+<area shape="rect" id="Node000021" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html" title="Thread pool adapter for async database operations." alt="" coords="969,953,1156,1253"/>
+<area shape="poly" id="edge30_Node000021_Node000007" title=" " alt="" coords="1415,753,1387,779,1357,801,1339,809,1322,812,1307,815,1291,825,1282,835,1277,844,1265,868,1169,988,1165,984,1260,865,1272,842,1277,832,1288,821,1305,810,1321,807,1337,804,1355,796,1384,775,1411,749"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="1335,790,1353,821,1376,874,1371,876,1348,824,1331,793"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html" title="Unified logging adapter for database operations." alt="" coords="534,953,719,1253"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="1140,794,1127,801,1104,810,1084,813,1047,810,1012,809,993,814,974,825,965,834,961,844,957,856,949,868,899,919,844,965,735,1042,732,1037,840,961,895,915,945,865,952,853,956,842,960,831,970,821,991,809,1011,804,1047,805,1083,807,1103,804,1124,796,1137,789"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="1116,794,1139,821,1173,865,1238,932,1304,995,1301,999,1234,936,1169,868,1135,824,1112,797"/>
+<area shape="rect" id="Node000017" href="$classdatabase_1_1integrated_1_1adapters_1_1monitoring__adapter.html" title="Monitoring adapter for database operations." alt="" coords="137,945,314,1260"/>
+<area shape="poly" id="edge23_Node000017_Node000009" title=" " alt="" coords="909,795,896,801,864,809,824,812,728,810,634,809,595,814,567,825,558,834,554,844,550,855,542,868,492,919,437,965,330,1042,326,1038,434,961,489,915,538,865,545,853,549,842,553,831,564,820,594,809,634,804,728,805,824,807,864,804,894,796,906,790"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="493,1377,680,1472"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="614,1471,639,1519,635,1521,609,1474"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="611,1253,597,1361,592,1361,605,1253"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="391,634,599,729"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="558,727,598,770,616,795,629,822,644,878,650,936,644,936,639,879,624,824,611,797,594,773,554,731"/>
+<area shape="rect" id="Node000013" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="789,198,941,393"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="868,393,860,481,851,517,838,542,823,551,803,556,752,560,700,561,662,567,610,593,562,626,559,621,607,589,661,561,700,556,752,554,802,551,821,546,834,538,846,516,855,480,863,392"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="317,263,467,328"/>
+<area shape="poly" id="edge20_Node000010_Node000014" title=" " alt="" coords="383,342,364,438,345,568,339,641,337,717,341,792,351,866,381,997,417,1096,463,1192,524,1313,559,1376,554,1379,519,1316,458,1194,412,1098,376,999,345,867,336,793,332,717,334,641,340,568,358,437,378,341"/>
+<area shape="poly" id="edge18_Node000012_Node000014" title=" " alt="" coords="407,341,485,633,480,634,401,342"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="132,1377,319,1472"/>
+<area shape="poly" id="edge27_Node000016_Node000014" title=" " alt="" coords="359,341,303,396,269,423,232,445,197,455,168,454,140,455,126,459,111,469,90,489,80,510,67,565,39,678,20,776,10,865,10,948,20,1030,43,1116,78,1209,126,1313,147,1346,173,1375,169,1379,143,1350,122,1316,73,1211,38,1117,15,1031,4,949,5,865,15,775,34,676,61,563,75,508,86,486,108,465,124,454,139,449,168,449,197,449,230,440,266,418,300,392,355,337"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="77,634,315,729"/>
+<area shape="poly" id="edge26_Node000018_Node000014" title=" " alt="" coords="353,340,298,392,232,445,208,455,198,459,190,468,175,508,171,552,175,595,183,633,178,634,170,596,166,552,170,507,186,465,195,455,206,450,229,440,294,388,350,336"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="704,1377,891,1472"/>
+<area shape="poly" id="edge34_Node000020_Node000014" title=" " alt="" coords="471,332,510,357,551,388,588,424,618,465,638,512,645,556,642,597,636,637,630,675,630,714,639,755,663,797,675,806,689,808,704,811,718,821,742,853,762,888,792,963,811,1041,821,1120,823,1197,821,1268,809,1378,803,1377,815,1267,818,1197,815,1121,806,1042,787,964,757,891,737,856,714,825,702,816,688,814,673,811,659,800,634,757,624,715,625,675,631,636,637,597,640,556,633,514,614,468,584,427,547,392,507,362,468,337"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="674,634,883,729"/>
+<area shape="poly" id="edge33_Node000022_Node000014" title=" " alt="" coords="478,332,523,357,569,387,614,423,653,465,664,484,668,502,671,519,678,539,709,588,741,632,737,635,704,591,674,541,666,520,663,503,659,486,649,468,610,427,566,391,520,361,476,337"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="381,13,403,78"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="395,78,395,246,389,246,389,78"/>
+<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="319,1470,605,1613,602,1618,316,1475"/>
+<area shape="poly" id="edge22_Node000016_Node000017" title=" " alt="" coords="228,1260,228,1361,223,1361,223,1260"/>
+<area shape="poly" id="edge24_Node000017_Node000018" title=" " alt="" coords="202,728,216,928,211,929,197,729"/>
+<area shape="rect" id="Node000019" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="26,148,219,443"/>
+<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="115,443,118,492,127,539,141,580,159,618,155,621,136,582,121,541,113,492,110,443"/>
+<area shape="poly" id="edge28_Node000001_Node000020" title=" " alt="" coords="785,1473,770,1520,765,1518,780,1472"/>
+<area shape="poly" id="edge29_Node000020_Node000021" title=" " alt="" coords="971,1218,848,1366,844,1363,967,1215"/>
+<area shape="poly" id="edge31_Node000021_Node000022" title=" " alt="" coords="815,727,852,765,896,796,915,803,934,805,969,802,1002,801,1019,807,1035,821,1054,846,1068,875,1077,905,1082,936,1076,937,1071,906,1063,876,1050,849,1031,825,1016,812,1001,806,969,807,934,811,914,809,893,801,848,769,812,731"/>
+<area shape="rect" id="Node000023" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1thread__backend.html" title="Abstract base class for thread pool backends." alt="" coords="966,151,1138,440"/>
+<area shape="poly" id="edge32_Node000022_Node000023" title=" " alt="" coords="973,442,906,542,837,624,833,620,902,538,968,439"/>
+</map>

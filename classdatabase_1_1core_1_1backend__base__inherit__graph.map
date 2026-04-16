@@ -1,0 +1,21 @@
+<map id="database::core::backend_base&lt; Derived, Type &gt;" name="database::core::backend_base&lt; Derived, Type &gt;">
+<area shape="rect" id="Node000001" title="CRTP template base class for database backends." alt="" coords="355,455,527,735"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="5,812,211,1107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,624,288,645,231,674,177,712,154,735,134,760,121,785,112,812,107,811,116,783,130,757,150,731,174,708,228,670,286,640,341,619"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="235,812,435,1107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="351,723,337,759,328,812,322,811,332,758,346,721"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="463,812,639,1107"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="520,747,524,758,537,811,532,812,519,759,515,748"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="673,812,853,1107"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="542,629,588,652,636,680,680,715,718,757,734,783,746,811,741,813,729,785,714,760,677,719,633,685,586,656,539,634"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="352,5,531,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,419,444,454,439,454,439,419"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1mongodb__backend.html" title="MongoDB implementation of database_backend interface." alt="" coords="21,1191,195,1671"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="111,1121,111,1190,105,1190,105,1121"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1backends_1_1postgresql__backend.html" title="PostgreSQL implementation of database_backend interface." alt="" coords="238,1156,431,1705"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="337,1120,337,1156,332,1156,332,1120"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1backends_1_1redis__backend.html" title="Redis implementation of database_backend interface." alt="" coords="465,1201,636,1661"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="553,1120,553,1200,548,1200,548,1120"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1backends_1_1sqlite__backend.html" title="SQLite implementation of database_backend interface." alt="" coords="676,1183,849,1678"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="765,1121,765,1183,760,1183,760,1121"/>
+</map>

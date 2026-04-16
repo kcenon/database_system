@@ -1,0 +1,33 @@
+<map id="database::backends::postgresql_backend" name="database::backends::postgresql_backend">
+<area shape="rect" id="Node000001" title="PostgreSQL implementation of database_backend interface." alt="" coords="391,1468,585,1957"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="107,1111,307,1405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="307,1415,394,1555,389,1557,302,1418"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,276,184,676"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="73,690,69,772,69,859,74,947,85,1033,95,1072,111,1109,106,1111,90,1073,80,1034,69,947,64,859,64,772,68,690"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="95,753,267,1033"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="142,689,155,752,150,754,136,690"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="245,443,390,509"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="335,508,381,614,405,683,424,753,443,883,459,1061,481,1451,476,1452,454,1062,438,883,419,754,400,684,376,616,330,510"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="324,509,333,608,337,752,335,834,329,919,318,1005,300,1087,297,1096,292,1094,295,1086,313,1004,324,919,330,834,332,752,327,608,319,509"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="301,510,256,595,233,647,213,701,204,738,198,736,208,699,228,645,251,592,296,508"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="256,141,381,206"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="321,220,320,443,315,443,316,220"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="390,5,413,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="392,59,349,128,345,125,388,56"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="419,443,546,509"/>
+<area shape="poly" id="edge18_Node000012_Node000006" title=" " alt="" coords="415,62,444,133,464,212,476,293,485,427,480,427,471,293,459,213,439,134,410,64"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="110,1047,113,1086,121,1109,116,1111,108,1087,105,1047"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="685,443,763,509"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="736,508,764,616,778,684,788,753,806,952,807,1033,801,1109,788,1184,766,1262,734,1347,690,1445,648,1521,597,1592,593,1589,643,1519,686,1443,729,1345,761,1260,783,1183,796,1109,801,1033,800,952,783,754,772,685,759,617,731,509"/>
+<area shape="rect" id="Node000010" href="$structdatabase_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="493,1218,683,1298"/>
+<area shape="poly" id="edge13_Node000010_Node000008" title=" " alt="" coords="725,509,708,729,701,883,696,949,680,1034,671,1061,660,1088,613,1204,608,1202,655,1086,666,1059,675,1033,690,949,696,882,703,729,719,509"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="511,853,665,933"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="710,510,671,595,631,701,612,771,599,837,594,836,607,770,625,699,666,593,706,508"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="659,133,789,213"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="727,227,727,443,721,443,721,227"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="582,1299,548,1453,543,1452,577,1298"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="591,933,591,1201,585,1201,585,933"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="478,522,472,619,476,674,487,729,500,763,517,796,556,852,552,855,513,798,495,765,481,730,470,675,467,619,473,522"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="406,141,429,206"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="419,206,421,252,442,346,468,427,463,429,437,347,416,252,413,206"/>
+</map>

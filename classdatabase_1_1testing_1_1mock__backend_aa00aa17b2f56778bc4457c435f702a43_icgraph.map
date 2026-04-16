@@ -1,0 +1,5 @@
+<map id="database::testing::mock_backend::initialize" name="database::testing::mock_backend::initialize">
+<area shape="rect" id="Node000001" title="Initialize the database backend." alt="" coords="123,5,305,45"/>
+<area shape="rect" id="Node000002" href="$backend__contract__test_8cpp.html#aa5655fbf21439e2cd6a00f6a8e558820" title=" " alt="" coords="5,13,75,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,28,75,28,75,23,109,23"/>
+</map>

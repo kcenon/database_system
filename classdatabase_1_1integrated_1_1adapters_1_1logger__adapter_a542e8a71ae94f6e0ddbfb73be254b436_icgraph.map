@@ -1,0 +1,7 @@
+<map id="database::integrated::adapters::logger_adapter::log_transaction" name="database::integrated::adapters::logger_adapter::log_transaction">
+<area shape="rect" id="Node000001" title="Log a transaction operation." alt="" coords="339,5,532,60"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#a3d1ab1e178130cddadaaef26af764dcc" title="Test transaction logging." alt="" coords="108,20,291,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,35,291,35,291,30,325,30"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,20,60,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,35,60,35,60,30,94,30"/>
+</map>

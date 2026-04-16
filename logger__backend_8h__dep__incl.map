@@ -1,0 +1,17 @@
+<map id="database/integrated/adapters/backends/logger_backend.h" name="database/integrated/adapters/backends/logger_backend.h">
+<area shape="rect" id="Node000001" title="Abstract interface for logger backends." alt="" coords="313,5,507,60"/>
+<area shape="rect" id="Node000002" href="$common__logger__backend_8h.html" title="Logger backend using common_system&#39;s ILogger and GlobalLoggerRegistry." alt="" coords="5,108,215,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="320,67,189,110,187,105,318,62"/>
+<area shape="rect" id="Node000004" href="$fallback__logger__backend_8h.html" title="Fallback logger backend using std::cout and std::ofstream." alt="" coords="239,108,443,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,73,361,109,357,106,382,70"/>
+<area shape="rect" id="Node000006" href="$logger__adapter_8cpp.html" title=" " alt="" coords="467,218,678,258"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="438,69,508,161,557,216,553,219,504,164,434,73"/>
+<area shape="rect" id="Node000007" href="$null__logger__backend_8h.html" title="Null logger backend (no&#45;op)" alt="" coords="518,108,694,163"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="474,64,556,106,554,110,472,69"/>
+<area shape="rect" id="Node000003" href="$common__logger__backend_8cpp.html" title=" " alt="" coords="5,211,215,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,176,113,211,107,211,107,176"/>
+<area shape="rect" id="Node000005" href="$fallback__logger__backend_8cpp.html" title=" " alt="" coords="239,211,443,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="343,176,343,211,338,211,338,176"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="415,166,530,215,528,220,413,171"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="596,176,582,218,577,217,590,175"/>
+</map>

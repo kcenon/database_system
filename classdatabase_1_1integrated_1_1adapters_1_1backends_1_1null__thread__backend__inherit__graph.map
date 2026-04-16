@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::null_thread_backend" name="database::integrated::adapters::backends::null_thread_backend">
+<area shape="rect" id="Node000001" title="Synchronous thread backend (no threading)" alt="" coords="5,343,189,652"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1thread__backend.html" title="Abstract base class for thread pool backends." alt="" coords="11,5,183,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,309,100,343,95,343,95,309"/>
+</map>

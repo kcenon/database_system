@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="5,84,163,139"/>
+<area shape="rect" id="Node000001" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1common__logger__backend.html" title="Logger backend using common_system&#39;s ILogger interface." alt="" coords="211,5,407,60"/>
+<area shape="poly" id="edge13_Node000000_Node000001" title=" " alt="" coords="175,77,229,58,231,63,177,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__logger__backend.html" title="Basic logger backend using standard C++ streams." alt="" coords="213,84,404,139"/>
+<area shape="poly" id="edge14_Node000000_Node000002" title=" " alt="" coords="177,109,213,109,213,114,177,114"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1null__logger__backend.html" title="No&#45;op logger backend." alt="" coords="227,163,390,217"/>
+<area shape="poly" id="edge15_Node000000_Node000003" title=" " alt="" coords="177,141,231,160,229,165,175,146"/>
+</map>

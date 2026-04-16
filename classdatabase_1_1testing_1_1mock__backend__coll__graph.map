@@ -1,0 +1,27 @@
+<map id="database::testing::mock_backend" name="database::testing::mock_backend">
+<area shape="rect" id="Node000001" title="Configurable mock for database_backend interface." alt="" coords="505,1272,685,1672"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,809,184,1209"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,1204,198,1207,271,1277,352,1337,433,1387,506,1427,503,1431,430,1392,349,1342,267,1281,194,1211,191,1208"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="678,135,757,200"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="758,185,802,216,823,237,838,262,847,287,853,326,863,437,869,578,870,735,868,892,861,1034,852,1145,839,1210,812,1263,778,1312,739,1356,699,1394,696,1390,735,1352,774,1308,808,1260,833,1208,846,1144,856,1033,862,892,865,735,864,578,858,437,848,327,841,288,834,264,819,241,799,220,755,190"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1testing_1_1backend__expectation.html" title="Single query expectation with configurable behavior for database_backend." alt="" coords="611,263,824,703"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="720,200,720,246,715,246,715,200"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="392,977,571,1042"/>
+<area shape="poly" id="edge12_Node000010_Node000003" title=" " alt="" coords="679,178,640,188,597,205,556,230,538,246,524,264,506,553,486,960,481,960,501,552,519,262,534,242,553,226,594,200,638,183,677,173"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="652,5,783,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="720,99,720,134,715,134,715,99"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="209,969,367,1049"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="308,1048,382,1208,402,1247,447,1307,496,1364,492,1368,443,1310,398,1249,378,1211,303,1050"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="137,450,258,515"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="151,526,96,581,69,614,46,649,30,684,23,719,27,752,45,784,61,797,78,803,96,802,115,799,155,793,176,796,198,807,232,843,257,885,274,929,284,968,279,970,268,931,252,888,228,846,194,811,175,801,155,798,116,804,97,808,77,808,59,802,41,787,22,754,18,719,25,682,42,646,65,611,92,578,147,523"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="595,969,823,1049"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="242,523,375,643,460,715,547,783,566,794,584,807,619,847,649,890,693,968,689,970,644,893,615,850,581,811,563,799,544,788,456,719,372,647,239,527"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="193,530,186,596,181,672,185,740,191,766,201,784,220,800,240,805,261,805,283,800,330,792,355,795,380,807,401,824,418,844,446,890,465,936,477,976,472,977,460,938,441,892,414,848,397,828,377,812,353,800,330,797,284,805,262,810,240,811,218,804,197,787,186,768,180,741,176,672,180,595,188,529"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="186,135,209,200"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="200,200,200,433,195,433,195,200"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="702,1050,651,1257,646,1255,697,1049"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="717,703,713,953,708,953,711,703"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="487,1042,497,1135,519,1247,521,1255,515,1257,513,1249,492,1135,481,1042"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="899,977,983,1042"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="942,1042,937,1086,927,1139,909,1196,882,1249,843,1299,797,1344,748,1383,700,1416,697,1411,745,1379,794,1340,839,1296,878,1247,904,1194,922,1138,932,1085,937,1042"/>
+</map>

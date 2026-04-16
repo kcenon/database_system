@@ -1,0 +1,9 @@
+<map id="database::integrated::unified_database_system::builder::set_slow_query_threshold" name="database::integrated::unified_database_system::builder::set_slow_query_threshold">
+<area shape="rect" id="Node000001" title="Set slow query threshold." alt="" coords="311,9,507,78"/>
+<area shape="rect" id="Node000002" href="$monitoring_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="158,5,213,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,33,213,24,213,18,297,28"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#a999f56b7107ee3cfd3c749095fcd91f5" title=" " alt="" coords="108,55,263,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="297,58,263,62,263,56,297,53"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

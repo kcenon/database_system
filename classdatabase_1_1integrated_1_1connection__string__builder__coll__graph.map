@@ -1,0 +1,21 @@
+<map id="database::integrated::connection_string_builder" name="database::integrated::connection_string_builder">
+<area shape="rect" id="Node000001" title="Fluent builder for constructing database connection strings." alt="" coords="168,591,373,1160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="172,448,369,528"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,528,273,574,268,574,268,528"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="117,291,267,371"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,370,234,423,240,432,235,435,230,425,205,372"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,148,110,213"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="79,213,87,240,101,265,113,278,109,282,96,268,82,242,73,215"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,136,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="73,99,73,148,68,148,68,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="134,148,271,213"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="202,227,197,291,192,290,197,227"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="174,13,205,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="191,78,193,124,194,131,189,132,188,124,186,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="282,13,313,78"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="292,79,283,103,270,125,260,138,256,135,266,123,278,100,287,77"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="291,298,413,363"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="335,377,312,425,298,449,293,447,307,423,331,375"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="341,148,363,213"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="355,214,355,282,349,282,349,214"/>
+</map>

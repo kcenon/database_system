@@ -1,0 +1,11 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,75,70"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1async_1_1async__executor.html#a71b543a4d274904f8d672cacc8086894" title="Gracefully shuts down the executor." alt="" coords="125,5,299,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,48,111,41,112,47,75,54"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1async_1_1async__executor.html#a6862043e5bcb84776c530b5914b3c91f" title="Returns the number of worker threads." alt="" coords="123,69,301,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="75,61,110,68,109,73,74,66"/>
+<area shape="rect" id="Node000003" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="349,13,416,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="300,23,336,23,336,28,300,28"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="464,13,565,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="417,23,450,23,450,28,417,28"/>
+</map>

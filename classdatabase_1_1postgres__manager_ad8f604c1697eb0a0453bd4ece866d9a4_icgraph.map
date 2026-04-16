@@ -1,0 +1,7 @@
+<map id="database::postgres_manager::rollback_transaction" name="database::postgres_manager::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="423,13,649,53"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1postgres__manager.html#a52165f58a278507160c813487af1ab4b" title="Shutdown the database backend gracefully." alt="" coords="216,13,375,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="409,35,375,35,375,30,409,30"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1postgres__manager.html#a7cd71674e518a36723c3f5760a2fc225" title="Destructor." alt="" coords="5,5,168,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,35,168,35,168,30,202,30"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="test_shutdown_without_init" name="test_shutdown_without_init">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,20,207,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#a134b75ec1d87a053627e91ee31256e80" title="Shutdown thread pool gracefully." alt="" coords="255,5,449,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,30,241,30,241,35,207,35"/>
+<area shape="rect" id="Node000003" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="497,20,600,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="450,30,484,30,484,35,450,35"/>
+</map>

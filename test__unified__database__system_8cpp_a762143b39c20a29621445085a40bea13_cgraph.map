@@ -1,0 +1,7 @@
+<map id="test_connection_state_api" name="test_connection_state_api">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,60,197,85"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#adb55d898ad9e982ee39729410c369dc6" title="Disconnect from database." alt="" coords="245,5,441,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,57,231,48,232,54,179,63"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#af3a85fe850d58e8dd368e23e19d934d8" title="Check if connected to database." alt="" coords="245,84,441,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,83,232,91,231,96,181,88"/>
+</map>

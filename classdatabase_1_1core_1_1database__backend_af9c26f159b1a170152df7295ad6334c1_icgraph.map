@@ -1,0 +1,9 @@
+<map id="database::core::database_backend::value_to_sql" name="database::core::database_backend::value_to_sql">
+<area shape="rect" id="Node000001" title=" " alt="" coords="503,37,689,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html#a202da813a3a1ff3bf3dda00b28533098" title="Expand positional parameters into a SQL string (fallback)" alt="" coords="260,37,455,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="489,60,455,60,455,55,489,55"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html#a83aabd4991b58cf0cab8596b6447feaa" title="Execute a parameterized DML/DDL query (prepared statement)" alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="246,46,212,41,213,36,247,40"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1database__backend.html#ac3283d58ec0219e40ecb290b11d74ace" title="Execute a parameterized SELECT query (prepared statement)" alt="" coords="11,69,206,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="247,74,206,79,206,74,246,69"/>
+</map>

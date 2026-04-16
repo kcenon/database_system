@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::null_logger_backend" name="database::integrated::adapters::backends::null_logger_backend">
+<area shape="rect" id="Node000001" title="No&#45;op logger backend." alt="" coords="5,248,188,463"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="21,5,173,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,214,99,248,94,248,94,214"/>
+</map>

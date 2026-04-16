@@ -1,0 +1,5 @@
+<map id="database::backends::postgresql_backend::execute_query" name="database::backends::postgresql_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,13,164,67"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="212,5,420,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,37,198,37,198,43,164,43"/>
+</map>

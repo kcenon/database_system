@@ -1,0 +1,18 @@
+<map id="database::security::audit_logger" name="database::security::audit_logger">
+<area shape="rect" id="Node000001" title="Security audit logging system." alt="" coords="61,700,271,1035"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,557,89,623"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,623,47,649,51,675,57,693,52,694,46,677,41,649,41,623"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="217,543,376,637"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="277,639,255,686,250,684,272,637"/>
+<area shape="rect" id="Node000004" href="$structdatabase_1_1security_1_1audit__log__entry.html" title="Audit log entry for security events." alt="" coords="204,365,339,465"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="281,465,290,525,285,526,276,466"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="153,135,232,200"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="194,200,181,489,174,683,169,683,175,489,188,200"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="205,199,253,349,248,350,200,201"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="127,5,258,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="195,99,195,134,190,134,190,99"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="363,383,484,448"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="407,462,372,520,351,544,347,541,368,517,402,459"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="412,135,435,200"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="426,200,426,366,421,366,421,200"/>
+</map>

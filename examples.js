@@ -1,0 +1,26 @@
+var examples =
+[
+    [ "/home/runner/work/database_system/database_system/database/async/async_operations.h", "_2home_2runner_2work_2database_system_2database_system_2database_2async_2async_operations_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/core/database_context.h", "_2home_2runner_2work_2database_system_2database_system_2database_2core_2database_context_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/database_manager.h", "_2home_2runner_2work_2database_system_2database_system_2database_2database_manager_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/adapters/logger_adapter.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2adapters_2logger_adapter_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/adapters/monitoring_adapter.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2adapters_2monitoring_adapter_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/adapters/thread_adapter.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2adapters_2thread_adapter_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/connection_string_builder.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2connection_string_builder_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/core/configuration.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2core_2configuration_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/core/database_coordinator.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2core_2database_coordinator_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/integrated/unified_database_system.h", "_2home_2runner_2work_2database_system_2database_system_2database_2integrated_2unified_database_system_8h-example.html", null ],
+    [ "/home/runner/work/database_system/database_system/database/orm/entity.h", "_2home_2runner_2work_2database_system_2database_system_2database_2orm_2entity_8h-example.html", null ],
+    [ "async_operations_demo.cpp", "async_operations_demo_8cpp-example.html", null ],
+    [ "basic_usage.cpp", "basic_usage_8cpp-example.html", null ],
+    [ "integrated/async_queries.cpp", "integrated_2async_queries_8cpp-example.html", null ],
+    [ "integrated/basic_usage.cpp", "integrated_2basic_usage_8cpp-example.html", null ],
+    [ "integrated/migration_from_legacy.cpp", "integrated_2migration_from_legacy_8cpp-example.html", null ],
+    [ "integrated/monitoring.cpp", "integrated_2monitoring_8cpp-example.html", null ],
+    [ "async_executor_demo.cpp", "async_executor_demo_8cpp-example.html", null ],
+    [ "orm_framework_demo.cpp", "orm_framework_demo_8cpp-example.html", null ],
+    [ "performance_monitoring_demo.cpp", "performance_monitoring_demo_8cpp-example.html", null ],
+    [ "postgres_advanced.cpp", "postgres_advanced_8cpp-example.html", null ],
+    [ "run_all_samples.cpp", "run_all_samples_8cpp-example.html", null ],
+    [ "security_framework_demo.cpp", "security_framework_demo_8cpp-example.html", null ]
+];

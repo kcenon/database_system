@@ -1,0 +1,8 @@
+<map id="database::backends::redis_backend::commit_transaction" name="database::backends::redis_backend::commit_transaction">
+<area shape="rect" id="Node000001" title="Commit the current transaction." alt="" coords="5,27,187,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1redis__backend.html#a2e8bfd39d52a3a2ff11f0bc1cb732694" title="Execute a general SQL query (DDL, DML)" alt="" coords="235,5,461,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,41,221,37,221,43,187,47"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="509,20,689,89"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="187,54,235,55,461,55,496,54,496,60,461,60,235,60,187,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="462,36,496,40,495,45,461,41"/>
+</map>

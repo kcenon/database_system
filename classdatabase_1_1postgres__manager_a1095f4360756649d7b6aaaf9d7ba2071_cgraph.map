@@ -1,0 +1,5 @@
+<map id="database::postgres_manager::begin_transaction" name="database::postgres_manager::begin_transaction">
+<area shape="rect" id="Node000001" title="Begin a transaction." alt="" coords="5,5,216,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1postgres__manager.html#a9f5c227a583b64a104ce7eae7497b549" title="Executes a general SQL query (DDL, DML) on PostgreSQL." alt="" coords="264,5,455,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,23,250,23,250,28,216,28"/>
+</map>

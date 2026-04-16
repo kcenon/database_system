@@ -1,0 +1,25 @@
+<map id="database/integrated/connection_string_builder.h" name="database/integrated/connection_string_builder.h">
+<area shape="rect" id="Node000001" title="Fluent builder for constructing type&#45;safe database connection strings." alt="" coords="304,5,508,45"/>
+<area shape="rect" id="Node000002" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="72,93,223,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="345,48,199,92,197,87,343,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="191,174,258,199"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="382,48,321,95,247,166,243,162,318,91,378,43"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="282,174,341,199"/>
+<area shape="poly" id="edge10_Node000001_Node000006" title=" " alt="" coords="382,47,359,69,339,95,325,128,317,161,312,160,320,126,334,92,355,65,379,43"/>
+<area shape="rect" id="Node000007" href="$result_8h.html" title="Result&lt;T&gt; type for database_system error handling." alt="" coords="349,93,463,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="409,46,409,79,403,79,403,46"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="487,93,562,119"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="436,43,497,84,494,88,433,48"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="587,93,684,119"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="462,43,590,86,588,91,460,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="708,93,771,119"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="492,43,695,90,694,95,491,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,174,167,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="148,119,141,161,136,160,143,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,174,76,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="133,121,69,168,66,164,130,117"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="161,117,205,162,202,166,157,121"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="172,116,276,166,274,171,170,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="365,167,553,207"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="416,117,441,154,437,157,412,120"/>
+</map>

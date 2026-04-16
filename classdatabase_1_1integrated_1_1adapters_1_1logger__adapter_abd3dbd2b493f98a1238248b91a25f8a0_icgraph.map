@@ -1,0 +1,28 @@
+<map id="database::integrated::adapters::logger_adapter::flush" name="database::integrated::adapters::logger_adapter::flush">
+<area shape="rect" id="Node000001" title="Flush pending log messages." alt="" coords="352,164,545,219"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="135,5,277,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,154,369,97,337,68,303,44,277,33,279,28,305,40,340,64,372,93,422,151"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#a4a0ed92e00e1363eb8d953775fc1357d" title="Test connection event logging." alt="" coords="116,55,296,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="403,157,356,124,303,94,272,83,273,77,305,89,359,119,406,153"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#a3ab20a0e2fee045d5e283db9b8315a0c" title="Test error logging." alt="" coords="136,104,276,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="360,162,303,143,262,132,263,127,305,138,362,157"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,153,291,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="338,182,291,178,292,172,338,177"/>
+<area shape="rect" id="Node000007" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,203,279,228"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="338,205,280,211,279,205,338,200"/>
+<area shape="rect" id="Node000008" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,252,304,277"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="357,226,305,242,259,254,258,249,303,237,355,220"/>
+<area shape="rect" id="Node000009" href="$test__logger__adapter_8cpp.html#acae8ee2c7c5718208ab603c907647606" title="Test thread safety (basic concurrency test)" alt="" coords="134,301,278,327"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="405,229,358,262,305,291,270,304,268,299,303,286,355,257,402,225"/>
+<area shape="rect" id="Node000010" href="$test__logger__adapter_8cpp.html#a3d1ab1e178130cddadaaef26af764dcc" title="Test transaction logging." alt="" coords="115,351,297,376"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="422,232,372,288,340,316,305,340,276,353,274,348,303,336,337,312,368,284,418,228"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,179,60,204"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="124,35,110,44,81,76,60,114,47,151,39,179,34,178,41,149,55,112,76,73,106,40,121,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="119,88,110,94,87,113,67,137,42,180,38,177,63,134,83,109,106,89,116,83"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="127,136,109,143,77,161,51,180,48,176,74,157,107,138,126,131"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="107,183,61,190,60,185,107,178"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="119,206,60,198,61,192,119,201"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="130,250,107,242,75,224,49,206,52,202,78,220,109,237,132,245"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="120,298,106,291,83,271,64,248,38,206,42,203,68,245,87,267,110,286,122,294"/>
+<area shape="poly" id="edge16_Node000010_Node000003" title=" " alt="" coords="115,346,106,340,77,308,56,269,42,233,34,205,39,203,47,231,61,267,81,304,110,336,118,342"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="database::core::has_backend" name="database::core::has_backend">
+<area shape="rect" id="Node000001" title="Convenience function for checking backend availability." alt="" coords="123,146,272,186"/>
+<area shape="rect" id="Node000002" href="$backend__registry__test_8cpp.html#a6117564ddd9c7a6d6f74369a2f4d2034" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,137,124,92,73,44,59,33,62,29,76,40,128,88,171,134"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a58f4442c406e1811763c5b070f7a420c" title=" " alt="" coords="5,55,75,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,141,60,82,63,78,154,136"/>
+<area shape="rect" id="Node000004" href="$backend__registry__test_8cpp.html#a76769518a2a6708c2f8652253a1489e2" title=" " alt="" coords="5,104,75,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="120,144,74,130,76,125,121,139"/>
+<area shape="rect" id="Node000005" href="$backend__registry__test_8cpp.html#a1049365d8e2e07b7918b3f62031c6e50" title=" " alt="" coords="5,153,75,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="109,169,75,169,75,163,109,163"/>
+<area shape="rect" id="Node000006" href="$backend__registry__test_8cpp.html#a50c8bbf96770336b504f386f9771bfaf" title=" " alt="" coords="5,203,75,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="121,193,76,207,74,202,120,188"/>
+<area shape="rect" id="Node000007" href="$backend__registry__test_8cpp.html#aac7d69144313c180feb1c87c75b9a937" title=" " alt="" coords="5,252,75,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="154,196,63,254,60,250,151,191"/>
+<area shape="rect" id="Node000008" href="$backend__registry__test_8cpp.html#a21d5dd643ea93d4228102e32972eba3d" title=" " alt="" coords="5,301,75,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="170,198,76,291,61,303,57,299,73,287,166,194"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="database::immutable_query_builder::select" name="database::immutable_query_builder::select">
+<area shape="rect" id="Node000001" title="SELECT clause &#45; specifies which columns to select." alt="" coords="5,13,171,53"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1immutable__query__builder.html#abc7fee19c4bbde9f84600cea76a61e44" title="Constructs a new immutable query builder." alt="" coords="219,5,416,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,30,205,30,205,35,171,35"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="tests/protocol/test_protocol_serializer.cpp" name="tests/protocol/test_protocol_serializer.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="177,5,351,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,101,109,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,48,98,98,96,93,218,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="335,262,401,287"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,47,211,79,180,120,169,142,164,164,165,185,174,205,188,221,204,234,243,253,283,264,321,269,320,275,282,269,241,258,201,238,184,225,170,208,160,186,158,163,164,140,175,117,207,76,239,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,181,243,207"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="261,46,223,169,218,168,256,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="267,181,330,207"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="271,45,296,167,291,168,265,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="909,181,960,207"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="352,40,467,62,594,91,744,132,897,178,895,183,743,137,593,96,466,68,351,45"/>
+<area shape="rect" id="Node000007" href="$database__protocol_8h.html" title=" " alt="" coords="379,93,581,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="312,43,421,86,419,91,310,48"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="448,136,420,156,396,183,380,216,373,249,368,248,375,214,391,180,416,152,444,131"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="417,136,257,183,255,178,415,131"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="438,136,339,178,337,173,436,131"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="582,124,727,146,896,179,895,184,726,151,581,130"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="579,181,647,207"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="513,131,583,172,581,177,511,136"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="672,181,747,207"/>
+<area shape="poly" id="edge12_Node000007_Node000009" title=" " alt="" coords="536,131,664,174,662,179,534,136"/>
+<area shape="rect" id="Node000010" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="405,181,555,207"/>
+<area shape="poly" id="edge13_Node000007_Node000010" title=" " alt="" coords="483,134,483,167,477,167,477,134"/>
+<area shape="rect" id="Node000011" href="$result_8h.html" title="Result&lt;T&gt; type for database_system error handling." alt="" coords="771,181,885,207"/>
+<area shape="poly" id="edge15_Node000007_Node000011" title=" " alt="" coords="564,131,765,176,763,181,563,136"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="465,209,397,256,394,252,462,205"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="734,255,922,295"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="831,207,831,241,825,241,825,207"/>
+</map>

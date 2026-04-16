@@ -1,0 +1,8 @@
+<map id="database::protocol::protocol_serializer::serialize" name="database::protocol::protocol_serializer::serialize">
+<area shape="rect" id="Node000001" title="Serialize error response." alt="" coords="5,39,156,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#a2842330958a97937e52eb31b9e48d4ff" title=" " alt="" coords="204,5,355,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,51,190,45,191,50,157,56"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ad653cc836ddf9e8d52742449b3d273d9" title=" " alt="" coords="403,39,553,93"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="156,67,204,69,355,69,389,68,389,73,355,74,204,74,156,72"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,43,390,48,389,54,354,48"/>
+</map>

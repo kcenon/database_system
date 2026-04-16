@@ -1,0 +1,7 @@
+<map id="database::integrated::adapters::logger_adapter::is_initialized" name="database::integrated::adapters::logger_adapter::is_initialized">
+<area shape="rect" id="Node000001" title="Check if logger is initialized." alt="" coords="291,5,484,60"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#a55fa9354578d0d36b1b01c28590a45a9" title="Test logger initialization and shutdown." alt="" coords="108,20,243,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,35,243,35,243,30,277,30"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,20,60,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,35,60,35,60,30,94,30"/>
+</map>

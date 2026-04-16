@@ -1,0 +1,9 @@
+<map id="database::async::async_result::get" name="database::async::async_result::get">
+<area shape="rect" id="Node000001" title=" " alt="" coords="579,27,753,67"/>
+<area shape="rect" id="Node000002" href="$test__async__operations_8cpp.html#a14c7779a5f2ffceac6ae1256d72ecfab" title=" " alt="" coords="377,5,446,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,38,446,25,447,19,565,33"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada609b1ea097d56a24354eebbe0c395b" title=" " alt="" coords="292,55,531,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="565,61,531,65,531,60,565,56"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada14f8286d21fcd629d6e6e75b957319" title=" " alt="" coords="5,48,244,103"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="278,78,244,78,244,73,278,73"/>
+</map>

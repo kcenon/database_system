@@ -1,0 +1,5 @@
+<map id="database::backends::mongodb_backend::execute_query" name="database::backends::mongodb_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,20,260,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="308,5,509,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,37,294,37,294,43,260,43"/>
+</map>

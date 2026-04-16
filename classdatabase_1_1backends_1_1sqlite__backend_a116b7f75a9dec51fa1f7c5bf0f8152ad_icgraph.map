@@ -1,0 +1,7 @@
+<map id="database::backends::sqlite_backend::convert_sqlite_value" name="database::backends::sqlite_backend::convert_sqlite_value">
+<area shape="rect" id="Node000001" title="Convert SQLite column value to database_value." alt="" coords="272,41,456,96"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a761ce9e5b8b9880eef3ab23bd6962d59" title="Execute a parameterized SELECT query (prepared statement)" alt="" coords="27,5,202,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="258,56,202,48,202,43,259,51"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1sqlite__backend.html#ad3ba0301d91dd1f039ed8f5f2c1809fb" title="Execute a SELECT query." alt="" coords="5,85,224,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,86,225,92,224,86,258,81"/>
+</map>

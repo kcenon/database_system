@@ -1,0 +1,9 @@
+<map id="database::integrated::adapters::backends::fallback_thread_backend::initialize" name="database::integrated::adapters::backends::fallback_thread_backend::initialize">
+<area shape="rect" id="Node000001" title="Initialize the thread backend." alt="" coords="5,55,197,125"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="290,5,393,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,56,245,41,276,32,278,37,246,46,198,61"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a4d24bf42a12b8d6b652a867bad2ac7a7" title="Get number of worker threads." alt="" coords="245,55,437,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,87,232,87,232,93,197,93"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a71698e760acac812053bfeb768546fb7" title="Worker thread function." alt="" coords="245,149,437,218"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,122,240,141,238,146,190,127"/>
+</map>

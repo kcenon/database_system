@@ -1,0 +1,11 @@
+<map id="database::integrated::unified_database_system::builder::enable_logging" name="database::integrated::unified_database_system::builder::enable_logging">
+<area shape="rect" id="Node000001" title="Enable logging." alt="" coords="311,40,507,95"/>
+<area shape="rect" id="Node000002" href="$migration__from__legacy_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="158,5,213,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,45,212,26,214,21,298,40"/>
+<area shape="rect" id="Node000003" href="$integrated_2basic__usage_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="158,55,213,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="297,70,213,70,213,65,297,65"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#a999f56b7107ee3cfd3c749095fcd91f5" title=" " alt="" coords="108,104,263,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="298,95,244,107,243,101,296,89"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,119,60,119,60,114,94,114"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,106,75,131"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__registry.html#a69f1d889cf06ebfa3bef59bfa96791f6" title="Clear all registered backends (for testing)" alt="" coords="131,5,311,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,104,84,79,121,55,136,48,138,53,124,60,87,84,57,108"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1core.html#a74309da069d452aa93ad1e6a0242e17c" title="Convenience function for checking backend availability." alt="" coords="147,69,296,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="75,111,133,101,133,106,75,116"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1core_1_1backend__registry.html#acbb12b577a2f87abe52a6e93d48216d0" title="Get the singleton instance." alt="" coords="368,127,548,167"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="75,118,354,137,354,142,75,124"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1core_1_1backend__registry.html#aea5b0e83188341608db3fc0d433ff2d7" title="Register a backend factory function." alt="" coords="123,184,320,224"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="63,129,124,163,154,176,152,181,121,168,60,134"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__registry.html#ae2eeb77f5975cfb706b96225d67d0a24" title="Check if a backend is registered." alt="" coords="368,39,548,79"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="296,77,354,69,355,75,296,82"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="297,105,362,121,361,126,295,110"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="414,127,412,117,419,108,434,102,458,100,485,103,500,110,498,115,484,108,458,105,435,107,422,112,417,118,419,126"/>
+</map>

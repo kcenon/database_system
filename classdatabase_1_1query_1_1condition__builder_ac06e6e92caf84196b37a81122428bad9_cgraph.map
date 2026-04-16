@@ -1,0 +1,29 @@
+<map id="database::query::condition_builder::format_condition" name="database::query::condition_builder::format_condition">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,165,200,205"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1value__formatter.html#a0dc2bf2db734a49a47390b0d7878b8e7" title="Quote and escape an identifier (table/column name)" alt="" coords="248,101,459,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,163,261,142,262,147,182,168"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1value__formatter.html#a567cd52ac19598dcea033db7e2dfa51a" title="Format a database value." alt="" coords="268,165,439,205"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,183,254,183,254,188,200,188"/>
+<area shape="rect" id="Node000014" href="$structdatabase_1_1query_1_1condition.html#ad5dc8d08b99d0f8171e215e03fac58a3" title=" " alt="" coords="256,229,451,269"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="182,203,262,223,261,229,181,208"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query_1_1value__formatter.html#a692f8219a2096ba81f705eb8bbb5477d" title=" " alt="" coords="515,5,693,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="438,164,457,151,474,129,480,105,487,80,505,55,511,50,515,55,509,59,491,82,485,106,479,131,460,155,440,168"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1query_1_1value__formatter.html#a004d6b1e97558144bc9b93a67c6ea3ac" title=" " alt="" coords="515,69,693,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="429,163,457,151,481,135,505,119,521,112,523,117,508,124,484,140,460,156,431,168"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1query_1_1value__formatter.html#a81407f17bc4f1de8619c7912c9650f2f" title=" " alt="" coords="507,133,701,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="439,172,493,165,493,170,439,177"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1query_1_1value__formatter.html#a3482e7c48817f79e4c954a52ceced724" title=" " alt="" coords="519,197,689,237"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="439,194,505,202,505,207,439,199"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1query_1_1value__formatter.html#ae4f64b594370b302a6ae877a851d518b" title=" " alt="" coords="511,261,697,301"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="431,203,460,215,484,231,508,247,523,254,521,259,505,252,481,235,457,220,429,208"/>
+<area shape="rect" id="Node000013" href="$classdatabase_1_1query_1_1value__formatter.html#afc342c29ad5f01013839ffd3682ac5df" title="Get NULL literal for this database." alt="" coords="519,325,689,365"/>
+<area shape="poly" id="edge12_Node000003_Node000013" title=" " alt="" coords="440,202,460,215,479,240,485,265,491,288,509,311,515,316,511,320,505,315,487,291,480,266,474,242,457,219,438,207"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1query_1_1value__formatter.html#af46914f04fc87b634e8a7146df61c699" title="Get boolean literal." alt="" coords="758,69,930,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="693,87,744,87,744,92,693,92"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1query_1_1value__formatter.html#a3c2b378e72f6cdac90ac9d9ad9fccd25" title="Escape a string value." alt="" coords="749,261,939,301"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="697,279,735,279,735,284,697,284"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1query_1_1value__formatter.html#a43de2d2bb5753471471a8a3c69b03dd7" title=" " alt="" coords="987,214,1207,269"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="938,264,973,258,973,264,939,269"/>
+<area shape="rect" id="Node000012" href="$classdatabase_1_1query_1_1value__formatter.html#a3e9141b95ca0d3ba1955bc66db2cad48" title=" " alt="" coords="1003,293,1191,347"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="939,293,990,301,989,306,938,298"/>
+</map>

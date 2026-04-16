@@ -1,0 +1,7 @@
+<map id="example_realtime_monitoring" name="example_realtime_monitoring">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,52,224,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a7ab0d61849248a9662f3cf634f39d1bf" title="Get current performance metrics." alt="" coords="272,5,468,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,49,258,44,259,49,217,55"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="318,84,422,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,75,305,86,304,91,216,80"/>
+</map>

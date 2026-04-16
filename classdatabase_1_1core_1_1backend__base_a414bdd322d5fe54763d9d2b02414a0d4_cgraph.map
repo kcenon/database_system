@@ -1,0 +1,5 @@
+<map id="database::core::backend_base::~backend_base" name="database::core::backend_base::~backend_base">
+<area shape="rect" id="Node000001" title="Virtual destructor." alt="" coords="5,5,185,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a1a3bffb1359c0b4021a8653362b949f2" title="Shutdown the database backend gracefully." alt="" coords="233,5,413,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,23,220,23,220,28,186,28"/>
+</map>

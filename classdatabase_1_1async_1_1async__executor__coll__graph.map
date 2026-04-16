@@ -1,0 +1,23 @@
+<map id="database::async::async_executor" name="database::async::async_executor">
+<area shape="rect" id="Node000001" title="High&#45;performance asynchronous executor using thread_system." alt="" coords="316,404,512,744"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,269,208,334"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,332,305,470,301,474,150,336"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,133,89,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="54,198,66,236,77,254,72,257,61,238,49,200"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,133,235,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="157,212,133,269,128,267,153,210"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="308,5,331,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="309,48,276,69,238,97,212,123,208,119,235,93,273,64,306,44"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="259,133,379,199"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="322,71,322,117,317,117,317,71"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="421,133,546,199"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="332,44,404,93,438,120,434,124,400,97,329,49"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="233,261,411,341"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="338,340,354,387,349,389,333,342"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="315,213,314,223,316,261,311,261,309,223,310,212"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="605,269,689,334"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="622,336,525,448,521,445,618,332"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="436,269,581,334"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="500,335,481,389,476,388,495,333"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="495,212,505,268,500,269,489,213"/>
+</map>

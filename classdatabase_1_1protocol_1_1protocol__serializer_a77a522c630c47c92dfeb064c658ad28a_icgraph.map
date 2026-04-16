@@ -1,0 +1,15 @@
+<map id="database::protocol::protocol_serializer::write_uint16" name="database::protocol::protocol_serializer::write_uint16">
+<area shape="rect" id="Node000001" title=" " alt="" coords="321,45,472,100"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ac7b5cd058b007350e1ef949401058548" title="Serialize transaction request." alt="" coords="123,5,273,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="307,57,273,50,274,45,308,52"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ac70ab663e51a2120fed6a9d596b335c8" title="Serialize message header to bytes." alt="" coords="123,84,273,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="308,93,274,99,273,94,307,87"/>
+<area shape="rect" id="Node000004" href="$test__protocol__serializer_8cpp.html#a5e09627a57cc9e663e79dabfcc2048a4" title=" " alt="" coords="5,24,75,49"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,80,67,52,69,47,129,76"/>
+<area shape="rect" id="Node000005" href="$test__protocol__serializer_8cpp.html#a96b294f0226a05bfa19beec151015205" title=" " alt="" coords="5,73,75,99"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="109,100,74,94,75,89,110,94"/>
+<area shape="rect" id="Node000006" href="$test__protocol__serializer_8cpp.html#a701bebba283906165afc1a416f74350d" title=" " alt="" coords="5,123,75,148"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="110,127,75,133,74,128,109,122"/>
+<area shape="rect" id="Node000007" href="$test__protocol__serializer_8cpp.html#af9884507f832517739901361a4233fce" title=" " alt="" coords="5,172,75,197"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="127,147,69,174,67,170,125,142"/>
+</map>

@@ -899,11 +899,11 @@ kcenon::common::Result<std::unique_ptr<unified_database_system>> unified_databas
     if (!connection_string_.empty()) {
         auto result = system->connect(config_.database.type, connection_string_);
         if (!result.is_ok()) {
-            return kcenon::common::error_info{
-                result.error().code,
+            return make_error_result<std::unique_ptr<unified_database_system>>(
                 "Failed to connect: " + result.error().message,
-                result.error().context
-            };
+                result.error().code,
+                "unified_database_system"
+            );
         }
     }
 

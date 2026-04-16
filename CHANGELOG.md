@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-16
+
 ### Changed
 
 - **BREAKING**: Unified CMake package name from `DatabaseSystem` to `database_system` for vcpkg consumption; use `find_package(database_system CONFIG REQUIRED)` ([#547](https://github.com/kcenon/database_system/issues/547))
+- **BREAKING**: `unified_database_system::builder::build()` now returns `Result<std::unique_ptr<unified_database_system>>` instead of throwing on failure ([#564](https://github.com/kcenon/database_system/issues/564))
+- `unified_database_system` constructor defers coordinator initialization to `connect()` for no-throw guarantee ([#564](https://github.com/kcenon/database_system/issues/564))
+- All synchronous public APIs now use `Result<T>` for error propagation with zero `throw` statements ([#564](https://github.com/kcenon/database_system/issues/564))
 
 ### Documentation
 
 - Modernize Doxygen with doxygen-awesome-css theme, dark mode toggle, and standardized mainpage ([#537](https://github.com/kcenon/database_system/issues/537))
+- Add v1.0 migration guide in README for CMake and builder API changes ([#564](https://github.com/kcenon/database_system/issues/564))
 
 ### Security
 
@@ -46,3 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - vcpkg manifest with backend-specific features
 - codecov.io integration
 - Cross-platform support (Linux, macOS, Windows)
+
+[Unreleased]: https://github.com/kcenon/database_system/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/kcenon/database_system/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/kcenon/database_system/releases/tag/v0.1.0

@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.20)
 
 # Project definition
 project(database_system
-    VERSION 0.1.0
+    VERSION 1.0.0
     DESCRIPTION "Pure, Lightweight C++20 Core DAL Library"
     LANGUAGES CXX
 )

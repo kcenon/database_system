@@ -69,6 +69,7 @@ set(HEADER_FILES
     # Sprint 5 Headers (Backend Plugin System)
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/connection_pool.h
     # Sprint 5.2 Headers (PostgreSQL Backend Plugin)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgresql_backend.h
     # Sprint 5.3 Headers (Additional Backend Plugins)
@@ -99,6 +100,7 @@ set(SOURCE_FILES
     # Sprint 5 Sources (Backend Plugin System)
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/connection_pool.cpp
     # Sprint 5.2 Sources (PostgreSQL Backend Plugin)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgresql_backend.cpp
     # Sprint 5.3 Sources (Additional Backend Plugins)
@@ -208,7 +210,9 @@ endif()
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     $<INSTALL_INTERFACE:include/database_system>
+    $<INSTALL_INTERFACE:include>
 )
 
 ##################################################

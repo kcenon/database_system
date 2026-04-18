@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Thread-safe `connection_pool` with RAII `pooled_connection` lease handle, bounded
+  sizing, acquisition timeout, and transparent replacement of broken connections.
+  The pool is backend-agnostic and lives alongside existing direct-connection APIs
+  without breaking them ([#568](https://github.com/kcenon/database_system/issues/568)).
+- Public forwarding header `kcenon/database/core/connection_pool.h`.
+- Unit test suite `connection_pool_test` covering pre-warming, concurrent
+  checkout/checkin, pool exhaustion, broken-connection replacement, and shutdown.
+
 ## [1.0.0] - 2026-04-16
 
 ### Changed

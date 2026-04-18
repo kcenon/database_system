@@ -38,6 +38,25 @@ category: "PROJ"
 
 ## [Unreleased] - 2026-01-23
 
+### 🔐 **Security**
+
+#### **Enable OpenSSL by default and publish ISO/IEC 27001 mapping (Issue #569)**
+- **`CMakeLists.txt`**: Introduced `USE_OPENSSL` option defaulting to `ON`. The
+  `secure_connection` module now links OpenSSL (PBKDF2-HMAC-SHA256, AES-256-GCM)
+  out of the box. `USE_OPENSSL=OFF` is still supported for minimal embedded
+  builds but emits a CMake `WARNING` and drops the module to non-production
+  placeholder crypto.
+- **New document**: `docs/compliance/ISO_27001.md` maps the current codebase to
+  ISO/IEC 27001:2022 Annex A controls (A.5.15, A.5.17, A.8.5, A.8.15, A.8.16,
+  A.8.20, A.8.21, A.8.24, A.8.26, A.8.28) with source-code citations. Out-of-
+  scope controls are listed explicitly.
+- **`README.md`**: Added "Security Posture" section summarising the new default
+  and linking to the compliance mapping.
+- **Note**: The default runtime TLS setting (`security_credentials::encryption =
+  encryption_type::tls` with `verify_certificate = true`) was already in place;
+  this change ensures the cryptographic primitives behind it are actually linked
+  in the default build.
+
 ### 📚 **Documentation**
 
 #### **Mark MongoDB and Redis Backends as Experimental (Issue #339)**

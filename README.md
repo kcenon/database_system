@@ -21,6 +21,7 @@
 - [Documentation](#documentation)
 - [CMake Integration](#cmake-integration)
 - [Production Quality](#production-quality)
+- [Security Posture](#security-posture)
 - [Performance Baselines](#performance-baselines)
 - [Contributing](#contributing)
 - [License](#license)
@@ -587,7 +588,8 @@ graph TD
 ### Advanced Topics
 - 🏛️ [Architecture](docs/ARCHITECTURE.md) - System design and patterns
 - 📘 [API Reference](docs/API_REFERENCE.md) - Complete API documentation
-- 🔐 [Security Guide](SECURITY.md) - Security policy and reporting <!-- TODO: dedicated docs/advanced/SECURITY.md for TLS/SSL, RBAC, audit logging -->
+- 🔐 [Security Guide](SECURITY.md) - Security policy and reporting
+- 🛡️ [Security Posture](#security-posture) - TLS default, ISO/IEC 27001 mapping
 - 🔄 [Migration Guide](docs/advanced/MIGRATION.md) - Upgrading from previous versions
 
 ### Development
@@ -673,6 +675,26 @@ target_link_libraries(your_target PRIVATE database_system::database)
 - ✅ **Transaction Safety**: Full ACID support with comprehensive error reporting
 
 [✅ Complete Production Quality Report →](docs/PRODUCTION_QUALITY.md)
+
+---
+
+## Security Posture
+
+**Secure defaults**: OpenSSL is enabled by default (`USE_OPENSSL=ON`). The
+`secure_connection` module therefore uses PBKDF2-HMAC-SHA256 for password
+hashing and AES-256-GCM for credential envelopes, and `security_credentials`
+defaults to `encryption_type::tls` with `verify_certificate=true`.
+
+Passing `-DUSE_OPENSSL=OFF` is supported only for minimal embedded builds that
+cannot ship OpenSSL; CMake emits a `WARNING` in that case and the library falls
+back to placeholder crypto that is explicitly *not* production-grade.
+
+**Standards mapping**: See [docs/compliance/ISO_27001.md](docs/compliance/ISO_27001.md)
+for a factual, source-cited mapping of implemented features to ISO/IEC 27001:2022
+Annex A controls (A.5.15, A.5.17, A.8.5, A.8.15, A.8.16, A.8.20, A.8.21, A.8.24,
+A.8.26, A.8.28). Out-of-scope controls are listed explicitly.
+
+**Reporting vulnerabilities**: see [SECURITY.md](SECURITY.md).
 
 ---
 

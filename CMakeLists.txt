@@ -80,6 +80,11 @@ if(USE_REDIS)
 endif()
 
 option(BUILD_DATABASE "Build database module" ON)
+# Security posture: OpenSSL is enabled by default so that TLS, PBKDF2-HMAC-SHA256,
+# and AES-256-GCM are available for the secure_connection module out of the box.
+# Opt out (USE_OPENSSL=OFF) only for minimal embedded builds that cannot ship OpenSSL;
+# see docs/compliance/ISO_27001.md for the security rationale.
+option(USE_OPENSSL "Enable OpenSSL-backed TLS and cryptography for secure_connection" ON)
 option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
 option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)
 option(USE_CONTAINER_SYSTEM "Enable container_system integration for high-performance serialization" ON)
@@ -180,12 +185,25 @@ include(FindSystemDependency)
 # Find required packages
 find_package(Threads REQUIRED)
 
-# Optional: OpenSSL for real cryptography in secure_connection
-find_package(OpenSSL QUIET)
-if(OPENSSL_FOUND)
-    message(STATUS "OpenSSL ${OPENSSL_VERSION} found — secure_connection will use PBKDF2/AES-256-GCM")
+# OpenSSL for real cryptography in secure_connection (enabled by default, see USE_OPENSSL).
+# Rationale: ISO/IEC 27001 A.10 / A.13 recommend authenticated encryption for data in transit
+# and keyed hash functions for credential storage. See docs/compliance/ISO_27001.md.
+if(USE_OPENSSL)
+    find_package(OpenSSL QUIET)
+    if(OPENSSL_FOUND)
+        message(STATUS "OpenSSL ${OPENSSL_VERSION} found — secure_connection will use PBKDF2/AES-256-GCM")
+    else()
+        message(WARNING
+            "USE_OPENSSL=ON but OpenSSL was not found.\n"
+            "  secure_connection will fall back to placeholder crypto (NOT for production).\n"
+            "  Install OpenSSL >= 3.0 (vcpkg: 'vcpkg install openssl') or pass -DUSE_OPENSSL=OFF\n"
+            "  to acknowledge the insecure build explicitly.")
+    endif()
 else()
-    message(STATUS "OpenSSL not found — secure_connection will use placeholder crypto (NOT for production)")
+    message(WARNING
+        "USE_OPENSSL=OFF — secure_connection will use placeholder crypto only.\n"
+        "  This is INSECURE and must not be used for production deployments.\n"
+        "  See docs/compliance/ISO_27001.md for the controls this opt-out disables.")
 endif()
 
 ##################################################

@@ -371,20 +371,38 @@ endif()
 
 # PostgreSQL dependency (optional)
 if(USE_POSTGRESQL)
+    # Prefer vcpkg-provided CMake config; fall back to pkg-config so distro
+    # packages (e.g. Ubuntu's libpqxx-dev, which ships no CMake config) can
+    # still satisfy the dependency.
     find_package(libpqxx CONFIG QUIET)
+    set(_db_pqxx_target "")
+    if(libpqxx_FOUND)
+        set(_db_pqxx_target libpqxx::pqxx)
+    else()
+        find_package(PkgConfig QUIET)
+        if(PkgConfig_FOUND)
+            pkg_check_modules(LIBPQXX QUIET IMPORTED_TARGET libpqxx)
+            if(LIBPQXX_FOUND)
+                set(_db_pqxx_target PkgConfig::LIBPQXX)
+                set(libpqxx_FOUND TRUE)
+            endif()
+        endif()
+    endif()
 
-    # OpenSSL 3.3+ required (ecosystem standard, aligned with logger/network_system)
-    find_package(OpenSSL 3.3 QUIET)
+    # OpenSSL is linked transitively via libpqxx/libpq; no direct usage in
+    # this backend, so we accept any available version (Ubuntu 24.04 ships
+    # 3.0, which is sufficient for the libpq dependency chain).
+    find_package(OpenSSL QUIET)
 
     if(libpqxx_FOUND AND OPENSSL_FOUND)
         target_link_libraries(${PROJECT_NAME}
             PUBLIC
-                libpqxx::pqxx
+                ${_db_pqxx_target}
                 OpenSSL::SSL
         )
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_POSTGRESQL)
         message(STATUS "PostgreSQL support enabled")
-        message(STATUS "  libpqxx found: ${libpqxx_FOUND}")
+        message(STATUS "  libpqxx target: ${_db_pqxx_target}")
         message(STATUS "  OpenSSL version: ${OPENSSL_VERSION}")
     else()
         message(WARNING "PostgreSQL libraries not found, disabling PostgreSQL support")

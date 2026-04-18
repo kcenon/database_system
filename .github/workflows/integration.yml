@@ -63,10 +63,13 @@ jobs:
             build-essential \
             cmake \
             ninja-build \
+            pkg-config \
             g++-13 \
             libgtest-dev \
             libsqlite3-dev \
             libpq-dev \
+            libpqxx-dev \
+            libssl-dev \
             postgresql-client
           echo "CC=gcc-13" >> $GITHUB_ENV
           echo "CXX=g++-13" >> $GITHUB_ENV

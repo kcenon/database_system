@@ -50,6 +50,7 @@ compile_commands.json
 
 # Test results
 Testing/
+!docs/testing/
 CTestTestfile.cmake
 *.gcov
 *.gcda

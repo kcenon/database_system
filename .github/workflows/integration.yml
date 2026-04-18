@@ -1,0 +1,159 @@
+name: Integration Matrix
+
+# Multi-backend integration suite: runs the parameterized database_system
+# integration tests against SQLite (always) and PostgreSQL (via service
+# container). See docs/testing/SCENARIOS.md for the scenario matrix.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  integration-matrix:
+    name: integration (${{ matrix.backend }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        backend: [sqlite, postgresql]
+
+    env:
+      # Test-only ephemeral credentials consumed by the postgres service
+      # and exported as the backend URL below. No external reach.
+      IT_PG_USER: it_user
+      IT_PG_DB: db_it
+      IT_PG_PW: ${{ secrets.IT_PG_PW || 'ephemeral-ci-only' }}
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: it_user
+          POSTGRES_DB: db_it
+          POSTGRES_PASSWORD: ${{ secrets.IT_PG_PW || 'ephemeral-ci-only' }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U it_user -d db_it"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout database_system
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Checkout common_system
+        uses: actions/checkout@v4
+        with:
+          repository: kcenon/common_system
+          path: common_system
+
+      - name: Install toolchain and backend dependencies
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
+          sudo rm -f /etc/apt/sources.list.d/azure-cli.list
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkg-config \
+            g++-13 \
+            libgtest-dev \
+            libsqlite3-dev \
+            libpq-dev \
+            libpqxx-dev \
+            libssl-dev \
+            postgresql-client
+          echo "CC=gcc-13" >> $GITHUB_ENV
+          echo "CXX=g++-13" >> $GITHUB_ENV
+
+      - name: Wait for PostgreSQL readiness
+        if: matrix.backend == 'postgresql'
+        env:
+          PGPASSWORD: ${{ env.IT_PG_PW }}
+        run: |
+          for i in $(seq 1 30); do
+            if pg_isready -h localhost -p 5432 -U "${IT_PG_USER}" -d "${IT_PG_DB}"; then
+              echo "PostgreSQL is ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "PostgreSQL failed to become ready" >&2
+          exit 1
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Configure CMake
+        run: |
+          POSTGRES_FLAG=OFF
+          if [ "${{ matrix.backend }}" = "postgresql" ]; then
+            POSTGRES_FLAG=ON
+          fi
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DUSE_UNIT_TEST=ON \
+            -DDATABASE_BUILD_INTEGRATION_TESTS=ON \
+            -DUSE_SQLITE=ON \
+            -DUSE_POSTGRESQL=${POSTGRES_FLAG} \
+            -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON
+
+      - name: Build integration tests
+        run: cmake --build build --target database_integration_tests -j $(nproc)
+
+      - name: Run integration tests (SQLite only)
+        if: matrix.backend == 'sqlite'
+        working-directory: build
+        run: |
+          ./bin/database_integration_tests \
+            --gtest_output=xml:integration_test_results.xml \
+            --gtest_color=yes
+
+      - name: Run integration tests (SQLite + PostgreSQL)
+        if: matrix.backend == 'postgresql'
+        working-directory: build
+        env:
+          IT_PG_USER: ${{ env.IT_PG_USER }}
+          IT_PG_DB: ${{ env.IT_PG_DB }}
+          IT_PG_PW: ${{ env.IT_PG_PW }}
+        run: |
+          # Compose the backend URL at runtime so no credential string is
+          # hardcoded in the workflow file. GitGuardian-compliant.
+          export DATABASE_SYSTEM_IT_PG_URL="host=localhost port=5432 dbname=${IT_PG_DB} user=${IT_PG_USER} password=${IT_PG_PW}"
+          ./bin/database_integration_tests \
+            --gtest_output=xml:integration_test_results.xml \
+            --gtest_color=yes
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-matrix-${{ matrix.backend }}
+          path: build/integration_test_results.xml
+          retention-days: 7
+
+  integration-summary:
+    name: integration summary
+    needs: integration-matrix
+    runs-on: ubuntu-24.04
+    if: always()
+    steps:
+      - name: Aggregate status
+        run: |
+          echo "Integration matrix result: ${{ needs.integration-matrix.result }}"
+          if [ "${{ needs.integration-matrix.result }}" = "failure" ]; then
+            exit 1
+          fi

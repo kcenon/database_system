@@ -106,16 +106,7 @@ TEST_P(BackendParam, TransactionCommitPersists) {
 }
 
 // Scenario 7: BEGIN + INSERT + ROLLBACK leaves no residue.
-//
-// The current PostgreSQL backend wraps each execute_query call in its own
-// pqxx::work that auto-commits, so raw BEGIN/ROLLBACK issued as SQL do not
-// span subsequent statements. Tracked as a backend limitation; skipped on
-// PG to keep the SQLite-side contract under test.
 TEST_P(BackendParam, TransactionRollbackDiscardsWrites) {
-  if (kind() == BackendKind::PostgreSQL) {
-    GTEST_SKIP() << "PG backend auto-commits each statement; multi-statement "
-                    "rollback not supported by current implementation.";
-  }
   ASSERT_TRUE(Create("BEGIN"));
   ASSERT_TRUE(Execute("INSERT INTO " + TableName() +
                       " (name, email, age) VALUES "
@@ -125,15 +116,7 @@ TEST_P(BackendParam, TransactionRollbackDiscardsWrites) {
 }
 
 // Scenario 8: savepoint rollback preserves outer transaction writes.
-//
-// Savepoints require a surrounding transaction, which the PG backend does
-// not currently maintain across execute_query calls (see scenario 7).
-// Skipped on PG until the backend supports explicit transaction scopes.
 TEST_P(BackendParam, NestedSavepointRollbackKeepsOuterWrites) {
-  if (kind() == BackendKind::PostgreSQL) {
-    GTEST_SKIP() << "PG backend does not retain a txn across execute_query "
-                    "calls; SAVEPOINT/ROLLBACK TO SAVEPOINT unsupported.";
-  }
   ASSERT_TRUE(Create("BEGIN"));
   ASSERT_TRUE(Execute("INSERT INTO " + TableName() +
                       " (name, email, age) VALUES "
@@ -153,16 +136,7 @@ TEST_P(BackendParam, NestedSavepointRollbackKeepsOuterWrites) {
 // -----------------------------------------------------------------------------
 
 // Scenario 9: a second session cannot observe uncommitted writes of the first.
-//
-// Requires holding an open transaction across a second-session read. The
-// current PG backend auto-commits each statement so "uncommitted" writes
-// become visible immediately; the scenario is therefore SQLite-only until
-// the backend supports explicit transaction scopes.
 TEST_P(BackendParam, ReadCommittedIsolation) {
-  if (kind() == BackendKind::PostgreSQL) {
-    GTEST_SKIP() << "PG backend auto-commits per statement; cannot hold an "
-                    "uncommitted write across a second-session read.";
-  }
   auto second_ctx = std::make_shared<database_context>();
   auto second = std::make_shared<database_manager>(second_ctx);
   if (kind() == BackendKind::SQLite) {

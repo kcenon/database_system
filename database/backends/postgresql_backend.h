@@ -171,7 +171,8 @@ private:
 	unsigned int execute_modification_query(const std::string& query_string);
 
 	void* connection_{nullptr};                 ///< PostgreSQL connection (PGconn* or pqxx::connection*)
-	std::atomic<bool> in_transaction_{false};   ///< Transaction state
+	std::atomic<bool> in_transaction_{false};   ///< Transaction state (mirrors active_txn_ under USE_POSTGRESQL)
+	void* active_txn_{nullptr};                 ///< Active pqxx::work* when a multi-statement txn is open (USE_POSTGRESQL only; nullptr otherwise)
 	mutable std::string last_error_;            ///< Last error message
 	core::connection_config connection_config_; ///< Cached connection config
 };

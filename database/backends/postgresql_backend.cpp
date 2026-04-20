@@ -15,6 +15,8 @@
 #include <iomanip>
 #include <variant>
 #include <iostream>
+#include <cctype>
+#include <cstring>
 
 #include "../utils/backend_logger.h"
 
@@ -28,6 +30,33 @@ constexpr unsigned int PG_INT8OID = 20;
 constexpr unsigned int PG_FLOAT4OID = 700;
 constexpr unsigned int PG_FLOAT8OID = 701;
 constexpr unsigned int PG_BOOLOID = 16;
+
+// Case-insensitive check: does `query` begin with `keyword` (surrounded by
+// whitespace/EOS/semicolon)? Used to detect BEGIN / COMMIT / ROLLBACK /
+// ROLLBACK TO ... transaction-control statements in execute_query so the
+// persistent pqxx::work can be opened, committed, or aborted across calls.
+bool query_starts_with(const std::string& query, const char* keyword) {
+	const std::size_t n = std::strlen(keyword);
+	std::size_t i = 0;
+	while (i < query.size() &&
+	       std::isspace(static_cast<unsigned char>(query[i]))) {
+		++i;
+	}
+	if (query.size() - i < n) {
+		return false;
+	}
+	for (std::size_t k = 0; k < n; ++k) {
+		if (std::tolower(static_cast<unsigned char>(query[i + k])) !=
+		    std::tolower(static_cast<unsigned char>(keyword[k]))) {
+			return false;
+		}
+	}
+	if (i + n == query.size()) {
+		return true;
+	}
+	const char c = query[i + n];
+	return std::isspace(static_cast<unsigned char>(c)) || c == ';';
+}
 }
 
 namespace database
@@ -96,6 +125,21 @@ kcenon::common::VoidResult postgresql_backend::do_shutdown()
 	}
 
 #ifdef USE_POSTGRESQL
+	// Safety: if rollback_transaction() couldn't reach the connection for
+	// any reason, drop the active pqxx::work* here before the connection
+	// underneath it is deleted.
+	if (active_txn_ != nullptr) {
+		try {
+			auto* txn = static_cast<pqxx::work*>(active_txn_);
+			txn->abort();
+			delete txn;
+		} catch (...) {
+			// Swallow — the connection teardown below is the recovery path.
+		}
+		active_txn_ = nullptr;
+		in_transaction_ = false;
+	}
+
 	try {
 		delete static_cast<pqxx::connection*>(connection_);
 		connection_ = nullptr;
@@ -329,12 +373,63 @@ kcenon::common::VoidResult postgresql_backend::execute_query(const std::string& 
 			};
 		}
 
-		pqxx::work txn{*static_cast<pqxx::connection*>(connection_)};
-		txn.exec(query_string);
-		txn.commit();
+		auto* conn = static_cast<pqxx::connection*>(connection_);
+
+		// Route through a persistent pqxx::work when a multi-statement txn
+		// is open, so BEGIN / INSERT / COMMIT issued as separate
+		// execute_query calls compose into a single transaction. Without
+		// this, each call would open-and-commit its own pqxx::work,
+		// silently auto-committing every statement and breaking
+		// ROLLBACK / SAVEPOINT / isolation semantics (#572).
+		if (active_txn_ != nullptr) {
+			auto* txn = static_cast<pqxx::work*>(active_txn_);
+			if (query_starts_with(query_string, "COMMIT") ||
+			    query_starts_with(query_string, "END")) {
+				txn->commit();
+				delete txn;
+				active_txn_ = nullptr;
+				in_transaction_ = false;
+			} else if (query_starts_with(query_string, "ROLLBACK") &&
+			           !query_starts_with(query_string, "ROLLBACK TO")) {
+				txn->abort();
+				delete txn;
+				active_txn_ = nullptr;
+				in_transaction_ = false;
+			} else {
+				// SAVEPOINT, RELEASE SAVEPOINT, ROLLBACK TO SAVEPOINT,
+				// and all DML execute within the active txn.
+				txn->exec(query_string);
+			}
+		} else {
+			if (query_starts_with(query_string, "BEGIN") ||
+			    query_starts_with(query_string, "START")) {
+				// Open a persistent txn. pqxx::work's ctor issues BEGIN
+				// internally, so we do not forward the BEGIN query text.
+				active_txn_ = new pqxx::work{*conn};
+				in_transaction_ = true;
+			} else {
+				// Transient auto-transaction (previous behavior).
+				pqxx::work txn{*conn};
+				txn.exec(query_string);
+				txn.commit();
+			}
+		}
+
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
+		// If the active txn is now in a poisoned state (pqxx throws on
+		// committed-or-aborted work, or on a failed exec), drop it so the
+		// next BEGIN can open a fresh one.
+		if (active_txn_ != nullptr) {
+			try {
+				delete static_cast<pqxx::work*>(active_txn_);
+			} catch (...) {
+				// Swallow secondary teardown error; we report the primary.
+			}
+			active_txn_ = nullptr;
+			in_transaction_ = false;
+		}
 		last_error_ = std::string("Execute error: ") + e.what();
 		logger_.error("execute_query", last_error_);
 		return kcenon::common::error_info{

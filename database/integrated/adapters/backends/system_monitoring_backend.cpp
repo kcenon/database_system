@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "system_monitoring_backend.h"
+#include <kcenon/database/integrated/adapters/backends/system_monitoring_backend.h>
 
 #include <kcenon/monitoring/core/performance_monitor.h>
 #include <kcenon/monitoring/exporters/metric_exporters.h>

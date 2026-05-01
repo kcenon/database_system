@@ -15,31 +15,35 @@ set(INTEGRATED_DB_TARGET integrated_database)
 # Source Files
 ##################################################
 
+# Public headers now live under <repo>/include/kcenon/database/integrated/.
+set(_INTEGRATED_DB_PUBLIC_INCLUDE_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/kcenon/database/integrated)
+
 set(INTEGRATED_DB_HEADERS
     # Core
-    core/configuration.h
-    core/database_coordinator.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/core/configuration.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/core/database_coordinator.h
     # Adapters
-    adapters/logger_adapter.h
-    adapters/monitoring_adapter.h
-    adapters/thread_adapter.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/logger_adapter.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/monitoring_adapter.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/thread_adapter.h
     # Logger Backends (common_system based)
-    adapters/backends/logger_backend.h
-    adapters/backends/common_logger_backend.h
-    adapters/backends/fallback_logger_backend.h
-    adapters/backends/null_logger_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/logger_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/common_logger_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/fallback_logger_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/null_logger_backend.h
     # Monitoring Backends
-    adapters/backends/monitoring_backend.h
-    adapters/backends/fallback_monitoring_backend.h
-    adapters/backends/null_monitoring_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/monitoring_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/fallback_monitoring_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/null_monitoring_backend.h
     # Thread Backends
-    adapters/backends/thread_backend.h
-    adapters/backends/fallback_thread_backend.h
-    adapters/backends/null_thread_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/thread_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/fallback_thread_backend.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/adapters/backends/null_thread_backend.h
     # Unified System
-    unified_database_system.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/unified_database_system.h
     # Connection String Builder
-    connection_string_builder.h
+    ${_INTEGRATED_DB_PUBLIC_INCLUDE_DIR}/connection_string_builder.h
 )
 
 set(INTEGRATED_DB_SOURCES
@@ -283,11 +287,8 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         RUNTIME DESTINATION bin
     )
 
-    # Install headers
-    install(DIRECTORY core/ adapters/
-        DESTINATION include/database_system/database/integrated
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
-    )
+    # Public headers are installed by the root CMakeLists.txt via the
+    # unified install(DIRECTORY include/) rule.
 endif()
 
 message(STATUS "Integrated database system configured")

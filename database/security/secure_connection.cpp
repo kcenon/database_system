@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "secure_connection.h"
+#include <kcenon/database/security/secure_connection.h>
 
 #include <algorithm>
 #include <fstream>

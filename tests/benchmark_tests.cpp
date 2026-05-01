@@ -10,13 +10,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "database/database_manager.h"
-#include "database/database_types.h"
-#include "database/core/database_context.h"
-#include "database/orm/entity.h"
-#include "database/monitoring/performance_monitor.h"
-#include "database/security/secure_connection.h"
-#include "database/async/async_operations.h"
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/database_types.h>
+#include <kcenon/database/core/database_context.h>
+#include <kcenon/database/orm/entity.h>
+#include <kcenon/database/monitoring/performance_monitor.h>
+#include <kcenon/database/security/secure_connection.h>
+#include <kcenon/database/async/async_operations.h>
 
 using namespace database;
 using namespace database::orm;

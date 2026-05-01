@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "postgres_manager.h"
+#include <kcenon/database/postgres_manager.h>
 
 #ifdef USE_POSTGRESQL
 #include <pqxx/pqxx>

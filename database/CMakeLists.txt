@@ -49,37 +49,40 @@ endif()
 # Source Files Configuration
 ##################################################
 
+# Public headers now live under <repo>/include/kcenon/database/.
+set(_DATABASE_PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include/kcenon/database)
+
 # Collect all header files
 set(HEADER_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_types.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_dialect.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/join_builder.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/database_manager.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/database_types.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/postgres_manager.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_builder.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_dialect.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_builder/value_formatter.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_builder/sql_dialect.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_builder/condition_builder.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query_builder/join_builder.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/core/database_context.h
     # Phase 4 Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/orm/entity.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/monitoring/performance_monitor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/security/secure_connection.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/async/async_operations.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/orm/entity.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/monitoring/performance_monitor.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/security/secure_connection.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/async/async_operations.h
     # Sprint 5 Headers (Backend Plugin System)
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_backend.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/backend_registry.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/connection_pool.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/core/database_backend.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/core/backend_registry.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/core/connection_pool.h
     # Sprint 5.2 Headers (PostgreSQL Backend Plugin)
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgresql_backend.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/backends/postgresql_backend.h
     # Sprint 5.3 Headers (Additional Backend Plugins)
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/sqlite_backend.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/mongodb_backend.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/backends/redis_backend.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/backends/sqlite_backend.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/backends/mongodb_backend.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/backends/redis_backend.h
     # P1-2 Headers (Immutable Query Builder)
-    ${CMAKE_CURRENT_SOURCE_DIR}/query/immutable_query_builder.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/query/immutable_query_builder.h
     # Protocol Serialization Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/protocol/database_protocol.h
+    ${_DATABASE_PUBLIC_INCLUDE_DIR}/protocol/database_protocol.h
 )
 
 # Collect all source files
@@ -207,12 +210,17 @@ endif()
 ##################################################
 
 # Public include directories (for consumers of this library)
+# Public headers are exposed via <kcenon/database/...> from
+# ${CMAKE_CURRENT_SOURCE_DIR}/../include. The legacy CMAKE_CURRENT_SOURCE_DIR
+# entries are retained so private translation units can still locate any
+# remaining .cpp-local includes during the migration.
 target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:include>
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    $<INSTALL_INTERFACE:include/database_system>
-    $<INSTALL_INTERFACE:include>
 )
 
 ##################################################

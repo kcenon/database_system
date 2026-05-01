@@ -12,7 +12,7 @@
  * For full integration testing, run the integration test suite instead.
  */
 
-#include "../../database/integrated/adapters/thread_adapter.h"
+#include <kcenon/database/integrated/adapters/thread_adapter.h>
 #include <atomic>
 #include <chrono>
 #include <iostream>

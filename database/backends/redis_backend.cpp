@@ -2,8 +2,8 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "redis_backend.h"
-#include "../core/result.h"
+#include <kcenon/database/backends/redis_backend.h>
+#include <kcenon/database/core/result.h>
 
 #ifdef USE_REDIS
 #include <hiredis/hiredis.h>
@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../utils/backend_logger.h"
+#include <kcenon/database/utils/backend_logger.h>
 
 namespace
 {

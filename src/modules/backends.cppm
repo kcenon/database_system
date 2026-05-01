@@ -31,24 +31,24 @@ module;
 #include <vector>
 
 // Include core headers
-#include "database/database_types.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/database_types.h>
+#include <kcenon/database/core/database_backend.h>
 
 // Conditionally include backend headers based on configuration
 #ifdef USE_POSTGRESQL
-#include "database/backends/postgresql_backend.h"
+#include <kcenon/database/backends/postgresql_backend.h>
 #endif
 
 #ifdef USE_SQLITE
-#include "database/backends/sqlite_backend.h"
+#include <kcenon/database/backends/sqlite_backend.h>
 #endif
 
 #ifdef USE_MONGODB
-#include "database/backends/mongodb_backend.h"
+#include <kcenon/database/backends/mongodb_backend.h>
 #endif
 
 #ifdef USE_REDIS
-#include "database/backends/redis_backend.h"
+#include <kcenon/database/backends/redis_backend.h>
 #endif
 
 export module kcenon.database:backends;

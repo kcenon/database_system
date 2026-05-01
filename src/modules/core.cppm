@@ -33,13 +33,13 @@ module;
 #include <vector>
 
 // Include existing headers in the global module fragment
-#include "database/database_types.h"
+#include <kcenon/database/database_types.h>
 #include "database/database_base.h"
-#include "database/core/database_backend.h"
-#include "database/core/database_context.h"
-#include "database/core/backend_registry.h"
-#include "database/core/concepts.h"
-#include "database/database_manager.h"
+#include <kcenon/database/core/database_backend.h>
+#include <kcenon/database/core/database_context.h>
+#include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/core/concepts.h>
+#include <kcenon/database/database_manager.h>
 #include "database/proxy/proxy_config.h"
 
 export module kcenon.database:core;

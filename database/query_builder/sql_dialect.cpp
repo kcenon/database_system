@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "sql_dialect.h"
+#include <kcenon/database/query_builder/sql_dialect.h>
 #include <stdexcept>
 
 namespace database::query {

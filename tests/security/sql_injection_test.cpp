@@ -16,9 +16,9 @@
 #include <string>
 #include <vector>
 
-#include "database/query_builder.h"
-#include "database/backends/sqlite_backend.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/query_builder.h>
+#include <kcenon/database/backends/sqlite_backend.h>
+#include <kcenon/database/core/database_backend.h>
 
 using namespace database;
 using namespace database::backends;

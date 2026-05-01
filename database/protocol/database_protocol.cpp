@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "database_protocol.h"
+#include <kcenon/database/protocol/database_protocol.h>
 #include <cstring>
 
 namespace database::protocol {

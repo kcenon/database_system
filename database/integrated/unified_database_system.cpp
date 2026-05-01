@@ -7,14 +7,14 @@
  * @brief Implementation of unified database system (Phase 6)
  */
 
-#include "unified_database_system.h"
-#include "core/database_coordinator.h"
-#include "adapters/logger_adapter.h"
-#include "adapters/monitoring_adapter.h"
-#include "adapters/thread_adapter.h"
-#include "../core/database_backend.h"
-#include "../core/backend_registry.h"
-#include "../postgres_manager.h"
+#include <kcenon/database/integrated/unified_database_system.h>
+#include <kcenon/database/integrated/core/database_coordinator.h>
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
+#include <kcenon/database/integrated/adapters/thread_adapter.h>
+#include <kcenon/database/core/database_backend.h>
+#include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/postgres_manager.h>
 
 #include <mutex>
 #include <chrono>

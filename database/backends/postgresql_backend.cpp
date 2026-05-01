@@ -2,8 +2,8 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "postgresql_backend.h"
-#include "../core/result.h"
+#include <kcenon/database/backends/postgresql_backend.h>
+#include <kcenon/database/core/result.h>
 
 #ifdef USE_POSTGRESQL
 #include <pqxx/pqxx>
@@ -18,7 +18,7 @@
 #include <cctype>
 #include <cstring>
 
-#include "../utils/backend_logger.h"
+#include <kcenon/database/utils/backend_logger.h>
 
 namespace
 {

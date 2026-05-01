@@ -2,11 +2,11 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "database/core/database_context.h"
-#include "database/monitoring/performance_monitor.h"
-#include "database/orm/entity.h"
-#include "database/async/async_operations.h"
-#include "database/security/secure_connection.h"
+#include <kcenon/database/core/database_context.h>
+#include <kcenon/database/monitoring/performance_monitor.h>
+#include <kcenon/database/orm/entity.h>
+#include <kcenon/database/async/async_operations.h>
+#include <kcenon/database/security/secure_connection.h>
 
 namespace database
 {

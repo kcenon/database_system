@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "backend_registry.h"
+#include <kcenon/database/core/backend_registry.h>
 
 #include <algorithm>
 

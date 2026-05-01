@@ -13,8 +13,8 @@
 
 #include <gtest/gtest.h>
 
-#include "database/core/connection_pool.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/connection_pool.h>
+#include <kcenon/database/core/database_backend.h>
 
 #include <atomic>
 #include <chrono>

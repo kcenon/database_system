@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "value_formatter.h"
+#include <kcenon/database/query_builder/value_formatter.h>
 #include <sstream>
 #include <iomanip>
 #include <cmath>

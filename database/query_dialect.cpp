@@ -2,8 +2,8 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "query_dialect.h"
-#include "query_builder.h"
+#include <kcenon/database/query_dialect.h>
+#include <kcenon/database/query_builder.h>
 
 #include <sstream>
 #include <stdexcept>

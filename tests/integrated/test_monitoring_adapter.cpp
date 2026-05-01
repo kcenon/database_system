@@ -13,7 +13,7 @@
  * integration test suite instead.
  */
 
-#include "../../database/integrated/adapters/monitoring_adapter.h"
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
 #include <chrono>
 #include <iostream>
 #include <cassert>

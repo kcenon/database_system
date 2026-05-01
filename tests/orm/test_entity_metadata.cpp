@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 #include <string>
 
-#include "database/orm/entity.h"
+#include <kcenon/database/orm/entity.h>
 
 using namespace database::orm;
 

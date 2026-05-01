@@ -69,7 +69,12 @@ message(STATUS "Mock framework library configured (DB-014)")
 if(GTest_FOUND OR gtest_FOUND)
     # Create unit test executable
     add_executable(database_unit_tests
-        unit_tests.cpp
+        test_database.cpp
+        test_orm.cpp
+        test_monitoring.cpp
+        test_security.cpp
+        test_async.cpp
+        test_query_builder.cpp
     )
 
     # Link dependencies - handle different target names

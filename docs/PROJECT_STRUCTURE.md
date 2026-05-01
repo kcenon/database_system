@@ -871,7 +871,7 @@ db.insert_query(
 ```cpp
 // include/database/backends/newdb/newdb_manager.h
 #pragma once
-#include "database/core/database_base.h"
+#include <kcenon/database/core/database_base.h>
 
 namespace database {
 

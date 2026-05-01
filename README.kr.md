@@ -160,7 +160,7 @@ cmake --build build
 ### 모듈 구조
 
 ```
-database/
+src/
   core/           - 백엔드 인터페이스, CRTP 베이스, backend_registry, concepts
   backends/       - postgresql, sqlite, mongodb, redis 구현
   query/          - immutable_query_builder (스레드 안전, 함수형)

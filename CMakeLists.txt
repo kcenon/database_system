@@ -324,7 +324,7 @@ endif()
 
 # Database module
 if(BUILD_DATABASE)
-    add_subdirectory(database)
+    add_subdirectory(src)
     message(STATUS "Database module will be built")
 else()
     message(STATUS "Database module disabled")

@@ -46,7 +46,7 @@ comment:
 flags:
   unittests:
     paths:
-      - database/
+      - src/
     carryforward: true
 
 ignore:

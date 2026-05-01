@@ -95,7 +95,8 @@ WARN_IF_INCOMPLETE_DOC = YES
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
 # Input directories for Database System
-INPUT                  = ./database \
+INPUT                  = ./src \
+                         ./include \
                          ./samples \
                          ./examples \
                          ./tests \
@@ -202,7 +203,7 @@ ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
-INCLUDE_PATH           = ./database
+INCLUDE_PATH           = ./include
 INCLUDE_FILE_PATTERNS  = *.h \
                          *.hpp
 PREDEFINED             = DATABASE_EXPORT= \

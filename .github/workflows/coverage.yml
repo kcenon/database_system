@@ -77,14 +77,14 @@ jobs:
           --base-directory "${WORKSPACE}" 2>/dev/null || true
 
         if [ -f build/coverage_raw.info ]; then
-          # Extract only project source files (database/ directory)
+          # Extract only project source files (src/ directory)
           lcov --extract build/coverage_raw.info \
-            "${WORKSPACE}/database/*" \
+            "${WORKSPACE}/src/*" \
             --output-file build/coverage.info \
             --ignore-errors source 2>/dev/null || true
 
           if [ -f build/coverage.info ]; then
-            # Remove test helpers that may be under database/
+            # Remove test helpers that may be under src/
             lcov --remove build/coverage.info \
               '*/test/*' '*/tests/*' '*/mock/*' '*/mocks/*' \
               --output-file build/coverage_filtered.info \

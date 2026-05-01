@@ -223,6 +223,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
 )
 
+# Legacy forwarding shims (issue #582). Expose them on the build interface so
+# in-tree consumers that still resolve <database/...> keep compiling. The
+# corresponding install rule lives in the top-level CMakeLists.txt.
+if(NOT DATABASE_DISABLE_LEGACY_HEADERS)
+    target_include_directories(${PROJECT_NAME} INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../legacy_include>
+    )
+endif()
+
 ##################################################
 # Dependencies
 ##################################################

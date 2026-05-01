@@ -17,16 +17,16 @@
 #include <memory>
 #include <string>
 
-#include "../config/feature_flags.h"
+#include <kcenon/database/config/feature_flags.h>
 
 #if KCENON_HAS_COMMON_SYSTEM
 
 #include <kcenon/common/di/service_container.h>
 #include <kcenon/common/interfaces/database_interface.h>
 
-#include "../adapters/common_system_database_adapter.h"
-#include "database/database_manager.h"
-#include "database/core/database_context.h"
+#include <kcenon/database/adapters/common_system_database_adapter.h>
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/core/database_context.h>
 
 namespace kcenon::database::di {
 

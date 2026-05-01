@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "connection_string_builder.h"
+#include <kcenon/database/integrated/connection_string_builder.h>
 
 #include <sstream>
 

@@ -27,10 +27,10 @@ module;
 #include <vector>
 
 // Include existing headers in the global module fragment
-#include "database/database_types.h"
+#include <kcenon/database/database_types.h>
 #include "database/database_base.h"
-#include "database/query_builder.h"
-#include "database/query_dialect.h"
+#include <kcenon/database/query_builder.h>
+#include <kcenon/database/query_dialect.h>
 
 export module kcenon.database:query;
 

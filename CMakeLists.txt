@@ -445,13 +445,9 @@ if(BUILD_DATABASE)
     list(REMOVE_DUPLICATES _DB_NON_IMPORTED_DEPS)
 
     # --- Tier 1: Headers (ALWAYS) ----------------------------------------
-    install(DIRECTORY database/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system/database
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
-        PATTERN "tests" EXCLUDE
-        PATTERN "samples" EXCLUDE
-    )
-
+    # Public headers live under include/kcenon/database/ and install to
+    # <prefix>/include/kcenon/database/ so consumers use the canonical
+    # <kcenon/database/...> form.
     install(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
@@ -465,7 +461,7 @@ if(BUILD_DATABASE)
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/database_system
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         )
 
         # Tier 3: Install + build-tree export sets

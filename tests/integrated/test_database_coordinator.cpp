@@ -14,10 +14,10 @@
  * - Report statistics
  */
 
-#include "../../database/integrated/adapters/logger_adapter.h"
-#include "../../database/integrated/adapters/monitoring_adapter.h"
-#include "../../database/integrated/adapters/thread_adapter.h"
-#include "../../database/integrated/core/database_coordinator.h"
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
+#include <kcenon/database/integrated/adapters/thread_adapter.h>
+#include <kcenon/database/integrated/core/database_coordinator.h>
 #include <chrono>
 #include <iostream>
 #include <thread>

@@ -2,8 +2,8 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "mongodb_backend.h"
-#include "../core/result.h"
+#include <kcenon/database/backends/mongodb_backend.h>
+#include <kcenon/database/core/result.h>
 
 #ifdef USE_MONGODB
 #include <mongocxx/client.hpp>
@@ -21,7 +21,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../utils/backend_logger.h"
+#include <kcenon/database/utils/backend_logger.h>
 
 namespace
 {

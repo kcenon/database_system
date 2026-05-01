@@ -13,7 +13,7 @@
 #include <vector>
 #include <map>
 
-#include "database/protocol/database_protocol.h"
+#include <kcenon/database/protocol/database_protocol.h>
 
 using namespace database::protocol;
 

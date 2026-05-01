@@ -2,7 +2,7 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "entity.h"
+#include <kcenon/database/orm/entity.h>
 #include <sstream>
 #include <algorithm>
 #include <iostream>

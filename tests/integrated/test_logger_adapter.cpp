@@ -9,7 +9,7 @@
  * Tests both common_system logging integration and fallback modes.
  */
 
-#include "../../database/integrated/adapters/logger_adapter.h"
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
 
 #include <chrono>
 #include <filesystem>

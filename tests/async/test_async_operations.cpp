@@ -27,7 +27,7 @@
 #include <thread>
 #include <vector>
 
-#include "database/async/async_operations.h"
+#include <kcenon/database/async/async_operations.h>
 
 using namespace database::async;
 
@@ -391,7 +391,7 @@ TEST(AsyncHelpersTest, MakeErrorResultInvokesOnErrorCallback) {
 // async_database Tests (#371)
 //=============================================================================
 
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/database_backend.h>
 
 namespace {
 

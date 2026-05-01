@@ -2,8 +2,8 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "sqlite_backend.h"
-#include "../core/result.h"
+#include <kcenon/database/backends/sqlite_backend.h>
+#include <kcenon/database/core/result.h>
 
 #ifdef USE_SQLITE
 #include <sqlite3.h>
@@ -15,7 +15,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../utils/backend_logger.h"
+#include <kcenon/database/utils/backend_logger.h>
 
 namespace
 {

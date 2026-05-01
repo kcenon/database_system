@@ -2,16 +2,16 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "database/database_manager.h"
+#include <kcenon/database/database_manager.h>
 
-#include "database/core/backend_registry.h"
-#include "database/backends/postgresql_backend.h"
-#include "database/backends/sqlite_backend.h"
+#include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/backends/postgresql_backend.h>
+#include <kcenon/database/backends/sqlite_backend.h>
 #ifdef USE_MONGODB
-#include "database/backends/mongodb_backend.h"
+#include <kcenon/database/backends/mongodb_backend.h>
 #endif
 #ifdef USE_REDIS
-#include "database/backends/redis_backend.h"
+#include <kcenon/database/backends/redis_backend.h>
 #endif
 #include <sstream>
 

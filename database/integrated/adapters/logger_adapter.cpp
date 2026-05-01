@@ -2,15 +2,15 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "logger_adapter.h"
-#include "backends/logger_backend.h"
-#include "backends/null_logger_backend.h"
-#include "backends/fallback_logger_backend.h"
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
+#include <kcenon/database/integrated/adapters/backends/logger_backend.h>
+#include <kcenon/database/integrated/adapters/backends/null_logger_backend.h>
+#include <kcenon/database/integrated/adapters/backends/fallback_logger_backend.h>
 
 // Include common_system backend if available
 // HAVE_COMMON_LOGGER_BACKEND is defined by CMake when common_logger_backend.cpp is compiled
 #ifdef HAVE_COMMON_LOGGER_BACKEND
-	#include "backends/common_logger_backend.h"
+	#include <kcenon/database/integrated/adapters/backends/common_logger_backend.h>
 #endif
 
 #include <algorithm>

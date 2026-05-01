@@ -8,7 +8,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "database/query_builder.h"
+#include <kcenon/database/query_builder.h>
 #include <string>
 #include <map>
 

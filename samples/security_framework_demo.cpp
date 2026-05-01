@@ -23,9 +23,9 @@
 #include <chrono>
 #include <memory>
 #include <vector>
-#include "database/database_manager.h"
-#include "database/security/secure_connection.h"
-#include "database/core/database_context.h"
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/security/secure_connection.h>
+#include <kcenon/database/core/database_context.h>
 
 using namespace database;
 using namespace database::security;

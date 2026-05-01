@@ -9,8 +9,8 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "database/query_builder.h"
-#include "database/database_types.h"
+#include <kcenon/database/query_builder.h>
+#include <kcenon/database/database_types.h>
 #include <memory>
 
 using namespace database;

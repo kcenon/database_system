@@ -15,7 +15,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "database/query_builder/sql_dialect.h"
+#include <kcenon/database/query_builder/sql_dialect.h>
 #include <memory>
 
 namespace database::query::tests

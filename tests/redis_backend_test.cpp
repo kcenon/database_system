@@ -17,8 +17,8 @@
 #include <memory>
 #include <string>
 
-#include "database/backends/redis_backend.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/backends/redis_backend.h>
+#include <kcenon/database/core/database_backend.h>
 
 using namespace database;
 using namespace database::backends;

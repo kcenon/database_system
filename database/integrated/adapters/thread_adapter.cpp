@@ -2,10 +2,10 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "thread_adapter.h"
-#include "backends/thread_backend.h"
-#include "backends/null_thread_backend.h"
-#include "backends/fallback_thread_backend.h"
+#include <kcenon/database/integrated/adapters/thread_adapter.h>
+#include <kcenon/database/integrated/adapters/backends/thread_backend.h>
+#include <kcenon/database/integrated/adapters/backends/null_thread_backend.h>
+#include <kcenon/database/integrated/adapters/backends/fallback_thread_backend.h>
 
 namespace database
 {

@@ -2,11 +2,11 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "database_coordinator.h"
+#include <kcenon/database/integrated/core/database_coordinator.h>
 
-#include "../adapters/logger_adapter.h"
-#include "../adapters/monitoring_adapter.h"
-#include "../adapters/thread_adapter.h"
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
+#include <kcenon/database/integrated/adapters/thread_adapter.h>
 
 #include <chrono>
 #include <stdexcept>

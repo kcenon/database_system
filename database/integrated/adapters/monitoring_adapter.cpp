@@ -2,14 +2,14 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-#include "monitoring_adapter.h"
-#include "backends/monitoring_backend.h"
-#include "backends/null_monitoring_backend.h"
-#include "backends/fallback_monitoring_backend.h"
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
+#include <kcenon/database/integrated/adapters/backends/monitoring_backend.h>
+#include <kcenon/database/integrated/adapters/backends/null_monitoring_backend.h>
+#include <kcenon/database/integrated/adapters/backends/fallback_monitoring_backend.h>
 
 // Include system_monitoring_backend only if monitoring_system is available
 #ifdef HAVE_SYSTEM_MONITORING_BACKEND
-#include "backends/system_monitoring_backend.h"
+#include <kcenon/database/integrated/adapters/backends/system_monitoring_backend.h>
 #endif
 
 namespace database

@@ -2,7 +2,7 @@
 // Copyright (c) 2025, kcenon
 // See the LICENSE file in the project root for full license information.
 
-#include "connection_pool.h"
+#include <kcenon/database/core/connection_pool.h>
 
 #include <utility>
 

@@ -92,6 +92,13 @@ option(BUILD_INTEGRATED_DATABASE "Build integrated database system with adapter 
 option(DATABASE_BUILD_BENCHMARKS "Build database system benchmarks" OFF)
 option(DATABASE_BUILD_INTEGRATION_TESTS "Build database system integration tests" ON)
 option(ENABLE_COVERAGE "Enable code coverage reporting" OFF)
+# Legacy <database/...> include path support (issue #582).
+# When ON (default), forwarding shims under legacy_include/database/ are exposed
+# in the build interface and installed at <prefix>/include/database/. They emit
+# a #pragma message redirecting consumers to the canonical <kcenon/database/...>
+# path. Set OFF for consumers that have already migrated; the shims are
+# scheduled for removal in the next minor release.
+option(DATABASE_DISABLE_LEGACY_HEADERS "Skip installing forwarding shims at legacy <database/...> paths" OFF)
 
 # Coverage Configuration (DB-006)
 if(ENABLE_COVERAGE)
@@ -452,6 +459,17 @@ if(BUILD_DATABASE)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
     )
+
+    # Legacy forwarding shims (issue #582). Mirror every public header at
+    # <prefix>/include/database/<rest>.h so external consumers using the
+    # pre-#577 <database/...> form keep building, with a deprecation
+    # #pragma message redirecting them to <kcenon/database/...>.
+    if(NOT DATABASE_DISABLE_LEGACY_HEADERS)
+        install(DIRECTORY legacy_include/database
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILES_MATCHING PATTERN "*.h"
+        )
+    endif()
 
     # --- Tier 2+3: Targets + conditional export --------------------------
     if(_DB_CAN_EXPORT)

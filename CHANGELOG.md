@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit test suite `connection_pool_test` covering pre-warming, concurrent
   checkout/checkin, pool exhaustion, broken-connection replacement, and shutdown.
 
+### Deprecated
+
+- Header path `<database/...>` is deprecated; use `<kcenon/database/...>`.
+  Forwarding stubs at the legacy paths emit `#pragma message` warnings and
+  include the canonical headers. Set `DATABASE_DISABLE_LEGACY_HEADERS=ON` to
+  opt out. Stubs will be removed in the next minor release
+  ([#582](https://github.com/kcenon/database_system/issues/582),
+  part of [#577](https://github.com/kcenon/database_system/issues/577)).
+
 ## [1.0.0] - 2026-04-16
 
 ### Changed

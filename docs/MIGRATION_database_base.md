@@ -12,7 +12,7 @@ category: "MIGR"
 
 > **SSOT**: This document is the single source of truth for **Migrating from database_base to database_backend**.
 >
-> **Related**: [migration/database_base.md](migration/database_base.md) also covers this topic from a `GUID` perspective. Canonical has not yet been chosen; treat both as authoritative and keep them in sync. <!-- TODO: name one canonical SSOT -->
+> **Related**: [migration/database_base.md](migration/database_base.md) previously duplicated this topic from a `GUID` perspective. As of #592 this document is the chosen canonical SSOT, and the `GUID` copy has been collapsed into a redirect stub pointing here.
 
 
 ## Overview

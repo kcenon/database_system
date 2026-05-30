@@ -77,4 +77,4 @@ struct module_version {
     static constexpr const char* module_name = "kcenon.database";
 };
 
-} // namespace database
+} // namespace kcenon::database

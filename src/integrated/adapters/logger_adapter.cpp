@@ -305,4 +305,4 @@ void logger_adapter::flush()
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

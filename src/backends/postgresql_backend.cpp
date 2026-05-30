@@ -1050,7 +1050,7 @@ std::string postgresql_backend::sanitize_error(const std::string& error_message)
 }
 
 } // namespace backends
-} // namespace database
+} // namespace kcenon::database
 
 // Auto-registration with backend_registry when PostgreSQL support is compiled in
 #ifdef USE_POSTGRESQL

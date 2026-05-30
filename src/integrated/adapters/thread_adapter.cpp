@@ -157,4 +157,4 @@ bool thread_adapter::is_idle() const
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

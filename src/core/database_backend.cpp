@@ -79,4 +79,4 @@ connection_config connection_config::from_string(const std::string& connect_stri
 }
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

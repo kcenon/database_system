@@ -248,4 +248,4 @@ std::string monitoring_adapter::export_prometheus_metrics()
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

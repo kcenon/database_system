@@ -31,4 +31,4 @@ database_context::~database_context()
     // Cleanup: All shared_ptrs will be automatically destroyed
 }
 
-} // namespace database
+} // namespace kcenon::database

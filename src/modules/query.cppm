@@ -48,7 +48,7 @@ using ::database::join_type;
 // Re-export sort order enumeration
 using ::database::sort_order;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Condition
@@ -59,7 +59,7 @@ export namespace database {
 // Re-export query condition class
 using ::database::query_condition;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Builder
@@ -70,7 +70,7 @@ export namespace database {
 // Re-export query builder class
 using ::database::query_builder;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Dialect (Strategy Pattern)
@@ -84,7 +84,7 @@ using ::database::query_dialect;
 // Re-export dialect factory function
 using ::database::create_dialect;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // SQL Dialect Implementation

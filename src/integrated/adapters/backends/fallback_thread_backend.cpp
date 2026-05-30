@@ -258,4 +258,4 @@ void fallback_thread_backend::worker_thread()
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

@@ -114,4 +114,4 @@ void backend_registry::clear()
 }
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

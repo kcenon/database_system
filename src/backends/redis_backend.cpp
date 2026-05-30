@@ -414,7 +414,7 @@ std::map<std::string, std::string> redis_backend::connection_info() const
 }
 
 } // namespace backends
-} // namespace database
+} // namespace kcenon::database
 
 // Auto-registration with backend_registry when Redis support is compiled in
 #ifdef USE_REDIS

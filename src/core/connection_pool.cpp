@@ -310,4 +310,4 @@ std::unique_ptr<database_backend> connection_pool::take_idle_locked()
 
 } // namespace pool
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

@@ -429,7 +429,7 @@ std::string mongodb_backend::build_connection_uri(const core::connection_config&
 }
 
 } // namespace backends
-} // namespace database
+} // namespace kcenon::database
 
 // Auto-registration with backend_registry when MongoDB support is compiled in
 #ifdef USE_MONGODB

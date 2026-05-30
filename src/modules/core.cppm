@@ -59,7 +59,7 @@ using core::database_row;
 /// @brief Collection of rows returned from a database query
 using core::database_result;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Database Types Enumeration
@@ -74,7 +74,7 @@ using ::database::connection_mode;
 // Re-export to_string functions
 using ::database::to_string;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Connection Configuration
@@ -119,7 +119,7 @@ export namespace database {
 // Re-export database context
 using ::database::database_context;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Proxy Configuration
@@ -141,7 +141,7 @@ export namespace database {
 // Re-export database manager
 using ::database::database_manager;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Legacy Types (deprecated)
@@ -157,4 +157,4 @@ using ::database::database_value;
 using ::database::database_row;
 using ::database::database_result;
 
-} // namespace database
+} // namespace kcenon::database

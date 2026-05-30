@@ -356,4 +356,4 @@ void fallback_monitoring_backend::update_avg_latency()
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

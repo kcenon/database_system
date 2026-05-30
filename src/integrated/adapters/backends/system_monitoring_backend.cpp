@@ -581,4 +581,4 @@ database_metrics system_monitoring_backend::convert_to_database_metrics(
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

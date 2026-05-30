@@ -432,4 +432,4 @@ namespace database
 
 		return info;
 	}
-} // namespace database
+} // namespace kcenon::database

@@ -38,7 +38,7 @@ A modern C++20 database abstraction layer providing unified access to multiple d
 > - **DirectMode**: Production-ready (stable)
 > - **ProxyMode**: Stub implementation (awaiting `database_server`, not yet available)
 >
-> Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/migration/database_base.md) for details. <!-- TODO: dedicated proxy-mode.md migration doc -->
+> Currently, DirectMode is the only production option. Connection pooling has been removed locally (Phase 4.3) in preparation for server-side pooling via ProxyMode. See [migration guide](docs/MIGRATION_database_base.md) for details. <!-- TODO: dedicated proxy-mode.md migration doc -->
 
 ### v1.0.0 Release (2026-04)
 

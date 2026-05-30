@@ -250,4 +250,4 @@ inline std::vector<std::string> available_backends()
 }
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

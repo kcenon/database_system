@@ -307,4 +307,4 @@ private:
 using backend_factory_fn = std::unique_ptr<database_backend> (*)();
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

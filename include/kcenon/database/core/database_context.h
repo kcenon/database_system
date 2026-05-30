@@ -236,4 +236,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace database
+} // namespace kcenon::database

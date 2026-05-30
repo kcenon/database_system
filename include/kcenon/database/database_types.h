@@ -69,4 +69,13 @@ namespace database
 		default: return "unknown";
 		}
 	}
-} // namespace database
+} // namespace kcenon::database
+
+// ---------------------------------------------------------------------------
+// Backward-compatibility alias.
+// The canonical namespace is `kcenon::database`. The unqualified `database`
+// namespace is retained as an alias so existing consumers that reference
+// `database::` continue to compile without changes.
+// Deprecated spelling: prefer `kcenon::database`. Planned for removal in v1.2.0.
+// ---------------------------------------------------------------------------
+namespace database = ::kcenon::database;

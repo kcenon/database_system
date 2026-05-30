@@ -55,13 +55,13 @@
 #include <future>
 
 // Forward declarations
-namespace database {
+namespace kcenon::database {
 class database_base;
 namespace core {
 class database_backend;
 // database_row is a type alias defined in database_backend.h, not forward-declarable
 } // namespace core
-} // namespace database
+} // namespace kcenon::database
 
 namespace database::concepts {
 

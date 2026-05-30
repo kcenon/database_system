@@ -75,4 +75,4 @@ public:
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

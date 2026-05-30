@@ -240,4 +240,4 @@ auto thread_adapter::submit(F&& f, Args&&... args) -> std::future<std::invoke_re
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

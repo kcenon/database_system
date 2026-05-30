@@ -480,4 +480,4 @@ struct unified_db_config
 };
 
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

@@ -19,7 +19,7 @@
 
 #include <kcenon/common/patterns/result.h>
 
-namespace database {
+namespace kcenon::database {
 
 // =============================================================================
 // Primary types - imported from common_system
@@ -51,7 +51,7 @@ enum class error_code {
 	timeout = -7
 };
 
-} // namespace database
+} // namespace kcenon::database
 
 // =============================================================================
 // Integrated namespace for compatibility

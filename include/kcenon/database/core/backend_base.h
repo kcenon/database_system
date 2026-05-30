@@ -173,4 +173,4 @@ protected:
 };
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

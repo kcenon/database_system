@@ -261,4 +261,4 @@ private:
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

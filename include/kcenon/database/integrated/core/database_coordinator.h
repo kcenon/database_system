@@ -206,4 +206,4 @@ private:
 };
 
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

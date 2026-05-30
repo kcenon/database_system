@@ -56,6 +56,10 @@ CTestTestfile.cmake
 *.gcda
 *.gcno
 
+# CTest-generated test discovery artifacts (must not be committed)
+cmake_test_discovery_*.json
+integration_tests/cmake_test_discovery_*.json
+
 # Documentation
 docs/html/
 docs/latex/

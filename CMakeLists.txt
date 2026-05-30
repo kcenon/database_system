@@ -60,5 +60,13 @@ include(cmake/tests.cmake)
 # target is defined when install(TARGETS database ...) is evaluated).
 include(cmake/install.cmake)
 
+# Fuzzers (libFuzzer; requires clang + sanitizers, OFF by default).
+# Declared here (not in a cmake/*.cmake module) so the option is visible at the
+# top level; the fuzz/ subdirectory guards on the `database` target and Clang.
+option(BUILD_FUZZERS "Build libFuzzer harnesses (requires clang + sanitizers)" OFF)
+if(BUILD_FUZZERS)
+    add_subdirectory(fuzz)
+endif()
+
 # Build configuration summary (must come last so all *_FOUND flags are populated).
 include(cmake/summary.cmake)

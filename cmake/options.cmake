@@ -41,7 +41,7 @@ option(ENABLE_COVERAGE "Enable code coverage reporting" OFF)
 # in the build interface and installed at <prefix>/include/database/. They emit
 # a #pragma message redirecting consumers to the canonical <kcenon/database/...>
 # path. Set OFF for consumers that have already migrated; the shims are
-# scheduled for removal in the next minor release.
+# scheduled for removal in version 2.0.0.
 option(DATABASE_DISABLE_LEGACY_HEADERS "Skip installing forwarding shims at legacy <database/...> paths" OFF)
 
 # Experimental backend warnings

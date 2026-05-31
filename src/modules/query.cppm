@@ -40,7 +40,7 @@ import kcenon.common;
 // Query Enumerations
 // ============================================================================
 
-export namespace database {
+export namespace kcenon::database {
 
 // Re-export join type enumeration
 using ::database::join_type;
@@ -48,35 +48,35 @@ using ::database::join_type;
 // Re-export sort order enumeration
 using ::database::sort_order;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Condition
 // ============================================================================
 
-export namespace database {
+export namespace kcenon::database {
 
 // Re-export query condition class
 using ::database::query_condition;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Builder
 // ============================================================================
 
-export namespace database {
+export namespace kcenon::database {
 
 // Re-export query builder class
 using ::database::query_builder;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // Query Dialect (Strategy Pattern)
 // ============================================================================
 
-export namespace database {
+export namespace kcenon::database {
 
 // Re-export query dialect interface
 using ::database::query_dialect;
@@ -84,13 +84,13 @@ using ::database::query_dialect;
 // Re-export dialect factory function
 using ::database::create_dialect;
 
-} // namespace database
+} // namespace kcenon::database
 
 // ============================================================================
 // SQL Dialect Implementation
 // ============================================================================
 
-export namespace database::detail {
+export namespace kcenon::database::detail {
 
 // Re-export SQL dialect implementation
 using ::database::detail::sql_dialect;
@@ -101,4 +101,4 @@ using ::database::detail::mongodb_dialect;
 // Re-export Redis dialect implementation
 using ::database::detail::redis_dialect;
 
-} // namespace database::detail
+} // namespace kcenon::database::detail

@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/utils/backend_logger.h
 //
 // External consumers using <database/utils/backend_logger.h> should migrate to
-// <kcenon/database/utils/backend_logger.h>. This stub will be removed in the next minor release.
+// <kcenon/database/utils/backend_logger.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/utils/backend_logger.h> is deprecated; use <kcenon/database/utils/backend_logger.h>")
 #include <kcenon/database/utils/backend_logger.h>

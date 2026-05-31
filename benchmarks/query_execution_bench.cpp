@@ -13,7 +13,7 @@
 #include <kcenon/database/database_types.h>
 #include <memory>
 
-using namespace database;
+using namespace kcenon::database;
 
 // Benchmark query builder creation
 static void BM_QueryBuilder_Create(benchmark::State& state) {

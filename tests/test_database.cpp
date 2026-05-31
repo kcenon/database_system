@@ -10,7 +10,7 @@
 #include <kcenon/database/database_manager.h>
 #include <kcenon/database/database_types.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 // Test fixture for database tests
 class DatabaseTest : public ::testing::Test {

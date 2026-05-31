@@ -10,7 +10,7 @@
 #include <kcenon/database/database_manager.h>
 #include <kcenon/database/database_types.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 // Connection Pool Tests removed in Phase 4.3 - pooling moved to server-side ProxyMode
 // Use ProxyMode with database_server for centralized connection pooling

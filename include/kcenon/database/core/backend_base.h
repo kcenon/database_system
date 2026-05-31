@@ -44,7 +44,7 @@
 #include <memory>
 #include <atomic>
 
-namespace database
+namespace kcenon::database
 {
 namespace core
 {
@@ -173,4 +173,4 @@ protected:
 };
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

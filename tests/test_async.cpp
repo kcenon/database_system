@@ -10,7 +10,7 @@
 
 #include <kcenon/database/async/async_operations.h>
 
-using namespace database::async;
+using namespace kcenon::database::async;
 
 // Phase 4: Asynchronous Operations Tests
 class AsyncOperationsTest : public ::testing::Test {

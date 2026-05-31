@@ -16,7 +16,7 @@
 #include <mutex>
 #include <optional>
 
-namespace database::orm
+namespace kcenon::database::orm
 {
 	// Forward declarations
 	class entity_base;
@@ -311,4 +311,4 @@ namespace database::orm
 		return field_constraint::foreign_key;
 	}
 
-} // namespace database::orm
+} // namespace kcenon::database::orm

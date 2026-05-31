@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/query_dialect.h
 //
 // External consumers using <database/query_dialect.h> should migrate to
-// <kcenon/database/query_dialect.h>. This stub will be removed in the next minor release.
+// <kcenon/database/query_dialect.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/query_dialect.h> is deprecated; use <kcenon/database/query_dialect.h>")
 #include <kcenon/database/query_dialect.h>

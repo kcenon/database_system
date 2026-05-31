@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 /**
  * @enum join_type
@@ -153,4 +153,4 @@ private:
     std::string join_type_to_string(join_type type) const;
 };
 
-} // namespace database::query
+} // namespace kcenon::database::query

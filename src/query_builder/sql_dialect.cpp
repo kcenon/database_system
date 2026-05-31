@@ -5,7 +5,7 @@
 #include <kcenon/database/query_builder/sql_dialect.h>
 #include <stdexcept>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 // Factory method
 std::unique_ptr<sql_dialect> sql_dialect::create(database_types type) {
@@ -225,4 +225,4 @@ bool sqlite_dialect::supports_feature(const std::string& feature) const {
     return false;
 }
 
-} // namespace database::query
+} // namespace kcenon::database::query

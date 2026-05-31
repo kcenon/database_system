@@ -63,7 +63,7 @@ namespace
 	}
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -192,4 +192,4 @@ void fallback_logger_backend::flush()
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

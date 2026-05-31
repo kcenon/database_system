@@ -6,7 +6,7 @@
 
 #include <sstream>
 
-namespace database::integrated {
+namespace kcenon::database::integrated {
 
 connection_string_builder& connection_string_builder::host(std::string_view h) {
     host_ = std::string(h);
@@ -257,4 +257,4 @@ std::string connection_string_builder::ssl_mode_to_postgres_string(enum ssl_mode
     }
 }
 
-} // namespace database::integrated
+} // namespace kcenon::database::integrated

@@ -10,7 +10,7 @@
 #include <memory>
 #include <vector>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 /**
  * @class sql_dialect
@@ -188,4 +188,4 @@ public:
     bool supports_feature(const std::string& feature) const override;
 };
 
-} // namespace database::query
+} // namespace kcenon::database::query

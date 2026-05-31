@@ -8,7 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace database
+namespace kcenon::database
 {
 	std::unique_ptr<query_dialect> create_dialect(database_types type)
 	{
@@ -806,4 +806,4 @@ namespace database
 
 	} // namespace detail
 
-} // namespace database
+} // namespace kcenon::database

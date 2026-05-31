@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/forward.h
 //
 // External consumers using <database/forward.h> should migrate to
-// <kcenon/database/forward.h>. This stub will be removed in the next minor release.
+// <kcenon/database/forward.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/forward.h> is deprecated; use <kcenon/database/forward.h>")
 #include <kcenon/database/forward.h>

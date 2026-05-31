@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-using namespace database::protocol;
+using namespace kcenon::database::protocol;
 
 /**
  * @brief Test suite for container-based protocol serialization

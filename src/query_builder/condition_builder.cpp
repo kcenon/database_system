@@ -5,7 +5,7 @@
 #include <kcenon/database/query_builder/condition_builder.h>
 #include <sstream>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 condition_builder::condition_builder()
     : current_group_level_(0) {}
@@ -136,4 +136,4 @@ std::string condition_builder::logical_op_to_string(logical_op op) const {
     }
 }
 
-} // namespace database::query
+} // namespace kcenon::database::query

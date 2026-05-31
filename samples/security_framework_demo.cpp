@@ -27,8 +27,8 @@
 #include <kcenon/database/security/secure_connection.h>
 #include <kcenon/database/core/database_context.h>
 
-using namespace database;
-using namespace database::security;
+using namespace kcenon::database;
+using namespace kcenon::database::security;
 
 void demonstrate_secure_connections() {
     std::cout << "=== Secure Connection Management ===\n";

@@ -18,7 +18,7 @@
 #include <kcenon/database/integrated/adapters/backends/monitoring_backend.h>
 #include <kcenon/database/integrated/adapters/monitoring_adapter.h>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -131,4 +131,4 @@ public:
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

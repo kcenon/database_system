@@ -16,15 +16,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Public forwarding header `kcenon/database/core/connection_pool.h`.
 - Unit test suite `connection_pool_test` covering pre-warming, concurrent
   checkout/checkin, pool exhaustion, broken-connection replacement, and shutdown.
+- Compatibility header `kcenon/database/compat.h` declaring the global namespace
+  alias `namespace database = kcenon::database;`. Pulled in by the foundation
+  headers so pre-#591 source using `database::` (or `::database::`) keeps
+  compiling. Define `DATABASE_DISABLE_LEGACY_NAMESPACE` to build without the
+  alias ([#591](https://github.com/kcenon/database_system/issues/591)).
+
+### Changed
+
+- Internal namespace migrated from `database::` to `kcenon::database::` so the
+  namespace matches the canonical `kcenon/database/...` include path. All in-tree
+  namespace definitions (headers, sources, and C++20 module partitions) now open
+  `kcenon::database`; a tracked backward-compatibility alias keeps the legacy
+  `database::` spelling working for existing consumers
+  ([#591](https://github.com/kcenon/database_system/issues/591)).
+- Relocated the loose `*_manager` / query translation units out of the `src` root
+  into their domain folders: `database_manager.cpp` -> `core/`,
+  `postgres_manager.cpp` -> `backends/`, `query_builder.cpp` and
+  `query_dialect.cpp` -> `query_builder/`. Public include paths are unchanged
+  ([#591](https://github.com/kcenon/database_system/issues/591)).
 
 ### Deprecated
 
 - Header path `<database/...>` is deprecated; use `<kcenon/database/...>`.
   Forwarding stubs at the legacy paths emit `#pragma message` warnings and
   include the canonical headers. Set `DATABASE_DISABLE_LEGACY_HEADERS=ON` to
-  opt out. Stubs will be removed in the next minor release
+  opt out. **Stubs will be removed in version 2.0.0** (removing a public include
+  path is a breaking change, hence a major bump)
   ([#582](https://github.com/kcenon/database_system/issues/582),
   part of [#577](https://github.com/kcenon/database_system/issues/577)).
+- Namespace `database::` is deprecated; use `kcenon::database::`. The compat
+  alias in `kcenon/database/compat.h` keeps the old spelling working. **The alias
+  will be removed in version 2.0.0**, in the same breaking-change window as the
+  legacy `<database/...>` include shims, so consumers migrate include path and
+  namespace together ([#591](https://github.com/kcenon/database_system/issues/591)).
 
 ## [1.0.0] - 2026-04-16
 

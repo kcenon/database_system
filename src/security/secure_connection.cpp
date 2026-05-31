@@ -20,7 +20,7 @@
 #include <openssl/err.h>
 #endif
 
-namespace database::security
+namespace kcenon::database::security
 {
 
 	// ─────────────────────────────────────────────
@@ -946,4 +946,4 @@ namespace database::security
 		return true;
 	}
 
-} // namespace database::security
+} // namespace kcenon::database::security

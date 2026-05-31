@@ -8,7 +8,7 @@
 #include <cmath>
 #include <variant>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 value_formatter::value_formatter(database_types db_type)
     : db_type_(db_type) {}
@@ -198,4 +198,4 @@ std::string value_formatter::escape_sqlite_string(const std::string& str) const 
     return result;
 }
 
-} // namespace database::query
+} // namespace kcenon::database::query

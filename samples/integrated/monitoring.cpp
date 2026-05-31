@@ -23,7 +23,7 @@
 #include <thread>
 #include <chrono>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 using namespace std::chrono;
 
 void print_header(const std::string& title) {

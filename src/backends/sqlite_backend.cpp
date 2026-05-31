@@ -22,7 +22,7 @@ namespace
 const database::utils::backend_logger logger_("SQLite");
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace backends
 {
@@ -630,7 +630,7 @@ std::map<std::string, std::string> sqlite_backend::connection_info() const
 }
 
 } // namespace backends
-} // namespace database
+} // namespace kcenon::database
 
 // Auto-registration with backend_registry when SQLite support is compiled in
 #ifdef USE_SQLITE

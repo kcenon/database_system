@@ -27,8 +27,8 @@
 #include <kcenon/database/orm/entity.h>
 #include <kcenon/database/database_types.h>
 
-using namespace database;
-using namespace database::orm;
+using namespace kcenon::database;
+using namespace kcenon::database::orm;
 
 // -------------------------------------------------------
 // Define a User entity

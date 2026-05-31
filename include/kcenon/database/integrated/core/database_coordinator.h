@@ -26,7 +26,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * // Create configuration
  * unified_db_config config;
@@ -73,7 +73,7 @@
 #include <kcenon/database/integrated/core/common_result.h>
 
 // Forward declarations to avoid circular dependencies
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -206,4 +206,4 @@ private:
 };
 
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

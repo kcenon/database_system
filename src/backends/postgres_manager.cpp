@@ -32,7 +32,7 @@ constexpr unsigned int PG_FLOAT8OID = 701;
 constexpr unsigned int PG_BOOLOID = 16;
 }
 
-namespace database
+namespace kcenon::database
 {
 	postgres_manager::postgres_manager(void)
 		: connection_(nullptr)
@@ -432,4 +432,4 @@ namespace database
 
 		return info;
 	}
-} // namespace database
+} // namespace kcenon::database

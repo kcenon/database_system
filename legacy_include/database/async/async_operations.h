@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/async/async_operations.h
 //
 // External consumers using <database/async/async_operations.h> should migrate to
-// <kcenon/database/async/async_operations.h>. This stub will be removed in the next minor release.
+// <kcenon/database/async/async_operations.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/async/async_operations.h> is deprecated; use <kcenon/database/async/async_operations.h>")
 #include <kcenon/database/async/async_operations.h>

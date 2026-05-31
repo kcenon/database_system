@@ -25,7 +25,7 @@
 #include <memory>
 #include <string>
 
-using namespace database;
+using namespace kcenon::database;
 
 namespace {
 

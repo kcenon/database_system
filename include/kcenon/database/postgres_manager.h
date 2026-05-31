@@ -6,7 +6,7 @@
 
 #include <kcenon/database/core/database_backend.h>
 
-namespace database
+namespace kcenon::database
 {
 	/**
 	 * @class postgres_manager
@@ -125,4 +125,4 @@ namespace database
 		std::string last_error_;  ///< Last error message
 		std::string connection_string_; ///< Connection string for connection_info
 	};
-} // namespace database
+} // namespace kcenon::database

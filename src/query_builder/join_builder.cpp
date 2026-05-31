@@ -5,7 +5,7 @@
 #include <kcenon/database/query_builder/join_builder.h>
 #include <sstream>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 join_builder::join_builder() = default;
 
@@ -100,4 +100,4 @@ std::string join_builder::join_type_to_string(join_type type) const {
     }
 }
 
-} // namespace database::query
+} // namespace kcenon::database::query

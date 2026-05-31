@@ -16,7 +16,7 @@
 #include <thread>
 #include <vector>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 using BackendParam = ParameterizedBackendFixture;
 
@@ -370,4 +370,4 @@ INSTANTIATE_TEST_SUITE_P(
     MultiBackend, BackendParam,
     ::testing::ValuesIn(EnabledBackends()), BackendParamName());
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

@@ -88,10 +88,10 @@ set(HEADER_FILES
 # Collect all source files
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/core/database_context.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_manager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/postgres_manager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/query_dialect.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/database_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/postgres_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/query_builder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/query_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/value_formatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/sql_dialect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/query_builder/condition_builder.cpp

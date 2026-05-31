@@ -27,7 +27,7 @@
 #include <atomic>
 #include <mutex>
 
-namespace database
+namespace kcenon::database
 {
 namespace backends
 {
@@ -154,4 +154,4 @@ private:
 };
 
 } // namespace backends
-} // namespace database
+} // namespace kcenon::database

@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <functional>
 
-namespace database::monitoring
+namespace kcenon::database::monitoring
 {
 	// performance_alert implementation
 	performance_alert::performance_alert(alert_type type, const std::string& message,
@@ -539,4 +539,4 @@ namespace database::monitoring
 		return metrics.str();
 	}
 
-} // namespace database::monitoring
+} // namespace kcenon::database::monitoring

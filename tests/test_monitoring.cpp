@@ -12,8 +12,8 @@
 #include <kcenon/database/database_types.h>
 #include <kcenon/database/monitoring/performance_monitor.h>
 
-using namespace database;
-using namespace database::monitoring;
+using namespace kcenon::database;
+using namespace kcenon::database::monitoring;
 
 // Phase 4: Performance Monitoring Tests
 class PerformanceMonitorTest : public ::testing::Test {

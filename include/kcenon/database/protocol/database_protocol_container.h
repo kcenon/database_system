@@ -10,7 +10,7 @@
 #include <core/container.h>
 #include <memory>
 
-namespace database::protocol {
+namespace kcenon::database::protocol {
 
 /**
  * @class container_protocol_serializer
@@ -50,6 +50,6 @@ public:
     static std::string serialize_to_json(const query_request& request);
 };
 
-} // namespace database::protocol
+} // namespace kcenon::database::protocol
 
 #endif // USE_CONTAINER_SYSTEM

@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/monitoring/pool_metrics.h
 //
 // External consumers using <database/monitoring/pool_metrics.h> should migrate to
-// <kcenon/database/monitoring/pool_metrics.h>. This stub will be removed in the next minor release.
+// <kcenon/database/monitoring/pool_metrics.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/monitoring/pool_metrics.h> is deprecated; use <kcenon/database/monitoring/pool_metrics.h>")
 #include <kcenon/database/monitoring/pool_metrics.h>

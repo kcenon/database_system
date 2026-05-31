@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/core/concepts.h
 //
 // External consumers using <database/core/concepts.h> should migrate to
-// <kcenon/database/core/concepts.h>. This stub will be removed in the next minor release.
+// <kcenon/database/core/concepts.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/core/concepts.h> is deprecated; use <kcenon/database/core/concepts.h>")
 #include <kcenon/database/core/concepts.h>

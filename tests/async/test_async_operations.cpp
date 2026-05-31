@@ -29,7 +29,7 @@
 
 #include <kcenon/database/async/async_operations.h>
 
-using namespace database::async;
+using namespace kcenon::database::async;
 
 //=============================================================================
 // async_result<T> Tests

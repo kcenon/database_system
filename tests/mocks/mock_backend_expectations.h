@@ -12,7 +12,7 @@
 #include <optional>
 #include <stdexcept>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // Forward declaration
 class mock_backend;
@@ -120,4 +120,4 @@ public:
         : std::runtime_error(message) {}
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

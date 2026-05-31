@@ -5,7 +5,7 @@
 #include "mock_database.h"
 #include <algorithm>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // mock_database implementation
 mock_database::mock_database()
@@ -304,4 +304,4 @@ mock_database mock_database_builder::build() {
     return std::move(*mock_);
 }
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

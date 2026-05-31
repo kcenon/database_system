@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/core/database_context.h
 //
 // External consumers using <database/core/database_context.h> should migrate to
-// <kcenon/database/core/database_context.h>. This stub will be removed in the next minor release.
+// <kcenon/database/core/database_context.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/core/database_context.h> is deprecated; use <kcenon/database/core/database_context.h>")
 #include <kcenon/database/core/database_context.h>

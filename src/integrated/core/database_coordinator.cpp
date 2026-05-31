@@ -11,7 +11,7 @@
 #include <chrono>
 #include <stdexcept>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -434,4 +434,4 @@ common::Result<database_coordinator::coordinator_stats> database_coordinator::ge
 }
 
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

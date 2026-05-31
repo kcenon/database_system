@@ -18,7 +18,7 @@
 
 #include <string>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -73,4 +73,4 @@ public:
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

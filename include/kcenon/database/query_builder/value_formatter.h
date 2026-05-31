@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 /**
  * @class value_formatter
@@ -85,4 +85,4 @@ private:
     std::string escape_sqlite_string(const std::string& str) const;
 };
 
-} // namespace database::query
+} // namespace kcenon::database::query

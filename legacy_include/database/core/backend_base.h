@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/core/backend_base.h
 //
 // External consumers using <database/core/backend_base.h> should migrate to
-// <kcenon/database/core/backend_base.h>. This stub will be removed in the next minor release.
+// <kcenon/database/core/backend_base.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/core/backend_base.h> is deprecated; use <kcenon/database/core/backend_base.h>")
 #include <kcenon/database/core/backend_base.h>

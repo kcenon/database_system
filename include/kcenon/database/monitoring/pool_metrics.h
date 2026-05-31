@@ -10,7 +10,7 @@
 #include <map>
 #include <mutex>
 
-namespace database::monitoring {
+namespace kcenon::database::monitoring {
 
 /**
  * @struct pool_metrics
@@ -247,4 +247,4 @@ struct priority_metrics : public pool_metrics {
 };
 #endif // USE_THREAD_SYSTEM
 
-} // namespace database::monitoring
+} // namespace kcenon::database::monitoring

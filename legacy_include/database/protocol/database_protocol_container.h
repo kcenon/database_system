@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/protocol/database_protocol_container.h
 //
 // External consumers using <database/protocol/database_protocol_container.h> should migrate to
-// <kcenon/database/protocol/database_protocol_container.h>. This stub will be removed in the next minor release.
+// <kcenon/database/protocol/database_protocol_container.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/protocol/database_protocol_container.h> is deprecated; use <kcenon/database/protocol/database_protocol_container.h>")
 #include <kcenon/database/protocol/database_protocol_container.h>

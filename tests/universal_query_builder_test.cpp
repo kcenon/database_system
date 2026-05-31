@@ -12,7 +12,7 @@
 #include <string>
 #include <map>
 
-namespace database::tests
+namespace kcenon::database::tests
 {
 
 class UniversalQueryBuilderTest : public ::testing::Test
@@ -347,4 +347,4 @@ TEST_F(UniversalQueryBuilderTest, LimitForMongoDB)
 }
 #endif // USE_MONGODB
 
-} // namespace database::tests
+} // namespace kcenon::database::tests

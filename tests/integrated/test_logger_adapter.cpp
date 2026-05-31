@@ -18,8 +18,8 @@
 #include <thread>
 #include <vector>
 
-using namespace database::integrated;
-using namespace database::integrated::adapters;
+using namespace kcenon::database::integrated;
+using namespace kcenon::database::integrated::adapters;
 
 namespace fs = std::filesystem;
 

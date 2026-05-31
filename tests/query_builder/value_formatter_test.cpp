@@ -10,8 +10,8 @@
 #include <gtest/gtest.h>
 #include <kcenon/database/query_builder/value_formatter.h>
 
-using namespace database;
-using namespace database::query;
+using namespace kcenon::database;
+using namespace kcenon::database::query;
 
 class ValueFormatterTest : public ::testing::Test {
 protected:

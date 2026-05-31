@@ -8,7 +8,7 @@
 
 #include <kcenon/database/security/secure_connection.h>
 
-using namespace database::security;
+using namespace kcenon::database::security;
 
 // Phase 4: Security Framework Tests
 // Note: Security tests are conceptual demonstrations

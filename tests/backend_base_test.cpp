@@ -24,8 +24,8 @@
 #include <kcenon/database/core/backend_base.h>
 #include <kcenon/database/core/database_backend.h>
 
-using namespace database;
-using namespace database::core;
+using namespace kcenon::database;
+using namespace kcenon::database::core;
 
 // =============================================================================
 // Test Backend Implementations

@@ -15,7 +15,7 @@
 #endif
 #include <sstream>
 
-namespace database
+namespace kcenon::database
 {
 	database_manager::database_manager(std::shared_ptr<database_context> context)
 		: connected_(false)
@@ -222,4 +222,4 @@ namespace database
 		return query_builder(db_type);
 	}
 
-}; // namespace database
+}; // namespace kcenon::database

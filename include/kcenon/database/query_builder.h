@@ -14,7 +14,7 @@
 #include <memory>
 #include <initializer_list>
 
-namespace database
+namespace kcenon::database
 {
 	/**
 	 * @enum join_type
@@ -163,4 +163,4 @@ namespace database
 		void ensure_dialect();
 	};
 
-} // namespace database
+} // namespace kcenon::database

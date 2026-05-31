@@ -13,7 +13,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * // Zero-config usage with defaults
  * unified_db_config config_simple;
@@ -35,7 +35,7 @@
 #include <cstdint>
 #include <string>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -480,4 +480,4 @@ struct unified_db_config
 };
 
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 
-using namespace database;
+using namespace kcenon::database;
 
 // Mock database for benchmarking
 class mock_transaction_database : public core::database_backend {

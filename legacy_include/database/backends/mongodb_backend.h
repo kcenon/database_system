@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/backends/mongodb_backend.h
 //
 // External consumers using <database/backends/mongodb_backend.h> should migrate to
-// <kcenon/database/backends/mongodb_backend.h>. This stub will be removed in the next minor release.
+// <kcenon/database/backends/mongodb_backend.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/backends/mongodb_backend.h> is deprecated; use <kcenon/database/backends/mongodb_backend.h>")
 #include <kcenon/database/backends/mongodb_backend.h>

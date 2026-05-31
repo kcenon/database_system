@@ -13,7 +13,7 @@
 #include <kcenon/database/database_types.h>
 #include <kcenon/database/core/result.h>
 
-namespace database::protocol {
+namespace kcenon::database::protocol {
 
 /**
  * @enum message_type
@@ -307,4 +307,4 @@ private:
     static std::string read_string(const std::vector<uint8_t>& buffer, size_t& offset);
 };
 
-} // namespace database::protocol
+} // namespace kcenon::database::protocol

@@ -13,7 +13,7 @@
 #include <string>
 #include <thread>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 /**
  * @class DatabaseSystemFixture
  * @brief Base test fixture for database system integration tests.
@@ -214,4 +214,4 @@ protected:
   bool connected_{false};
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

@@ -11,7 +11,9 @@
 
 #include <cstdint>
 
-namespace database
+#include <kcenon/database/compat.h>
+
+namespace kcenon::database
 {
 	/**
 	 * @enum database_types
@@ -69,4 +71,4 @@ namespace database
 		default: return "unknown";
 		}
 	}
-} // namespace database
+} // namespace kcenon::database

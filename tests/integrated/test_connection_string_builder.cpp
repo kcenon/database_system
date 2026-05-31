@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 // Test counters
 static int tests_passed = 0;

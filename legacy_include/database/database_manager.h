@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/database_manager.h
 //
 // External consumers using <database/database_manager.h> should migrate to
-// <kcenon/database/database_manager.h>. This stub will be removed in the next minor release.
+// <kcenon/database/database_manager.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/database_manager.h> is deprecated; use <kcenon/database/database_manager.h>")
 #include <kcenon/database/database_manager.h>

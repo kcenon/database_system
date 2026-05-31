@@ -23,7 +23,7 @@
 #include <string>
 #include <string_view>
 
-namespace database
+namespace kcenon::database
 {
 namespace utils
 {
@@ -110,4 +110,4 @@ private:
 };
 
 } // namespace utils
-} // namespace database
+} // namespace kcenon::database

@@ -5,7 +5,7 @@
 #include <kcenon/database/protocol/database_protocol.h>
 #include <cstring>
 
-namespace database::protocol {
+namespace kcenon::database::protocol {
 
 // Protocol serialization implementation
 std::vector<uint8_t> protocol_serializer::serialize_header(const message_header& header) {
@@ -341,4 +341,4 @@ std::string protocol_serializer::read_string(const std::vector<uint8_t>& buffer,
     return value;
 }
 
-} // namespace database::protocol
+} // namespace kcenon::database::protocol

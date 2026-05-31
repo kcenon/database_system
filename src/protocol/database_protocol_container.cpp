@@ -8,7 +8,7 @@
 #include <core/container.h>
 #include <core/value_types.h>
 
-namespace database::protocol {
+namespace kcenon::database::protocol {
 
 using namespace container_module;
 
@@ -166,6 +166,6 @@ std::string container_protocol_serializer::serialize_to_json(const query_request
     return {};
 }
 
-} // namespace database::protocol
+} // namespace kcenon::database::protocol
 
 #endif // USE_CONTAINER_SYSTEM

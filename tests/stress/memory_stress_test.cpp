@@ -27,9 +27,9 @@
 #include <mach/task.h>
 #endif
 
-using namespace database;
-using namespace database::backends;
-using namespace database::core;
+using namespace kcenon::database;
+using namespace kcenon::database::backends;
+using namespace kcenon::database::core;
 
 /**
  * @class MemoryStressTest

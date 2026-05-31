@@ -7,7 +7,7 @@
 #include <kcenon/database/integrated/adapters/backends/null_thread_backend.h>
 #include <kcenon/database/integrated/adapters/backends/fallback_thread_backend.h>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -157,4 +157,4 @@ bool thread_adapter::is_idle() const
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

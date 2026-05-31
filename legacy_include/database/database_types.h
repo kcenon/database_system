@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/database_types.h
 //
 // External consumers using <database/database_types.h> should migrate to
-// <kcenon/database/database_types.h>. This stub will be removed in the next minor release.
+// <kcenon/database/database_types.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/database_types.h> is deprecated; use <kcenon/database/database_types.h>")
 #include <kcenon/database/database_types.h>

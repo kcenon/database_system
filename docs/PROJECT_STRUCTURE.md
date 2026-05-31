@@ -850,7 +850,10 @@ db.insert_query(
 ### Code Organization Best Practices
 
 1. **One class per file**: Each class has separate `.h` and `.cpp`
-2. **Namespace organization**: All code in `database` namespace
+2. **Namespace organization**: All code in the `kcenon::database` namespace
+   (matching the canonical `kcenon/database/...` include path). The legacy
+   `database::` spelling remains available via the deprecated alias in
+   `kcenon/database/compat.h` until version 2.0.0 (see CHANGELOG, issue #591).
 3. **Include guards**: Use `#pragma once` for all headers
 4. **Forward declarations**: Minimize header dependencies
 5. **PIMPL idiom**: Hide implementation details where appropriate
@@ -869,11 +872,11 @@ db.insert_query(
 
 **Template**:
 ```cpp
-// include/database/backends/newdb/newdb_manager.h
+// include/kcenon/database/backends/newdb/newdb_manager.h
 #pragma once
 #include <kcenon/database/core/database_base.h>
 
-namespace database {
+namespace kcenon::database {
 
 class newdb_manager : public database_base {
 public:
@@ -885,7 +888,7 @@ public:
     // ... other methods
 };
 
-} // namespace database
+} // namespace kcenon::database
 ```
 
 ---

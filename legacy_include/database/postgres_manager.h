@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/postgres_manager.h
 //
 // External consumers using <database/postgres_manager.h> should migrate to
-// <kcenon/database/postgres_manager.h>. This stub will be removed in the next minor release.
+// <kcenon/database/postgres_manager.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/postgres_manager.h> is deprecated; use <kcenon/database/postgres_manager.h>")
 #include <kcenon/database/postgres_manager.h>

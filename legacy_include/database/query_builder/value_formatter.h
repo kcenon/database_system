@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/query_builder/value_formatter.h
 //
 // External consumers using <database/query_builder/value_formatter.h> should migrate to
-// <kcenon/database/query_builder/value_formatter.h>. This stub will be removed in the next minor release.
+// <kcenon/database/query_builder/value_formatter.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/query_builder/value_formatter.h> is deprecated; use <kcenon/database/query_builder/value_formatter.h>")
 #include <kcenon/database/query_builder/value_formatter.h>

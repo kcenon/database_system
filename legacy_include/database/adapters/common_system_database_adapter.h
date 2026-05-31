@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/adapters/common_system_database_adapter.h
 //
 // External consumers using <database/adapters/common_system_database_adapter.h> should migrate to
-// <kcenon/database/adapters/common_system_database_adapter.h>. This stub will be removed in the next minor release.
+// <kcenon/database/adapters/common_system_database_adapter.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/adapters/common_system_database_adapter.h> is deprecated; use <kcenon/database/adapters/common_system_database_adapter.h>")
 #include <kcenon/database/adapters/common_system_database_adapter.h>

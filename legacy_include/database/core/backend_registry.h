@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/core/backend_registry.h
 //
 // External consumers using <database/core/backend_registry.h> should migrate to
-// <kcenon/database/core/backend_registry.h>. This stub will be removed in the next minor release.
+// <kcenon/database/core/backend_registry.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/core/backend_registry.h> is deprecated; use <kcenon/database/core/backend_registry.h>")
 #include <kcenon/database/core/backend_registry.h>

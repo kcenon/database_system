@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/security/secure_connection.h
 //
 // External consumers using <database/security/secure_connection.h> should migrate to
-// <kcenon/database/security/secure_connection.h>. This stub will be removed in the next minor release.
+// <kcenon/database/security/secure_connection.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/security/secure_connection.h> is deprecated; use <kcenon/database/security/secure_connection.h>")
 #include <kcenon/database/security/secure_connection.h>

@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/integrated/connection_string_builder.h
 //
 // External consumers using <database/integrated/connection_string_builder.h> should migrate to
-// <kcenon/database/integrated/connection_string_builder.h>. This stub will be removed in the next minor release.
+// <kcenon/database/integrated/connection_string_builder.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/integrated/connection_string_builder.h> is deprecated; use <kcenon/database/integrated/connection_string_builder.h>")
 #include <kcenon/database/integrated/connection_string_builder.h>

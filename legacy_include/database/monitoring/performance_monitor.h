@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/monitoring/performance_monitor.h
 //
 // External consumers using <database/monitoring/performance_monitor.h> should migrate to
-// <kcenon/database/monitoring/performance_monitor.h>. This stub will be removed in the next minor release.
+// <kcenon/database/monitoring/performance_monitor.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/monitoring/performance_monitor.h> is deprecated; use <kcenon/database/monitoring/performance_monitor.h>")
 #include <kcenon/database/monitoring/performance_monitor.h>

@@ -6,7 +6,7 @@
 // Generated from include/kcenon/database/di/service_registration.h
 //
 // External consumers using <database/di/service_registration.h> should migrate to
-// <kcenon/database/di/service_registration.h>. This stub will be removed in the next minor release.
+// <kcenon/database/di/service_registration.h>. This stub will be removed in version 2.0.0.
 #pragma once
 #pragma message("Header <database/di/service_registration.h> is deprecated; use <kcenon/database/di/service_registration.h>")
 #include <kcenon/database/di/service_registration.h>

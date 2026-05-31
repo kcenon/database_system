@@ -182,8 +182,11 @@ auto query = builder
 
 | 백엔드 | CMake 옵션 | vcpkg 기능 | 상태 | 비고 |
 |---------|--------------|---------------|--------|-------|
-| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 실험적 | NoSQL 문서 저장소 |
-| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 실험적 | 인메모리 데이터 저장소 |
+| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 실험적 | NoSQL 문서 저장소, 제한적 테스트 |
+| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 실험적 | 인메모리 데이터 저장소, 제한적 테스트 |
+
+> 권위 있는 지원 수준, CMake vs vcpkg 기본값, 실험적 백엔드 제한 사항 및
+> 안정화 로드맵은 [백엔드 및 통합 기능 매트릭스 →](docs/BACKENDS.md)를 참조하세요.
 
 **실험적 백엔드를 활성화하려면:**
 
@@ -633,13 +636,26 @@ target_link_libraries(your_target PRIVATE database_system::database)
 
 | 옵션 | 기본값 | 설명 |
 |--------|---------|-------------|
-| `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 |
-| `USE_SQLITE` | OFF | SQLite 지원 활성화 |
-| `USE_MONGODB` | OFF | MongoDB 지원 활성화 |
-| `USE_REDIS` | OFF | Redis 지원 활성화 |
+| `USE_POSTGRESQL` | ON | PostgreSQL 지원 활성화 (안정) |
+| `USE_SQLITE` | OFF | SQLite 지원 활성화 (안정) |
+| `USE_MONGODB` | OFF | MongoDB 지원 활성화 (🧪 실험적) |
+| `USE_REDIS` | OFF | Redis 지원 활성화 (🧪 실험적) |
+| `USE_OPENSSL` | ON | `secure_connection`용 OpenSSL TLS / 암호화 활성화 |
+| `USE_THREAD_SYSTEM` | ON | thread_system 통합 활성화 (미발견 시 자동 비활성화) |
+| `USE_MONITORING_SYSTEM` | ON | monitoring_system 통합 활성화 (미발견 시 자동 비활성화) |
+| `USE_CONTAINER_SYSTEM` | ON | container_system 통합 활성화 (미발견 시 자동 비활성화) |
+| `DATABASE_DISABLE_LEGACY_HEADERS` | OFF | `<database/...>` 포워딩 심 설치 건너뛰기 (2.0.0에서 제거 예정) |
 | `BUILD_DATABASE_SAMPLES` | ON | 샘플 프로그램 빌드 |
 | `USE_UNIT_TEST` | ON | 단위 테스트 빌드 |
-| `BUILD_WITH_COMMON_SYSTEM` | OFF | common_system 통합 활성화 (Result<T>, KCENON_HAS_COMMON_SYSTEM 설정) |
+| `BUILD_WITH_COMMON_SYSTEM` | 발견 시 ON | common_system 통합 (Result<T>, KCENON_HAS_COMMON_SYSTEM 설정); common_system은 필수 Tier 0 의존성 |
+
+> **CMake vs vcpkg 기본값 (의도적으로 다름).** 직접 CMake / FetchContent 빌드는
+> 에코시스템 통합 옵션(`USE_THREAD_SYSTEM`, `USE_MONITORING_SYSTEM`,
+> `USE_CONTAINER_SYSTEM`)을 기본 **ON**으로 두고 형제 시스템이 없으면 우아하게
+> 비활성화됩니다. `vcpkg install`은 `postgresql` 기본 기능만 제공하며 에코시스템
+> 통합은 `vcpkg install kcenon-database-system[ecosystem]`로 선택합니다. 전체
+> 조정 내역, 기능별 검증 명령, 레거시 심 수명 주기는
+> [백엔드 및 통합 기능 매트릭스 →](docs/BACKENDS.md)를 참조하세요.
 
 [📦 전체 빌드 가이드 →](docs/guides/BUILD_GUIDE.md)
 

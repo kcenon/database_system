@@ -51,6 +51,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   legacy `<database/...>` include shims, so consumers migrate include path and
   namespace together ([#591](https://github.com/kcenon/database_system/issues/591)).
 
+### Documentation
+
+- Reworked `docs/BACKENDS.md` into the authoritative **backend and integration
+  feature matrix**: each backend, ecosystem integration, OpenSSL, and the legacy
+  include shims now lists its CMake option/default, vcpkg feature and
+  default-features membership, support level, and a verification command. Added a
+  dedicated section reconciling the **CMake-vs-vcpkg default mismatch** (the two
+  default surfaces are intentionally different: direct CMake defaults ecosystem
+  integration ON with graceful fallback, while the vcpkg default ships only the
+  `postgresql` feature). Documented the legacy `<database/...>` shim and
+  `database::` namespace-alias lifecycle (both removed in **2.0.0**). Linked the
+  matrix from `README.md`, `README.kr.md`, and `docs/advanced/CURRENT_STATE.md`,
+  extended the README build-option tables with the integration/OpenSSL/legacy
+  options, and surfaced MongoDB/Redis experimental status at every introduction
+  point ([#590](https://github.com/kcenon/database_system/issues/590)).
+
 ## [1.0.0] - 2026-04-16
 
 ### Changed

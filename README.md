@@ -182,8 +182,12 @@ auto query = builder
 
 | Backend | CMake Option | vcpkg Feature | Status | Notes |
 |---------|--------------|---------------|--------|-------|
-| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 Experimental | NoSQL document store |
-| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 Experimental | In-memory data store |
+| **MongoDB** | `USE_MONGODB=ON` | `mongodb` | 🧪 Experimental | NoSQL document store, limited testing |
+| **Redis** | `USE_REDIS=ON` | `redis` | 🧪 Experimental | In-memory data store, limited testing |
+
+> See the [Backend and Integration Feature Matrix →](docs/BACKENDS.md) for the
+> authoritative support levels, CMake-vs-vcpkg defaults, and experimental-backend
+> limitations and stabilization roadmap.
 
 **To enable experimental backends:**
 
@@ -633,13 +637,28 @@ target_link_libraries(your_target PRIVATE database_system::database)
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `USE_POSTGRESQL` | ON | Enable PostgreSQL support |
-| `USE_SQLITE` | OFF | Enable SQLite support |
-| `USE_MONGODB` | OFF | Enable MongoDB support |
-| `USE_REDIS` | OFF | Enable Redis support |
+| `USE_POSTGRESQL` | ON | Enable PostgreSQL support (stable) |
+| `USE_SQLITE` | OFF | Enable SQLite support (stable) |
+| `USE_MONGODB` | OFF | Enable MongoDB support (🧪 experimental) |
+| `USE_REDIS` | OFF | Enable Redis support (🧪 experimental) |
+| `USE_OPENSSL` | ON | Enable OpenSSL-backed TLS / crypto for `secure_connection` |
+| `USE_THREAD_SYSTEM` | ON | Enable thread_system integration (auto-disables if not found) |
+| `USE_MONITORING_SYSTEM` | ON | Enable monitoring_system integration (auto-disables if not found) |
+| `USE_CONTAINER_SYSTEM` | ON | Enable container_system integration (auto-disables if not found) |
+| `DATABASE_DISABLE_LEGACY_HEADERS` | OFF | Skip installing `<database/...>` forwarding shims (removed in 2.0.0) |
 | `BUILD_DATABASE_SAMPLES` | ON | Build sample programs |
 | `USE_UNIT_TEST` | ON | Build unit tests |
-| `BUILD_WITH_COMMON_SYSTEM` | OFF | Enable common_system integration (Result<T>, sets KCENON_HAS_COMMON_SYSTEM) |
+| `BUILD_WITH_COMMON_SYSTEM` | ON when found | common_system integration (Result<T>, sets KCENON_HAS_COMMON_SYSTEM); common_system is a required Tier 0 dependency |
+
+> **CMake vs vcpkg defaults (intentionally different).** A direct CMake /
+> FetchContent build defaults the ecosystem-integration options (`USE_THREAD_SYSTEM`,
+> `USE_MONITORING_SYSTEM`, `USE_CONTAINER_SYSTEM`) to **ON** and degrades
+> gracefully when a sibling system is absent. A `vcpkg install` ships only the
+> `postgresql` default feature; ecosystem integration is opt-in via
+> `vcpkg install kcenon-database-system[ecosystem]`. See the
+> [Backend and Integration Feature Matrix →](docs/BACKENDS.md) for the full
+> reconciliation, per-feature verification commands, and the legacy shim
+> lifecycle.
 
 [📦 Complete Build Guide →](docs/guides/BUILD_GUIDE.md)
 

@@ -22,7 +22,7 @@
  * **Example Usage:**
  *
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * // 1. Zero-config usage (simplest)
  * unified_database_system db;
@@ -87,7 +87,7 @@
 // Include query builder
 #include <kcenon/database/query_builder.h>
 
-namespace database::integrated {
+namespace kcenon::database::integrated {
 
 // Forward declarations
 class database_coordinator;
@@ -664,4 +664,4 @@ inline kcenon::common::Result<std::unique_ptr<unified_database_system>> create_d
         .build();
 }
 
-} // namespace database::integrated
+} // namespace kcenon::database::integrated

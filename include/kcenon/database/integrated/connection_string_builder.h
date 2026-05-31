@@ -11,7 +11,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * // PostgreSQL connection string
  * auto pg_conn = connection_string_builder()
@@ -49,7 +49,7 @@
 #include <string_view>
 #include <vector>
 
-namespace database::integrated {
+namespace kcenon::database::integrated {
 
 /**
  * @brief SSL connection mode for database connections
@@ -193,4 +193,4 @@ private:
     [[nodiscard]] static std::string ssl_mode_to_postgres_string(enum ssl_mode mode);
 };
 
-} // namespace database::integrated
+} // namespace kcenon::database::integrated

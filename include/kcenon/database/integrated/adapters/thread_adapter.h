@@ -21,7 +21,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * db_thread_config config;
  * config.pool_name = "db_async";
@@ -64,12 +64,12 @@
 #include <kcenon/database/integrated/core/common_result.h>
 
 // Forward declare backend interface
-namespace database::integrated::adapters::backends
+namespace kcenon::database::integrated::adapters::backends
 {
 	class thread_backend;
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -240,4 +240,4 @@ auto thread_adapter::submit(F&& f, Args&&... args) -> std::future<std::invoke_re
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

@@ -33,7 +33,7 @@ namespace monitoring
 }
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -128,4 +128,4 @@ private:
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

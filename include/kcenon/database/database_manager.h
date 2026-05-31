@@ -15,8 +15,10 @@
 
 #include <kcenon/database/query_builder.h>
 
+#include <kcenon/database/compat.h>
 
-namespace database
+
+namespace kcenon::database
 {
 	/**
 	 * @class database_manager
@@ -176,4 +178,4 @@ namespace database
 		std::string connect_string_; ///< Cached connection string for initialization
 
 	};
-} // namespace database
+} // namespace kcenon::database

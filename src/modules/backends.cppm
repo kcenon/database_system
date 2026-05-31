@@ -60,12 +60,12 @@ import kcenon.common;
 // ============================================================================
 
 #ifdef USE_POSTGRESQL
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export PostgreSQL backend
 using ::database::backends::postgresql_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -73,12 +73,12 @@ using ::database::backends::postgresql_backend;
 // ============================================================================
 
 #ifdef USE_SQLITE
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export SQLite backend
 using ::database::backends::sqlite_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -86,12 +86,12 @@ using ::database::backends::sqlite_backend;
 // ============================================================================
 
 #ifdef USE_MONGODB
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export MongoDB backend
 using ::database::backends::mongodb_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -99,10 +99,10 @@ using ::database::backends::mongodb_backend;
 // ============================================================================
 
 #ifdef USE_REDIS
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export Redis backend
 using ::database::backends::redis_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif

@@ -12,7 +12,7 @@
 #include <kcenon/database/integrated/adapters/backends/system_monitoring_backend.h>
 #endif
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -248,4 +248,4 @@ std::string monitoring_adapter::export_prometheus_metrics()
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

@@ -17,7 +17,7 @@
 
 #include <kcenon/database/integrated/adapters/backends/thread_backend.h>
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -94,4 +94,4 @@ public:
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

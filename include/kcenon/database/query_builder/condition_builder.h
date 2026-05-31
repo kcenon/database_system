@@ -10,7 +10,7 @@
 #include <vector>
 #include <memory>
 
-namespace database::query {
+namespace kcenon::database::query {
 
 /**
  * @enum logical_op
@@ -144,4 +144,4 @@ private:
     std::string logical_op_to_string(logical_op op) const;
 };
 
-} // namespace database::query
+} // namespace kcenon::database::query

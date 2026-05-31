@@ -26,7 +26,7 @@
  *
  * Example:
  * @code
- * using namespace database::core;
+ * using namespace kcenon::database::core;
  *
  * pool::pool_config cfg;
  * cfg.min_size = 2;
@@ -65,7 +65,7 @@
 #include <mutex>
 #include <vector>
 
-namespace database
+namespace kcenon::database
 {
 namespace core
 {
@@ -333,4 +333,4 @@ private:
 
 } // namespace pool
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

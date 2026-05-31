@@ -23,7 +23,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * db_monitoring_config config;
  * config.enable_metrics = true;
@@ -74,12 +74,12 @@
 #include <kcenon/database/integrated/adapters/backends/monitoring_backend.h>
 
 // Forward declare backend class only
-namespace database::integrated::adapters::backends
+namespace kcenon::database::integrated::adapters::backends
 {
 	class monitoring_backend;
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -307,4 +307,4 @@ private:
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

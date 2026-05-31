@@ -38,7 +38,7 @@
     #include <kcenon/common/interfaces/logger_interface.h>
     #include <kcenon/common/interfaces/monitoring_interface.h>
 
-    namespace database::async {
+    namespace kcenon::database::async {
         /**
          * @brief Type alias for thread pool implementation
          * Uses kcenon::thread::thread_pool when thread_system is available
@@ -98,7 +98,7 @@
          */
         constexpr bool using_thread_system = true;
 
-    } // namespace database::async
+    } // namespace kcenon::database::async
 
 #else
     // Fallback to standard library threading
@@ -112,7 +112,7 @@
     #include <variant>
     #include <string>
 
-    namespace database::async {
+    namespace kcenon::database::async {
         /**
          * @brief Fallback thread context (empty implementation)
          * Provides a no-op context when thread_system is not available
@@ -215,6 +215,6 @@
          */
         constexpr bool using_thread_system = false;
 
-    } // namespace database::async
+    } // namespace kcenon::database::async
 
 #endif // USE_THREAD_SYSTEM

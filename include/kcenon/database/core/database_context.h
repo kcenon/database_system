@@ -36,7 +36,7 @@
  * @endcode
  */
 
-namespace database
+namespace kcenon::database
 {
 
 // Forward declarations
@@ -236,4 +236,4 @@ private:
     mutable std::mutex mutex_;
 };
 
-} // namespace database
+} // namespace kcenon::database

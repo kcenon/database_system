@@ -25,7 +25,7 @@
  *
  * @example
  * @code
- * using namespace database::integrated;
+ * using namespace kcenon::database::integrated;
  *
  * db_logger_config config;
  * config.enable_query_logging = true;
@@ -73,12 +73,12 @@
 #include <kcenon/database/integrated/core/common_result.h>
 
 // Forward declare backend interface
-namespace database::integrated::adapters::backends
+namespace kcenon::database::integrated::adapters::backends
 {
 	class logger_backend;
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -261,4 +261,4 @@ private:
 
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

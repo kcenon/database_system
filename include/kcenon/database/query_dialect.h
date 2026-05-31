@@ -13,7 +13,7 @@
 #include <map>
 #include <variant>
 
-namespace database
+namespace kcenon::database
 {
 	// Forward declarations
 	class query_condition;
@@ -304,4 +304,4 @@ namespace database
 	 */
 	std::unique_ptr<query_dialect> create_dialect(database_types type);
 
-} // namespace database
+} // namespace kcenon::database

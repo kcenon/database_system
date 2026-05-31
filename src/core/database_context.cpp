@@ -8,7 +8,7 @@
 #include <kcenon/database/async/async_operations.h>
 #include <kcenon/database/security/secure_connection.h>
 
-namespace database
+namespace kcenon::database
 {
 
 database_context::database_context()
@@ -31,4 +31,4 @@ database_context::~database_context()
     // Cleanup: All shared_ptrs will be automatically destroyed
 }
 
-} // namespace database
+} // namespace kcenon::database

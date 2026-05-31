@@ -50,7 +50,7 @@
 #include <functional>
 #include <mutex>
 
-namespace database
+namespace kcenon::database
 {
 namespace core
 {
@@ -250,4 +250,4 @@ inline std::vector<std::string> available_backends()
 }
 
 } // namespace core
-} // namespace database
+} // namespace kcenon::database

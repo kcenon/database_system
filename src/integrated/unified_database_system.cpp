@@ -23,7 +23,7 @@
 #include <stdexcept>
 #include <sstream>
 
-namespace database::integrated {
+namespace kcenon::database::integrated {
 
 // ============================================================================
 // Helper Functions
@@ -914,4 +914,4 @@ unified_database_system::builder unified_database_system::create_builder() {
     return builder{};
 }
 
-} // namespace database::integrated
+} // namespace kcenon::database::integrated

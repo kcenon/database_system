@@ -6,7 +6,7 @@
 #include <sstream>
 #include <algorithm>
 
-namespace database
+namespace kcenon::database
 {
 	// Public constructor
 	immutable_query_builder::immutable_query_builder(const std::string& table)
@@ -356,4 +356,4 @@ namespace database
 		}
 	}
 
-} // namespace database
+} // namespace kcenon::database

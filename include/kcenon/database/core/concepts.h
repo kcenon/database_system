@@ -29,7 +29,7 @@
  * @code
  * #include <kcenon/database/core/concepts.h>
  *
- * using namespace database::concepts;
+ * using namespace kcenon::database::concepts;
  *
  * // Use callable concepts for async operations
  * template<Invocable F>
@@ -55,15 +55,15 @@
 #include <future>
 
 // Forward declarations
-namespace database {
+namespace kcenon::database {
 class database_base;
 namespace core {
 class database_backend;
 // database_row is a type alias defined in database_backend.h, not forward-declarable
 } // namespace core
-} // namespace database
+} // namespace kcenon::database
 
-namespace database::concepts {
+namespace kcenon::database::concepts {
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Callable Concepts (adapted from common_system for database_system)
@@ -343,4 +343,4 @@ template<typename F, typename... Args>
 concept VoidTask = VoidCallable<F, Args...> &&
     std::move_constructible<std::decay_t<F>>;
 
-} // namespace database::concepts
+} // namespace kcenon::database::concepts

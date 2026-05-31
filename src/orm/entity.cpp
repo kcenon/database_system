@@ -18,7 +18,7 @@
 #define ORM_LOG_INFO(message) \
 	std::cout << "[ORM] Info: " << message << std::endl
 
-namespace database::orm
+namespace kcenon::database::orm
 {
 	// field_metadata implementation
 	field_metadata::field_metadata(const std::string& name,
@@ -250,4 +250,4 @@ namespace database::orm
 	// Note: Template implementations moved to header file to avoid
 	// template instantiation issues. Only non-template methods implemented here.
 
-} // namespace database::orm
+} // namespace kcenon::database::orm

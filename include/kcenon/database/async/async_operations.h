@@ -32,7 +32,7 @@
     #include <kcenon/thread/core/error_handling.h>
 #endif
 
-namespace database::async
+namespace kcenon::database::async
 {
 #ifdef USE_THREAD_SYSTEM
 	/**
@@ -1284,4 +1284,4 @@ namespace database::async
 	}
 #endif // HAS_COROUTINES
 
-} // namespace database::async
+} // namespace kcenon::database::async

@@ -15,7 +15,7 @@
 #include <functional>
 #include <optional>
 
-namespace database::security
+namespace kcenon::database::security
 {
 	/**
 	 * @enum encryption_type
@@ -433,4 +433,4 @@ namespace database::security
 	}
 
 
-} // namespace database::security
+} // namespace kcenon::database::security

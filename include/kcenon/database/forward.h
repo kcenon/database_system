@@ -8,6 +8,8 @@
  * in the database_system module to reduce compilation dependencies.
  */
 
+#include <kcenon/database/compat.h>
+
 namespace kcenon::database {
 
 /// @name Core classes

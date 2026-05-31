@@ -12,7 +12,7 @@
 #include <optional>
 #include <memory>
 
-namespace database
+namespace kcenon::database
 {
 	/**
 	 * @class immutable_query_builder
@@ -163,4 +163,4 @@ namespace database
 		std::string join_type_to_string(join_type type) const;
 	};
 
-} // namespace database
+} // namespace kcenon::database

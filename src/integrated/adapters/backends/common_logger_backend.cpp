@@ -20,7 +20,7 @@ namespace
 	}
 }
 
-namespace database
+namespace kcenon::database
 {
 namespace integrated
 {
@@ -150,4 +150,4 @@ kcenon::common::interfaces::log_level common_logger_backend::convert_log_level(d
 } // namespace backends
 } // namespace adapters
 } // namespace integrated
-} // namespace database
+} // namespace kcenon::database

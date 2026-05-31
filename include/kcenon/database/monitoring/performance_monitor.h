@@ -16,7 +16,7 @@
 #include <functional>
 #include <string>
 
-namespace database::monitoring
+namespace kcenon::database::monitoring
 {
 	// Forward declaration for query_timer
 	class performance_monitor;
@@ -341,4 +341,4 @@ namespace database::monitoring
 	#define MONITOR_QUERY_ERROR(error) \
 		timer_.set_error(error)
 
-} // namespace database::monitoring
+} // namespace kcenon::database::monitoring

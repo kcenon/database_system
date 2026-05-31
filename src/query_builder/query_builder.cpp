@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace database
+namespace kcenon::database
 {
 	// query_condition implementation
 	query_condition::query_condition(const std::string& field, const std::string& op, const core::database_value& value)
@@ -399,4 +399,4 @@ namespace database
 		}
 	}
 
-} // namespace database
+} // namespace kcenon::database

@@ -24,7 +24,7 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 void print_header(const std::string& title) {
     std::cout << "\n" << std::string(60, '=') << "\n";

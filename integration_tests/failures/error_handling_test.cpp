@@ -9,8 +9,8 @@
 #include "framework/system_fixture.h"
 #include "framework/test_helpers.h"
 
-using namespace database;
-using namespace database::testing;
+using namespace kcenon::database;
+using namespace kcenon::database::testing;
 
 /**
  * @brief Test suite for error handling and failure scenarios.

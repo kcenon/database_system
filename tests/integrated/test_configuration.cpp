@@ -20,7 +20,7 @@
 #include <iostream>
 #include <string>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 /**
  * @brief Test default configuration values

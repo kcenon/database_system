@@ -27,7 +27,7 @@
 #include <kcenon/database/query_builder.h>
 #include <kcenon/database/database_types.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 int main()
 {

@@ -18,7 +18,7 @@
 #include <kcenon/database/query_builder/sql_dialect.h>
 #include <memory>
 
-namespace database::query::tests
+namespace kcenon::database::query::tests
 {
 
 //=============================================================================
@@ -279,4 +279,4 @@ TEST_F(CrossDialectTest, CurrentTimestampFunction)
     EXPECT_EQ(sqlite_->current_timestamp(), "CURRENT_TIMESTAMP");
 }
 
-} // namespace database::query::tests
+} // namespace kcenon::database::query::tests

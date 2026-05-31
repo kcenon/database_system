@@ -12,7 +12,7 @@
 
 #include <kcenon/database/orm/entity.h>
 
-using namespace database::orm;
+using namespace kcenon::database::orm;
 
 //=============================================================================
 // field_metadata Tests

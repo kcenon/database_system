@@ -38,8 +38,8 @@ int main() {
 #include <kcenon/database/database_manager.h>
 #include <kcenon/database/async/async_operations.h>
 
-using namespace database;
-using namespace database::async;
+using namespace kcenon::database;
+using namespace kcenon::database::async;
 
 void demonstrate_basic_async_operations() {
     std::cout << "=== Basic Asynchronous Database Operations ===\n";

@@ -13,7 +13,7 @@
 #include <atomic>
 #include <chrono>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 /**
  * @class mock_connection_pool
@@ -254,4 +254,4 @@ inline void mock_connection_pool::configure_all(std::function<void(mock_database
     }
 }
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

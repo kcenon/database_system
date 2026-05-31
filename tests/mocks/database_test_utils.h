@@ -12,7 +12,7 @@
 #include <chrono>
 #include <functional>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 /**
  * @brief Helper function to create test data rows
@@ -242,4 +242,4 @@ inline bool is_error(const kcenon::common::VoidResult& result) {
 
 } // namespace assertions
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

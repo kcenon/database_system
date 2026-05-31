@@ -26,7 +26,7 @@
 #include <kcenon/database/postgres_manager.h>
 #include <kcenon/database/core/database_backend.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 int main() {
     std::cout << "=== Database System - PostgreSQL Advanced Features Example ===" << std::endl;

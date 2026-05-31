@@ -22,11 +22,11 @@
 #include <kcenon/database/security/secure_connection.h>
 #include <kcenon/database/async/async_operations.h>
 
-using namespace database;
-using namespace database::orm;
-using namespace database::monitoring;
-using namespace database::security;
-using namespace database::async;
+using namespace kcenon::database;
+using namespace kcenon::database::orm;
+using namespace kcenon::database::monitoring;
+using namespace kcenon::database::security;
+using namespace kcenon::database::async;
 
 // Test entity for integration tests
 class IntegrationTestUser : public entity_base

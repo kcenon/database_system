@@ -23,7 +23,7 @@
 #include <vector>
 #include <kcenon/database/async/async_operations.h>
 
-using namespace database::async;
+using namespace kcenon::database::async;
 using namespace std::chrono;
 
 void demonstrate_basic_usage() {

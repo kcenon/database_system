@@ -11,7 +11,7 @@
 #include <mutex>
 #include <regex>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 /**
  * @class mock_database
@@ -137,4 +137,4 @@ private:
     std::unique_ptr<mock_database> mock_;
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

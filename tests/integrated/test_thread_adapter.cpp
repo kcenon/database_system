@@ -18,8 +18,8 @@
 #include <iostream>
 #include <thread>
 
-using namespace database::integrated;
-using namespace database::integrated::adapters;
+using namespace kcenon::database::integrated;
+using namespace kcenon::database::integrated::adapters;
 
 // Test result tracking
 int tests_passed = 0;

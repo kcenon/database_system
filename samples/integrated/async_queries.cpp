@@ -24,7 +24,7 @@
 #include <chrono>
 #include <iomanip>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 using namespace std::chrono;
 
 void print_header(const std::string& title) {

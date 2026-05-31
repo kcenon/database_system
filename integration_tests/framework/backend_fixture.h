@@ -17,7 +17,7 @@
 #include <thread>
 #include <vector>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 /**
  * @enum BackendKind
@@ -250,4 +250,4 @@ struct BackendParamName {
   }
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

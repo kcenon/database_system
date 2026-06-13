@@ -104,17 +104,26 @@ namespace kcenon::database::security
 			return false;
 		}
 
-		// Generate new key
+		// Generate new key using a cryptographically secure RNG
 		std::string old_key = master_key_;
+		std::string new_key(32, '\0');
+#ifdef DATABASE_HAS_OPENSSL
+		if (RAND_bytes(reinterpret_cast<unsigned char*>(new_key.data()),
+		               static_cast<int>(new_key.size())) != 1)
+		{
+			return false;  // CSPRNG failure — abort rather than emit a weak key
+		}
+#else
+		// WARNING: std::mt19937 is NOT a cryptographically secure RNG.
+		// Build with OpenSSL to enable RAND_bytes key generation.
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dist(33, 126);  // printable ASCII
-		std::string new_key;
-		new_key.reserve(32);
-		for (int i = 0; i < 32; ++i)
+		std::uniform_int_distribution<int> dist(0, 255);
+		for (auto& c : new_key)
 		{
-			new_key.push_back(static_cast<char>(dist(gen)));
+			c = static_cast<char>(dist(gen));
 		}
+#endif
 
 		// Re-encrypt all stored credentials with new key
 		std::unordered_map<std::string, std::string> rotated;
@@ -286,9 +295,16 @@ namespace kcenon::database::security
 			return {};
 		}
 
+		// Fail closed: never encrypt with a hardcoded default key. A configured
+		// master key is required for any cryptographic operation.
+		if (master_key_.empty())
+		{
+			return {};
+		}
+
 #ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM encryption
-		std::string key = master_key_.empty() ? "default_key_placeholder!!" : master_key_;
+		std::string key = master_key_;
 		// Pad or truncate key to 32 bytes for AES-256
 		key.resize(32, '\0');
 
@@ -356,6 +372,13 @@ namespace kcenon::database::security
 			return {};
 		}
 
+		// Fail closed: never decrypt with a hardcoded default key. A configured
+		// master key is required for any cryptographic operation.
+		if (master_key_.empty())
+		{
+			return {};
+		}
+
 #ifdef DATABASE_HAS_OPENSSL
 		// AES-256-GCM decryption: parse "aes:<iv_hex>:<ciphertext_hex>:<tag_hex>"
 		if (encrypted_data.substr(0, 4) == "aes:")
@@ -371,7 +394,7 @@ namespace kcenon::database::security
 			auto ciphertext = hex_to_bytes(encrypted_data.substr(first + 1, second - first - 1));
 			auto tag = hex_to_bytes(encrypted_data.substr(second + 1));
 
-			std::string key = master_key_.empty() ? "default_key_placeholder!!" : master_key_;
+			std::string key = master_key_;
 			key.resize(32, '\0');
 
 			EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
@@ -580,16 +603,25 @@ namespace kcenon::database::security
 	{
 		std::lock_guard<std::mutex> lock(encryption_mutex_);
 
-		// Generate a random key for the field
+		// Generate a random key for the field using a cryptographically secure RNG
+		std::string key(32, '\0');
+#ifdef DATABASE_HAS_OPENSSL
+		if (RAND_bytes(reinterpret_cast<unsigned char*>(key.data()),
+		               static_cast<int>(key.size())) != 1)
+		{
+			return false;  // CSPRNG failure — abort rather than emit a weak key
+		}
+#else
+		// WARNING: std::mt19937 is NOT a cryptographically secure RNG.
+		// Build with OpenSSL to enable RAND_bytes key generation.
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 255);
-
-		std::string key(32, '\0');
 		for (auto& c : key)
 		{
 			c = static_cast<char>(dis(gen));
 		}
+#endif
 
 		// Hex-encode the key for storage
 		std::ostringstream oss;
@@ -613,15 +645,25 @@ namespace kcenon::database::security
 		}
 
 		// Generate new key (in production, would re-encrypt existing data)
+		// using a cryptographically secure RNG.
+		std::string key(32, '\0');
+#ifdef DATABASE_HAS_OPENSSL
+		if (RAND_bytes(reinterpret_cast<unsigned char*>(key.data()),
+		               static_cast<int>(key.size())) != 1)
+		{
+			return false;  // CSPRNG failure — abort rather than emit a weak key
+		}
+#else
+		// WARNING: std::mt19937 is NOT a cryptographically secure RNG.
+		// Build with OpenSSL to enable RAND_bytes key generation.
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 255);
-
-		std::string key(32, '\0');
 		for (auto& c : key)
 		{
 			c = static_cast<char>(dis(gen));
 		}
+#endif
 
 		std::ostringstream oss;
 		for (unsigned char c : key)
@@ -650,17 +692,25 @@ namespace kcenon::database::security
 		// Auto-generate field key if not present
 		if (field_keys_.find(key) == field_keys_.end())
 		{
-			// Temporarily release lock to call generate_field_key
-			// Instead, inline the key generation
+			// Inline the key generation using a cryptographically secure RNG.
+			std::string field_key(32, '\0');
+#ifdef DATABASE_HAS_OPENSSL
+			if (RAND_bytes(reinterpret_cast<unsigned char*>(field_key.data()),
+			               static_cast<int>(field_key.size())) != 1)
+			{
+				return false;  // CSPRNG failure — abort rather than emit a weak key
+			}
+#else
+			// WARNING: std::mt19937 is NOT a cryptographically secure RNG.
+			// Build with OpenSSL to enable RAND_bytes key generation.
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution<> dis(0, 255);
-
-			std::string field_key(32, '\0');
 			for (auto& c : field_key)
 			{
 				c = static_cast<char>(dis(gen));
 			}
+#endif
 
 			std::ostringstream oss;
 			for (unsigned char ch : field_key)

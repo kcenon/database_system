@@ -52,3 +52,72 @@ TEST_F(SecurityTest, SecurityConceptDemonstration) {
   // Test that security concepts are understood
   EXPECT_TRUE(true); // Security concepts validated
 }
+
+// Regression test for kcenon/database_system#599.
+// Credential encryption must fail closed when no master key is configured:
+// it must NOT silently fall back to a hardcoded default key (which would
+// "encrypt" credentials under a publicly-known key). With no master key set,
+// store_credentials produces no usable ciphertext, so a subsequent
+// get_credentials cannot round-trip the credential back out.
+TEST_F(SecurityTest, CredentialEncryptionFailsClosedWithoutMasterKey) {
+  credential_manager mgr;  // No master key configured.
+
+  security_credentials creds;
+  creds.username = "alice";
+  creds.password_hash = "hashed_secret";
+
+  // store_credentials returns true (entry recorded), but the encrypted blob
+  // is empty because encryption fails closed.
+  mgr.store_credentials("conn-1", creds);
+
+  // The credential must NOT be retrievable: a fail-closed encrypt means there
+  // is nothing to decrypt back into a valid credential.
+  auto retrieved = mgr.get_credentials("conn-1");
+  EXPECT_FALSE(retrieved.has_value())
+      << "Credentials round-tripped without a master key — encryption "
+         "silently used a default key instead of failing closed (#599).";
+}
+
+// With a master key configured, the round-trip succeeds, confirming the
+// fail-closed guard does not change behavior when a key is present.
+TEST_F(SecurityTest, CredentialEncryptionRoundTripsWithMasterKey) {
+  credential_manager mgr;
+  mgr.set_master_key("a-strong-32-byte-master-key-value");
+
+  security_credentials creds;
+  creds.username = "bob";
+  creds.password_hash = "hashed_secret";
+
+  mgr.store_credentials("conn-2", creds);
+
+  auto retrieved = mgr.get_credentials("conn-2");
+  ASSERT_TRUE(retrieved.has_value())
+      << "Round-trip failed with a configured master key.";
+  EXPECT_EQ(retrieved->username, "bob");
+  EXPECT_EQ(retrieved->password_hash, "hashed_secret");
+}
+
+// Field-level encryption must also fail closed: with neither a field key nor a
+// master encryption key configured, derive_key yields nothing and
+// encrypt_field_data must return empty rather than encrypt under a default key.
+TEST_F(SecurityTest, FieldEncryptionFailsClosedWithoutKey) {
+  encryption_manager mgr;  // No master key, no field key.
+
+  std::string ciphertext = mgr.encrypt_field_data("sensitive", "ssn");
+  EXPECT_TRUE(ciphertext.empty())
+      << "Field encryption produced output without any configured key (#599).";
+}
+
+// With a configured master encryption key, field encryption round-trips.
+TEST_F(SecurityTest, FieldEncryptionRoundTripsWithMasterKey) {
+  encryption_manager mgr;
+  mgr.set_master_encryption_key("a-strong-32-byte-master-key-value");
+
+  const std::string plaintext = "sensitive";
+  std::string ciphertext = mgr.encrypt_field_data(plaintext, "ssn");
+  ASSERT_FALSE(ciphertext.empty())
+      << "Field encryption returned empty with a configured key.";
+
+  std::string decrypted = mgr.decrypt_field_data(ciphertext, "ssn");
+  EXPECT_EQ(decrypted, plaintext);
+}

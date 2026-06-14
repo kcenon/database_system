@@ -4,6 +4,7 @@
 
 #include <kcenon/database/integrated/core/database_coordinator.h>
 
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/integrated/adapters/logger_adapter.h>
 #include <kcenon/database/integrated/adapters/monitoring_adapter.h>
 #include <kcenon/database/integrated/adapters/thread_adapter.h>
@@ -19,7 +20,12 @@ namespace integrated
 // Helper to create error result
 namespace
 {
-	inline common::VoidResult make_error(const std::string& msg, int code = -1)
+	// Default to an in-band database_system code (see core/result.h) so the
+	// shared common::error_info::code resolves to the "DatabaseSystem" category
+	// instead of the common (-1..-99) band.
+	inline common::VoidResult make_error(
+		const std::string& msg,
+		int code = static_cast<int>(error_code::unknown_error))
 	{
 		return common::VoidResult(common::error_info{ code, msg, "" });
 	}
@@ -302,7 +308,7 @@ public:
 		if (!initialized_)
 		{
 			return common::Result<bool>(
-				common::error_info{ -1, "Coordinator not initialized", "" }
+				common::error_info{ static_cast<int>(error_code::invalid_state), "Coordinator not initialized", "" }
 			);
 		}
 

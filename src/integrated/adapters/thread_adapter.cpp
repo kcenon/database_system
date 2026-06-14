@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for full license information.
 
 #include <kcenon/database/integrated/adapters/thread_adapter.h>
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/integrated/adapters/backends/thread_backend.h>
 #include <kcenon/database/integrated/adapters/backends/null_thread_backend.h>
 #include <kcenon/database/integrated/adapters/backends/fallback_thread_backend.h>
@@ -63,7 +64,7 @@ common::VoidResult thread_adapter::initialize()
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not created", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not created", "" });
 	}
 
 	return backend_->initialize();
@@ -93,7 +94,7 @@ common::VoidResult thread_adapter::execute(std::function<void()> task)
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->execute(std::move(task));

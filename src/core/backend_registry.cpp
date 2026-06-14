@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for full license information.
 
 #include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/core/result.h>
 
 #include <algorithm>
 
@@ -22,12 +23,12 @@ kcenon::common::VoidResult backend_registry::register_backend(const std::string&
 {
 	if (name.empty())
 	{
-		return kcenon::common::error_info{1, "Backend name cannot be empty", "backend_registry"};
+		return kcenon::common::error_info{static_cast<int>(error_code::invalid_argument), "Backend name cannot be empty", "backend_registry"};
 	}
 
 	if (!factory)
 	{
-		return kcenon::common::error_info{2, "Factory function cannot be null", "backend_registry"};
+		return kcenon::common::error_info{static_cast<int>(error_code::invalid_argument), "Factory function cannot be null", "backend_registry"};
 	}
 
 	std::lock_guard<std::mutex> lock(mutex_);
@@ -35,7 +36,7 @@ kcenon::common::VoidResult backend_registry::register_backend(const std::string&
 	// Check if backend already registered
 	if (factories_.find(name) != factories_.end())
 	{
-		return kcenon::common::error_info{3, "Backend '" + name + "' is already registered", "backend_registry"};
+		return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Backend '" + name + "' is already registered", "backend_registry"};
 	}
 
 	factories_[name] = factory;
@@ -49,7 +50,7 @@ kcenon::common::VoidResult backend_registry::unregister_backend(const std::strin
 	auto it = factories_.find(name);
 	if (it == factories_.end())
 	{
-		return kcenon::common::error_info{4, "Backend '" + name + "' not found", "backend_registry"};
+		return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Backend '" + name + "' not found", "backend_registry"};
 	}
 
 	factories_.erase(it);

@@ -3,10 +3,13 @@
 // See the LICENSE file in the project root for full license information.
 
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <memory>
 #include <vector>
 
+#include <kcenon/common/error/error_codes.h>
 #include <kcenon/database/core/database_context.h>
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/database_manager.h>
 #include <kcenon/database/database_types.h>
 
@@ -116,4 +119,67 @@ TEST_F(DatabaseTest, GeneralQueryExecution) {
   // Test various query types work without crashing
   EXPECT_NO_THROW(db_mgr_->create_query_result("SELECT 1"));
   EXPECT_NO_THROW(db_mgr_->select_query_result("SELECT 1"));
+}
+
+// ---------------------------------------------------------------------------
+// Error-code band tests (issue #600)
+//
+// The database error_code enumerators must live in common_system's reserved
+// database_system band [-599, -500] so that when a backend casts one into the
+// shared kcenon::common::error_info::code, common's error registry attributes
+// it to the "DatabaseSystem" category instead of the common (-1..-99) band.
+// ---------------------------------------------------------------------------
+TEST(DatabaseErrorCodeBandTest, RepresentativeCodeIsInDatabaseBand) {
+  const int code = static_cast<int>(error_code::connection_failed);
+
+  // Inside the reserved database_system band.
+  EXPECT_GE(code, -599);
+  EXPECT_LE(code, -500);
+
+  // common's registry resolves it to the DatabaseSystem category.
+  EXPECT_EQ(kcenon::common::error::get_category_name(code), "DatabaseSystem");
+}
+
+TEST(DatabaseErrorCodeBandTest, AlignedCodesMatchCommonDatabaseSystem) {
+  namespace cds = kcenon::common::error::codes::database_system;
+
+  // Codes with a common equivalent are aligned to the exact common value so the
+  // shared message table returns the correct text.
+  EXPECT_EQ(static_cast<int>(error_code::connection_failed), cds::connection_failed);
+  EXPECT_EQ(static_cast<int>(error_code::query_failed), cds::query_failed);
+  EXPECT_EQ(static_cast<int>(error_code::timeout), cds::query_timeout);
+
+  // connection_failed has a dedicated message in common's table.
+  EXPECT_EQ(
+      kcenon::common::error::get_error_message(
+          static_cast<int>(error_code::connection_failed)),
+      "Database connection failed");
+}
+
+TEST(DatabaseErrorCodeBandTest, AllNonZeroCodesInBandAndDistinct) {
+  const std::vector<int> codes = {
+      static_cast<int>(error_code::connection_failed),
+      static_cast<int>(error_code::query_failed),
+      static_cast<int>(error_code::timeout),
+      static_cast<int>(error_code::unknown_error),
+      static_cast<int>(error_code::invalid_argument),
+      static_cast<int>(error_code::not_implemented),
+      static_cast<int>(error_code::invalid_state),
+  };
+
+  for (int code : codes) {
+    EXPECT_GE(code, -599) << "code " << code << " below database band";
+    EXPECT_LE(code, -500) << "code " << code << " above database band";
+    EXPECT_EQ(kcenon::common::error::get_category_name(code), "DatabaseSystem")
+        << "code " << code << " not attributed to DatabaseSystem";
+  }
+
+  // All enumerators are distinct (no collisions within the band).
+  std::vector<int> sorted = codes;
+  std::sort(sorted.begin(), sorted.end());
+  EXPECT_EQ(std::adjacent_find(sorted.begin(), sorted.end()), sorted.end())
+      << "duplicate error_code value detected";
+
+  // success stays 0.
+  EXPECT_EQ(static_cast<int>(error_code::success), 0);
 }

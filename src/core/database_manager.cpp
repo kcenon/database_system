@@ -4,6 +4,7 @@
 
 #include <kcenon/database/database_manager.h>
 
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/core/backend_registry.h>
 #include <kcenon/database/backends/postgresql_backend.h>
 #include <kcenon/database/backends/sqlite_backend.h>
@@ -89,7 +90,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend configured", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend configured", "database_manager"});
 		}
 
 		// Store connection string for potential reconnection
@@ -111,7 +112,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 
 		auto result = database_->shutdown();
@@ -127,7 +128,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		// database_backend uses execute_query for DDL/prepared statements
 		return database_->execute_query(query_string);
@@ -138,7 +139,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::Result<core::database_result>(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		return database_->select_query(query_string);
 	}
@@ -148,7 +149,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		return database_->execute_query(query_string);
 	}
@@ -158,7 +159,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		return database_->begin_transaction();
 	}
@@ -168,7 +169,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		return database_->commit_transaction();
 	}
@@ -178,7 +179,7 @@ namespace kcenon::database
 		if (!database_)
 		{
 			return kcenon::common::VoidResult(
-				kcenon::common::error_info{-1, "No database backend", "database_manager"});
+				kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No database backend", "database_manager"});
 		}
 		return database_->rollback_transaction();
 	}

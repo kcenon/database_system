@@ -41,16 +41,36 @@ using error_info = kcenon::common::error_info;
 // Database-specific error codes
 // =============================================================================
 
-/// Error codes for database operations
+/// @brief Error codes for database operations.
+///
+/// All non-zero values live in common_system's reserved database_system band
+/// [-599, -500] (see kcenon::common::error::category::database_system). This
+/// guarantees that when a backend casts one of these into the shared
+/// kcenon::common::error_info::code, consumers calling
+/// kcenon::common::error::get_category_name() / get_error_message() resolve the
+/// "DatabaseSystem" category instead of mis-attributing the code to the common
+/// (-1..-99) band.
+///
+/// Where common already defines a matching database code in
+/// kcenon::common::error::codes::database_system, the enumerator is aligned to
+/// that exact value so the shared message table returns the correct text:
+///   - connection_failed -> database_system::connection_failed (base-0  = -500)
+///   - query_failed      -> database_system::query_failed      (base-40 = -540)
+///   - timeout           -> database_system::query_timeout     (base-42 = -542)
+///
+/// Database-specific generics with no common equivalent occupy distinct unused
+/// slots at the tail of the band; none collide with a common database_system
+/// code or with the adapter-local constants in
+/// common_system_database_adapter.h (-580..-585).
 enum class error_code {
 	success = 0,
-	unknown_error = -1,
-	invalid_argument = -2,
-	not_implemented = -3,
-	invalid_state = -4,
-	connection_failed = -5,
-	query_failed = -6,
-	timeout = -7
+	connection_failed = -500, // == common::error::codes::database_system::connection_failed
+	invalid_state = -596,
+	not_implemented = -597,
+	invalid_argument = -598,
+	unknown_error = -599,
+	query_failed = -540,      // == common::error::codes::database_system::query_failed
+	timeout = -542            // == common::error::codes::database_system::query_timeout
 };
 
 } // namespace kcenon::database

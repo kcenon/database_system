@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for full license information.
 
 #include <kcenon/database/integrated/adapters/logger_adapter.h>
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/integrated/adapters/backends/logger_backend.h>
 #include <kcenon/database/integrated/adapters/backends/null_logger_backend.h>
 #include <kcenon/database/integrated/adapters/backends/fallback_logger_backend.h>
@@ -156,7 +157,7 @@ common::VoidResult logger_adapter::initialize()
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not created", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not created", "" });
 	}
 
 	return backend_->initialize();

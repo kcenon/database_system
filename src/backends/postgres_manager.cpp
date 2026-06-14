@@ -4,6 +4,8 @@
 
 #include <kcenon/database/postgres_manager.h>
 
+#include <kcenon/database/core/result.h>
+
 #ifdef USE_POSTGRESQL
 #include <pqxx/pqxx>
 #elif defined(HAVE_LIBPQ)
@@ -54,7 +56,7 @@ namespace kcenon::database
 	kcenon::common::VoidResult postgres_manager::initialize(const core::connection_config& config)
 	{
 		if (initialized_) {
-			return kcenon::common::error_info{-1, "Already initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Already initialized", "postgres_manager"};
 		}
 
 		// Build connection string from config
@@ -112,7 +114,8 @@ namespace kcenon::database
 		initialized_ = true;
 		return kcenon::common::ok();
 #endif
-		return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+		// Connection-open failure path (initialize): map to connection_failed.
+		return kcenon::common::error_info{static_cast<int>(error_code::connection_failed), last_error_, "postgres_manager"};
 	}
 
 	kcenon::common::VoidResult postgres_manager::shutdown()
@@ -151,7 +154,8 @@ namespace kcenon::database
 		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Mock disconnect.");
 		return kcenon::common::ok();
 #endif
-		return kcenon::common::error_info{-3, last_error_, "postgres_manager"};
+		// Disconnect failure path (shutdown): map to connection_failed.
+		return kcenon::common::error_info{static_cast<int>(error_code::connection_failed), last_error_, "postgres_manager"};
 	}
 
 	bool postgres_manager::is_initialized() const
@@ -162,7 +166,7 @@ namespace kcenon::database
 	kcenon::common::Result<uint64_t> postgres_manager::execute_modification_query(const std::string& query_string)
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 #ifdef USE_POSTGRESQL
@@ -175,7 +179,7 @@ namespace kcenon::database
 		} catch (const std::exception& e) {
 			last_error_ = std::string("Modification query error: ") + e.what();
 			POSTGRES_LOG_ERROR("execute_modification_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 #elif defined(HAVE_LIBPQ)
 		try {
@@ -183,7 +187,7 @@ namespace kcenon::database
 			if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 				last_error_ = PQerrorMessage(static_cast<PGconn*>(connection_));
 				PQclear(result);
-				return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+				return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 			}
 			const char* affected_rows = PQcmdTuples(result);
 			uint64_t count = 0;
@@ -195,7 +199,7 @@ namespace kcenon::database
 		} catch (const std::exception& e) {
 			last_error_ = std::string("Modification query error: ") + e.what();
 			POSTGRES_LOG_ERROR("execute_modification_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 #else
 		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Mock modification: " + query_string.substr(0, 20) + "...");
@@ -206,7 +210,7 @@ namespace kcenon::database
 	kcenon::common::Result<core::database_result> postgres_manager::select_query(const std::string& query_string)
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 		core::database_result result;
@@ -244,7 +248,7 @@ namespace kcenon::database
 		} catch (const std::exception& e) {
 			last_error_ = std::string("Select query error: ") + e.what();
 			POSTGRES_LOG_ERROR("select_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 #elif defined(HAVE_LIBPQ)
 		try {
@@ -252,7 +256,7 @@ namespace kcenon::database
 			if (PQresultStatus(pg_result) != PGRES_TUPLES_OK) {
 				last_error_ = PQerrorMessage(static_cast<PGconn*>(connection_));
 				PQclear(pg_result);
-				return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+				return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 			}
 
 			int rows = PQntuples(pg_result);
@@ -286,7 +290,7 @@ namespace kcenon::database
 		} catch (const std::exception& e) {
 			last_error_ = std::string("Select query error: ") + e.what();
 			POSTGRES_LOG_ERROR("select_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 #else
 		POSTGRES_LOG_WARNING("PostgreSQL support not compiled. Mock select: " + query_string.substr(0, 20) + "...");
@@ -304,7 +308,7 @@ namespace kcenon::database
 	kcenon::common::VoidResult postgres_manager::execute_query(const std::string& query_string)
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 #ifdef USE_POSTGRESQL
@@ -316,14 +320,14 @@ namespace kcenon::database
 		} catch (const std::exception& e) {
 			last_error_ = std::string("Execute error: ") + e.what();
 			POSTGRES_LOG_ERROR("execute_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 #elif defined(HAVE_LIBPQ)
 		PGresult* result = PQexec(static_cast<PGconn*>(connection_), query_string.c_str());
 		if (result == nullptr) {
 			last_error_ = "PostgreSQL execute failed";
 			POSTGRES_LOG_ERROR("execute_query", last_error_);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 
 		ExecStatusType status = PQresultStatus(result);
@@ -333,7 +337,7 @@ namespace kcenon::database
 			last_error_ = PQerrorMessage(static_cast<PGconn*>(connection_));
 			POSTGRES_LOG_ERROR("execute_query", last_error_);
 			PQclear(result);
-			return kcenon::common::error_info{-2, last_error_, "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::query_failed), last_error_, "postgres_manager"};
 		}
 
 		PQclear(result);
@@ -347,11 +351,11 @@ namespace kcenon::database
 	kcenon::common::VoidResult postgres_manager::begin_transaction()
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 		if (in_transaction_) {
-			return kcenon::common::error_info{-2, "Transaction already active", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Transaction already active", "postgres_manager"};
 		}
 
 		auto result = execute_query("BEGIN");
@@ -364,11 +368,11 @@ namespace kcenon::database
 	kcenon::common::VoidResult postgres_manager::commit_transaction()
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 		if (!in_transaction_) {
-			return kcenon::common::error_info{-2, "No active transaction", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No active transaction", "postgres_manager"};
 		}
 
 		auto result = execute_query("COMMIT");
@@ -381,11 +385,11 @@ namespace kcenon::database
 	kcenon::common::VoidResult postgres_manager::rollback_transaction()
 	{
 		if (!initialized_) {
-			return kcenon::common::error_info{-1, "Not initialized", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "Not initialized", "postgres_manager"};
 		}
 
 		if (!in_transaction_) {
-			return kcenon::common::error_info{-2, "No active transaction", "postgres_manager"};
+			return kcenon::common::error_info{static_cast<int>(error_code::invalid_state), "No active transaction", "postgres_manager"};
 		}
 
 		auto result = execute_query("ROLLBACK");

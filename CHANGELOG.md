@@ -24,6 +24,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING:** Remapped every non-zero `kcenon::database::error_code` enumerator
+  into common_system's reserved `database_system` band `[-599, -500]`. The old
+  values collided with common's `common_errors` band (`-1..-99`): casting the
+  former `connection_failed = -5` into the shared `kcenon::common::error_info::code`
+  made consumers resolve it as `Cancelled` / category `Common` instead of
+  `DatabaseSystem`. New values: `success = 0` (unchanged),
+  `connection_failed = -500` (aligned to
+  `common::error::codes::database_system::connection_failed`),
+  `query_failed = -540` (aligned to `database_system::query_failed`),
+  `timeout = -542` (aligned to `database_system::query_timeout`),
+  `invalid_state = -596`, `not_implemented = -597`, `invalid_argument = -598`,
+  `unknown_error = -599`. In addition, every hand-coded error code that previously
+  fed `kcenon::common::error_info` with a positive or `-1..-99` value (backend
+  managers, `backend_registry`, integrated adapters, coordinator, and unified
+  system) is now routed through these in-band codes, so the shared error registry
+  attributes them to the `DatabaseSystem` category. Any consumer comparing against
+  the old numeric values must update. This is a SemVer-major break for callers that
+  read raw `error_info::code`; it must ship as **v1.1.0 coordinated with the
+  ecosystem** — the version bump and release are owner-coordinated and are
+  intentionally not performed here
+  ([#600](https://github.com/kcenon/database_system/issues/600)).
 - Internal namespace migrated from `database::` to `kcenon::database::` so the
   namespace matches the canonical `kcenon/database/...` include path. All in-tree
   namespace definitions (headers, sources, and C++20 module partitions) now open

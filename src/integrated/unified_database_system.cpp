@@ -31,15 +31,20 @@ namespace kcenon::database::integrated {
 
 namespace {
 
+// Default error code for these helpers: an in-band database_system value so the
+// shared common::error_info::code resolves to the "DatabaseSystem" category
+// rather than the common (-1..-99) band. See core/result.h for the band design.
+constexpr int kDefaultErrorCode = static_cast<int>(error_code::unknown_error);
+
 // Helper to create error VoidResult
-inline kcenon::common::VoidResult make_error(const std::string& msg, int code = -1, const std::string& context = "")
+inline kcenon::common::VoidResult make_error(const std::string& msg, int code = kDefaultErrorCode, const std::string& context = "")
 {
     return kcenon::common::VoidResult(kcenon::common::error_info{code, msg, context});
 }
 
 // Helper to create error Result<T>
 template <typename T>
-inline kcenon::common::Result<T> make_error_result(const std::string& msg, int code = -1, const std::string& context = "")
+inline kcenon::common::Result<T> make_error_result(const std::string& msg, int code = kDefaultErrorCode, const std::string& context = "")
 {
     return kcenon::common::Result<T>(kcenon::common::error_info{code, msg, context});
 }
@@ -197,7 +202,7 @@ public:
         const std::vector<query_param>& params) override {
 
         if (!active_) {
-            return make_error_result<query_result>("Transaction not active", -1, "transaction");
+            return make_error_result<query_result>("Transaction not active", static_cast<int>(error_code::invalid_state), "transaction");
         }
 
         auto start = std::chrono::steady_clock::now();
@@ -243,12 +248,12 @@ public:
 
     kcenon::common::VoidResult commit() override {
         if (!active_) {
-            return make_error("Transaction not active", -1, "transaction");
+            return make_error("Transaction not active", static_cast<int>(error_code::invalid_state), "transaction");
         }
 
         auto result = backend_->commit_transaction();
         if (result.is_err()) {
-            return make_error("Commit failed: " + result.error().message, -1, "transaction");
+            return make_error("Commit failed: " + result.error().message, static_cast<int>(error_code::invalid_state), "transaction");
         }
 
         active_ = false;
@@ -257,12 +262,12 @@ public:
 
     kcenon::common::VoidResult rollback() override {
         if (!active_) {
-            return make_error("Transaction not active", -1, "transaction");
+            return make_error("Transaction not active", static_cast<int>(error_code::invalid_state), "transaction");
         }
 
         auto result = backend_->rollback_transaction();
         if (result.is_err()) {
-            return make_error("Rollback failed: " + result.error().message, -1, "transaction");
+            return make_error("Rollback failed: " + result.error().message, static_cast<int>(error_code::invalid_state), "transaction");
         }
 
         active_ = false;
@@ -312,7 +317,7 @@ public:
         }
 
         if (connected_) {
-            return make_error("Already connected", -1, "unified_database_system");
+            return make_error("Already connected", static_cast<int>(error_code::invalid_state), "unified_database_system");
         }
 
         backend_type_ = backend;
@@ -321,14 +326,14 @@ public:
         // Create backend instance
         backend_ = create_backend(backend);
         if (!backend_) {
-            return make_error("Unsupported backend type", -2, "unified_database_system");
+            return make_error("Unsupported backend type", static_cast<int>(error_code::invalid_argument), "unified_database_system");
         }
 
         // Connect to database using connection_config
         auto config = core::connection_config::from_string(connection_string);
         auto result = backend_->initialize(config);
         if (result.is_err()) {
-            return make_error("Connection failed: " + result.error().message, -3, "unified_database_system");
+            return make_error("Connection failed: " + result.error().message, static_cast<int>(error_code::connection_failed), "unified_database_system");
         }
 
         connected_ = true;
@@ -384,7 +389,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return make_error_result<query_result>("Not connected to database", -1, "unified_database_system");
+            return make_error_result<query_result>("Not connected to database", static_cast<int>(error_code::invalid_state), "unified_database_system");
         }
 
         // Record query start
@@ -458,7 +463,7 @@ public:
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
             std::promise<kcenon::common::Result<query_result>> promise;
-            promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
+            promise.set_value(make_error_result<query_result>("Thread pool not available", static_cast<int>(error_code::invalid_state), "unified_database_system"));
             return promise.get_future();
         }
 
@@ -476,7 +481,7 @@ public:
         auto* thread_pool = coordinator_->get_thread_pool();
         if (!thread_pool) {
             std::promise<kcenon::common::Result<query_result>> promise;
-            promise.set_value(make_error_result<query_result>("Thread pool not available", -1, "unified_database_system"));
+            promise.set_value(make_error_result<query_result>("Thread pool not available", static_cast<int>(error_code::invalid_state), "unified_database_system"));
             return promise.get_future();
         }
 
@@ -495,7 +500,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (!connected_) {
-            return make_error_result<std::unique_ptr<transaction>>("Not connected to database", -1, "unified_database_system");
+            return make_error_result<std::unique_ptr<transaction>>("Not connected to database", static_cast<int>(error_code::invalid_state), "unified_database_system");
         }
 
         ++metrics_.transactions_started;
@@ -614,7 +619,7 @@ private:
         auto init_result = coordinator_->initialize();
         if (!init_result.is_ok()) {
             return make_error("Failed to initialize database coordinator: " +
-                init_result.error().message, -10, "unified_database_system");
+                init_result.error().message, static_cast<int>(error_code::invalid_state), "unified_database_system");
         }
         initialized_ = true;
         return kcenon::common::ok();

@@ -4,13 +4,19 @@
 
 #include <kcenon/database/integrated/adapters/backends/fallback_thread_backend.h>
 
+#include <kcenon/database/core/result.h>
+
 #include <algorithm>
 
 namespace
 {
+	// In-band database_system code (see core/result.h) so the shared
+	// common::error_info::code resolves to "DatabaseSystem", not the common
+	// (-1..-99) band.
 	inline common::VoidResult make_error(const std::string& msg)
 	{
-		return common::VoidResult(common::error_info{ -1, msg, "" });
+		return common::VoidResult(common::error_info{
+			static_cast<int>(kcenon::database::error_code::unknown_error), msg, "" });
 	}
 }
 

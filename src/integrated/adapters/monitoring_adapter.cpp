@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for full license information.
 
 #include <kcenon/database/integrated/adapters/monitoring_adapter.h>
+#include <kcenon/database/core/result.h>
 #include <kcenon/database/integrated/adapters/backends/monitoring_backend.h>
 #include <kcenon/database/integrated/adapters/backends/null_monitoring_backend.h>
 #include <kcenon/database/integrated/adapters/backends/fallback_monitoring_backend.h>
@@ -83,7 +84,7 @@ common::VoidResult monitoring_adapter::initialize()
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not created", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not created", "" });
 	}
 
 	return backend_->initialize();
@@ -113,7 +114,7 @@ common::VoidResult monitoring_adapter::record_metric(const std::string& name, do
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->record_metric(name, value);
@@ -126,7 +127,7 @@ common::VoidResult monitoring_adapter::record_metric(
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->record_metric(name, value, tags);
@@ -137,7 +138,7 @@ common::Result<backends::metrics_snapshot> monitoring_adapter::get_metrics()
 	if (!backend_)
 	{
 		return common::Result<backends::metrics_snapshot>(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->get_metrics();
@@ -148,7 +149,7 @@ common::Result<backends::health_check_result> monitoring_adapter::check_health()
 	if (!backend_)
 	{
 		return common::Result<backends::health_check_result>(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->check_health();
@@ -159,7 +160,7 @@ common::VoidResult monitoring_adapter::reset()
 	if (!backend_)
 	{
 		return common::VoidResult(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->reset();
@@ -230,7 +231,7 @@ common::Result<database_metrics> monitoring_adapter::get_database_metrics()
 	if (!backend_)
 	{
 		return common::Result<database_metrics>(
-			common::error_info{ -1, "Backend not initialized", "" });
+			common::error_info{ static_cast<int>(error_code::invalid_state), "Backend not initialized", "" });
 	}
 
 	return backend_->get_database_metrics();

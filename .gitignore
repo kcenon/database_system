@@ -95,3 +95,8 @@ documents/
 common_system/
 thread_system/
 *_system/.integration_plan/
+
+# Coherence gate reports and Python tests
+coherence-results/
+__pycache__/
+*.pyc

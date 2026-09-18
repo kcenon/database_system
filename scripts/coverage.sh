@@ -63,7 +63,7 @@ mkdir -p "${COVERAGE_DIR}"
 gcovr --root "${PROJECT_DIR}" \
     --exclude '.*tests/.*' \
     --exclude '.*third_party/.*' \
-    --exclude '.*samples/.*' \
+    --exclude '.*examples/tutorials/.*' \
     --exclude '.*benchmarks/.*' \
     --exclude '.*build.*' \
     --html --html-details \
@@ -82,7 +82,7 @@ if [ "$CHECK_THRESHOLD" = true ]; then
     if gcovr --root "${PROJECT_DIR}" \
         --exclude '.*tests/.*' \
         --exclude '.*third_party/.*' \
-        --exclude '.*samples/.*' \
+        --exclude '.*examples/tutorials/.*' \
         --exclude '.*benchmarks/.*' \
         --exclude '.*build.*' \
         --fail-under-line ${THRESHOLD} \

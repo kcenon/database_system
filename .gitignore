@@ -90,3 +90,11 @@ documents/
 common_system/
 thread_system/
 *_system/.integration_plan/
+
+coherence-results/
+
+__pycache__/
+
+*.pyc
+
+!ci/*.json

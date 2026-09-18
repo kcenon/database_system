@@ -308,7 +308,7 @@ category: "PROJ"
   - Removed `integration_tests/scenarios/connection_management_test.cpp`
   - Removed `benchmarks/connection_pool_bench.cpp`
   - Removed `samples/connection_pool_demo.cpp`
-  - Removed `samples/migration/connection_pool_v2_demo.cpp`
+  - Removed `examples/tutorials/migration/connection_pool_v2_demo.cpp`
 
 - **Migration Required**: Use ProxyMode with database_server for production deployments
   - See `docs/migration/proxy-mode.md` for migration guide

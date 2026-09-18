@@ -1043,7 +1043,7 @@ To migrate from the legacy `database_manager` API to `unified_database_system`:
    }
    ```
 
-See `samples/integrated/migration_from_legacy.cpp` for a complete migration example.
+See `examples/tutorials/integrated/migration_from_legacy.cpp` for a complete migration example.
 
 ---
 

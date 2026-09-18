@@ -1,3 +1,11 @@
+include("${CMAKE_CURRENT_LIST_DIR}/KcenonDependencyOptions.cmake")
+
+kcenon_dependency_option(KCENON_WITH_COMMON_SYSTEM BUILD_WITH_COMMON_SYSTEM
+    "Required common_system integration" ON)
+if(NOT KCENON_WITH_COMMON_SYSTEM)
+    message(FATAL_ERROR "common_system is required")
+endif()
+
 ##################################################
 # Database System: build options
 #
@@ -25,9 +33,12 @@ option(USE_REDIS "Enable Redis backend (EXPERIMENTAL - see docs/BACKENDS.md)" OF
 option(USE_OPENSSL "Enable OpenSSL-backed TLS and cryptography for secure_connection" ON)
 
 # Ecosystem integration options
-option(USE_THREAD_SYSTEM "Enable thread_system integration for high-performance threading" ON)
-option(USE_MONITORING_SYSTEM "Enable monitoring_system integration for metrics and profiling" ON)
-option(USE_CONTAINER_SYSTEM "Enable container_system integration for high-performance serialization" ON)
+kcenon_dependency_option(KCENON_WITH_THREAD_SYSTEM USE_THREAD_SYSTEM
+    "Enable thread_system integration for high-performance threading" ON)
+kcenon_dependency_option(KCENON_WITH_MONITORING_SYSTEM USE_MONITORING_SYSTEM
+    "Enable monitoring_system integration for metrics and profiling" ON)
+kcenon_dependency_option(KCENON_WITH_CONTAINER_SYSTEM USE_CONTAINER_SYSTEM
+    "Enable container_system integration for high-performance serialization" ON)
 
 # Testing and coverage options
 option(USE_UNIT_TEST "Use unit test" ON)

@@ -5,12 +5,12 @@
 #ifdef USE_CONTAINER_SYSTEM
 
 #include <kcenon/database/protocol/database_protocol_container.h>
-#include <core/container.h>
-#include <core/value_types.h>
+#include <kcenon/container/container.h>
+#include <kcenon/container/value_types.h>
 
 namespace kcenon::database::protocol {
 
-using namespace container_module;
+using namespace kcenon::container;
 
 std::vector<uint8_t> container_protocol_serializer::serialize_container(
     const query_request& request) {

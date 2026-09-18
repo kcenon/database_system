@@ -50,8 +50,8 @@ if(USE_THREAD_SYSTEM)
         )
 
         target_include_directories(${SAMPLE_NAME} PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/..
-            ${CMAKE_CURRENT_SOURCE_DIR}/../..
+            ${database_system_SOURCE_DIR}
+            ${database_system_SOURCE_DIR}/..
         )
 
         target_link_libraries(${SAMPLE_NAME} PRIVATE
@@ -61,7 +61,7 @@ if(USE_THREAD_SYSTEM)
 
         # Link thread_system: prefer CMake targets from unified build
         set(_THREAD_LINKED FALSE)
-        foreach(_thread_target thread_system ThreadSystem)
+        foreach(_thread_target thread_system::thread_system thread_system ThreadSystem)
             if(TARGET ${_thread_target})
                 target_link_libraries(${SAMPLE_NAME} PRIVATE ${_thread_target})
                 set(_THREAD_LINKED TRUE)
@@ -116,7 +116,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 foreach(SAMPLE ${SAMPLE_PROGRAMS})
     # Create executable for each sample with unique prefix
     add_executable(database_${SAMPLE} ${SAMPLE}.cpp)
-    
+
     # Set target properties
     set_target_properties(database_${SAMPLE} PROPERTIES
         CXX_STANDARD 20
@@ -126,8 +126,8 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
 
     # Include directories
     target_include_directories(database_${SAMPLE} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${CMAKE_CURRENT_SOURCE_DIR}/../..
+        ${database_system_SOURCE_DIR}
+        ${database_system_SOURCE_DIR}/..
     )
 
     # Link libraries
@@ -150,7 +150,7 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
             /wd4100  # unreferenced formal parameter
         )
     endif()
-    
+
     # Platform-specific definitions
     if(WIN32)
         target_compile_definitions(database_${SAMPLE} PRIVATE
@@ -159,7 +159,7 @@ foreach(SAMPLE ${SAMPLE_PROGRAMS})
             NOMINMAX
         )
     endif()
-    
+
     message(STATUS "Database sample configured: ${SAMPLE}")
 endforeach()
 
@@ -181,9 +181,9 @@ install(TARGETS ${PREFIXED_SAMPLE_PROGRAMS}
 
 # Install sample source files for reference
 install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_basic_usage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/basic_usage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/postgres_advanced.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/database_run_all_samples.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/run_all_samples.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/README.md
     DESTINATION share/database_system/samples

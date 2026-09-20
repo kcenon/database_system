@@ -831,7 +831,7 @@ db.insert_query(
 | PostgreSQL Advanced | `postgres_advanced` | `build/bin/samples/` |
 | Connection Pool Demo | `connection_pool_demo` | `build/bin/samples/` |
 | ORM Examples | `orm_examples` | `build/bin/samples/` |
-| Unified System | `unified_basic_usage` | `build/bin/samples/integrated/` |
+| Unified System | `unified_basic_usage` | `build/bin/examples/tutorials/integrated/` |
 
 ### Test Executables
 

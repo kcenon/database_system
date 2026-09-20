@@ -59,7 +59,7 @@ if(ENABLE_COVERAGE)
                     --root ${CMAKE_SOURCE_DIR}
                     --exclude '.*tests/.*'
                     --exclude '.*third_party/.*'
-                    --exclude '.*samples/.*'
+                    --exclude '.*examples/tutorials/.*'
                     --exclude '.*examples/.*'
                     --exclude '.*benchmarks/.*'
                     --html --html-details
@@ -76,7 +76,7 @@ if(ENABLE_COVERAGE)
                     --root ${CMAKE_SOURCE_DIR}
                     --exclude '.*tests/.*'
                     --exclude '.*third_party/.*'
-                    --exclude '.*samples/.*'
+                    --exclude '.*examples/tutorials/.*'
                     --exclude '.*examples/.*'
                     --exclude '.*benchmarks/.*'
                     --fail-under-line 80

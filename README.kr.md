@@ -480,7 +480,7 @@ int main() {
 }
 ```
 
-[🚀 더 많은 예제 →](samples/)
+[🚀 더 많은 예제 →](examples/tutorials/)
 
 ---
 
@@ -580,7 +580,7 @@ graph TD
 ### 시작하기
 - 📖 [시작 가이드](docs/README.md)
 - 🔧 [빌드 가이드](docs/guides/BUILD_GUIDE.md)
-- 🚀 [빠른 시작 예제](samples/)
+- 🚀 [빠른 시작 예제](examples/tutorials/)
 
 ### 핵심 문서
 - 📚 [상세 기능](docs/FEATURES.md) - 백엔드 상세, ORM, 쿼리 빌더

@@ -6,8 +6,8 @@
 ##################################################
 
 # Samples
-if(BUILD_DATABASE_SAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/samples)
-    add_subdirectory(samples)
+if(BUILD_DATABASE_SAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/tutorials)
+    add_subdirectory(examples/tutorials samples)
     message(STATUS "Database samples will be built")
 endif()
 

@@ -197,7 +197,13 @@ if(BUILD_WITH_COMMON_SYSTEM AND common_system_FOUND AND TARGET common_system)
 endif()
 
 # thread_system
-if(USE_THREAD_SYSTEM AND TARGET thread_system)
+if(USE_THREAD_SYSTEM AND TARGET thread_system::thread_system)
+    if(INTEGRATED_DB_SOURCES)
+        target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC thread_system::thread_system)
+    else()
+        target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE thread_system::thread_system)
+    endif()
+elseif(USE_THREAD_SYSTEM AND TARGET thread_system)
     if(INTEGRATED_DB_SOURCES)
         target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC thread_system)
     else()
@@ -209,7 +215,13 @@ endif()
 # monitoring_system
 if(USE_MONITORING_SYSTEM)
     # Try to find monitoring_system library
-    if(TARGET monitoring_system)
+    if(TARGET monitoring_system::monitoring_system)
+        if(INTEGRATED_DB_SOURCES)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system::monitoring_system)
+        else()
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system::monitoring_system)
+        endif()
+    elseif(TARGET monitoring_system)
         if(INTEGRATED_DB_SOURCES)
             target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system)
         else()
@@ -279,7 +291,7 @@ endif()
 # In subdirectory builds (e.g., via pacs_system), the parent project handles
 # installation and the transitive dependencies (thread_base, etc.) may not
 # be in any export set.
-if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+if(CMAKE_SOURCE_DIR STREQUAL database_system_SOURCE_DIR)
     install(TARGETS ${INTEGRATED_DB_TARGET}
         EXPORT database_system-targets
         ARCHIVE DESTINATION lib

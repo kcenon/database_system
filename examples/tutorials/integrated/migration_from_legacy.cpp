@@ -224,7 +224,7 @@ int main() {
     std::cout << "Documentation:\n";
     std::cout << "  • INTEGRATION.md - Complete integration guide\n";
     std::cout << "  • ARCHITECTURE.md - System architecture\n";
-    std::cout << "  • samples/integrated/ - Working examples\n\n";
+    std::cout << "  • examples/tutorials/integrated/ - Working examples\n\n";
 
     std::cout << "Examples:\n";
     std::cout << "  • basic_usage - Getting started\n";

@@ -131,7 +131,7 @@ jobs:
 
     - name: Compare with baseline (if exists)
       id: comparison
-      if: hashFiles('benchmarks/baselines/baseline_${{ matrix.os }}_*.json') != ''
+      if: hashFiles(format('benchmarks/baselines/baseline_{0}_*.json', matrix.os)) != ''
       run: |
         echo "Comparing with baseline..."
 
@@ -156,7 +156,7 @@ jobs:
         fi
 
     - name: Upload comparison report
-      if: hashFiles('comparison_${{ matrix.os }}.md') != ''
+      if: hashFiles(format('comparison_{0}.md', matrix.os)) != ''
       uses: actions/upload-artifact@v7
       with:
         name: comparison-report-${{ matrix.os }}

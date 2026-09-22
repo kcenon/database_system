@@ -13,7 +13,7 @@
  * - Struct composition
  */
 
-#include "integrated/core/configuration.h"
+#include <kcenon/database/integrated/core/configuration.h>
 
 #include <cassert>
 #include <chrono>

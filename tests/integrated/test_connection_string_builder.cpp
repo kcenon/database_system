@@ -7,7 +7,7 @@
  * @brief Unit tests for connection_string_builder
  */
 
-#include "integrated/connection_string_builder.h"
+#include <kcenon/database/integrated/connection_string_builder.h>
 
 #include <iostream>
 #include <string>

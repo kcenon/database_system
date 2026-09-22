@@ -83,7 +83,7 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~redis_backend() override = default;
+	~redis_backend() noexcept override;
 
 	// database_backend interface implementation
 

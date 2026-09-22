@@ -38,6 +38,11 @@ mongodb_backend::mongodb_backend()
 {
 }
 
+mongodb_backend::~mongodb_backend() noexcept
+{
+	shutdown_before_derived_destruction();
+}
+
 kcenon::common::VoidResult mongodb_backend::do_initialize(const core::connection_config& config)
 {
 	connection_config_ = config;
@@ -69,6 +74,10 @@ kcenon::common::VoidResult mongodb_backend::do_initialize(const core::connection
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
+		delete static_cast<mongocxx::database*>(database_);
+		database_ = nullptr;
+		delete static_cast<mongocxx::client*>(client_);
+		client_ = nullptr;
 		last_error_ = std::string("Connection error: ") + e.what();
 		logger_.error("do_initialize", last_error_);
 	}

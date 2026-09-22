@@ -85,7 +85,7 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~postgresql_backend() override = default;
+	~postgresql_backend() noexcept override;
 
 	// database_backend interface implementation
 

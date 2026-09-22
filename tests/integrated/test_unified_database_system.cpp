@@ -11,9 +11,9 @@
  * Integration tests with real databases are in integration_tests/.
  */
 
-#include "integrated/unified_database_system.h"
-#include "core/database_backend.h"
-#include "core/backend_registry.h"
+#include <kcenon/database/integrated/unified_database_system.h>
+#include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/core/database_backend.h>
 
 #include <iostream>
 #include <cassert>

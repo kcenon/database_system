@@ -278,6 +278,11 @@ void connection_pool::return_connection(std::unique_ptr<database_backend> backen
 
 std::unique_ptr<database_backend> connection_pool::create_locked(std::unique_lock<std::mutex>& lock)
 {
+	// Reserve capacity while holding the lock. Without this reservation, every
+	// waiter can observe the same available slot after the factory call unlocks
+	// the mutex, allowing the pool to grow beyond max_size.
+	++total_connections_;
+
 	// Factory may block on network I/O; drop the lock while calling it.
 	lock.unlock();
 	std::unique_ptr<database_backend> backend;
@@ -289,11 +294,11 @@ std::unique_ptr<database_backend> connection_pool::create_locked(std::unique_loc
 	lock.lock();
 
 	if (!backend) {
+		--total_connections_;
 		++failed_creations_;
 		return nullptr;
 	}
 
-	++total_connections_;
 	return backend;
 }
 

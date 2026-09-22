@@ -1225,5 +1225,4 @@ auto top_players = cache_conn->select_query("ZREVRANGE leaderboard 0 9 WITHSCORE
 
 ---
 
-*This guide is based on production experience with database_system. For additional examples, see `/samples/` directory and `ARCHITECTURE.md`.*
-
+*This guide is based on production experience with database_system. For additional examples, see `examples/tutorials/` and `ARCHITECTURE.md`.*

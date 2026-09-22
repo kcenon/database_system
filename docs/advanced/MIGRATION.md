@@ -867,7 +867,7 @@ Database migrations are critical operations that require careful planning, testi
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture overview
 - [STRUCTURE.md](STRUCTURE.md) - Project directory structure
 - [API_REFERENCE.md](../API_REFERENCE.md) - Complete API documentation
-- [samples/](../../samples/) - Example migrations and usage patterns
+- [examples/tutorials/](../../examples/tutorials/) - Example migrations and usage patterns
 
 ---
 

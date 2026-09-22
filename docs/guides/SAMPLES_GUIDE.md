@@ -54,7 +54,7 @@ ninja  # or make
 
 ## Basic Usage Sample
 
-**File**: `samples/basic_usage.cpp`
+**File**: `examples/tutorials/basic_usage.cpp`
 
 Demonstrates fundamental database operations using the database_manager singleton.
 
@@ -234,7 +234,7 @@ PostgreSQL support not compiled. Connection: host=localhost port=...
 
 ## PostgreSQL Advanced Sample
 
-**File**: `samples/postgres_advanced.cpp`
+**File**: `examples/tutorials/postgres_advanced.cpp`
 
 Demonstrates advanced PostgreSQL-specific features and optimizations.
 
@@ -299,7 +299,7 @@ auto products = db_manager.select_query(
 
 ## Connection Pool Demo
 
-**File**: `samples/connection_pool_demo.cpp`
+**File**: `examples/connection_pool_demo.cpp`
 
 Comprehensive demonstration of connection pooling capabilities.
 

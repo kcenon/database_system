@@ -914,7 +914,7 @@ Include:
 - **GitHub Issues**: [database_system issues](https://github.com/kcenon/database_system/issues)
 - **Documentation**: See [BUILD_GUIDE.md](BUILD_GUIDE.md) and [API_REFERENCE.md](../API_REFERENCE.md)
 - **FAQ**: Check [FAQ.md](FAQ.md) for common questions
-- **Examples**: See `samples/` directory for working examples
+- **Examples**: See `examples/tutorials/` for focused tutorials and `examples/` for larger programs
 
 ---
 

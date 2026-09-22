@@ -403,7 +403,7 @@ if constexpr (database::async::using_thread_system) {
 For questions or issues:
 - Open an issue on GitHub
 - Check existing documentation
-- Review sample code in `samples/migration/`
+- Review sample code in `examples/tutorials/migration/`
 
 ---
 

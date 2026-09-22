@@ -904,7 +904,7 @@ Follows [Semantic Versioning](https://semver.org/):
 ### Resources
 
 - **Documentation**: [docs/](../)
-- **Examples**: [samples/](../../samples/)
+- **Examples**: [examples/tutorials/](../../examples/tutorials/)
 - **Build Guide**: [docs/guides/BUILD_GUIDE.md](../guides/BUILD_GUIDE.md)
 - **Architecture**: [docs/ARCHITECTURE.md](../ARCHITECTURE.md)
 - **API Reference**: [docs/API_REFERENCE.md](../API_REFERENCE.md)

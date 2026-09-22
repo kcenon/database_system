@@ -50,10 +50,15 @@ compile_commands.json
 
 # Test results
 Testing/
+!docs/testing/
 CTestTestfile.cmake
 *.gcov
 *.gcda
 *.gcno
+
+# CTest-generated test discovery artifacts (must not be committed)
+cmake_test_discovery_*.json
+integration_tests/cmake_test_discovery_*.json
 
 # Documentation
 docs/html/
@@ -91,10 +96,7 @@ common_system/
 thread_system/
 *_system/.integration_plan/
 
+# Coherence gate reports and Python tests
 coherence-results/
-
 __pycache__/
-
 *.pyc
-
-!ci/*.json

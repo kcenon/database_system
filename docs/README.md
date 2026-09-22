@@ -103,7 +103,7 @@ These repo-level Markdown files are not registered under a `DBS-*` doc_id but ar
 | [DOC_REVIEW_REPORT.md](../DOC_REVIEW_REPORT.md) | Latest documentation audit report |
 | [benchmarks/README.md](../benchmarks/README.md) | Benchmarks subproject README |
 | [integration_tests/README.md](../integration_tests/README.md) | Integration tests subproject README |
-| [samples/README.md](../samples/README.md) | Samples README |
+| [examples/tutorials/README.md](../examples/tutorials/README.md) | Samples README |
 | [examples/README.md](../examples/README.md) | Examples README |
 | [.github/ISSUE_TEMPLATE/bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) | Bug report template |
 | [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | Feature request template |

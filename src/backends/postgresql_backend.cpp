@@ -69,6 +69,11 @@ postgresql_backend::postgresql_backend()
 {
 }
 
+postgresql_backend::~postgresql_backend() noexcept
+{
+	shutdown_before_derived_destruction();
+}
+
 kcenon::common::VoidResult postgresql_backend::do_initialize(const core::connection_config& config)
 {
 	connection_config_ = config;
@@ -97,6 +102,10 @@ kcenon::common::VoidResult postgresql_backend::do_initialize(const core::connect
 		PQfinish(static_cast<PGconn*>(connection_));
 		connection_ = nullptr;
 	} catch (const std::exception& e) {
+		if (connection_) {
+			PQfinish(static_cast<PGconn*>(connection_));
+			connection_ = nullptr;
+		}
 		last_error_ = std::string("Connection error: ") + sanitize_error(e.what());
 		logger_.error("do_initialize", last_error_);
 	}

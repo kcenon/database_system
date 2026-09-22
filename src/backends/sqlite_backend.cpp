@@ -32,6 +32,11 @@ sqlite_backend::sqlite_backend()
 {
 }
 
+sqlite_backend::~sqlite_backend() noexcept
+{
+	shutdown_before_derived_destruction();
+}
+
 kcenon::common::VoidResult sqlite_backend::do_initialize(const core::connection_config& config)
 {
 	connection_config_ = config;
@@ -46,6 +51,7 @@ kcenon::common::VoidResult sqlite_backend::do_initialize(const core::connection_
 
 		// Open or create the database
 		int result = sqlite3_open(db_path.c_str(), &db);
+		connection_ = db;
 
 		if (result != SQLITE_OK) {
 			last_error_ = std::string("Connection failed: ") + sqlite3_errmsg(db);
@@ -53,14 +59,13 @@ kcenon::common::VoidResult sqlite_backend::do_initialize(const core::connection_
 			if (db) {
 				sqlite3_close(db);
 			}
+			connection_ = nullptr;
 			return kcenon::common::error_info{
 				static_cast<int>(database::error_code::connection_failed),
 				last_error_,
 				"sqlite_backend"
 			};
 		}
-
-		connection_ = db;
 
 		// Enable foreign key constraints
 		char* error_msg = nullptr;
@@ -72,6 +77,10 @@ kcenon::common::VoidResult sqlite_backend::do_initialize(const core::connection_
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
+		if (connection_) {
+			sqlite3_close(static_cast<sqlite3*>(connection_));
+			connection_ = nullptr;
+		}
 		last_error_ = std::string("Connection error: ") + e.what();
 		logger_.error("do_initialize", last_error_);
 	}

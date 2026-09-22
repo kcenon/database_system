@@ -14,7 +14,7 @@
  *
  * Design Goals:
  * - Eliminate ~150 lines of boilerplate per backend
- * - Centralize common lifecycle logic (constructor, destructor, create, type)
+ * - Centralize common lifecycle logic (initialize, shutdown, create, type)
  * - Standardize initialization guard checks
  * - Allow backends to focus on database-specific implementation
  *
@@ -24,6 +24,9 @@
  *       : public backend_base<postgresql_backend, database_types::postgres> {
  *   public:
  *       static constexpr const char* backend_name() { return "postgresql_backend"; }
+ *       ~postgresql_backend() noexcept override {
+ *           shutdown_before_derived_destruction();
+ *       }
  *
  *   protected:
  *       friend class backend_base<postgresql_backend, database_types::postgres>;
@@ -83,12 +86,12 @@ public:
 	/**
 	 * @brief Virtual destructor
 	 *
-	 * Calls shutdown() to ensure proper cleanup of derived class resources.
+	 * Derived resources cannot be accessed safely from a CRTP base destructor:
+	 * the derived object and its members have already been destroyed. Concrete
+	 * backends must call shutdown_before_derived_destruction() from their own
+	 * destructor body instead.
 	 */
-	~backend_base() override
-	{
-		shutdown();
-	}
+	~backend_base() override = default;
 
 	// Prevent copying (backends own unique resources)
 	backend_base(const backend_base&) = delete;
@@ -123,6 +126,9 @@ public:
 	 *
 	 * Performs initialization guard check, then delegates to derived class.
 	 * Derived class must implement do_initialize() for database-specific logic.
+	 * If initialization fails after acquiring resources, do_initialize() must
+	 * release that partial state before returning because the backend is not yet
+	 * marked initialized and destruction will not call do_shutdown().
 	 */
 	kcenon::common::VoidResult initialize(const connection_config& config) override
 	{
@@ -169,6 +175,24 @@ public:
 	}
 
 protected:
+	/**
+	 * @brief Best-effort RAII cleanup for concrete backend destructors
+	 *
+	 * This helper must be called from the concrete derived destructor while the
+	 * derived members are still alive. Explicit shutdown remains the reporting
+	 * API; a destructor cannot return cleanup errors and must not throw.
+	 */
+	void shutdown_before_derived_destruction() noexcept
+	{
+		try {
+			(void)shutdown();
+		} catch (...) {
+			// Destructors cannot report or propagate cleanup failures. Prevent a
+			// second cleanup attempt after an exceptional shutdown path.
+			initialized_ = false;
+		}
+	}
+
 	std::atomic<bool> initialized_{false}; ///< Initialization state
 };
 

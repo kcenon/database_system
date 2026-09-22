@@ -31,6 +31,11 @@ redis_backend::redis_backend()
 {
 }
 
+redis_backend::~redis_backend() noexcept
+{
+	shutdown_before_derived_destruction();
+}
+
 kcenon::common::VoidResult redis_backend::do_initialize(const core::connection_config& config)
 {
 	connection_config_ = config;
@@ -42,11 +47,13 @@ kcenon::common::VoidResult redis_backend::do_initialize(const core::connection_c
 	try {
 		// Create Redis connection
 		redisContext* ctx = redisConnect(host_.c_str(), port_);
+		context_ = ctx;
 		if (ctx == nullptr || ctx->err) {
 			if (ctx) {
 				last_error_ = std::string("Connection error: ") + ctx->errstr;
 				logger_.error("do_initialize", last_error_);
 				redisFree(ctx);
+				context_ = nullptr;
 			} else {
 				last_error_ = "Connection allocation error";
 				logger_.error("do_initialize", last_error_);
@@ -57,8 +64,6 @@ kcenon::common::VoidResult redis_backend::do_initialize(const core::connection_c
 				"redis_backend"
 			};
 		}
-
-		context_ = ctx;
 
 		// Authenticate if password provided
 		if (!config.password.empty()) {
@@ -98,6 +103,10 @@ kcenon::common::VoidResult redis_backend::do_initialize(const core::connection_c
 		last_error_.clear();
 		return kcenon::common::ok();
 	} catch (const std::exception& e) {
+		if (context_) {
+			redisFree(static_cast<redisContext*>(context_));
+			context_ = nullptr;
+		}
 		last_error_ = std::string("Connection error: ") + e.what();
 		logger_.error("do_initialize", last_error_);
 	}

@@ -304,8 +304,9 @@ private:
 	/// Return a backend to the pool (called by pooled_connection on release).
 	void return_connection(std::unique_ptr<database_backend> backend, bool broken);
 
-	/// Try to create a new connection; increments total_connections on success.
-	/// Called with mutex held. Returns nullptr on factory failure.
+	/// Try to create a new connection. A capacity slot is reserved before the
+	/// mutex is released for the factory call, preventing concurrent creators
+	/// from exceeding max_size. Returns nullptr on factory failure.
 	std::unique_ptr<database_backend> create_locked(std::unique_lock<std::mutex>& lock);
 
 	/// Pop an idle connection (if any). Called with mutex held.

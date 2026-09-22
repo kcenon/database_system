@@ -82,7 +82,7 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~sqlite_backend() override = default;
+	~sqlite_backend() noexcept override;
 
 	// database_backend interface implementation
 

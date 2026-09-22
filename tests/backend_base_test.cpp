@@ -19,6 +19,7 @@
 #include <atomic>
 #include <gtest/gtest.h>
 #include <memory>
+#include <stdexcept>
 #include <string>
 
 #include <kcenon/database/core/backend_base.h>
@@ -33,6 +34,60 @@ using namespace kcenon::database::core;
 
 namespace {
 
+struct lifecycle_observer
+{
+    int shutdown_call_count = 0;
+    int partial_cleanup_count = 0;
+    bool member_alive = false;
+    bool member_alive_during_shutdown = false;
+    bool partial_resource_alive = false;
+};
+
+class observed_member
+{
+public:
+    explicit observed_member(lifecycle_observer* observer) noexcept
+        : observer_(observer)
+    {
+        if (observer_) {
+            observer_->member_alive = true;
+        }
+    }
+
+    ~observed_member()
+    {
+        if (observer_) {
+            observer_->member_alive = false;
+        }
+    }
+
+private:
+    lifecycle_observer* observer_;
+};
+
+class tracked_resource
+{
+public:
+    explicit tracked_resource(lifecycle_observer* observer) noexcept
+        : observer_(observer)
+    {
+        if (observer_) {
+            observer_->partial_resource_alive = true;
+        }
+    }
+
+    ~tracked_resource()
+    {
+        if (observer_) {
+            observer_->partial_resource_alive = false;
+            observer_->partial_cleanup_count++;
+        }
+    }
+
+private:
+    lifecycle_observer* observer_;
+};
+
 /**
  * @brief Concrete backend that always succeeds initialization
  */
@@ -42,8 +97,19 @@ class succeeding_backend
 public:
     static constexpr const char* backend_name() { return "succeeding_backend"; }
 
+    explicit succeeding_backend(lifecycle_observer* observer = nullptr) noexcept
+        : observer_(observer), observed_member_(observer)
+    {
+    }
+
+    ~succeeding_backend() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
+
     int init_call_count = 0;
     int shutdown_call_count = 0;
+    bool throw_on_shutdown = false;
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
@@ -86,8 +152,19 @@ protected:
     kcenon::common::VoidResult do_shutdown()
     {
         shutdown_call_count++;
+        if (observer_) {
+            observer_->shutdown_call_count++;
+            observer_->member_alive_during_shutdown = observer_->member_alive;
+        }
+        if (throw_on_shutdown) {
+            throw std::runtime_error("Simulated shutdown exception");
+        }
         return kcenon::common::ok();
     }
+
+private:
+    lifecycle_observer* observer_;
+    observed_member observed_member_;
 };
 
 /**
@@ -98,6 +175,16 @@ class failing_backend
 {
 public:
     static constexpr const char* backend_name() { return "failing_backend"; }
+
+    explicit failing_backend(lifecycle_observer* observer = nullptr) noexcept
+        : observer_(observer), observed_member_(observer)
+    {
+    }
+
+    ~failing_backend() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
 
     int init_call_count = 0;
 
@@ -136,6 +223,8 @@ protected:
     kcenon::common::VoidResult do_initialize(const connection_config&)
     {
         init_call_count++;
+        partial_resource_ = std::make_unique<tracked_resource>(observer_);
+        partial_resource_.reset();
         return kcenon::common::error_info{
             static_cast<int>(database::error_code::connection_failed),
             "Simulated connection failure",
@@ -145,8 +234,17 @@ protected:
 
     kcenon::common::VoidResult do_shutdown()
     {
+        if (observer_) {
+            observer_->shutdown_call_count++;
+            observer_->member_alive_during_shutdown = observer_->member_alive;
+        }
         return kcenon::common::ok();
     }
+
+private:
+    lifecycle_observer* observer_;
+    observed_member observed_member_;
+    std::unique_ptr<tracked_resource> partial_resource_;
 };
 
 } // anonymous namespace
@@ -315,24 +413,80 @@ TEST_F(BackendBaseTest, CreateReturnsDistinctInstances)
 
 TEST_F(BackendBaseTest, DestructorCallsShutdown)
 {
-    int shutdown_count = 0;
+    lifecycle_observer observer;
     {
-        succeeding_backend backend;
-        backend.initialize(test_config_);
-        shutdown_count = backend.shutdown_call_count;
-        EXPECT_EQ(shutdown_count, 0);
-        // Destructor should call shutdown
+        succeeding_backend backend(&observer);
+        ASSERT_TRUE(backend.initialize(test_config_).is_ok());
+        EXPECT_EQ(observer.shutdown_call_count, 0);
     }
-    // After destruction, we cannot check shutdown_call_count directly,
-    // but we can verify the pattern works without crashes
-    SUCCEED();
+    EXPECT_EQ(observer.shutdown_call_count, 1);
+    EXPECT_TRUE(observer.member_alive_during_shutdown);
+    EXPECT_FALSE(observer.member_alive);
 }
 
 TEST_F(BackendBaseTest, DestructorSafeWithoutInit)
 {
-    // Backend destroyed without ever being initialized - should not crash
-    { succeeding_backend backend; }
-    SUCCEED();
+    lifecycle_observer observer;
+    { succeeding_backend backend(&observer); }
+    EXPECT_EQ(observer.shutdown_call_count, 0);
+    EXPECT_FALSE(observer.member_alive);
+}
+
+TEST_F(BackendBaseTest, ExplicitShutdownThenDestructionCleansExactlyOnce)
+{
+    lifecycle_observer observer;
+    {
+        succeeding_backend backend(&observer);
+        ASSERT_TRUE(backend.initialize(test_config_).is_ok());
+        ASSERT_TRUE(backend.shutdown().is_ok());
+        EXPECT_EQ(observer.shutdown_call_count, 1);
+    }
+    EXPECT_EQ(observer.shutdown_call_count, 1);
+    EXPECT_TRUE(observer.member_alive_during_shutdown);
+    EXPECT_FALSE(observer.member_alive);
+}
+
+TEST_F(BackendBaseTest, FailedInitializationCleansPartialResourcesExactlyOnce)
+{
+    lifecycle_observer observer;
+    {
+        failing_backend backend(&observer);
+        EXPECT_FALSE(backend.initialize(test_config_).is_ok());
+        EXPECT_EQ(observer.partial_cleanup_count, 1);
+        EXPECT_FALSE(observer.partial_resource_alive);
+    }
+    EXPECT_EQ(observer.shutdown_call_count, 0);
+    EXPECT_EQ(observer.partial_cleanup_count, 1);
+    EXPECT_FALSE(observer.partial_resource_alive);
+    EXPECT_FALSE(observer.member_alive);
+}
+
+TEST_F(BackendBaseTest, PolymorphicDestructionCleansWhileDerivedMembersAreAlive)
+{
+    lifecycle_observer observer;
+    {
+        std::unique_ptr<database_backend> backend =
+            std::make_unique<succeeding_backend>(&observer);
+        ASSERT_TRUE(backend->initialize(test_config_).is_ok());
+    }
+    EXPECT_EQ(observer.shutdown_call_count, 1);
+    EXPECT_TRUE(observer.member_alive_during_shutdown);
+    EXPECT_FALSE(observer.member_alive);
+}
+
+TEST_F(BackendBaseTest, DestructorContainsShutdownExceptions)
+{
+    lifecycle_observer observer;
+    EXPECT_NO_THROW({
+        succeeding_backend backend(&observer);
+        if (!backend.initialize(test_config_).is_ok()) {
+            throw std::runtime_error("Initialization unexpectedly failed");
+        }
+        backend.throw_on_shutdown = true;
+    });
+    EXPECT_EQ(observer.shutdown_call_count, 1);
+    EXPECT_TRUE(observer.member_alive_during_shutdown);
+    EXPECT_FALSE(observer.member_alive);
 }
 
 // =============================================================================

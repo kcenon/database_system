@@ -49,6 +49,11 @@ class test_backend
 public:
     static constexpr const char* backend_name() { return "test_backend"; }
 
+    ~test_backend() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
+
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
         return kcenon::common::Result<database_result>::ok(database_result{});
@@ -100,6 +105,11 @@ class test_backend_alt
 {
 public:
     static constexpr const char* backend_name() { return "test_backend_alt"; }
+
+    ~test_backend_alt() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {

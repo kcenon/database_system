@@ -85,7 +85,7 @@ public:
 	/**
 	 * @brief Destructor - ensures proper cleanup
 	 */
-	~mongodb_backend() override = default;
+	~mongodb_backend() noexcept override;
 
 	// database_backend interface implementation
 

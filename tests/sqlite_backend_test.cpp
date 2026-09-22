@@ -118,6 +118,23 @@ TEST_F(SQLiteBackendTest, ShutdownAfterConnection) {
 #endif
 }
 
+TEST_F(SQLiteBackendTest, DestructionClosesInitializedConnection) {
+#ifdef USE_SQLITE
+  auto backend = std::make_unique<sqlite_backend>();
+  connection_config config;
+  config.database = ":memory:";
+  ASSERT_TRUE(backend->initialize(config).is_ok());
+  ASSERT_TRUE(backend->is_initialized());
+
+  // No explicit shutdown: the concrete destructor must close the connection
+  // before sqlite_mutex_ and the other derived members are destroyed.
+  backend.reset();
+  SUCCEED();
+#else
+  GTEST_SKIP() << "SQLite support not compiled";
+#endif
+}
+
 //=============================================================================
 // CREATE Query Tests
 //=============================================================================

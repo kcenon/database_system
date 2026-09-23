@@ -20,8 +20,8 @@ if(@USE_POSTGRESQL@)
     find_dependency(OpenSSL)
 endif()
 
-if(@USE_SQLITE@)
-    find_dependency(unofficial-sqlite3 CONFIG QUIET)
+if("@DATABASE_SQLITE_PACKAGE@" STREQUAL "unofficial-sqlite3")
+    find_dependency(unofficial-sqlite3 CONFIG REQUIRED)
 endif()
 
 if(@USE_MONGODB@)
@@ -38,6 +38,10 @@ find_dependency(common_system CONFIG REQUIRED)
 
 if(@USE_CONTAINER_SYSTEM@)
     find_dependency(container_system CONFIG REQUIRED)
+endif()
+
+if(@USE_MONITORING_SYSTEM@)
+    find_dependency(monitoring_system CONFIG REQUIRED)
 endif()
 
 # Include targets (may not exist if install(EXPORT) was skipped in subdirectory builds)

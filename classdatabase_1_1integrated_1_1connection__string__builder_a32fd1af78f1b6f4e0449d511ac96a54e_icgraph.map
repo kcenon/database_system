@@ -1,0 +1,16 @@
+<map id="database::integrated::connection_string_builder::ssl_mode" name="database::integrated::connection_string_builder::ssl_mode">
+<area shape="rect" id="Node000001" title="Set the SSL connection mode." alt="" coords="332,65,529,120"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="115,5,277,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="340,63,283,45,245,33,246,28,285,39,342,58"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#afd4a5140c6bab942f1aeddc0442905a2" title=" " alt="" coords="126,55,266,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="318,83,266,78,267,72,319,78"/>
+<area shape="rect" id="Node000005" href="$test__connection__string__builder_8cpp.html#a79c270a943d76dd2ecb0ed91bc07f5c0" title=" " alt="" coords="129,104,263,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="319,107,264,112,263,107,318,101"/>
+<area shape="rect" id="Node000006" href="$test__connection__string__builder_8cpp.html#a69ff771d91c92a1c86f0084da008345e" title=" " alt="" coords="108,153,284,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="336,127,285,143,243,156,241,151,283,138,334,122"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,37,109,44,77,63,51,82,48,78,75,58,107,40,124,33"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="112,83,61,91,60,86,112,78"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="114,107,60,99,60,94,115,102"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="128,152,107,143,76,126,49,108,52,103,78,121,109,138,130,147"/>
+</map>

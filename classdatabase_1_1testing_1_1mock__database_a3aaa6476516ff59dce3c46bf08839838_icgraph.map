@@ -1,0 +1,7 @@
+<map id="database::testing::mock_database::record_query" name="database::testing::mock_database::record_query">
+<area shape="rect" id="Node000001" title=" " alt="" coords="281,37,500,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__database.html#ab873d7d1df3fddf64c72f38c42b3c9c5" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,5,233,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,46,233,41,234,36,268,40"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1testing_1_1mock__database.html#a64de0fb3d91755634497794457b3632a" title="Execute a SELECT query." alt="" coords="11,69,227,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,74,228,79,227,74,268,69"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="database::testing::backend_expectation_builder" name="database::testing::backend_expectation_builder">
+<area shape="rect" id="Node000001" title="Fluent builder for backend expectations." alt="" coords="896,1735,1063,1984"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__backend.html" title="Configurable mock for database_backend interface." alt="" coords="644,1272,824,1672"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,1613,894,1719,890,1722,822,1616"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="645,809,823,1209"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="737,1223,737,1272,731,1272,731,1223"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="931,135,1009,200"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="972,200,966,750,959,1055,953,1159,947,1210,926,1256,900,1300,838,1378,834,1374,895,1297,922,1254,942,1209,948,1159,953,1055,961,750,967,200"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1testing_1_1backend__expectation.html" title="Single query expectation with configurable behavior for database_backend." alt="" coords="1019,263,1233,703"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="988,199,1014,251,1009,254,983,202"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="189,977,367,1042"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="935,202,905,231,876,264,825,341,792,414,768,483,748,549,725,612,693,672,671,702,645,731,613,759,574,788,547,801,522,805,475,799,429,794,406,799,381,812,348,843,322,882,304,923,291,961,286,960,299,921,317,879,343,840,378,807,404,793,429,789,476,794,522,800,546,796,571,783,609,755,641,727,667,699,689,670,720,610,743,547,763,481,787,412,821,339,872,261,901,228,932,198"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="905,5,1035,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="973,99,973,134,967,134,967,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,969,164,1049"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="97,1049,108,1086,126,1128,149,1170,179,1208,229,1253,285,1293,344,1328,405,1359,524,1409,629,1442,627,1447,523,1414,403,1364,342,1333,282,1297,226,1257,175,1211,144,1173,121,1130,103,1088,92,1051"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="217,450,339,515"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="252,528,200,618,173,672,150,728,129,793,113,859,92,970,87,969,107,858,124,791,145,726,168,670,196,616,248,526"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="392,969,620,1049"/>
+<area shape="poly" id="edge11_Node000009_Node000007" title=" " alt="" coords="300,527,492,968,487,970,295,529"/>
+<area shape="poly" id="edge14_Node000011_Node000007" title=" " alt="" coords="281,529,281,976,275,976,275,529"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="267,135,289,200"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="281,200,281,433,275,433,275,200"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="528,1048,639,1273,634,1275,523,1051"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="1202,703,1206,744,1205,786,1189,915,1169,1046,1120,1304,1067,1536,1020,1720,1015,1718,1062,1535,1114,1303,1163,1046,1184,914,1199,785,1201,744,1197,703"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1127,703,1116,754,1109,773,1098,787,1068,798,1015,803,867,804,719,802,664,805,634,812,597,841,567,877,544,917,527,955,522,953,539,915,563,874,593,837,632,807,664,800,719,797,867,798,1015,798,1067,793,1095,783,1104,771,1111,752,1121,702"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="291,1041,326,1121,351,1166,381,1208,440,1268,504,1322,570,1370,631,1410,629,1414,567,1375,501,1327,436,1272,377,1211,347,1169,321,1123,286,1043"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="848,977,932,1042"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="885,1043,865,1119,838,1210,822,1257,817,1256,833,1209,860,1118,880,1042"/>
+</map>

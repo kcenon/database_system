@@ -1,0 +1,19 @@
+<map id="test_postgres_custom_option" name="test_postgres_custom_option">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,202,171,242"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#af5b10f03c2d51e45e12a68ce6fa78cb2" title="Build the connection string for the specified backend." alt="" coords="237,123,434,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,199,227,179,229,184,158,205"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a2c2c2341f0951a37c0b6e2fcf2a120f0" title="Set the database host." alt="" coords="219,202,452,242"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="171,219,205,219,205,225,171,225"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a6b6ee8a7fa60e6eac967ac3b4920d581" title="Add a custom option." alt="" coords="237,267,434,321"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="158,239,229,260,227,265,157,245"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#ac6e8733c2e83bdb66c76bdd608dbe64f" title=" " alt="" coords="500,5,697,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,120,499,69,513,63,515,68,501,74,392,125"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a4bd1398d87ea731bc51749b695aa2737" title=" " alt="" coords="500,84,697,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="434,133,485,125,486,131,434,138"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a650997c9db48a30a939bad19e177b947" title=" " alt="" coords="500,163,697,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="435,162,487,170,486,176,434,168"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a1d9e84b4f875cb0f7565d5f934fb7b0c" title=" " alt="" coords="500,241,697,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="427,175,453,188,478,207,501,226,513,233,510,237,499,231,474,211,451,192,425,180"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1connection__string__builder.html#a61a02a0b6e169ee0f53ae9e54cb4d731" title=" " alt="" coords="745,84,964,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="698,109,732,109,732,114,698,114"/>
+</map>

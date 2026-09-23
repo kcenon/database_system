@@ -1,0 +1,10 @@
+<map id="database::integrated::connection_string_builder::connect_timeout" name="database::integrated::connection_string_builder::connect_timeout">
+<area shape="rect" id="Node000001" title="Set the connection timeout." alt="" coords="324,16,521,71"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="111,5,273,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,34,273,29,273,24,311,28"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#a879d00275dfe4cd65204013199e4c5e3" title=" " alt="" coords="108,55,276,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,58,276,61,276,56,310,52"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,36,60,42,60,36,98,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,55,60,50,60,45,95,50"/>
+</map>

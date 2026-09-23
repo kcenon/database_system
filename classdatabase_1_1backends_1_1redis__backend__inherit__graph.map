@@ -1,0 +1,10 @@
+<map id="database::backends::redis_backend" name="database::backends::redis_backend">
+<area shape="rect" id="Node000001" title="Redis implementation of database_backend interface." alt="" coords="15,1156,185,1616"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="12,812,188,1107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,1121,103,1156,97,1156,97,1121"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,5,184,405"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,419,102,812,96,812,94,419"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="117,455,289,735"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="156,418,166,454,161,455,151,419"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="162,749,144,812,139,811,157,747"/>
+</map>

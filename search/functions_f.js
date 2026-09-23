@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['parse_5fquery_5fstring_0',['parse_query_string',['../classdatabase_1_1backends_1_1mongodb__backend.html#a1028bf7f7a32cdd74609add6673dd64b',1,'database::backends::mongodb_backend']]],
+  ['parse_5fredis_5fquery_1',['parse_redis_query',['../classdatabase_1_1backends_1_1redis__backend.html#a7d1afa771441a661f560f69a60d9f433',1,'database::backends::redis_backend']]],
+  ['password_2',['password',['../classdatabase_1_1integrated_1_1connection__string__builder.html#abadfd6129089f53beb5e5bca30df1f6c',1,'database::integrated::connection_string_builder']]],
+  ['pending_5ftasks_3',['pending_tasks',['../classdatabase_1_1async_1_1async__executor.html#a733a5c32d3c596dc6e42dfee70deac9f',1,'database::async::async_executor']]],
+  ['perform_5fmutual_5fauthentication_4',['perform_mutual_authentication',['../classdatabase_1_1security_1_1connection__security.html#adff820379c5ad0d505dc957d3de83f21',1,'database::security::connection_security']]],
+  ['performance_5falert_5',['performance_alert',['../classdatabase_1_1monitoring_1_1performance__alert.html#af8af48003228ab4a600e5ae66a01f9e8',1,'database::monitoring::performance_alert']]],
+  ['performance_5fmonitor_6',['performance_monitor',['../classdatabase_1_1monitoring_1_1performance__monitor.html#a86075ed741ec62b22bbd0684bfcc32d7',1,'database::monitoring::performance_monitor']]],
+  ['persist_5fentry_7',['persist_entry',['../classdatabase_1_1security_1_1audit__logger.html#aa5d31bb2da490463857b83e0f06705f3',1,'database::security::audit_logger']]],
+  ['placeholder_8',['placeholder',['../classdatabase_1_1query_1_1sql__dialect.html#a04f8f89adac54eb0c40e4d2c61296a6d',1,'database::query::sql_dialect::placeholder()'],['../classdatabase_1_1query_1_1postgresql__dialect.html#ae332e0e5b4d0bc1294bb3451212c121a',1,'database::query::postgresql_dialect::placeholder()'],['../classdatabase_1_1query_1_1sqlite__dialect.html#aa47bc66f92b6ff0b135c5a13babf67bd',1,'database::query::sqlite_dialect::placeholder()']]],
+  ['port_9',['port',['../classdatabase_1_1integrated_1_1connection__string__builder.html#a2729cf7f82ad1d1a96495d86e56a0a6b',1,'database::integrated::connection_string_builder']]],
+  ['postgres_5fmanager_10',['postgres_manager',['../classdatabase_1_1postgres__manager.html#a2fb6a01c21ad878bfdb0c87815ecbf09',1,'database::postgres_manager']]],
+  ['postgresql_5fbackend_11',['postgresql_backend',['../classdatabase_1_1backends_1_1postgresql__backend.html#a952aee0ac1ab7903f35c823c47e3fbc5',1,'database::backends::postgresql_backend']]],
+  ['prepare_5fphase_12',['prepare_phase',['../classdatabase_1_1async_1_1transaction__coordinator.html#a39f8bf721b5c24dd2834c3598ff69fb7',1,'database::async::transaction_coordinator']]],
+  ['primary_5fkey_13',['primary_key',['../namespacedatabase_1_1orm.html#a7d653b0ef39699785eab3257815e7e97',1,'database::orm']]],
+  ['print_5ferror_14',['print_error',['../error__handling_8cpp.html#a673f805efc47720638fe620a751d62b9',1,'error_handling.cpp']]],
+  ['print_5fheader_15',['print_header',['../async__queries_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4',1,'print_header(const std::string &amp;title):&#160;async_queries.cpp'],['../integrated_2basic__usage_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4',1,'print_header(const std::string &amp;title):&#160;basic_usage.cpp'],['../migration__from__legacy_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4',1,'print_header(const std::string &amp;title):&#160;migration_from_legacy.cpp'],['../monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4',1,'print_header(const std::string &amp;title):&#160;monitoring.cpp']]],
+  ['print_5fhealth_5fcheck_16',['print_health_check',['../integrated_2basic__usage_8cpp.html#a5a650a3077d6d190ac036f68beea08af',1,'print_health_check(const health_check &amp;health):&#160;basic_usage.cpp'],['../monitoring_8cpp.html#a7b3fa0ffdd64e3d407ea4c98eca35215',1,'print_health_check(const health_check &amp;health, bool detailed=true):&#160;monitoring.cpp']]],
+  ['print_5finfo_17',['print_info',['../classUser.html#a2249c34b491e5befa0902d10b702c5bb',1,'User::print_info()'],['../classProduct.html#ab02d7033f26de70690c8ff46c3cbb91b',1,'Product::print_info()']]],
+  ['print_5fmetrics_18',['print_metrics',['../integrated_2basic__usage_8cpp.html#a4a42539d070675fdbe57ddf6ede7367c',1,'print_metrics(const database_metrics &amp;metrics):&#160;basic_usage.cpp'],['../monitoring_8cpp.html#af4c0572c1add5d186febb5c155399c29',1,'print_metrics(const database_metrics &amp;metrics, bool detailed=true):&#160;monitoring.cpp']]],
+  ['print_5fsection_19',['print_section',['../migration__from__legacy_8cpp.html#a1156846072709ab6e482082b43aae398',1,'migration_from_legacy.cpp']]],
+  ['print_5fseparator_20',['print_separator',['../monitoring_8cpp.html#ac1c57fa77126b78c71abd37839ce3cef',1,'monitoring.cpp']]],
+  ['print_5fusage_21',['print_usage',['../run__all__samples_8cpp.html#ac7608332d002ef2745359f4cada4afc8',1,'run_all_samples.cpp']]],
+  ['process_5fevent_22',['process_event',['../classdatabase_1_1async_1_1stream__processor.html#aeca0c22cd8b1ee35cd05190fda2ef553',1,'database::async::stream_processor']]],
+  ['products_5fdata_23',['products_data',['../namespacedatabase_1_1testing_1_1fixtures.html#a5aed57b8cdc61032d7934bbfaf12efb7',1,'database::testing::fixtures']]],
+  ['prometheus_5fexporter_24',['prometheus_exporter',['../classdatabase_1_1monitoring_1_1prometheus__exporter.html#aac1af58316459ffc3ff0a9f056ca8bf0',1,'database::monitoring::prometheus_exporter']]]
+];

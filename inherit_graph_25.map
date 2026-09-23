@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="5,99,168,154"/>
+<area shape="rect" id="Node000001" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__monitoring__backend.html" title="Basic monitoring backend using internal metrics storage." alt="" coords="245,5,405,75"/>
+<area shape="poly" id="edge16_Node000000_Node000001" title=" " alt="" coords="175,92,244,67,245,72,176,97"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1null__monitoring__backend.html" title="No&#45;op monitoring backend." alt="" coords="228,99,421,154"/>
+<area shape="poly" id="edge17_Node000000_Node000002" title=" " alt="" coords="182,124,228,124,228,129,182,129"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html" title="Monitoring backend using monitoring_system library." alt="" coords="216,178,433,233"/>
+<area shape="poly" id="edge18_Node000000_Node000003" title=" " alt="" coords="182,155,242,175,241,180,180,160"/>
+</map>

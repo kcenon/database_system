@@ -1,0 +1,14 @@
+<map id="database::integrated::adapters::thread_adapter::initialize" name="database::integrated::adapters::thread_adapter::initialize">
+<area shape="rect" id="Node000001" title="Initialize thread pool." alt="" coords="240,119,435,174"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="377,108,363,101,337,98,316,100,303,105,296,111,296,119,291,119,291,109,300,100,315,95,337,93,364,96,379,104"/>
+<area shape="rect" id="Node000002" href="$test__thread__adapter_8cpp.html#a46916a46f98723d495c606024c389ff0" title=" " alt="" coords="21,5,176,45"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="284,114,240,86,191,60,163,48,165,43,193,55,242,81,287,110"/>
+<area shape="rect" id="Node000003" href="$test__thread__adapter_8cpp.html#a484dee84dc71a3f9b548573a44cd278b" title=" " alt="" coords="21,69,176,109"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="226,123,176,110,177,105,227,118"/>
+<area shape="rect" id="Node000004" href="$test__thread__adapter_8cpp.html#a6fe6d091436f5fbd69cf2c6f07213407" title=" " alt="" coords="15,134,183,159"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="226,149,183,149,183,144,226,144"/>
+<area shape="rect" id="Node000005" href="$test__thread__adapter_8cpp.html#aadc652bfc6b1190060ac7dc10163f9cb" title=" " alt="" coords="5,183,192,209"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="227,172,161,186,160,181,226,167"/>
+<area shape="rect" id="Node000006" href="$test__thread__adapter_8cpp.html#a2b9b7f36f5b6329626303dfbfb0080d9" title=" " alt="" coords="16,233,181,258"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="277,183,193,222,154,235,153,230,191,218,275,178"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="BackendContractTest::SetUp" name="BackendContractTest::SetUp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,164,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__backend.html#ab1fab5c932cca025311a3a5b3f55911f" title=" " alt="" coords="212,5,463,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,23,198,23,198,28,164,28"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1testing_1_1mock__backend.html#aba857fc95ece7679fb9e6994e8083a12" title="Get the database type of this backend." alt="" coords="511,5,667,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="463,23,497,23,497,28,463,28"/>
+</map>

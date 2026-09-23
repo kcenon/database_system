@@ -1,0 +1,7 @@
+<map id="database::database_manager::database_type" name="database::database_manager::database_type">
+<area shape="rect" id="Node000001" title="Retrieves the current database type used by the manager." alt="" coords="233,49,424,89"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1database__manager.html#a59dd2c4bf46910b80cf1cbf351769b49" title="Creates a query builder for the current database type." alt="" coords="5,5,185,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,54,185,49,186,44,220,49"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1database__manager.html#a553102bdf428754230977e7bb8253355" title="Sets the database mode (type) for the manager." alt="" coords="16,85,175,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="220,88,175,95,174,90,219,83"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="test_connect_mock_backend" name="test_connect_mock_backend">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,215,148"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a95f409a4b7abc3f421d0cba5e3501b31" title="Connect to database." alt="" coords="263,29,459,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,120,259,86,260,91,153,125"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#adb55d898ad9e982ee39729410c369dc6" title="Disconnect from database." alt="" coords="263,108,459,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="215,133,249,133,249,138,215,138"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1unified__database__system.html#af3a85fe850d58e8dd368e23e19d934d8" title="Check if connected to database." alt="" coords="263,187,459,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="153,146,260,180,259,185,151,151"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="312,29,312,19,321,10,337,5,361,3,389,6,405,14,403,18,387,11,361,8,338,10,324,15,317,21,317,29"/>
+</map>

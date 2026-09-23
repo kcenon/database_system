@@ -1,0 +1,9 @@
+<map id="database::backends::postgresql_backend::do_initialize" name="database::backends::postgresql_backend::do_initialize">
+<area shape="rect" id="Node000001" title="Database&#45;specific initialization logic." alt="" coords="5,92,164,147"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a3b58394defe65fa536360e832d4cd844" title="Convert connection_config to PostgreSQL connection string." alt="" coords="212,5,396,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,89,220,63,222,68,156,94"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1postgresql__backend.html#ac39d51365dc62898a015ea4d83b8a154" title="Build a connection string with password masked for safe logging." alt="" coords="217,85,391,154"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,117,203,117,203,122,164,122"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a2de534693f2b2637506d232dcb448e18" title="Remove password from an error message that may contain the connection string." alt="" coords="225,179,383,233"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="156,144,222,171,220,176,154,149"/>
+</map>

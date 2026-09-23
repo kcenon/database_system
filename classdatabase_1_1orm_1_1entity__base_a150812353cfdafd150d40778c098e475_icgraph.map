@@ -1,0 +1,11 @@
+<map id="database::orm::entity_base::get_metadata" name="database::orm::entity_base::get_metadata">
+<area shape="rect" id="Node000001" title=" " alt="" coords="307,63,469,103"/>
+<area shape="rect" id="Node000002" href="$orm__framework__demo_8cpp.html#ae78183753df4fdf58f82b0925ec4afa2" title=" " alt="" coords="108,5,259,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,61,255,48,256,43,304,56"/>
+<area shape="rect" id="Node000004" href="$orm__entity__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="156,70,211,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,85,211,85,211,80,293,80"/>
+<area shape="rect" id="Node000005" href="$integration__tests_8cpp.html#aca6f4ee9e88a00d5b11c348debac35f0" title=" " alt="" coords="149,119,218,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="294,108,219,126,218,121,293,103"/>
+<area shape="rect" id="Node000003" href="$orm__framework__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

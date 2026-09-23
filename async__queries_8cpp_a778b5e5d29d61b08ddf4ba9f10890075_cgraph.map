@@ -1,0 +1,7 @@
+<map id="example_concurrent_queries" name="example_concurrent_queries">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,160,85"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a390f073ab733e1e1fb82b17d9dab6ba7" title=" " alt="" coords="208,5,404,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,51,194,46,195,51,161,56"/>
+<area shape="rect" id="Node000003" href="$async__queries_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="254,84,358,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,73,241,85,240,90,160,78"/>
+</map>

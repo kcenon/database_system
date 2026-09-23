@@ -1,0 +1,5 @@
+<map id="database::core::database_backend::execute_query" name="database::core::database_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="260,5,447,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html#a83aabd4991b58cf0cab8596b6447feaa" title="Execute a parameterized DML/DDL query (prepared statement)" alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,28,212,28,212,23,246,23"/>
+</map>

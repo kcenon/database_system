@@ -1,0 +1,5 @@
+<map id="database::query::sqlite_dialect::returning_clause" name="database::query::sqlite_dialect::returning_clause">
+<area shape="rect" id="Node000001" title="Generate RETURNING clause for INSERT/UPDATE." alt="" coords="5,5,195,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1sqlite__dialect.html#a3946960602f15c16dfc97f2b08d9c643" title="Quote an identifier (table or column name)" alt="" coords="243,5,425,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,23,229,23,229,28,195,28"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="database::query::condition_builder::add" name="database::query::condition_builder::add">
+<area shape="rect" id="Node000001" title="Add a condition." alt="" coords="248,37,443,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1condition__builder.html#ac145df7e02ea497711251761d9dac337" title="Add a simple condition." alt="" coords="5,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,45,200,41,201,36,235,40"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1condition__builder.html#a257afb28bd12f1cc280d4752e767c9c2" title="Add a raw SQL condition." alt="" coords="5,69,200,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,75,201,79,200,74,234,69"/>
+</map>

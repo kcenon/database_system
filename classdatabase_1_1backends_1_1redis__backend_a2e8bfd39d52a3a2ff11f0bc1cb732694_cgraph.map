@@ -1,0 +1,5 @@
+<map id="database::backends::redis_backend::execute_query" name="database::backends::redis_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,20,232,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="280,5,460,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,37,266,37,266,43,232,43"/>
+</map>

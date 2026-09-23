@@ -1,0 +1,9 @@
+<map id="database/integrated/core/database_coordinator.h" name="database/integrated/core/database_coordinator.h">
+<area shape="rect" id="Node000001" title="Lifecycle manager for all database system adapters (Phase 5)" alt="" coords="259,5,470,45"/>
+<area shape="rect" id="Node000002" href="$database__coordinator_8cpp.html" title=" " alt="" coords="5,93,231,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,52,173,96,171,91,297,47"/>
+<area shape="rect" id="Node000003" href="$unified__database__system_8cpp.html" title="Implementation of unified database system (Phase 6)" alt="" coords="255,93,474,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="367,59,367,93,362,93,362,59"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html" title="Unit tests for database_coordinator (Phase 5)" alt="" coords="499,93,695,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="429,48,547,91,545,96,427,53"/>
+</map>

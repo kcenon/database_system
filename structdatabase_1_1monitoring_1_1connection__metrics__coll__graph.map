@@ -1,0 +1,12 @@
+<map id="database::monitoring::connection_metrics" name="database::monitoring::connection_metrics">
+<area shape="rect" id="Node000001" title="Metrics for database connection usage." alt="" coords="93,448,259,608"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,269,160,334"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,334,87,377,99,423,103,432,98,434,93,425,82,378,79,334"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,133,240,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="149,212,107,270,103,267,145,209"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="185,261,359,341"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="210,208,246,260,242,263,205,211"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="166,5,189,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="180,71,180,117,175,117,175,71"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="266,343,255,383,240,425,236,434,231,432,235,423,250,381,261,341"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="database::async::transaction_coordinator::prepare_phase" name="database::async::transaction_coordinator::prepare_phase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="579,13,788,53"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada609b1ea097d56a24354eebbe0c395b" title=" " alt="" coords="292,13,531,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="565,35,531,35,531,30,565,30"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada14f8286d21fcd629d6e6e75b957319" title=" " alt="" coords="5,5,244,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="278,35,244,35,244,30,278,30"/>
+</map>

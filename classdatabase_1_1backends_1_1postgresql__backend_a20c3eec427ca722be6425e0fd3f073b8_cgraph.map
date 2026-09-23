@@ -1,0 +1,8 @@
+<map id="database::backends::postgresql_backend::begin_transaction" name="database::backends::postgresql_backend::begin_transaction">
+<area shape="rect" id="Node000001" title="Begin a transaction." alt="" coords="5,39,164,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a312f8888a0317e8e984b2c92e907e1ee" title="Execute a general SQL query (DDL, DML)" alt="" coords="212,5,371,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,51,198,45,199,50,165,56"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="419,31,627,101"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="164,67,212,69,371,69,405,68,405,73,371,74,212,74,164,72"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="371,41,406,46,405,52,370,47"/>
+</map>

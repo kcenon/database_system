@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::thread_adapter::submit" name="database::integrated::adapters::thread_adapter::submit">
+<area shape="rect" id="Node000001" title="Submit a task and get a future." alt="" coords="5,5,200,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1thread__adapter.html#ab1002e7afa86e4422ba132dd16a5e812" title="Execute a task (fire&#45;and&#45;forget)" alt="" coords="248,5,443,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,30,234,30,234,35,200,35"/>
+</map>

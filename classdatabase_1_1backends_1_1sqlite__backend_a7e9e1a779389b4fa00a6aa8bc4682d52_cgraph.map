@@ -1,0 +1,5 @@
+<map id="database::backends::sqlite_backend::execute_query" name="database::backends::sqlite_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,20,236,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="284,5,464,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,37,270,37,270,43,236,43"/>
+</map>

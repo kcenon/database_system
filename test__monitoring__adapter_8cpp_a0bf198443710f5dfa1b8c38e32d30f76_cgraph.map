@@ -1,0 +1,5 @@
+<map id="test_api_availability_prometheus" name="test_api_availability_prometheus">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,20,160,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1monitoring__adapter.html#ae409ec10becb841a75918d598a1089fd" title="Export metrics in Prometheus format." alt="" coords="208,5,423,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,37,194,37,194,43,161,43"/>
+</map>

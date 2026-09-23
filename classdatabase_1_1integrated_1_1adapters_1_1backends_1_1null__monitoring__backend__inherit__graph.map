@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::null_monitoring_backend" name="database::integrated::adapters::backends::null_monitoring_backend">
+<area shape="rect" id="Node000001" title="No&#45;op monitoring backend." alt="" coords="5,348,219,643"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="15,5,209,300"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,314,115,348,109,348,109,314"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="test_basic_initialization_and_shutdown" name="test_basic_initialization_and_shutdown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,115,181,155"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="229,29,400,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,113,223,86,225,91,151,118"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#ad8de4d287a42b93f35dcb22007d378f5" title="Check if coordinator is initialized." alt="" coords="229,108,400,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="182,133,215,133,215,138,182,138"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="229,187,400,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="151,153,225,179,223,184,150,158"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="271,29,272,19,279,10,294,5,315,3,340,6,354,14,351,18,338,11,315,8,295,10,282,15,277,21,277,29"/>
+</map>

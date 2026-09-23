@@ -1,0 +1,14 @@
+<map id="database::query_condition" name="database::query_condition">
+<area shape="rect" id="Node000001" title="Represents a WHERE condition in a query." alt="" coords="263,321,450,507"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="224,569,383,649"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="309,508,302,531,299,553,294,553,297,530,304,506"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="317,135,396,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,200,359,305,354,305,354,200"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="291,5,422,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="359,99,359,134,354,134,354,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="362,568,380,544,386,522,391,524,384,547,367,571"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,381,127,447"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="64,460,69,504,76,525,88,544,117,568,151,585,188,597,224,603,223,608,187,602,149,590,114,573,84,547,71,527,64,505,59,461"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="55,135,77,200"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="69,200,69,365,63,365,63,200"/>
+</map>

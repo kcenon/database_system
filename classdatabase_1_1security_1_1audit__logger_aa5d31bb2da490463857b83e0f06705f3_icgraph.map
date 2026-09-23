@@ -1,0 +1,9 @@
+<map id="database::security::audit_logger::persist_entry" name="database::security::audit_logger::persist_entry">
+<area shape="rect" id="Node000001" title=" " alt="" coords="220,91,424,131"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1security_1_1audit__logger.html#ac1b65e8867e60424e067b81705ced4a6" title=" " alt="" coords="5,5,172,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,89,170,63,171,58,250,84"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1security_1_1audit__logger.html#ad9045edcbb3dfcc4b7f986c353780d7b" title=" " alt="" coords="7,84,171,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,114,171,114,171,109,206,109"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1security_1_1audit__logger.html#a0767f7073eed358e78d51d71e3e268a1" title=" " alt="" coords="17,163,160,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="250,138,161,169,159,164,248,133"/>
+</map>

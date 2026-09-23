@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::monitoring_adapter::check_health" name="database::integrated::adapters::monitoring_adapter::check_health">
+<area shape="rect" id="Node000001" title="Perform health check." alt="" coords="208,5,381,60"/>
+<area shape="rect" id="Node000002" href="$test__monitoring__adapter_8cpp.html#a5c080af7e80a235db82052acbf522221" title=" " alt="" coords="5,13,160,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,35,161,35,161,30,194,30"/>
+</map>

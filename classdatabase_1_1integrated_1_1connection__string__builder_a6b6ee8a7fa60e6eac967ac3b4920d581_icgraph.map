@@ -1,0 +1,10 @@
+<map id="database::integrated::connection_string_builder::option" name="database::integrated::connection_string_builder::option">
+<area shape="rect" id="Node000001" title="Add a custom option." alt="" coords="321,20,519,75"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="110,5,271,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,36,271,31,272,26,308,30"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#a6ab30a56111a15bc7ed1b227961d810f" title=" " alt="" coords="108,55,273,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="308,64,274,68,273,63,307,58"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,35,60,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,36,61,45,60,40,108,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,61,60,55,61,49,95,56"/>
+</map>

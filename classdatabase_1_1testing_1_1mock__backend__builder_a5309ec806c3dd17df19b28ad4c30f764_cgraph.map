@@ -1,0 +1,11 @@
+<map id="database::testing::mock_backend_builder::failing_database" name="database::testing::mock_backend_builder::failing_database">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,176,100"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__backend.html#abcd37f0b471bb862e187c9f4fa198eeb" title=" " alt="" coords="224,15,427,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,56,210,51,211,56,177,62"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1testing_1_1backend__expectation__builder.html#a1112f6336545f3c0b84c7524d3c925f8" title=" " alt="" coords="245,81,405,136"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="177,83,232,92,231,97,176,88"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1testing_1_1backend__expectation.html#a20e77b7f392f16ead75695cc8e923b5a" title=" " alt="" coords="475,5,635,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="427,31,461,31,461,36,427,37"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1testing_1_1backend__expectation.html#ae83ff9f0f97e9cc0786689dd8c4a5a10" title=" " alt="" coords="475,84,635,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="406,107,461,108,461,113,406,112"/>
+</map>

@@ -1,0 +1,38 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,439,60,464"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a7f57e267b96199e1ffe2656760d866fc" title="Build and return the configured database system." alt="" coords="113,5,309,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="32,438,39,364,52,254,74,144,89,100,106,70,108,68,112,71,110,73,93,102,79,145,57,255,44,364,38,439"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#aaf4ac9ec1dfd6c14baa50d1a29864225" title="Create a builder for custom configuration." alt="" coords="113,84,309,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="31,439,31,387,38,310,47,267,61,225,80,184,106,148,108,146,112,150,110,152,85,187,66,227,52,269,43,311,36,387,36,439"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a646e8e4ff73066756d8c3f60805e32fc" title="Enable async operations." alt="" coords="113,163,309,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="32,438,36,398,47,342,69,281,86,252,106,227,108,225,112,228,110,230,90,255,74,283,53,343,41,399,37,439"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a9c96e91e431a9d21c47e8c333e521c4a" title="Enable logging." alt="" coords="113,241,309,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="35,438,57,375,78,338,106,305,110,302,114,306,110,309,83,341,62,378,40,440"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a08c7e8b669facce7452a5efd438c7ff3" title="Enable monitoring and metrics collection." alt="" coords="108,320,313,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="44,437,71,411,107,385,118,378,121,383,109,390,75,415,48,441"/>
+<area shape="rect" id="Node000007" href="$async__queries_8cpp.html#afd9d64515567bb052bfa633fff9852a5" title=" " alt="" coords="111,528,310,553"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="47,462,74,488,109,513,128,521,126,526,107,518,70,492,43,466"/>
+<area shape="rect" id="Node000009" href="$async__queries_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="407,585,511,611"/>
+<area shape="poly" id="edge21_Node000001_Node000009" title=" " alt="" coords="36,464,37,507,46,567,55,599,68,629,86,656,110,678,149,698,192,705,237,702,282,691,325,674,365,655,428,616,431,621,368,659,328,679,284,696,238,707,192,711,147,703,106,683,82,660,63,632,50,601,41,568,32,508,31,464"/>
+<area shape="rect" id="Node000010" href="$async__queries_8cpp.html#a778b5e5d29d61b08ddf4ba9f10890075" title=" " alt="" coords="133,578,288,618"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="41,463,66,512,85,540,110,564,122,572,119,577,106,568,81,543,61,515,36,465"/>
+<area shape="rect" id="Node000011" href="$async__queries_8cpp.html#ac7dc80ce25dd867d5092ac13e18d6896" title=" " alt="" coords="121,643,301,668"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="38,464,44,497,56,542,78,589,92,610,110,628,117,634,114,638,106,632,88,613,73,591,51,544,39,499,33,465"/>
+<area shape="rect" id="Node000012" href="$async__queries_8cpp.html#a402e453e23c9b0623d6a3ed0bea4aa8f" title=" " alt="" coords="131,399,290,439"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="60,444,118,433,119,439,61,449"/>
+<area shape="rect" id="Node000013" href="$async__queries_8cpp.html#ad38bd9ad243c11905faa62a1f5222301" title=" " alt="" coords="125,463,296,503"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="61,454,112,463,111,468,60,459"/>
+<area shape="rect" id="Node000014" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a2a5d17291dc549682989e55d53ea4fc1" title="Set connection pool size." alt="" coords="113,744,309,799"/>
+<area shape="poly" id="edge22_Node000001_Node000014" title=" " alt="" coords="37,464,39,512,48,580,57,618,70,655,88,691,110,723,122,734,118,738,106,726,83,694,65,657,52,619,43,581,33,512,31,465"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a390f073ab733e1e1fb82b17d9dab6ba7" title=" " alt="" coords="361,507,557,561"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="310,535,348,534,348,540,310,541"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="267,551,394,580,393,586,266,556"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="287,576,347,560,348,565,289,581"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="288,595,394,595,394,601,288,601"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="285,640,312,628,327,615,336,601,344,587,360,572,368,566,371,570,363,576,349,590,340,604,331,618,315,632,287,645"/>
+<area shape="poly" id="edge14_Node000011_Node000009" title=" " alt="" coords="266,640,393,610,394,616,267,645"/>
+<area shape="poly" id="edge16_Node000012_Node000008" title=" " alt="" coords="283,437,314,449,405,497,403,502,312,454,282,442"/>
+<area shape="poly" id="edge17_Node000012_Node000009" title=" " alt="" coords="292,434,315,449,328,465,335,481,340,513,344,543,351,558,363,572,378,582,395,589,393,594,375,587,360,576,346,561,339,545,334,514,330,483,324,468,312,453,289,438"/>
+<area shape="poly" id="edge19_Node000013_Node000008" title=" " alt="" coords="297,498,348,509,347,514,296,503"/>
+<area shape="poly" id="edge20_Node000013_Node000009" title=" " alt="" coords="293,501,315,513,331,528,339,544,348,558,363,572,395,586,393,591,360,576,344,562,335,546,326,532,312,517,290,506"/>
+</map>

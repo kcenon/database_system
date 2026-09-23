@@ -1,0 +1,8 @@
+<map id="database::backends::postgresql_backend::rollback_transaction" name="database::backends::postgresql_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="5,39,168,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a312f8888a0317e8e984b2c92e907e1ee" title="Execute a general SQL query (DDL, DML)" alt="" coords="216,5,375,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,50,202,45,203,50,169,56"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="423,31,631,101"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="168,67,216,69,375,69,409,68,409,73,375,74,216,74,168,73"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,41,410,46,409,52,374,47"/>
+</map>

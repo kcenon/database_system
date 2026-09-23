@@ -1,0 +1,20 @@
+<map id="BackendBaseTest" name="BackendBaseTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="51,576,177,641"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="46,441,139,506"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,519,112,575,106,576,97,520"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="163,433,353,513"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,515,162,567,158,563,214,511"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="200,148,279,213"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="279,212,294,236,308,283,311,322,306,362,294,410,291,419,286,417,289,409,300,361,306,322,303,284,289,238,274,215"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="107,291,262,371"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="226,215,216,238,203,276,198,274,212,236,221,213"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="174,5,305,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="242,99,242,148,237,148,237,99"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="207,370,233,418,228,420,203,372"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,148,132,213"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="74,226,79,247,88,265,110,288,107,292,84,268,74,249,69,228"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="29,13,52,78"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="41,78,45,124,47,132,42,133,39,124,36,79"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="105,13,128,78"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="108,79,88,133,83,132,103,77"/>
+</map>

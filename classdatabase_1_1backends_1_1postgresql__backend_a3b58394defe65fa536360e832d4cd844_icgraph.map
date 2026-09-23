@@ -1,0 +1,5 @@
+<map id="database::backends::postgresql_backend::build_connection_string" name="database::backends::postgresql_backend::build_connection_string">
+<area shape="rect" id="Node000001" title="Convert connection_config to PostgreSQL connection string." alt="" coords="212,5,396,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a49e80129ca6cf6f45b8ce8edd16daeef" title="Database&#45;specific initialization logic." alt="" coords="5,5,164,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,35,164,35,164,30,198,30"/>
+</map>

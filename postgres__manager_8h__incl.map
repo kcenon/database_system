@@ -1,0 +1,21 @@
+<map id="database/postgres_manager.h" name="database/postgres_manager.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="413,5,632,31"/>
+<area shape="rect" id="Node000002" href="$database__backend_8h.html" title="Abstract interface for database backends." alt="" coords="429,79,616,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="525,31,525,65,520,65,520,31"/>
+<area shape="rect" id="Node000003" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="5,159,155,185"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="450,107,168,155,146,159,145,154,168,149,449,101"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="179,152,367,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="487,107,347,150,346,145,486,101"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="392,159,469,185"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="511,106,456,152,453,148,507,102"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="493,159,552,185"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="525,104,525,145,520,145,520,104"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="577,159,639,185"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="537,102,587,148,583,152,533,106"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="664,159,715,185"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="549,102,653,150,656,151,654,156,651,154,547,106"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="739,159,807,185"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="567,102,727,149,734,152,732,157,726,155,566,107"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="47,240,113,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="83,185,83,226,77,226,77,185"/>
+</map>

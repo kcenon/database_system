@@ -1,0 +1,25 @@
+var structdatabase_1_1integrated_1_1unified__db__config =
+[
+    [ "enable_file_logging", "structdatabase_1_1integrated_1_1unified__db__config.html#ad37589163670906f24f84883b34e770a", null ],
+    [ "enable_monitoring", "structdatabase_1_1integrated_1_1unified__db__config.html#a67f6f8658c18fd464e1eae89ac45e45e", null ],
+    [ "enable_priority_scheduling", "structdatabase_1_1integrated_1_1unified__db__config.html#ac1f76744825a4dc35e1cfe57889dc81b", null ],
+    [ "enable_prometheus", "structdatabase_1_1integrated_1_1unified__db__config.html#a8699e196a4725378b148ca98d8311c09", null ],
+    [ "enable_query_logging", "structdatabase_1_1integrated_1_1unified__db__config.html#adf67278bbf4ee6666ef65ca7b714391f", null ],
+    [ "enable_slow_query_logging", "structdatabase_1_1integrated_1_1unified__db__config.html#a05f8f16141075d12a7e0c682abe1180f", null ],
+    [ "enable_ssl", "structdatabase_1_1integrated_1_1unified__db__config.html#a5c00cc736300a9572a9ef74cf833f392", null ],
+    [ "set_backend", "structdatabase_1_1integrated_1_1unified__db__config.html#a2d3b58f3808e722bfd2572637b92ff19", null ],
+    [ "set_credentials", "structdatabase_1_1integrated_1_1unified__db__config.html#a4bcb356de07b6ba036146ca035ac52ee", null ],
+    [ "set_log_level", "structdatabase_1_1integrated_1_1unified__db__config.html#aacf91dce3c55d6284525e9aff5e55daa", null ],
+    [ "set_pool_name", "structdatabase_1_1integrated_1_1unified__db__config.html#a9593be9d39f3494a405049b2751bb944", null ],
+    [ "set_pool_size", "structdatabase_1_1integrated_1_1unified__db__config.html#a25b29d76c64cdc4e4389550774c67422", null ],
+    [ "set_thread_count", "structdatabase_1_1integrated_1_1unified__db__config.html#a6985a29562db52b8362773f69818784a", null ],
+    [ "set_timeouts", "structdatabase_1_1integrated_1_1unified__db__config.html#a1b16eb63da5de04c6d940a48e4e9c91a", null ],
+    [ "connection_pool", "structdatabase_1_1integrated_1_1unified__db__config.html#a90587fcac0f28b9b0f8477ae16c6a31b", null ],
+    [ "database", "structdatabase_1_1integrated_1_1unified__db__config.html#aef392c59ca5b36325852a9007e324bce", null ],
+    [ "enable_common_system_integration", "structdatabase_1_1integrated_1_1unified__db__config.html#ae622385b1b1ea689c69db380b01eb76d", null ],
+    [ "enable_monitoring_system_integration", "structdatabase_1_1integrated_1_1unified__db__config.html#acbafa796ef42725a4e81eefd9d54656e", null ],
+    [ "enable_thread_system_integration", "structdatabase_1_1integrated_1_1unified__db__config.html#ac68a3f07e3c28e14c3b1faf0d6292ba4", null ],
+    [ "logger", "structdatabase_1_1integrated_1_1unified__db__config.html#a2d712cd98b3ca9b5c9c1810ad582f1a3", null ],
+    [ "monitoring", "structdatabase_1_1integrated_1_1unified__db__config.html#ac9570ee0452b864b0b546f1c9b11319b", null ],
+    [ "thread", "structdatabase_1_1integrated_1_1unified__db__config.html#aeb616c1016c1be215ad8defc7555e415", null ]
+];

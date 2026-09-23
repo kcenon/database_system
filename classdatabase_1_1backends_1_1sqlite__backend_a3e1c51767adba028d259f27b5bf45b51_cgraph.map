@@ -1,0 +1,5 @@
+<map id="database::backends::sqlite_backend::execute_prepared" name="database::backends::sqlite_backend::execute_prepared">
+<area shape="rect" id="Node000001" title="Execute a parameterized DML/DDL query (prepared statement)" alt="" coords="5,13,192,67"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="240,5,420,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,37,226,37,226,43,192,43"/>
+</map>

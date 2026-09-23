@@ -1,0 +1,13 @@
+<map id="database::monitoring::performance_monitor::performance_monitor" name="database::monitoring::performance_monitor::performance_monitor">
+<area shape="rect" id="Node000001" title="Constructor &#45; now public for dependency injection." alt="" coords="5,84,176,139"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a7d276774dfa14f8ae3e2504f5fa777bb" title=" " alt="" coords="224,84,395,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,109,210,109,210,114,176,114"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a5e5957db23db4a588191f4e206fe2e57" title=" " alt="" coords="443,44,613,99"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,93,429,87,430,92,395,98"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a2d04a8fcaf5cbdbc1af2ad6ddd8c5981" title=" " alt="" coords="443,123,613,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="395,124,430,130,429,135,394,129"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a9df3a90d4c31d2486b4016ef118ca383" title=" " alt="" coords="681,5,852,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="613,55,667,46,668,51,614,60"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a7d19bd8c946b3ddfdbf5b920575df296" title=" " alt="" coords="661,84,872,139"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="614,83,648,89,647,94,613,88"/>
+</map>

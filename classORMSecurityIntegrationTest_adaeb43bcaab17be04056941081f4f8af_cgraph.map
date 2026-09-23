@@ -1,0 +1,15 @@
+<map id="ORMSecurityIntegrationTest::SetUp" name="ORMSecurityIntegrationTest::SetUp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,105,208,145"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestBase.html#a6f7c60ad37f712eb505a37560c45e06a" title=" " alt="" coords="256,105,407,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,123,242,123,242,128,209,128"/>
+<area shape="rect" id="Node000003" href="$classIntegrationTestBase.html#a973e79f99d5e80efbeb97e46fd8a3d5b" title=" " alt="" coords="463,5,649,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="364,103,406,78,454,55,472,48,474,52,456,60,408,83,366,107"/>
+<area shape="rect" id="Node000004" href="$classIntegrationTestBase.html#a032f56263c88a755aa6b1cee1d58de00" title=" " alt="" coords="467,69,645,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="407,111,453,103,454,108,408,116"/>
+<area shape="rect" id="Node000006" href="$classIntegrationTestBase.html#a75f477f7de37b04d4e5e9eec8b6ac8f1" title=" " alt="" coords="478,134,634,189"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="408,135,465,144,464,149,407,140"/>
+<area shape="rect" id="Node000007" href="$classIntegrationTestBase.html#a84990d03d4a2cb116f6ed446d1262f30" title=" " alt="" coords="455,213,657,253"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="363,143,406,171,456,198,475,206,473,211,454,202,403,175,360,148"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1orm_1_1entity__manager.html#a1fffab096329491b53647a6b00a5d8c3" title=" " alt="" coords="705,69,896,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="645,87,691,87,691,92,645,92"/>
+</map>

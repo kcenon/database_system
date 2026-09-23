@@ -1,0 +1,25 @@
+var classdatabase_1_1testing_1_1mock__connection__pool =
+[
+    [ "config", "structdatabase_1_1testing_1_1mock__connection__pool_1_1config.html", "structdatabase_1_1testing_1_1mock__connection__pool_1_1config" ],
+    [ "stats", "structdatabase_1_1testing_1_1mock__connection__pool_1_1stats.html", "structdatabase_1_1testing_1_1mock__connection__pool_1_1stats" ],
+    [ "mock_connection_pool", "classdatabase_1_1testing_1_1mock__connection__pool.html#abb5bcc31efa4235184cbe090c8df6a5c", null ],
+    [ "~mock_connection_pool", "classdatabase_1_1testing_1_1mock__connection__pool.html#af04976d8b8c055ea8355826740369b0b", null ],
+    [ "acquire", "classdatabase_1_1testing_1_1mock__connection__pool.html#a4a3e3ffc29f3a913fc7a8155f123e35d", null ],
+    [ "acquire", "classdatabase_1_1testing_1_1mock__connection__pool.html#a255541a09c4dccfd3d35a4b4dfe49955", null ],
+    [ "configure_all", "classdatabase_1_1testing_1_1mock__connection__pool.html#ad666bdf32ea0060fb81bfcfae7fd9a62", null ],
+    [ "create_connection", "classdatabase_1_1testing_1_1mock__connection__pool.html#ac50f5a02719365a868df663b6b7e701e", null ],
+    [ "get_stats", "classdatabase_1_1testing_1_1mock__connection__pool.html#ac7951e5bf16327a6e641b3e5120e36c6", null ],
+    [ "release", "classdatabase_1_1testing_1_1mock__connection__pool.html#a89eeb30bae16aada462459da4c66c26e", null ],
+    [ "reset", "classdatabase_1_1testing_1_1mock__connection__pool.html#ae4b53c7b4676c67c1498d1b4298aaabf", null ],
+    [ "simulate_exhaustion", "classdatabase_1_1testing_1_1mock__connection__pool.html#aa4238c0b86484958cd96a1decdb5a886", null ],
+    [ "acquisition_timeouts_", "classdatabase_1_1testing_1_1mock__connection__pool.html#ab1bd4fb0a15f52726d3edd4023cec43f", null ],
+    [ "available_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a6e57c1b1d0152537c4277ed2ecfe0e36", null ],
+    [ "config_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a4cbb0f2cb5cb86325b7725eda95eb152", null ],
+    [ "connections_", "classdatabase_1_1testing_1_1mock__connection__pool.html#aa6489107e738ffeb04b34cbe9d7fa158", null ],
+    [ "cv_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a110076b8c1f9038c60fbaf71b67144f6", null ],
+    [ "exhausted_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a37978ab19899983df83c763c1ee57ab1", null ],
+    [ "in_use_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a1ba42fd7f4e7361cc51a19f4cdfb735b", null ],
+    [ "mutex_", "classdatabase_1_1testing_1_1mock__connection__pool.html#a9e08f5ebb8f52a877b461d022408b463", null ],
+    [ "total_acquisitions_", "classdatabase_1_1testing_1_1mock__connection__pool.html#ae7890dee9bf2c0118b7e51c8c09f77b7", null ],
+    [ "total_releases_", "classdatabase_1_1testing_1_1mock__connection__pool.html#aabddc8e9d72af0f2b7b6b48c075180d7", null ]
+];

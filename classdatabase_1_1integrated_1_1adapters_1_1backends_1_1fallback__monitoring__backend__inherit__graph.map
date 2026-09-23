@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::fallback_monitoring_backend" name="database::integrated::adapters::backends::fallback_monitoring_backend">
+<area shape="rect" id="Node000001" title="Basic monitoring backend using internal metrics storage." alt="" coords="17,348,187,876"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="5,5,199,300"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,314,105,348,99,348,99,314"/>
+</map>

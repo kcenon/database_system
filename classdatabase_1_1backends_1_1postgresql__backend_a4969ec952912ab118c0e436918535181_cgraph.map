@@ -1,0 +1,8 @@
+<map id="database::backends::postgresql_backend::commit_transaction" name="database::backends::postgresql_backend::commit_transaction">
+<area shape="rect" id="Node000001" title="Commit the current transaction." alt="" coords="5,39,165,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a312f8888a0317e8e984b2c92e907e1ee" title="Execute a general SQL query (DDL, DML)" alt="" coords="213,5,372,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,50,199,45,200,50,166,56"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="420,31,628,101"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="165,67,213,69,372,69,406,68,406,73,372,74,213,74,165,72"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="372,41,407,46,406,52,372,47"/>
+</map>

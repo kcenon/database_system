@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classdatabase_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,13,184,38"/>
+<area shape="rect" id="Node000001" href="$classdatabase_1_1detail_1_1sql__dialect.html" title="SQL dialect implementation for PostgreSQL, SQLite." alt="" coords="232,5,387,45"/>
+<area shape="poly" id="edge31_Node000000_Node000001" title=" " alt="" coords="198,23,232,23,232,28,198,28"/>
+</map>

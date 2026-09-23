@@ -1,0 +1,7 @@
+<map id="database::integrated::transaction_impl::execute" name="database::integrated::transaction_impl::execute">
+<area shape="rect" id="Node000001" title="Execute a query within the transaction." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" href="$namespacedatabase_1_1integrated.html#a80bf1ddda27c626fb087597d5ed0b7fd" title="Convert core::database_result to query_result." alt="" coords="252,5,409,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,23,238,23,238,28,205,28"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1integrated.html#adb8299b4a69859d4ab1fe43032c48e35" title="Convert database_value (variant) to string." alt="" coords="457,5,615,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="410,23,443,23,443,28,410,28"/>
+</map>

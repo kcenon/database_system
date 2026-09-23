@@ -1,0 +1,5 @@
+<map id="database::immutable_query_builder::join" name="database::immutable_query_builder::join">
+<area shape="rect" id="Node000001" title="JOIN clause &#45; adds a join." alt="" coords="5,13,167,53"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1immutable__query__builder.html#abc7fee19c4bbde9f84600cea76a61e44" title="Constructs a new immutable query builder." alt="" coords="215,5,412,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,30,201,30,201,35,167,35"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="database::backends::sqlite_backend::do_shutdown" name="database::backends::sqlite_backend::do_shutdown">
+<area shape="rect" id="Node000001" title="Database&#45;specific shutdown logic." alt="" coords="5,27,156,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a5f56a82046149633f54e7a2e7a707175" title="Rollback the current transaction." alt="" coords="204,27,391,82"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,52,190,52,190,57,156,57"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a7e9e1a779389b4fa00a6aa8bc4682d52" title="Execute a general SQL query (DDL, DML)" alt="" coords="439,5,669,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,41,425,37,425,43,391,47"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="717,20,897,89"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="391,54,439,55,669,55,704,54,704,60,669,60,439,60,391,59"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="670,36,704,40,703,45,669,41"/>
+</map>

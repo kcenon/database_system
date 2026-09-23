@@ -1,0 +1,30 @@
+<map id="database::query::join_builder::join_builder" name="database::query::join_builder::join_builder">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,267,164,307"/>
+<area shape="poly" id="edge12_Node000001_Node000001" title=" " alt="" coords="45,267,42,257,49,248,63,242,85,240,110,243,123,250,121,255,108,248,85,245,64,247,52,252,47,258,50,266"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1join__builder.html#a33b98aadca19035a30d0343adc666a26" title="Add a join with explicit type." alt="" coords="220,5,379,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,265,106,224,131,170,166,113,210,62,226,50,229,54,214,66,170,116,136,172,111,226,95,267"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1join__builder.html#abe0b4905d0e2c4d980259bbbc9cc3ea9" title="Build the JOIN clauses." alt="" coords="220,120,379,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,264,151,221,211,176,233,164,236,168,213,181,154,226,108,268"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query_1_1join__builder.html#a9e05411c0c9ca6b2dcbcb73c771ba586" title="Check if builder is empty." alt="" coords="461,20,619,60"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="92,265,109,230,134,186,168,142,211,106,252,88,312,72,447,49,447,54,313,77,254,93,213,110,172,146,139,189,113,232,97,267"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1query_1_1join__builder.html#a77518180452cc11ef38016074f7f0326" title="Add an INNER JOIN." alt="" coords="461,228,619,268"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="114,264,159,240,211,220,272,211,334,210,394,215,447,223,447,229,393,220,334,215,273,216,213,225,161,244,117,269"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1query_1_1join__builder.html#ae1c126d31865d22b2a75acc1632b513e" title="Clear all joins." alt="" coords="220,235,379,275"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="164,272,206,266,207,271,165,277"/>
+<area shape="rect" id="Node000009" href="$classdatabase_1_1query_1_1join__builder.html#aecfb2f159e59bfd6ae1c7ae6e61b2280" title="Add a CROSS JOIN." alt="" coords="220,299,379,339"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="165,296,207,302,206,308,164,301"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1query_1_1join__builder.html#abdeaffa8e1575c762d63079a78cc5741" title="Add a FULL OUTER JOIN." alt="" coords="212,363,387,403"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="124,304,213,348,230,355,228,360,211,353,122,309"/>
+<area shape="rect" id="Node000011" href="$classdatabase_1_1query_1_1join__builder.html#ad976a94ca95c26f9fe8901d1bf9158d2" title="Add a LEFT JOIN." alt="" coords="220,427,379,467"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="103,305,149,358,180,387,213,412,223,418,221,423,211,417,176,391,145,362,99,308"/>
+<area shape="rect" id="Node000012" href="$classdatabase_1_1query_1_1join__builder.html#a613ae9ac84d1c75ac74ccf51b574997d" title="Add a RIGHT JOIN." alt="" coords="220,491,379,531"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="97,306,114,342,139,388,173,435,214,477,221,482,218,486,210,481,169,439,134,391,109,345,92,308"/>
+<area shape="rect" id="Node000013" href="$classdatabase_1_1query_1_1join__builder.html#ad97f91b6843a99cdcdcbd9f2714beb32" title="Get number of joins." alt="" coords="220,555,379,595"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="93,306,106,353,130,416,166,483,188,513,214,541,219,545,216,549,210,545,184,517,161,486,125,418,101,355,88,307"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="347,118,385,99,409,84,433,70,451,62,453,67,436,74,412,88,388,104,349,122"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1query_1_1value__formatter.html#a0dc2bf2db734a49a47390b0d7878b8e7" title="Quote and escape an identifier (table/column name)" alt="" coords="435,84,645,124"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="379,125,420,119,421,124,380,131"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="352,158,388,176,412,196,436,214,450,220,448,225,433,218,409,200,385,181,350,162"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1query_1_1join__builder.html#add70466cafa2dbd0e7f530e002d2ea5f" title=" " alt="" coords="459,149,621,203"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="380,149,446,159,445,164,379,155"/>
+</map>

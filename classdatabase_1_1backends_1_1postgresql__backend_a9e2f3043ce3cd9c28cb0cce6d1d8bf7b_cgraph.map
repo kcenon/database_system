@@ -1,0 +1,10 @@
+<map id="database::backends::postgresql_backend::do_shutdown" name="database::backends::postgresql_backend::do_shutdown">
+<area shape="rect" id="Node000001" title="Database&#45;specific shutdown logic." alt="" coords="5,39,164,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a6d3e3887890750e1b505682b6529d033" title="Rollback the current transaction." alt="" coords="212,39,375,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,63,198,63,198,69,164,69"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a312f8888a0317e8e984b2c92e907e1ee" title="Execute a general SQL query (DDL, DML)" alt="" coords="423,5,581,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,50,409,45,410,50,375,56"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="629,31,837,101"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="375,67,423,69,581,69,615,68,616,73,581,74,423,74,375,73"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="582,41,616,46,616,52,581,47"/>
+</map>

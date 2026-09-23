@@ -1,0 +1,7 @@
+<map id="database::testing::scoped_test_database::~scoped_test_database" name="database::testing::scoped_test_database::~scoped_test_database">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,30,192,85"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__database.html#a4017a14cfb0952ae5e7bc6f359d0d6f9" title=" " alt="" coords="255,5,421,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,42,241,36,241,41,193,48"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1testing_1_1mock__database.html#ac98d27710f3fbedd4da8381e037eebb4" title="Shutdown the database backend gracefully." alt="" coords="240,69,436,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,67,227,72,226,77,192,72"/>
+</map>

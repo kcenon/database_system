@@ -1,0 +1,45 @@
+<map id="MongoDBBackendTest" name="MongoDBBackendTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="381,2104,539,2189"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="228,1969,321,2034"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,2040,408,2102,404,2106,325,2045"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="346,1961,574,2041"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="463,2042,463,2088,457,2088,457,2042"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1mongodb__backend.html" title="MongoDB implementation of database_backend interface." alt="" coords="373,1519,547,1899"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="463,1899,463,1945,457,1945,457,1899"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="357,1161,563,1456"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="463,1470,463,1518,457,1518,457,1470"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="428,327,607,727"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="567,740,578,834,583,935,578,1038,571,1089,560,1138,552,1162,547,1160,555,1137,566,1088,573,1037,578,935,573,834,562,741"/>
+<area shape="rect" id="Node000010" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="366,804,538,1084"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="487,741,477,804,471,803,481,740"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="182,494,327,559"/>
+<area shape="poly" id="edge14_Node000004_Node000007" title=" " alt="" coords="247,560,209,707,188,813,172,934,165,1064,171,1198,180,1265,194,1330,213,1394,238,1455,264,1501,295,1544,363,1620,359,1624,290,1547,259,1503,234,1457,208,1395,189,1331,175,1265,166,1199,160,1064,167,934,183,813,203,706,242,559"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="249,560,230,655,221,718,216,789,217,863,225,939,242,1013,270,1083,277,1091,284,1095,303,1106,348,1153,344,1156,300,1110,282,1100,273,1095,266,1085,237,1015,219,940,211,864,211,789,216,718,225,654,244,559"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="272,558,381,788,377,791,267,561"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="192,141,317,206"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="257,220,257,494,252,494,252,220"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="243,5,266,71"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="257,71,257,124,252,124,252,71"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="833,494,959,559"/>
+<area shape="poly" id="edge21_Node000015_Node000009" title=" " alt="" coords="267,37,361,44,509,60,587,73,659,89,719,108,760,131,781,156,801,192,837,287,867,390,888,477,883,479,862,392,832,289,796,194,776,159,757,135,717,113,658,94,586,78,509,66,361,49,266,43"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="5,237,155,303"/>
+<area shape="poly" id="edge24_Node000018_Node000009" title=" " alt="" coords="245,56,182,135,114,226,110,223,178,132,241,52"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="366,1094,365,1115,368,1137,375,1160,370,1162,363,1138,359,1116,361,1093"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="666,494,745,559"/>
+<area shape="poly" id="edge12_Node000004_Node000011" title=" " alt="" coords="707,560,698,702,678,925,661,1054,639,1189,611,1325,577,1457,555,1520,550,1518,572,1455,606,1324,634,1188,655,1053,672,924,693,702,702,559"/>
+<area shape="rect" id="Node000013" href="$structdatabase_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="689,1269,879,1349"/>
+<area shape="poly" id="edge16_Node000013_Node000011" title=" " alt="" coords="707,560,708,779,716,930,732,1084,749,1173,770,1252,765,1254,744,1174,727,1084,711,931,703,780,702,560"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="819,904,973,984"/>
+<area shape="poly" id="edge18_Node000014_Node000011" title=" " alt="" coords="721,559,816,779,870,888,865,891,811,781,716,561"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="616,133,747,213"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="688,227,706,494,701,494,682,227"/>
+<area shape="poly" id="edge25_Node000001_Node000013" title=" " alt="" coords="790,1349,791,1417,784,1495,755,1658,740,1724,724,1784,702,1843,674,1903,637,1968,589,2043,566,2071,539,2096,535,2092,562,2067,585,2040,632,1966,669,1900,697,1840,719,1782,735,1722,749,1657,779,1494,786,1417,784,1349"/>
+<area shape="poly" id="edge15_Node000004_Node000013" title=" " alt="" coords="755,1351,637,1496,559,1591,555,1588,633,1493,751,1347"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="887,985,803,1254,798,1252,881,983"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="899,573,899,903,893,903,893,573"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="897,141,919,206"/>
+<area shape="poly" id="edge20_Node000015_Node000016" title=" " alt="" coords="910,206,900,478,895,478,904,206"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="249,1276,333,1341"/>
+<area shape="poly" id="edge22_Node000004_Node000017" title=" " alt="" coords="300,1341,319,1412,346,1494,368,1542,363,1544,342,1496,313,1413,295,1342"/>
+<area shape="poly" id="edge23_Node000003_Node000018" title=" " alt="" coords="72,317,55,400,35,510,20,636,13,764,13,1710,16,1725,23,1741,50,1775,90,1809,141,1843,256,1907,367,1959,365,1964,254,1912,138,1848,87,1813,46,1778,18,1744,11,1727,8,1710,8,764,14,636,30,510,49,399,67,316"/>
+</map>

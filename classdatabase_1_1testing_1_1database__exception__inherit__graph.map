@@ -1,0 +1,7 @@
+<map id="database::testing::database_exception" name="database::testing::database_exception">
+<area shape="rect" id="Node000001" title="Exception thrown by mock when simulating errors." alt="" coords="5,232,175,312"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,119,155,184"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,198,93,232,87,232,87,198"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="37,5,143,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,84,93,119,87,119,87,84"/>
+</map>

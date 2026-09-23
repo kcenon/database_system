@@ -1,0 +1,23 @@
+<map id="database::core::backend_registry::create" name="database::core::backend_registry::create">
+<area shape="rect" id="Node000001" title="Create a backend instance by name." alt="" coords="464,201,644,241"/>
+<area shape="rect" id="Node000002" href="$namespacedatabase_1_1core.html#a1a9cb6e3906d9fc696293c0714362d1b" title="Convenience function for creating backends (static method style)" alt="" coords="249,5,416,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,191,483,125,450,90,414,60,394,48,397,43,418,55,454,86,487,122,535,188"/>
+<area shape="rect" id="Node000004" href="$namespacedatabase_1_1integrated.html#ab5cce7fcf7d52fab70046a9602b0182e" title="Create database backend instance." alt="" coords="254,69,411,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,195,469,160,415,125,388,112,390,107,417,120,472,155,520,191"/>
+<area shape="rect" id="Node000006" href="$backend__registry__test_8cpp.html#a8bd773618aa10ce88185914d1f98fb92" title=" " alt="" coords="298,134,367,159"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="485,199,415,175,367,159,368,154,417,169,487,194"/>
+<area shape="rect" id="Node000007" href="$backend__registry__test_8cpp.html#ae5b4b489d32092810f7c2d9c62666a39" title=" " alt="" coords="298,183,367,209"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="450,212,367,203,368,197,450,207"/>
+<area shape="rect" id="Node000008" href="$backend__registry__test_8cpp.html#a928c968d9b28e4651044f1d824a7144c" title=" " alt="" coords="298,233,367,258"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="450,235,368,244,367,239,450,230"/>
+<area shape="rect" id="Node000009" href="$backend__registry__test_8cpp.html#ab82db004adc9f451db707ec13408882b" title=" " alt="" coords="298,282,367,307"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="487,249,417,273,368,288,367,283,415,268,485,244"/>
+<area shape="rect" id="Node000010" href="$backend__registry__test_8cpp.html#ac5817ff2e80e8bb8fb8ca4117cf60de9" title=" " alt="" coords="298,331,367,357"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="521,252,474,289,417,322,369,339,367,334,415,318,471,284,518,248"/>
+<area shape="rect" id="Node000011" href="$backend__registry__test_8cpp.html#aaacd41d4c7c0fa952dd7a82e584627a7" title=" " alt="" coords="298,381,367,406"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="534,255,485,314,453,345,417,372,393,383,368,390,367,385,391,378,415,367,450,341,481,311,529,251"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a2f4b0da00ea8ff8e268802555a44ef53" title=" " alt="" coords="69,13,138,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,28,138,28,138,23,235,23"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1impl.html#a4d85329d5409d1d0f93915096fb3ff2d" title=" " alt="" coords="5,62,201,117"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="240,92,202,92,202,87,240,87"/>
+</map>

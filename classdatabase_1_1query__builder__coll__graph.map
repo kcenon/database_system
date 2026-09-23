@@ -1,0 +1,11 @@
+<map id="database::query_builder" name="database::query_builder">
+<area shape="rect" id="Node000001" title="Universal query builder that adapts to different database types." alt="" coords="41,604,211,889"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,461,219,541"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,542,129,588,123,588,123,542"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,133,183,399"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,399,121,444,116,445,109,399"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,233,357,299"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="256,311,198,400,155,463,151,460,193,397,252,309"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="271,5,293,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="285,71,285,217,279,217,279,71"/>
+</map>

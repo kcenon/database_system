@@ -1,0 +1,9 @@
+<map id="database::orm::entity_manager::register_entity" name="database::orm::entity_manager::register_entity">
+<area shape="rect" id="Node000001" title=" " alt="" coords="680,5,871,45"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestBase.html#a032f56263c88a755aa6b1cee1d58de00" title=" " alt="" coords="455,5,632,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="666,28,632,28,632,23,666,23"/>
+<area shape="rect" id="Node000003" href="$classIntegrationTestBase.html#a6f7c60ad37f712eb505a37560c45e06a" title=" " alt="" coords="256,5,407,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="441,28,407,28,407,23,441,23"/>
+<area shape="rect" id="Node000004" href="$classORMSecurityIntegrationTest.html#adaeb43bcaab17be04056941081f4f8af" title=" " alt="" coords="5,5,208,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="242,28,208,28,208,23,242,23"/>
+</map>

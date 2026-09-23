@@ -1,0 +1,11 @@
+<map id="example_health_monitoring" name="example_health_monitoring">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,211,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system.html#a8ae583be5d348e13dca0fcf1160e1fbf" title="Perform health check." alt="" coords="259,5,455,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,81,245,59,246,64,159,86"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="305,84,409,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,94,291,94,291,99,211,99"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a7b3fa0ffdd64e3d407ea4c98eca35215" title=" " alt="" coords="284,133,429,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="173,107,279,128,278,133,172,112"/>
+<area shape="rect" id="Node000005" href="$monitoring_8cpp.html#ac1c57fa77126b78c71abd37839ce3cef" title=" " alt="" coords="503,133,624,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="429,143,489,143,489,149,429,149"/>
+</map>

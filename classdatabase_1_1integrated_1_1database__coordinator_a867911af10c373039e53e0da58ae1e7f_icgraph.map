@@ -1,0 +1,9 @@
+<map id="database::integrated::database_coordinator::get_thread_pool" name="database::integrated::database_coordinator::get_thread_pool">
+<area shape="rect" id="Node000001" title="Get thread adapter." alt="" coords="273,40,444,95"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab9a4da242976f9a340b77cd2aaba8203" title=" " alt="" coords="38,5,193,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="259,50,178,33,179,28,260,45"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="39,55,192,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,70,192,70,192,65,259,65"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html#accc8517f261f391e19e50bc9a3808991" title=" " alt="" coords="5,104,225,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,90,179,107,178,101,259,85"/>
+</map>

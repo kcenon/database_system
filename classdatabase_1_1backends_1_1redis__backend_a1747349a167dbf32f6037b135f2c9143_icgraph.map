@@ -1,0 +1,5 @@
+<map id="database::backends::redis_backend::rollback_transaction" name="database::backends::redis_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="204,5,387,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1redis__backend.html#a3068157c5503cf11fc85537e02c4e581" title="Database&#45;specific shutdown logic." alt="" coords="5,5,156,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,35,156,35,156,30,190,30"/>
+</map>

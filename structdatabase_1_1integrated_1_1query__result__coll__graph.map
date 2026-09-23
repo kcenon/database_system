@@ -1,0 +1,20 @@
+<map id="database::integrated::query_result" name="database::integrated::query_result">
+<area shape="rect" id="Node000001" title="Query result set." alt="" coords="193,597,343,837"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="181,469,355,535"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="271,535,271,581,265,581,265,535"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,327,269,407"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="217,405,244,454,240,457,212,408"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,148,110,213"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="76,213,85,257,93,280,105,301,115,314,111,317,100,304,88,282,80,259,70,214"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,136,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="73,99,73,148,68,148,68,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="134,148,261,213"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="191,227,189,238,188,284,190,326,185,327,183,284,184,237,185,227"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="178,13,201,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="192,78,193,124,194,132,189,132,188,124,186,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="307,13,330,78"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="309,61,239,138,235,134,305,58"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="313,237,434,303"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="333,75,344,109,368,221,363,222,339,110,328,77"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="367,317,349,380,320,447,302,471,298,468,315,444,344,378,362,316"/>
+</map>

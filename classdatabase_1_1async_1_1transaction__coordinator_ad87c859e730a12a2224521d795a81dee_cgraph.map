@@ -1,0 +1,7 @@
+<map id="database::async::transaction_coordinator::rollback_distributed_transaction" name="database::async::transaction_coordinator::rollback_distributed_transaction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,30,245,85"/>
+<area shape="rect" id="Node000002" href="$namespacedatabase_1_1async.html#af1c9ab27b919341f983143041b2ad297" title=" " alt="" coords="293,5,465,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,40,279,35,280,41,246,45"/>
+<area shape="rect" id="Node000003" href="$namespacedatabase_1_1async.html#ad93d8cee7647b0ce3fd5cf67f6206dd2" title=" " alt="" coords="293,69,465,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,70,280,74,279,79,245,75"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="database::protocol::protocol_serializer::serialize_header" name="database::protocol::protocol_serializer::serialize_header">
+<area shape="rect" id="Node000001" title="Serialize message header to bytes." alt="" coords="5,84,156,139"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#a77a522c630c47c92dfeb064c658ad28a" title=" " alt="" coords="204,5,355,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,81,196,63,198,68,152,86"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ad653cc836ddf9e8d52742449b3d273d9" title=" " alt="" coords="204,84,355,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,109,190,109,190,114,156,114"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1protocol_1_1protocol__serializer.html#ab16fceb3c875a1a6f06c241f4541577e" title=" " alt="" coords="204,163,355,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="152,136,198,155,196,160,150,141"/>
+</map>

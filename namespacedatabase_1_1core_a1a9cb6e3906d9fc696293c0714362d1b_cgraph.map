@@ -1,0 +1,8 @@
+<map id="database::core::create_backend" name="database::core::create_backend">
+<area shape="rect" id="Node000001" title="Convenience function for creating backends (static method style)" alt="" coords="5,49,172,89"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__registry.html#ae6f2cbf34fa56e9e750cbc5b57b4e0f9" title="Create a backend instance by name." alt="" coords="220,5,400,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,50,206,43,207,48,173,55"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__registry.html#acbb12b577a2f87abe52a6e93d48216d0" title="Get the singleton instance." alt="" coords="220,93,400,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,83,207,90,206,95,172,88"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="269,94,266,84,273,74,288,69,310,67,336,70,350,77,348,82,334,75,310,72,289,74,276,79,271,85,274,92"/>
+</map>

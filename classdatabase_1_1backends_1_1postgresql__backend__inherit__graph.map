@@ -1,0 +1,10 @@
+<map id="database::backends::postgresql_backend" name="database::backends::postgresql_backend">
+<area shape="rect" id="Node000001" title="PostgreSQL implementation of database_backend interface." alt="" coords="9,1156,202,1705"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="5,812,205,1107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,1120,108,1156,103,1156,103,1120"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="11,5,189,405"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,419,107,812,102,812,99,419"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="122,455,294,735"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="162,418,172,454,167,455,157,419"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="167,749,149,812,144,811,162,747"/>
+</map>

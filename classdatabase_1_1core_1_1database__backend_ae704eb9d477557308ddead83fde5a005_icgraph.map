@@ -1,0 +1,7 @@
+<map id="database::core::database_backend::select_query" name="database::core::database_backend::select_query">
+<area shape="rect" id="Node000001" title="Execute a SELECT query." alt="" coords="248,37,435,77"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query__builder.html#a3a16832a0aa34508d78d986b4a7e1e67" title=" " alt="" coords="13,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,46,192,40,193,35,235,40"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html#ac3283d58ec0219e40ecb290b11d74ace" title="Execute a parameterized SELECT query (prepared statement)" alt="" coords="5,69,200,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,74,200,79,200,74,234,69"/>
+</map>

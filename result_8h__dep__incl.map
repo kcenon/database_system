@@ -1,0 +1,76 @@
+<map id="database/core/result.h" name="database/core/result.h">
+<area shape="rect" id="Node000001" title="Result&lt;T&gt; type for database_system error handling." alt="" coords="1843,5,2009,31"/>
+<area shape="rect" id="Node000002" href="$mongodb__backend_8cpp.html" title=" " alt="" coords="387,269,599,309"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1829,23,1553,32,1376,42,1191,55,1008,74,840,99,698,130,641,149,595,169,565,191,540,218,505,270,500,267,535,215,562,187,593,164,639,144,697,125,839,94,1007,69,1190,50,1376,36,1552,27,1829,18"/>
+<area shape="rect" id="Node000003" href="$postgresql__backend_8cpp.html" title=" " alt="" coords="2571,269,2790,309"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1964,35,2064,88,2122,124,2177,165,2192,180,2202,194,2211,207,2227,219,2273,240,2314,252,2351,259,2387,260,2463,260,2508,261,2560,267,2571,268,2570,274,2559,272,2508,266,2463,265,2387,266,2350,264,2313,258,2271,245,2225,224,2207,211,2197,198,2188,183,2174,169,2119,129,2061,93,1962,39"/>
+<area shape="rect" id="Node000004" href="$redis__backend_8cpp.html" title=" " alt="" coords="5,269,188,309"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1829,23,1362,38,1056,55,746,81,658,87,582,87,451,85,390,90,327,103,260,128,185,169,158,191,136,218,107,270,102,268,131,215,154,187,182,164,258,123,326,98,389,85,451,80,582,82,658,82,746,76,1056,50,1362,33,1829,18"/>
+<area shape="rect" id="Node000005" href="$sqlite__backend_8cpp.html" title=" " alt="" coords="827,269,1014,309"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1830,33,1698,52,1553,81,1383,128,1217,182,969,272,967,267,1215,177,1381,123,1552,76,1697,47,1829,28"/>
+<area shape="rect" id="Node000006" href="$backend__base_8h.html" title="CRTP template base class for database backends." alt="" coords="1565,79,1737,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1874,37,1718,81,1717,76,1872,32"/>
+<area shape="rect" id="Node000023" href="$connection__string__builder_8h.html" title="Fluent builder for constructing type&#45;safe database connection strings." alt="" coords="2245,79,2449,119"/>
+<area shape="poly" id="edge27_Node000001_Node000023" title=" " alt="" coords="2001,30,2247,76,2246,81,2000,36"/>
+<area shape="rect" id="Node000026" href="$unified__database__system_8h.html" title="Zero&#45;configuration database system with integrated adapters (Phase 6)" alt="" coords="3136,79,3340,119"/>
+<area shape="poly" id="edge30_Node000001_Node000026" title=" " alt="" coords="2023,22,3136,89,3136,94,2023,28"/>
+<area shape="rect" id="Node000033" href="$database__protocol_8h.html" title=" " alt="" coords="4093,79,4295,119"/>
+<area shape="poly" id="edge37_Node000001_Node000033" title=" " alt="" coords="2023,20,4092,91,4092,96,2023,25"/>
+<area shape="rect" id="Node000007" href="$mongodb__backend_8h.html" title="MongoDB database backend plugin implementation." alt="" coords="607,174,819,214"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1552,113,819,185,818,180,1551,107"/>
+<area shape="rect" id="Node000009" href="$postgresql__backend_8h.html" title="PostgreSQL database backend plugin implementation." alt="" coords="1945,174,2163,214"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="1746,119,1973,171,1972,177,1745,124"/>
+<area shape="rect" id="Node000012" href="$redis__backend_8h.html" title="Redis database backend plugin implementation." alt="" coords="196,174,379,214"/>
+<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="1552,108,1135,133,594,169,379,187,379,182,594,164,1134,128,1551,103"/>
+<area shape="rect" id="Node000014" href="$sqlite__backend_8h.html" title="SQLite database backend plugin implementation." alt="" coords="1365,174,1551,214"/>
+<area shape="poly" id="edge16_Node000006_Node000014" title=" " alt="" coords="1601,127,1498,176,1496,172,1599,122"/>
+<area shape="rect" id="Node000021" href="$backend__base__test_8cpp.html" title=" " alt="" coords="1576,174,1727,214"/>
+<area shape="poly" id="edge25_Node000006_Node000021" title=" " alt="" coords="1654,132,1654,174,1649,174,1649,132"/>
+<area shape="rect" id="Node000022" href="$backend__registry__test_8cpp.html" title=" " alt="" coords="1751,174,1920,214"/>
+<area shape="poly" id="edge26_Node000006_Node000022" title=" " alt="" coords="1702,122,1799,172,1797,176,1700,127"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="657,222,538,272,536,267,655,217"/>
+<area shape="rect" id="Node000008" href="$mongodb__backend__test_8cpp.html" title=" " alt="" coords="623,269,803,309"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="715,228,715,269,710,269,710,228"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="2155,214,2182,219,2371,244,2560,267,2571,268,2571,274,2559,272,2370,249,2182,224,2155,219"/>
+<area shape="rect" id="Node000010" href="$database__manager_8cpp.html" title=" " alt="" coords="2099,277,2337,302"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="2100,218,2199,274,2196,279,2098,223"/>
+<area shape="rect" id="Node000011" href="$postgresql__backend__test_8cpp.html" title=" " alt="" coords="2361,269,2547,309"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="2149,215,2374,267,2373,272,2148,220"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="238,222,136,272,134,267,235,218"/>
+<area shape="rect" id="Node000013" href="$redis__backend__test_8cpp.html" title=" " alt="" coords="212,269,363,309"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="290,228,290,269,285,269,285,228"/>
+<area shape="poly" id="edge17_Node000014_Node000005" title=" " alt="" coords="1352,216,1026,272,1015,274,1014,269,1026,267,1351,211"/>
+<area shape="poly" id="edge18_Node000014_Node000010" title=" " alt="" coords="1541,214,1564,219,1710,239,1825,247,1940,253,2088,267,2143,274,2143,279,2087,272,1940,258,1825,252,1710,244,1563,224,1540,220"/>
+<area shape="rect" id="Node000015" href="$credential__test_8cpp.html" title=" " alt="" coords="1561,269,1739,309"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="1510,218,1612,267,1610,272,1508,222"/>
+<area shape="rect" id="Node000016" href="$data__masking__test_8cpp.html" title=" " alt="" coords="1763,269,1907,309"/>
+<area shape="poly" id="edge20_Node000014_Node000016" title=" " alt="" coords="1548,215,1564,219,1764,268,1763,273,1563,224,1546,220"/>
+<area shape="rect" id="Node000017" href="$sql__injection__test_8cpp.html" title=" " alt="" coords="1931,269,2075,309"/>
+<area shape="poly" id="edge21_Node000014_Node000017" title=" " alt="" coords="1543,214,1564,219,1663,235,1741,243,1820,252,1920,267,1932,269,1931,274,1919,272,1819,257,1741,249,1663,240,1563,224,1542,220"/>
+<area shape="rect" id="Node000018" href="$sqlite__backend__test_8cpp.html" title=" " alt="" coords="1038,269,1193,309"/>
+<area shape="poly" id="edge22_Node000014_Node000018" title=" " alt="" coords="1376,220,1185,272,1184,267,1375,215"/>
+<area shape="rect" id="Node000019" href="$async__stress__test_8cpp.html" title=" " alt="" coords="1217,269,1355,309"/>
+<area shape="poly" id="edge23_Node000014_Node000019" title=" " alt="" coords="1413,223,1322,272,1319,267,1410,218"/>
+<area shape="rect" id="Node000020" href="$memory__stress__test_8cpp.html" title=" " alt="" coords="1380,269,1536,309"/>
+<area shape="poly" id="edge24_Node000014_Node000020" title=" " alt="" coords="1461,228,1461,269,1455,269,1455,228"/>
+<area shape="rect" id="Node000024" href="$connection__string__builder_8cpp.html" title=" " alt="" coords="2238,174,2457,214"/>
+<area shape="poly" id="edge28_Node000023_Node000024" title=" " alt="" coords="2350,132,2350,174,2345,174,2345,132"/>
+<area shape="rect" id="Node000025" href="$test__connection__string__builder_8cpp.html" title="Unit tests for connection_string_builder." alt="" coords="2481,174,2704,214"/>
+<area shape="poly" id="edge29_Node000023_Node000025" title=" " alt="" coords="2411,121,2544,171,2542,176,2409,126"/>
+<area shape="rect" id="Node000027" href="$unified__database__system_8cpp.html" title="Implementation of unified database system (Phase 6)" alt="" coords="3607,174,3826,214"/>
+<area shape="poly" id="edge31_Node000026_Node000027" title=" " alt="" coords="3354,118,3595,164,3630,171,3629,177,3593,169,3353,124"/>
+<area shape="rect" id="Node000028" href="$async__queries_8cpp.html" title="Async query execution example with unified_database_system." alt="" coords="3851,174,4068,214"/>
+<area shape="poly" id="edge32_Node000026_Node000028" title=" " alt="" coords="3354,107,3579,129,3838,164,3878,171,3877,177,3838,169,3578,134,3353,112"/>
+<area shape="rect" id="Node000029" href="$integrated_2basic__usage_8cpp.html" title="Basic usage example of unified_database_system." alt="" coords="2728,174,2932,214"/>
+<area shape="poly" id="edge33_Node000026_Node000029" title=" " alt="" coords="3143,124,2913,177,2912,171,3142,119"/>
+<area shape="rect" id="Node000030" href="$migration__from__legacy_8cpp.html" title="Migration guide from legacy database_manager API to unified_database_system." alt="" coords="2957,167,3117,221"/>
+<area shape="poly" id="edge34_Node000026_Node000030" title=" " alt="" coords="3186,127,3094,169,3092,164,3184,122"/>
+<area shape="rect" id="Node000031" href="$monitoring_8cpp.html" title="Monitoring and observability example with unified_database_system." alt="" coords="3141,174,3335,214"/>
+<area shape="poly" id="edge35_Node000026_Node000031" title=" " alt="" coords="3241,132,3241,174,3235,174,3235,132"/>
+<area shape="rect" id="Node000032" href="$test__unified__database__system_8cpp.html" title="Phase 6: Unit tests for unified_database_system." alt="" coords="3360,174,3583,214"/>
+<area shape="poly" id="edge36_Node000026_Node000032" title=" " alt="" coords="3299,121,3425,171,3423,176,3297,126"/>
+<area shape="rect" id="Node000034" href="$database__protocol_8cpp.html" title=" " alt="" coords="4093,174,4295,214"/>
+<area shape="poly" id="edge38_Node000033_Node000034" title=" " alt="" coords="4197,132,4197,174,4191,174,4191,132"/>
+<area shape="rect" id="Node000035" href="$test__protocol__serializer_8cpp.html" title=" " alt="" coords="4320,174,4495,214"/>
+<area shape="poly" id="edge39_Node000033_Node000035" title=" " alt="" coords="4251,122,4365,171,4363,176,4249,127"/>
+</map>

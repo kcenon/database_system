@@ -1,0 +1,16 @@
+<map id="test_full_integration" name="test_full_integration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,217,159,243"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a0c27fa5a0f96c016d99d313cb460a30c" title="Perform aggregate health check of all adapters." alt="" coords="207,5,377,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,216,132,148,166,107,205,69,210,65,213,70,208,73,170,110,136,151,93,219"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a33047d2d2d53e124a71f57b1961acad5" title="Get logger adapter." alt="" coords="207,84,377,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="100,215,147,183,205,148,215,143,218,147,208,152,150,188,103,219"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af13bb0ed7e9bd43ac054421483d64d7e" title="Get monitoring adapter." alt="" coords="207,163,377,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="149,215,193,206,194,211,150,220"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1database__coordinator.html#a867911af10c373039e53e0da58ae1e7f" title="Get thread adapter." alt="" coords="207,241,377,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="152,240,194,248,193,253,151,245"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="207,344,377,399"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="104,241,240,334,237,338,101,245"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="207,423,377,477"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="92,242,134,318,168,366,208,408,215,413,211,417,205,412,164,369,129,321,87,244"/>
+<area shape="poly" id="edge6_Node000006_Node000006" title=" " alt="" coords="251,344,251,334,259,325,272,319,292,317,316,320,329,328,326,333,314,325,292,323,274,325,262,329,256,336,256,344"/>
+</map>

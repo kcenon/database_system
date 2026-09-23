@@ -1,0 +1,10 @@
+<map id="test_monitoring_functionality" name="test_monitoring_functionality">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,220,148"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af13bb0ed7e9bd43ac054421483d64d7e" title="Get monitoring adapter." alt="" coords="268,5,439,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,120,275,63,277,68,145,125"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1database__coordinator.html#af00137d5ac61db7c9325c43b44e5f6f7" title="Initialize all adapters in correct order." alt="" coords="268,108,439,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="220,133,254,133,254,138,220,138"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1database__coordinator.html#aafc8659890c61e001a28941171c57415" title="Shutdown all adapters in reverse order." alt="" coords="268,187,439,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="154,146,257,180,255,185,152,151"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="307,108,307,98,315,89,331,83,353,81,380,84,396,92,393,97,379,90,353,87,332,89,318,93,312,100,312,108"/>
+</map>

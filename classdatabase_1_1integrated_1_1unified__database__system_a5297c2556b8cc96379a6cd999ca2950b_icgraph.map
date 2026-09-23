@@ -1,0 +1,13 @@
+<map id="database::integrated::unified_database_system::reset_metrics" name="database::integrated::unified_database_system::reset_metrics">
+<area shape="rect" id="Node000001" title="Reset metrics counters." alt="" coords="339,55,535,110"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#a9bb3534b3b1a1e395f9b24ed00c7e6fe" title=" " alt="" coords="122,5,277,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,58,276,47,277,41,326,53"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#a6a1ece730b765694880eeb3e353ae79b" title=" " alt="" coords="128,70,271,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,85,271,85,271,80,325,80"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#a2a82977ec81258db4dbd762d206328bd" title=" " alt="" coords="108,119,291,145"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="325,108,262,122,260,117,324,103"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,70,60,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,52,61,76,59,71,127,47"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="114,85,60,85,60,80,114,80"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="138,118,107,109,59,94,61,89,109,104,139,113"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::system_monitoring_backend::shutdown" name="database::integrated::adapters::backends::system_monitoring_backend::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the monitoring backend gracefully." alt="" coords="281,5,499,75"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html#ad894284eb1e7e2cd6babf82eccc5328a" title=" " alt="" coords="5,5,233,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,43,233,43,233,37,268,37"/>
+</map>

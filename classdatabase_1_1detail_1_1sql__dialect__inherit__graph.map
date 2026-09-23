@@ -1,0 +1,5 @@
+<map id="database::detail::sql_dialect" name="database::detail::sql_dialect">
+<area shape="rect" id="Node000001" title="SQL dialect implementation for PostgreSQL, SQLite." alt="" coords="5,319,183,919"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,5,183,271"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,285,97,319,91,319,91,285"/>
+</map>

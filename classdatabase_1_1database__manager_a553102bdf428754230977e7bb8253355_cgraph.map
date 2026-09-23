@@ -1,0 +1,10 @@
+<map id="database::database_manager::set_mode" name="database::database_manager::set_mode">
+<area shape="rect" id="Node000001" title="Sets the database mode (type) for the manager." alt="" coords="5,20,164,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html#acffc6bc4aab395bc2b246731c8d09e6a" title=" " alt="" coords="212,5,413,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,57,157,63,198,64,198,70,156,68,120,63"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="164,46,198,46,198,52,164,51"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="164,29,198,28,198,34,164,34"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="120,17,156,12,198,10,198,16,157,17,121,23"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1database__manager.html#ac062ec7202362f83d152357b39ab51c1" title="Retrieves the current database type used by the manager." alt="" coords="217,99,408,139"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="139,58,213,84,236,92,234,97,211,89,138,63"/>
+</map>

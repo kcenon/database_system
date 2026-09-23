@@ -1,0 +1,9 @@
+<map id="database::integrated::database_coordinator::get_logger" name="database::integrated::database_coordinator::get_logger">
+<area shape="rect" id="Node000001" title="Get logger adapter." alt="" coords="237,40,408,95"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab9a4da242976f9a340b77cd2aaba8203" title=" " alt="" coords="20,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,48,155,33,157,28,224,43"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="21,55,174,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,70,174,70,174,65,223,65"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html#adcb222f549dd264a7bcf5b7e1c3a0dc6" title=" " alt="" coords="5,104,189,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,92,157,107,155,101,223,86"/>
+</map>

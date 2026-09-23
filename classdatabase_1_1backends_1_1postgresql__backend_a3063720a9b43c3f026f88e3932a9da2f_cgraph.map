@@ -1,0 +1,21 @@
+<map id="database::backends::postgresql_backend::execute_batch" name="database::backends::postgresql_backend::execute_batch">
+<area shape="rect" id="Node000001" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,125,164,180"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a20c3eec427ca722be6425e0fd3f073b8" title="Begin a transaction." alt="" coords="239,47,398,101"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,124,226,103,227,108,165,129"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="680,75,888,145"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="103,124,148,74,177,50,211,32,273,13,338,4,403,4,468,10,531,21,590,35,691,68,690,73,589,40,530,26,467,15,403,9,338,10,274,18,213,37,180,54,151,78,107,127"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a4969ec952912ab118c0e436918535181" title="Commit the current transaction." alt="" coords="239,125,399,180"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="164,150,225,150,225,155,164,155"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a1825a44bedbbcc66f993457967300043" title="Execute a modification query (INSERT, UPDATE, DELETE)" alt="" coords="212,283,425,337"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="111,178,156,224,213,269,222,274,220,279,211,274,152,228,107,182"/>
+<area shape="rect" id="Node000007" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a6d3e3887890750e1b505682b6529d033" title="Rollback the current transaction." alt="" coords="237,204,400,259"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="165,177,225,197,223,202,163,182"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a312f8888a0317e8e984b2c92e907e1ee" title="Execute a general SQL query (DDL, DML)" alt="" coords="473,148,632,203"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="398,99,426,110,488,140,486,144,424,115,396,104"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="398,74,632,89,667,92,666,98,632,94,398,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="631,151,666,141,668,146,633,156"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="399,158,460,164,459,169,399,163"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="398,141,473,133,666,116,667,121,474,138,399,146"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="400,209,459,195,460,200,401,215"/>
+<area shape="poly" id="edge12_Node000007_Node000004" title=" " alt="" coords="401,237,453,238,512,236,573,228,631,213,686,186,734,151,737,156,689,190,633,218,574,233,512,241,453,243,400,242"/>
+</map>

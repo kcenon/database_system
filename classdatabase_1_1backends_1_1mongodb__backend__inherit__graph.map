@@ -1,0 +1,10 @@
+<map id="database::backends::mongodb_backend" name="database::backends::mongodb_backend">
+<area shape="rect" id="Node000001" title="MongoDB implementation of database_backend interface." alt="" coords="21,1156,195,1636"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__base.html" title=" " alt="" coords="5,812,211,1107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,1121,111,1156,105,1156,105,1121"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="13,5,192,405"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,419,110,812,104,812,102,419"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="125,455,297,735"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="164,418,174,454,169,455,159,419"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="170,749,152,812,147,811,165,747"/>
+</map>

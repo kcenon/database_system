@@ -1,0 +1,5 @@
+<map id="database::backends::mongodb_backend::do_initialize" name="database::backends::mongodb_backend::do_initialize">
+<area shape="rect" id="Node000001" title="Database&#45;specific initialization logic." alt="" coords="5,5,181,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1mongodb__backend.html#a52370793b81065af5db3c795911fed49" title="Convert connection_config to MongoDB connection URI." alt="" coords="229,5,421,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,30,216,30,216,35,181,35"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="database::async::make_error_result" name="database::async::make_error_result">
+<area shape="rect" id="Node000001" title=" " alt="" coords="867,141,1039,181"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1async_1_1transaction__coordinator.html#a8016f7eebdeef2aaa2c17b2c544e0d70" title=" " alt="" coords="594,5,803,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="919,134,873,95,817,60,789,48,791,43,820,55,876,91,923,130"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1async_1_1transaction__coordinator.html#a39f8bf721b5c24dd2834c3598ff69fb7" title=" " alt="" coords="594,69,803,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="873,140,818,124,775,112,777,107,819,119,874,135"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ad87c859e730a12a2224521d795a81dee" title=" " alt="" coords="579,134,819,189"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="853,164,819,164,819,159,853,159"/>
+<area shape="rect" id="Node000007" href="$test__async__operations_8cpp.html#aa715d8d570d9247863d360241f43e5e1" title=" " alt="" coords="671,213,726,238"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="874,188,819,203,727,223,725,218,818,197,873,183"/>
+<area shape="rect" id="Node000008" href="$test__async__operations_8cpp.html#a9b5af963d634930dd8f856659e436f6b" title=" " alt="" coords="671,262,726,287"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="918,192,873,224,820,252,771,267,727,275,726,269,770,262,818,247,870,219,915,188"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada609b1ea097d56a24354eebbe0c395b" title=" " alt="" coords="292,37,531,77"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="581,41,531,47,531,41,580,36"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1async_1_1transaction__coordinator.html#ada14f8286d21fcd629d6e6e75b957319" title=" " alt="" coords="5,30,244,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="278,60,244,60,244,55,278,55"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="580,79,531,73,531,68,581,74"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,256,60,281"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a7f57e267b96199e1ffe2656760d866fc" title="Build and return the configured database system." alt="" coords="113,5,309,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,255,38,219,51,170,72,117,88,92,106,70,109,67,113,71,110,73,92,95,77,119,56,171,43,220,38,256"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system.html#aaf4ac9ec1dfd6c14baa50d1a29864225" title="Create a builder for custom configuration." alt="" coords="113,84,309,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="36,255,61,204,81,174,106,148,111,144,114,148,110,152,85,177,66,206,41,257"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a9c96e91e431a9d21c47e8c333e521c4a" title="Enable logging." alt="" coords="113,163,309,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="54,254,107,226,121,220,123,225,109,231,57,258"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a08c7e8b669facce7452a5efd438c7ff3" title="Enable monitoring and metrics collection." alt="" coords="108,241,313,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="60,266,94,266,94,271,60,271"/>
+<area shape="rect" id="Node000006" href="$migration__from__legacy_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="159,320,263,345"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="57,279,109,305,146,317,145,322,107,310,54,284"/>
+<area shape="rect" id="Node000007" href="$migration__from__legacy_8cpp.html#a1156846072709ab6e482082b43aae398" title=" " alt="" coords="157,369,264,395"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="43,280,69,318,88,338,109,354,145,370,143,374,107,359,84,342,65,321,39,283"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1builder.html#a2a5d17291dc549682989e55d53ea4fc1" title="Set connection pool size." alt="" coords="113,419,309,473"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="40,281,63,339,83,374,110,404,116,409,112,413,106,408,79,377,59,342,35,283"/>
+</map>

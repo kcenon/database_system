@@ -1,0 +1,10 @@
+<map id="database::integrated::unified_database_system::remove" name="database::integrated::unified_database_system::remove">
+<area shape="rect" id="Node000001" title="Execute a DELETE query." alt="" coords="319,27,515,82"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#abb0565d93590f76e76b98a7a297dded4" title=" " alt="" coords="113,5,266,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="304,43,266,38,266,33,305,38"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#a0c117199850c10b4f161dfa3c97778a3" title=" " alt="" coords="108,70,271,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="305,71,271,75,271,70,304,66"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,42,60,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,45,61,52,60,47,99,40"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="105,70,60,62,61,57,106,65"/>
+</map>

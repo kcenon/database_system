@@ -1,0 +1,7 @@
+<map id="database::postgres_manager::shutdown" name="database::postgres_manager::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the database backend gracefully." alt="" coords="5,5,164,45"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1postgres__manager.html#ad8f604c1697eb0a0453bd4ece866d9a4" title="Rollback the current transaction." alt="" coords="212,5,439,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,23,198,23,198,28,165,28"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1postgres__manager.html#a9f5c227a583b64a104ce7eae7497b549" title="Executes a general SQL query (DDL, DML) on PostgreSQL." alt="" coords="487,5,677,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="439,23,473,23,473,28,439,28"/>
+</map>

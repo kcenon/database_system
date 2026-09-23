@@ -1,0 +1,9 @@
+<map id="database::integrated::adapters::backends::fallback_thread_backend::shutdown" name="database::integrated::adapters::backends::fallback_thread_backend::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the thread backend gracefully." alt="" coords="5,9,197,78"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="245,5,348,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,28,231,24,232,29,198,33"/>
+<area shape="rect" id="Node000003" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="263,55,330,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,53,250,59,249,64,198,58"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="396,55,497,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="330,65,382,65,382,70,330,70"/>
+</map>

@@ -1,0 +1,31 @@
+<map id="database::orm::entity_manager" name="database::orm::entity_manager">
+<area shape="rect" id="Node000001" title="Manages entity metadata and provides factory methods." alt="" coords="273,1569,428,1769"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="253,1397,448,1507"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="353,1507,353,1553,348,1553,348,1507"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,135,110,200"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="63,201,46,257,28,331,14,414,8,500,8,1296,14,1331,29,1360,54,1384,84,1403,120,1418,159,1429,237,1443,236,1448,157,1435,118,1423,82,1408,50,1388,25,1363,9,1333,3,1296,3,500,9,414,23,330,41,255,58,199"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1orm_1_1entity__metadata.html" title="Metadata for entire entities including table mapping and relationships." alt="" coords="145,952,308,1192"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="70,201,64,298,61,439,68,604,77,688,91,770,107,823,132,874,161,936,156,938,127,876,102,825,85,771,71,689,62,604,56,439,59,297,65,200"/>
+<area shape="rect" id="Node000008" href="$classdatabase_1_1orm_1_1field__metadata.html" title="Metadata for entity fields including constraints and relationships." alt="" coords="111,321,270,681"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="85,200,123,305,118,307,80,201"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,136,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="73,99,73,134,68,134,68,99"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="257,1255,444,1335"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="353,1335,353,1381,348,1381,348,1335"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="296,1191,323,1239,319,1242,291,1194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="142,795,311,875"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="229,875,229,935,224,935,224,875"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="186,681,190,726,199,770,201,779,196,780,193,771,185,727,181,682"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="322,469,443,534"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="366,548,300,706,289,740,276,772,261,796,256,793,271,769,284,738,295,704,361,546"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="499,135,522,200"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="500,173,453,189,427,204,406,226,392,252,381,281,371,342,371,401,376,452,371,452,365,401,366,342,376,280,387,250,402,222,424,200,450,184,498,168"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="459,705,608,771"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="511,200,509,224,509,297,520,516,532,689,527,689,515,517,504,297,504,224,505,200"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="556,461,700,541"/>
+<area shape="poly" id="edge16_Node000012_Node000010" title=" " alt="" coords="524,183,548,223,571,281,591,340,619,444,614,446,586,342,566,283,543,225,520,186"/>
+<area shape="poly" id="edge12_Node000005_Node000011" title=" " alt="" coords="509,784,479,838,452,900,419,998,393,1097,360,1255,355,1254,387,1096,414,997,447,898,475,836,504,782"/>
+<area shape="poly" id="edge14_Node000002_Node000012" title=" " alt="" coords="631,555,631,833,631,1296,626,1326,613,1353,594,1375,569,1394,511,1422,449,1439,447,1434,509,1417,567,1389,590,1371,609,1350,621,1325,625,1296,625,833,625,555"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="671,135,694,200"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="680,201,640,446,634,445,675,200"/>
+</map>

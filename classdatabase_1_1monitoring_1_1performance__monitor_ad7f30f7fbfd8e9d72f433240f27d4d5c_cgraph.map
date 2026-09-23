@@ -1,0 +1,10 @@
+<map id="database::monitoring::performance_monitor::record_query_metrics" name="database::monitoring::performance_monitor::record_query_metrics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,39,176,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a5e5957db23db4a588191f4e206fe2e57" title=" " alt="" coords="224,71,395,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,76,211,81,210,86,176,81"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a9df3a90d4c31d2486b4016ef118ca383" title=" " alt="" coords="463,5,633,60"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="176,57,449,37,449,42,177,62"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,72,449,57,450,62,396,77"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1monitoring_1_1performance__monitor.html#a7d19bd8c946b3ddfdbf5b920575df296" title=" " alt="" coords="443,84,653,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="395,100,429,102,429,107,395,105"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="database::integrated::adapters::backends::fallback_thread_backend::~fallback_thread_backend" name="database::integrated::adapters::backends::fallback_thread_backend::~fallback_thread_backend">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,9,208,78"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#a9fe9d51e52ff0999a1e1200c77f151dc" title="Shutdown the thread backend gracefully." alt="" coords="256,9,448,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,41,243,41,243,46,208,46"/>
+<area shape="rect" id="Node000003" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="496,5,599,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="448,28,482,24,483,29,449,33"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="514,55,581,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="449,53,501,59,500,64,448,58"/>
+<area shape="rect" id="Node000005" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="647,55,748,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="581,65,633,65,633,70,581,70"/>
+</map>

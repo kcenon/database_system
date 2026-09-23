@@ -1,0 +1,9 @@
+<map id="database::async::async_executor::thread_count" name="database::async::async_executor::thread_count">
+<area shape="rect" id="Node000001" title="Returns the number of worker threads." alt="" coords="348,23,527,63"/>
+<area shape="rect" id="Node000002" href="$async__executor__demo_8cpp.html#a2a76b47d313e62bb496b4401923146da" title=" " alt="" coords="108,5,300,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="334,35,300,31,300,26,334,29"/>
+<area shape="rect" id="Node000004" href="$test__async__operations_8cpp.html#a40158301d7297498c2db67a5448757fa" title=" " alt="" coords="169,55,239,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,57,240,66,239,61,334,51"/>
+<area shape="rect" id="Node000003" href="$async__executor__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+</map>

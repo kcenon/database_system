@@ -1,0 +1,13 @@
+<map id="PoolMetricsTest" name="PoolMetricsTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="15,873,131,939"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,641,99,706"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,720,73,873,68,873,54,720"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1monitoring_1_1pool__metrics.html" title="Performance metrics for connection pools." alt="" coords="123,536,309,811"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,813,104,861,99,858,129,810"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="131,261,301,327"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="219,327,219,520,213,520,213,327"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="153,133,279,199"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="219,213,219,261,213,261,213,213"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="205,5,227,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="219,71,219,117,213,117,213,71"/>
+</map>

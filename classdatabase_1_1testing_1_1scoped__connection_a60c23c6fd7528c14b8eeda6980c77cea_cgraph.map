@@ -1,0 +1,5 @@
+<map id="database::testing::scoped_connection::~scoped_connection" name="database::testing::scoped_connection::~scoped_connection">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,163,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1testing_1_1mock__connection__pool.html#a89eeb30bae16aada462459da4c66c26e" title="Release a connection back to the pool." alt="" coords="211,5,381,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,30,197,30,197,35,163,35"/>
+</map>

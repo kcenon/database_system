@@ -1,0 +1,5 @@
+<map id="database::immutable_query_builder::where" name="database::immutable_query_builder::where">
+<area shape="rect" id="Node000001" title="WHERE clause &#45; adds a query_condition." alt="" coords="5,13,172,53"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1immutable__query__builder.html#abc7fee19c4bbde9f84600cea76a61e44" title="Constructs a new immutable query builder." alt="" coords="220,5,417,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,30,206,30,206,35,172,35"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="database::query::join_builder::build" name="database::query::join_builder::build">
+<area shape="rect" id="Node000001" title="Build the JOIN clauses." alt="" coords="5,101,164,141"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1join__builder.html#a9e05411c0c9ca6b2dcbcb73c771ba586" title="Check if builder is empty." alt="" coords="238,5,397,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,99,211,55,231,47,233,52,213,60,123,104"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1value__formatter.html#a0dc2bf2db734a49a47390b0d7878b8e7" title="Quote and escape an identifier (table/column name)" alt="" coords="212,69,423,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,108,198,103,199,108,165,113"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query_1_1join__builder.html#a77518180452cc11ef38016074f7f0326" title="Add an INNER JOIN." alt="" coords="238,133,397,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="165,130,225,138,224,143,164,135"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1query_1_1join__builder.html#add70466cafa2dbd0e7f530e002d2ea5f" title=" " alt="" coords="236,198,399,253"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="124,139,213,183,230,190,228,195,211,188,122,144"/>
+</map>

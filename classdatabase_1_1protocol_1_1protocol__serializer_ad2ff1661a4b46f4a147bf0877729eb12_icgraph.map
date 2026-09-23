@@ -1,0 +1,9 @@
+<map id="database::protocol::protocol_serializer::deserialize_transaction_response" name="database::protocol::protocol_serializer::deserialize_transaction_response">
+<area shape="rect" id="Node000001" title="Deserialize transaction response." alt="" coords="123,33,304,102"/>
+<area shape="rect" id="Node000002" href="$test__protocol__serializer_8cpp.html#addb75b182de2be36d78bfb3f92b11651" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,40,74,30,76,25,110,35"/>
+<area shape="rect" id="Node000003" href="$test__protocol__serializer_8cpp.html#a0a2e3c22057475ec8d9111414707f04f" title=" " alt="" coords="5,55,75,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,70,75,70,75,65,109,65"/>
+<area shape="rect" id="Node000004" href="$test__protocol__serializer_8cpp.html#ac90f54b6aafe406d2e9f96f7b2292fc0" title=" " alt="" coords="5,104,75,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="110,100,76,110,74,104,108,94"/>
+</map>

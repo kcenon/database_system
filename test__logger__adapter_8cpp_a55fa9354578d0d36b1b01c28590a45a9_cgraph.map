@@ -1,0 +1,14 @@
+<map id="test_initialization" name="test_initialization">
+<area shape="rect" id="Node000001" title="Test logger initialization and shutdown." alt="" coords="5,133,140,159"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#aadc2d01617401344c90e9c43781f354d" title="Clean up test log directory." alt="" coords="215,5,354,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,131,124,86,154,61,187,40,201,33,204,38,189,44,157,65,128,90,86,135"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#a23835148e8c242f95b6e53a9a762a3c7" title="Initialize the logger." alt="" coords="188,79,381,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="140,131,174,124,175,129,141,136"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#adc1577b3e74f21141ab49b5b3fd4927f" title="Check if logger is initialized." alt="" coords="188,157,381,212"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="141,156,175,162,174,167,140,161"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1adapters_1_1logger__adapter.html#a8b731e5ca0153a0ab6eef3b24f9dc025" title="Shutdown the logger gracefully." alt="" coords="188,236,381,291"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="92,157,135,188,189,221,202,228,200,233,187,226,132,192,89,161"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="246,79,246,69,253,60,266,54,285,52,307,55,320,63,317,68,305,60,285,57,268,59,257,64,251,70,252,79"/>
+<area shape="rect" id="Node000006" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="429,251,532,276"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="382,261,415,261,415,266,382,266"/>
+</map>

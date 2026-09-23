@@ -1,0 +1,15 @@
+<map id="database::orm::entity_base" name="database::orm::entity_base">
+<area shape="rect" id="Node000001" title="Base class for all ORM entities." alt="" coords="361,5,553,211"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestUser.html" title=" " alt="" coords="5,339,147,424"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="350,150,253,197,205,227,160,261,126,299,99,340,95,337,122,296,157,257,202,222,250,192,347,146"/>
+<area shape="rect" id="Node000003" href="$classProduct.html" title=" " alt="" coords="171,329,293,434"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="353,208,307,260,262,330,257,327,303,257,349,205"/>
+<area shape="rect" id="Node000004" href="$classTestUser.html" title=" " alt="" coords="318,259,447,504"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="428,225,419,259,414,258,423,223"/>
+<area shape="rect" id="Node000005" href="$classUser.html" title=" " alt="" coords="472,329,595,434"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="492,223,521,328,516,329,487,225"/>
+<area shape="rect" id="Node000006" href="$classpost__entity.html" title=" " alt="" coords="619,289,749,474"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="565,207,609,257,631,287,627,290,605,260,561,211"/>
+<area shape="rect" id="Node000007" href="$classuser__entity.html" title=" " alt="" coords="773,349,889,414"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="567,142,616,163,668,189,718,220,763,257,782,278,798,301,821,347,816,349,793,304,778,281,759,261,715,224,665,194,614,168,565,147"/>
+</map>

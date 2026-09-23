@@ -1,0 +1,11 @@
+<map id="database::core::backend_base&lt; Derived, Type &gt;" name="database::core::backend_base&lt; Derived, Type &gt;">
+<area shape="rect" id="Node000001" title="CRTP template base class for database backends." alt="" coords="30,724,202,1004"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,261,184,661"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,675,111,723,106,724,103,675"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="209,429,354,494"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,495,182,709,177,707,266,493"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="219,133,344,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="284,213,284,429,279,429,279,213"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="270,5,293,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="284,71,284,117,279,117,279,71"/>
+</map>

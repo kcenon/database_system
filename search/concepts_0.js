@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['database_3a_3aconcepts_3a_3aasynccallable_0',['AsyncCallable',['../conceptdatabase_1_1concepts_1_1AsyncCallable.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3abackendfactory_1',['BackendFactory',['../conceptdatabase_1_1concepts_1_1BackendFactory.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3acompensationaction_2',['CompensationAction',['../conceptdatabase_1_1concepts_1_1CompensationAction.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3aconnectionfactory_3',['ConnectionFactory',['../conceptdatabase_1_1concepts_1_1ConnectionFactory.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3aconnectionwrapper_4',['ConnectionWrapper',['../conceptdatabase_1_1concepts_1_1ConnectionWrapper.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3adelayedcallable_5',['DelayedCallable',['../conceptdatabase_1_1concepts_1_1DelayedCallable.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3aerrorhandler_6',['ErrorHandler',['../conceptdatabase_1_1concepts_1_1ErrorHandler.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3ainvocable_7',['Invocable',['../conceptdatabase_1_1concepts_1_1Invocable.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3anoexceptcallable_8',['NoexceptCallable',['../conceptdatabase_1_1concepts_1_1NoexceptCallable.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3apooledresource_9',['PooledResource',['../conceptdatabase_1_1concepts_1_1PooledResource.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3apredicate_10',['Predicate',['../conceptdatabase_1_1concepts_1_1Predicate.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3aquerycallback_11',['QueryCallback',['../conceptdatabase_1_1concepts_1_1QueryCallback.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3areturnsresult_12',['ReturnsResult',['../conceptdatabase_1_1concepts_1_1ReturnsResult.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3astreameventfilter_13',['StreamEventFilter',['../conceptdatabase_1_1concepts_1_1StreamEventFilter.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3astreameventhandler_14',['StreamEventHandler',['../conceptdatabase_1_1concepts_1_1StreamEventHandler.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3asubmittabletask_15',['SubmittableTask',['../conceptdatabase_1_1concepts_1_1SubmittableTask.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3atransactionaction_16',['TransactionAction',['../conceptdatabase_1_1concepts_1_1TransactionAction.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3avoidcallable_17',['VoidCallable',['../conceptdatabase_1_1concepts_1_1VoidCallable.html',1,'database::concepts']]],
+  ['database_3a_3aconcepts_3a_3avoidtask_18',['VoidTask',['../conceptdatabase_1_1concepts_1_1VoidTask.html',1,'database::concepts']]]
+];

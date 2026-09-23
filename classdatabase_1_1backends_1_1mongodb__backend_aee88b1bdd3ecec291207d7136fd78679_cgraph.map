@@ -1,0 +1,7 @@
+<map id="database::backends::mongodb_backend::do_shutdown" name="database::backends::mongodb_backend::do_shutdown">
+<area shape="rect" id="Node000001" title="Database&#45;specific shutdown logic." alt="" coords="5,13,181,67"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1mongodb__backend.html#a0d57fb83a8991cf02a2874e732e68d67" title="Rollback the current transaction." alt="" coords="229,13,441,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,37,216,37,216,43,181,43"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="489,5,691,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="441,37,476,37,476,43,441,43"/>
+</map>

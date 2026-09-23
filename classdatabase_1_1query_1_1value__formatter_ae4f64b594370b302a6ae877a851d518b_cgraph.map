@@ -1,0 +1,9 @@
+<map id="database::query::value_formatter::format_string" name="database::query::value_formatter::format_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,53,192,93"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1query_1_1value__formatter.html#a3c2b378e72f6cdac90ac9d9ad9fccd25" title="Escape a string value." alt="" coords="240,53,429,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,70,227,70,227,75,192,75"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1query_1_1value__formatter.html#a43de2d2bb5753471471a8a3c69b03dd7" title=" " alt="" coords="477,5,697,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="429,55,463,50,464,55,430,60"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1query_1_1value__formatter.html#a3e9141b95ca0d3ba1955bc66db2cad48" title=" " alt="" coords="493,84,681,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="430,84,480,92,479,98,429,90"/>
+</map>

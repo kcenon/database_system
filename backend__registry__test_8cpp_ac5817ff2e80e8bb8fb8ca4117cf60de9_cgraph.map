@@ -1,0 +1,8 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,57,75,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1core_1_1backend__registry.html#ae6f2cbf34fa56e9e750cbc5b57b4e0f9" title="Create a backend instance by name." alt="" coords="123,5,303,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,58,120,46,121,51,76,63"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__registry.html#acbb12b577a2f87abe52a6e93d48216d0" title="Get the singleton instance." alt="" coords="123,93,303,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="76,75,121,87,120,92,74,81"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="180,94,178,84,183,75,195,69,213,67,233,70,244,77,241,81,231,75,213,72,197,74,187,79,183,85,185,92"/>
+</map>

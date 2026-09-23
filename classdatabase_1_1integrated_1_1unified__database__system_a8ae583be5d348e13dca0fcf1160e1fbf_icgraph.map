@@ -1,0 +1,17 @@
+<map id="database::integrated::unified_database_system::check_health" name="database::integrated::unified_database_system::check_health">
+<area shape="rect" id="Node000001" title="Perform health check." alt="" coords="361,65,557,120"/>
+<area shape="rect" id="Node000002" href="$monitoring_8cpp.html#a9d63bbcc36f0557919bb8db9d2d698a6" title=" " alt="" coords="143,5,279,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="371,63,313,45,269,33,271,28,314,39,372,58"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a0ea4c8743984cdce83268f0c5629fff6" title=" " alt="" coords="108,55,313,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="348,84,313,80,314,75,348,79"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#aa5fbf0c9a289db06f5bdf19910a247e1" title=" " alt="" coords="127,104,294,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="348,106,294,111,294,106,347,101"/>
+<area shape="rect" id="Node000007" href="$test__unified__database__system_8cpp.html#a83eccdb9ba810f5b1a3baa4ba42958f3" title=" " alt="" coords="139,154,283,194"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="367,127,314,145,277,156,276,151,313,139,365,122"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,41,60,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="135,36,61,51,60,46,134,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,61,60,59,61,53,95,56"/>
+<area shape="rect" id="Node000006" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,119,60,144"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="114,127,61,132,60,126,113,122"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="125,156,60,140,61,135,126,151"/>
+</map>

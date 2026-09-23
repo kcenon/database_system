@@ -1,0 +1,27 @@
+var classdatabase_1_1database__context =
+[
+    [ "database_context", "classdatabase_1_1database__context.html#ad39c4f0fcdee9e6a6fb389bdba089e62", null ],
+    [ "~database_context", "classdatabase_1_1database__context.html#a19fbcef2456327bd4884ea5c71b6c049", null ],
+    [ "database_context", "classdatabase_1_1database__context.html#a9a4bc9f6c0247908fbc717efb981690f", null ],
+    [ "database_context", "classdatabase_1_1database__context.html#a63cd8526b531d3eb5ca9dcaee237115c", null ],
+    [ "get_access_control", "classdatabase_1_1database__context.html#a549e629596ffeb84a8d494f120be6502", null ],
+    [ "get_audit_logger", "classdatabase_1_1database__context.html#a82187cf4745987528615ec3f9646d8f8", null ],
+    [ "get_credential_manager", "classdatabase_1_1database__context.html#a76c16b663caa4a7af3c8cd4ec98a9d9f", null ],
+    [ "get_encryption_manager", "classdatabase_1_1database__context.html#af39e372e3944bd1162b764799de2d095", null ],
+    [ "get_entity_manager", "classdatabase_1_1database__context.html#a33180962fafb9f3006f0e820c1f34dc5", null ],
+    [ "get_performance_monitor", "classdatabase_1_1database__context.html#a6ea4ce64d93b7611f5860fbbea3d06e1", null ],
+    [ "get_security_monitor", "classdatabase_1_1database__context.html#a0193e1e850765b1e45aad03db555fe32", null ],
+    [ "get_transaction_coordinator", "classdatabase_1_1database__context.html#a47ffc56153f46846aa118018d317c484", null ],
+    [ "is_initialized", "classdatabase_1_1database__context.html#a7ac965eb81c1612bc7bf948f51edbeae", null ],
+    [ "operator=", "classdatabase_1_1database__context.html#a621b16b2b3fb648222390f8dd7127f38", null ],
+    [ "operator=", "classdatabase_1_1database__context.html#af1ca5afc0602fe4a130f40c35e1c00b4", null ],
+    [ "access_control_", "classdatabase_1_1database__context.html#a57d0beac3c0a93fa3e657c21be1285b5", null ],
+    [ "audit_logger_", "classdatabase_1_1database__context.html#a6fc91d6ff20900e016092848e8aeec77", null ],
+    [ "credential_manager_", "classdatabase_1_1database__context.html#a011426f5621937cb10f1401f42d67daa", null ],
+    [ "encryption_manager_", "classdatabase_1_1database__context.html#a2a350b462625ec049954d0191017417f", null ],
+    [ "entity_manager_", "classdatabase_1_1database__context.html#a600580f9841511aa4d63f13357e63a8d", null ],
+    [ "mutex_", "classdatabase_1_1database__context.html#abfdfe93beebf66df6b0a078f994ce948", null ],
+    [ "performance_monitor_", "classdatabase_1_1database__context.html#ac8b443d6ed6f1d37ebc69bdd9c353c3c", null ],
+    [ "security_monitor_", "classdatabase_1_1database__context.html#a3db55f301befe9f6b056a5e331e58c90", null ],
+    [ "transaction_coordinator_", "classdatabase_1_1database__context.html#ada06a04f1993b19499b649a4b815bcea", null ]
+];

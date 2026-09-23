@@ -1,0 +1,15 @@
+<map id="database::backends::postgresql_backend::execute_query" name="database::backends::postgresql_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="423,84,581,139"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a20c3eec427ca722be6425e0fd3f073b8" title="Begin a transaction." alt="" coords="214,5,373,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="415,82,365,63,367,58,417,77"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a4969ec952912ab118c0e436918535181" title="Commit the current transaction." alt="" coords="213,84,373,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="409,114,374,114,374,109,409,109"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a6d3e3887890750e1b505682b6529d033" title="Rollback the current transaction." alt="" coords="212,163,375,217"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="417,146,367,165,365,160,415,141"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a3063720a9b43c3f026f88e3932a9da2f" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,84,164,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="208,67,159,86,157,81,207,62"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="199,114,164,114,164,109,199,109"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="207,160,157,141,159,136,208,155"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1backends_1_1postgresql__backend.html#a9e2f3043ce3cd9c28cb0cce6d1d8bf7b" title="Database&#45;specific shutdown logic." alt="" coords="5,163,164,217"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="198,193,164,193,164,187,198,187"/>
+</map>

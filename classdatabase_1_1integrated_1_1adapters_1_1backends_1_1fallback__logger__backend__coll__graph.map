@@ -1,0 +1,23 @@
+<map id="database::integrated::adapters::backends::fallback_logger_backend" name="database::integrated::adapters::backends::fallback_logger_backend">
+<area shape="rect" id="Node000001" title="Basic logger backend using standard C++ streams." alt="" coords="304,789,515,1084"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="5,519,157,714"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,722,171,725,238,789,305,848,302,852,234,793,167,729,165,726"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1integrated_1_1db__logger__config.html" title="Logger configuration." alt="" coords="181,507,387,727"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="329,726,348,773,343,775,324,728"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="245,371,323,437"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="287,437,287,490,281,490,281,437"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="219,235,349,315"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="287,328,287,371,281,371,281,328"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="411,584,495,649"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="452,650,434,773,429,773,446,649"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="520,584,621,649"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="558,651,501,767,496,776,492,773,496,764,553,649"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="499,364,642,444"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="573,458,573,583,568,583,568,458"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="502,235,639,315"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="573,328,573,364,568,364,568,328"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="489,120,652,185"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="573,199,573,235,568,235,568,199"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="521,5,620,71"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="573,85,573,120,568,120,568,85"/>
+</map>

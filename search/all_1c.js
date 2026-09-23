@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['v1_200_200_20release_202026_2004_0',['v1.0.0 Release (2026-04)',['../md_README.html#autotoc_md66',1,'']]],
+  ['validate_5fsession_1',['validate_session',['../classdatabase_1_1security_1_1access__control.html#ae37735a6a1a0626b6ce3b02097fea879',1,'database::security::access_control']]],
+  ['validate_5ftable_5faccess_2',['validate_table_access',['../classdatabase_1_1security_1_1query__security.html#ae77f81b55ba1c4b3d2ee92c2878dc997',1,'database::security::query_security']]],
+  ['value_3',['value',['../structdatabase_1_1integrated_1_1query__param.html#a9c4c85b9dc45d14cb4a5b9911c45296e',1,'database::integrated::query_param::value'],['../structdatabase_1_1query_1_1condition.html#a81034c5ac66449327b8d848dadb84eff',1,'database::query::condition::value'],['../classdatabase_1_1async_1_1result__type.html#a3672c9fec14c5c8b5a2117fc08063af8',1,'database::async::result_type::value() const'],['../classdatabase_1_1async_1_1result__type.html#a5d0b386899bc85e626a3d13bc47614fb',1,'database::async::result_type::value()'],['../classcommon_1_1Result.html#abaea7428b84a870826be2debcb416050',1,'common::Result::value()'],['../classcommon_1_1Result.html#a0682f11ed824e04b5a0b38aa0b8b7e76',1,'common::Result::value() const']]],
+  ['value_5f_4',['value_',['../classdatabase_1_1async_1_1result__type.html#a05d288d9570a4d0adaa6f5907f4aea6e',1,'database::async::result_type::value_'],['../classdatabase_1_1orm_1_1field__accessor.html#a1c19f47681b77c1a3ca9c7a776abb1c2',1,'database::orm::field_accessor::value_'],['../classdatabase_1_1query__condition.html#a641d620d90db2f0cc68e640349ecf45b',1,'database::query_condition::value_']]],
+  ['value_5fformatter_5',['value_formatter',['../classdatabase_1_1query_1_1value__formatter.html',1,'database::query::value_formatter'],['../classdatabase_1_1query_1_1value__formatter.html#a2c86cd34499c34e2b8f35a60877afe85',1,'database::query::value_formatter::value_formatter()']]],
+  ['value_5fformatter_2ecpp_6',['value_formatter.cpp',['../value__formatter_8cpp.html',1,'']]],
+  ['value_5fformatter_2eh_7',['value_formatter.h',['../value__formatter_8h.html',1,'']]],
+  ['value_5fformatter_5ftest_2ecpp_8',['value_formatter_test.cpp',['../value__formatter__test_8cpp.html',1,'']]],
+  ['value_5fto_5fsql_9',['value_to_sql',['../classdatabase_1_1core_1_1database__backend.html#af9c26f159b1a170152df7295ad6334c1',1,'database::core::database_backend']]],
+  ['value_5fto_5fstring_10',['value_to_string',['../namespacedatabase_1_1integrated.html#adb8299b4a69859d4ab1fe43032c48e35',1,'database::integrated']]],
+  ['valueformattertest_11',['ValueFormatterTest',['../classValueFormatterTest.html',1,'']]],
+  ['values_12',['values',['../classdatabase_1_1query__builder.html#ae19d2536c52338c328841b84a947c169',1,'database::query_builder::values(const std::map&lt; std::string, core::database_value &gt; &amp;data)'],['../classdatabase_1_1query__builder.html#ac4c1d89cc71f8eaab3ea9abec33f9136',1,'database::query_builder::values(const std::vector&lt; std::map&lt; std::string, core::database_value &gt; &gt; &amp;rows)']]],
+  ['vcpkg_13',['vcpkg',['../md_README.html#autotoc_md88',1,'Installation via vcpkg'],['../index.html#install_vcpkg',1,'vcpkg']]],
+  ['verify_5fall_5fexpectations_14',['verify_all_expectations',['../classdatabase_1_1testing_1_1mock__backend.html#a7537d814308f94b010d5fc803f3784fa',1,'database::testing::mock_backend::verify_all_expectations()'],['../classdatabase_1_1testing_1_1mock__database.html#af89b0bcfa35ed7b1cbf7e6b204a93d3f',1,'database::testing::mock_database::verify_all_expectations()']]],
+  ['verify_5fca_15',['verify_ca',['../namespacedatabase_1_1integrated.html#a1e55e85f9c797a548beaf9a6de1f3bcaa297343a3c30b6a87f6e3cb90effdbe2a',1,'database::integrated']]],
+  ['verify_5fcertificate_16',['verify_certificate',['../structdatabase_1_1security_1_1security__credentials.html#ac8cd34ca7897f85c857cfc9c33f82dee',1,'database::security::security_credentials']]],
+  ['verify_5ffull_17',['verify_full',['../namespacedatabase_1_1integrated.html#a1e55e85f9c797a548beaf9a6de1f3bcaaea55fc2bfa33afffe915a7cfc48dcb53',1,'database::integrated']]],
+  ['verify_5fpassword_18',['verify_password',['../classdatabase_1_1security_1_1credential__manager.html#a339d4b35f7d990780b1f6fd89ebaff2e',1,'database::security::credential_manager']]],
+  ['verify_5fserver_5fcertificate_19',['verify_server_certificate',['../classdatabase_1_1security_1_1connection__security.html#acef57dc990b9623884c26ff112e2da85',1,'database::security::connection_security']]],
+  ['version_20',['version',['../structdatabase_1_1protocol_1_1message__header.html#aa15c7381f21110aaad49e67fcca44e6c',1,'database::protocol::message_header']]],
+  ['via_20vcpkg_21',['Installation via vcpkg',['../md_README.html#autotoc_md88',1,'']]],
+  ['voidresult_22',['VoidResult',['../namespacedatabase.html#a97a23cf84a6d58f8c6cc94c5ab25cbfe',1,'database::VoidResult'],['../namespacecommon.html#a671313fc2e43367acf369b1379fd3fcc',1,'common::VoidResult']]],
+  ['vs_20proxy_23',['Connection Modes: Direct vs Proxy',['../tutorial_backends.html#be_modes',1,'']]],
+  ['vs_20raw_20sql_20—_20when_20should_20i_20use_20which_24',['Query builder vs raw SQL — when should I use which?',['../faq.html#faq_querybuilder',1,'']]]
+];

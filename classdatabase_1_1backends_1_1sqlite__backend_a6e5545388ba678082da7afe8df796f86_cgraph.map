@@ -1,0 +1,8 @@
+<map id="database::backends::sqlite_backend::begin_transaction" name="database::backends::sqlite_backend::begin_transaction">
+<area shape="rect" id="Node000001" title="Begin a transaction." alt="" coords="5,27,176,82"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1sqlite__backend.html#a7e9e1a779389b4fa00a6aa8bc4682d52" title="Execute a general SQL query (DDL, DML)" alt="" coords="224,5,455,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,42,210,38,211,43,177,47"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1backend__base.html#a520364bb2e027bc10bcaa1619390c9e7" title=" " alt="" coords="503,20,683,89"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="176,54,224,55,455,55,489,54,489,60,455,60,224,60,176,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="455,36,489,40,489,45,455,41"/>
+</map>

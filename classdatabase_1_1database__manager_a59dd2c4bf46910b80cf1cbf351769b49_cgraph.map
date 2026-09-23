@@ -1,0 +1,5 @@
+<map id="database::database_manager::create_query_builder" name="database::database_manager::create_query_builder">
+<area shape="rect" id="Node000001" title="Creates a query builder for the current database type." alt="" coords="5,5,185,60"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1database__manager.html#ac062ec7202362f83d152357b39ab51c1" title="Retrieves the current database type used by the manager." alt="" coords="233,13,424,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,30,219,30,219,35,186,35"/>
+</map>

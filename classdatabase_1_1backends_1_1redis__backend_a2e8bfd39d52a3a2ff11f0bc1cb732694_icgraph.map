@@ -1,0 +1,11 @@
+<map id="database::backends::redis_backend::execute_query" name="database::backends::redis_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="435,91,661,131"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1backends_1_1redis__backend.html#a4b2387f20aa7056bd952e4b371c5fda0" title="Begin a transaction." alt="" coords="212,5,379,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="469,90,378,61,380,56,471,85"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1backends_1_1redis__backend.html#a363020a319e94538f9a1af9a30194d21" title="Commit the current transaction." alt="" coords="205,84,386,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,114,386,114,386,109,421,109"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1backends_1_1redis__backend.html#a1747349a167dbf32f6037b135f2c9143" title="Rollback the current transaction." alt="" coords="204,163,387,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="471,138,385,165,383,160,469,133"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1backends_1_1redis__backend.html#a3068157c5503cf11fc85537e02c4e581" title="Database&#45;specific shutdown logic." alt="" coords="5,163,156,217"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="190,193,156,193,156,187,190,187"/>
+</map>

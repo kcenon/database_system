@@ -1,0 +1,15 @@
+<map id="database::orm::query_builder&lt; EntityType, typename &gt;" name="database::orm::query_builder&lt; EntityType, typename &gt;">
+<area shape="rect" id="Node000001" title="Template query builder for type&#45;safe ORM queries." alt="" coords="254,783,431,1197"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="165,611,360,691"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="275,691,293,766,287,767,269,692"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,133,184,533"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,510,228,585,233,595,229,598,223,588,182,513"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="208,301,357,366"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="281,380,267,557,265,610,260,610,261,557,275,380"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="271,5,294,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="285,71,285,284,280,284,280,71"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="406,618,485,683"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="438,684,413,768,408,766,433,683"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="401,293,532,373"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="466,387,450,618,445,618,460,387"/>
+</map>

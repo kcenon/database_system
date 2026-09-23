@@ -1,0 +1,26 @@
+<map id="database::integrated::adapters::backends::system_monitoring_backend" name="database::integrated::adapters::backends::system_monitoring_backend">
+<area shape="rect" id="Node000001" title="Monitoring backend using monitoring_system library." alt="" coords="444,648,669,1132"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="5,291,199,585"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,581,212,584,269,642,329,699,446,798,442,802,326,703,265,646,208,587,206,585"/>
+<area shape="rect" id="Node000003" href="$structdatabase_1_1integrated_1_1db__monitoring__config.html" title="Monitoring and metrics configuration." alt="" coords="223,321,429,555"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="388,554,439,654,434,656,383,557"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="287,148,365,213"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="329,214,329,305,323,305,323,214"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="261,5,391,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="329,99,329,148,323,148,323,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="453,405,537,471"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="502,471,524,631,519,632,497,471"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="562,391,746,485"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="647,486,615,632,610,631,641,485"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="590,148,739,213"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="663,227,662,237,657,390,652,390,657,237,657,227"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="713,13,736,78"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="716,73,688,134,683,132,711,71"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="783,148,904,213"/>
+<area shape="poly" id="edge12_Node000012_Node000009" title=" " alt="" coords="738,58,806,134,802,138,734,61"/>
+<area shape="rect" id="Node000010" href="$structdatabase_1_1integrated_1_1adapters_1_1database__metrics.html" title="Database&#45;specific metrics structure." alt="" coords="965,291,1167,585"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="967,573,955,587,891,652,821,712,751,766,685,813,682,808,748,762,818,708,887,648,951,584,963,569"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="770,398,941,478"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="832,480,681,707,676,704,827,477"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="848,227,856,398,851,398,843,227"/>
+</map>

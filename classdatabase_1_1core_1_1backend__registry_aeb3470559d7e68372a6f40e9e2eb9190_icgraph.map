@@ -1,0 +1,5 @@
+<map id="database::core::backend_registry::backend_count" name="database::core::backend_registry::backend_count">
+<area shape="rect" id="Node000001" title="Get number of registered backends." alt="" coords="123,5,305,45"/>
+<area shape="rect" id="Node000002" href="$backend__registry__test_8cpp.html#a9cdc9ae2b144b2b313013cc7373a19ea" title=" " alt="" coords="5,13,75,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,28,75,28,75,23,109,23"/>
+</map>

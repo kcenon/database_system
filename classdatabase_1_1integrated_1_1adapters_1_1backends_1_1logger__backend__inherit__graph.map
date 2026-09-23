@@ -1,0 +1,9 @@
+<map id="database::integrated::adapters::backends::logger_backend" name="database::integrated::adapters::backends::logger_backend">
+<area shape="rect" id="Node000001" title="Abstract base class for logger backends." alt="" coords="275,5,427,200"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1common__logger__backend.html" title="Logger backend using common_system&#39;s ILogger interface." alt="" coords="5,268,221,583"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,208,235,250,221,269,217,266,231,246,264,204"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1fallback__logger__backend.html" title="Basic logger backend using standard C++ streams." alt="" coords="245,248,456,603"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="353,213,353,248,348,248,348,213"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1null__logger__backend.html" title="No&#45;op logger backend." alt="" coords="481,318,663,533"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="437,202,470,246,515,316,510,319,466,250,433,205"/>
+</map>

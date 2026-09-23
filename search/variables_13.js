@@ -1,0 +1,13 @@
+var searchData=
+[
+  ['unhealthy_5fconnections_5fremoved_0',['unhealthy_connections_removed',['../structdatabase_1_1monitoring_1_1pool__metrics.html#af280e68f8688dfbffe6d5818ccf09818',1,'database::monitoring::pool_metrics']]],
+  ['uptime_1',['uptime',['../structdatabase_1_1integrated_1_1database__coordinator_1_1coordinator__stats.html#ad7155b93b281d494568ef1d578ac7d77',1,'database::integrated::database_coordinator::coordinator_stats']]],
+  ['user_5f_2',['user_',['../classdatabase_1_1integrated_1_1connection__string__builder.html#ad3c19741ae07335763949a18e928c05c',1,'database::integrated::connection_string_builder']]],
+  ['user_5fagent_3',['user_agent',['../structdatabase_1_1security_1_1audit__log__entry.html#a691f8ac3a99110e342d8a74ca66c2c88',1,'database::security::audit_log_entry']]],
+  ['user_5fid_4',['user_id',['../structdatabase_1_1security_1_1audit__log__entry.html#a9c378fe0939caaf72cd9d0e68f3d0fb4',1,'database::security::audit_log_entry::user_id'],['../structdatabase_1_1security_1_1access__control_1_1user__session.html#a91faf0f1dd60906ceb8b54acef91c7e1',1,'database::security::access_control::user_session::user_id'],['../structdatabase_1_1security_1_1security__monitor_1_1security__alert.html#a6e48618926bb22e9315b2ed464b75d4c',1,'database::security::security_monitor::security_alert::user_id']]],
+  ['user_5fquery_5fpatterns_5f_5',['user_query_patterns_',['../classdatabase_1_1security_1_1security__monitor.html#a081100a55b49c6ce3dccf197d2eeca9d',1,'database::security::security_monitor']]],
+  ['user_5froles_5f_6',['user_roles_',['../classdatabase_1_1security_1_1access__control.html#a9dec4e57ed9e6d04cbbf4c389ed8182f',1,'database::security::access_control']]],
+  ['username_7',['username',['../structdatabase_1_1core_1_1connection__config.html#af6f4b77abd316a147f0aa5c0b2ef9eb1',1,'database::core::connection_config::username'],['../structdatabase_1_1integrated_1_1database__config.html#af3cf15c9d9c27cffe6fbf2631d8631a8',1,'database::integrated::database_config::username'],['../structdatabase_1_1security_1_1security__credentials.html#acd2cfeb637d3c386d38f87076a72d0c8',1,'database::security::security_credentials::username'],['../classBenchmarkUser.html#a24b11bdcc268f31c93ce9aecda1f30b9',1,'BenchmarkUser::username'],['../classTestUser.html#ab9076f17af46393baacd6a5e54f48d3a',1,'TestUser::username']]],
+  ['using_5fthread_5fsystem_8',['using_thread_system',['../namespacedatabase_1_1async.html#ae514b2e1090d4a3f25b226a57288144d',1,'database::async']]],
+  ['utilization_5fpercent_9',['utilization_percent',['../structdatabase_1_1integrated_1_1unified__database__system_1_1pool__stats.html#a1d14fdf775f9563dba4b08481d82f904',1,'database::integrated::unified_database_system::pool_stats']]]
+];

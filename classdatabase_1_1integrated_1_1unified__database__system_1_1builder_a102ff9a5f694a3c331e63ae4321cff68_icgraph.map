@@ -1,0 +1,9 @@
+<map id="database::integrated::unified_database_system::builder::set_connection_string" name="database::integrated::unified_database_system::builder::set_connection_string">
+<area shape="rect" id="Node000001" title="Set the connection string." alt="" coords="313,27,539,82"/>
+<area shape="rect" id="Node000002" href="$namespacedatabase_1_1integrated.html#a0ff5f1966d9e976cd683413e5d85eaa3" title="Create a database with builder configuration." alt="" coords="108,5,265,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="300,42,265,38,266,32,300,37"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#a999f56b7107ee3cfd3c749095fcd91f5" title=" " alt="" coords="109,70,264,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,72,264,76,264,71,300,67"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,70,60,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="96,85,60,85,60,80,96,80"/>
+</map>

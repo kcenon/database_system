@@ -1,0 +1,5 @@
+<map id="demonstrate_chained_operations" name="demonstrate_chained_operations">
+<area shape="rect" id="Node000001" title="Demonstrates chaining operations with early return on failure." alt="" coords="5,5,168,45"/>
+<area shape="rect" id="Node000002" href="$error__handling_8cpp.html#a673f805efc47720638fe620a751d62b9" title="Helper to print a Result error." alt="" coords="216,13,307,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="database::postgres_manager::execute_query" name="database::postgres_manager::execute_query">
+<area shape="rect" id="Node000001" title="Executes a general SQL query (DDL, DML) on PostgreSQL." alt="" coords="697,69,888,109"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1postgres__manager.html#a1095f4360756649d7b6aaaf9d7ba2071" title="Begin a transaction." alt="" coords="431,5,641,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="698,69,616,48,617,43,699,63"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1postgres__manager.html#ac07c998eeaac444c59d0998df24c6ab8" title="Commit the current transaction." alt="" coords="423,69,649,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="684,92,649,92,649,87,684,87"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1postgres__manager.html#ad8f604c1697eb0a0453bd4ece866d9a4" title="Rollback the current transaction." alt="" coords="423,133,649,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="699,115,617,136,616,131,698,110"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1postgres__manager.html#a52165f58a278507160c813487af1ab4b" title="Shutdown the database backend gracefully." alt="" coords="216,133,375,173"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="409,156,375,156,375,151,409,151"/>
+<area shape="rect" id="Node000006" href="$classdatabase_1_1postgres__manager.html#a7cd71674e518a36723c3f5760a2fc225" title="Destructor." alt="" coords="5,126,168,181"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="202,156,168,156,168,151,202,151"/>
+</map>

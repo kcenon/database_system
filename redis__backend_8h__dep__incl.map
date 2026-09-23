@@ -1,0 +1,7 @@
+<map id="database/backends/redis_backend.h" name="database/backends/redis_backend.h">
+<area shape="rect" id="Node000001" title="Redis database backend plugin implementation." alt="" coords="100,5,283,45"/>
+<area shape="rect" id="Node000002" href="$redis__backend_8cpp.html" title=" " alt="" coords="5,93,188,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,57,119,95,116,91,158,53"/>
+<area shape="rect" id="Node000003" href="$redis__backend__test_8cpp.html" title=" " alt="" coords="212,93,363,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,53,268,91,264,95,221,57"/>
+</map>

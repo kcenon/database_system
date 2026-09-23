@@ -1,0 +1,5 @@
+<map id="database::integrated::adapters::backends::system_monitoring_backend" name="database::integrated::adapters::backends::system_monitoring_backend">
+<area shape="rect" id="Node000001" title="Monitoring backend using monitoring_system library." alt="" coords="5,348,231,932"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="21,5,215,300"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,314,121,348,115,348,115,314"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="database::integrated::connection_string_builder::user" name="database::integrated::connection_string_builder::user">
+<area shape="rect" id="Node000001" title="Set the username for authentication." alt="" coords="343,73,576,113"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="121,5,282,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,71,294,45,253,33,254,28,295,39,384,66"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#ac930fa3b92d6773ef1e058b24df36a88" title=" " alt="" coords="130,55,273,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="329,83,273,77,273,72,330,77"/>
+<area shape="rect" id="Node000005" href="$test__connection__string__builder_8cpp.html#af5ea2ff9a1a3b20926210e04dd2ad2fb" title=" " alt="" coords="108,104,295,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="329,107,295,111,295,105,329,102"/>
+<area shape="rect" id="Node000006" href="$test__connection__string__builder_8cpp.html#a4362948db6e585754ddbe679908f70a4" title=" " alt="" coords="126,153,277,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="378,119,295,143,250,156,249,151,294,138,377,114"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,37,109,44,77,63,51,82,48,78,74,58,107,40,125,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="117,83,61,91,60,86,116,77"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="99,105,60,99,61,94,99,99"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="129,152,107,143,76,126,49,108,52,104,78,121,109,138,131,147"/>
+</map>

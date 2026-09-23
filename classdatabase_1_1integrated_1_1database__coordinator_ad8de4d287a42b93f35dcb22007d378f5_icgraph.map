@@ -1,0 +1,5 @@
+<map id="database::integrated::database_coordinator::is_initialized" name="database::integrated::database_coordinator::is_initialized">
+<area shape="rect" id="Node000001" title="Check if coordinator is initialized." alt="" coords="229,5,400,60"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab830be22d551a6f2db6b558153a52647" title=" " alt="" coords="5,13,181,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,35,182,35,182,30,215,30"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="database::integrated::unified_database_system::get_config" name="database::integrated::unified_database_system::get_config">
+<area shape="rect" id="Node000001" title="Get current configuration." alt="" coords="277,5,473,60"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#a2d30b8da3b1ed05b91a769352340b216" title=" " alt="" coords="108,20,229,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,35,230,35,230,30,263,30"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,20,60,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,35,60,35,60,30,94,30"/>
+</map>

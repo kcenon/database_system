@@ -1,0 +1,11 @@
+<map id="database::integrated::convert_result" name="database::integrated::convert_result">
+<area shape="rect" id="Node000001" title="Convert core::database_result to query_result." alt="" coords="517,41,675,81"/>
+<area shape="rect" id="Node000002" href="$classdatabase_1_1integrated_1_1transaction__impl.html#a700c8c47ee54b76dcaf3f495b8e90068" title="Execute a query within the transaction." alt="" coords="271,5,469,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="504,49,469,44,470,39,504,44"/>
+<area shape="rect" id="Node000003" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1impl.html#a5b7bb2ff3ce3dfa41214c917806252b6" title=" " alt="" coords="272,70,468,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="504,79,469,84,468,79,503,73"/>
+<area shape="rect" id="Node000004" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1impl.html#a0537202f65f83329f9c05a1a3cd7fdb3" title=" " alt="" coords="16,30,212,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="258,83,212,75,213,70,259,77"/>
+<area shape="rect" id="Node000005" href="$classdatabase_1_1integrated_1_1unified__database__system_1_1impl.html#ae40046db6ee5d2322c0f619b5a24e43f" title=" " alt="" coords="5,109,223,163"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="259,117,223,122,222,117,258,112"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="database::monitoring::performance_summary" name="database::monitoring::performance_summary">
+<area shape="rect" id="Node000001" title="Aggregated performance metrics." alt="" coords="50,433,225,773"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="60,291,215,371"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,371,140,417,135,417,135,371"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,155,110,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,220,114,275,110,277,83,222"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,136,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="73,100,73,155,68,155,68,100"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="135,148,279,228"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="184,242,159,292,154,289,179,239"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="178,13,201,78"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="191,78,193,124,195,132,189,133,188,124,186,78"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="254,13,277,78"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="256,79,238,125,235,134,230,132,234,123,252,77"/>
+</map>

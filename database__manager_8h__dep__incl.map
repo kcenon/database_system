@@ -1,0 +1,27 @@
+<map id="database/database_manager.h" name="database/database_manager.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1187,5,1410,31"/>
+<area shape="rect" id="Node000002" href="$database__manager_8cpp.html" title=" " alt="" coords="5,93,243,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1173,23,993,28,764,38,510,55,255,81,173,96,172,91,254,76,509,50,764,33,993,23,1173,18"/>
+<area shape="rect" id="Node000003" href="$basic__connection_8cpp.html" title="Demonstrates basic database connection and simple query execution." alt="" coords="267,93,496,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1174,26,870,44,689,60,508,81,430,96,429,91,508,76,688,55,870,39,1173,21"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html" title="Demonstrates multi&#45;threaded database usage with independent database_manager instances." alt="" coords="521,86,682,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1174,28,950,46,822,61,695,81,663,89,662,83,694,76,821,56,949,41,1173,23"/>
+<area shape="rect" id="Node000005" href="$error__handling_8cpp.html" title="Demonstrates the Result&lt;T&gt; error handling pattern used throughout the database_system API." alt="" coords="707,93,917,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1206,35,930,81,861,96,860,91,929,76,1206,30"/>
+<area shape="rect" id="Node000006" href="$transaction__management_8cpp.html" title="Demonstrates transaction management with commit and rollback." alt="" coords="941,86,1104,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1249,37,1084,88,1083,83,1248,32"/>
+<area shape="rect" id="Node000007" href="$basic__usage_8cpp.html" title="Basic database operations example using database_manager." alt="" coords="1128,86,1272,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1277,42,1224,88,1220,84,1273,38"/>
+<area shape="rect" id="Node000008" href="$orm__framework__demo_8cpp.html" title="ORM framework demonstration with C++20 concepts&#45;based entities." alt="" coords="1297,86,1498,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1324,38,1377,84,1374,88,1320,42"/>
+<area shape="rect" id="Node000009" href="$performance__monitoring__demo_8cpp.html" title="Performance monitoring with real&#45;time metrics, analysis, and alerting." alt="" coords="1523,79,1709,133"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1355,32,1523,77,1522,82,1354,37"/>
+<area shape="rect" id="Node000010" href="$security__framework__demo_8cpp.html" title="Enterprise security framework with TLS, RBAC, audit logging, and threat detection." alt="" coords="1734,79,1890,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1424,30,1567,49,1722,76,1734,79,1733,84,1721,81,1567,54,1423,35"/>
+<area shape="rect" id="Node000011" href="$benchmark__tests_8cpp.html" title=" " alt="" coords="1915,93,2112,119"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1424,24,1648,43,1776,58,1903,76,1971,91,1970,96,1902,81,1775,63,1647,48,1423,29"/>
+<area shape="rect" id="Node000012" href="$integration__tests_8cpp.html" title=" " alt="" coords="2136,93,2331,119"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1424,19,1742,35,1934,52,2124,76,2193,91,2192,96,2124,81,1933,57,1742,41,1423,25"/>
+<area shape="rect" id="Node000013" href="$unit__tests_8cpp.html" title=" " alt="" coords="2355,93,2504,119"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1424,20,1907,39,2160,55,2264,65,2343,76,2398,91,2397,96,2342,81,2263,70,2159,61,1907,45,1423,25"/>
+</map>

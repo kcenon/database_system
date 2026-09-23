@@ -288,16 +288,18 @@ endif()
 if(USE_CONTAINER_SYSTEM)
     set(_DATABASE_CONTAINER_HANDLED FALSE)
 
-    if(_DATABASE_IS_UNIFIED_BUILD)
-        foreach(_candidate container_system "ContainerSystem::container")
-            if(TARGET ${_candidate})
-                target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
-                set(_DATABASE_CONTAINER_HANDLED TRUE)
-                message(STATUS "Database: Linked ${_candidate} target from unified build")
-                break()
-            endif()
-        endforeach()
-    endif()
+    # Prefer an already loaded target for both unified and installed-package
+    # builds. The central ecosystem profile preloads ContainerSystem::container,
+    # so falling through to source-directory probing would incorrectly disable
+    # an available installed dependency.
+    foreach(_candidate "ContainerSystem::container" container_system)
+        if(TARGET ${_candidate})
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
+            set(_DATABASE_CONTAINER_HANDLED TRUE)
+            message(STATUS "Database: Linked existing ${_candidate} target")
+            break()
+        endif()
+    endforeach()
 
     if(_DATABASE_CONTAINER_HANDLED)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)
@@ -400,6 +402,7 @@ if(USE_SQLITE)
     find_package(unofficial-sqlite3 CONFIG QUIET)
 
     if(unofficial-sqlite3_FOUND)
+        set(DATABASE_SQLITE_PACKAGE "unofficial-sqlite3" PARENT_SCOPE)
         target_link_libraries(${PROJECT_NAME}
             PUBLIC
                 unofficial::sqlite3::sqlite3
@@ -413,6 +416,7 @@ if(USE_SQLITE)
         if(PKG_CONFIG_FOUND)
             pkg_check_modules(SQLITE3 QUIET sqlite3)
             if(SQLITE3_FOUND)
+                set(DATABASE_SQLITE_PACKAGE "pkg-config" PARENT_SCOPE)
                 target_include_directories(${PROJECT_NAME} PUBLIC ${SQLITE3_INCLUDE_DIRS})
                 target_link_libraries(${PROJECT_NAME} PUBLIC ${SQLITE3_LIBRARIES})
                 target_compile_definitions(${PROJECT_NAME} PUBLIC USE_SQLITE)

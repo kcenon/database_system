@@ -61,6 +61,10 @@ option(USE_SQLITE "Enable SQLite support" OFF)
 option(USE_MONGODB "Enable MongoDB backend (EXPERIMENTAL - see docs/BACKENDS.md)" OFF)
 option(USE_REDIS "Enable Redis backend (EXPERIMENTAL - see docs/BACKENDS.md)" OFF)
 
+# Captures the SQLite provider used by the database target so the generated
+# package config only recreates dependencies that the exported target names.
+set(DATABASE_SQLITE_PACKAGE "")
+
 # Experimental backend warnings
 if(USE_MONGODB)
     message(WARNING

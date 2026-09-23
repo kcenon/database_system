@@ -60,7 +60,7 @@ database_system/
 │   ├── resilient/                 # 복원력 구현
 │   ├── integrated/                # 통합 시스템 구현
 │   └── adapters/                  # 어댑터 구현
-├── samples/                       # 예제 프로그램
+├── examples/tutorials/            # 학습용 예제 프로그램
 │   ├── basic_usage/               # 기본 연산
 │   ├── postgres_advanced/         # 고급 PostgreSQL
 │   ├── connection_pool_demo/      # 커넥션 풀링
@@ -633,7 +633,7 @@ monitor.set_monitoring_system(monitoring_system::instance());
 | PostgreSQL 고급 | `postgres_advanced` | `build/bin/samples/` |
 | 커넥션 풀 데모 | `connection_pool_demo` | `build/bin/samples/` |
 | ORM 예제 | `orm_examples` | `build/bin/samples/` |
-| 통합 시스템 | `unified_basic_usage` | `build/bin/samples/integrated/` |
+| 통합 시스템 | `unified_basic_usage` | `build/bin/examples/tutorials/integrated/` |
 
 ---
 

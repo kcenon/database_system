@@ -476,7 +476,7 @@ int main() {
 }
 ```
 
-[🚀 More Examples →](samples/)
+[🚀 More Examples →](examples/tutorials/)
 
 ---
 
@@ -576,7 +576,7 @@ graph TD
 ### Getting Started
 - 📖 [Getting Started Guide](docs/README.md)
 - 🔧 [Build Guide](docs/guides/BUILD_GUIDE.md)
-- 🚀 [Quick Start Examples](samples/)
+- 🚀 [Quick Start Examples](examples/tutorials/)
 
 ### Core Documentation
 - 📚 [Detailed Features](docs/FEATURES.md) - Backend details, ORM, query builders

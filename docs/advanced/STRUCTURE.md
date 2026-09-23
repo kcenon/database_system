@@ -115,7 +115,7 @@ database_system/
 │   └── scenarios/                      # Integration scenarios
 │       ├── connection_management_test.cpp # Connection pool tests
 │       └── query_execution_test.cpp    # Query execution tests
-├── samples/                            # Example applications
+├── examples/tutorials/                 # Example applications
 │   ├── async_operations_demo.cpp       # Async operations example
 │   ├── basic_usage.cpp                 # Basic database operations
 │   ├── connection_pool_demo.cpp        # Connection pooling demo
@@ -161,7 +161,7 @@ database_system/
 | `benchmarks/` | Performance tests | Connection pool, query, transaction benchmarks |
 | `docs/` | Documentation | API reference, architecture, guides |
 | `integration_tests/` | Integration tests | Multi-component testing scenarios |
-| `samples/` | Example code | Usage demonstrations |
+| `examples/tutorials/` | Example code | Usage demonstrations |
 | `tests/` | Unit tests | Component-level testing |
 
 ---

@@ -158,7 +158,7 @@ if (result.is_ok()) {
 - [Architecture Guide](../ARCHITECTURE.md) - System design and patterns
 - [Integration Guide](./INTEGRATION.md) - Advanced integration scenarios
 - [FAQ](./FAQ.md) - Frequently asked questions
-- [Examples](../../samples/) - Complete sample applications
+- [Examples](../../examples/tutorials/) - Complete tutorial applications
 
 ## Common Issues
 

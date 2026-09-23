@@ -54,7 +54,7 @@ ninja  # or make
 
 ## 기본 사용법 샘플
 
-**파일**: `samples/basic_usage.cpp`
+**파일**: `examples/tutorials/basic_usage.cpp`
 
 database_manager 싱글톤을 사용한 기본 데이터베이스 작업을 보여줍니다.
 
@@ -234,7 +234,7 @@ PostgreSQL support not compiled. Connection: host=localhost port=...
 
 ## PostgreSQL 고급 샘플
 
-**파일**: `samples/postgres_advanced.cpp`
+**파일**: `examples/tutorials/postgres_advanced.cpp`
 
 PostgreSQL 전용 고급 기능 및 최적화를 보여줍니다.
 
@@ -299,7 +299,7 @@ auto products = db_manager.select_query(
 
 ## 연결 풀 데모
 
-**파일**: `samples/connection_pool_demo.cpp`
+**파일**: `examples/connection_pool_demo.cpp`
 
 연결 풀링 기능에 대한 종합적인 데모입니다.
 

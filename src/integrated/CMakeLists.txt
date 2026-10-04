@@ -214,20 +214,23 @@ endif()
 
 # monitoring_system
 if(USE_MONITORING_SYSTEM)
-    # Try to find monitoring_system library
-    if(TARGET monitoring_system::monitoring_system)
-        if(INTEGRATED_DB_SOURCES)
-            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system::monitoring_system)
-        else()
-            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system::monitoring_system)
+    set(_INTEGRATED_MONITORING_TARGET "")
+    foreach(_candidate monitoring_system::monitoring_system kcenon::monitoring monitoring_system)
+        if(TARGET ${_candidate})
+            set(_INTEGRATED_MONITORING_TARGET ${_candidate})
+            break()
         endif()
-    elseif(TARGET monitoring_system)
+    endforeach()
+
+    # Prefer the imported package target so the dependency is retained in the
+    # installed integrated_database link interface.
+    if(_INTEGRATED_MONITORING_TARGET)
         if(INTEGRATED_DB_SOURCES)
-            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC monitoring_system)
+            target_link_libraries(${INTEGRATED_DB_TARGET} PUBLIC ${_INTEGRATED_MONITORING_TARGET})
         else()
-            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE monitoring_system)
+            target_link_libraries(${INTEGRATED_DB_TARGET} INTERFACE ${_INTEGRATED_MONITORING_TARGET})
         endif()
-        message(STATUS "Integrated DB: Linked with monitoring_system target")
+        message(STATUS "Integrated DB: Linked with ${_INTEGRATED_MONITORING_TARGET} target")
     else()
         # Try to link directly with monitoring_system library
         find_system_dependency_library(monitoring_system)
@@ -287,10 +290,10 @@ endif()
 # Installation
 ##################################################
 
-# Only add to export set when database_system is the top-level project.
-# In subdirectory builds (e.g., via pacs_system), the parent project handles
-# installation and the transitive dependencies (thread_base, etc.) may not
-# be in any export set.
+# Only add to the export set when database_system is the top-level project.
+# src/CMakeLists.txt declares its own project(), so PROJECT_SOURCE_DIR
+# points at src/ here and cannot identify a top-level database_system
+# build.
 if(CMAKE_SOURCE_DIR STREQUAL database_system_SOURCE_DIR)
     install(TARGETS ${INTEGRATED_DB_TARGET}
         EXPORT database_system-targets

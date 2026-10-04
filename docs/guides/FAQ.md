@@ -1053,7 +1053,7 @@ for (const auto& [query_hash, metric] : query_metrics) {
 **A:** Resources:
 
 - **Documentation**: [Full documentation](../../README.md)
-- **Examples**: [samples/](../../samples/)
+- **Examples**: [examples/tutorials/](../../examples/tutorials/)
 - **Architecture**: [docs/ARCHITECTURE.md](../ARCHITECTURE.md)
 - **API Reference**: [docs/API_REFERENCE.md](../API_REFERENCE.md)
 - **Issues**: [GitHub Issues](https://github.com/kcenon/database_system/issues)

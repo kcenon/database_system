@@ -299,7 +299,7 @@ auto products = db_manager.select_query(
 
 ## 연결 풀 데모
 
-**파일**: `samples/connection_pool_demo.cpp`
+**파일**: `examples/connection_pool_demo.cpp`
 
 연결 풀링 기능에 대한 종합적인 데모입니다.
 

@@ -309,17 +309,16 @@ endif()
 if(USE_CONTAINER_SYSTEM)
     set(_DATABASE_CONTAINER_HANDLED FALSE)
 
-    # Installed canonical targets carry their public include path too.
-    if(TARGET container_system::container_system OR _DATABASE_IS_UNIFIED_BUILD)
-        foreach(_candidate container_system::container_system container_system "ContainerSystem::container")
-            if(TARGET ${_candidate})
-                target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
-                set(_DATABASE_CONTAINER_HANDLED TRUE)
-                message(STATUS "Database: Linked ${_candidate} target from unified build")
-                break()
-            endif()
-        endforeach()
-    endif()
+    # Accept both canonical and historical installed targets before probing
+    # sibling source directories; imported targets carry their include paths.
+    foreach(_candidate container_system::container_system "ContainerSystem::container" container_system)
+        if(TARGET ${_candidate})
+            target_link_libraries(${PROJECT_NAME} PUBLIC ${_candidate})
+            set(_DATABASE_CONTAINER_HANDLED TRUE)
+            message(STATUS "Database: Linked existing ${_candidate} target")
+            break()
+        endif()
+    endforeach()
 
     if(_DATABASE_CONTAINER_HANDLED)
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_CONTAINER_SYSTEM)

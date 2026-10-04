@@ -299,7 +299,7 @@ auto products = db_manager.select_query(
 
 ## Connection Pool Demo
 
-**File**: `samples/connection_pool_demo.cpp`
+**File**: `examples/connection_pool_demo.cpp`
 
 Comprehensive demonstration of connection pooling capabilities.
 

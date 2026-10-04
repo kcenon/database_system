@@ -58,7 +58,7 @@ database_system/
 │   ├── resilient/                 # Resilient implementations
 │   ├── integrated/                # Unified system implementations
 │   └── adapters/                  # Adapter implementations
-├── samples/                       # Example programs
+├── examples/tutorials/            # Focused example programs
 │   ├── basic_usage/               # Basic operations
 │   ├── postgres_advanced/         # Advanced PostgreSQL
 │   ├── connection_pool_demo/      # Connection pooling

@@ -97,7 +97,7 @@ WARN_LOGFILE           =
 # Input directories for Database System
 INPUT                  = ./src \
                          ./include \
-                         ./samples \
+                         ./examples/tutorials \
                          ./examples \
                          ./tests \
                          ./README.md \
@@ -131,7 +131,7 @@ EXCLUDE_PATTERNS       = */CMakeFiles/* \
                          */_deps/* \
                          */node_modules/*
 EXCLUDE_SYMBOLS        =
-EXAMPLE_PATH           = ./samples \
+EXAMPLE_PATH           = ./examples/tutorials \
                          ./examples
 EXAMPLE_PATTERNS       = *.cpp \
                          *.h

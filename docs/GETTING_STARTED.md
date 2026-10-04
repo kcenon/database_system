@@ -428,7 +428,7 @@ auto result = db->execute("SELECT * FROM users");
   and adapter patterns.
 - **[Backends](BACKENDS.md)** -- Backend-specific configuration and feature
   matrix.
-- **[samples/](../samples/)** -- Runnable example programs covering all
+- **[examples/tutorials/](../examples/tutorials/)** -- Runnable example programs covering all
   features.
 - **[Benchmarks](BENCHMARKS.md)** -- Performance data for query builders,
   connection pools, and backends.

@@ -181,6 +181,12 @@ if(BUILD_WITH_COMMON_SYSTEM)
             target_include_directories(${PROJECT_NAME} PUBLIC
                 $<BUILD_INTERFACE:${common_system_INCLUDE_DIR}>
             )
+            # The installed package resolves common via find_dependency().
+            # Retain that public dependency even when this build only found
+            # common's source headers and did not create an imported target.
+            target_link_libraries(${PROJECT_NAME} PUBLIC
+                $<INSTALL_INTERFACE:kcenon::common_system>
+            )
             target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_WITH_COMMON_SYSTEM KCENON_HAS_COMMON_SYSTEM=1)
             message(STATUS "Database: common_system integration enabled")
         else()

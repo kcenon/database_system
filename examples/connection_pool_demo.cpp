@@ -31,10 +31,10 @@
 #include <mutex>
 #include <variant>
 
-#include "database/database_manager.h"
-#include "database/core/database_context.h"
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/core/database_context.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 static std::mutex cout_mutex;
 

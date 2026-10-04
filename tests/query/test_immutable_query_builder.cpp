@@ -11,9 +11,9 @@
 #include <gtest/gtest.h>
 #include <string>
 
-#include "database/query/immutable_query_builder.h"
+#include <kcenon/database/query/immutable_query_builder.h>
 
-using namespace database;
+using namespace kcenon::database;
 
 //=============================================================================
 // immutable_query_builder Tests

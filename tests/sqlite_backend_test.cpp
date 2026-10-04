@@ -21,12 +21,12 @@
 #include <thread>
 #include <vector>
 
-#include "database/backends/sqlite_backend.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/backends/sqlite_backend.h>
+#include <kcenon/database/core/database_backend.h>
 
-using namespace database;
-using namespace database::backends;
-using namespace database::core;
+using namespace kcenon::database;
+using namespace kcenon::database::backends;
+using namespace kcenon::database::core;
 
 /**
  * @class SQLiteBackendTest
@@ -113,6 +113,23 @@ TEST_F(SQLiteBackendTest, ShutdownAfterConnection) {
   EXPECT_TRUE(connectToMemory());
   EXPECT_TRUE(backend_->shutdown().is_ok());
   EXPECT_FALSE(backend_->is_initialized());
+#else
+  GTEST_SKIP() << "SQLite support not compiled";
+#endif
+}
+
+TEST_F(SQLiteBackendTest, DestructionClosesInitializedConnection) {
+#ifdef USE_SQLITE
+  auto backend = std::make_unique<sqlite_backend>();
+  connection_config config;
+  config.database = ":memory:";
+  ASSERT_TRUE(backend->initialize(config).is_ok());
+  ASSERT_TRUE(backend->is_initialized());
+
+  // No explicit shutdown: the concrete destructor must close the connection
+  // before sqlite_mutex_ and the other derived members are destroyed.
+  backend.reset();
+  SUCCEED();
 #else
   GTEST_SKIP() << "SQLite support not compiled";
 #endif

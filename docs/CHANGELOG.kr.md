@@ -257,7 +257,7 @@ category: "PROJ"
   - `integration_tests/scenarios/connection_management_test.cpp` 제거
   - `benchmarks/connection_pool_bench.cpp` 제거
   - `samples/connection_pool_demo.cpp` 제거
-  - `samples/migration/connection_pool_v2_demo.cpp` 제거
+  - `examples/tutorials/migration/connection_pool_v2_demo.cpp` 제거
 
 - **마이그레이션 필요**: 프로덕션 배포에는 database_server를 통한 ProxyMode 사용
   - 마이그레이션 가이드: `docs/migration/proxy-mode.md`

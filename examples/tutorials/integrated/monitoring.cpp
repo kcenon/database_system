@@ -17,13 +17,13 @@
  *   ./monitoring [connection_string]
  */
 
-#include "integrated/unified_database_system.h"
+#include <kcenon/database/integrated/unified_database_system.h>
 #include <iostream>
 #include <iomanip>
 #include <thread>
 #include <chrono>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 using namespace std::chrono;
 
 void print_header(const std::string& title) {

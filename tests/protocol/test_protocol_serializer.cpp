@@ -13,9 +13,9 @@
 #include <vector>
 #include <map>
 
-#include "database/protocol/database_protocol.h"
+#include <kcenon/database/protocol/database_protocol.h>
 
-using namespace database::protocol;
+using namespace kcenon::database::protocol;
 
 //=============================================================================
 // message_header Tests

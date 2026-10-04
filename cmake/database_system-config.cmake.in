@@ -17,11 +17,17 @@ find_dependency(Threads REQUIRED)
 # Backend-specific dependencies (configured at build time)
 if(@USE_POSTGRESQL@)
     find_dependency(libpqxx CONFIG)
-    find_dependency(OpenSSL)
+endif()
+if(@USE_OPENSSL@)
+    find_dependency(OpenSSL REQUIRED)
 endif()
 
-if("@DATABASE_SQLITE_PACKAGE@" STREQUAL "unofficial-sqlite3")
-    find_dependency(unofficial-sqlite3 CONFIG REQUIRED)
+if(@USE_SQLITE@)
+    if(@DATABASE_SQLITE_VCPKG@)
+        find_dependency(unofficial-sqlite3 CONFIG REQUIRED)
+    else()
+        find_dependency(SQLite3 REQUIRED)
+    endif()
 endif()
 
 if(@USE_MONGODB@)
@@ -35,13 +41,15 @@ endif()
 
 # Ecosystem dependencies
 find_dependency(common_system CONFIG REQUIRED)
+if(@USE_THREAD_SYSTEM@)
+    find_dependency(thread_system CONFIG REQUIRED)
+endif()
+if(@USE_MONITORING_SYSTEM@)
+    find_dependency(monitoring_system CONFIG REQUIRED)
+endif()
 
 if(@USE_CONTAINER_SYSTEM@)
     find_dependency(container_system CONFIG REQUIRED)
-endif()
-
-if(@USE_MONITORING_SYSTEM@)
-    find_dependency(monitoring_system CONFIG REQUIRED)
 endif()
 
 # Include targets (may not exist if install(EXPORT) was skipped in subdirectory builds)
@@ -62,7 +70,7 @@ set(database_system_FOUND TRUE)
 
 # Provide information about the package
 set(database_system_VERSION @PROJECT_VERSION@)
-set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
+set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
 set(database_system_LIBRARIES database_system::database_system)
 
 message(STATUS "Found database_system: ${database_system_VERSION}")

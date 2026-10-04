@@ -5,7 +5,7 @@
 #include "mock_backend.h"
 #include <algorithm>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // mock_backend implementation
 mock_backend::mock_backend()
@@ -296,4 +296,4 @@ mock_backend mock_backend_builder::build() {
     return std::move(*mock_);
 }
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

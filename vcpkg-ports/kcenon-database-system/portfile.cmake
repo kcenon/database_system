@@ -16,8 +16,11 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
         mongodb     USE_MONGODB
         redis       USE_REDIS
         ecosystem   USE_THREAD_SYSTEM
+        ecosystem   KCENON_WITH_THREAD_SYSTEM
         ecosystem   USE_MONITORING_SYSTEM
+        ecosystem   KCENON_WITH_MONITORING_SYSTEM
         ecosystem   USE_CONTAINER_SYSTEM
+        ecosystem   KCENON_WITH_CONTAINER_SYSTEM
         ecosystem   BUILD_INTEGRATED_DATABASE
 )
 

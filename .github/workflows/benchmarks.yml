@@ -5,13 +5,13 @@ on:
     branches: [ main, phase-* ]
     paths:
       - 'benchmarks/**'
-      - 'database/**'
+      - 'src/**'
       - '.github/workflows/benchmarks.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'benchmarks/**'
-      - 'database/**'
+      - 'src/**'
   workflow_dispatch:
     inputs:
       save_baseline:

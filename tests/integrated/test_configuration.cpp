@@ -13,14 +13,14 @@
  * - Struct composition
  */
 
-#include "integrated/core/configuration.h"
+#include <kcenon/database/integrated/core/configuration.h>
 
 #include <cassert>
 #include <chrono>
 #include <iostream>
 #include <string>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 /**
  * @brief Test default configuration values

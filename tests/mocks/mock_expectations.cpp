@@ -6,7 +6,7 @@
 #include "mock_database.h"
 #include <cstdint>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // expectation implementation
 expectation::expectation()
@@ -177,4 +177,4 @@ expectation_builder& expectation_builder::any_times() {
     return *this;
 }
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

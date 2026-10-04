@@ -13,13 +13,13 @@
  * integration test suite instead.
  */
 
-#include "../../database/integrated/adapters/monitoring_adapter.h"
+#include <kcenon/database/integrated/adapters/monitoring_adapter.h>
 #include <chrono>
 #include <iostream>
 #include <cassert>
 
-using namespace database::integrated;
-using namespace database::integrated::adapters;
+using namespace kcenon::database::integrated;
+using namespace kcenon::database::integrated::adapters;
 
 // Test result tracking
 int tests_passed = 0;

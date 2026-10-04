@@ -20,11 +20,11 @@
  *   ./basic_usage "host=localhost dbname=testdb user=testuser password=testpass"
  */
 
-#include "integrated/unified_database_system.h"
+#include <kcenon/database/integrated/unified_database_system.h>
 #include <iostream>
 #include <iomanip>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 void print_header(const std::string& title) {
     std::cout << "\n" << std::string(60, '=') << "\n";

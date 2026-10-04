@@ -9,13 +9,13 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "database/core/database_backend.h"
-#include "database/database_types.h"
-#include "database/query_builder.h"
+#include <kcenon/database/core/database_backend.h>
+#include <kcenon/database/database_types.h>
+#include <kcenon/database/query_builder.h>
 #include <memory>
 #include <vector>
 
-using namespace database;
+using namespace kcenon::database;
 
 // Mock database for benchmarking
 class mock_transaction_database : public core::database_backend {

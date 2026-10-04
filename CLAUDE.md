@@ -9,7 +9,7 @@ interface with zero-configuration setup and RAII-based resource management.
 ## Architecture
 
 ```
-database/
+src/
   core/           - Backend interface, CRTP base, backend_registry, concepts
   backends/       - postgresql, sqlite, mongodb, redis implementations
   query/          - immutable_query_builder (thread-safe, functional style)

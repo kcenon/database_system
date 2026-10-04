@@ -23,12 +23,12 @@
 #include <thread>
 #include <vector>
 
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/database_backend.h>
 #include "mocks/mock_backend.h"
 
-using namespace database;
-using namespace database::core;
-using namespace database::testing;
+using namespace kcenon::database;
+using namespace kcenon::database::core;
+using namespace kcenon::database::testing;
 
 // =============================================================================
 // Test Fixture

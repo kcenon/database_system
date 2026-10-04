@@ -9,7 +9,7 @@
  * Tests both common_system logging integration and fallback modes.
  */
 
-#include "../../database/integrated/adapters/logger_adapter.h"
+#include <kcenon/database/integrated/adapters/logger_adapter.h>
 
 #include <chrono>
 #include <filesystem>
@@ -18,8 +18,8 @@
 #include <thread>
 #include <vector>
 
-using namespace database::integrated;
-using namespace database::integrated::adapters;
+using namespace kcenon::database::integrated;
+using namespace kcenon::database::integrated::adapters;
 
 namespace fs = std::filesystem;
 

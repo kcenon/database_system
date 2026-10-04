@@ -5,7 +5,7 @@
 #include "mock_backend_expectations.h"
 #include "mock_backend.h"
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // backend_expectation implementation
 backend_expectation::backend_expectation()
@@ -191,4 +191,4 @@ backend_expectation_builder& backend_expectation_builder::any_times() {
     return *this;
 }
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

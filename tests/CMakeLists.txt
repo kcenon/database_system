@@ -69,7 +69,12 @@ message(STATUS "Mock framework library configured (DB-014)")
 if(GTest_FOUND OR gtest_FOUND)
     # Create unit test executable
     add_executable(database_unit_tests
-        unit_tests.cpp
+        test_database.cpp
+        test_orm.cpp
+        test_monitoring.cpp
+        test_security.cpp
+        test_async.cpp
+        test_query_builder.cpp
     )
 
     # Link dependencies - handle different target names
@@ -202,6 +207,50 @@ if(GTest_FOUND OR gtest_FOUND)
     )
 
     message(STATUS "SQLite backend tests configured (DB-001)")
+endif()
+
+##################################################
+# Connection Pool Tests (Issue #568)
+##################################################
+
+if(GTest_FOUND OR gtest_FOUND)
+    add_executable(connection_pool_test
+        connection_pool_test.cpp
+    )
+
+    if(GTest_FOUND)
+        target_link_libraries(connection_pool_test PRIVATE
+            database
+            GTest::gtest
+            GTest::gtest_main
+            Threads::Threads
+        )
+    else()
+        target_link_libraries(connection_pool_test PRIVATE
+            database
+            gtest
+            gtest_main
+            Threads::Threads
+        )
+    endif()
+
+    set_target_properties(connection_pool_test PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+    apply_test_compiler_options(connection_pool_test)
+
+    add_test(NAME ConnectionPoolTests COMMAND connection_pool_test)
+
+    gtest_discover_tests(connection_pool_test
+        PROPERTIES
+            TIMEOUT ${TEST_TIMEOUT}
+        DISCOVERY_TIMEOUT 60
+    )
+
+    message(STATUS "Connection pool tests configured (Issue #568)")
 endif()
 
 ##################################################

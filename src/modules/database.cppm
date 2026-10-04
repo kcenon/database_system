@@ -13,7 +13,7 @@
  * @code
  * import kcenon.database;
  *
- * using namespace database;
+ * using namespace kcenon::database;
  *
  * // Create database context and manager
  * auto context = std::make_shared<database_context>();
@@ -63,7 +63,7 @@ export import :query;
 // Tier 3: Backend implementations (optional, depends on build configuration)
 export import :backends;
 
-export namespace database {
+export namespace kcenon::database {
 
 /**
  * @brief Version information for database_system module.
@@ -77,4 +77,4 @@ struct module_version {
     static constexpr const char* module_name = "kcenon.database";
 };
 
-} // namespace database
+} // namespace kcenon::database

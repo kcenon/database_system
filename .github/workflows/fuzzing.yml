@@ -1,0 +1,106 @@
+name: Fuzzing
+
+on:
+  schedule:
+    # Weekly run, Monday 03:17 UTC (off-peak).
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      max_total_time:
+        description: 'Seconds to run each fuzzer'
+        required: false
+        default: '120'
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    name: ${{ matrix.fuzzer }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        fuzzer: [sql_value_formatter_fuzzer, sql_query_builder_fuzzer]
+
+    steps:
+      - name: Checkout database_system
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          path: database_system
+
+      - name: Checkout common_system
+        uses: actions/checkout@v6
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang-18 libfmt-dev
+
+      - name: Set up compiler
+        run: |
+          echo "CC=clang-18" >> $GITHUB_ENV
+          echo "CXX=clang++-18" >> $GITHUB_ENV
+
+      - name: Build and install common_system
+        run: |
+          cd common_system
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_UNIT_TEST=OFF \
+            -DCMAKE_C_COMPILER=clang-18 -DCMAKE_CXX_COMPILER=clang++-18
+          cmake --build build --config Release
+          sudo cmake --install build --prefix /usr/local
+
+      - name: Configure (BUILD_FUZZERS=ON)
+        run: |
+          cd database_system
+          cmake -B build-fuzz -S . \
+            -GNinja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_COMPILER=clang-18 \
+            -DCMAKE_CXX_COMPILER=clang++-18 \
+            -DBUILD_FUZZERS=ON \
+            -DUSE_UNIT_TEST=OFF \
+            -DBUILD_DATABASE_SAMPLES=OFF \
+            -DDATABASE_BUILD_INTEGRATION_TESTS=OFF
+
+      - name: Build fuzzer
+        run: |
+          cd database_system
+          cmake --build build-fuzz --target ${{ matrix.fuzzer }} -j
+
+      - name: Run fuzzer
+        run: |
+          cd database_system
+          MAX_TIME="${{ github.event.inputs.max_total_time || '120' }}"
+          ./build-fuzz/fuzz/${{ matrix.fuzzer }} \
+            -max_total_time="${MAX_TIME}" \
+            -print_final_stats=1 \
+            fuzz/corpus 2>&1 | tee fuzz_${{ matrix.fuzzer }}.log
+
+      - name: Upload crash artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: fuzz-crashes-${{ matrix.fuzzer }}
+          path: |
+            database_system/crash-*
+            database_system/leak-*
+            database_system/timeout-*
+            database_system/fuzz_${{ matrix.fuzzer }}.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: fuzz-log-${{ matrix.fuzzer }}
+          path: database_system/fuzz_${{ matrix.fuzzer }}.log
+          if-no-files-found: ignore
+          retention-days: 7

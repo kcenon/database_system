@@ -23,12 +23,12 @@
 #include <thread>
 #include <memory>
 #include <random>
-#include "database/database_manager.h"
-#include "database/core/database_context.h"
-#include "database/monitoring/performance_monitor.h"
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/core/database_context.h>
+#include <kcenon/database/monitoring/performance_monitor.h>
 
-using namespace database;
-using namespace database::monitoring;
+using namespace kcenon::database;
+using namespace kcenon::database::monitoring;
 
 void demonstrate_basic_metrics(std::shared_ptr<database_context> context) {
     std::cout << "=== Basic Performance Metrics Demonstration ===\n";

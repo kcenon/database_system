@@ -14,11 +14,11 @@
 #include <atomic>
 #include <thread>
 
-#include "database/monitoring/performance_monitor.h"
-#include "database/monitoring/pool_metrics.h"
+#include <kcenon/database/monitoring/performance_monitor.h>
+#include <kcenon/database/monitoring/pool_metrics.h>
 
-using namespace database;
-using namespace database::monitoring;
+using namespace kcenon::database;
+using namespace kcenon::database::monitoring;
 
 //=============================================================================
 // Helper: create a query_metrics with given parameters

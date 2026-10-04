@@ -18,10 +18,10 @@
 #include <cassert>
 
 // Include only necessary protocol headers
-#include "../database/protocol/database_protocol.h"
-#include "../database/protocol/database_protocol_container.h"
+#include <kcenon/database/protocol/database_protocol.h>
+#include <kcenon/database/protocol/database_protocol_container.h>
 
-using namespace database::protocol;
+using namespace kcenon::database::protocol;
 
 // Simple assertion macro
 #define TEST_ASSERT(condition, message) \

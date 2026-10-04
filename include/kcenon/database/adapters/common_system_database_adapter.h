@@ -19,7 +19,7 @@
 #include <mutex>
 #include <string>
 
-#include "../config/feature_flags.h"
+#include <kcenon/database/config/feature_flags.h>
 
 #if KCENON_HAS_COMMON_SYSTEM
 
@@ -27,8 +27,8 @@
 #include <kcenon/common/patterns/result.h>
 
 // Include database_system headers
-#include "database/database_manager.h"
-#include "database/core/database_context.h"
+#include <kcenon/database/database_manager.h>
+#include <kcenon/database/core/database_context.h>
 
 namespace kcenon::database::adapters {
 

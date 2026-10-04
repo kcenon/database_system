@@ -31,24 +31,24 @@ module;
 #include <vector>
 
 // Include core headers
-#include "database/database_types.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/database_types.h>
+#include <kcenon/database/core/database_backend.h>
 
 // Conditionally include backend headers based on configuration
 #ifdef USE_POSTGRESQL
-#include "database/backends/postgresql_backend.h"
+#include <kcenon/database/backends/postgresql_backend.h>
 #endif
 
 #ifdef USE_SQLITE
-#include "database/backends/sqlite_backend.h"
+#include <kcenon/database/backends/sqlite_backend.h>
 #endif
 
 #ifdef USE_MONGODB
-#include "database/backends/mongodb_backend.h"
+#include <kcenon/database/backends/mongodb_backend.h>
 #endif
 
 #ifdef USE_REDIS
-#include "database/backends/redis_backend.h"
+#include <kcenon/database/backends/redis_backend.h>
 #endif
 
 export module kcenon.database:backends;
@@ -60,12 +60,12 @@ import kcenon.common;
 // ============================================================================
 
 #ifdef USE_POSTGRESQL
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export PostgreSQL backend
 using ::database::backends::postgresql_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -73,12 +73,12 @@ using ::database::backends::postgresql_backend;
 // ============================================================================
 
 #ifdef USE_SQLITE
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export SQLite backend
 using ::database::backends::sqlite_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -86,12 +86,12 @@ using ::database::backends::sqlite_backend;
 // ============================================================================
 
 #ifdef USE_MONGODB
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export MongoDB backend
 using ::database::backends::mongodb_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif
 
 // ============================================================================
@@ -99,10 +99,10 @@ using ::database::backends::mongodb_backend;
 // ============================================================================
 
 #ifdef USE_REDIS
-export namespace database::backends {
+export namespace kcenon::database::backends {
 
 // Re-export Redis backend
 using ::database::backends::redis_backend;
 
-} // namespace database::backends
+} // namespace kcenon::database::backends
 #endif

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/database_backend.h>
 #include <cstdint>
 #include <string>
 #include <functional>
@@ -12,7 +12,7 @@
 #include <optional>
 #include <stdexcept>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 // Forward declaration
 class mock_database;
@@ -116,4 +116,4 @@ public:
         : std::runtime_error(message) {}
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

@@ -12,11 +12,11 @@
  * query execution, async operations, monitoring, and configuration.
  */
 
-#include "integrated/unified_database_system.h"
+#include <kcenon/database/integrated/unified_database_system.h>
 #include <iostream>
 #include <iomanip>
 
-using namespace database::integrated;
+using namespace kcenon::database::integrated;
 
 void print_header(const std::string& title) {
     std::cout << "\n" << std::string(70, '=') << "\n";
@@ -224,7 +224,7 @@ int main() {
     std::cout << "Documentation:\n";
     std::cout << "  • INTEGRATION.md - Complete integration guide\n";
     std::cout << "  • ARCHITECTURE.md - System architecture\n";
-    std::cout << "  • samples/integrated/ - Working examples\n\n";
+    std::cout << "  • examples/tutorials/integrated/ - Working examples\n\n";
 
     std::cout << "Examples:\n";
     std::cout << "  • basic_usage - Getting started\n";

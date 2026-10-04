@@ -2,9 +2,9 @@ name: Sanitizer Tests
 
 on:
   push:
-    branches: [ main, phase-* ]
+    branches: [ main, develop, phase-* ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       run: |
         sudo apt-get update
         # Use Clang 18 for full C++20 std::format support
-        sudo apt-get install -y cmake ninja-build clang-18 libgtest-dev libfmt-dev libpq-dev
+        sudo apt-get install -y cmake ninja-build clang-18 libgtest-dev libfmt-dev libpq-dev libsqlite3-dev
 
     - name: Set up compiler
       run: |
@@ -70,6 +70,7 @@ jobs:
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
           -DALLOW_BUILD_WITHOUT_NETWORK_SYSTEM=ON \
           -DUSE_UNIT_TEST=ON \
+          -DUSE_SQLITE=ON \
           -DBUILD_DATABASE_SAMPLES=OFF \
           -DDATABASE_BUILD_INTEGRATION_TESTS=OFF
 
@@ -81,11 +82,11 @@ jobs:
     - name: Run tests with ${{ matrix.sanitizer }} sanitizer
       run: |
         cd database_system/build
-        ctest --output-on-failure --verbose
+        ctest --output-on-failure --verbose --no-tests=error
       env:
-        TSAN_OPTIONS: "halt_on_error=0 second_deadlock_stack=1"
-        ASAN_OPTIONS: "halt_on_error=0 detect_leaks=1"
-        UBSAN_OPTIONS: "halt_on_error=0 print_stacktrace=1"
+        TSAN_OPTIONS: "halt_on_error=0:second_deadlock_stack=1"
+        ASAN_OPTIONS: "halt_on_error=0:detect_leaks=1"
+        UBSAN_OPTIONS: "halt_on_error=1:print_stacktrace=1"
 
     - name: Upload sanitizer logs
       if: failure()

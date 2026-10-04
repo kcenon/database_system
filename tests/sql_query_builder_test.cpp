@@ -8,12 +8,12 @@
  */
 
 #include <gtest/gtest.h>
-#include "database/query_builder.h"
+#include <kcenon/database/query_builder.h>
 #include <string>
 #include <map>
 #include <vector>
 
-namespace database::tests
+namespace kcenon::database::tests
 {
 
 class SQLQueryBuilderTest : public ::testing::Test
@@ -517,4 +517,4 @@ TEST_F(SQLQueryBuilderTest, SwitchDatabase)
     EXPECT_TRUE(query.find("[users]") != std::string::npos);  // SQLite syntax
 }
 
-} // namespace database::tests
+} // namespace kcenon::database::tests

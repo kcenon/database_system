@@ -51,7 +51,12 @@ This document captures the current state of the `database_system` at the beginni
 - C++20 compiler (see `README.md` for authoritative compiler baseline)
 - common_system (required): IDatabase interface, Result<T>
 - container_system (optional): Query results
-- Database backends (PostgreSQL, SQLite, MongoDB, Redis)
+- Database backends: PostgreSQL (stable, default ON), SQLite (stable, opt-in),
+  MongoDB and Redis (**experimental**, opt-in)
+
+> The authoritative backend / ecosystem-integration support matrix, the
+> CMake-vs-vcpkg default reconciliation, and the legacy include-shim lifecycle
+> (removal target **2.0.0**) live in [docs/BACKENDS.md](../BACKENDS.md).
 
 ---
 

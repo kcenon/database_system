@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/database_backend.h>
 #include "mock_backend_expectations.h"
 #include <queue>
 #include <functional>
 #include <mutex>
 #include <regex>
 
-namespace database::testing {
+namespace kcenon::database::testing {
 
 /**
  * @class mock_backend
@@ -147,4 +147,4 @@ private:
     std::unique_ptr<mock_backend> mock_;
 };
 
-} // namespace database::testing
+} // namespace kcenon::database::testing

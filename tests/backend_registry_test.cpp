@@ -24,12 +24,12 @@
 #include <thread>
 #include <vector>
 
-#include "database/core/backend_base.h"
-#include "database/core/backend_registry.h"
-#include "database/core/database_backend.h"
+#include <kcenon/database/core/backend_base.h>
+#include <kcenon/database/core/backend_registry.h>
+#include <kcenon/database/core/database_backend.h>
 
-using namespace database;
-using namespace database::core;
+using namespace kcenon::database;
+using namespace kcenon::database::core;
 
 // =============================================================================
 // Test Backend Implementations
@@ -48,6 +48,11 @@ class test_backend
 {
 public:
     static constexpr const char* backend_name() { return "test_backend"; }
+
+    ~test_backend() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {
@@ -100,6 +105,11 @@ class test_backend_alt
 {
 public:
     static constexpr const char* backend_name() { return "test_backend_alt"; }
+
+    ~test_backend_alt() noexcept override
+    {
+        shutdown_before_derived_destruction();
+    }
 
     kcenon::common::Result<database_result> select_query(const std::string&) override
     {

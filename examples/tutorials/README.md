@@ -235,7 +235,7 @@ cd bin
 
 ### Alternative Build (samples only)
 ```bash
-cd samples
+cd examples/tutorials
 mkdir build && cd build
 cmake ..
 make

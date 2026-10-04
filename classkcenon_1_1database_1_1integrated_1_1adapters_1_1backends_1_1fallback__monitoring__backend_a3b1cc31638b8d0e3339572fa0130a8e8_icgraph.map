@@ -1,0 +1,5 @@
+<map id="kcenon::database::integrated::adapters::backends::fallback_monitoring_backend::update_avg_latency" name="kcenon::database::integrated::adapters::backends::fallback_monitoring_backend::update_avg_latency">
+<area shape="rect" id="Node000001" title="Update average query latency." alt="" coords="308,13,608,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__monitoring__backend.html#ad1ced817969c0c947b4d11fc5a113fa4" title="Record query execution." alt="" coords="5,5,260,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="294,43,260,43,260,37,294,37"/>
+</map>

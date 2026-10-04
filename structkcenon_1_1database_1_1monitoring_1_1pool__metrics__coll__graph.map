@@ -1,0 +1,9 @@
+<map id="kcenon::database::monitoring::pool_metrics" name="kcenon::database::monitoring::pool_metrics">
+<area shape="rect" id="Node000001" title="Performance metrics for connection pools." alt="" coords="5,536,213,811"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,261,195,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,327,112,520,107,520,107,327"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="47,133,172,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,213,112,261,107,261,107,213"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="98,5,121,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,71,112,117,107,117,107,71"/>
+</map>

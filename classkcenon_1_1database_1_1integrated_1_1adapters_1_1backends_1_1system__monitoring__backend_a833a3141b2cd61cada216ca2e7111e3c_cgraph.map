@@ -1,0 +1,7 @@
+<map id="kcenon::database::integrated::adapters::backends::system_monitoring_backend::record_metric" name="kcenon::database::integrated::adapters::backends::system_monitoring_backend::record_metric">
+<area shape="rect" id="Node000001" title="Record a metric value with tags." alt="" coords="5,5,264,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html#ad172e982ccba4ac21a4b40c9e9def373" title="Record a metric value." alt="" coords="312,5,571,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,30,298,30,298,35,264,35"/>
+<area shape="rect" id="Node000003" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="619,20,721,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="571,30,605,30,605,35,571,35"/>
+</map>

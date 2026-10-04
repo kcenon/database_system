@@ -1,0 +1,9 @@
+<map id="kcenon::database::integrated::database_coordinator::get_monitor" name="kcenon::database::integrated::database_coordinator::get_monitor">
+<area shape="rect" id="Node000001" title="Get monitoring adapter." alt="" coords="268,40,480,95"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab9a4da242976f9a340b77cd2aaba8203" title=" " alt="" coords="35,5,190,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,47,180,33,181,28,255,42"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="36,55,189,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,70,190,70,190,65,254,65"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html#a177316b4e79eac2939d378a4420b7115" title=" " alt="" coords="5,104,220,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,92,181,107,180,101,254,87"/>
+</map>

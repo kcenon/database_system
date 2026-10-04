@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['raw_0',['raw',['../structkcenon_1_1database_1_1query_1_1condition.html#aee9cb0615c02be65248c23f245171747',1,'kcenon::database::query::condition']]],
+  ['raw_5fcondition_5f_1',['raw_condition_',['../classkcenon_1_1database_1_1query__condition.html#a05cb4b14a42f12b9812321fee9fe9d68',1,'kcenon::database::query_condition']]],
+  ['recent_5fquery_5flatencies_5f_2',['recent_query_latencies_',['../classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1system__monitoring__backend.html#a79142253c0fd64a9c248d9452eb36e30',1,'kcenon::database::integrated::adapters::backends::system_monitoring_backend']]],
+  ['redis_5fmutex_5f_3',['redis_mutex_',['../classkcenon_1_1database_1_1backends_1_1redis__backend.html#a007bee67fdd470ef4ecce28e3a4486a1',1,'kcenon::database::backends::redis_backend']]],
+  ['replaced_5fconnections_4',['replaced_connections',['../structkcenon_1_1database_1_1core_1_1pool_1_1pool__statistics.html#aa891acd0ba7d419e17b3c87a97a966e5',1,'kcenon::database::core::pool::pool_statistics']]],
+  ['replaced_5fconnections_5f_5',['replaced_connections_',['../classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#a662c4656f7a3c9ce4f2bd453e81188d6',1,'kcenon::database::core::pool::connection_pool']]],
+  ['request_5fid_6',['request_id',['../structkcenon_1_1database_1_1protocol_1_1message__header.html#aabe15ff48043d472aabb9ed371f7424d',1,'kcenon::database::protocol::message_header']]],
+  ['result_5f_7',['result_',['../classkcenon_1_1database_1_1testing_1_1backend__expectation.html#a4f9a2e2dd379ac77f1b272ebdc6a7fe0',1,'kcenon::database::testing::backend_expectation::result_'],['../classkcenon_1_1database_1_1testing_1_1expectation.html#adf0d9e4261c64ba4730ac24802ea5272',1,'kcenon::database::testing::expectation::result_']]],
+  ['retention_5fperiod_5f_8',['retention_period_',['../classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a8a24396c29e4844a10f0a3f3a6541155',1,'kcenon::database::monitoring::performance_monitor::retention_period_'],['../classkcenon_1_1database_1_1security_1_1audit__logger.html#a93795b7c1ae6c16bebeeab6963d0e2b0',1,'kcenon::database::security::audit_logger::retention_period_']]],
+  ['role_9',['role',['../classIntegrationTestUser.html#a7899ac64d1b52d359e7c729125408e3f',1,'IntegrationTestUser']]],
+  ['role_5f_10',['role_',['../classIntegrationTestUser.html#a2e7c97c1b8ef0ce2f0821ec0f61a1a38',1,'IntegrationTestUser']]],
+  ['role_5fmetadata_5f_11',['role_metadata_',['../classIntegrationTestUser.html#afecabb4acdc6dcb1ed12e83578dcdb1c',1,'IntegrationTestUser']]],
+  ['roles_12',['roles',['../structkcenon_1_1database_1_1security_1_1access__control_1_1user__session.html#a00ced97b7cee29f932a0418f6a2a6d94',1,'kcenon::database::security::access_control::user_session']]],
+  ['roles_5f_13',['roles_',['../classkcenon_1_1database_1_1security_1_1access__control.html#af3e5388e18056be310759ea82691bde8',1,'kcenon::database::security::access_control']]],
+  ['rolled_5fback_5ftransactions_14',['rolled_back_transactions',['../structkcenon_1_1database_1_1integrated_1_1adapters_1_1database__metrics.html#a544b3cc280cafdbb79cda720e54d8d56',1,'kcenon::database::integrated::adapters::database_metrics']]],
+  ['rows_15',['rows',['../structkcenon_1_1database_1_1integrated_1_1query__result.html#a684cb0980431dd618987483cabf9b674',1,'kcenon::database::integrated::query_result::rows'],['../structkcenon_1_1database_1_1protocol_1_1query__response.html#afa5fb71cd5cb7206cf8a16b929f96167',1,'kcenon::database::protocol::query_response::rows']]],
+  ['rows_5faffected_16',['rows_affected',['../structkcenon_1_1database_1_1monitoring_1_1query__metrics.html#a480b3c0cf32d2d667aa78e028b641d48',1,'kcenon::database::monitoring::query_metrics']]],
+  ['rows_5faffected_5f_17',['rows_affected_',['../classkcenon_1_1database_1_1testing_1_1backend__expectation.html#af39709bf6b87f0bb234f47f13ab8635e',1,'kcenon::database::testing::backend_expectation::rows_affected_'],['../classkcenon_1_1database_1_1testing_1_1expectation.html#ab3e21a41dcd230c311b26f29b224f781',1,'kcenon::database::testing::expectation::rows_affected_']]],
+  ['runner_18',['runner',['../structsample__info.html#a0052919c1c9d42fe0852ff5cb61c2ab3',1,'sample_info']]],
+  ['running_5f_19',['running_',['../classkcenon_1_1database_1_1async_1_1stream__processor.html#a3ee44526a623a6f06a4f7ecde65a5f45',1,'kcenon::database::async::stream_processor::running_'],['../classkcenon_1_1database_1_1monitoring_1_1dashboard__server.html#ae50ebe7fe8f985019a01095dd79ccd59',1,'kcenon::database::monitoring::dashboard_server::running_']]]
+];

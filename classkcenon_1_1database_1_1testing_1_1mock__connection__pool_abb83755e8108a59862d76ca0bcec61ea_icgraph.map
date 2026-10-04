@@ -1,0 +1,7 @@
+<map id="kcenon::database::testing::mock_connection_pool::create_connection" name="kcenon::database::testing::mock_connection_pool::create_connection">
+<area shape="rect" id="Node000001" title=" " alt="" coords="244,45,435,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__connection__pool.html#a305a22bde85e95e4b2479f9d661150a7" title="Acquire a connection with timeout." alt="" coords="5,5,196,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,57,196,51,197,46,231,52"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1mock__connection__pool.html#a2eccfb291fa0bdf41bdefea86819cb1b" title=" " alt="" coords="5,84,196,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,93,197,99,196,93,230,88"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="test_api_availability_metrics" name="test_api_availability_metrics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,53,160,93"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1monitoring__adapter.html#a7547fe3e4608d6e64346f44ed25809da" title="Get database&#45;specific metrics." alt="" coords="208,5,431,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,57,194,51,195,56,161,62"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1monitoring__adapter.html#a027a00707c18bf20d85b1d01ab7d733a" title="Get current metrics snapshot." alt="" coords="208,84,431,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,83,195,88,194,94,160,88"/>
+</map>

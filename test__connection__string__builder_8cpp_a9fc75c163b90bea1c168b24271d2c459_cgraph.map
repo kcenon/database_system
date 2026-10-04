@@ -1,0 +1,15 @@
+<map id="test_sqlite_no_database" name="test_sqlite_no_database">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,139,185,164"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa5edeff418c13ac932aea9fc517f0149" title="Build the connection string for the specified backend." alt="" coords="233,131,471,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,149,220,149,220,154,186,154"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a1c2df7547e4a116cd61a84404cb9bcaf" title=" " alt="" coords="519,5,731,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,129,518,69,533,63,535,68,520,74,393,134"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa7c0cb071c93eedd6fa7e6e209869ba6" title=" " alt="" coords="519,84,731,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="471,131,505,126,506,131,471,137"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a45d1db0d86e7da36c061ff9defe39dc7" title=" " alt="" coords="519,163,731,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="471,166,506,170,505,176,471,171"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#ab285a7072843bb337fb206e13dc650fc" title=" " alt="" coords="519,241,731,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="395,169,520,226,538,234,536,239,518,231,393,174"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a71afdffa2f5ccdeffbd2c9e6a6b0915b" title=" " alt="" coords="779,84,997,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="731,109,765,109,765,114,731,114"/>
+</map>

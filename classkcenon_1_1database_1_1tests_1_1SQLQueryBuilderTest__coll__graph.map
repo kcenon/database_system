@@ -1,0 +1,18 @@
+<map id="kcenon::database::tests::SQLQueryBuilderTest" name="kcenon::database::tests::SQLQueryBuilderTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="36,1153,205,1253"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,1018,146,1083"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,1097,116,1153,111,1153,103,1097"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="170,1011,365,1091"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,1093,182,1143,178,1140,227,1089"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query__builder.html" title="Universal query builder that adapts to different database types." alt="" coords="93,648,268,948"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="235,947,251,994,246,996,230,949"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="61,491,255,571"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="164,571,169,631,164,632,159,571"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,133,183,413"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="85,413,90,440,98,466,103,476,98,478,93,468,84,441,80,414"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="222,241,371,306"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="299,320,297,467,297,613,300,727,298,841,285,987,280,1011,275,1010,279,986,293,841,295,727,292,613,291,467,293,320"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="273,319,239,367,197,415,177,426,169,430,162,439,154,464,153,491,148,491,149,463,157,436,165,426,174,422,194,411,235,364,269,316"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="285,5,308,71"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="299,71,299,224,294,224,294,71"/>
+</map>

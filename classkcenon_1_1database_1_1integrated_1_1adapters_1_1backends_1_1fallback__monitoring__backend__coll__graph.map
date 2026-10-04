@@ -1,0 +1,29 @@
+<map id="kcenon::database::integrated::adapters::backends::fallback_monitoring_backend" name="kcenon::database::integrated::adapters::backends::fallback_monitoring_backend">
+<area shape="rect" id="Node000001" title="Basic monitoring backend using internal metrics storage." alt="" coords="531,648,739,1061"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="5,291,232,585"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,582,246,583,317,642,392,698,532,790,529,795,389,702,313,647,242,587,240,586"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1integrated_1_1db__monitoring__config.html" title="Monitoring and metrics configuration." alt="" coords="637,321,843,555"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="713,556,693,633,688,632,708,555"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="687,155,766,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="735,221,739,252,742,304,736,304,733,252,730,221"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="451,398,613,478"/>
+<area shape="poly" id="edge11_Node000011_Node000004" title=" " alt="" coords="705,223,662,269,644,280,627,293,591,338,561,385,557,382,586,335,623,289,641,276,658,265,701,219"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="661,5,792,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="729,100,729,155,724,155,724,100"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="867,405,951,471"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="904,472,886,527,858,587,808,663,752,734,748,730,804,660,854,584,881,525,899,470"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1database_1_1integrated_1_1adapters_1_1database__metrics.html" title="Database&#45;specific metrics structure." alt="" coords="975,298,1179,578"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="977,575,966,587,860,685,753,771,750,766,856,681,962,583,973,572"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="256,398,427,478"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="360,477,392,546,436,623,477,679,521,732,517,735,472,682,431,625,387,549,355,479"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="211,155,333,221"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="287,233,333,397,328,398,282,235"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="323,13,346,78"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="325,58,303,81,284,110,276,140,271,138,279,108,299,77,321,55"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="425,148,569,228"/>
+<area shape="poly" id="edge14_Node000012_Node000010" title=" " alt="" coords="348,57,416,122,433,136,430,140,413,126,344,61"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="539,478,549,546,564,623,566,631,561,632,559,625,544,547,534,479"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="507,242,511,266,529,397,524,398,505,267,502,242"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="486,13,509,78"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="500,78,500,132,495,132,495,78"/>
+</map>

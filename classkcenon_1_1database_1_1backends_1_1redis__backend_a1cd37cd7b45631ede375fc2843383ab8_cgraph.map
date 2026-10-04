@@ -1,0 +1,8 @@
+<map id="kcenon::database::backends::redis_backend::rollback_transaction" name="kcenon::database::backends::redis_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="5,27,212,82"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html#ad3f5b0e05cec201ced3aadb28596a8a6" title="Execute a general SQL query (DDL, DML)" alt="" coords="260,5,487,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,41,246,37,247,42,212,46"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="535,20,729,89"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="212,54,260,55,487,55,521,54,521,60,487,60,260,60,212,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="487,36,521,39,521,45,487,41"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="kcenon::database::backends::postgresql_backend::rollback_transaction" name="kcenon::database::backends::postgresql_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="315,41,533,96"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a7f06ebfef03db6bf69ddd756a3d63b8b" title="Database&#45;specific shutdown logic." alt="" coords="33,5,239,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,56,239,48,240,43,301,51"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a6f4b3c60f10e8754a06b4185fd2c4fd2" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,85,267,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="301,87,267,91,267,86,301,81"/>
+</map>

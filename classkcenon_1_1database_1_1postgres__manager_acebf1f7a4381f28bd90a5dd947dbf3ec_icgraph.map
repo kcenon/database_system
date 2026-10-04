@@ -1,0 +1,13 @@
+<map id="kcenon::database::postgres_manager::execute_query" name="kcenon::database::postgres_manager::execute_query">
+<area shape="rect" id="Node000001" title="Executes a general SQL query (DDL, DML) on PostgreSQL." alt="" coords="804,69,1005,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1postgres__manager.html#a9242af9c6d9303b35fd4f637393b43ed" title="Begin a transaction." alt="" coords="537,5,748,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="808,69,724,48,726,43,809,63"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1postgres__manager.html#a5bc00c4bd287793e99a7da3bf5ca3e1b" title="Commit the current transaction." alt="" coords="530,69,755,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="790,92,755,92,755,87,790,87"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1postgres__manager.html#ac23cba985fb74a172d342747edb46203" title="Rollback the current transaction." alt="" coords="529,133,756,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="809,115,726,136,724,131,808,110"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1postgres__manager.html#ab7e4b31128c9013ab842139de63b7027" title="Shutdown the database backend gracefully." alt="" coords="280,133,481,173"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="516,156,481,156,481,151,516,151"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1postgres__manager.html#ad2abf364270b626eabe2e7cad0c7b686" title="Destructor." alt="" coords="5,133,232,173"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="266,156,232,156,232,151,266,151"/>
+</map>

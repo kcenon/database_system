@@ -1,0 +1,31 @@
+<map id="kcenon::database::core::database_backend" name="kcenon::database::core::database_backend">
+<area shape="rect" id="Node000001" title="Abstract base class for database backends." alt="" coords="965,5,1135,405"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="273,1072,470,1416"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="952,234,851,266,734,313,674,343,615,376,559,414,508,457,437,525,380,587,334,647,298,707,269,770,243,841,193,1019,190,1034,192,1047,203,1059,217,1070,275,1130,271,1134,214,1074,199,1063,188,1049,184,1034,187,1018,238,840,264,768,294,704,330,644,376,584,433,522,504,453,556,410,612,372,672,338,732,308,849,261,950,229"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="6,1072,203,1416"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="951,224,760,258,647,281,532,309,422,340,324,376,245,415,216,435,193,456,146,524,112,599,88,679,73,762,66,845,65,925,69,1002,76,1072,71,1072,63,1002,59,925,60,844,67,761,82,678,107,598,142,522,189,453,212,431,243,410,322,371,420,335,531,304,646,276,759,252,950,219"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="915,1072,1113,1416"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1054,419,1055,1019,1055,1048,1053,1072,1047,1071,1050,1048,1050,1019,1048,419"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="579,1072,777,1416"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1047,419,1034,821,1026,979,1018,1049,1004,1062,991,1068,964,1069,936,1067,904,1074,839,1111,778,1155,775,1151,836,1107,902,1070,936,1062,964,1064,990,1063,1002,1057,1013,1047,1020,979,1028,821,1042,419"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="518,560,715,889"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="957,321,717,607,713,604,953,318"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1database_1_1postgres__manager.html" title="Manages PostgreSQL database operations." alt="" coords="1113,497,1307,952"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1118,418,1143,497,1137,498,1113,420"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html" title="Configurable mock for database_backend interface." alt="" coords="1331,455,1513,995"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1148,276,1238,356,1282,403,1320,453,1333,473,1328,476,1316,456,1277,406,1234,359,1145,280"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1database_1_1testing_1_1mock__database.html" title="Configurable mock for database_backend interface." alt="" coords="1537,465,1720,985"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1150,233,1239,266,1339,313,1390,342,1439,375,1485,412,1527,453,1539,468,1535,471,1523,456,1482,416,1436,379,1387,347,1337,318,1237,271,1148,238"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1backends_1_1mongodb__backend.html" title="MongoDB implementation of database_backend interface." alt="" coords="272,1510,471,1990"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,1430,374,1510,369,1510,369,1430"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html" title="PostgreSQL implementation of database_backend interface." alt="" coords="5,1465,204,2035"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="107,1430,107,1465,102,1465,102,1430"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html" title="Redis implementation of database_backend interface." alt="" coords="915,1520,1113,1980"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1017,1429,1017,1520,1011,1520,1011,1429"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1backends_1_1sqlite__backend.html" title="SQLite implementation of database_backend interface." alt="" coords="579,1503,777,1997"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="681,1430,681,1502,675,1502,675,1430"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="512,861,462,938,420,1020,402,1073,397,1071,416,1018,458,935,508,858"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="508,789,437,833,360,888,285,951,217,1020,180,1073,176,1070,213,1017,281,947,357,883,434,829,505,784"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="726,864,917,1112,913,1116,722,867"/>
+<area shape="poly" id="edge13_Node000010_Node000008" title=" " alt="" coords="611,903,613,976,621,1048,625,1071,620,1072,615,1048,608,976,605,904"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classkcenon_1_1database_1_1orm_1_1entity__base.html" title="Base class for all ORM entities." alt="" coords="5,122,176,162"/>
+<area shape="rect" id="Node000001" href="$classIntegrationTestUser.html" title=" " alt="" coords="224,5,373,31"/>
+<area shape="poly" id="edge23_Node000000_Node000001" title=" " alt="" coords="122,111,168,74,223,40,250,28,252,33,225,44,171,79,126,115"/>
+<area shape="rect" id="Node000002" href="$classProduct.html" title=" " alt="" coords="263,55,334,80"/>
+<area shape="poly" id="edge24_Node000000_Node000002" title=" " alt="" coords="154,115,223,89,262,76,264,81,225,94,156,120"/>
+<area shape="rect" id="Node000003" href="$classTestUser.html" title=" " alt="" coords="259,104,338,129"/>
+<area shape="poly" id="edge25_Node000000_Node000003" title=" " alt="" coords="189,127,259,119,259,124,190,133"/>
+<area shape="rect" id="Node000004" href="$classUser.html" title=" " alt="" coords="273,153,325,179"/>
+<area shape="poly" id="edge26_Node000000_Node000004" title=" " alt="" coords="190,151,273,160,272,166,189,156"/>
+<area shape="rect" id="Node000005" href="$classpost__entity.html" title=" " alt="" coords="251,203,346,228"/>
+<area shape="poly" id="edge27_Node000000_Node000005" title=" " alt="" coords="160,164,225,187,261,200,259,205,223,193,158,169"/>
+<area shape="rect" id="Node000006" href="$classuser__entity.html" title=" " alt="" coords="251,252,346,277"/>
+<area shape="poly" id="edge28_Node000000_Node000006" title=" " alt="" coords="127,169,172,204,225,237,254,249,252,254,223,242,169,208,123,173"/>
+</map>

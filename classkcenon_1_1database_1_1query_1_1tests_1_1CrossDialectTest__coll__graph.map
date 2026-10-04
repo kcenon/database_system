@@ -1,0 +1,13 @@
+<map id="kcenon::database::query::tests::CrossDialectTest" name="kcenon::database::query::tests::CrossDialectTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,683,180,763"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="25,525,118,591"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,604,90,682,85,683,75,605"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="142,511,315,605"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,607,138,672,134,668,188,604"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1sql__dialect.html" title="Abstract base class for database&#45;specific SQL dialects." alt="" coords="79,133,253,433"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,433,217,494,212,495,198,434"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="278,251,427,316"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="335,330,252,512,247,510,330,328"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="341,5,364,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="355,71,355,234,350,234,350,71"/>
+</map>

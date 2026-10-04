@@ -1,0 +1,10 @@
+<map id="kcenon::database::database_manager::set_mode" name="kcenon::database::database_manager::set_mode">
+<area shape="rect" id="Node000001" title="Sets the database mode (type) for the manager." alt="" coords="5,20,211,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#aeed2ddcd360782a67f673627030cbc17" title=" " alt="" coords="262,5,461,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,57,195,63,248,64,248,70,194,68,147,63"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="211,46,248,46,248,52,211,52"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="211,28,248,28,248,34,211,34"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="147,17,194,12,248,10,248,16,195,17,148,23"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1database__manager.html#acf6d0220fbc75699b436e78221793ee4" title="Retrieves the current database type used by the manager." alt="" coords="259,99,464,139"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="174,58,284,92,282,97,172,63"/>
+</map>

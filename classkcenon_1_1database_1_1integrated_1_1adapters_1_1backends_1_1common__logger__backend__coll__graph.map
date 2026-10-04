@@ -1,0 +1,11 @@
+<map id="kcenon::database::integrated::adapters::backends::common_logger_backend" name="kcenon::database::integrated::adapters::backends::common_logger_backend">
+<area shape="rect" id="Node000001" title="Logger backend using common_system&#39;s ILogger interface." alt="" coords="21,545,237,840"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1logger__backend.html" title="Abstract base class for logger backends." alt="" coords="5,275,209,470"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,483,122,545,116,545,112,484"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1integrated_1_1db__logger__config.html" title="Logger configuration." alt="" coords="234,263,439,483"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,484,236,533,231,530,263,481"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="297,135,376,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="339,200,339,246,334,246,334,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="271,5,402,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="339,99,339,134,334,134,334,99"/>
+</map>

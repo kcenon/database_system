@@ -1,0 +1,7 @@
+<map id="include/kcenon/database/database_types.h" name="include/kcenon/database/database_types.h">
+<area shape="rect" id="Node000001" title="Defines the enumeration of supported database types." alt="" coords="24,5,208,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,47,62,85,58,82,95,44"/>
+<area shape="rect" id="Node000003" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="95,93,294,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,44,175,82,171,85,133,47"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="kcenon::database::integrated::backend_type_to_name" name="kcenon::database::integrated::backend_type_to_name">
+<area shape="rect" id="Node000001" title="Convert backend_type to registry name string." alt="" coords="525,13,737,53"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1integrated.html#a43e04859c1022fc5d5ba68444a462718" title="Create database backend instance." alt="" coords="265,13,477,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="512,35,478,35,478,30,512,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a261afbb5fd3bc414680a7c9654df83af" title=" " alt="" coords="5,5,217,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="252,35,218,35,218,30,252,30"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::database::integrated::adapters::backends::fallback_thread_backend::shutdown" name="kcenon::database::integrated::adapters::backends::fallback_thread_backend::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the thread backend gracefully." alt="" coords="5,16,221,71"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="269,5,372,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,27,255,23,256,29,222,33"/>
+<area shape="rect" id="Node000003" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="287,55,354,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,53,274,59,273,65,221,59"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="420,55,521,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="354,65,406,65,406,70,354,70"/>
+</map>

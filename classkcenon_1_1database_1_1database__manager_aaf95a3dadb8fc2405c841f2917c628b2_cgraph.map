@@ -1,0 +1,5 @@
+<map id="kcenon::database::database_manager::connect_result" name="kcenon::database::database_manager::connect_result">
+<area shape="rect" id="Node000001" title="Result&#45;based wrapper for connect()." alt="" coords="5,13,211,53"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1database_1_1core_1_1connection__config.html#a6ddaff389d2b84838721ab25e68c41f7" title="Construct connection_config from legacy connection string." alt="" coords="259,5,445,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,30,245,30,245,35,211,35"/>
+</map>

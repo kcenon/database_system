@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::redis_backend::rollback_transaction" name="kcenon::database::backends::redis_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="271,5,477,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html#a8b91321c087ce12df211063aa0c242e0" title="Database&#45;specific shutdown logic." alt="" coords="5,13,223,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,35,223,35,223,30,257,30"/>
+</map>

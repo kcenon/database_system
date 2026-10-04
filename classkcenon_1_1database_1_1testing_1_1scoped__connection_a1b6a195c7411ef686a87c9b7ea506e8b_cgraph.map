@@ -1,0 +1,5 @@
+<map id="kcenon::database::testing::scoped_connection::~scoped_connection" name="kcenon::database::testing::scoped_connection::~scoped_connection">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,224,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__connection__pool.html#a553e1d5dfff8f3d66175d2c9f52e8659" title="Release a connection back to the pool." alt="" coords="272,5,463,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,30,258,30,258,35,224,35"/>
+</map>

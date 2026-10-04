@@ -1,0 +1,8 @@
+<map id="test_double_initialization" name="test_double_initialization">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,192,94"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1database__coordinator.html#a98212da9f0ff93722ee9cc8886ded55d" title="Initialize all adapters in correct order." alt="" coords="244,29,479,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,67,230,63,231,68,192,73"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1database__coordinator.html#a3243bf67d85a6da739f4727297c07bd4" title="Shutdown all adapters in reverse order." alt="" coords="240,93,483,133"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="192,90,227,94,226,100,192,95"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="313,30,310,20,318,10,335,5,361,3,392,6,408,13,406,18,390,11,361,8,336,10,321,15,315,21,318,28"/>
+</map>

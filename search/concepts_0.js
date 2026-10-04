@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3aasynccallable_0',['AsyncCallable',['../conceptkcenon_1_1database_1_1concepts_1_1AsyncCallable.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3abackendfactory_1',['BackendFactory',['../conceptkcenon_1_1database_1_1concepts_1_1BackendFactory.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3acompensationaction_2',['CompensationAction',['../conceptkcenon_1_1database_1_1concepts_1_1CompensationAction.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3aconnectionfactory_3',['ConnectionFactory',['../conceptkcenon_1_1database_1_1concepts_1_1ConnectionFactory.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3aconnectionwrapper_4',['ConnectionWrapper',['../conceptkcenon_1_1database_1_1concepts_1_1ConnectionWrapper.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3adelayedcallable_5',['DelayedCallable',['../conceptkcenon_1_1database_1_1concepts_1_1DelayedCallable.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3aerrorhandler_6',['ErrorHandler',['../conceptkcenon_1_1database_1_1concepts_1_1ErrorHandler.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3ainvocable_7',['Invocable',['../conceptkcenon_1_1database_1_1concepts_1_1Invocable.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3anoexceptcallable_8',['NoexceptCallable',['../conceptkcenon_1_1database_1_1concepts_1_1NoexceptCallable.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3apooledresource_9',['PooledResource',['../conceptkcenon_1_1database_1_1concepts_1_1PooledResource.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3apredicate_10',['Predicate',['../conceptkcenon_1_1database_1_1concepts_1_1Predicate.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3aquerycallback_11',['QueryCallback',['../conceptkcenon_1_1database_1_1concepts_1_1QueryCallback.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3areturnsresult_12',['ReturnsResult',['../conceptkcenon_1_1database_1_1concepts_1_1ReturnsResult.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3astreameventfilter_13',['StreamEventFilter',['../conceptkcenon_1_1database_1_1concepts_1_1StreamEventFilter.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3astreameventhandler_14',['StreamEventHandler',['../conceptkcenon_1_1database_1_1concepts_1_1StreamEventHandler.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3asubmittabletask_15',['SubmittableTask',['../conceptkcenon_1_1database_1_1concepts_1_1SubmittableTask.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3atransactionaction_16',['TransactionAction',['../conceptkcenon_1_1database_1_1concepts_1_1TransactionAction.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3avoidcallable_17',['VoidCallable',['../conceptkcenon_1_1database_1_1concepts_1_1VoidCallable.html',1,'kcenon::database::concepts']]],
+  ['kcenon_3a_3adatabase_3a_3aconcepts_3a_3avoidtask_18',['VoidTask',['../conceptkcenon_1_1database_1_1concepts_1_1VoidTask.html',1,'kcenon::database::concepts']]]
+];

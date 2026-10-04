@@ -1,0 +1,8 @@
+<map id="test_transaction_raii_cleanup" name="test_transaction_raii_cleanup">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,65,160,105"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a209dbfcae1486713c7da07b1eed9f420" title=" " alt="" coords="208,5,420,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,65,194,57,195,62,161,70"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="208,108,420,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,99,195,107,194,112,160,104"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="269,108,269,98,277,89,292,83,314,81,340,84,355,92,352,97,338,90,314,87,294,89,280,93,274,100,275,108"/>
+</map>

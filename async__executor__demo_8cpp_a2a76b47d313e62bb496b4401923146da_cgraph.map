@@ -1,0 +1,9 @@
+<map id="demonstrate_basic_usage" name="demonstrate_basic_usage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,92,197,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a2dd8c9bda100a82838e2d601b4b642d4" title="Checks if using thread_system implementation." alt="" coords="261,5,453,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,89,247,61,249,66,148,95"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a928094cb19dea337fe7d4201b745eb54" title="Submits a task for asynchronous execution." alt="" coords="265,85,449,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,102,252,102,252,107,197,107"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a44db3f8e2a44d1f89bedc0522a88ac51" title="Returns the number of worker threads." alt="" coords="245,149,469,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="154,115,264,143,263,148,153,120"/>
+</map>

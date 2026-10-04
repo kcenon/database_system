@@ -1,0 +1,21 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,237,75,262"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a848ba39dbaf985b3378adcd29f5a0cab" title="Deserialize message header from bytes." alt="" coords="123,133,404,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,234,202,176,204,181,72,239"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#af7bc4e841abac6c85c8513f7e3e03b19" title="Serialize message header to bytes." alt="" coords="131,293,396,333"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="76,256,181,287,179,292,74,262"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1protocol_1_1message__header.html#aef41a17c47f58d04b6fd6ea60103c3bd" title="Validate message header." alt="" coords="472,5,671,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="297,131,367,93,451,55,474,47,475,52,453,60,369,98,300,136"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aeb62d7633c0460e4155ec91f88cb085a" title=" " alt="" coords="454,69,689,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="360,131,461,110,462,115,361,136"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aa53d16c2c59a7beab50fd73540a11754" title=" " alt="" coords="454,133,689,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="404,151,440,151,440,156,404,156"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a204f2d5a1d9b17e6fdcf34973f7c736b" title=" " alt="" coords="454,197,689,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="361,171,462,192,461,197,360,176"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a0ed58ce57c7f788ef803136597452ff3" title=" " alt="" coords="452,261,691,301"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="396,297,438,292,439,298,397,302"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="452,325,691,365"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="397,324,439,329,438,334,396,330"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a5ee3973f81e1b33c1439947d000565c9" title=" " alt="" coords="452,389,691,429"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="321,331,453,375,481,383,479,388,451,380,320,336"/>
+</map>

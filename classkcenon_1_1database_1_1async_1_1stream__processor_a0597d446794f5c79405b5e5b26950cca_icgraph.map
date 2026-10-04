@@ -1,0 +1,9 @@
+<map id="kcenon::database::async::stream_processor::process_event" name="kcenon::database::async::stream_processor::process_event">
+<area shape="rect" id="Node000001" title=" " alt="" coords="603,13,851,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1stream__processor.html#a83f26fb51253e3f878b8fb78db78d660" title=" " alt="" coords="355,5,555,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="589,35,555,35,555,30,589,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1stream__processor.html#ae2a5e2237d97e9f46e4960c25066954d" title=" " alt="" coords="123,5,307,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="341,35,307,35,307,30,341,30"/>
+<area shape="rect" id="Node000004" href="$test__async__operations_8cpp.html#ae4fa437e1a349ecf93217130d1d8deb1" title=" " alt="" coords="5,20,75,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,35,75,35,75,30,109,30"/>
+</map>

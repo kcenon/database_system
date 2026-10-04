@@ -1,0 +1,11 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,49,75,74"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a32346074b0ccdbf764e4abd3715542e3" title="Builds the final SQL query string." alt="" coords="123,41,339,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,59,109,59,109,64,75,64"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a2c8c7714091bec89829a2e887b417f78" title="Builds the SQL query for a specific database type." alt="" coords="387,34,603,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,59,373,59,373,64,339,64"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a35765e5c51a40f774adc01fe2416d2f1" title=" " alt="" coords="651,5,888,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="602,45,637,40,637,45,603,50"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a29131ae85e489345bdc06cd1dc983e5d" title=" " alt="" coords="661,70,877,125"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="603,73,648,79,647,84,602,78"/>
+</map>

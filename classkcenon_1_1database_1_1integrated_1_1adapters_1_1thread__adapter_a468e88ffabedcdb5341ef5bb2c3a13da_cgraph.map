@@ -1,0 +1,5 @@
+<map id="kcenon::database::integrated::adapters::thread_adapter::submit" name="kcenon::database::integrated::adapters::thread_adapter::submit">
+<area shape="rect" id="Node000001" title="Submit a task and get a future." alt="" coords="5,5,217,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#a07dbe87b17d1b64ec180b4dde013d6b5" title="Execute a task (fire&#45;and&#45;forget)" alt="" coords="265,5,477,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,30,252,30,252,35,217,35"/>
+</map>

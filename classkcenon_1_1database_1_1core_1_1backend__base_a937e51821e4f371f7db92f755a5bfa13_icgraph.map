@@ -1,0 +1,5 @@
+<map id="kcenon::database::core::backend_base::shutdown" name="kcenon::database::core::backend_base::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the database backend gracefully." alt="" coords="260,13,453,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a05dfb4fc44420b388f3a330ebbefb5d3" title="Best&#45;effort RAII cleanup for concrete backend destructors." alt="" coords="5,5,212,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,35,212,35,212,30,246,30"/>
+</map>

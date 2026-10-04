@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::postgresql_backend::commit_transaction" name="kcenon::database::backends::postgresql_backend::commit_transaction">
+<area shape="rect" id="Node000001" title="Commit the current transaction." alt="" coords="315,5,532,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a6f4b3c60f10e8754a06b4185fd2c4fd2" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,13,267,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,35,267,35,267,30,301,30"/>
+</map>

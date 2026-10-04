@@ -1,0 +1,21 @@
+<map id="kcenon::database::backends::postgresql_backend::execute_batch" name="kcenon::database::backends::postgresql_backend::execute_batch">
+<area shape="rect" id="Node000001" title="Execute multiple queries in a single transaction (batch mode)." alt="" coords="5,130,267,170"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#ac29b924abbc0ab0d455952ead8ac83ab" title="Begin a transaction." alt="" coords="321,44,527,98"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,127,309,100,311,105,211,132"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="892,79,1097,148"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="156,128,223,75,266,48,314,29,390,11,468,4,547,4,625,11,700,23,770,38,889,72,888,77,769,43,699,28,624,16,547,10,468,9,391,17,315,34,269,53,226,79,160,132"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a57b0e5237de11db3fd74c7436c0e7417" title="Commit the current transaction." alt="" coords="315,122,533,177"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="267,147,302,147,302,152,267,152"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#ab7b1184cccd3d0aca083f4df3bc2ef6c" title="Execute a modification query (INSERT, UPDATE, DELETE)" alt="" coords="315,280,533,334"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="165,168,231,216,316,266,328,272,326,277,313,271,229,220,162,172"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a9740c495d8f78d24a8c7105c73963392" title="Rollback the current transaction." alt="" coords="315,201,533,256"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="211,167,311,195,309,200,209,172"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a16dd7aa0eb0540d800e6dabf235d7977" title="Execute a general SQL query (DDL, DML)" alt="" coords="581,151,844,191"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="505,96,642,144,640,149,503,101"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="528,76,879,102,878,108,527,81"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="811,148,878,135,879,140,812,154"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="533,155,568,158,567,163,533,160"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="533,140,581,136,878,118,878,123,582,142,533,145"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="533,204,598,191,599,196,534,209"/>
+<area shape="poly" id="edge12_Node000007_Node000004" title=" " alt="" coords="534,233,604,233,683,230,764,219,843,201,892,180,936,154,939,158,894,185,845,206,765,224,683,235,604,239,534,238"/>
+</map>

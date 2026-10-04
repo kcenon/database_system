@@ -1,0 +1,30 @@
+<map id="tests/query_builder/value_formatter_test.cpp" name="tests/query_builder/value_formatter_test.cpp">
+<area shape="rect" id="Node000001" title="Unit tests for value_formatter." alt="" coords="402,5,593,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="359,101,463,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="480,48,434,92,431,89,476,44"/>
+<area shape="rect" id="Node000003" href="$value__formatter_8h.html" title=" " alt="" coords="487,93,681,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="518,44,557,82,553,85,515,48"/>
+<area shape="rect" id="Node000004" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="17,269,215,309"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="526,136,386,184,174,267,172,262,384,179,525,131"/>
+<area shape="rect" id="Node000007" href="$database__backend_8h.html" title="Abstract interface for database backends." alt="" coords="397,181,563,221"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="563,136,515,174,512,170,559,132"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="720,277,779,302"/>
+<area shape="poly" id="edge14_Node000003_Node000010" title=" " alt="" coords="604,132,731,265,727,268,600,135"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="803,277,866,302"/>
+<area shape="poly" id="edge15_Node000003_Node000011" title=" " alt="" coords="615,131,688,179,810,266,807,271,685,184,612,136"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,357,72,383"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="99,311,62,349,58,346,95,308"/>
+<area shape="rect" id="Node000006" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="95,357,294,383"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="137,308,175,346,171,349,133,311"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="401,224,209,269,208,264,400,219"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="507,269,695,309"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="508,219,565,259,562,264,505,224"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="239,277,316,302"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="437,224,318,274,316,269,434,219"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="553,219,708,267,713,269,711,274,706,272,551,224"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="563,213,673,235,791,267,798,269,796,274,790,272,671,241,562,219"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="340,277,391,302"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="456,224,394,270,390,266,453,219"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="415,277,483,302"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="476,223,461,265,456,263,471,221"/>
+</map>

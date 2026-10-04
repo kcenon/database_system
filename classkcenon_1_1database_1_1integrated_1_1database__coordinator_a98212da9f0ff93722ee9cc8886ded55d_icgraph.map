@@ -1,0 +1,24 @@
+<map id="kcenon::database::integrated::database_coordinator::initialize" name="kcenon::database::integrated::database_coordinator::initialize">
+<area shape="rect" id="Node000001" title="Initialize all adapters in correct order." alt="" coords="273,251,508,291"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="438,240,421,233,391,230,364,232,348,237,342,243,345,250,340,252,337,242,345,232,363,227,391,225,422,227,440,235"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ab9a4da242976f9a340b77cd2aaba8203" title=" " alt="" coords="38,5,193,31"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="373,240,350,195,317,142,275,90,250,66,224,46,192,31,194,26,227,41,254,62,279,86,322,139,355,193,378,238"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#a7d31a607a467d8e455f437ef2e1293dd" title=" " alt="" coords="20,55,211,95"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="364,242,305,175,267,140,224,110,200,98,202,93,227,105,270,136,309,171,368,239"/>
+<area shape="rect" id="Node000004" href="$test__database__coordinator_8cpp.html#ab830be22d551a6f2db6b558153a52647" title=" " alt="" coords="27,119,203,159"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="349,246,291,209,224,174,193,162,195,157,226,169,294,204,352,241"/>
+<area shape="rect" id="Node000005" href="$test__database__coordinator_8cpp.html#aadc652bfc6b1190060ac7dc10163f9cb" title=" " alt="" coords="22,184,209,209"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="315,250,225,223,178,212,179,207,226,218,316,245"/>
+<area shape="rect" id="Node000006" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="39,233,192,259"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="260,262,192,256,193,250,260,257"/>
+<area shape="rect" id="Node000007" href="$test__database__coordinator_8cpp.html#a5ab0c22e1467d17ba65398c7ddea2604" title=" " alt="" coords="45,283,185,308"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="260,285,186,292,185,287,260,280"/>
+<area shape="rect" id="Node000008" href="$test__database__coordinator_8cpp.html#adcb222f549dd264a7bcf5b7e1c3a0dc6" title=" " alt="" coords="23,332,207,357"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="312,298,226,322,174,335,173,329,225,317,310,293"/>
+<area shape="rect" id="Node000009" href="$test__database__coordinator_8cpp.html#a177316b4e79eac2939d378a4420b7115" title=" " alt="" coords="8,381,223,407"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="352,301,294,337,226,371,186,384,185,379,224,366,292,333,349,297"/>
+<area shape="rect" id="Node000010" href="$test__database__coordinator_8cpp.html#a7bd05ec23109b56b41b997b155bebe37" title=" " alt="" coords="59,431,172,456"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="366,303,307,363,268,394,227,420,200,431,173,439,171,433,198,426,224,416,265,390,303,359,362,300"/>
+<area shape="rect" id="Node000011" href="$test__database__coordinator_8cpp.html#accc8517f261f391e19e50bc9a3808991" title=" " alt="" coords="5,480,225,505"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="374,305,349,344,316,388,275,433,227,470,199,482,197,477,224,465,271,429,312,385,345,341,369,302"/>
+</map>

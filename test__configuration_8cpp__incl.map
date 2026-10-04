@@ -1,0 +1,19 @@
+<map id="tests/integrated/test_configuration.cpp" name="tests/integrated/test_configuration.cpp">
+<area shape="rect" id="Node000001" title="Unit tests for integrated database configuration." alt="" coords="239,5,393,45"/>
+<area shape="rect" id="Node000002" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="74,93,278,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,48,220,89,217,84,284,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,72,207"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="238,30,194,35,147,47,103,66,65,95,53,111,46,130,41,168,35,167,41,129,48,109,61,91,100,62,146,42,193,30,238,24"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="285,181,344,207"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="319,46,318,168,312,168,313,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="353,101,423,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="334,44,371,88,367,91,330,47"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="447,101,527,126"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="355,43,453,92,451,97,352,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="144,136,72,177,70,172,142,131"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="98,181,169,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="168,135,148,171,144,168,163,132"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="193,181,260,207"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="191,132,214,168,209,171,186,135"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="211,131,283,172,281,177,208,136"/>
+</map>

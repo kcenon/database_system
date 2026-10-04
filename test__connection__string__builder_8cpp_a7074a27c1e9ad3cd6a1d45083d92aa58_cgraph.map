@@ -1,0 +1,17 @@
+<map id="test_sqlite_file" name="test_sqlite_file">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,175,123,200"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa5edeff418c13ac932aea9fc517f0149" title="Build the connection string for the specified backend." alt="" coords="171,131,408,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,175,156,170,157,175,123,181"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a1643a547a181cce0d263e2fedf41ba12" title="Set the database name." alt="" coords="183,196,395,251"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="123,194,171,202,170,207,122,199"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a1c2df7547e4a116cd61a84404cb9bcaf" title=" " alt="" coords="456,5,668,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="328,129,455,69,470,63,472,68,457,74,331,134"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa7c0cb071c93eedd6fa7e6e209869ba6" title=" " alt="" coords="456,84,668,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="408,131,442,126,443,131,409,137"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a45d1db0d86e7da36c061ff9defe39dc7" title=" " alt="" coords="456,163,668,217"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="409,166,443,170,442,176,408,171"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#ab285a7072843bb337fb206e13dc650fc" title=" " alt="" coords="456,241,668,296"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,169,409,181,425,192,434,204,443,215,458,226,468,233,466,237,454,231,440,219,430,207,421,196,407,186,381,174"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a71afdffa2f5ccdeffbd2c9e6a6b0915b" title=" " alt="" coords="716,84,935,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="668,109,703,109,703,114,668,114"/>
+</map>

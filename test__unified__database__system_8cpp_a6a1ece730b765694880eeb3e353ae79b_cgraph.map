@@ -1,0 +1,12 @@
+<map id="test_reset_metrics" name="test_reset_metrics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,163,148,188"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="196,29,408,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,160,137,128,195,93,207,87,209,92,197,98,140,132,96,165"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aedbff42a4907596de056ce888353dc6e" title=" " alt="" coords="196,108,408,163"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="148,160,182,154,183,159,149,165"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#ae99414d762ba08d350283d0c7aa1c190" title="Get current performance metrics." alt="" coords="196,187,408,241"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="149,185,183,191,182,196,148,190"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a4e840af985e11068e28b6caaa324f937" title="Reset metrics counters." alt="" coords="196,265,408,320"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="96,186,141,217,197,250,212,257,210,262,195,255,138,222,93,190"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="258,29,258,19,266,10,281,5,302,3,327,6,342,14,339,18,326,11,302,8,282,10,269,15,263,21,263,29"/>
+</map>

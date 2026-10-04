@@ -1,0 +1,9 @@
+<map id="test_move_semantics" name="test_move_semantics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,99,171,124"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#aee70774b469807431bd84ea40535db82" title="Build and return the configured database system." alt="" coords="219,5,431,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,96,228,62,230,67,128,101"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a03625e9424dd8498f8534854e40d6f81" title="Create a builder for custom configuration." alt="" coords="219,84,431,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,109,205,109,205,114,171,114"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a987f1ad42e9a63d296fe214e5aff7571" title="Set the database backend type." alt="" coords="219,163,431,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="128,122,230,156,228,161,127,127"/>
+</map>

@@ -70,7 +70,7 @@ set(database_system_FOUND TRUE)
 
 # Provide information about the package
 set(database_system_VERSION @PROJECT_VERSION@)
-set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/database_system")
+set(database_system_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
 set(database_system_LIBRARIES database_system::database_system)
 
 message(STATUS "Found database_system: ${database_system_VERSION}")

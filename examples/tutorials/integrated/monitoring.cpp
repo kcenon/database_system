@@ -17,7 +17,7 @@
  *   ./monitoring [connection_string]
  */
 
-#include "integrated/unified_database_system.h"
+#include <kcenon/database/integrated/unified_database_system.h>
 #include <iostream>
 #include <iomanip>
 #include <thread>

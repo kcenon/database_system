@@ -20,7 +20,7 @@
  *   ./basic_usage "host=localhost dbname=testdb user=testuser password=testpass"
  */
 
-#include "integrated/unified_database_system.h"
+#include <kcenon/database/integrated/unified_database_system.h>
 #include <iostream>
 #include <iomanip>
 

@@ -75,6 +75,7 @@ jobs:
           cmake --build build-fuzz --target ${{ matrix.fuzzer }} -j
 
       - name: Run fuzzer
+        shell: bash
         run: |
           cd database_system
           MAX_TIME="${{ github.event.inputs.max_total_time || '120' }}"
@@ -103,4 +104,4 @@ jobs:
           name: fuzz-log-${{ matrix.fuzzer }}
           path: database_system/fuzz_${{ matrix.fuzzer }}.log
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 14

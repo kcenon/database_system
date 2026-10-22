@@ -1,0 +1,7 @@
+<map id="test_api_availability_stats" name="test_api_availability_stats">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,53,160,93"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#a296ab170cf88d75d162db249ee28aefb" title="Get current queue size." alt="" coords="208,5,420,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,57,194,51,195,56,161,62"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#a4149ee6c8a9ab7b6ba37600c7735a173" title="Get number of worker threads." alt="" coords="208,84,420,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,83,195,89,194,94,160,88"/>
+</map>

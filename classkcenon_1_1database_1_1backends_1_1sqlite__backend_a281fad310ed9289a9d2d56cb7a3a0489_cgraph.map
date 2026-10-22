@@ -1,0 +1,7 @@
+<map id="kcenon::database::backends::sqlite_backend::select_query" name="kcenon::database::backends::sqlite_backend::select_query">
+<area shape="rect" id="Node000001" title="Execute a SELECT query." alt="" coords="5,57,224,97"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1sqlite__backend.html#a0bf09c26c3fe8bd7c474f06bad7d93cf" title="Convert SQLite column value to database_value." alt="" coords="272,5,479,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,56,258,50,259,55,225,61"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="278,85,473,154"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,92,265,99,264,104,224,97"/>
+</map>

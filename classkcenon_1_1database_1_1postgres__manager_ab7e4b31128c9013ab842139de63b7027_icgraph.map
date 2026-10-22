@@ -1,0 +1,5 @@
+<map id="kcenon::database::postgres_manager::shutdown" name="kcenon::database::postgres_manager::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the database backend gracefully." alt="" coords="280,5,481,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1postgres__manager.html#ad2abf364270b626eabe2e7cad0c7b686" title="Destructor." alt="" coords="5,5,232,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,28,232,28,232,23,266,23"/>
+</map>

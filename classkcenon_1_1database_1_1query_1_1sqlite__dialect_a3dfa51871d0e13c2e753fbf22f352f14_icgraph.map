@@ -1,0 +1,7 @@
+<map id="kcenon::database::query::sqlite_dialect::quote_identifier" name="kcenon::database::query::sqlite_dialect::quote_identifier">
+<area shape="rect" id="Node000001" title="Quote an identifier (table or column name)" alt="" coords="237,45,420,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1sqlite__dialect.html#a19d996913ae5fbb1d4c67bed9c8c0cd0" title="Generate RETURNING clause for INSERT/UPDATE." alt="" coords="5,5,189,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,57,189,51,190,46,224,52"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1sqlite__dialect.html#a9e945e1e4797ec4e50d5b732f29e0d01" title="Generate UPSERT (INSERT OR UPDATE) clause." alt="" coords="6,84,189,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,93,189,99,188,93,223,88"/>
+</map>

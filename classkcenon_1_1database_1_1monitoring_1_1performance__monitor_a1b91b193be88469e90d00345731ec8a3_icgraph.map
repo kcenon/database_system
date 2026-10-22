@@ -1,0 +1,9 @@
+<map id="kcenon::database::monitoring::performance_monitor::check_thresholds" name="kcenon::database::monitoring::performance_monitor::check_thresholds">
+<area shape="rect" id="Node000001" title=" " alt="" coords="643,41,860,96"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a36fa71829a861905f7d57ab19d90728d" title=" " alt="" coords="316,13,595,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="629,56,594,52,595,47,630,51"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a4b51883dc945dada731e56ae1a42f66b" title=" " alt="" coords="345,77,565,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="629,86,566,94,565,89,628,81"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a41cf68fab73b6e8e5b28103e42141008" title="Constructor &#45; now public for dependency injection." alt="" coords="5,5,268,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="302,35,268,35,268,30,302,30"/>
+</map>

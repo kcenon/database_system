@@ -1,0 +1,9 @@
+<map id="kcenon::database::backends::postgresql_backend::do_initialize" name="kcenon::database::backends::postgresql_backend::do_initialize">
+<area shape="rect" id="Node000001" title="Database&#45;specific initialization logic." alt="" coords="5,84,212,139"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#ae763b3de58165098a28373c545c5eee3" title="Convert connection_config to PostgreSQL connection string." alt="" coords="285,5,491,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,81,277,61,278,66,207,86"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a69295856c94b50fb034066e744261514" title="Build a connection string with password masked for safe logging." alt="" coords="285,84,491,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,109,271,109,271,114,212,114"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a85574d17c346955a11e96e8439228f1c" title="Remove password from an error message that may contain the connection string." alt="" coords="260,163,516,203"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="213,135,297,157,296,162,212,141"/>
+</map>

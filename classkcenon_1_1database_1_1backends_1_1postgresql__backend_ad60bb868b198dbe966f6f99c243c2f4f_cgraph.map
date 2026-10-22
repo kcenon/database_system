@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::postgresql_backend::~postgresql_backend" name="kcenon::database::backends::postgresql_backend::~postgresql_backend">
+<area shape="rect" id="Node000001" title="Destructor &#45; ensures proper cleanup." alt="" coords="5,20,252,75"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a05dfb4fc44420b388f3a330ebbefb5d3" title=" " alt="" coords="300,5,521,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,45,286,45,286,50,252,50"/>
+</map>

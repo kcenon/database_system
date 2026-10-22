@@ -1,0 +1,13 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,109,75,134"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a848ba39dbaf985b3378adcd29f5a0cab" title="Deserialize message header from bytes." alt="" coords="123,101,404,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,119,109,119,109,124,75,124"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1protocol_1_1message__header.html#aef41a17c47f58d04b6fd6ea60103c3bd" title="Validate message header." alt="" coords="470,5,669,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,99,451,55,479,46,481,52,453,60,321,104"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aeb62d7633c0460e4155ec91f88cb085a" title=" " alt="" coords="452,69,687,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="404,104,438,100,438,106,405,109"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aa53d16c2c59a7beab50fd73540a11754" title=" " alt="" coords="452,133,687,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="405,133,438,137,438,142,404,139"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a204f2d5a1d9b17e6fdcf34973f7c736b" title=" " alt="" coords="452,197,687,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="321,139,453,183,481,191,479,196,451,188,320,144"/>
+</map>

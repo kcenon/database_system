@@ -1,0 +1,7 @@
+<map id="kcenon::database::integrated::adapters::backends::thread_backend" name="kcenon::database::integrated::adapters::backends::thread_backend">
+<area shape="rect" id="Node000001" title="Abstract base class for thread pool backends." alt="" coords="125,5,329,295"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html" title="Simple thread pool using std::thread." alt="" coords="5,343,217,932"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,309,184,343,179,342,187,307"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1null__thread__backend.html" title="Synchronous thread backend (no threading)" alt="" coords="241,483,445,792"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="267,307,309,482,304,483,262,309"/>
+</map>

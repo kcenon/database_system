@@ -1,0 +1,7 @@
+<map id="kcenon::database::query::condition_builder::add" name="kcenon::database::query::condition_builder::add">
+<area shape="rect" id="Node000001" title="Add a condition." alt="" coords="259,37,441,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1condition__builder.html#a16310301915cefd4fcba4a0416692ee6" title="Add a simple condition." alt="" coords="17,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,46,199,40,200,35,246,41"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1condition__builder.html#ad5663e3418b57cc1a62fca889d1d77d4" title="Add a raw SQL condition." alt="" coords="5,69,211,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,74,211,78,211,73,245,69"/>
+</map>

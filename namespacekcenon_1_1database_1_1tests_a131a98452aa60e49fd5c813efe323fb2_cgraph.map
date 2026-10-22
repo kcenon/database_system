@@ -1,0 +1,26 @@
+<map id="kcenon::database::tests::TEST_F" name="kcenon::database::tests::TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,197,183,237"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query__builder.html#a6e1cbde647cbbaa2a6d28f387384b963" title=" " alt="" coords="231,5,413,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,196,154,127,189,89,229,55,238,49,241,54,232,59,193,93,158,131,110,199"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query__builder.html#a56f6d5a43e530e7823054b88a3d7ef65" title=" " alt="" coords="231,69,413,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="118,195,168,157,229,119,244,112,246,117,232,124,171,162,121,199"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query__builder.html#a9ab6accb49d088160fd3bc1b0fabeca0" title=" " alt="" coords="231,133,413,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="165,195,236,175,237,180,167,200"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1query__builder.html#a9ad600f77ff5ec8c91b6ac04a801e0a4" title=" " alt="" coords="231,197,413,237"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="183,215,217,215,217,220,183,220"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1query__builder.html#a0a2230e8192f41c291096f3db64dc386" title=" " alt="" coords="231,261,413,301"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="167,235,237,255,236,260,165,240"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1query__builder.html#a53c9bccff57bc0bc55861303a746164e" title=" " alt="" coords="231,325,413,365"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="121,235,171,273,232,311,246,318,244,323,229,316,168,277,118,240"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1query__builder.html#a5f32bf36570758c6bd468a69f742fb5a" title=" " alt="" coords="231,389,413,429"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="110,236,158,304,193,342,232,375,241,381,238,385,229,379,189,346,154,307,105,239"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query__builder.html#a45eb7ee7222f1d1fb5d3ffaa7d254489" title=" " alt="" coords="461,229,644,269"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="391,107,415,119,447,142,478,168,527,217,524,221,474,171,444,146,412,124,388,112"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1database.html#a3f3372b7f3b1d55f670196fc53a9d301" title="Factory function to create appropriate dialect for database type." alt="" coords="692,229,879,269"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="644,247,678,247,678,252,644,252"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="383,171,414,183,500,221,498,226,412,188,381,176"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="414,227,448,232,447,237,413,233"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="413,266,447,261,448,267,414,271"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="381,323,412,311,498,273,500,278,414,316,383,328"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="388,387,412,375,444,353,474,327,524,278,527,281,478,331,447,357,415,380,391,392"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,136,75,161"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ab443e63f6201809dab8b32ba5c07f721" title="Get list of all registered backend names." alt="" coords="141,5,349,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,134,80,102,121,70,134,64,136,68,124,75,84,106,54,137"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ad3312ec279457d968b0778490494ce7a" title="Get number of registered backends." alt="" coords="123,85,368,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="74,139,138,125,139,130,75,144"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="144,173,347,213"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="75,153,139,167,138,172,74,159"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a381e330bf39ee7cd470e8a56391c29b3" title="Register a backend factory function." alt="" coords="146,237,345,292"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="54,160,84,191,124,222,136,229,134,234,121,227,80,195,50,164"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="207,173,204,163,211,154,224,148,245,146,269,149,283,156,280,161,268,154,245,151,226,153,214,158,210,164,212,172"/>
+</map>

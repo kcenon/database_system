@@ -1,0 +1,89 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,416,60,441"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#aadc2d01617401344c90e9c43781f354d" title="Clean up test log directory." alt="" coords="399,307,537,332"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="32,416,35,377,45,325,55,298,68,271,85,247,106,228,157,201,181,195,204,194,251,204,305,228,323,242,331,260,339,277,354,292,387,307,385,312,350,296,334,280,326,262,319,246,303,232,250,209,203,199,181,201,159,206,110,232,89,251,72,274,60,300,50,327,40,378,37,416"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="135,440,277,465"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="61,430,121,438,120,444,60,435"/>
+<area shape="rect" id="Node000010" href="$test__logger__adapter_8cpp.html#a4a0ed92e00e1363eb8d953775fc1357d" title="Test connection event logging." alt="" coords="116,243,296,268"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="34,415,41,387,55,349,76,310,106,277,113,272,116,277,110,281,81,314,60,352,47,388,39,417"/>
+<area shape="rect" id="Node000013" href="$test__logger__adapter_8cpp.html#a3ab20a0e2fee045d5e283db9b8315a0c" title="Test error logging." alt="" coords="136,489,276,515"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="51,439,77,458,109,476,128,483,126,488,107,480,75,463,48,444"/>
+<area shape="rect" id="Node000015" href="$test__logger__adapter_8cpp.html#a55fa9354578d0d36b1b01c28590a45a9" title="Test logger initialization and shutdown." alt="" coords="139,539,273,564"/>
+<area shape="poly" id="edge24_Node000001_Node000015" title=" " alt="" coords="42,440,68,483,87,506,109,525,127,534,124,539,107,530,83,509,63,486,38,443"/>
+<area shape="rect" id="Node000017" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,391,291,416"/>
+<area shape="poly" id="edge29_Node000001_Node000017" title=" " alt="" coords="60,422,107,415,108,420,61,427"/>
+<area shape="rect" id="Node000018" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,588,279,613"/>
+<area shape="poly" id="edge36_Node000001_Node000018" title=" " alt="" coords="39,441,47,469,60,505,81,543,110,575,121,582,118,587,106,579,77,546,56,508,42,471,34,442"/>
+<area shape="rect" id="Node000021" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,637,304,663"/>
+<area shape="poly" id="edge44_Node000001_Node000021" title=" " alt="" coords="37,441,42,478,54,527,75,580,91,603,110,624,115,628,112,632,106,628,87,607,71,582,49,529,37,479,32,442"/>
+<area shape="rect" id="Node000022" href="$test__logger__adapter_8cpp.html#acae8ee2c7c5718208ab603c907647606" title="Test thread safety (basic concurrency test)" alt="" coords="134,341,278,367"/>
+<area shape="poly" id="edge52_Node000001_Node000022" title=" " alt="" coords="49,413,75,395,107,377,129,368,131,373,109,382,78,399,52,418"/>
+<area shape="rect" id="Node000023" href="$test__logger__adapter_8cpp.html#a3d1ab1e178130cddadaaef26af764dcc" title="Test transaction logging." alt="" coords="115,292,297,317"/>
+<area shape="poly" id="edge58_Node000001_Node000023" title=" " alt="" coords="38,415,63,372,83,348,106,328,119,321,122,325,110,332,87,352,68,375,42,417"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="276,440,302,427,319,407,325,386,332,364,350,343,384,326,387,331,354,347,337,366,330,387,323,409,306,431,279,445"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#af26bd7f4d08d521ffd1b5b5d08b9bd6b" title="Flush pending log messages." alt="" coords="352,357,584,397"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="263,437,303,426,351,407,380,398,382,403,353,413,305,431,265,442"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a0982310317cce219bda3988656ede5e9" title="Initialize the logger." alt="" coords="362,524,574,579"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="263,463,305,475,401,516,399,521,303,481,262,468"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a30ba3594d291f5b2fb567951b8f5d2be" title="Generic log message." alt="" coords="357,242,579,282"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="276,442,302,427,315,411,322,395,326,361,329,327,336,309,350,292,355,288,358,292,354,296,341,312,334,328,331,362,327,396,320,414,306,431,279,446"/>
+<area shape="rect" id="Node000007" href="$test__logger__adapter_8cpp.html#a8e1c5c853009c223e5247a6ccb3eb382" title="Check if a log file contains a specific string." alt="" coords="403,760,533,785"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="279,459,306,476,329,511,337,546,336,580,330,615,324,648,323,682,331,714,354,747,370,759,390,767,388,772,368,764,350,751,326,717,318,682,319,648,325,614,331,580,332,546,324,513,302,480,276,463"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a52e8b8852ef0c409fb976a9945475e5b" title="Shutdown the logger gracefully." alt="" coords="362,421,574,476"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="277,449,348,448,348,453,278,454"/>
+<area shape="poly" id="edge6_Node000005_Node000005" title=" " alt="" coords="417,524,418,514,427,505,444,499,468,497,497,500,514,508,512,513,496,506,468,503,445,505,429,509,422,516,423,524"/>
+<area shape="rect" id="Node000009" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="687,436,789,461"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="574,446,673,446,673,451,574,451"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="261,265,305,277,353,291,392,301,391,306,351,297,303,282,260,271"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="283,266,306,277,322,294,331,311,338,327,354,343,363,348,360,353,350,347,334,330,326,313,318,297,302,281,281,271"/>
+<area shape="poly" id="edge14_Node000010_Node000005" title=" " alt="" coords="291,266,306,277,325,304,334,330,336,355,334,381,332,433,339,460,354,487,385,515,381,519,350,490,334,462,327,434,329,381,331,355,329,331,321,306,302,281,288,270"/>
+<area shape="poly" id="edge17_Node000010_Node000008" title=" " alt="" coords="289,266,306,277,320,293,327,310,331,343,335,375,342,391,354,407,359,411,355,415,350,410,337,394,330,377,326,344,322,311,315,296,302,281,286,270"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a38bc47a2fcd418026b8eb631eaa7344a" title="Log a connection pool event." alt="" coords="362,84,574,139"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="220,241,275,196,312,171,351,148,363,142,365,147,353,152,315,175,278,200,223,245"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#ac64116fab28b55361609cf00eced4be4" title="Log a connection pool state change." alt="" coords="362,5,574,60"/>
+<area shape="poly" id="edge16_Node000010_Node000012" title=" " alt="" coords="212,241,231,207,262,161,302,112,350,69,357,65,360,69,354,73,306,116,266,164,236,210,216,244"/>
+<area shape="poly" id="edge19_Node000013_Node000002" title=" " alt="" coords="275,492,302,476,315,460,322,445,325,411,329,376,336,359,350,343,366,332,384,324,387,329,369,336,354,347,341,362,334,378,330,411,327,446,320,463,306,480,277,496"/>
+<area shape="poly" id="edge20_Node000013_Node000004" title=" " alt="" coords="275,489,302,476,318,460,326,443,334,425,350,408,362,401,365,405,354,412,338,428,331,445,322,463,306,480,277,494"/>
+<area shape="poly" id="edge21_Node000013_Node000005" title=" " alt="" coords="275,512,349,526,348,531,274,517"/>
+<area shape="poly" id="edge23_Node000013_Node000008" title=" " alt="" coords="269,487,348,470,349,476,270,492"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a3434d45e8c5388bc66e757f5198ae0bb" title="Log a database error." alt="" coords="362,603,574,657"/>
+<area shape="poly" id="edge22_Node000013_Node000014" title=" " alt="" coords="278,512,306,525,322,541,331,558,339,574,354,589,360,594,357,598,350,593,334,577,326,560,318,544,302,530,275,516"/>
+<area shape="poly" id="edge25_Node000015_Node000002" title=" " alt="" coords="273,542,289,535,302,525,318,504,326,482,327,459,325,436,323,413,325,389,333,366,350,343,366,331,384,323,386,328,369,336,354,347,337,368,330,390,329,412,330,436,332,459,331,483,323,506,306,529,291,540,275,547"/>
+<area shape="poly" id="edge26_Node000015_Node000005" title=" " alt="" coords="273,549,348,549,348,554,273,554"/>
+<area shape="poly" id="edge28_Node000015_Node000008" title=" " alt="" coords="273,536,303,525,317,516,326,506,351,486,365,479,367,484,353,491,330,510,320,520,305,530,275,541"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#ac8ffec46feb0c55c7ac7ae4081a5f20f" title="Check if logger is initialized." alt="" coords="362,681,574,736"/>
+<area shape="poly" id="edge27_Node000015_Node000016" title=" " alt="" coords="275,558,306,575,324,598,331,622,337,646,354,668,358,671,354,675,350,672,332,648,326,624,319,600,302,579,273,563"/>
+<area shape="poly" id="edge30_Node000017_Node000002" title=" " alt="" coords="272,388,303,377,326,360,351,342,385,330,386,335,353,347,330,364,305,382,274,393"/>
+<area shape="poly" id="edge31_Node000017_Node000004" title=" " alt="" coords="291,392,338,387,339,393,292,397"/>
+<area shape="poly" id="edge32_Node000017_Node000005" title=" " alt="" coords="279,414,305,426,322,441,331,456,340,471,354,487,396,515,393,520,350,491,335,474,327,459,318,445,303,431,277,418"/>
+<area shape="poly" id="edge33_Node000017_Node000006" title=" " alt="" coords="283,388,302,377,319,357,326,336,333,314,350,292,358,287,361,291,354,296,337,316,331,338,324,360,306,381,286,393"/>
+<area shape="poly" id="edge34_Node000017_Node000007" title=" " alt="" coords="290,414,306,427,322,447,332,468,341,509,338,550,330,590,321,630,319,669,328,708,338,728,354,747,370,759,390,767,388,772,368,764,350,751,334,730,323,710,314,670,316,629,324,589,333,549,335,509,327,470,317,450,302,431,287,418"/>
+<area shape="poly" id="edge35_Node000017_Node000008" title=" " alt="" coords="280,413,348,425,348,431,279,419"/>
+<area shape="poly" id="edge37_Node000018_Node000002" title=" " alt="" coords="278,590,302,575,322,547,329,519,329,490,325,461,321,431,321,401,329,372,350,343,366,331,384,323,386,328,369,335,354,347,334,374,326,402,326,431,330,460,334,489,335,519,326,549,306,579,281,595"/>
+<area shape="poly" id="edge38_Node000018_Node000004" title=" " alt="" coords="278,590,302,575,317,555,325,535,326,494,327,451,334,429,350,408,356,403,360,407,354,412,339,432,332,452,331,494,330,536,322,558,306,579,281,594"/>
+<area shape="poly" id="edge39_Node000018_Node000005" title=" " alt="" coords="274,585,348,571,349,576,275,591"/>
+<area shape="poly" id="edge40_Node000018_Node000007" title=" " alt="" coords="281,609,306,624,319,639,326,656,330,687,334,718,341,733,354,747,371,758,390,765,388,770,368,762,350,751,337,736,329,720,325,688,321,657,315,642,302,628,278,614"/>
+<area shape="poly" id="edge43_Node000018_Node000008" title=" " alt="" coords="278,588,302,575,319,554,326,532,333,510,350,487,357,482,360,486,354,491,338,512,331,534,324,557,306,579,281,592"/>
+<area shape="rect" id="Node000019" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a60b58028a28b4d9977b094bf18b20558" title="Log a SQL query execution." alt="" coords="362,809,574,864"/>
+<area shape="poly" id="edge41_Node000018_Node000019" title=" " alt="" coords="281,608,306,624,322,646,330,668,331,711,332,754,339,775,354,796,356,798,352,802,350,800,334,778,327,755,326,711,325,669,318,648,302,628,278,613"/>
+<area shape="rect" id="Node000020" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a3ad98f7321be740d389c4be26e7865ae" title="Log a slow query with warning." alt="" coords="632,841,844,896"/>
+<area shape="poly" id="edge42_Node000019_Node000020" title=" " alt="" coords="575,847,619,852,618,857,574,852"/>
+<area shape="poly" id="edge45_Node000021_Node000002" title=" " alt="" coords="288,635,302,624,325,590,333,555,331,521,325,485,318,450,317,414,326,378,350,343,366,330,384,322,386,327,369,335,354,346,331,380,322,415,324,449,330,484,337,520,338,556,330,592,306,628,292,639"/>
+<area shape="poly" id="edge46_Node000021_Node000004" title=" " alt="" coords="288,635,302,624,321,598,328,572,329,546,326,519,323,491,323,464,331,436,350,408,355,403,359,407,354,412,336,438,328,465,328,491,331,518,334,546,334,573,325,601,306,628,291,639"/>
+<area shape="poly" id="edge47_Node000021_Node000005" title=" " alt="" coords="272,635,303,624,327,607,351,589,365,582,368,587,353,594,330,611,305,628,274,640"/>
+<area shape="poly" id="edge48_Node000021_Node000007" title=" " alt="" coords="223,661,278,703,314,727,353,746,390,758,388,763,351,751,312,731,275,708,220,665"/>
+<area shape="poly" id="edge51_Node000021_Node000008" title=" " alt="" coords="286,635,302,624,316,608,323,592,326,558,329,523,336,505,350,487,355,483,358,486,354,490,341,507,335,524,331,558,328,593,320,611,306,628,289,640"/>
+<area shape="poly" id="edge49_Node000021_Node000019" title=" " alt="" coords="219,661,271,725,310,763,353,796,362,801,360,806,351,800,307,767,268,729,215,665"/>
+<area shape="poly" id="edge50_Node000021_Node000020" title=" " alt="" coords="213,662,228,706,255,766,274,797,297,827,323,853,353,874,385,889,419,899,491,908,561,906,627,896,627,901,562,911,490,914,418,904,384,894,351,879,320,857,293,831,270,800,251,768,223,708,208,664"/>
+<area shape="poly" id="edge53_Node000022_Node000002" title=" " alt="" coords="278,342,385,328,386,333,279,347"/>
+<area shape="poly" id="edge54_Node000022_Node000004" title=" " alt="" coords="278,358,339,363,338,368,278,363"/>
+<area shape="poly" id="edge55_Node000022_Node000005" title=" " alt="" coords="279,362,306,377,318,391,326,404,332,432,338,459,344,473,354,487,389,515,385,519,350,491,339,475,332,461,327,433,321,406,314,394,302,381,277,367"/>
+<area shape="poly" id="edge56_Node000022_Node000006" title=" " alt="" coords="273,339,303,328,326,310,351,292,367,285,369,289,353,296,330,314,305,332,274,344"/>
+<area shape="poly" id="edge57_Node000022_Node000008" title=" " alt="" coords="268,364,305,377,330,391,353,406,370,414,368,419,351,411,327,396,303,382,266,369"/>
+<area shape="poly" id="edge59_Node000023_Node000002" title=" " alt="" coords="298,307,385,312,385,317,298,312"/>
+<area shape="poly" id="edge60_Node000023_Node000004" title=" " alt="" coords="258,315,305,327,353,342,381,350,380,355,351,347,303,333,257,320"/>
+<area shape="poly" id="edge61_Node000023_Node000005" title=" " alt="" coords="287,315,306,328,322,348,330,368,333,407,335,446,341,466,354,487,386,515,383,519,350,490,336,469,330,447,328,407,325,369,317,351,302,332,284,320"/>
+<area shape="poly" id="edge63_Node000023_Node000008" title=" " alt="" coords="282,315,306,328,323,348,331,368,338,388,354,407,361,412,358,416,350,411,333,390,326,370,319,350,302,332,280,320"/>
+<area shape="rect" id="Node000024" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#aaad9e3b34cb710412987f80218413365" title="Log a transaction operation." alt="" coords="362,163,574,217"/>
+<area shape="poly" id="edge62_Node000023_Node000024" title=" " alt="" coords="274,289,303,277,317,266,326,253,335,241,350,228,362,221,365,226,354,232,339,244,330,257,321,269,305,282,276,294"/>
+</map>

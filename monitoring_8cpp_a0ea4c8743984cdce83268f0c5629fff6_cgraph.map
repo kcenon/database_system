@@ -1,0 +1,11 @@
+<map id="example_health_monitoring" name="example_health_monitoring">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,211,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a14ef0e34cb02656d21d6499c791a5d55" title="Perform health check." alt="" coords="259,5,471,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,81,245,60,246,65,161,86"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="313,84,417,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,94,299,94,299,99,211,99"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a7b3fa0ffdd64e3d407ea4c98eca35215" title=" " alt="" coords="292,133,437,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,107,285,128,284,133,174,112"/>
+<area shape="rect" id="Node000005" href="$monitoring_8cpp.html#ac1c57fa77126b78c71abd37839ce3cef" title=" " alt="" coords="519,133,640,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="438,143,505,143,505,149,438,149"/>
+</map>

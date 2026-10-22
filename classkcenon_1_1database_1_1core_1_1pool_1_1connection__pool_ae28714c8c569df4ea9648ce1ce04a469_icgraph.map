@@ -1,0 +1,5 @@
+<map id="kcenon::database::core::pool::connection_pool::take_idle_locked" name="kcenon::database::core::pool::connection_pool::take_idle_locked">
+<area shape="rect" id="Node000001" title="Pop an idle connection (if any). Called with mutex held." alt="" coords="227,5,400,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#a0c85f55bd64a2bcb19c15ad441b56e52" title="Acquire with an explicit timeout (overrides the configured one)." alt="" coords="5,5,179,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,35,179,35,179,30,213,30"/>
+</map>

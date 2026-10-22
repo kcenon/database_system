@@ -1,0 +1,5 @@
+<map id="kcenon::database::query_dialect" name="kcenon::database::query_dialect">
+<area shape="rect" id="Node000001" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,5,183,285"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1detail_1_1sql__dialect.html" title="SQL dialect implementation for PostgreSQL, SQLite." alt="" coords="5,333,183,933"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,299,97,333,91,333,91,299"/>
+</map>

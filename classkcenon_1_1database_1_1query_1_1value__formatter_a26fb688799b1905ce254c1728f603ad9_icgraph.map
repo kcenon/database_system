@@ -1,0 +1,25 @@
+<map id="kcenon::database::query::value_formatter::escape_postgresql_string" name="kcenon::database::query::value_formatter::escape_postgresql_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1185,183,1375,237"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a1788e034efb0b29a84ccf7893949771d" title="Escape a string value." alt="" coords="948,183,1137,237"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1172,213,1137,213,1137,207,1172,207"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a66af11f64f077c76bc9c71d9fa37f0c7" title=" " alt="" coords="713,119,900,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="934,183,899,174,901,169,935,178"/>
+<area shape="rect" id="Node000011" href="$value__formatter__test_8cpp.html#ad72644fe0b0ba7c3a5483255f68aa6a6" title=" " alt="" coords="772,197,841,223"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="934,213,842,213,842,207,934,207"/>
+<area shape="rect" id="Node000012" href="$value__formatter__test_8cpp.html#a415dc868b6bbebeca2d9a3304becc52f" title=" " alt="" coords="772,247,841,272"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="935,235,842,255,841,250,934,230"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a8d613ac82b160cc5fa8dc6dfd576fd75" title="Format a database value." alt="" coords="479,126,665,166"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="700,149,666,149,666,143,700,143"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1query_1_1condition__builder.html#a261194fd371b36ecc67b1e409d77e4f0" title=" " alt="" coords="236,5,431,60"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="523,122,430,74,404,63,406,58,432,69,525,117"/>
+<area shape="rect" id="Node000007" href="$value__formatter__test_8cpp.html#a3d803735a348e253cfedf0dd33d7690e" title=" " alt="" coords="299,84,368,109"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="465,127,368,106,369,101,466,121"/>
+<area shape="rect" id="Node000008" href="$value__formatter__test_8cpp.html#a6852ef91709e23191525640a16ca8637" title=" " alt="" coords="299,133,368,159"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="465,149,368,149,368,143,465,143"/>
+<area shape="rect" id="Node000009" href="$value__formatter__test_8cpp.html#a64345068bd960b309e6cf323eff81054" title=" " alt="" coords="299,183,368,208"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="466,171,369,191,368,186,465,165"/>
+<area shape="rect" id="Node000010" href="$value__formatter__test_8cpp.html#a4a3cd77dd8c4f3fc5e0263cb3fa2cee4" title=" " alt="" coords="299,232,368,257"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="527,175,481,199,432,222,369,240,367,235,430,217,479,195,524,171"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query_1_1condition__builder.html#a16d0c52353e7154415160b7654488782" title="Build the WHERE clause." alt="" coords="5,13,188,53"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="222,35,188,35,188,30,222,30"/>
+</map>

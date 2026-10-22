@@ -1,0 +1,9 @@
+<map id="kcenon::database::monitoring::prometheus_exporter" name="kcenon::database::monitoring::prometheus_exporter">
+<area shape="rect" id="Node000001" title="Export metrics in Prometheus format." alt="" coords="19,317,243,457"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1monitoring_1_1metrics__exporter.html" title="Export metrics to external monitoring systems." alt="" coords="5,135,213,255"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,269,126,317,120,318,115,269"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="238,162,317,227"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,229,196,306,192,303,251,226"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="212,5,343,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="280,100,280,162,275,162,275,100"/>
+</map>

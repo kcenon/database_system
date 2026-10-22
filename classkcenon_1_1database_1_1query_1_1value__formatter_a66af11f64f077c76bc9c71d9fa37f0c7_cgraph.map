@@ -1,0 +1,9 @@
+<map id="kcenon::database::query::value_formatter::format_string" name="kcenon::database::query::value_formatter::format_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,192,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a1788e034efb0b29a84ccf7893949771d" title="Escape a string value." alt="" coords="240,45,429,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,70,227,70,227,75,192,75"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a26fb688799b1905ce254c1728f603ad9" title=" " alt="" coords="477,5,667,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="429,54,463,48,464,54,430,59"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#af19b5372b157a6c4cc370670640af90e" title=" " alt="" coords="477,84,667,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="430,85,464,91,463,96,429,91"/>
+</map>

@@ -1,0 +1,65 @@
+<map id="kcenon::database::protocol::protocol_serializer::write_string" name="kcenon::database::protocol::protocol_serializer::write_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="384,750,619,790"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a42cb5e137cda20ae2c137cfb8a1d38ca" title="Serialize connect request." alt="" coords="123,590,336,630"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="468,743,409,693,373,667,335,644,307,633,310,628,337,640,376,662,412,688,471,739"/>
+<area shape="rect" id="Node000028" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#ab7956499a6e70e449c481d9772365761" title="Serialize connect response." alt="" coords="123,654,336,694"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="438,747,335,709,299,697,300,692,337,703,440,742"/>
+<area shape="rect" id="Node000029" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a047be327519d1543c0cb105aba0e9940" title="Serialize error response." alt="" coords="123,718,336,758"/>
+<area shape="poly" id="edge28_Node000001_Node000029" title=" " alt="" coords="370,757,336,753,337,748,371,752"/>
+<area shape="rect" id="Node000030" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a936a70e1cacec51d66a9dd63c27daa30" title="Serialize query request." alt="" coords="123,782,336,822"/>
+<area shape="poly" id="edge29_Node000001_Node000030" title=" " alt="" coords="371,788,337,792,336,787,370,783"/>
+<area shape="rect" id="Node000031" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a0a7c5f6722d70aa0ce929c0db61245d0" title="Serialize query response." alt="" coords="123,846,336,886"/>
+<area shape="poly" id="edge30_Node000001_Node000031" title=" " alt="" coords="440,798,337,837,300,848,299,843,335,831,438,793"/>
+<area shape="rect" id="Node000032" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a69ca01d164dc5bb44f7d74a290f98e7e" title="Serialize transaction response." alt="" coords="123,910,336,950"/>
+<area shape="poly" id="edge31_Node000001_Node000032" title=" " alt="" coords="471,801,412,852,376,878,337,900,310,912,307,907,335,896,373,873,409,847,468,797"/>
+<area shape="rect" id="Node000003" href="$test__protocol__serializer_8cpp.html#ab3b9b166d30943eb872fadcedb0cf2ac" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="224,577,215,479,191,341,172,264,146,187,113,113,73,44,62,33,66,29,77,40,118,110,151,185,177,263,197,339,220,478,229,576"/>
+<area shape="rect" id="Node000004" href="$test__protocol__serializer_8cpp.html#a591f959f34a3626d51ce278da4c37750" title=" " alt="" coords="5,55,75,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="223,576,212,486,186,360,167,291,142,222,111,155,73,93,62,82,66,78,77,90,115,152,147,220,172,290,192,359,217,485,228,576"/>
+<area shape="rect" id="Node000005" href="$test__protocol__serializer_8cpp.html#a786efc0eb3c08d1e168760967d11d18d" title=" " alt="" coords="5,104,75,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="222,577,208,494,182,381,162,320,138,258,108,198,73,142,61,131,65,127,77,139,113,195,142,256,167,318,187,380,214,493,227,576"/>
+<area shape="rect" id="Node000006" href="$test__protocol__serializer_8cpp.html#a5459b354e044aaeaf35b83478b558ff4" title=" " alt="" coords="5,153,75,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="220,577,205,502,176,402,157,348,133,293,105,240,73,192,61,181,65,177,77,188,110,238,138,291,162,346,181,400,210,501,225,576"/>
+<area shape="rect" id="Node000007" href="$test__protocol__serializer_8cpp.html#a30540100e6a66b1591ddacc812706024" title=" " alt="" coords="5,203,75,228"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="218,577,200,511,171,423,129,329,102,283,73,241,61,230,65,226,77,238,107,280,133,326,176,421,206,509,223,576"/>
+<area shape="rect" id="Node000008" href="$test__protocol__serializer_8cpp.html#a2d326a82805ee67f735a0234193701c6" title=" " alt="" coords="5,252,75,277"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="216,578,196,520,165,445,124,365,73,290,61,279,64,275,77,287,129,362,170,443,201,518,221,576"/>
+<area shape="rect" id="Node000009" href="$test__protocol__serializer_8cpp.html#a59fe18526cecd4323a4df9683294ec87" title=" " alt="" coords="5,301,75,327"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="213,578,191,529,159,467,120,401,73,340,60,329,64,325,77,336,124,398,164,464,195,526,217,576"/>
+<area shape="rect" id="Node000010" href="$test__protocol__serializer_8cpp.html#a2a7795d61b43e79214942d1801dbd864" title=" " alt="" coords="5,351,75,376"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="208,579,153,490,115,438,73,389,60,378,63,374,77,385,119,434,157,487,213,577"/>
+<area shape="rect" id="Node000011" href="$test__protocol__serializer_8cpp.html#a44dc579075a9c6c4491a21458bc5d3df" title=" " alt="" coords="5,400,75,425"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="202,581,146,513,73,439,59,428,62,423,76,435,150,510,206,577"/>
+<area shape="rect" id="Node000012" href="$test__protocol__serializer_8cpp.html#a8ec5d2c99df34f2ea04f0a371d487ee1" title=" " alt="" coords="5,449,75,475"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="192,583,73,488,58,477,61,473,76,484,195,579"/>
+<area shape="rect" id="Node000013" href="$test__protocol__serializer_8cpp.html#a560bf78695dea2e9cf5a015a796f8c1c" title=" " alt="" coords="5,499,75,524"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="177,586,64,526,67,522,179,581"/>
+<area shape="rect" id="Node000014" href="$test__protocol__serializer_8cpp.html#afeb0db17b7857e324b1aa08896854400" title=" " alt="" coords="5,548,75,573"/>
+<area shape="poly" id="edge13_Node000002_Node000014" title=" " alt="" coords="138,589,74,572,76,567,139,584"/>
+<area shape="rect" id="Node000015" href="$test__protocol__serializer_8cpp.html#ae0037b9ba14a06d78f1776e155deceba" title=" " alt="" coords="5,597,75,623"/>
+<area shape="poly" id="edge14_Node000002_Node000015" title=" " alt="" coords="109,613,75,613,75,607,109,607"/>
+<area shape="rect" id="Node000016" href="$test__protocol__serializer_8cpp.html#a79b9c5e5b323520287138eb05091e83c" title=" " alt="" coords="5,647,75,672"/>
+<area shape="poly" id="edge15_Node000002_Node000016" title=" " alt="" coords="139,636,76,653,74,648,138,631"/>
+<area shape="rect" id="Node000017" href="$test__protocol__serializer_8cpp.html#a219877e7b9f2d4f60a146045e9ccbccc" title=" " alt="" coords="5,696,75,721"/>
+<area shape="poly" id="edge16_Node000002_Node000017" title=" " alt="" coords="137,638,124,644,99,663,76,685,60,698,57,694,73,681,96,659,121,640,135,633"/>
+<area shape="rect" id="Node000018" href="$test__protocol__serializer_8cpp.html#a3604b8815c3b404d7c2395bc04767dea" title=" " alt="" coords="5,745,75,771"/>
+<area shape="poly" id="edge17_Node000002_Node000018" title=" " alt="" coords="131,639,124,644,107,665,99,686,92,709,77,734,63,747,59,743,73,731,87,707,94,684,102,662,121,640,128,635"/>
+<area shape="rect" id="Node000019" href="$test__protocol__serializer_8cpp.html#a75732e665a85010abe5d6b5ca5376f73" title=" " alt="" coords="5,795,75,820"/>
+<area shape="poly" id="edge18_Node000002_Node000019" title=" " alt="" coords="129,640,125,644,111,660,103,676,98,709,94,745,88,764,77,784,64,796,60,793,73,780,83,761,89,744,93,709,98,675,106,658,121,640,125,636"/>
+<area shape="rect" id="Node000020" href="$test__protocol__serializer_8cpp.html#aa45dd4ebea2a1ce3fb32322caa6339cb" title=" " alt="" coords="5,844,75,869"/>
+<area shape="poly" id="edge19_Node000002_Node000020" title=" " alt="" coords="128,640,125,644,108,666,99,689,96,711,97,733,97,780,91,806,77,833,65,846,61,842,72,830,86,804,91,780,91,733,91,710,94,687,103,664,121,640,125,636"/>
+<area shape="rect" id="Node000021" href="$test__protocol__serializer_8cpp.html#a37933cf32fe99a88d57674d36057f0cf" title=" " alt="" coords="5,893,75,919"/>
+<area shape="poly" id="edge20_Node000002_Node000021" title=" " alt="" coords="128,641,125,644,104,673,95,701,93,729,96,757,99,816,93,848,77,882,65,895,61,891,72,879,88,847,94,816,90,757,88,729,90,700,100,670,121,640,124,637"/>
+<area shape="rect" id="Node000022" href="$test__protocol__serializer_8cpp.html#a403afd4522596cc53a127adb1e03d6dc" title=" " alt="" coords="5,943,75,968"/>
+<area shape="poly" id="edge21_Node000002_Node000022" title=" " alt="" coords="128,641,125,644,101,679,91,713,90,747,94,781,99,816,101,852,95,890,77,931,65,944,61,941,72,929,90,889,96,852,94,816,89,781,85,747,86,712,96,677,121,640,124,637"/>
+<area shape="rect" id="Node000023" href="$test__protocol__serializer_8cpp.html#a90d0d747b9673ad64c9449762317f522" title=" " alt="" coords="5,992,75,1017"/>
+<area shape="poly" id="edge22_Node000002_Node000023" title=" " alt="" coords="127,641,125,644,98,685,87,725,87,765,93,804,100,845,103,888,97,933,77,981,65,994,61,990,72,978,92,931,98,888,95,846,88,805,82,765,82,725,93,683,121,640,123,637"/>
+<area shape="rect" id="Node000024" href="$test__protocol__serializer_8cpp.html#a56d3784f58d5f2e26d4564b7e3ba640b" title=" " alt="" coords="5,1041,75,1067"/>
+<area shape="poly" id="edge23_Node000002_Node000024" title=" " alt="" coords="127,641,125,644,107,668,95,691,83,738,84,783,92,828,101,875,106,924,100,975,91,1002,77,1030,65,1043,62,1039,72,1027,86,1000,94,974,100,924,96,876,87,829,79,783,78,737,90,690,102,665,121,640,123,637"/>
+<area shape="rect" id="Node000025" href="$test__protocol__serializer_8cpp.html#a01b8c3de5a7a3f122861096f8707b0e3" title=" " alt="" coords="5,1091,75,1116"/>
+<area shape="poly" id="edge24_Node000002_Node000025" title=" " alt="" coords="127,641,125,644,105,671,91,698,83,724,79,750,81,801,91,852,102,905,108,959,102,1017,92,1048,77,1079,66,1092,62,1089,72,1077,87,1046,97,1016,103,959,97,905,85,853,75,801,73,749,78,723,86,696,100,668,121,640,123,637"/>
+<area shape="rect" id="Node000026" href="$test__protocol__serializer_8cpp.html#a0a2e3c22057475ec8d9111414707f04f" title=" " alt="" coords="5,1140,75,1165"/>
+<area shape="poly" id="edge25_Node000002_Node000026" title=" " alt="" coords="127,641,125,644,114,661,106,684,96,740,94,807,95,881,97,1023,92,1083,77,1129,66,1142,62,1138,72,1126,86,1082,92,1023,90,881,89,807,91,740,100,682,109,659,121,640,123,637"/>
+<area shape="rect" id="Node000027" href="$test__protocol__serializer_8cpp.html#ac90f54b6aafe406d2e9f96f7b2292fc0" title=" " alt="" coords="5,1189,75,1215"/>
+<area shape="poly" id="edge26_Node000002_Node000027" title=" " alt="" coords="127,641,125,644,113,663,104,688,94,750,92,824,95,905,99,1062,93,1128,86,1155,77,1178,66,1191,62,1187,72,1175,81,1154,88,1127,93,1062,89,905,87,824,89,750,99,687,108,661,121,640,123,637"/>
+</map>

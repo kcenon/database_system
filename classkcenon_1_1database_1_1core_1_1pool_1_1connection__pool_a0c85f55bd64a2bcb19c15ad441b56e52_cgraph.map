@@ -1,0 +1,7 @@
+<map id="kcenon::database::core::pool::connection_pool::acquire" name="kcenon::database::core::pool::connection_pool::acquire">
+<area shape="rect" id="Node000001" title="Acquire with an explicit timeout (overrides the configured one)." alt="" coords="5,45,179,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#a0885fefa8507694bd080b410d2bb01f2" title="Try to create a new connection. A capacity slot is reserved before the mutex is released for the fact..." alt="" coords="227,5,400,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,54,213,48,214,53,180,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#ae28714c8c569df4ea9648ce1ce04a469" title="Pop an idle connection (if any). Called with mutex held." alt="" coords="227,84,400,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,85,214,91,213,96,179,90"/>
+</map>

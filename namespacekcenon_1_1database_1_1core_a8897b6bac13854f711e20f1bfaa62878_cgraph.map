@@ -1,0 +1,8 @@
+<map id="kcenon::database::core::available_backends" name="kcenon::database::core::available_backends">
+<area shape="rect" id="Node000001" title="Convenience function for getting available backends." alt="" coords="5,61,179,101"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ab443e63f6201809dab8b32ba5c07f721" title="Get list of all registered backend names." alt="" coords="227,5,435,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,61,213,54,214,59,179,66"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="229,109,432,149"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,95,218,103,217,109,178,101"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="286,109,284,99,291,90,307,84,331,82,358,85,373,92,371,97,357,90,331,87,308,89,294,94,289,100,292,108"/>
+</map>

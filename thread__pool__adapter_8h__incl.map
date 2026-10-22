@@ -1,0 +1,21 @@
+<map id="include/kcenon/database/adapters/thread_pool_adapter.h" name="include/kcenon/database/adapters/thread_pool_adapter.h">
+<area shape="rect" id="Node000001" title="Adapter layer for thread_system integration." alt="" coords="380,5,564,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,69,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="380,52,244,77,83,110,82,105,243,72,379,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="93,108,157,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="381,59,171,110,170,105,379,54"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="182,108,325,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="406,63,296,105,294,100,404,58"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="349,108,416,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="447,62,406,100,403,96,443,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="441,108,503,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="475,60,475,94,469,94,469,60"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="527,108,614,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="504,58,549,97,545,101,500,62"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="639,108,716,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="536,58,638,100,636,105,534,63"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="741,108,809,133"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="565,57,728,103,726,109,563,63"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="833,108,892,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="565,49,820,105,819,110,564,55"/>
+</map>

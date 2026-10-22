@@ -1,0 +1,16 @@
+<map id="kcenon::database::orm::entity_metadata" name="kcenon::database::orm::entity_metadata">
+<area shape="rect" id="Node000001" title="Metadata for entire entities including table mapping and relationships." alt="" coords="231,916,394,1156"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="269,135,348,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="340,199,353,223,357,244,357,260,353,297,355,576,353,697,343,854,338,900,333,899,338,853,348,697,350,576,347,297,351,260,352,244,347,225,335,201"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1orm_1_1field__metadata.html" title="Metadata for entity fields including constraints and relationships." alt="" coords="169,321,331,681"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="271,200,254,225,241,264,234,306,229,305,236,263,249,223,267,197"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="243,5,374,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,99,311,134,306,134,306,99"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="177,759,329,853"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="267,853,280,900,275,901,262,854"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="254,681,255,743,249,743,249,681"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,469,127,534"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="61,548,58,591,59,639,70,689,79,712,92,733,109,752,130,767,177,787,175,792,128,771,106,756,88,736,75,714,65,690,54,640,52,591,55,547"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="55,135,77,200"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="69,200,69,452,63,452,63,200"/>
+</map>

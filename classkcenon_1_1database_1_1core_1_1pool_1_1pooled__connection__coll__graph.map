@@ -1,0 +1,30 @@
+<map id="kcenon::database::core::pool::pooled_connection" name="kcenon::database::core::pool::pooled_connection">
+<area shape="rect" id="Node000001" title="Move&#45;only RAII lease handle for a pooled database_backend." alt="" coords="543,1887,723,2227"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="411,1729,584,1824"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="522,1823,546,1870,541,1873,518,1826"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html" title="Thread&#45;safe pool of database_backend instances." alt="" coords="409,1087,586,1667"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="500,1667,500,1713,495,1713,495,1667"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="638,877,807,972"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="696,986,588,1200,584,1197,691,983"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1database_1_1core_1_1pool_1_1pool__config.html" title="Configuration for a connection_pool instance." alt="" coords="340,855,505,995"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="437,994,449,1070,444,1071,431,995"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="530,892,614,957"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="569,958,551,1071,545,1070,564,957"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="106,877,315,972"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="243,971,402,1221,397,1223,238,974"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="391,647,577,741"/>
+<area shape="poly" id="edge15_Node000001_Node000008" title=" " alt="" coords="578,710,665,736,710,754,753,778,791,806,821,839,841,878,848,923,848,1778,845,1808,838,1836,813,1890,778,1938,738,1980,734,1976,774,1935,809,1887,833,1835,840,1807,843,1778,843,924,836,880,816,842,787,810,750,782,708,759,664,741,577,715"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="430,744,280,869,277,865,427,739"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="221,133,392,533"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="394,512,449,621,454,631,449,633,444,624,390,514"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="416,301,565,366"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="492,380,488,647,482,646,487,380"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="173,5,195,71"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="196,39,235,47,291,64,351,91,380,110,406,131,434,167,456,207,472,247,483,284,478,285,467,249,451,209,430,170,402,135,377,114,349,96,289,69,234,52,195,44"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="136,557,256,623"/>
+<area shape="poly" id="edge12_Node000012_Node000011" title=" " alt="" coords="187,71,198,541,192,541,182,71"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="5,765,155,831"/>
+<area shape="poly" id="edge14_Node000013_Node000011" title=" " alt="" coords="175,64,161,97,149,134,131,221,116,310,96,485,86,638,83,749,78,749,81,638,91,484,111,309,125,220,144,133,156,95,170,62"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="201,636,211,877,206,877,195,637"/>
+<area shape="poly" id="edge13_Node000002_Node000013" title=" " alt="" coords="83,844,86,915,96,994,104,1028,117,1062,183,1238,237,1375,266,1439,301,1506,344,1580,399,1665,451,1728,447,1731,395,1668,340,1583,296,1509,261,1441,232,1377,178,1240,112,1064,99,1030,91,995,81,916,77,845"/>
+</map>

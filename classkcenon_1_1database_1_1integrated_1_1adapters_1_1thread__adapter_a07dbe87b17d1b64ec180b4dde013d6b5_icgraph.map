@@ -1,0 +1,11 @@
+<map id="kcenon::database::integrated::adapters::thread_adapter::execute" name="kcenon::database::integrated::adapters::thread_adapter::execute">
+<area shape="rect" id="Node000001" title="Execute a task (fire&#45;and&#45;forget)" alt="" coords="481,62,693,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#a468e88ffabedcdb5341ef5bb2c3a13da" title="Submit a task and get a future." alt="" coords="221,62,433,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="468,92,434,92,434,87,468,87"/>
+<area shape="rect" id="Node000003" href="$test__thread__adapter_8cpp.html#a46916a46f98723d495c606024c389ff0" title=" " alt="" coords="12,5,167,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,61,164,48,165,43,213,56"/>
+<area shape="rect" id="Node000004" href="$test__thread__adapter_8cpp.html#a484dee84dc71a3f9b548573a44cd278b" title=" " alt="" coords="12,69,167,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="207,92,167,92,167,87,207,87"/>
+<area shape="rect" id="Node000005" href="$test__thread__adapter_8cpp.html#a6fe6d091436f5fbd69cf2c6f07213407" title=" " alt="" coords="5,134,173,159"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="208,121,144,136,143,131,207,116"/>
+</map>

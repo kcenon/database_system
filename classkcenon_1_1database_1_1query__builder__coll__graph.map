@@ -1,0 +1,11 @@
+<map id="kcenon::database::query_builder" name="kcenon::database::query_builder">
+<area shape="rect" id="Node000001" title="Universal query builder that adapts to different database types." alt="" coords="39,633,213,933"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="29,491,223,571"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,571,129,617,123,617,123,571"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,133,183,413"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,413,122,474,116,474,109,414"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,241,357,306"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="258,319,152,492,148,489,253,317"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="271,5,293,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="285,71,285,224,279,224,279,71"/>
+</map>

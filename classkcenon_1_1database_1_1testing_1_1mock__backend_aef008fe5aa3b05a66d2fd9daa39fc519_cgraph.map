@@ -1,0 +1,7 @@
+<map id="kcenon::database::testing::mock_backend::execute_query" name="kcenon::database::testing::mock_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,37,236,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#adada235592d244a7452971d48deb950e" title=" " alt="" coords="284,5,527,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,42,270,38,271,43,237,47"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#af6b7ebefdf09aa4da21d1739f7a749e3" title=" " alt="" coords="295,69,515,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,68,282,73,281,78,236,73"/>
+</map>

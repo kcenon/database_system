@@ -1,0 +1,5 @@
+<map id="kcenon::database::core::pool::pooled_connection::~pooled_connection" name="kcenon::database::core::pool::pooled_connection::~pooled_connection">
+<area shape="rect" id="Node000001" title="Destructor returns the backend to the pool (if any)." alt="" coords="5,5,193,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1pool_1_1pooled__connection.html#aed1cbb8b8e94510e238e228af58751e7" title="Release the lease early, returning the backend to the pool." alt="" coords="241,5,429,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,30,227,30,227,35,194,35"/>
+</map>

@@ -1,0 +1,35 @@
+<map id="kcenon::database::backends::mongodb_backend" name="kcenon::database::backends::mongodb_backend">
+<area shape="rect" id="Node000001" title="MongoDB implementation of database_backend interface." alt="" coords="486,1567,685,1947"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="111,1160,308,1504"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,1453,488,1642,484,1646,315,1456"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,276,176,676"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="53,690,44,783,41,883,48,984,67,1082,86,1137,113,1190,108,1192,81,1139,61,1083,42,984,36,883,38,783,47,690"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="76,753,273,1083"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="134,689,146,753,141,754,129,690"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="311,443,457,509"/>
+<area shape="poly" id="edge11_Node000001_Node000004" title=" " alt="" coords="392,509,556,1550,550,1551,386,509"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="381,509,343,754,334,862,333,947,327,1031,319,1080,305,1137,303,1145,298,1144,300,1135,314,1079,322,1030,328,946,329,861,337,753,376,508"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="355,511,285,593,248,645,218,701,204,739,199,737,214,699,244,642,280,590,350,507"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="408,141,533,206"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="460,220,396,444,391,442,455,219"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="605,5,627,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="606,52,519,132,515,128,603,48"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="798,443,925,509"/>
+<area shape="poly" id="edge18_Node000012_Node000006" title=" " alt="" coords="629,45,675,79,702,104,726,132,772,208,808,288,834,364,852,426,847,428,829,366,803,290,767,210,722,135,698,107,672,83,626,49"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="109,1096,113,1136,120,1159,115,1161,108,1136,104,1096"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="619,443,698,509"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="658,509,637,756,612,1107,593,1550,588,1550,607,1107,632,756,653,509"/>
+<area shape="rect" id="Node000010" href="$structkcenon_1_1database_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="623,1292,788,1372"/>
+<area shape="poly" id="edge13_Node000010_Node000008" title=" " alt="" coords="663,509,705,1276,700,1276,658,509"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="784,878,939,958"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="676,508,839,862,834,864,671,510"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="581,133,712,213"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="651,227,660,443,655,443,646,227"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="697,1373,646,1552,641,1550,692,1372"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="849,959,728,1277,723,1276,844,957"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="864,522,864,878,859,878,859,522"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="862,141,885,206"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="875,206,866,427,861,427,869,206"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="813,1299,897,1365"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="852,1365,830,1449,812,1498,789,1544,747,1603,698,1657,694,1654,742,1600,784,1541,808,1495,825,1447,847,1364"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::sqlite_backend::~sqlite_backend" name="kcenon::database::backends::sqlite_backend::~sqlite_backend">
+<area shape="rect" id="Node000001" title="Destructor &#45; ensures proper cleanup." alt="" coords="5,20,212,75"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a05dfb4fc44420b388f3a330ebbefb5d3" title=" " alt="" coords="260,5,461,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,45,246,45,246,50,212,50"/>
+</map>

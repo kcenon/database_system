@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::mongodb_backend::rollback_transaction" name="kcenon::database::backends::mongodb_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="300,5,512,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1mongodb__backend.html#ae814cd951fd8ed8caac798a67f3bf939" title="Database&#45;specific shutdown logic." alt="" coords="5,13,252,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="286,35,252,35,252,30,286,30"/>
+</map>

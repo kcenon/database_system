@@ -1,0 +1,16 @@
+<map id="kcenon::database::async::transaction_coordinator::two_phase_commit" name="kcenon::database::async::transaction_coordinator::two_phase_commit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,117,189,172"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a88c32450aabe539e6f5ac2be3825943c" title=" " alt="" coords="237,5,421,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,115,236,69,248,63,251,68,239,74,149,120"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1database_1_1async.html#a58708eb78f8410b00a4607f3f6f416ad" title=" " alt="" coords="469,91,652,131"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="190,152,301,156,361,154,421,149,490,133,491,138,422,154,362,160,301,162,189,157"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1async_1_1async__result.html#af000852d8829d0aebf22a688db688ebd" title=" " alt="" coords="238,214,421,254"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="170,170,265,207,263,211,168,175"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a5c77188f60a98cc204db08bbbe265bb2" title=" " alt="" coords="237,84,421,139"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="190,129,223,124,224,129,190,134"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1database_1_1async.html#adf8882e1e710b4fa4b62e4d717742eed" title=" " alt="" coords="469,21,652,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="422,33,455,34,455,40,422,39"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="412,58,489,84,487,89,410,63"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="419,81,481,62,483,67,421,86"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="422,109,455,109,455,114,422,114"/>
+</map>

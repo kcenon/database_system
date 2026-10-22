@@ -1,0 +1,11 @@
+<map id="kcenon::database::testing::mock_backend::type" name="kcenon::database::testing::mock_backend::type">
+<area shape="rect" id="Node000001" title="Get the database type of this backend." alt="" coords="519,63,709,103"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#a6b7a4e1e6b4fa77d19a3131653195ead" title=" " alt="" coords="212,5,471,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,63,437,48,438,43,506,57"/>
+<area shape="rect" id="Node000004" href="$backend__contract__test_8cpp.html#ae730a9d27061ce8aa292a1cd1eb7ed12" title=" " alt="" coords="307,70,376,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="505,85,376,85,376,80,505,80"/>
+<area shape="rect" id="Node000005" href="$backend__contract__test_8cpp.html#a51d9abaeac711d39c36a9dec07305693" title=" " alt="" coords="307,119,376,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="506,105,377,128,376,123,505,100"/>
+<area shape="rect" id="Node000003" href="$classBackendContractTest.html#ac2b068287eb2e33853553bb7524d9d70" title=" " alt="" coords="5,5,164,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,28,164,28,164,23,198,23"/>
+</map>

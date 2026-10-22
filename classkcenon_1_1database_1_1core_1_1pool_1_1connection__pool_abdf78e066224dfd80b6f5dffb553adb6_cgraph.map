@@ -1,0 +1,5 @@
+<map id="kcenon::database::core::pool::connection_pool::~connection_pool" name="kcenon::database::core::pool::connection_pool::~connection_pool">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,179,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#a55381cb2aa57da38e265efd14911b8e4" title="Shut down the pool: drain all idle connections and prevent further acquires." alt="" coords="227,5,400,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,30,213,30,213,35,179,35"/>
+</map>

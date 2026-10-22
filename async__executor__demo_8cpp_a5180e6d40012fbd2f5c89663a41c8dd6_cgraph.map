@@ -1,0 +1,13 @@
+<map id="demonstrate_shutdown" name="demonstrate_shutdown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,180,102"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a99c41dacf2b5ba061d9c9a3857d0acdd" title="Returns the number of pending tasks." alt="" coords="228,5,461,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,74,251,46,253,51,145,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#adbb31652b636bf7055e57858d2913e7c" title="Gracefully shuts down the executor." alt="" coords="243,69,446,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,87,229,87,229,92,180,92"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a928094cb19dea337fe7d4201b745eb54" title="Submits a task for asynchronous execution." alt="" coords="253,133,437,173"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="145,100,253,127,251,132,143,105"/>
+<area shape="rect" id="Node000004" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="509,77,576,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="447,87,495,87,495,92,447,92"/>
+<area shape="rect" id="Node000005" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="624,77,725,102"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="577,87,610,87,610,92,577,92"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="log_file_contains" name="log_file_contains">
+<area shape="rect" id="Node000001" title="Check if a log file contains a specific string." alt="" coords="352,80,483,105"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="135,5,277,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,76,303,45,265,33,267,28,305,39,380,71"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,55,291,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="338,86,291,80,292,75,338,81"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,104,279,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="338,104,280,111,279,106,338,99"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,153,304,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="378,114,305,143,262,156,261,151,303,138,376,109"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,37,109,44,77,62,51,82,48,77,74,58,107,40,126,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="107,84,61,91,60,86,107,79"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="119,107,60,99,61,94,119,102"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="130,152,107,143,75,126,49,108,52,103,78,121,109,138,132,147"/>
+</map>

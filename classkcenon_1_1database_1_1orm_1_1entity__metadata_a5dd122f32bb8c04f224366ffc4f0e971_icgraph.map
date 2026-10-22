@@ -1,0 +1,19 @@
+<map id="kcenon::database::orm::entity_metadata::add_field" name="kcenon::database::orm::entity_metadata::add_field">
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,220,445,260"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestUser.html#aff24275ad86425667ab7d0a40ff4126c" title=" " alt="" coords="21,5,177,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,210,268,135,232,94,190,60,170,48,172,43,194,55,236,91,272,131,325,207"/>
+<area shape="rect" id="Node000003" href="$classpost__entity.html#acb93ddc739002bf4d545584e14a62a00" title=" " alt="" coords="19,69,178,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="309,213,256,168,191,124,165,112,168,107,193,119,259,163,313,209"/>
+<area shape="rect" id="Node000004" href="$classProduct.html#aa9c8b27d0a2caf4dc93bb0042aa00b07" title=" " alt="" coords="31,133,166,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,218,191,188,157,176,159,171,193,183,275,213"/>
+<area shape="rect" id="Node000005" href="$classUser.html#afa29a42a724e673981fd3c17019ef608" title=" " alt="" coords="5,198,192,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,229,192,225,193,219,227,223"/>
+<area shape="rect" id="Node000006" href="$classuser__entity.html#afb0daaeb2ee7600a37e50a3c15154f37" title=" " alt="" coords="19,248,178,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="226,256,178,262,178,256,226,251"/>
+<area shape="rect" id="Node000007" href="$test__entity__metadata_8cpp.html#a3598c4e76bb4f002b4bb90f394b85582" title=" " alt="" coords="64,313,133,338"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="284,268,193,303,134,320,133,315,191,297,282,263"/>
+<area shape="rect" id="Node000008" href="$test__entity__metadata_8cpp.html#a14a5015a010300a4c6f52ff6a7782996" title=" " alt="" coords="64,362,133,387"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="311,271,258,313,193,352,163,363,134,371,133,366,162,358,191,347,255,308,307,267"/>
+<area shape="rect" id="Node000009" href="$test__entity__metadata_8cpp.html#ae66172ec0589e82bf52915e8f1f53f11" title=" " alt="" coords="64,411,133,437"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="322,273,268,338,233,372,193,401,164,414,134,422,133,417,162,409,191,396,230,368,265,335,318,270"/>
+</map>

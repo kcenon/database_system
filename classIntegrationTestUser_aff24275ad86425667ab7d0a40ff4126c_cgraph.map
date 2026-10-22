@@ -1,0 +1,17 @@
+<map id="IntegrationTestUser::initialize_metadata" name="IntegrationTestUser::initialize_metadata">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,197,161,237"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1orm_1_1entity__metadata.html#a5dd122f32bb8c04f224366ffc4f0e971" title=" " alt="" coords="209,5,415,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,195,137,127,169,88,208,55,217,49,220,54,211,59,173,92,141,130,97,198"/>
+<area shape="rect" id="Node000003" href="$classIntegrationTestUser.html#a43080aa8b7066ad38ebae4ce065682a2" title=" " alt="" coords="237,69,387,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,195,150,157,208,119,223,112,225,117,211,124,153,161,108,199"/>
+<area shape="rect" id="Node000004" href="$classIntegrationTestUser.html#aec0ded57a16161b2fef326dc728d7bf6" title=" " alt="" coords="237,133,387,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="155,195,226,174,228,180,156,200"/>
+<area shape="rect" id="Node000005" href="$classIntegrationTestUser.html#a18ceecf24e5e9d00caad80e89fe974d0" title=" " alt="" coords="237,197,387,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="162,215,223,215,223,220,162,220"/>
+<area shape="rect" id="Node000006" href="$classIntegrationTestUser.html#a341bd7ebb923822fa4b44bc4ea281eea" title=" " alt="" coords="237,261,387,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="156,235,228,255,226,260,155,240"/>
+<area shape="rect" id="Node000007" href="$classIntegrationTestUser.html#afb6cfbdfe2b0bfd9b3ece7d4fca9bb67" title=" " alt="" coords="237,325,387,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="108,236,153,274,211,311,225,318,223,323,208,316,150,278,104,240"/>
+<area shape="rect" id="Node000008" href="$classIntegrationTestUser.html#a3090c3180a5490fa7e89653f5808c820" title=" " alt="" coords="237,389,387,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="97,236,141,305,173,343,211,375,226,384,224,389,208,380,169,346,137,308,93,239"/>
+</map>

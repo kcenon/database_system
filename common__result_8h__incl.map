@@ -1,0 +1,11 @@
+<map id="include/kcenon/database/integrated/core/common_result.h" name="include/kcenon/database/integrated/core/common_result.h">
+<area shape="rect" id="Node000001" title="Common Result&lt;T&gt; pattern for integrated database system." alt="" coords="191,5,377,60"/>
+<area shape="rect" id="Node000002" href="$feature__flags_8h.html" title="Unified feature flags header for database_system." alt="" coords="5,108,181,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,62,145,104,143,100,229,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="206,115,274,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,61,254,104,249,102,269,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="299,115,357,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="299,59,319,102,314,104,294,61"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="382,115,442,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="322,58,387,105,384,110,318,62"/>
+</map>

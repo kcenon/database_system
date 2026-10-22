@@ -1,0 +1,7 @@
+<map id="kcenon::database::testing::mock_backend::select_query" name="kcenon::database::testing::mock_backend::select_query">
+<area shape="rect" id="Node000001" title="Execute a SELECT query." alt="" coords="5,37,224,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#adada235592d244a7452971d48deb950e" title=" " alt="" coords="272,5,515,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,42,258,38,259,43,225,47"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#af6b7ebefdf09aa4da21d1739f7a749e3" title=" " alt="" coords="283,69,503,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,67,270,73,270,78,224,73"/>
+</map>

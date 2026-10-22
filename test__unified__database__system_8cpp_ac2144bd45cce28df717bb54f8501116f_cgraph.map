@@ -1,0 +1,9 @@
+<map id="test_query_param_null_safety" name="test_query_param_null_safety">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,176,109"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1database_1_1integrated_1_1query__param.html#a6047c8f79617079e89b9aedf19af0bf1" title="Get the string value (returns empty string for null)" alt="" coords="224,5,436,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,67,241,46,242,51,167,72"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1integrated_1_1query__param.html#a291b9f945c0082f752d340e308ab26fd" title="Check if this parameter represents a NULL value." alt="" coords="224,69,436,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,87,210,87,210,92,176,92"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1database_1_1integrated_1_1query__param.html#a9ae34b441f9193319c70217e4951ac22" title="Get the value for SQL generation." alt="" coords="224,133,436,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="167,107,242,127,241,132,166,112"/>
+</map>

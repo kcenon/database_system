@@ -1,0 +1,10 @@
+<map id="kcenon::database::backends::postgresql_backend" name="kcenon::database::backends::postgresql_backend">
+<area shape="rect" id="Node000001" title="PostgreSQL implementation of database_backend interface." alt="" coords="5,1255,204,1824"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="6,861,203,1205"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,1219,107,1254,102,1254,102,1219"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="14,5,185,405"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,419,106,861,101,861,98,419"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="121,455,318,784"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="164,418,174,453,169,455,159,419"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="173,798,155,862,150,860,167,797"/>
+</map>

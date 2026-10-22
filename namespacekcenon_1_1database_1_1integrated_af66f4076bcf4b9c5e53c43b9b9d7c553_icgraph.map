@@ -1,0 +1,11 @@
+<map id="kcenon::database::integrated::convert_result" name="kcenon::database::integrated::convert_result">
+<area shape="rect" id="Node000001" title="Convert core::database_result to query_result." alt="" coords="531,41,743,81"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1transaction__impl.html#a7fce78a4269c9dffafd249cb40c5d502" title="Execute a query within the transaction." alt="" coords="271,5,483,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="517,47,483,43,483,37,518,42"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a38c118c833e7d128c2342ec34cb982dd" title=" " alt="" coords="271,70,483,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="518,80,483,85,483,80,517,75"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a40911c15f47108410c878b1a240e08c4" title=" " alt="" coords="8,30,220,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="257,82,220,76,221,71,257,77"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a9c145ce77dab64d456090392b19f057b" title=" " alt="" coords="5,109,223,163"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="257,118,223,123,222,117,257,112"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::database::database_manager::create_query_builder" name="kcenon::database::database_manager::create_query_builder">
+<area shape="rect" id="Node000001" title="Creates a query builder for the current database type." alt="" coords="5,5,237,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1database__manager.html#acf6d0220fbc75699b436e78221793ee4" title="Retrieves the current database type used by the manager." alt="" coords="285,5,491,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,23,272,23,272,28,238,28"/>
+</map>

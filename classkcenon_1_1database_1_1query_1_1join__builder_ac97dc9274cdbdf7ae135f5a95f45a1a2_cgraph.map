@@ -1,0 +1,30 @@
+<map id="kcenon::database::query::join_builder::join_builder" name="kcenon::database::query::join_builder::join_builder">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,267,196,307"/>
+<area shape="poly" id="edge12_Node000001_Node000001" title=" " alt="" coords="55,267,52,257,60,248,76,242,101,240,129,243,145,250,142,255,128,248,101,245,77,247,63,252,57,258,60,266"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a6adf751afb897708c911946599ff32dd" title="Add a join with explicit type." alt="" coords="256,5,439,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,265,126,223,155,169,194,112,242,62,261,49,264,54,246,66,198,115,159,172,131,226,112,267"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a73096249a985a21b9d2195840e159727" title="Build the JOIN clauses." alt="" coords="256,120,439,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,264,175,221,243,176,270,163,273,168,245,181,179,225,126,269"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a630d240a8a54c04162e157d33fc6d82e" title="Check if builder is empty." alt="" coords="502,8,685,48"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="110,265,130,230,159,187,197,143,243,106,333,82,488,47,489,53,334,87,245,110,201,146,163,190,134,233,114,268"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a9b49eb4f15dccc37c40fb89609d952e0" title="Add an INNER JOIN." alt="" coords="502,231,685,271"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="134,264,185,240,243,220,309,211,375,211,439,217,496,225,496,231,438,222,375,216,309,217,245,225,187,244,137,269"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#ac124e4548f9a7fc1f7be31d9de231834" title="Clear all joins." alt="" coords="256,235,439,275"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="196,272,242,266,243,271,197,277"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a29a21ca6e4b06e415346668b1553fb7a" title="Add a CROSS JOIN." alt="" coords="256,299,439,339"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="197,296,243,302,242,308,196,302"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a059a10629ad37c9be60c5ea5f188df53" title="Add a FULL OUTER JOIN." alt="" coords="244,363,451,403"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="144,304,245,348,266,356,264,361,243,353,142,309"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#ab17e55749cf382f65b93b470c3e1c125" title="Add a LEFT JOIN." alt="" coords="256,427,439,467"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="121,305,174,358,208,387,245,412,258,419,255,424,243,417,205,392,170,362,117,309"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#ad6c97e5f472588b24f6a35e25d71fab5" title="Add a RIGHT JOIN." alt="" coords="256,491,439,531"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="114,306,133,342,163,388,200,436,246,477,254,482,251,486,242,481,196,439,158,391,129,345,109,308"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#aab1a394ea3ca676a54ccb9bf6f6d47ee" title="Get number of joins." alt="" coords="256,555,439,595"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="110,306,126,354,154,417,193,484,218,514,246,541,252,545,249,550,242,545,214,518,189,487,149,420,121,356,105,308"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="411,117,449,99,473,78,497,58,510,51,512,56,500,62,476,83,452,104,413,122"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a50c111ff3082581feb79ab2e13a3217e" title="Quote and escape an identifier (table/column name)" alt="" coords="499,73,688,127"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="438,123,485,115,486,120,439,128"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="413,158,452,176,476,197,500,216,513,223,510,228,497,221,473,201,449,181,411,163"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a8ff3f65a2375e6cf3728057223c701cc" title=" " alt="" coords="502,151,685,206"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="439,152,489,160,488,165,439,157"/>
+</map>

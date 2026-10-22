@@ -1,0 +1,31 @@
+<map id="test_builder_pattern" name="test_builder_pattern">
+<area shape="rect" id="Node000001" title="Test builder pattern methods." alt="" coords="5,521,159,547"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8c1c2c96d4c0b27df0b18ea823cd0efa" title="Enable file logging." alt="" coords="211,5,423,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,521,81,445,85,388,94,325,109,257,131,190,163,126,205,70,207,67,211,71,209,73,167,129,136,192,114,259,99,326,90,389,86,445,85,521"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a6d1ed9d38d72737e5431e1007e3a024e" title="Enable/disable monitoring." alt="" coords="211,84,423,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="81,521,86,456,103,357,118,301,140,246,168,194,205,148,208,145,211,149,209,152,173,197,145,249,123,303,108,358,91,456,86,521"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a25a219d9a09f3b9ebeabad07278d8c1d" title="Enable priority&#45;based scheduling." alt="" coords="211,163,423,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="82,520,91,467,112,389,128,346,148,303,174,262,205,227,208,224,212,228,209,231,178,266,153,305,133,348,117,390,96,468,87,521"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#af0cc28147319bb8f851af38a00440f15" title="Configure Prometheus metrics export." alt="" coords="211,241,423,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="84,520,97,479,121,422,157,360,179,331,205,305,210,301,213,306,208,309,183,334,161,363,126,424,102,481,89,522"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ad9db208457d5e12c480155514a97b399" title="Enable/disable query logging." alt="" coords="211,320,423,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="89,519,133,455,166,417,205,384,212,379,215,384,208,388,170,421,137,459,93,522"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#afe0b4e1b47093bfcdf82845303593f30" title="Configure slow query detection." alt="" coords="211,399,423,453"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="103,519,149,492,206,464,223,456,225,461,208,468,152,497,106,524"/>
+<area shape="rect" id="Node000008" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#afcbc21ca73c3676434f9fd1e885ec0ab" title="Enable SSL/TLS for database connections." alt="" coords="207,478,427,518"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="159,520,193,514,193,520,160,525"/>
+<area shape="rect" id="Node000009" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a9502755202a4b85419a86f0063afea85" title="Set database backend type and connection string." alt="" coords="211,543,423,597"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="160,543,198,549,197,554,159,548"/>
+<area shape="rect" id="Node000010" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a66a7d27f69d5cf880a0c8c98668b6f7b" title="Set database credentials." alt="" coords="211,621,423,676"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="103,545,150,574,208,606,224,613,221,618,205,611,147,579,100,549"/>
+<area shape="rect" id="Node000011" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a56b8e004923e089fc24a4120c48d653d" title="Set minimum logging level." alt="" coords="211,700,423,755"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="93,546,136,612,169,651,208,685,217,691,214,695,205,689,166,655,132,615,88,549"/>
+<area shape="rect" id="Node000012" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8769e3f82bc3f0903d63c3d59bd74771" title="Set connection pool name." alt="" coords="211,779,423,833"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="89,546,102,588,126,646,161,709,183,738,208,764,215,769,211,773,205,768,179,742,157,712,121,649,97,590,84,548"/>
+<area shape="rect" id="Node000013" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ae8626b2bee706977e79b52d99bf65dde" title="Configure connection pool size." alt="" coords="211,857,423,912"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="87,547,96,601,117,680,132,723,153,767,178,807,209,843,213,847,209,851,205,847,174,810,148,769,128,725,112,682,91,602,82,548"/>
+<area shape="rect" id="Node000014" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8ac00c95af44e79d31e8e227c2aa10cf" title="Set thread pool size." alt="" coords="211,936,423,991"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="86,547,91,612,107,712,123,767,144,823,172,875,209,922,213,926,209,929,205,925,168,878,139,825,118,769,102,713,85,612,81,547"/>
+<area shape="rect" id="Node000015" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a37d3101f2fe6ad749deae2c540ef890c" title="Set connection timeouts." alt="" coords="211,1015,423,1069"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="85,547,86,623,90,680,99,744,114,812,136,879,167,943,209,1000,212,1004,209,1008,205,1004,162,946,131,881,108,813,94,745,85,680,81,624,80,547"/>
+</map>

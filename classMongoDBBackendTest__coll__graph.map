@@ -1,0 +1,45 @@
+<map id="MongoDBBackendTest" name="MongoDBBackendTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="387,2232,546,2317"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="263,2089,356,2155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="354,2162,425,2230,421,2234,350,2166"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="380,2075,553,2169"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="469,2170,469,2216,464,2216,464,2170"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1backends_1_1mongodb__backend.html" title="MongoDB implementation of database_backend interface." alt="" coords="367,1632,566,2012"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="469,2012,469,2058,464,2058,464,2012"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="368,1225,565,1569"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="469,1583,469,1632,464,1632,464,1583"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="444,327,615,727"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="580,740,595,847,602,964,597,1085,590,1144,577,1202,568,1231,563,1230,572,1201,584,1143,592,1084,597,965,589,848,575,741"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="359,804,556,1133"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="497,741,487,804,482,803,492,740"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="175,494,321,559"/>
+<area shape="poly" id="edge14_Node000004_Node000007" title=" " alt="" coords="241,560,224,626,203,722,182,842,167,978,161,1126,163,1201,170,1277,181,1353,198,1427,220,1499,249,1568,271,1609,298,1648,358,1718,354,1722,294,1651,267,1612,244,1570,215,1501,193,1428,176,1354,165,1278,158,1202,156,1126,161,978,177,841,197,721,219,625,236,559"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="247,560,238,682,230,851,231,937,235,1017,246,1084,262,1132,269,1140,278,1145,299,1155,331,1186,360,1219,356,1223,327,1189,296,1160,275,1149,266,1145,258,1135,240,1085,230,1018,225,937,225,850,232,682,242,559"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="265,558,375,788,370,790,261,561"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="185,141,311,206"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="251,220,251,494,245,494,245,220"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="237,5,259,71"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="251,71,251,124,245,124,245,71"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="850,494,977,559"/>
+<area shape="poly" id="edge21_Node000015_Node000009" title=" " alt="" coords="260,37,359,43,514,59,596,71,671,87,734,107,778,131,798,156,818,192,854,287,884,390,906,477,900,479,879,392,849,288,813,194,794,159,774,135,732,112,670,92,595,77,513,64,358,49,260,43"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="5,237,155,303"/>
+<area shape="poly" id="edge24_Node000018_Node000009" title=" " alt="" coords="239,55,175,135,112,225,108,222,171,132,234,51"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="383,1147,382,1174,385,1201,391,1225,386,1226,380,1202,377,1174,378,1147"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="683,494,762,559"/>
+<area shape="poly" id="edge12_Node000004_Node000011" title=" " alt="" coords="724,560,715,717,691,968,672,1114,648,1267,617,1421,580,1570,564,1618,559,1616,575,1569,612,1419,643,1266,667,1113,686,967,709,717,719,560"/>
+<area shape="rect" id="Node000013" href="$structkcenon_1_1database_1_1core_1_1connection__config.html" title="Configuration for database connection." alt="" coords="713,1357,879,1437"/>
+<area shape="poly" id="edge16_Node000013_Node000011" title=" " alt="" coords="725,560,728,798,735,964,749,1133,766,1244,786,1341,781,1342,761,1245,744,1134,730,964,722,798,720,560"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="836,929,991,1009"/>
+<area shape="poly" id="edge18_Node000014_Node000011" title=" " alt="" coords="738,558,833,779,892,913,887,915,828,781,734,561"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="633,133,764,213"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="705,227,723,494,718,494,700,227"/>
+<area shape="poly" id="edge25_Node000001_Node000013" title=" " alt="" coords="804,1438,809,1517,807,1563,801,1608,763,1789,743,1862,721,1929,692,1993,656,2058,610,2129,551,2210,541,2222,537,2219,547,2206,606,2126,652,2056,688,1990,716,1927,738,1861,758,1788,796,1608,802,1562,803,1517,799,1438"/>
+<area shape="poly" id="edge15_Node000004_Node000013" title=" " alt="" coords="773,1439,720,1519,654,1610,579,1701,575,1697,650,1606,716,1516,769,1436"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="905,1010,814,1342,808,1341,900,1008"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="916,573,916,929,911,929,911,573"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="914,141,937,206"/>
+<area shape="poly" id="edge20_Node000015_Node000016" title=" " alt="" coords="927,206,918,478,912,478,922,206"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="259,1365,343,1430"/>
+<area shape="poly" id="edge22_Node000004_Node000017" title=" " alt="" coords="309,1430,325,1511,353,1607,363,1631,358,1633,348,1609,320,1513,303,1431"/>
+<area shape="poly" id="edge23_Node000003_Node000018" title=" " alt="" coords="73,317,40,511,26,636,20,764,20,1823,30,1842,58,1869,152,1936,271,2009,383,2072,380,2077,268,2013,149,1940,54,1873,26,1845,15,1824,15,764,21,636,35,510,68,316"/>
+</map>

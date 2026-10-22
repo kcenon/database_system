@@ -1,0 +1,14 @@
+var searchData=
+[
+  ['valid_0',['valid',['../classkcenon_1_1database_1_1core_1_1pool_1_1pooled__connection.html#aa8d372c7081456393ca5a670e3c589b6',1,'kcenon::database::core::pool::pooled_connection']]],
+  ['validate_5fsession_1',['validate_session',['../classkcenon_1_1database_1_1security_1_1access__control.html#ab46906aa289a34d24d8c7cfe6028e381',1,'kcenon::database::security::access_control']]],
+  ['validate_5ftable_5faccess_2',['validate_table_access',['../classkcenon_1_1database_1_1security_1_1query__security.html#a069798ee7d5cf63ef53ee67c1f6d6f3b',1,'kcenon::database::security::query_security']]],
+  ['value_3',['value',['../classkcenon_1_1database_1_1async_1_1result__type.html#a804cba404672349748400c4934182917',1,'kcenon::database::async::result_type::value() const'],['../classkcenon_1_1database_1_1async_1_1result__type.html#a9a6802cad628c2391a0c902ba2e64fa8',1,'kcenon::database::async::result_type::value()'],['../classcommon_1_1Result.html#abaea7428b84a870826be2debcb416050',1,'common::Result::value()'],['../classcommon_1_1Result.html#a0682f11ed824e04b5a0b38aa0b8b7e76',1,'common::Result::value() const']]],
+  ['value_5fformatter_4',['value_formatter',['../classkcenon_1_1database_1_1query_1_1value__formatter.html#a618103e80c2c1b11aadbf24bbfd3620f',1,'kcenon::database::query::value_formatter']]],
+  ['value_5fto_5fsql_5',['value_to_sql',['../classkcenon_1_1database_1_1core_1_1database__backend.html#a7b1fdf959a38ef33e075b41af7ba0afe',1,'kcenon::database::core::database_backend']]],
+  ['value_5fto_5fstring_6',['value_to_string',['../namespacekcenon_1_1database_1_1integrated.html#a98b5fc83e061d022fbac8401f12fa1f0',1,'kcenon::database::integrated']]],
+  ['values_7',['values',['../classkcenon_1_1database_1_1query__builder.html#a70d822f1a52967017e91b66812716244',1,'kcenon::database::query_builder::values(const std::map&lt; std::string, core::database_value &gt; &amp;data)'],['../classkcenon_1_1database_1_1query__builder.html#a13614af8befa2f43709018e8986d4442',1,'kcenon::database::query_builder::values(const std::vector&lt; std::map&lt; std::string, core::database_value &gt; &gt; &amp;rows)']]],
+  ['verify_5fall_5fexpectations_8',['verify_all_expectations',['../classkcenon_1_1database_1_1testing_1_1mock__backend.html#a08ac52d16664f9d6046d3c985c0f6f07',1,'kcenon::database::testing::mock_backend::verify_all_expectations()'],['../classkcenon_1_1database_1_1testing_1_1mock__database.html#ac53e25b6ae44db62549a5fa504027218',1,'kcenon::database::testing::mock_database::verify_all_expectations()']]],
+  ['verify_5fpassword_9',['verify_password',['../classkcenon_1_1database_1_1security_1_1credential__manager.html#a1db9a1886b8549d4ff85d29180b92b7f',1,'kcenon::database::security::credential_manager']]],
+  ['verify_5fserver_5fcertificate_10',['verify_server_certificate',['../classkcenon_1_1database_1_1security_1_1connection__security.html#a2b17ceddc2409af3833b52645dadde76',1,'kcenon::database::security::connection_security']]]
+];

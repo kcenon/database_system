@@ -1,0 +1,5 @@
+<map id="kcenon::database::query::postgresql_dialect::returning_clause" name="kcenon::database::query::postgresql_dialect::returning_clause">
+<area shape="rect" id="Node000001" title="Generate RETURNING clause for INSERT/UPDATE." alt="" coords="5,5,188,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1postgresql__dialect.html#a99d3a299d841770838a6ae3b44a4dbb8" title="Quote an identifier (table or column name)" alt="" coords="236,5,419,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,30,222,30,222,35,188,35"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::mongodb_backend::do_initialize" name="kcenon::database::backends::mongodb_backend::do_initialize">
+<area shape="rect" id="Node000001" title="Database&#45;specific initialization logic." alt="" coords="5,13,244,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1mongodb__backend.html#a480cc9b9fa2b83b30715b6f02da40df3" title="Convert connection_config to MongoDB connection URI." alt="" coords="292,5,499,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,30,278,30,278,35,244,35"/>
+</map>

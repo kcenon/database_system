@@ -1,0 +1,17 @@
+<map id="include/kcenon/database/integrated/adapters/backends/logger_backend.h" name="include/kcenon/database/integrated/adapters/backends/logger_backend.h">
+<area shape="rect" id="Node000001" title="Abstract interface for logger backends." alt="" coords="321,5,540,60"/>
+<area shape="rect" id="Node000002" href="$common__logger__backend_8h.html" title="Logger backend using common_system&#39;s ILogger and GlobalLoggerRegistry." alt="" coords="5,108,224,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,67,198,110,196,105,335,62"/>
+<area shape="rect" id="Node000004" href="$fallback__logger__backend_8h.html" title="Fallback logger backend using std::cout and std::ofstream." alt="" coords="248,108,467,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="406,73,379,109,374,106,401,70"/>
+<area shape="rect" id="Node000006" href="$logger__adapter_8cpp.html" title=" " alt="" coords="464,218,637,258"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="458,70,481,107,543,216,538,219,476,109,453,73"/>
+<area shape="rect" id="Node000007" href="$null__logger__backend_8h.html" title="Null logger backend (no&#45;op)" alt="" coords="541,108,760,163"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="502,63,594,106,592,110,499,68"/>
+<area shape="rect" id="Node000003" href="$common__logger__backend_8cpp.html" title=" " alt="" coords="17,211,213,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,176,117,211,112,211,112,176"/>
+<area shape="rect" id="Node000005" href="$fallback__logger__backend_8cpp.html" title=" " alt="" coords="249,211,439,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="355,177,350,211,345,210,349,176"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="421,167,515,215,513,220,418,171"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="617,174,572,219,568,216,613,171"/>
+</map>

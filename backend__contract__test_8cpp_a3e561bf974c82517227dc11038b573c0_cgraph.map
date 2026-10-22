@@ -1,0 +1,7 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,45,75,70"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#aebf26a2c3b8448200524359b7a2037a9" title=" " alt="" coords="123,5,365,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,49,109,44,110,49,75,55"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#af5d361df6b0afd00bc1770716bd23fde" title="Check if backend is initialized and ready." alt="" coords="135,69,353,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="75,60,122,67,121,73,75,65"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::database::core::backend_registry::unregister_backend" name="kcenon::database::core::backend_registry::unregister_backend">
+<area shape="rect" id="Node000001" title="Unregister a backend (for testing or dynamic unloading)" alt="" coords="122,40,335,102"/>
+<area shape="rect" id="Node000002" href="$backend__registry__test_8cpp.html#aaacd41d4c7c0fa952dd7a82e584627a7" title=" " alt="" coords="5,5,74,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,39,75,31,74,26,109,36"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a21d5dd643ea93d4228102e32972eba3d" title=" " alt="" coords="5,57,74,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,73,75,74,74,69,109,70"/>
+<area shape="rect" id="Node000004" href="$backend__registry__test_8cpp.html#a6da7f5ba534ad2883710dc26bbc25651" title=" " alt="" coords="5,109,74,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="104,106,75,116,74,111,109,104"/>
+</map>

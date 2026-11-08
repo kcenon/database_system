@@ -1,0 +1,37 @@
+<map id="include/kcenon/database/security/secure_connection.h" name="include/kcenon/database/security/secure_connection.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="687,5,901,50"/>
+<area shape="rect" id="Node000002" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="17,191,214,235"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="684,41,541,64,461,80,383,101,269,142,172,186,169,181,267,137,381,95,460,75,540,59,689,39"/>
+<area shape="rect" id="Node000005" href="$database__backend_8h.html" title="Abstract interface for database backends." alt="" coords="492,98,656,143"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="744,50,642,94,640,89,739,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="237,199,314,227"/>
+<area shape="poly" id="edge14_Node000001_Node000007" title=" " alt="" coords="684,45,585,68,480,101,432,122,385,146,308,193,305,188,382,142,429,117,478,95,584,63,689,44"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="714,199,772,227"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="784,48,763,99,753,143,747,185,743,182,748,142,758,97,780,52"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="796,199,858,227"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="785,49,771,94,768,118,773,142,786,166,803,189,798,187,781,169,767,144,763,119,765,93,781,52"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="782,106,905,134"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="807,48,831,94,826,92,805,53"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="929,106,995,134"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="835,48,927,99,922,99,834,53"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1018,106,1082,134"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="870,48,1008,96,1014,100,1009,99,1006,100,870,53"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1106,106,1192,134"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="902,47,996,69,1095,95,1106,101,1100,101,1093,101,995,74,901,53"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1216,106,1290,134"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="902,37,1047,59,1126,75,1204,95,1213,101,1208,100,1203,101,1125,81,1046,65,902,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,283,71,311"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,235,63,274,59,270,93,237"/>
+<area shape="rect" id="Node000004" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="95,283,293,311"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="137,233,173,272,168,272,135,238"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="490,140,229,192,228,187,493,135"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="338,191,525,235"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="542,142,479,185,477,180,537,144"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="489,143,327,193,320,196,318,191,325,188,494,141"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="615,141,708,192,703,192,614,146"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="649,141,786,188,791,193,786,192,784,193,648,146"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="549,199,599,227"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="576,141,576,185,572,182,572,145"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="623,199,690,227"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="595,140,637,188,632,187,593,145"/>
+</map>

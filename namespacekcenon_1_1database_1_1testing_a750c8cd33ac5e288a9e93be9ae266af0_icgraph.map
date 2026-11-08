@@ -1,0 +1,7 @@
+<map id="kcenon::database::testing::make_result" name="kcenon::database::testing::make_result">
+<area shape="rect" id="Node000001" title="Helper function to create test data rows." alt="" coords="243,40,432,85"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1testing_1_1fixtures.html#a34551337bd2eb0328890e5bc2fb3528e" title="Standard products table data." alt="" coords="5,5,195,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,47,195,44,195,39,230,46"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1database_1_1testing_1_1fixtures.html#aa7ab9920b6a74d6f51aba623f6d056bc" title="Standard user table data." alt="" coords="5,75,195,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,79,196,86,195,80,230,78"/>
+</map>

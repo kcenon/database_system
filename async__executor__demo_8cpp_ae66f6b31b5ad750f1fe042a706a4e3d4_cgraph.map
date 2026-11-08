@@ -1,0 +1,34 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,219,60,247"/>
+<area shape="rect" id="Node000002" href="$async__executor__demo_8cpp.html#a42041fcce388634f3aca50aba67e7c55" title=" " alt="" coords="135,271,298,299"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,240,108,256,140,266,136,268,107,261,61,245"/>
+<area shape="rect" id="Node000004" href="$async__executor__demo_8cpp.html#a2a76b47d313e62bb496b4401923146da" title=" " alt="" coords="121,103,312,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="42,217,69,185,106,153,147,135,144,139,109,158,73,189,47,220"/>
+<area shape="rect" id="Node000007" href="$async__executor__demo_8cpp.html#aad4056e597b5c35b4b163e5a47a5c875" title=" " alt="" coords="114,219,319,247"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="59,231,100,231,96,235,61,235"/>
+<area shape="rect" id="Node000008" href="$async__executor__demo_8cpp.html#aaafe1f0be510149fc165122633274691" title=" " alt="" coords="108,167,325,195"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="59,221,107,205,140,197,136,201,108,210,62,225"/>
+<area shape="rect" id="Node000010" href="$async__executor__demo_8cpp.html#a5180e6d40012fbd2f5c89663a41c8dd6" title=" " alt="" coords="129,323,304,351"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="44,245,72,278,109,308,124,316,118,318,106,313,68,281,44,250"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a928094cb19dea337fe7d4201b745eb54" title="Submits a task for asynchronous execution." alt="" coords="398,245,581,290"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="298,277,384,274,379,275,299,282"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="279,129,304,139,327,154,344,174,351,194,359,213,375,231,386,240,381,240,371,235,354,215,346,196,339,176,323,158,302,144,280,134"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a2dd8c9bda100a82838e2d601b4b642d4" title="Checks if using thread_system implementation." alt="" coords="394,74,585,136"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="312,110,381,109,376,111,313,115"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a44db3f8e2a44d1f89bedc0522a88ac51" title="Returns the number of worker threads." alt="" coords="378,5,601,50"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="256,100,372,60,399,53,394,56,374,65,258,105"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="319,243,385,253,380,255,320,249"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="286,193,326,205,350,218,374,231,393,240,388,240,372,235,348,222,324,210,287,198"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="268,164,381,134,377,137,270,169"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a33b54115126303019a464abaa37a6e10" title="Waits for all pending tasks to complete." alt="" coords="398,160,580,221"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="325,182,385,186,380,188,326,187"/>
+<area shape="poly" id="edge18_Node000010_Node000003" title=" " alt="" coords="275,320,324,308,389,294,384,295,326,313,277,325"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a99c41dacf2b5ba061d9c9a3857d0acdd" title="Returns the number of pending tasks." alt="" coords="373,315,605,359"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="304,334,360,337,355,337,304,340"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#adbb31652b636bf7055e57858d2913e7c" title="Gracefully shuts down the executor." alt="" coords="388,384,590,429"/>
+<area shape="poly" id="edge15_Node000010_Node000012" title=" " alt="" coords="274,349,386,379,381,380,273,354"/>
+<area shape="rect" id="Node000013" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="653,392,719,420"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="590,404,640,406,635,406,590,409"/>
+<area shape="rect" id="Node000014" href="$connection__pool__demo_8cpp.html#a63938b99b68e5ec6cbb45e1e600bedc5" title="Thread&#45;safe print helper." alt="" coords="767,392,867,420"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="719,404,754,406,748,406,719,409"/>
+</map>

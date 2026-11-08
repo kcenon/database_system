@@ -1,0 +1,8 @@
+<map id="kcenon::database::core::has_backend" name="kcenon::database::core::has_backend">
+<area shape="rect" id="Node000001" title="Convenience function for checking backend availability." alt="" coords="5,64,178,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a2119e18398c7ffd74b9f61aa657dac1d" title="Check if a backend is registered." alt="" coords="241,5,413,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,66,228,57,223,59,179,71"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="226,115,428,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,103,213,112,208,113,178,108"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="282,113,281,105,288,96,304,90,327,89,352,91,369,100,364,100,351,96,327,94,305,96,291,100,286,107,287,116"/>
+</map>

@@ -1,0 +1,35 @@
+<map id="kcenon::database::detail::sql_dialect" name="kcenon::database::detail::sql_dialect">
+<area shape="rect" id="Node000001" title="SQL dialect implementation for PostgreSQL, SQLite." alt="" coords="407,1133,582,1580"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,687,180,1000"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,1011,182,1062,212,1107,257,1161,308,1211,409,1295,404,1296,304,1215,253,1165,208,1111,178,1064,155,1016"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="500,808,675,880"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="583,878,540,1118,535,1116,580,882"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="675,160,751,232"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="749,198,790,203,836,213,884,230,929,254,986,296,1033,338,1071,381,1099,427,1117,478,1126,533,1126,595,1115,664,1085,804,1068,861,1048,913,1022,961,989,1009,946,1058,891,1111,819,1170,742,1223,667,1269,598,1307,596,1302,664,1264,740,1218,816,1165,887,1107,942,1054,985,1005,1018,958,1043,911,1063,860,1080,803,1110,663,1120,594,1121,533,1112,479,1094,430,1067,384,1029,341,983,300,926,258,882,235,835,219,789,208,752,202"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="716,229,722,311,721,419,711,542,700,604,686,664,658,734,623,795,619,792,653,732,681,663,695,603,705,541,716,419,716,311,715,235"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1query__condition.html" title="Represents a WHERE condition in a query." alt="" coords="826,365,997,588"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="738,229,826,351,820,352,738,234"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="204,432,373,521"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="674,224,371,425,367,421,677,220"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="649,5,777,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="713,107,715,160,710,159,712,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="518,440,636,513"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="579,525,589,808,584,807,577,530"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="754,799,960,888"/>
+<area shape="poly" id="edge12_Node000008_Node000006" title=" " alt="" coords="615,521,688,611,828,799,823,799,684,614,615,527"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="325,790,477,897"/>
+<area shape="poly" id="edge20_Node000013_Node000006" title=" " alt="" coords="503,515,478,534,449,557,424,583,405,613,390,658,385,705,386,750,392,791,386,791,381,751,379,704,385,657,400,611,420,580,446,553,475,530,507,511"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="505,14,524,86"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="522,83,555,256,575,424,570,423,550,256,521,89"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="282,160,405,232"/>
+<area shape="poly" id="edge17_Node000011_Node000007" title=" " alt="" coords="504,61,400,150,396,147,506,57"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="835,886,777,992,700,1111,648,1180,595,1245,591,1241,644,1176,696,1107,772,989,832,890"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="861,798,891,608,894,603,866,800"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="997,551,1017,577,1030,605,1034,635,1029,664,1010,701,986,734,931,790,928,786,982,731,1006,698,1024,662,1029,635,1024,607,1012,580,996,556"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="273,524,251,611,228,731,222,798,221,866,228,934,243,999,272,1069,310,1136,354,1198,398,1253,393,1254,349,1201,306,1139,267,1072,238,1001,223,935,216,866,217,797,223,730,246,610,274,519"/>
+<area shape="poly" id="edge19_Node000013_Node000010" title=" " alt="" coords="274,519,268,554,264,590,266,627,277,662,283,670,290,674,308,685,342,729,370,775,365,776,337,732,304,689,287,679,279,674,272,665,260,628,258,590,263,553,273,524"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="334,244,300,433,295,432,333,249"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="334,14,353,86"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="344,83,346,143,341,143,343,89"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="410,894,447,1109,448,1117,443,1115,442,1109,408,899"/>
+</map>

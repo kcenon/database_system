@@ -1,0 +1,8 @@
+<map id="test_select_success" name="test_select_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,89,156,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="204,29,415,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,86,191,82,186,84,157,91"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#ad5712fc76f34561cf903395d8010534d" title="Execute a SELECT query." alt="" coords="204,115,415,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="156,114,191,122,185,123,156,119"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="265,28,265,19,274,10,288,5,309,3,333,5,350,15,344,15,332,11,309,8,290,10,277,15,270,21,269,31"/>
+</map>

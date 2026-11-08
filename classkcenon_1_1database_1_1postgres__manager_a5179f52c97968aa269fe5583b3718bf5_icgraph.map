@@ -1,0 +1,5 @@
+<map id="kcenon::database::postgres_manager::type" name="kcenon::database::postgres_manager::type">
+<area shape="rect" id="Node000001" title="Returns the specific type of the database." alt="" coords="254,5,454,50"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1postgres__manager.html#a35b49f298fadd41f74054c46b66aac3a" title="Executes a SELECT query on the connected PostgreSQL database and returns the resulting data." alt="" coords="5,5,206,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,28,206,30,206,25,241,27"/>
+</map>

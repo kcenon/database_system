@@ -1,0 +1,31 @@
+<map id="kcenon::database::orm::field_accessor::get" name="kcenon::database::orm::field_accessor::get">
+<area shape="rect" id="Node000001" title=" " alt="" coords="542,153,713,198"/>
+<area shape="rect" id="Node000002" href="$orm__framework__demo_8cpp.html#afcd2efe7b49b7a6300d444d5085cc764" title=" " alt="" coords="108,212,296,240"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="524,196,495,203,297,223,296,218,494,198,530,195"/>
+<area shape="rect" id="Node000004" href="$classProduct.html#aa575058f1f9557e5286cb19a10581a2f" title=" " alt="" coords="344,5,494,33"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="596,141,551,94,523,70,493,48,470,36,469,31,496,44,526,65,555,90,601,141"/>
+<area shape="rect" id="Node000006" href="$classIntegrationTestUser.html#afd5caefb6690526f04ec3b71d662899a" title=" " alt="" coords="345,264,493,308"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="573,205,464,265,462,260,568,206"/>
+<area shape="rect" id="Node000008" href="$classUser.html#a54af5624351276ec3f65b00e2a5ecbb8" title=" " alt="" coords="364,161,474,189"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="524,176,475,178,474,173,529,175"/>
+<area shape="rect" id="Node000010" href="$orm__entity__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="392,332,446,360"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="605,209,558,268,528,297,496,323,472,335,447,343,446,338,470,330,493,318,525,293,554,265,600,212"/>
+<area shape="rect" id="Node000011" href="$classProduct.html#ab02d7033f26de70690c8ff46c3cbb91b" title=" " alt="" coords="349,57,489,85"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="576,144,493,100,465,88,465,83,495,95,581,144"/>
+<area shape="rect" id="Node000012" href="$classUser.html#a2249c34b491e5befa0902d10b702c5bb" title=" " alt="" coords="358,109,480,137"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="525,151,477,140,477,135,530,150"/>
+<area shape="rect" id="Node000003" href="$orm__framework__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,152,60,180"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,208,107,203,60,182,60,177,109,198,130,206"/>
+<area shape="rect" id="Node000005" href="$orm__framework__demo_8cpp.html#ab70ec1cf76c9b1ff4699ad0b5cca93eb" title=" " alt="" coords="127,74,276,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="362,40,268,76,266,71,366,37"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="121,127,109,134,62,155,58,151,107,129,124,123"/>
+<area shape="rect" id="Node000007" href="$integration__tests_8cpp.html#aca6f4ee9e88a00d5b11c348debac35f0" title=" " alt="" coords="168,272,236,300"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="327,286,237,288,236,283,332,285"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="361,156,343,151,265,122,265,117,345,146,366,155"/>
+<area shape="rect" id="Node000009" href="$orm__framework__demo_8cpp.html#ae78183753df4fdf58f82b0925ec4afa2" title=" " alt="" coords="127,144,276,188"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="347,173,278,172,277,166,352,171"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="110,168,61,168,59,163,114,164"/>
+<area shape="poly" id="edge14_Node000011_Node000005" title=" " alt="" coords="332,82,278,90,276,85,336,80"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="340,115,277,108,276,103,345,113"/>
+<area shape="poly" id="edge16_Node000012_Node000009" title=" " alt="" coords="341,139,278,154,276,149,346,137"/>
+</map>

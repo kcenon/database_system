@@ -1,0 +1,29 @@
+<map id="kcenon::database::query::condition_builder::format_condition" name="kcenon::database::query::condition_builder::format_condition">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,182,199,244"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a50c111ff3082581feb79ab2e13a3217e" title="Quote and escape an identifier (table/column name)" alt="" coords="247,105,435,166"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,179,234,169,230,173,200,184"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a8d613ac82b160cc5fa8dc6dfd576fd75" title="Format a database value." alt="" coords="248,191,434,235"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,211,234,212,229,214,200,215"/>
+<area shape="rect" id="Node000014" href="$structkcenon_1_1database_1_1query_1_1condition.html#a144c43783bb7321f7d9c20a454135796" title=" " alt="" coords="250,260,432,305"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="199,238,250,254,245,256,199,244"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#ad8ef5cddb43f2bd4cb149a498b63b2ec" title=" " alt="" coords="483,5,704,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="418,188,433,176,445,162,451,148,456,119,461,90,469,75,481,60,485,61,489,57,485,64,473,78,466,92,461,120,456,150,449,165,437,180,421,192"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a42f79f0ff03aa2d2a23792ad040a7ce5" title=" " alt="" coords="483,75,704,119"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="412,188,434,176,448,165,457,153,466,141,482,129,495,125,490,128,484,134,470,145,461,156,451,168,436,181,414,192"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a3a7111a43fff1d9cbb130e0b45c0fc9e" title=" " alt="" coords="500,144,687,205"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="434,196,487,190,482,192,435,201"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a45a6a4273f93c0b9dcd647395c67122d" title=" " alt="" coords="488,229,699,274"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="434,225,476,233,470,234,435,230"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a66af11f64f077c76bc9c71d9fa37f0c7" title=" " alt="" coords="500,298,687,360"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="411,233,436,245,461,265,484,284,494,291,489,291,482,289,457,269,434,250,411,239"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a183e0b1df7951b1c2d20d3ccda2d543d" title="Get NULL literal for this database." alt="" coords="503,384,684,445"/>
+<area shape="poly" id="edge12_Node000003_Node000013" title=" " alt="" coords="420,233,437,246,450,262,457,278,462,309,466,340,473,355,485,370,493,379,488,378,481,373,468,357,461,341,456,310,452,279,445,265,433,250,419,239"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#aeed2663c8a484ac656a0536093e38937" title="Get boolean literal." alt="" coords="756,66,937,128"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="704,94,743,96,738,98,705,100"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a1788e034efb0b29a84ccf7893949771d" title="Escape a string value." alt="" coords="752,298,941,360"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="687,326,740,329,734,329,688,332"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a26fb688799b1905ce254c1728f603ad9" title=" " alt="" coords="989,256,1177,317"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="941,309,971,307,976,306,942,315"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#af19b5372b157a6c4cc370670640af90e" title=" " alt="" coords="989,341,1177,402"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="941,343,976,352,971,352,941,349"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::database::protocol::protocol_serializer::serialize_header" name="kcenon::database::protocol::protocol_serializer::serialize_header">
+<area shape="rect" id="Node000001" title="Serialize message header to bytes." alt="" coords="5,75,270,119"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a0ed58ce57c7f788ef803136597452ff3" title=" " alt="" coords="318,5,556,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,71,325,53,320,55,238,77"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="318,75,556,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="270,94,305,97,299,97,271,100"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a5ee3973f81e1b33c1439947d000565c9" title=" " alt="" coords="318,144,556,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="237,117,325,139,320,140,237,123"/>
+</map>

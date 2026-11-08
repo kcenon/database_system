@@ -1,0 +1,15 @@
+<map id="include/kcenon/database/integrated/unified_database_system.h" name="include/kcenon/database/integrated/unified_database_system.h">
+<area shape="rect" id="Node000001" title="Zero&#45;configuration database system with integrated adapters (Phase 6)" alt="" coords="548,5,756,67"/>
+<area shape="rect" id="Node000002" href="$async__queries_8cpp.html" title="Async query execution example with unified_database_system." alt="" coords="5,124,222,168"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="534,60,234,118,199,126,198,120,233,112,533,55"/>
+<area shape="rect" id="Node000003" href="$integrated_2basic__usage_8cpp.html" title="Basic usage example of unified_database_system." alt="" coords="245,124,448,168"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="554,72,409,126,408,120,549,73"/>
+<area shape="rect" id="Node000004" href="$migration__from__legacy_8cpp.html" title="Migration guide from legacy database_manager API to unified_database_system." alt="" coords="472,115,632,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="616,77,582,117,579,112,611,80"/>
+<area shape="rect" id="Node000005" href="$monitoring_8cpp.html" title="Monitoring and observability example with unified_database_system." alt="" coords="656,124,851,168"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="692,76,736,124,731,122,690,81"/>
+<area shape="rect" id="Node000006" href="$unified__database__system_8cpp.html" title="Implementation of unified database system (Phase 6)" alt="" coords="875,124,1045,168"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="753,70,901,123,895,123,752,75"/>
+<area shape="rect" id="Node000007" href="$test__unified__database__system_8cpp.html" title="Phase 6: Unit tests for unified_database_system." alt="" coords="1070,124,1291,168"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="771,56,1058,112,1095,123,1090,123,1057,118,771,61"/>
+</map>

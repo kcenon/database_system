@@ -1,0 +1,15 @@
+<map id="sample_runner" name="sample_runner">
+<area shape="rect" id="Node000001" title=" " alt="" coords="40,590,226,752"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="62,436,204,525"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,522,136,574,131,573,132,527"/>
+<area shape="rect" id="Node000003" href="$structsample__info.html" title=" " alt="" coords="24,298,114,371"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="74,368,89,411,94,421,88,421,84,413,74,373"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,144,107,216"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="69,214,72,281,67,281,69,219"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,133,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="69,107,72,144,67,144,69,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="138,298,256,371"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="177,382,155,437,150,435,174,386"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="188,144,206,216"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="198,214,200,282,195,281,197,219"/>
+</map>

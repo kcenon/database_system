@@ -1,0 +1,44 @@
+<map id="tests/integrated/test_monitoring_adapter.cpp" name="tests/integrated/test_monitoring_adapter.cpp">
+<area shape="rect" id="Node000001" title="Unit tests for monitoring_adapter (Phase 3)" alt="" coords="866,5,1048,50"/>
+<area shape="rect" id="Node000002" href="$monitoring__adapter_8h.html" title="Database monitoring adapter with runtime backend selection." alt="" coords="323,98,549,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="864,46,565,99,563,94,868,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="827,402,893,429"/>
+<area shape="poly" id="edge24_Node000001_Node000004" title=" " alt="" coords="954,49,869,388,865,385,950,51"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="956,106,1036,134"/>
+<area shape="poly" id="edge25_Node000001_Node000015" title=" " alt="" coords="968,48,987,93,982,91,965,53"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1059,106,1128,134"/>
+<area shape="poly" id="edge26_Node000001_Node000016" title=" " alt="" coords="990,48,1064,98,1059,98,989,53"/>
+<area shape="rect" id="Node000003" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="102,300,306,345"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="379,145,343,166,304,193,260,240,226,289,222,285,256,237,301,189,340,162,384,142"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="549,132,677,155,732,170,769,188,792,209,810,233,837,287,853,341,860,388,855,385,847,343,832,289,806,236,788,212,767,193,730,175,676,160,549,138"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,402,75,429"/>
+<area shape="poly" id="edge8_Node000002_Node000005" title=" " alt="" coords="321,137,207,160,158,175,126,193,106,213,89,237,65,290,51,343,45,387,39,386,46,342,60,289,84,234,101,210,122,189,156,171,205,155,325,134"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="147,402,213,429"/>
+<area shape="poly" id="edge9_Node000002_Node000006" title=" " alt="" coords="324,145,262,168,196,200,165,220,137,244,113,271,93,301,87,323,93,344,114,371,141,393,136,394,110,375,88,346,81,323,88,299,108,268,133,240,162,216,193,195,260,163,328,142"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="338,402,396,429"/>
+<area shape="poly" id="edge11_Node000002_Node000007" title=" " alt="" coords="395,142,369,166,349,192,340,217,335,243,336,296,346,346,358,388,353,386,340,348,331,297,330,242,335,215,344,189,365,162,391,145"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="359,208,436,235"/>
+<area shape="poly" id="edge10_Node000002_Node000008" title=" " alt="" coords="429,141,410,195,406,192,426,145"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="380,309,503,336"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="442,141,451,190,451,245,447,295,443,292,446,245,445,191,439,146"/>
+<area shape="rect" id="Node000010" href="$common__result_8h.html" title="Common Result&lt;T&gt; pattern for integrated database system." alt="" coords="577,300,780,345"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="549,130,609,139,667,151,715,168,733,178,746,189,755,205,757,220,746,253,735,274,720,292,717,287,731,271,742,251,752,220,750,207,742,192,730,182,713,172,666,156,608,144,549,135"/>
+<area shape="rect" id="Node000014" href="$monitoring__backend_8h.html" title="Abstract interface for monitoring backends." alt="" coords="510,191,732,252"/>
+<area shape="poly" id="edge18_Node000002_Node000014" title=" " alt="" coords="477,141,554,183,549,183,476,146"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="306,335,368,342,493,353,590,357,687,366,809,390,820,396,815,396,807,396,686,371,590,362,492,358,368,348,306,340"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="166,348,78,396,76,391,164,343"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="200,344,190,388,185,385,196,347"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="244,343,332,393,327,394,242,348"/>
+<area shape="poly" id="edge16_Node000010_Node000007" title=" " alt="" coords="602,345,434,396,411,403,410,397,433,390,597,346"/>
+<area shape="rect" id="Node000011" href="$feature__flags_8h.html" title="Unified feature flags header for database_system." alt="" coords="446,393,621,438"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="646,345,582,387,580,382,641,346"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="645,402,712,429"/>
+<area shape="poly" id="edge15_Node000010_Node000012" title=" " alt="" coords="681,343,681,388,677,384,677,347"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="737,402,796,429"/>
+<area shape="poly" id="edge17_Node000010_Node000013" title=" " alt="" coords="701,343,746,391,741,389,698,348"/>
+<area shape="poly" id="edge20_Node000014_Node000003" title=" " alt="" coords="508,250,311,299,310,294,512,248"/>
+<area shape="poly" id="edge21_Node000014_Node000004" title=" " alt="" coords="715,250,756,271,794,298,813,319,829,342,852,388,847,386,824,345,809,322,790,302,754,276,714,256"/>
+<area shape="poly" id="edge22_Node000014_Node000007" title=" " alt="" coords="603,251,565,301,516,347,464,379,411,402,410,396,461,374,513,343,562,297,599,254"/>
+<area shape="poly" id="edge23_Node000014_Node000009" title=" " alt="" coords="569,252,480,303,477,299,564,254"/>
+<area shape="poly" id="edge19_Node000014_Node000010" title=" " alt="" coords="640,251,661,288,656,286,638,255"/>
+</map>

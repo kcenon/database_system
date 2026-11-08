@@ -1,0 +1,11 @@
+<map id="kcenon::database::query::join_builder::build" name="kcenon::database::query::join_builder::build">
+<area shape="rect" id="Node000001" title="Build the JOIN clauses." alt="" coords="5,121,187,166"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a630d240a8a54c04162e157d33fc6d82e" title="Check if builder is empty." alt="" coords="238,5,420,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,119,179,89,233,60,250,55,246,58,236,65,181,94,134,123"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1value__formatter.html#a50c111ff3082581feb79ab2e13a3217e" title="Quote and escape an identifier (table/column name)" alt="" coords="235,74,423,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="186,126,222,122,217,124,188,131"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a9b49eb4f15dccc37c40fb89609d952e0" title="Add an INNER JOIN." alt="" coords="238,160,420,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="187,156,225,164,220,166,187,161"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1query_1_1join__builder.html#a8ff3f65a2375e6cf3728057223c701cc" title=" " alt="" coords="238,229,420,290"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="139,164,236,215,247,222,242,222,233,219,138,169"/>
+</map>

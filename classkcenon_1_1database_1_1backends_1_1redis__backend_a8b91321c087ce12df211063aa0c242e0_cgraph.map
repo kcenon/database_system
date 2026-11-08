@@ -1,0 +1,10 @@
+<map id="kcenon::database::backends::redis_backend::do_shutdown" name="kcenon::database::backends::redis_backend::do_shutdown">
+<area shape="rect" id="Node000001" title="Database&#45;specific shutdown logic." alt="" coords="5,36,222,81"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html#a1cd37cd7b45631ede375fc2843383ab8" title="Rollback the current transaction." alt="" coords="270,28,475,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,56,257,58,251,59,222,61"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html#ad3f5b0e05cec201ced3aadb28596a8a6" title="Execute a general SQL query (DDL, DML)" alt="" coords="523,5,748,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="475,44,505,43,510,42,476,49"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="796,19,990,98"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="475,59,523,60,748,60,783,62,778,62,748,65,523,65,475,64"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="749,38,784,45,778,45,749,44"/>
+</map>

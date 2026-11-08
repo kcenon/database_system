@@ -1,0 +1,15 @@
+<map id="kcenon::database::orm::query_builder&lt; EntityType, typename &gt;" name="kcenon::database::orm::query_builder&lt; EntityType, typename &gt;">
+<area shape="rect" id="Node000001" title="Template query builder for type&#45;safe ORM queries." alt="" coords="230,877,424,1340"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="160,671,342,778"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="262,775,281,860,275,860,261,780"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,143,174,589"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,562,215,646,220,656,214,656,210,648,174,567"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="198,330,344,402"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="267,414,255,613,254,672,248,671,250,613,266,420"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="262,5,280,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="272,75,274,313,269,312,271,80"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="389,688,465,761"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="419,758,394,862,389,859,417,763"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="387,321,515,411"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="448,423,435,648,432,689,427,688,430,647,446,428"/>
+</map>

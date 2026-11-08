@@ -1,0 +1,7 @@
+<map id="kcenon::database::monitoring::performance_alert" name="kcenon::database::monitoring::performance_alert">
+<area shape="rect" id="Node000001" title="Alert system for performance thresholds." alt="" coords="5,281,210,460"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="70,144,146,216"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,213,110,265,105,264,107,218"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="44,5,172,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,107,110,145,105,144,107,112"/>
+</map>

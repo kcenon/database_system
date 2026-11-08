@@ -1,0 +1,10 @@
+<map id="test_move_semantics" name="test_move_semantics">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,89,170,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#aed5a9b60a85244b98b7a37fa9537b0a7" title="Initialize thread pool." alt="" coords="218,29,429,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,86,205,81,200,83,169,91"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1thread__adapter.html#a9eb18fb81e4db02eab29743988fafffb" title="Shutdown thread pool gracefully." alt="" coords="218,115,429,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="168,115,205,123,200,124,168,120"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="283,28,284,19,291,10,305,5,323,3,345,5,360,15,354,15,343,11,323,8,306,10,294,15,289,21,288,31"/>
+<area shape="rect" id="Node000004" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="477,132,579,159"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="429,143,464,145,459,146,429,148"/>
+</map>

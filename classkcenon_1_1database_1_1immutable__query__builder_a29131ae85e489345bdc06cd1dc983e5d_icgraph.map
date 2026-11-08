@@ -1,0 +1,9 @@
+<map id="kcenon::database::immutable_query_builder::join_type_to_string" name="kcenon::database::immutable_query_builder::join_type_to_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="648,5,864,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a2c8c7714091bec89829a2e887b417f78" title="Builds the SQL query for a specific database type." alt="" coords="385,5,600,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="630,36,601,39,601,34,635,36"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a32346074b0ccdbf764e4abd3715542e3" title="Builds the final SQL query string." alt="" coords="122,14,337,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,36,337,39,337,34,372,36"/>
+<area shape="rect" id="Node000004" href="$test__immutable__query__builder_8cpp.html#a2dbd0b148eca3e10b1e81bdf5586d1c0" title=" " alt="" coords="5,22,74,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,37,74,39,74,34,109,35"/>
+</map>

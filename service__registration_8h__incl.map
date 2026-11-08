@@ -1,0 +1,9 @@
+<map id="include/kcenon/database/di/service_registration.h" name="include/kcenon/database/di/service_registration.h">
+<area shape="rect" id="Node000001" title="Service container registration for database_system services." alt="" coords="44,5,227,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,106,82,134"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,49,70,97,66,93,111,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="106,106,165,134"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,48,138,92,133,90,134,52"/>
+<area shape="rect" id="Node000004" href="$feature__flags_8h.html" title="Unified feature flags header for database_system." alt="" coords="189,98,364,143"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,48,233,89,228,90,169,53"/>
+</map>

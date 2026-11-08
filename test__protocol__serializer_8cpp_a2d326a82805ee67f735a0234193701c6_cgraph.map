@@ -1,0 +1,17 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,106,74,134"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a81a2cfb9f7e2225edd126087b9ef506d" title="Deserialize error response." alt="" coords="122,50,350,112"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,111,109,105,105,108,75,115"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a42cb5e137cda20ae2c137cfb8a1d38ca" title="Serialize connect request." alt="" coords="130,136,342,181"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="74,124,117,133,112,136,74,129"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a6e1c3932fc97a7672b3eb7d6cfbfb39c" title=" " alt="" coords="400,5,630,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,57,387,52,382,53,351,62"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aa53d16c2c59a7beab50fd73540a11754" title=" " alt="" coords="682,49,917,94"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="350,76,669,72,665,75,351,82"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="631,43,670,51,665,51,631,48"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#af2425d58415140b16f9c414b0fa7e27e" title=" " alt="" coords="398,129,632,174"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="342,153,385,155,380,155,343,158"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="680,145,919,190"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="343,177,398,184,515,189,632,184,662,184,668,184,632,189,515,195,398,189,342,182"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="633,156,668,160,662,160,633,161"/>
+</map>

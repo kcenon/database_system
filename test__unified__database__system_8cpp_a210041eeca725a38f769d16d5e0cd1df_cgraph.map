@@ -1,0 +1,8 @@
+<map id="test_transaction_commit" name="test_transaction_commit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,189,105"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a209dbfcae1486713c7da07b1eed9f420" title=" " alt="" coords="237,5,448,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,74,224,62,219,64,163,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="237,115,448,176"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,103,224,118,219,119,162,108"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="295,113,295,104,304,95,320,90,342,88,368,91,385,101,380,100,367,96,342,93,321,95,307,100,300,107,299,116"/>
+</map>

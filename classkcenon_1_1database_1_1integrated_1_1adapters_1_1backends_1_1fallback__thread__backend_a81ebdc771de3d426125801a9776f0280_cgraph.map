@@ -1,0 +1,9 @@
+<map id="kcenon::database::integrated::adapters::backends::fallback_thread_backend::initialize" name="kcenon::database::integrated::adapters::backends::fallback_thread_backend::initialize">
+<area shape="rect" id="Node000001" title="Initialize the thread backend." alt="" coords="5,58,221,119"/>
+<area shape="rect" id="Node000002" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="334,5,436,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,56,268,43,321,33,316,35,269,48,222,61"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#aeb17bfa842d7329e21539128b3e2c096" title="Get number of worker threads." alt="" coords="272,58,498,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,86,258,88,253,89,222,91"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#ad633949a4cea5a427a1e22d593dfed93" title="Worker thread function." alt="" coords="269,143,501,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,117,273,137,267,138,213,123"/>
+</map>

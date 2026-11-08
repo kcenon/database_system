@@ -1,0 +1,16 @@
+<map id="kcenon::database::integrated::unified_database_system::impl::connect" name="kcenon::database::integrated::unified_database_system::impl::connect">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,144,217,205"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1integrated.html#a43e04859c1022fc5d5ba68444a462718" title="Create database backend instance." alt="" coords="265,75,476,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,140,281,123,276,125,218,145"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a43672ee45abf6ec62ce5a8ebfd727536" title=" " alt="" coords="265,144,476,205"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="217,172,252,174,247,175,218,177"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1database_1_1core_1_1connection__config.html#a6ddaff389d2b84838721ab25e68c41f7" title="Construct connection_config from legacy connection string." alt="" coords="278,229,463,290"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="207,203,266,224,261,225,207,208"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1database_1_1integrated.html#a6b3d4b44eef474c18453047573cf687e" title="Convert backend_type to registry name string." alt="" coords="524,5,735,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="456,71,531,54,526,56,458,77"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a9388ae64e8f49f97f2453549f2fee4e1" title="Create a backend instance by name." alt="" coords="536,75,724,119"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="476,94,523,96,518,98,477,100"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="528,168,731,213"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="442,117,477,129,559,162,554,162,475,134,442,123"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="581,166,579,158,587,149,604,143,630,141,658,144,676,153,671,153,656,149,630,147,605,149,590,153,584,159,585,169"/>
+</map>

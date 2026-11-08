@@ -1,0 +1,9 @@
+<map id="include/kcenon/database/utils/backend_logger.h" name="include/kcenon/database/utils/backend_logger.h">
+<area shape="rect" id="Node000001" title="Centralized logging utility for database backends." alt="" coords="47,5,230,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,85,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,49,73,90,70,85,111,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,98,168,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="140,48,141,84,136,81,137,52"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="192,98,288,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="166,48,214,88,209,88,164,53"/>
+</map>

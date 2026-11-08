@@ -1,0 +1,12 @@
+var searchData=
+[
+  ['offset_5f_0',['offset_',['../classkcenon_1_1database_1_1immutable__query__builder.html#ad095653447113b2bf85233421d78bddc',1,'kcenon::database::immutable_query_builder']]],
+  ['offset_5fcount_5f_1',['offset_count_',['../classkcenon_1_1database_1_1orm_1_1query__builder.html#ace33e9039bce3eba4b14e36dfc542c20',1,'kcenon::database::orm::query_builder::offset_count_'],['../classkcenon_1_1database_1_1detail_1_1sql__dialect.html#ab1e523cca0c84477923b366a5521c931',1,'kcenon::database::detail::sql_dialect::offset_count_']]],
+  ['op_2',['op',['../structkcenon_1_1database_1_1query_1_1condition.html#a44b78147575efd0065ed6043bd277253',1,'kcenon::database::query::condition::op'],['../structkcenon_1_1database_1_1query_1_1condition__builder_1_1condition__node.html#a7d6043af2bb28fb737bb86fb77e488fb',1,'kcenon::database::query::condition_builder::condition_node::op']]],
+  ['operation_3',['operation',['../structkcenon_1_1database_1_1protocol_1_1query__request.html#ad2ead444c038b23cc203825cad7b9239',1,'kcenon::database::protocol::query_request::operation'],['../structkcenon_1_1database_1_1protocol_1_1transaction__request.html#a003fcfafe401f402a3b2f32b79b38ca8',1,'kcenon::database::protocol::transaction_request::operation'],['../structkcenon_1_1database_1_1security_1_1audit__log__entry.html#a5a0b01fd11a380bfaeb358488bfc0c60',1,'kcenon::database::security::audit_log_entry::operation']]],
+  ['operator_5f_4',['operator_',['../classkcenon_1_1database_1_1query__condition.html#af99be8095630d9c74e6090743d6005cc',1,'kcenon::database::query_condition']]],
+  ['options_5',['options',['../structkcenon_1_1database_1_1core_1_1connection__config.html#ab7c8b9262fc318a13206ff878fc00452',1,'kcenon::database::core::connection_config::options'],['../structkcenon_1_1database_1_1protocol_1_1connect__request.html#a9181e17eb3649b9fa0890ab172523ef2',1,'kcenon::database::protocol::connect_request::options']]],
+  ['order_5fby_5f_6',['order_by_',['../classkcenon_1_1database_1_1immutable__query__builder.html#ae59b6441e26b2d32789153442d7a962a',1,'kcenon::database::immutable_query_builder']]],
+  ['order_5fby_5fclauses_5f_7',['order_by_clauses_',['../classkcenon_1_1database_1_1detail_1_1sql__dialect.html#a1842a151e4a386e2fb159c1674e2582a',1,'kcenon::database::detail::sql_dialect']]],
+  ['order_5fclause_5f_8',['order_clause_',['../classkcenon_1_1database_1_1orm_1_1query__builder.html#ae670d346e50c9d521f84c0aa3b13b67a',1,'kcenon::database::orm::query_builder']]]
+];

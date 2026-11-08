@@ -1,0 +1,22 @@
+<map id="kcenon::database::security::encryption_manager" name="kcenon::database::security::encryption_manager">
+<area shape="rect" id="Node000001" title="Data encryption and key management." alt="" coords="168,502,353,804"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,348,86,420"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="40,418,42,449,50,477,70,510,96,540,125,567,156,592,151,593,121,571,92,544,66,514,45,479,37,450,40,423"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="206,168,282,240"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,238,224,284,215,331,212,409,221,486,215,485,207,409,210,331,219,283,232,243"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="509,331,649,437"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="266,237,299,274,318,291,339,305,378,318,412,320,448,320,495,330,490,332,448,326,412,326,377,324,336,309,315,295,295,278,267,243"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="316,331,484,437"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="237,238,238,274,241,290,248,305,258,316,269,320,299,329,304,332,299,334,297,333,268,325,255,320,244,309,236,292,233,274,236,243"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="180,5,308,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,107,247,169,242,168,244,112"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="545,435,509,480,440,538,369,589,366,584,437,534,505,476,541,439"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="389,160,529,249"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="543,229,571,247,592,272,601,301,599,332,594,330,596,302,587,274,567,251,543,235"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="434,260,431,274,414,333,409,330,426,272,431,265"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="481,14,501,86"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="485,84,474,144,469,142,483,89"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="375,14,394,86"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="383,83,387,110,395,135,401,146,396,146,390,137,382,112,382,89"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="375,435,349,489,345,486,372,439"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="kcenon::database::integrated::unified_database_system::builder::set_pool_size" name="kcenon::database::integrated::unified_database_system::builder::set_pool_size">
+<area shape="rect" id="Node000001" title="Set connection pool size." alt="" coords="309,40,520,102"/>
+<area shape="rect" id="Node000002" href="$migration__from__legacy_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="157,5,212,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="292,45,212,28,212,23,297,43"/>
+<area shape="rect" id="Node000003" href="$async__queries_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="157,57,212,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="291,72,212,74,212,69,296,71"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#a999f56b7107ee3cfd3c749095fcd91f5" title=" " alt="" coords="108,109,261,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="297,98,249,111,248,106,292,99"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,109,60,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="89,124,60,126,60,121,94,122"/>
+</map>

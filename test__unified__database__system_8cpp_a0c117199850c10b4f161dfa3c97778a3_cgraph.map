@@ -1,0 +1,8 @@
+<map id="test_remove_success" name="test_remove_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,89,167,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="215,29,426,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,86,202,81,197,83,167,91"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a12d9f8ca60eb206ca35f09efedaa0b54" title="Execute a DELETE query." alt="" coords="215,115,426,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="166,115,202,123,197,124,166,120"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="275,28,275,19,284,10,299,5,320,3,345,5,362,15,356,15,343,11,320,8,300,10,287,15,280,21,279,31"/>
+</map>

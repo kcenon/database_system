@@ -1,0 +1,9 @@
+<map id="kcenon::database::postgres_manager" name="kcenon::database::postgres_manager">
+<area shape="rect" id="Node000001" title="Manages PostgreSQL database operations." alt="" coords="16,690,206,1153"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,144,174,591"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,603,105,690,100,690,99,608"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="199,331,274,404"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,401,170,674,165,672,228,406"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="173,5,300,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="237,107,239,331,234,331,236,112"/>
+</map>

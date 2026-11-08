@@ -1,0 +1,19 @@
+<map id="kcenon::database::core::backend_registry::has_backend" name="kcenon::database::core::backend_registry::has_backend">
+<area shape="rect" id="Node000001" title="Check if a backend is registered." alt="" coords="342,144,514,206"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1core.html#acbc26694901d28904f6ff4f080b3a018" title="Convenience function for checking backend availability." alt="" coords="122,153,294,198"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,176,295,178,294,173,329,174"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a6117564ddd9c7a6d6f74369a2f4d2034" title=" " alt="" coords="5,5,74,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="172,143,72,48,60,36,58,31,75,44,176,141"/>
+<area shape="rect" id="Node000004" href="$backend__registry__test_8cpp.html#a58f4442c406e1811763c5b070f7a420c" title=" " alt="" coords="5,57,74,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="155,146,64,88,64,83,160,143"/>
+<area shape="rect" id="Node000005" href="$backend__registry__test_8cpp.html#a76769518a2a6708c2f8652253a1489e2" title=" " alt="" coords="5,109,74,137"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="117,149,75,136,74,131,121,146"/>
+<area shape="rect" id="Node000006" href="$backend__registry__test_8cpp.html#a1049365d8e2e07b7918b3f62031c6e50" title=" " alt="" coords="5,161,74,189"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="104,177,75,178,73,173,108,173"/>
+<area shape="rect" id="Node000007" href="$backend__registry__test_8cpp.html#a50c8bbf96770336b504f386f9771bfaf" title=" " alt="" coords="5,213,74,241"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="117,205,76,219,73,214,121,201"/>
+<area shape="rect" id="Node000008" href="$backend__registry__test_8cpp.html#aac7d69144313c180feb1c87c75b9a937" title=" " alt="" coords="5,265,74,293"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="157,209,65,267,62,263,157,203"/>
+<area shape="rect" id="Node000009" href="$backend__registry__test_8cpp.html#a21d5dd643ea93d4228102e32972eba3d" title=" " alt="" coords="5,317,74,345"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="176,210,75,306,61,319,58,315,72,303,172,207"/>
+</map>

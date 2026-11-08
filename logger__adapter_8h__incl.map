@@ -1,0 +1,27 @@
+<map id="include/kcenon/database/integrated/adapters/logger_adapter.h" name="include/kcenon/database/integrated/adapters/logger_adapter.h">
+<area shape="rect" id="Node000001" title="Database logging adapter with runtime backend selection." alt="" coords="196,5,394,67"/>
+<area shape="rect" id="Node000002" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="124,115,328,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,66,252,104,248,100,272,69"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,216,71,244"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="194,63,146,86,100,117,82,136,68,158,49,202,44,200,63,156,78,133,96,113,143,81,198,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="98,216,167,244"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="194,59,151,82,131,97,115,116,107,137,107,159,121,202,115,202,102,159,102,136,110,114,127,93,148,77,198,55"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="308,216,366,244"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="318,65,332,89,342,114,347,160,344,202,339,199,342,160,337,116,327,91,316,70"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="629,124,706,151"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="395,55,503,80,617,112,627,118,621,117,616,118,502,85,395,60"/>
+<area shape="rect" id="Node000008" href="$common__result_8h.html" title="Common Result&lt;T&gt; pattern for integrated database system." alt="" coords="402,115,605,160"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="359,65,447,108,442,108,359,70"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="182,163,80,211,78,207,180,158"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="206,159,159,207,155,203,201,161"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="193,216,259,244"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="228,158,228,202,224,199,224,162"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="253,157,312,206,306,206,251,163"/>
+<area shape="poly" id="edge13_Node000008_Node000006" title=" " alt="" coords="466,160,375,211,373,206,461,161"/>
+<area shape="rect" id="Node000009" href="$feature__flags_8h.html" title="Unified feature flags header for database_system." alt="" coords="390,208,566,252"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="499,158,490,195,486,191,495,162"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="590,216,657,244"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="533,157,596,207,591,206,531,163"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="682,216,741,244"/>
+<area shape="poly" id="edge14_Node000008_Node000011" title=" " alt="" coords="558,158,670,205,674,210,669,209,668,210,557,163"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="sample_runner::list_available_samples" name="sample_runner::list_available_samples">
+<area shape="rect" id="Node000001" title=" " alt="" coords="303,5,453,50"/>
+<area shape="rect" id="Node000002" href="$run__all__samples_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,14,60,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,24,255,25,108,25,61,28,60,23,108,20,255,20,290,23"/>
+<area shape="rect" id="Node000003" href="$classsample__runner.html#a4915c0808c689b41902fdfcd2af4e98e" title=" " alt="" coords="108,35,255,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="291,41,256,49,255,43,285,41"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="90,41,60,36,60,30,95,38"/>
+</map>

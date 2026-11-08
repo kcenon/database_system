@@ -1,0 +1,8 @@
+<map id="test_transaction_rollback" name="test_transaction_rollback">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,191,105"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a209dbfcae1486713c7da07b1eed9f420" title=" " alt="" coords="239,5,450,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,74,226,62,222,64,164,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="239,115,450,176"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,103,227,118,221,119,163,108"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="297,113,297,104,306,95,322,90,344,88,370,91,388,101,382,100,369,96,344,93,323,95,309,100,302,107,301,116"/>
+</map>

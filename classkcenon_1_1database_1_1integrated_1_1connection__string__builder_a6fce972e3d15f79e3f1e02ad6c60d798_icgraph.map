@@ -1,0 +1,10 @@
+<map id="kcenon::database::integrated::connection_string_builder::connect_timeout" name="kcenon::database::integrated::connection_string_builder::connect_timeout">
+<area shape="rect" id="Node000001" title="Set the connection timeout." alt="" coords="323,15,534,77"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="111,5,272,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,32,272,31,272,25,310,32"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#a879d00275dfe4cd65204013199e4c5e3" title=" " alt="" coords="108,57,275,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="310,59,276,65,275,60,305,59"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,32,60,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,37,61,44,59,39,98,34"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,56,60,53,60,47,95,54"/>
+</map>

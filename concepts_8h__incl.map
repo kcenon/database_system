@@ -1,0 +1,15 @@
+<map id="include/kcenon/database/core/concepts.h" name="include/kcenon/database/core/concepts.h">
+<area shape="rect" id="Node000001" title="C++20 concepts for database_system type validation." alt="" coords="228,5,411,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,85,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,53,100,97,98,92,246,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,98,200,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="278,50,195,93,193,88,273,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="224,98,311,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="308,49,286,87,283,83,304,52"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="335,98,411,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="335,48,359,85,354,84,332,53"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="436,98,494,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="359,48,431,90,426,90,358,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="519,98,579,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="381,48,507,95,502,95,380,53"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="kcenon::database::core::backend_registry::clear" name="kcenon::database::core::backend_registry::clear">
+<area shape="rect" id="Node000001" title="Clear all registered backends (for testing)" alt="" coords="210,105,389,150"/>
+<area shape="rect" id="Node000002" href="$classBackendRegistryTest.html#a738157d1d9e629239b571c979ba479ba" title=" " alt="" coords="5,5,162,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,99,161,65,136,53,136,48,163,60,240,97"/>
+<area shape="rect" id="Node000003" href="$classBackendRegistryTest.html#a2b91b18ebfe2424f93f77c53beee6d01" title=" " alt="" coords="5,75,162,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,114,163,111,162,105,197,112"/>
+<area shape="rect" id="Node000004" href="$backend__registry__test_8cpp.html#a6117564ddd9c7a6d6f74369a2f4d2034" title=" " alt="" coords="49,143,118,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,143,119,155,118,150,197,140"/>
+<area shape="rect" id="Node000005" href="$backend__registry__test_8cpp.html#aac7d69144313c180feb1c87c75b9a937" title=" " alt="" coords="49,195,118,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="231,155,163,185,119,200,117,195,161,180,226,157"/>
+</map>

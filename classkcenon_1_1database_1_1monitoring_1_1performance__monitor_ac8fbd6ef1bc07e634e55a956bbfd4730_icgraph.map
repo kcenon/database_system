@@ -1,0 +1,13 @@
+<map id="kcenon::database::monitoring::performance_monitor::get_performance_summary" name="kcenon::database::monitoring::performance_monitor::get_performance_summary">
+<area shape="rect" id="Node000001" title=" " alt="" coords="905,87,1121,148"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a1b91b193be88469e90d00345731ec8a3" title=" " alt="" coords="641,44,857,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="887,98,858,95,858,90,892,98"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#af47f5b3e819252c8d0b90421614d95fe" title=" " alt="" coords="642,129,857,191"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="892,137,858,145,857,140,887,138"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a36fa71829a861905f7d57ab19d90728d" title=" " alt="" coords="315,14,593,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="623,59,593,57,593,52,628,59"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a4b51883dc945dada731e56ae1a42f66b" title=" " alt="" coords="344,83,564,144"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="623,91,564,102,564,96,628,91"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a41cf68fab73b6e8e5b28103e42141008" title="Constructor &#45; now public for dependency injection." alt="" coords="5,5,267,67"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="297,37,268,39,266,34,302,35"/>
+</map>

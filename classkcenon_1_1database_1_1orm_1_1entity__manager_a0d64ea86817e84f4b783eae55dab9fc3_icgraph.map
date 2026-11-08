@@ -1,0 +1,9 @@
+<map id="kcenon::database::orm::entity_manager::register_entity" name="kcenon::database::orm::entity_manager::register_entity">
+<area shape="rect" id="Node000001" title=" " alt="" coords="678,5,869,67"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestBase.html#a032f56263c88a755aa6b1cee1d58de00" title=" " alt="" coords="454,14,630,58"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="660,36,631,39,631,34,665,36"/>
+<area shape="rect" id="Node000003" href="$classIntegrationTestBase.html#a6f7c60ad37f712eb505a37560c45e06a" title=" " alt="" coords="256,14,406,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="436,36,407,39,406,34,441,36"/>
+<area shape="rect" id="Node000004" href="$classORMSecurityIntegrationTest.html#adaeb43bcaab17be04056941081f4f8af" title=" " alt="" coords="5,14,208,58"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="237,36,208,39,208,34,243,36"/>
+</map>

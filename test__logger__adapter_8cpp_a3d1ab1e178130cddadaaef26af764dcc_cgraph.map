@@ -1,0 +1,16 @@
+<map id="test_transaction_logging" name="test_transaction_logging">
+<area shape="rect" id="Node000001" title="Test transaction logging." alt="" coords="5,167,187,194"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#aadc2d01617401344c90e9c43781f354d" title="Clean up test log directory." alt="" coords="281,5,420,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,165,155,105,192,71,233,42,268,30,264,33,236,47,195,75,159,109,109,168"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#af26bd7f4d08d521ffd1b5b5d08b9bd6b" title="Flush pending log messages." alt="" coords="235,57,466,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,164,173,138,234,111,256,105,251,108,236,116,176,143,125,168"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a0982310317cce219bda3988656ede5e9" title="Initialize the logger." alt="" coords="245,150,456,211"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="186,178,231,179,227,182,188,183"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#aaad9e3b34cb710412987f80218413365" title="Log a transaction operation." alt="" coords="245,235,456,297"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="140,192,245,228,240,231,140,198"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a52e8b8852ef0c409fb976a9945475e5b" title="Shutdown the logger gracefully." alt="" coords="245,320,456,382"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="110,192,162,247,198,278,236,306,245,313,239,313,233,311,194,283,159,251,109,197"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="308,148,309,139,317,131,331,125,350,123,373,126,388,135,383,136,371,131,350,128,332,130,320,135,314,141,313,151"/>
+<area shape="rect" id="Node000007" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="514,337,616,365"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="456,349,501,351,496,351,457,354"/>
+</map>

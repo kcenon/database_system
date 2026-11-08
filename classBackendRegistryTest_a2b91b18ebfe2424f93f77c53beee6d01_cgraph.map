@@ -1,0 +1,8 @@
+<map id="BackendRegistryTest::TearDown" name="BackendRegistryTest::TearDown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,52,162,97"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ae4677bbe509ce5e3b4243529a18a44ff" title="Clear all registered backends (for testing)" alt="" coords="221,5,400,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,56,209,48,204,50,163,61"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="210,99,412,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,88,197,97,192,97,162,93"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="268,97,266,89,273,80,288,74,311,72,335,75,352,84,346,83,334,80,311,77,290,79,277,84,271,90,272,100"/>
+</map>

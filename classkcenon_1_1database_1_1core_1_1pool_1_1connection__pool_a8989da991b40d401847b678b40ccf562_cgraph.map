@@ -1,0 +1,7 @@
+<map id="kcenon::database::core::pool::connection_pool::create" name="kcenon::database::core::pool::connection_pool::create">
+<area shape="rect" id="Node000001" title="Create a new connection_pool." alt="" coords="5,48,178,110"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#ae6c6675e4ebcb16bb0c78ec893c128da" title="The effective configuration." alt="" coords="226,5,398,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,60,213,55,208,57,179,65"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1pool_1_1connection__pool.html#ac2c16e13c903f59bb172114d9629edee" title=" " alt="" coords="226,91,398,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,93,213,102,208,102,178,98"/>
+</map>

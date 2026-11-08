@@ -1,0 +1,9 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,83,74,111"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#aebf26a2c3b8448200524359b7a2037a9" title=" " alt="" coords="122,5,364,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,80,121,60,145,54,141,57,123,65,73,85"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#af5d361df6b0afd00bc1770716bd23fde" title="Check if backend is initialized and ready." alt="" coords="135,75,351,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="73,94,121,95,117,99,75,100"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1testing_1_1mock__backend.html#a37f8c89f0deae8946b3f3ddbaf73f8ae" title="Get the database type of this backend." alt="" coords="148,144,338,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="72,109,123,129,146,139,141,139,121,134,72,114"/>
+</map>

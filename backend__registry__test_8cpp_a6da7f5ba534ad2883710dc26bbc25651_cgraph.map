@@ -1,0 +1,8 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,76,74,104"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="127,29,330,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,81,114,74,110,77,75,86"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ab17401a3bbefeda132c217feea6bd588" title="Unregister a backend (for testing or dynamic unloading)" alt="" coords="122,98,335,160"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="74,95,109,103,104,105,74,100"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="192,28,191,19,197,10,210,5,228,3,249,5,262,14,257,14,247,10,228,8,211,10,200,15,196,21,197,30"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="kcenon::database::backends::redis_backend" name="kcenon::database::backends::redis_backend">
+<area shape="rect" id="Node000001" title="Redis implementation of database_backend interface." alt="" coords="5,1388,200,1901"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title=" " alt="" coords="5,952,200,1338"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,1351,105,1388,100,1388,103,1356"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="13,5,182,452"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,464,104,953,99,952,99,469"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__base.html" title="CRTP template base class for database backends." alt="" coords="119,501,314,870"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="159,464,171,501,166,502,159,469"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="167,887,153,953,148,952,168,882"/>
+</map>

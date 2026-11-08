@@ -1,0 +1,8 @@
+<map id="test_update_success" name="test_update_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,89,162,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="210,29,421,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,86,197,81,192,83,163,91"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#ad7f726152d32c249eca00eba785cfa9f" title="Execute an UPDATE query." alt="" coords="210,115,421,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="162,114,197,123,192,124,162,120"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="270,28,271,19,279,10,294,5,315,3,340,5,356,15,351,15,338,11,315,8,295,10,282,15,276,21,274,31"/>
+</map>

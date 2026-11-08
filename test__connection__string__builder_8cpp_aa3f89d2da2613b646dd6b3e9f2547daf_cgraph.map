@@ -1,0 +1,21 @@
+<map id="test_builder_copy" name="test_builder_copy">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,266,142,294"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa5edeff418c13ac932aea9fc517f0149" title="Build the connection string for the specified backend." alt="" coords="190,142,426,186"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,264,133,230,188,196,206,191,202,194,191,201,136,235,93,268"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a1643a547a181cce0d263e2fedf41ba12" title="Set the database name." alt="" coords="202,211,414,272"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="141,267,189,260,185,263,143,271"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aca8eb9d867658716ef7db5f7902a6f58" title="Set the database host." alt="" coords="192,296,424,341"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="141,289,179,296,174,298,142,294"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a57a52431e109382b0e7c0e4100abf8bc" title="Set the database port." alt="" coords="193,366,423,410"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="94,292,138,322,191,351,208,360,203,360,188,356,135,326,93,297"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a1c2df7547e4a116cd61a84404cb9bcaf" title=" " alt="" coords="474,5,685,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,139,473,76,488,72,483,75,475,81,352,143"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#aa7c0cb071c93eedd6fa7e6e209869ba6" title=" " alt="" coords="474,91,685,152"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="426,143,461,139,456,141,427,148"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a45d1db0d86e7da36c061ff9defe39dc7" title=" " alt="" coords="474,176,685,238"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="426,180,461,187,456,188,427,185"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#ab285a7072843bb337fb206e13dc650fc" title=" " alt="" coords="474,261,685,323"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="403,184,427,197,443,209,452,222,461,235,476,247,482,254,477,253,472,252,457,238,448,225,439,213,425,201,403,190"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1connection__string__builder.html#a71afdffa2f5ccdeffbd2c9e6a6b0915b" title=" " alt="" coords="733,91,952,152"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="685,119,720,121,715,122,686,124"/>
+</map>

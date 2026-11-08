@@ -1,0 +1,13 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,107,74,135"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1core.html#ab5971d1c1b7891b3e654e4ee222e0848" title="Convenience function for creating backends (static method style)" alt="" coords="134,39,306,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,108,138,87,135,91,75,112"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="367,99,569,143"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="74,118,352,118,351,124,74,124"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a381e330bf39ee7cd470e8a56391c29b3" title="Register a backend factory function." alt="" coords="122,158,319,220"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="74,131,125,151,120,154,74,136"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a9388ae64e8f49f97f2453549f2fee4e1" title="Create a backend instance by name." alt="" coords="374,5,562,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="306,47,361,41,356,43,308,52"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="307,79,361,94,355,95,307,85"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="421,97,420,89,428,80,444,74,468,72,495,75,512,84,507,83,494,80,468,77,445,79,431,84,425,90,426,99"/>
+</map>

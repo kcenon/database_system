@@ -1,0 +1,7 @@
+<map id="kcenon::database::async::transaction_coordinator::rollback_distributed_transaction" name="kcenon::database::async::transaction_coordinator::rollback_distributed_transaction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,32,244,93"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1async.html#adf8882e1e710b4fa4b62e4d717742eed" title=" " alt="" coords="292,5,474,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,44,279,41,274,43,245,49"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1database_1_1async.html#a58708eb78f8410b00a4607f3f6f416ad" title=" " alt="" coords="292,75,474,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,76,279,83,273,83,244,81"/>
+</map>

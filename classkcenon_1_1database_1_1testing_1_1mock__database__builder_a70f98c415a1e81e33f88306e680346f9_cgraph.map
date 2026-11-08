@@ -1,0 +1,11 @@
+<map id="kcenon::database::testing::mock_database_builder::failing_database" name="kcenon::database::testing::mock_database_builder::failing_database">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,36,195,97"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1testing_1_1mock__database.html#a762e461d94b11bb854f0473006dfe70b" title=" " alt="" coords="243,5,458,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,49,230,46,225,48,196,54"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1testing_1_1expectation__builder.html#ac849d91823cb07c5f33bde7ef3403583" title=" " alt="" coords="256,74,445,136"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="195,78,243,88,238,88,195,84"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1testing_1_1expectation.html#a4d18b2a2280188a39468aa013c65bacf" title=" " alt="" coords="506,5,695,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="458,25,493,27,488,28,459,30"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1testing_1_1expectation.html#a57c5bd31d6e0914c39764c6d4e3e3693" title=" " alt="" coords="506,83,695,127"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="446,102,493,105,487,105,446,108"/>
+</map>

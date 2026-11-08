@@ -1,0 +1,27 @@
+<map id="include/kcenon/database/integrated/connection_string_builder.h" name="include/kcenon/database/integrated/connection_string_builder.h">
+<area shape="rect" id="Node000001" title="Fluent builder for constructing type&#45;safe database connection strings." alt="" coords="354,5,538,67"/>
+<area shape="rect" id="Node000002" href="$configuration_8h.html" title="Unified configuration for integrated database system." alt="" coords="35,115,238,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="352,68,220,112,218,107,356,65"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="189,216,255,244"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="393,66,357,92,324,117,278,162,242,206,239,201,274,158,320,113,354,87,388,69"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="278,216,336,244"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="402,66,376,91,354,117,330,160,316,203,312,199,325,158,349,113,372,87,398,69"/>
+<area shape="rect" id="Node000007" href="$result_8h.html" title="Result&lt;T&gt; type for database_system error handling." alt="" coords="364,115,528,160"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="448,65,448,101,444,98,444,70"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="553,124,627,151"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="491,65,562,115,556,115,489,70"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="651,124,748,151"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="524,65,654,117,649,118,523,70"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="772,124,834,151"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="538,53,646,78,760,112,767,117,761,117,758,118,645,83,538,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,216,71,244"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,159,65,207,62,203,111,161"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="95,216,165,244"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="137,158,135,202,130,199,133,162"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,158,202,204,196,205,156,162"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="178,158,272,208,267,209,177,163"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="360,208,548,252"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="450,158,453,194,449,191,446,162"/>
+<area shape="rect" id="Node000009" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="571,216,769,244"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="500,158,626,210,621,210,499,163"/>
+</map>

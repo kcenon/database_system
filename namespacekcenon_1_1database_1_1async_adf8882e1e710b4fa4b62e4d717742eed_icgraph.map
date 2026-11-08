@@ -1,0 +1,18 @@
+<map id="kcenon::database::async::make_error_result" name="kcenon::database::async::make_error_result">
+<area shape="rect" id="Node000001" title=" " alt="" coords="807,184,990,229"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a88c32450aabe539e6f5ac2be3825943c" title=" " alt="" coords="548,5,732,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="865,172,818,127,758,81,732,67,732,62,761,77,821,123,870,173"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a5c77188f60a98cc204db08bbbe265bb2" title=" " alt="" coords="548,91,732,152"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="811,179,732,154,732,149,817,179"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#ae8147f67647d18d868ffe29e93c481c2" title=" " alt="" coords="521,176,759,238"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="789,207,760,209,759,204,794,207"/>
+<area shape="rect" id="Node000007" href="$test__async__operations_8cpp.html#aa715d8d570d9247863d360241f43e5e1" title=" " alt="" coords="614,262,667,290"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="815,234,760,252,668,274,667,268,759,247,810,235"/>
+<area shape="rect" id="Node000008" href="$test__async__operations_8cpp.html#a9b5af963d634930dd8f856659e436f6b" title=" " alt="" coords="614,314,667,342"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="861,238,814,274,760,304,712,320,668,328,667,323,710,314,758,299,811,270,856,240"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a7e170d29541cbcd96cea9d69ef021555" title=" " alt="" coords="290,48,473,110"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="531,55,474,66,473,61,536,53"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a1dbd4b0e6380bff4f32958e70d9f9a2d" title=" " alt="" coords="5,48,242,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="272,80,243,81,241,76,276,78"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="531,104,474,97,473,91,536,103"/>
+</map>

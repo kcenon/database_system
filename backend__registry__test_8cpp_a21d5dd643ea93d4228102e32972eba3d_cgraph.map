@@ -1,0 +1,15 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,158,74,186"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1core.html#acbc26694901d28904f6ff4f080b3a018" title="Convenience function for checking backend availability." alt="" coords="142,55,314,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,156,120,116,151,104,147,108,123,121,62,160"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="383,115,585,160"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="73,166,121,160,368,142,366,147,122,165,75,170"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a381e330bf39ee7cd470e8a56391c29b3" title="Register a backend factory function." alt="" coords="130,175,327,236"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="73,176,117,184,112,187,75,181"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ab17401a3bbefeda132c217feea6bd588" title="Unregister a backend (for testing or dynamic unloading)" alt="" coords="122,260,335,322"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="53,184,84,215,123,246,131,252,126,252,120,250,81,219,52,189"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a2119e18398c7ffd74b9f61aa657dac1d" title="Check if a backend is registered." alt="" coords="398,5,570,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="314,61,385,51,380,54,316,66"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="315,95,374,110,369,112,315,100"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="436,113,434,105,442,96,459,90,484,89,512,91,530,100,524,100,511,96,484,94,460,96,445,101,439,107,441,116"/>
+</map>

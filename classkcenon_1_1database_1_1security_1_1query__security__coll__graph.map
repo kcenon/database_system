@@ -1,0 +1,13 @@
+<map id="kcenon::database::security::query_security" name="kcenon::database::security::query_security">
+<area shape="rect" id="Node000001" title="SQL injection prevention and query security." alt="" coords="22,468,236,709"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,297,216,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,367,132,452,127,451,128,372"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,160,107,232"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,229,84,272,89,282,84,283,79,274,71,235"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,133,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="69,107,72,160,67,160,69,112"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="132,160,249,232"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="168,248,160,274,148,298,143,296,155,272,170,243"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="181,14,200,86"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="191,83,193,143,188,143,190,89"/>
+</map>

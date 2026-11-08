@@ -1,0 +1,20 @@
+<map id="kcenon::database::core::backend_registry" name="kcenon::database::core::backend_registry">
+<area shape="rect" id="Node000001" title="Singleton registry for database backend plugins." alt="" coords="23,468,188,848"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="21,322,102,395"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,392,77,452,72,452,66,397"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="126,314,282,403"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,401,176,453,171,451,189,406"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,160,107,232"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="98,229,159,300,154,302,99,235"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,133,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="69,107,72,160,67,160,69,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="131,160,277,232"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="204,229,206,297,201,297,203,235"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="226,14,245,86"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,69,217,92,208,119,205,143,200,142,203,118,213,90,228,64"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="301,160,424,232"/>
+<area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="245,68,265,101,289,134,302,148,297,149,284,137,260,104,245,74"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="325,246,287,292,261,316,257,313,283,288,328,242"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="365,14,384,86"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="372,83,369,144,364,142,371,89"/>
+</map>

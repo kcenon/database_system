@@ -1,0 +1,19 @@
+<map id="examples/tutorials/run_all_samples.cpp" name="examples/tutorials/run_all_samples.cpp">
+<area shape="rect" id="Node000001" title="Sample runner that executes all available database system samples." alt="" coords="268,5,427,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,85,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,53,100,98,99,93,268,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,98,168,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="295,50,183,96,181,91,289,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="191,98,254,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="317,50,256,92,254,87,312,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="277,98,328,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="338,49,319,86,315,82,333,52"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="351,98,438,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,48,382,85,377,83,359,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="462,98,538,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="389,48,465,91,460,90,387,53"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="562,98,627,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="414,48,550,95,544,95,413,53"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="650,98,725,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="427,45,638,97,633,97,427,50"/>
+</map>

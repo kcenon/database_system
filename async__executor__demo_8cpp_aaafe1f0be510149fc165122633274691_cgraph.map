@@ -1,0 +1,9 @@
+<map id="demonstrate_high_throughput" name="demonstrate_high_throughput">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,100,223,127"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a2dd8c9bda100a82838e2d601b4b642d4" title="Checks if using thread_system implementation." alt="" coords="271,5,462,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,97,258,68,254,72,163,102"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a928094cb19dea337fe7d4201b745eb54" title="Submits a task for asynchronous execution." alt="" coords="275,91,458,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,111,262,113,257,114,223,116"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#a33b54115126303019a464abaa37a6e10" title="Waits for all pending tasks to complete." alt="" coords="275,160,458,222"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="162,125,263,157,258,159,161,131"/>
+</map>

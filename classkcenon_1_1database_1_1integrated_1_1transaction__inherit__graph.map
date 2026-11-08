@@ -1,0 +1,5 @@
+<map id="kcenon::database::integrated::transaction" name="kcenon::database::integrated::transaction">
+<area shape="rect" id="Node000001" title="Transaction interface for ACID operations." alt="" coords="5,5,206,184"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1transaction__impl.html" title=" " alt="" coords="5,232,206,455"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,197,108,233,103,232,105,202"/>
+</map>

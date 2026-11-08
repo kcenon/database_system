@@ -1,0 +1,5 @@
+<map id="kcenon::database::core::pool::connection_pool" name="kcenon::database::core::pool::connection_pool">
+<area shape="rect" id="Node000001" title="Thread&#45;safe pool of database_backend instances." alt="" coords="5,160,180,874"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="10,5,176,112"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,124,95,160,90,160,93,129"/>
+</map>

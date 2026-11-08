@@ -1,0 +1,13 @@
+<map id="print_error" name="print_error">
+<area shape="rect" id="Node000001" title="Helper to print a Result error." alt="" coords="349,83,438,111"/>
+<area shape="rect" id="Node000002" href="$error__handling_8cpp.html#a44f6c668eb4460a43bb689bf006a4709" title="Demonstrates chaining operations with early return on failure." alt="" coords="123,5,286,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="338,77,300,65,269,53,269,48,302,60,343,77"/>
+<area shape="rect" id="Node000004" href="$error__handling_8cpp.html#aa896290e847d4e43323236611cab7701" title="Demonstrates handling a connection failure gracefully." alt="" coords="113,75,296,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="331,97,296,100,296,94,336,97"/>
+<area shape="rect" id="Node000005" href="$error__handling_8cpp.html#a45f1703581e250a6a0d37a9367f06554" title="Demonstrates handling query errors with Result&lt;T&gt;." alt="" coords="108,143,301,171"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="346,116,302,134,264,145,263,140,300,129,340,117"/>
+<area shape="rect" id="Node000003" href="$error__handling_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,83,60,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,58,109,65,62,86,59,82,107,60,126,54"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="96,99,61,100,59,94,100,95"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="125,138,107,134,60,113,60,108,109,129,130,138"/>
+</map>

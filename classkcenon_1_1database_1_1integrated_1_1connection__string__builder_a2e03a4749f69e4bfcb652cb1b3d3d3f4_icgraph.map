@@ -1,0 +1,16 @@
+<map id="kcenon::database::integrated::connection_string_builder::user" name="kcenon::database::integrated::connection_string_builder::user">
+<area shape="rect" id="Node000001" title="Set the username for authentication." alt="" coords="341,76,573,120"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="120,5,280,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="368,71,292,48,252,36,252,31,294,43,374,70"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#ac930fa3b92d6773ef1e058b24df36a88" title=" " alt="" coords="130,57,271,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="323,85,272,81,271,76,328,84"/>
+<area shape="rect" id="Node000005" href="$test__connection__string__builder_8cpp.html#af5ea2ff9a1a3b20926210e04dd2ad2fb" title=" " alt="" coords="108,109,293,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="323,111,294,117,293,111,328,110"/>
+<area shape="rect" id="Node000006" href="$test__connection__string__builder_8cpp.html#a4362948db6e585754ddbe679908f70a4" title=" " alt="" coords="125,161,276,189"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="371,125,294,151,252,163,251,158,292,146,366,126"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,84,60,112"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,40,109,48,78,66,52,86,48,82,75,62,106,43,127,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="113,87,61,96,59,91,116,83"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="90,108,61,104,60,99,94,105"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="123,156,106,151,76,133,51,115,51,109,78,129,109,146,128,156"/>
+</map>

@@ -1,0 +1,54 @@
+<map id="tests/backend_contract_test.cpp" name="tests/backend_contract_test.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="237,5,408,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,72,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,53,88,99,85,94,248,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,98,200,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,53,191,93,188,89,278,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="68,350,145,378"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,52,125,339,121,336,306,49"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="853,350,912,378"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="408,30,567,42,754,67,843,85,922,108,984,137,1008,154,1025,172,1042,204,1047,233,1041,263,1025,295,1005,318,980,336,928,357,926,352,978,331,1002,314,1020,293,1036,261,1042,233,1037,205,1020,175,1004,158,982,142,920,113,842,90,753,72,566,47,409,35"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="326,98,389,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="332,48,348,84,343,83,331,53"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="169,350,231,378"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="320,48,294,177,276,246,258,295,243,319,226,341,222,337,239,316,253,293,271,244,289,176,317,53"/>
+<area shape="rect" id="Node000008" href="$database__backend_8h.html" title="Abstract interface for database backends." alt="" coords="344,249,509,294"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="357,48,383,70,403,97,418,131,426,168,431,234,426,232,421,168,413,133,399,99,379,73,357,53"/>
+<area shape="rect" id="Node000015" href="$mock__backend_8h.html" title=" " alt="" coords="624,98,802,126"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="409,44,638,93,633,96,409,50"/>
+<area shape="poly" id="edge12_Node000008_Node000004" title=" " alt="" coords="341,292,254,316,158,345,151,347,149,342,156,339,253,311,346,290"/>
+<area shape="poly" id="edge13_Node000008_Node000005" title=" " alt="" coords="509,283,706,314,842,339,849,344,843,343,840,345,705,319,509,288"/>
+<area shape="poly" id="edge14_Node000008_Node000007" title=" " alt="" coords="362,296,244,344,240,346,238,341,241,340,367,293"/>
+<area shape="rect" id="Node000009" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="255,342,451,387"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="411,293,382,332,378,328,407,296"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="642,342,830,387"/>
+<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="501,292,650,337,644,338,500,297"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="476,350,526,378"/>
+<area shape="poly" id="edge15_Node000008_Node000013" title=" " alt="" coords="445,292,483,339,478,338,443,297"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="550,350,618,378"/>
+<area shape="poly" id="edge16_Node000008_Node000014" title=" " alt="" coords="465,292,550,342,545,342,464,297"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="242,435,307,462"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="335,386,299,425,296,421,330,388"/>
+<area shape="rect" id="Node000011" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="332,435,529,462"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="375,385,410,424,405,422,372,390"/>
+<area shape="poly" id="edge18_Node000015_Node000008" title=" " alt="" coords="687,125,592,176,475,243,473,239,589,171,683,127"/>
+<area shape="rect" id="Node000016" href="$mock__backend__expectations_8h.html" title=" " alt="" coords="602,174,824,201"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="715,124,715,159,711,157,712,128"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="842,258,928,286"/>
+<area shape="poly" id="edge28_Node000015_Node000017" title=" " alt="" coords="755,124,798,143,838,172,863,206,879,244,874,242,858,209,834,176,795,148,755,129"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="952,258,1010,286"/>
+<area shape="poly" id="edge30_Node000015_Node000018" title=" " alt="" coords="756,124,810,144,865,171,917,208,960,248,955,247,914,212,862,176,807,149,756,129"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="949,174,1010,201"/>
+<area shape="poly" id="edge27_Node000015_Node000021" title=" " alt="" coords="761,124,937,173,932,174,761,129"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="464,174,528,201"/>
+<area shape="poly" id="edge29_Node000015_Node000022" title=" " alt="" coords="672,127,543,173,541,168,677,125"/>
+<area shape="poly" id="edge22_Node000016_Node000005" title=" " alt="" coords="729,199,782,247,864,339,859,338,778,251,728,204"/>
+<area shape="poly" id="edge20_Node000016_Node000008" title=" " alt="" coords="665,203,518,247,516,242,670,201"/>
+<area shape="poly" id="edge21_Node000016_Node000012" title=" " alt="" coords="644,201,604,222,588,235,574,251,566,272,574,293,598,318,630,339,625,338,595,322,570,295,561,272,570,248,584,231,601,218,640,203"/>
+<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="741,199,846,251,841,251,740,205"/>
+<area shape="poly" id="edge24_Node000016_Node000018" title=" " alt="" coords="776,199,856,219,941,247,946,251,941,251,939,252,854,224,776,205"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="584,258,658,286"/>
+<area shape="poly" id="edge25_Node000016_Node000019" title=" " alt="" coords="701,201,648,250,645,245,696,203"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="682,258,768,286"/>
+<area shape="poly" id="edge26_Node000016_Node000020" title=" " alt="" coords="717,200,723,244,719,241,714,204"/>
+</map>

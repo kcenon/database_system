@@ -1,0 +1,8 @@
+<map id="kcenon::database::core::create_backend" name="kcenon::database::core::create_backend">
+<area shape="rect" id="Node000001" title="Convenience function for creating backends (static method style)" alt="" coords="5,52,178,97"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a9388ae64e8f49f97f2453549f2fee4e1" title="Create a backend instance by name." alt="" coords="233,5,421,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,55,220,48,215,50,179,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="226,99,428,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,89,213,98,208,98,178,94"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="282,97,281,89,288,80,304,74,327,72,352,75,369,84,364,83,351,80,327,77,305,79,291,84,286,90,287,100"/>
+</map>

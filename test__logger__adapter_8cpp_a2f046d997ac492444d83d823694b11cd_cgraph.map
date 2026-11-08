@@ -1,0 +1,18 @@
+<map id="test_log_level_filtering" name="test_log_level_filtering">
+<area shape="rect" id="Node000001" title="Test log level filtering." alt="" coords="5,205,175,233"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#aadc2d01617401344c90e9c43781f354d" title="Clean up test log directory." alt="" coords="269,5,408,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,204,113,170,140,126,176,80,221,42,256,28,252,32,224,47,180,84,144,129,117,172,100,206"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#af26bd7f4d08d521ffd1b5b5d08b9bd6b" title="Flush pending log messages." alt="" coords="223,57,454,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="103,203,153,158,186,133,221,111,237,106,233,110,224,116,189,138,156,162,107,207"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a0982310317cce219bda3988656ede5e9" title="Initialize the logger." alt="" coords="233,150,444,211"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="174,204,220,198,215,201,176,208"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a30ba3594d291f5b2fb567951b8f5d2be" title="Generic log message." alt="" coords="228,236,448,280"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="175,230,215,237,210,239,176,235"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#a8e1c5c853009c223e5247a6ccb3eb382" title="Check if a log file contains a specific string." alt="" coords="273,304,404,332"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="112,231,163,261,224,290,260,303,255,304,222,295,160,266,112,236"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1logger__adapter.html#a52e8b8852ef0c409fb976a9945475e5b" title="Shutdown the logger gracefully." alt="" coords="233,356,444,418"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="104,231,154,284,187,314,224,341,235,349,229,349,221,345,184,318,150,288,102,236"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="296,148,297,139,305,131,319,125,338,123,361,126,376,135,371,136,359,131,338,128,320,130,308,135,302,141,301,151"/>
+<area shape="rect" id="Node000008" href="$namespacecommon.html#a0dc355c1a84773961a9291a646c0baad" title=" " alt="" coords="502,373,604,401"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="444,385,489,387,484,387,445,390"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="kcenon::database::tests::SQLQueryBuilderTest" name="kcenon::database::tests::SQLQueryBuilderTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="42,1263,208,1375"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="59,1117,148,1190"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,1202,120,1264,115,1263,109,1206"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="172,1109,363,1198"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,1196,185,1253,181,1249,228,1200"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query__builder.html" title="Universal query builder that adapts to different database types." alt="" coords="96,709,266,1044"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="234,1041,251,1093,246,1092,233,1046"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="62,537,252,627"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="161,624,168,692,163,692,160,629"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query__dialect.html" title="Abstract interface for database&#45;specific query formatting." alt="" coords="5,143,180,455"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="81,452,88,484,97,512,102,523,97,524,92,514,83,485,81,457"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="221,263,367,335"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="295,347,295,513,297,674,300,800,299,925,285,1085,281,1110,276,1108,280,1084,293,925,295,800,291,674,290,513,294,353"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="268,351,238,404,195,457,176,469,168,473,161,481,153,508,152,538,147,537,147,508,156,478,164,468,173,464,191,453,234,400,270,346"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="285,5,304,78"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="295,75,297,246,292,245,294,80"/>
+</map>

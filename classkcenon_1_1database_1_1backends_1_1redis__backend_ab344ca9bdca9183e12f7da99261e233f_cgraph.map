@@ -1,0 +1,8 @@
+<map id="kcenon::database::backends::redis_backend::begin_transaction" name="kcenon::database::backends::redis_backend::begin_transaction">
+<area shape="rect" id="Node000001" title="Begin a transaction." alt="" coords="5,36,252,81"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1redis__backend.html#ad3f5b0e05cec201ced3aadb28596a8a6" title="Execute a general SQL query (DDL, DML)" alt="" coords="300,5,525,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,42,287,41,282,42,252,48"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="573,19,766,98"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="252,59,300,60,525,60,560,62,554,62,525,65,300,65,252,64"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="525,38,560,45,555,45,525,44"/>
+</map>

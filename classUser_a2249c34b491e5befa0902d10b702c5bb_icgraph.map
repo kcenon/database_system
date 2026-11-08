@@ -1,0 +1,10 @@
+<map id="User::print_info" name="User::print_info">
+<area shape="rect" id="Node000001" title=" " alt="" coords="305,48,426,76"/>
+<area shape="rect" id="Node000002" href="$orm__framework__demo_8cpp.html#ae78183753df4fdf58f82b0925ec4afa2" title=" " alt="" coords="108,5,257,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,48,257,44,257,39,292,48"/>
+<area shape="rect" id="Node000004" href="$orm__framework__demo_8cpp.html#ab70ec1cf76c9b1ff4699ad0b5cca93eb" title=" " alt="" coords="108,75,257,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,76,258,86,257,80,287,77"/>
+<area shape="rect" id="Node000003" href="$orm__framework__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,48,60,76"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,50,61,59,59,54,95,47"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,77,60,71,60,66,95,75"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="tests/query_builder/sql_dialect_test.cpp" name="tests/query_builder/sql_dialect_test.cpp">
+<area shape="rect" id="Node000001" title="Unit tests for SQL dialect abstraction (Issue #332)" alt="" coords="310,5,464,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="173,106,276,134"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,52,263,101,260,96,351,49"/>
+<area shape="rect" id="Node000003" href="$sql__dialect_8h.html" title=" " alt="" coords="301,98,474,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="389,48,390,84,385,81,386,53"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="528,199,604,227"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="425,48,457,70,488,96,525,141,554,186,549,185,521,144,484,100,454,74,424,53"/>
+<area shape="rect" id="Node000004" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="17,191,214,235"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="320,145,196,188,194,183,324,142"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="238,199,296,227"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="361,142,298,192,295,187,357,144"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="320,199,417,227"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="385,141,377,185,372,182,381,145"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="431,141,529,192,524,192,430,146"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="442,199,504,227"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="408,140,452,188,447,187,407,146"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,283,71,311"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="97,235,63,274,59,270,93,237"/>
+<area shape="rect" id="Node000006" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="95,283,293,311"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="137,233,173,272,168,272,135,238"/>
+</map>

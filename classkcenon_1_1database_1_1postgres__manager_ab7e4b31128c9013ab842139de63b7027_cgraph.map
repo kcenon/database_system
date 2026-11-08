@@ -1,0 +1,7 @@
+<map id="kcenon::database::postgres_manager::shutdown" name="kcenon::database::postgres_manager::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the database backend gracefully." alt="" coords="5,5,206,50"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1postgres__manager.html#ac23cba985fb74a172d342747edb46203" title="Rollback the current transaction." alt="" coords="254,5,480,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,25,241,27,235,28,206,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1postgres__manager.html#acebf1f7a4381f28bd90a5dd947dbf3ec" title="Executes a general SQL query (DDL, DML) on PostgreSQL." alt="" coords="528,5,728,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="480,25,515,28,510,28,481,30"/>
+</map>

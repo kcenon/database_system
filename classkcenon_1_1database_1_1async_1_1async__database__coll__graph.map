@@ -1,0 +1,35 @@
+<map id="kcenon::database::async::async_database" name="kcenon::database::async::async_database">
+<area shape="rect" id="Node000001" title="Asynchronous database interface wrapper." alt="" coords="166,1134,364,1459"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,963,252,1069"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,1066,201,1119,196,1119,179,1072"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,434,174,881"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,878,101,938,105,948,100,949,96,940,83,884"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="198,622,344,694"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="261,706,235,793,214,840,188,883,172,895,165,899,159,906,152,934,152,963,146,963,146,933,154,904,161,895,169,890,184,879,210,837,230,792,259,711"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="286,963,456,1069"/>
+<area shape="poly" id="edge18_Node000006_Node000004" title=" " alt="" coords="286,705,344,904,360,964,355,963,339,906,285,711"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="446,5,464,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="445,49,390,83,355,110,327,144,297,201,276,263,263,327,256,392,254,454,256,511,265,605,260,605,250,512,249,454,251,391,258,327,271,262,292,199,322,141,352,106,387,78,448,45"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="655,143,773,215"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="464,45,643,138,638,140,465,50"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="337,143,454,215"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="445,66,420,128,415,126,447,61"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="505,143,627,215"/>
+<area shape="poly" id="edge17_Node000015_Node000005" title=" " alt="" coords="464,49,512,100,534,129,529,130,508,103,465,55"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="353,1067,335,1120,330,1117,350,1071"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1async_1_1async__executor.html" title="High&#45;performance asynchronous executor using thread_system." alt="" coords="480,468,674,848"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="569,845,553,897,528,941,503,966,473,985,470,981,499,962,524,937,549,894,566,849"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="776,288,956,361"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="834,363,795,412,687,535,682,532,790,409,838,358"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="826,143,906,215"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="867,212,868,272,863,271,865,217"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="736,225,758,254,800,288,795,289,755,258,736,231"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="306,280,481,369"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="418,367,474,466,469,466,418,372"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="374,227,373,239,373,260,377,280,371,280,367,260,368,239,373,232"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="671,288,752,361"/>
+<area shape="poly" id="edge14_Node000007_Node000013" title=" " alt="" coords="698,358,662,453,657,451,696,363"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="506,288,647,361"/>
+<area shape="poly" id="edge15_Node000007_Node000014" title=" " alt="" coords="577,358,579,451,574,450,576,363"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="570,227,577,289,571,289,569,232"/>
+</map>

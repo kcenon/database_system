@@ -1,0 +1,8 @@
+<map id="test_execute_transaction_success" name="test_execute_transaction_success">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,190,125"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#aa99ec881dd791e8a6ed3ebe78c290e00" title="Connect to database." alt="" coords="238,29,449,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,84,225,80,220,82,191,89"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a92470f8670eafa1d25c07a9a93b46048" title="Execute multiple queries in a transaction." alt="" coords="238,115,449,176"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="190,116,225,124,220,125,190,122"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="295,28,296,19,305,10,321,5,343,3,369,5,386,15,381,15,368,11,343,8,322,10,308,15,301,21,300,31"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="kcenon::database::backends::postgresql_backend::commit_transaction" name="kcenon::database::backends::postgresql_backend::commit_transaction">
+<area shape="rect" id="Node000001" title="Commit the current transaction." alt="" coords="5,28,222,89"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a16dd7aa0eb0540d800e6dabf235d7977" title="Execute a general SQL query (DDL, DML)" alt="" coords="270,5,531,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,44,257,43,252,44,223,49"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="579,19,783,98"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="222,59,270,60,531,60,566,62,561,62,531,65,270,65,222,64"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="531,39,566,46,561,46,531,45"/>
+</map>

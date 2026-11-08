@@ -1,0 +1,18 @@
+<map id="kcenon::database::security::audit_logger" name="kcenon::database::security::audit_logger">
+<area shape="rect" id="Node000001" title="Security audit logging system." alt="" coords="60,782,269,1157"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,628,86,700"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,697,46,729,50,758,57,779,51,779,45,759,40,729,42,703"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="224,611,366,717"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,715,253,768,249,766,271,720"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1database_1_1security_1_1audit__log__entry.html" title="Audit log entry for security events." alt="" coords="202,400,388,512"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="296,509,298,594,292,593,294,515"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="160,144,236,216"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="199,215,176,766,170,766,194,217"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="210,213,273,384,267,385,210,219"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="134,5,262,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,107,200,144,195,144,197,112"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="412,420,530,492"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="438,507,378,589,355,613,351,609,374,585,441,502"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="462,144,480,216"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="472,214,474,403,468,402,470,219"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="kcenon::database::tests::TEST_F" name="kcenon::database::tests::TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,109,182,154"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query__builder.html#a6e1cbde647cbbaa2a6d28f387384b963" title=" " alt="" coords="230,5,411,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,107,229,60,246,55,241,58,231,65,138,111"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query__builder.html#a9ad600f77ff5ec8c91b6ac04a801e0a4" title=" " alt="" coords="230,75,411,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,116,217,112,212,114,183,121"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query__builder.html#a53c9bccff57bc0bc55861303a746164e" title=" " alt="" coords="230,144,411,189"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="182,143,217,149,212,151,182,148"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1query__builder.html#a5f32bf36570758c6bd468a69f742fb5a" title=" " alt="" coords="230,213,411,258"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="137,152,231,199,246,207,241,207,229,203,136,157"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query__builder.html#a45eb7ee7222f1d1fb5d3ffaa7d254489" title=" " alt="" coords="459,144,640,189"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="397,117,462,139,456,139,396,123"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1database.html#a3f3372b7f3b1d55f670196fc53a9d301" title="Factory function to create appropriate dialect for database type." alt="" coords="688,144,874,189"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="641,164,676,166,670,167,641,169"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="411,164,446,166,441,167,412,169"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="396,210,456,194,462,193,397,215"/>
+</map>

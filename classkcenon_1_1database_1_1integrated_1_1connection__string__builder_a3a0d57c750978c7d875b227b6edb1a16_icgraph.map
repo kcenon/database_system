@@ -1,0 +1,16 @@
+<map id="kcenon::database::integrated::connection_string_builder::ssl_mode" name="kcenon::database::integrated::connection_string_builder::ssl_mode">
+<area shape="rect" id="Node000001" title="Set the SSL connection mode." alt="" coords="331,67,542,129"/>
+<area shape="rect" id="Node000002" href="$test__connection__string__builder_8cpp.html#a400f08db0650f1f98f534f8342ab4112" title=" " alt="" coords="115,5,276,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,62,282,48,244,36,244,31,284,43,333,61"/>
+<area shape="rect" id="Node000004" href="$test__connection__string__builder_8cpp.html#afd4a5140c6bab942f1aeddc0442905a2" title=" " alt="" coords="126,57,265,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="313,85,266,82,265,76,318,84"/>
+<area shape="rect" id="Node000005" href="$test__connection__string__builder_8cpp.html#a79c270a943d76dd2ecb0ed91bc07f5c0" title=" " alt="" coords="128,109,262,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="313,111,264,119,263,113,318,110"/>
+<area shape="rect" id="Node000006" href="$test__connection__string__builder_8cpp.html#a69ff771d91c92a1c86f0084da008345e" title=" " alt="" coords="108,161,283,189"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="330,133,284,151,245,163,244,158,282,146,325,135"/>
+<area shape="rect" id="Node000003" href="$test__connection__string__builder_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,84,60,112"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,40,109,48,78,66,53,85,49,81,75,62,106,43,126,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="109,87,61,96,59,91,112,83"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="111,112,61,105,60,99,115,109"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="122,156,106,151,76,133,51,115,51,109,78,128,109,146,127,156"/>
+</map>

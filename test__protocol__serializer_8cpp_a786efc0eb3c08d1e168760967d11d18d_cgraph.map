@@ -1,0 +1,18 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,120,74,148"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#ad69f6345f3b46cbda4a57235ae8cb4bc" title="Deserialize connect response." alt="" coords="122,65,350,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,125,109,120,105,123,75,130"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a42cb5e137cda20ae2c137cfb8a1d38ca" title="Serialize connect request." alt="" coords="130,151,342,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="74,138,117,148,112,150,74,144"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a6e1c3932fc97a7672b3eb7d6cfbfb39c" title=" " alt="" coords="400,5,630,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,65,409,53,404,55,351,70"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a1d57d06f01d55e81b0d650b3dd7198ca" title=" " alt="" coords="402,75,628,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="350,94,389,96,384,97,351,99"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#aa53d16c2c59a7beab50fd73540a11754" title=" " alt="" coords="682,5,917,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="630,25,669,27,664,28,631,30"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#af2425d58415140b16f9c414b0fa7e27e" title=" " alt="" coords="398,148,632,193"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="342,169,385,171,380,172,343,175"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="680,177,919,222"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="337,193,398,202,535,209,662,209,667,209,535,214,398,208,336,199"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="633,180,668,186,662,186,633,185"/>
+</map>

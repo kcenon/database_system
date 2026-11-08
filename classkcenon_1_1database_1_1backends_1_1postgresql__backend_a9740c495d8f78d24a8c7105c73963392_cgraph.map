@@ -1,0 +1,8 @@
+<map id="kcenon::database::backends::postgresql_backend::rollback_transaction" name="kcenon::database::backends::postgresql_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="5,28,224,89"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1postgresql__backend.html#a16dd7aa0eb0540d800e6dabf235d7977" title="Execute a general SQL query (DDL, DML)" alt="" coords="272,5,533,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,44,259,43,253,44,224,49"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="581,19,785,98"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="224,59,272,60,533,60,568,62,563,62,533,65,272,65,224,64"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="533,39,568,46,563,46,533,45"/>
+</map>

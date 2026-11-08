@@ -1,0 +1,13 @@
+<map id="kcenon::database::integrated::transaction_impl" name="kcenon::database::integrated::transaction_impl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="27,915,227,1116"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1transaction.html" title="Transaction interface for ACID operations." alt="" coords="5,671,206,850"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,862,121,916,116,915,114,868"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="230,708,413,814"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,812,216,903,212,900,280,816"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="176,143,345,589"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="296,587,314,691,308,690,294,592"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="369,330,514,402"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="428,415,340,709,335,707,425,419"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="432,5,451,78"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="443,75,444,313,439,312,441,80"/>
+</map>

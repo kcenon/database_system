@@ -1,0 +1,31 @@
+<map id="include/kcenon/database/integrated/adapters/backends/monitoring_backend.h" name="include/kcenon/database/integrated/adapters/backends/monitoring_backend.h">
+<area shape="rect" id="Node000001" title="Abstract interface for monitoring backends." alt="" coords="309,5,527,67"/>
+<area shape="rect" id="Node000002" href="$fallback__monitoring__backend_8h.html" title="Fallback monitoring backend using internal metrics tracking." alt="" coords="5,225,234,286"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="323,76,289,95,254,117,222,143,192,172,144,226,140,223,188,168,219,139,251,113,287,91,327,72"/>
+<area shape="rect" id="Node000004" href="$monitoring__adapter_8cpp.html" title=" " alt="" coords="291,343,470,388"/>
+<area shape="poly" id="edge17_Node000001_Node000004" title=" " alt="" coords="383,77,337,146,315,184,299,225,292,256,299,285,320,316,349,343,343,342,316,320,294,287,287,256,294,224,310,182,332,143,380,80"/>
+<area shape="rect" id="Node000005" href="$null__monitoring__backend_8h.html" title="Null monitoring backend (no&#45;op)" alt="" coords="309,225,527,286"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="420,81,421,225,416,223,416,85"/>
+<area shape="rect" id="Node000006" href="$system__monitoring__backend_8h.html" title="Monitoring backend using kcenon/monitoring_system." alt="" coords="1438,225,1662,286"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="542,49,744,75,971,112,1223,167,1441,224,1436,224,1222,172,970,118,743,81,543,54"/>
+<area shape="rect" id="Node000008" href="$monitoring__adapter_8h.html" title="Database monitoring adapter with runtime backend selection." alt="" coords="729,115,958,177"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="542,66,731,115,726,116,542,71"/>
+<area shape="rect" id="Node000003" href="$fallback__monitoring__backend_8cpp.html" title=" " alt="" coords="9,334,230,396"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,300,122,335,117,333,118,304"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="207,290,331,341,326,343,206,295"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="405,299,390,344,386,340,401,303"/>
+<area shape="rect" id="Node000007" href="$system__monitoring__backend_8cpp.html" title=" " alt="" coords="1442,334,1658,396"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="1552,300,1552,336,1548,332,1548,304"/>
+<area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="713,167,297,227,235,237,233,232,296,222,715,162"/>
+<area shape="poly" id="edge12_Node000008_Node000004" title=" " alt="" coords="920,183,940,202,955,223,967,257,965,272,955,288,930,302,886,314,758,334,607,350,471,361,471,355,606,345,757,329,885,308,928,297,951,284,960,270,962,257,950,226,936,205,918,189"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="712,180,528,229,527,224,717,179"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="973,158,1186,184,1427,222,1440,227,1435,227,1426,227,1186,189,973,163"/>
+<area shape="rect" id="Node000009" href="$database__coordinator_8cpp.html" title=" " alt="" coords="1222,233,1414,278"/>
+<area shape="poly" id="edge13_Node000008_Node000009" title=" " alt="" coords="973,170,1209,222,1243,233,1237,232,1208,227,973,175"/>
+<area shape="rect" id="Node000010" href="$unified__database__system_8cpp.html" title="Implementation of unified database system (Phase 6)" alt="" coords="552,233,722,278"/>
+<area shape="poly" id="edge14_Node000008_Node000010" title=" " alt="" coords="774,183,679,235,677,230,769,185"/>
+<area shape="rect" id="Node000011" href="$test__database__coordinator_8cpp.html" title="Unit tests for database_coordinator (Phase 5)" alt="" coords="746,233,941,278"/>
+<area shape="poly" id="edge15_Node000008_Node000011" title=" " alt="" coords="845,190,846,234,841,231,842,194"/>
+<area shape="rect" id="Node000012" href="$test__monitoring__adapter_8cpp.html" title="Unit tests for monitoring_adapter (Phase 3)" alt="" coords="1015,233,1197,278"/>
+<area shape="poly" id="edge16_Node000008_Node000012" title=" " alt="" coords="932,180,1056,233,1051,233,931,186"/>
+</map>

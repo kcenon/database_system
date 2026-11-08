@@ -1,0 +1,21 @@
+<map id="test_builder_custom" name="test_builder_custom">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,364,159,391"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#aee70774b469807431bd84ea40535db82" title="Build and return the configured database system." alt="" coords="213,5,424,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,363,92,310,114,234,130,192,150,151,175,112,205,77,210,75,207,79,209,81,179,115,155,154,135,195,119,236,98,312,88,364"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a03625e9424dd8498f8534854e40d6f81" title="Create a builder for custom configuration." alt="" coords="213,91,424,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="85,363,100,323,124,270,159,213,181,186,205,162,211,159,208,164,208,166,185,189,164,216,129,272,105,325,90,364"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a74a017bb63ee8631f9dcfc580c5b6e7c" title="Enable async operations." alt="" coords="213,176,424,238"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="91,362,137,307,169,275,205,247,215,243,212,247,208,252,173,279,141,311,96,365"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a4ace1863aea3f31dee14ed11f0923157" title="Enable logging." alt="" coords="213,261,424,323"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="121,361,219,327,216,331,125,365"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a6d626581ddccfe462d5ad7f0fe1b7723" title="Enable monitoring and metrics collection." alt="" coords="213,347,424,408"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="157,375,200,376,196,379,160,380"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a987f1ad42e9a63d296fe214e5aff7571" title="Set the database backend type." alt="" coords="213,432,424,494"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="122,389,219,425,215,428,124,395"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#afc990298dc2ae9f89ccaeeb41fc07580" title="Set the connection string." alt="" coords="207,517,431,579"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="94,389,141,444,173,476,208,503,216,509,211,510,205,508,169,480,137,448,94,394"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#ad4cfb1f945ba448f17333bc06fa04f4a" title="Set connection pool size." alt="" coords="213,603,424,664"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="88,389,105,430,129,483,164,539,185,566,208,589,213,593,207,594,205,593,181,569,159,542,124,485,100,432,88,394"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a2926ca988e1f6e6b649748575648b8fe" title="Set slow query threshold." alt="" coords="213,689,424,768"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="86,389,99,443,120,518,156,600,180,639,209,674,212,679,206,678,205,678,176,642,152,603,115,520,93,445,85,395"/>
+</map>

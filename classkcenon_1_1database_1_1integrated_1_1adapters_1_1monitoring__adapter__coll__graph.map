@@ -1,0 +1,17 @@
+<map id="kcenon::database::integrated::adapters::monitoring_adapter" name="kcenon::database::integrated::adapters::monitoring_adapter">
+<area shape="rect" id="Node000001" title="Monitoring adapter for database operations." alt="" coords="121,933,332,1268"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1database_1_1integrated_1_1db__monitoring__config.html" title="Monitoring and metrics configuration." alt="" coords="5,605,210,868"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,865,169,917,164,917,150,871"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,288,146,361"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,358,110,588,105,588,108,363"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="44,5,172,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="108,107,110,289,105,288,108,112"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="235,675,458,798"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="328,796,289,918,285,916,325,800"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1monitoring__backend.html" title="Abstract base class for monitoring backends." alt="" coords="209,160,433,489"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="332,486,344,659,339,658,330,491"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="458,288,603,361"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="510,372,376,676,371,674,507,376"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="521,14,540,86"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="531,83,533,272,528,271,530,88"/>
+</map>

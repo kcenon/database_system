@@ -1,0 +1,14 @@
+<map id="kcenon::database::security::access_control::user_session" name="kcenon::database::security::access_control::user_session">
+<area shape="rect" id="Node000001" title=" " alt="" coords="118,434,325,568"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="204,160,279,232"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,229,273,256,273,273,263,348,247,419,242,417,257,347,268,273,268,256,261,234"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="66,297,241,369"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="211,234,197,257,181,284,177,281,193,255,214,230"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="178,5,305,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,107,244,160,239,159,241,112"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="169,367,191,419,185,419,167,372"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,160,123,232"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="69,244,82,272,103,297,98,298,78,274,69,249"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="55,14,74,86"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="64,83,67,143,62,143,64,89"/>
+</map>

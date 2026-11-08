@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::mongodb_backend::begin_transaction" name="kcenon::database::backends::mongodb_backend::begin_transaction">
+<area shape="rect" id="Node000001" title="Begin a transaction." alt="" coords="5,14,211,76"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="259,5,456,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,42,245,44,240,45,211,47"/>
+</map>

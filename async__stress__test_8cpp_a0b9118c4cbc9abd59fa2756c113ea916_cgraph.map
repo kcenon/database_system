@@ -1,0 +1,17 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title="Tests that query builders work correctly under concurrent use." alt="" coords="5,118,74,146"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query__builder.html#a6e1cbde647cbbaa2a6d28f387384b963" title=" " alt="" coords="122,5,303,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,116,82,88,120,60,133,55,129,59,123,65,86,92,57,119"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query__builder.html#a9ad600f77ff5ec8c91b6ac04a801e0a4" title=" " alt="" coords="122,75,303,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="73,123,108,116,104,120,75,127"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1query__builder.html#a53c9bccff57bc0bc55861303a746164e" title=" " alt="" coords="122,144,303,189"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="73,136,109,144,104,146,75,141"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1query__builder.html#a5f32bf36570758c6bd468a69f742fb5a" title=" " alt="" coords="122,213,303,258"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="55,143,86,171,123,199,133,206,128,206,120,203,82,175,54,149"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query__builder.html#a45eb7ee7222f1d1fb5d3ffaa7d254489" title=" " alt="" coords="351,144,532,189"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="289,117,354,139,348,139,288,123"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1database.html#a3f3372b7f3b1d55f670196fc53a9d301" title="Factory function to create appropriate dialect for database type." alt="" coords="580,144,766,189"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="533,164,568,166,562,167,533,169"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="303,164,338,166,333,167,304,169"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="288,210,348,194,354,193,289,215"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="kcenon::database::integrated::create_database" name="kcenon::database::integrated::create_database">
+<area shape="rect" id="Node000001" title="Create a database with builder configuration." alt="" coords="5,142,217,186"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#aee70774b469807431bd84ea40535db82" title="Build and return the configured database system." alt="" coords="271,5,482,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,139,263,76,279,72,274,75,266,81,151,143"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#a03625e9424dd8498f8534854e40d6f81" title="Create a builder for custom configuration." alt="" coords="271,91,482,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,145,258,140,253,142,218,150"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#a987f1ad42e9a63d296fe214e5aff7571" title="Set the database backend type." alt="" coords="271,176,482,238"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,179,258,187,253,188,217,184"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1builder.html#afc990298dc2ae9f89ccaeeb41fc07580" title="Set the connection string." alt="" coords="265,261,489,323"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="150,185,266,247,279,255,274,255,263,252,149,190"/>
+</map>

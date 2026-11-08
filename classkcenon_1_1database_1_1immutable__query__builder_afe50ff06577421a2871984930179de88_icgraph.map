@@ -1,0 +1,21 @@
+<map id="kcenon::database::immutable_query_builder::immutable_query_builder" name="kcenon::database::immutable_query_builder::immutable_query_builder">
+<area shape="rect" id="Node000001" title="Constructs a new immutable query builder." alt="" coords="269,274,484,336"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a0450019600cc240db6171c85de28cada" title="GROUP BY clause &#45; groups results." alt="" coords="5,5,221,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="355,259,333,214,303,162,265,109,219,64,202,53,201,48,222,60,269,106,308,159,338,212,360,260"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1immutable__query__builder.html#ad6343228ccc113d3ddb237a6f16c2af3" title="HAVING clause &#45; filters grouped results." alt="" coords="5,75,221,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="343,261,290,196,257,163,219,134,200,122,198,117,222,129,260,159,294,193,349,261"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1immutable__query__builder.html#adcfddb1ab0e29c84eb3afb5ee434fca1" title="JOIN clause &#45; adds a join." alt="" coords="5,144,221,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="321,265,273,234,219,203,194,192,192,187,222,199,276,229,326,264"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a610a10176f8d8cc9afcc0145beeeadb9" title="LIMIT clause &#45; limits number of results." alt="" coords="5,213,221,258"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="252,274,201,261,200,256,256,272"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1immutable__query__builder.html#af1c41404d35a45bcff4b09dd4b34001b" title="OFFSET clause &#45; skips rows." alt="" coords="5,283,221,327"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="251,306,222,307,220,303,255,304"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a5dbef37baaa183edb78db19b92700630" title="ORDER BY clause &#45; specifies sorting." alt="" coords="5,352,221,397"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="252,339,202,354,199,349,256,336"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a909bae07fbeedc4b2e793d47afa4b1ad" title="SELECT clause &#45; specifies which columns to select." alt="" coords="5,421,221,466"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="321,347,276,381,222,411,195,423,192,418,219,407,273,376,325,343"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1immutable__query__builder.html#a9acf3b31381ac2bb15e142a69b2ab083" title="WHERE clause &#45; adds a query_condition." alt="" coords="5,491,221,535"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="348,347,294,417,260,451,222,481,200,493,197,488,219,476,257,447,290,414,344,351"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1immutable__query__builder.html#ac0c204b32d238087a2677af36b497cf4" title="WHERE clause &#45; adds a condition." alt="" coords="5,560,221,605"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="359,348,338,398,308,451,269,504,222,550,203,562,201,557,219,546,265,501,303,448,333,396,356,352"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::database::protocol::protocol_serializer::deserialize_connect_response" name="kcenon::database::protocol::protocol_serializer::deserialize_connect_response">
+<area shape="rect" id="Node000001" title="Deserialize connect response." alt="" coords="122,40,350,102"/>
+<area shape="rect" id="Node000002" href="$test__protocol__serializer_8cpp.html#a03bdf397d4c9bce4f481ed82f64e2309" title=" " alt="" coords="5,5,74,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,38,74,31,74,25,109,36"/>
+<area shape="rect" id="Node000003" href="$test__protocol__serializer_8cpp.html#a786efc0eb3c08d1e168760967d11d18d" title=" " alt="" coords="5,57,74,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,73,75,74,73,69,108,70"/>
+<area shape="rect" id="Node000004" href="$test__protocol__serializer_8cpp.html#a5459b354e044aaeaf35b83478b558ff4" title=" " alt="" coords="5,109,74,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="104,106,75,117,73,112,109,105"/>
+</map>

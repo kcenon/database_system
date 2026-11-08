@@ -1,0 +1,5 @@
+<map id="MemoryStressTest" name="MemoryStressTest">
+<area shape="rect" id="Node000001" title="Test fixture for memory stress tests." alt="" coords="5,126,206,265"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="61,5,151,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,90,108,127,103,126,105,95"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="kcenon::database::async::transaction_coordinator::distributed_transaction" name="kcenon::database::async::transaction_coordinator::distributed_transaction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="71,1052,244,1203"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,898,114,970"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,968,103,1027,107,1037,102,1037,98,1029,82,973"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,718,133,808"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="72,820,77,899,72,898,71,825"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="145,881,351,987"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="228,985,210,1029,206,1039,201,1036,205,1027,225,989"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="156,710,339,816"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="249,813,250,865,245,863,247,818"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="99,143,268,589"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="166,586,175,638,188,685,192,695,187,695,183,687,170,639,165,592"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="300,330,446,402"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="363,414,334,503,311,549,282,591,271,599,261,603,252,607,245,615,236,637,233,661,236,710,231,709,227,661,231,636,240,612,249,602,259,598,269,595,278,588,307,546,329,501,361,419"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="424,5,442,78"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="428,75,385,314,380,312,426,80"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="434,613,552,686"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="442,57,461,101,475,170,485,240,497,379,500,503,498,598,493,596,495,503,492,379,480,241,470,170,456,102,442,62"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="461,695,402,775,331,859,307,883,303,879,327,855,398,772,458,699"/>
+</map>

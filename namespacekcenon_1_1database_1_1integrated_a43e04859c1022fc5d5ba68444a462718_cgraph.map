@@ -1,0 +1,10 @@
+<map id="kcenon::database::integrated::create_backend" name="kcenon::database::integrated::create_backend">
+<area shape="rect" id="Node000001" title="Create database backend instance." alt="" coords="5,75,217,119"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1integrated.html#a6b3d4b44eef474c18453047573cf687e" title="Convert backend_type to registry name string." alt="" coords="265,5,476,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,72,272,53,267,56,198,76"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a9388ae64e8f49f97f2453549f2fee4e1" title="Create a backend instance by name." alt="" coords="276,75,464,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,94,263,96,258,98,218,100"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="269,168,472,213"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="176,117,294,161,290,163,175,122"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="322,166,320,158,328,149,345,143,370,141,398,144,417,153,411,153,397,149,370,147,346,149,331,153,325,159,326,169"/>
+</map>

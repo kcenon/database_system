@@ -1,0 +1,16 @@
+<map id="demonstrate_entity_lifecycle" name="demonstrate_entity_lifecycle">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,76,155,120"/>
+<area shape="rect" id="Node000002" href="$classProduct.html#aa575058f1f9557e5286cb19a10581a2f" title=" " alt="" coords="203,5,353,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,73,202,43,223,38,219,40,204,48,134,77"/>
+<area shape="rect" id="Node000004" href="$classUser.html#a54af5624351276ec3f65b00e2a5ecbb8" title=" " alt="" coords="223,57,332,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="154,85,210,79,205,82,156,90"/>
+<area shape="rect" id="Node000005" href="$classProduct.html#ab02d7033f26de70690c8ff46c3cbb91b" title=" " alt="" coords="208,109,348,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="155,105,195,112,190,113,155,110"/>
+<area shape="rect" id="Node000006" href="$classUser.html#a2249c34b491e5befa0902d10b702c5bb" title=" " alt="" coords="217,161,338,189"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="135,118,204,146,224,156,218,155,202,151,134,123"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1orm_1_1field__accessor.html#ae896c891d77948e57d55cd938d5921f5" title=" " alt="" coords="401,76,571,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,31,354,43,417,69,411,70,352,48,320,36"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="333,75,388,85,383,85,333,81"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="348,112,388,110,383,110,349,117"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="319,158,352,146,409,127,414,126,354,151,320,163"/>
+</map>

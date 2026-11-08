@@ -1,0 +1,10 @@
+<map id="kcenon::database::integrated::unified_db_config::set_backend" name="kcenon::database::integrated::unified_db_config::set_backend">
+<area shape="rect" id="Node000001" title="Set database backend type and connection string." alt="" coords="320,15,531,77"/>
+<area shape="rect" id="Node000002" href="$test__configuration_8cpp.html#ab7a22d1086e3b64a5ce0f2f0bdb17459" title="Test builder pattern methods." alt="" coords="114,5,266,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,32,267,30,267,25,307,32"/>
+<area shape="rect" id="Node000004" href="$test__configuration_8cpp.html#aa93184475c90e37740fad2326d3e6bdd" title="Test struct copy and move semantics." alt="" coords="108,57,272,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="307,59,273,65,272,60,302,59"/>
+<area shape="rect" id="Node000003" href="$test__configuration_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main test runner." alt="" coords="5,32,60,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,36,61,44,60,39,101,33"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,57,60,53,60,47,94,54"/>
+</map>

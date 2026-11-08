@@ -1,0 +1,25 @@
+var structkcenon_1_1database_1_1integrated_1_1unified__db__config =
+[
+    [ "enable_file_logging", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8c1c2c96d4c0b27df0b18ea823cd0efa", null ],
+    [ "enable_monitoring", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a6d1ed9d38d72737e5431e1007e3a024e", null ],
+    [ "enable_priority_scheduling", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a25a219d9a09f3b9ebeabad07278d8c1d", null ],
+    [ "enable_prometheus", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#af0cc28147319bb8f851af38a00440f15", null ],
+    [ "enable_query_logging", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ad9db208457d5e12c480155514a97b399", null ],
+    [ "enable_slow_query_logging", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#afe0b4e1b47093bfcdf82845303593f30", null ],
+    [ "enable_ssl", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#afcbc21ca73c3676434f9fd1e885ec0ab", null ],
+    [ "set_backend", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a9502755202a4b85419a86f0063afea85", null ],
+    [ "set_credentials", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a66a7d27f69d5cf880a0c8c98668b6f7b", null ],
+    [ "set_log_level", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a56b8e004923e089fc24a4120c48d653d", null ],
+    [ "set_pool_name", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8769e3f82bc3f0903d63c3d59bd74771", null ],
+    [ "set_pool_size", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ae8626b2bee706977e79b52d99bf65dde", null ],
+    [ "set_thread_count", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a8ac00c95af44e79d31e8e227c2aa10cf", null ],
+    [ "set_timeouts", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a37d3101f2fe6ad749deae2c540ef890c", null ],
+    [ "connection_pool", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a0ccd19ff1ef4c33dda4eb914378938a7", null ],
+    [ "database", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a5a1547642169f76519de180026bd1445", null ],
+    [ "enable_common_system_integration", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a1a314dca12ae633ccbbc07639a03956a", null ],
+    [ "enable_monitoring_system_integration", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#af94cd62de917138d60c20fcf4bb67664", null ],
+    [ "enable_thread_system_integration", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#afa6f32f3f40323333b3685e806978560", null ],
+    [ "logger", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ae1ad3ffa6b72a53148190a0c9d2a8bb1", null ],
+    [ "monitoring", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a60639a04313657afff2ca62c7a1e7231", null ],
+    [ "thread", "structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a00c700ac38816df276f63b5b6c6da04b", null ]
+];

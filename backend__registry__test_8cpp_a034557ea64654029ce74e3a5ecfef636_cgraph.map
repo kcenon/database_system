@@ -1,0 +1,8 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,76,74,104"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="122,29,324,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,81,109,75,105,78,75,86"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a381e330bf39ee7cd470e8a56391c29b3" title="Register a backend factory function." alt="" coords="124,98,322,160"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="74,95,111,104,106,106,74,100"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="187,28,186,19,192,10,205,5,223,3,243,5,256,14,251,14,241,10,223,8,206,10,196,14,191,21,192,30"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="kcenon::database::core::backend_base&lt; Derived, Type &gt;" name="kcenon::database::core::backend_base&lt; Derived, Type &gt;">
+<area shape="rect" id="Node000001" title="CRTP template base class for database backends." alt="" coords="14,792,209,1161"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1database__backend.html" title="Abstract base class for database backends." alt="" coords="5,280,174,727"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,739,106,792,100,792,100,744"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="199,467,341,540"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,537,181,777,176,775,257,542"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="209,143,331,215"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="271,227,272,468,267,467,269,232"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="260,5,279,78"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="270,75,272,126,267,126,269,80"/>
+</map>

@@ -1,0 +1,28 @@
+<map id="kcenon::database::integrated::adapters::logger_adapter::flush" name="kcenon::database::integrated::adapters::logger_adapter::flush">
+<area shape="rect" id="Node000001" title="Flush pending log messages." alt="" coords="351,180,582,224"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="134,5,276,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,167,379,107,342,75,302,48,276,36,275,31,304,43,345,71,382,103,441,167"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#a4a0ed92e00e1363eb8d953775fc1357d" title="Test connection event logging." alt="" coords="116,57,295,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,170,366,135,302,100,270,88,269,83,304,95,369,130,426,170"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#a3ab20a0e2fee045d5e283db9b8315a0c" title="Test error logging." alt="" coords="136,109,275,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="379,175,302,152,261,140,260,135,304,147,384,174"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,161,290,189"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="333,189,291,186,290,181,338,188"/>
+<area shape="rect" id="Node000007" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,213,278,241"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="333,216,279,223,278,218,338,214"/>
+<area shape="rect" id="Node000008" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,265,303,293"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="377,230,304,255,261,267,259,262,302,250,381,228"/>
+<area shape="rect" id="Node000009" href="$test__logger__adapter_8cpp.html#acae8ee2c7c5718208ab603c907647606" title="Test thread safety (basic concurrency test)" alt="" coords="134,317,277,345"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="425,232,369,273,304,307,270,319,268,314,302,302,366,268,420,235"/>
+<area shape="rect" id="Node000010" href="$test__logger__adapter_8cpp.html#a3d1ab1e178130cddadaaef26af764dcc" title="Test transaction logging." alt="" coords="115,369,296,397"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="441,235,382,300,345,332,304,359,276,371,274,366,302,354,342,327,378,296,436,237"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,188,60,216"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,40,109,48,80,81,60,121,46,159,39,188,34,187,41,157,55,119,76,78,106,44,121,35"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="116,94,109,100,86,120,68,144,43,188,38,186,63,141,83,117,106,96,119,90"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="124,144,109,152,78,170,53,189,48,186,75,166,106,147,127,141"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="104,193,62,200,59,195,107,189"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="115,216,61,208,59,203,119,212"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="123,261,106,255,75,237,51,219,51,213,78,233,109,250,128,259"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="116,312,106,307,83,286,63,262,40,219,40,213,68,259,87,282,109,302,122,311"/>
+<area shape="poly" id="edge16_Node000010_Node000003" title=" " alt="" coords="111,361,106,358,76,324,55,285,41,247,36,219,37,214,47,245,60,283,81,321,109,355,117,362"/>
+</map>

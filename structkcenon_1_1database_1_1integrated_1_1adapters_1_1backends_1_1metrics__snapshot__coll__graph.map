@@ -1,0 +1,20 @@
+<map id="kcenon::database::integrated::adapters::backends::metrics_snapshot" name="kcenon::database::integrated::adapters::backends::metrics_snapshot">
+<area shape="rect" id="Node000001" title="Simple metrics snapshot structure." alt="" coords="108,468,310,575"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="317,314,475,403"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="348,402,284,460,281,455,343,404"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="31,168,107,240"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="51,243,40,277,30,318,28,361,32,382,40,402,64,435,97,464,92,466,60,439,35,405,27,384,23,362,24,317,35,275,52,238"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,238,133,265,169,288,203,299,232,302,263,304,303,312,298,314,262,309,232,308,202,304,167,292,130,269,101,243"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="126,314,292,403"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="62,238,65,265,73,288,113,312,108,315,69,292,60,266,62,243"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,133,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="69,107,72,169,67,168,69,112"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="190,160,330,249"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="343,235,366,251,385,272,394,292,399,315,394,313,389,294,380,274,363,255,343,240"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="228,260,225,274,215,315,211,313,220,272,225,265"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="290,14,310,86"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="292,84,278,144,273,142,290,89"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="184,14,202,86"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="190,83,193,110,200,135,205,145,199,146,195,137,188,111,189,88"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="211,401,212,452,207,450,208,405"/>
+</map>

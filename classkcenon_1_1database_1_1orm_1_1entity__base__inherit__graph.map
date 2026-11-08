@@ -1,0 +1,15 @@
+<map id="kcenon::database::orm::entity_base" name="kcenon::database::orm::entity_base">
+<area shape="rect" id="Node000001" title="Base class for all ORM entities." alt="" coords="497,5,657,251"/>
+<area shape="rect" id="Node000002" href="$classIntegrationTestUser.html" title=" " alt="" coords="5,310,178,1008"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,149,411,170,333,200,257,244,223,270,192,301,180,316,176,313,189,297,219,266,254,239,331,196,410,165,485,145"/>
+<area shape="rect" id="Node000003" href="$classProduct.html" title=" " alt="" coords="202,299,402,1019"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="485,210,450,253,417,300,405,322,400,319,412,298,446,250,488,206"/>
+<area shape="rect" id="Node000004" href="$classTestUser.html" title=" " alt="" coords="426,522,554,796"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="556,264,515,524,510,522,553,268"/>
+<area shape="rect" id="Node000005" href="$classUser.html" title=" " alt="" coords="579,299,752,1019"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="601,263,608,300,603,299,599,268"/>
+<area shape="rect" id="Node000006" href="$classpost__entity.html" title=" " alt="" coords="776,377,941,941"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="668,191,722,240,766,298,787,336,804,378,799,377,782,338,762,300,718,244,668,197"/>
+<area shape="rect" id="Node000007" href="$classuser__entity.html" title=" " alt="" coords="965,332,1134,986"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="671,145,742,166,818,197,892,240,926,267,955,297,980,333,975,332,951,301,922,271,889,245,816,202,741,171,672,151"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::database::core::database_backend::value_to_sql" name="kcenon::database::core::database_backend::value_to_sql">
+<area shape="rect" id="Node000001" title=" " alt="" coords="517,48,711,110"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1database__backend.html#a61f7092e2ab271544faee83547602a15" title="Expand positional parameters into a SQL string (fallback)" alt="" coords="263,48,469,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="499,79,470,81,469,76,504,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1database__backend.html#a2097ce3a0d02df3ac1d9d1e004aa3c5b" title="Execute a parameterized DML/DDL query (prepared statement)" alt="" coords="5,5,215,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,60,215,56,215,51,250,59"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1database__backend.html#a4fa44adbc2d9b0c0ddd5b6010779d665" title="Execute a parameterized SELECT query (prepared statement)" alt="" coords="11,91,209,152"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="245,99,210,108,209,102,250,98"/>
+</map>

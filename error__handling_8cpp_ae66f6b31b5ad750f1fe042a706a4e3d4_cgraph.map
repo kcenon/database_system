@@ -1,0 +1,15 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,114,60,142"/>
+<area shape="rect" id="Node000002" href="$error__handling_8cpp.html#a44f6c668eb4460a43bb689bf006a4709" title="Demonstrates chaining operations with early return on failure." alt="" coords="123,5,286,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="45,112,72,86,106,60,119,55,115,59,109,65,75,90,49,115"/>
+<area shape="rect" id="Node000004" href="$error__handling_8cpp.html#aa896290e847d4e43323236611cab7701" title="Demonstrates handling a connection failure gracefully." alt="" coords="113,75,296,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="59,120,100,114,96,118,61,125"/>
+<area shape="rect" id="Node000005" href="$error__handling_8cpp.html#afecd485b19e1a006d7d10ea52544cbb9" title="Demonstrates using last_error() for additional diagnostics." alt="" coords="118,143,291,171"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="60,130,107,138,102,142,61,135"/>
+<area shape="rect" id="Node000006" href="$error__handling_8cpp.html#a45f1703581e250a6a0d37a9367f06554" title="Demonstrates handling query errors with Result&lt;T&gt;." alt="" coords="108,195,301,223"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="50,139,77,161,109,180,128,190,122,190,106,185,74,165,49,145"/>
+<area shape="rect" id="Node000003" href="$error__handling_8cpp.html#a673f805efc47720638fe620a751d62b9" title="Helper to print a Result error." alt="" coords="349,83,438,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="269,48,302,60,343,77,338,78,300,65,269,53"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="295,94,336,96,331,98,296,100"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="272,192,300,180,338,152,369,124,373,122,342,156,302,185,274,197"/>
+</map>

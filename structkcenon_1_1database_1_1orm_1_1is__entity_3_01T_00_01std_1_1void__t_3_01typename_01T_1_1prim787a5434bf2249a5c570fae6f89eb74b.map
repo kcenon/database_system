@@ -1,0 +1,5 @@
+<map id="kcenon::database::orm::is_entity&lt; T, std::void_t&lt; typename T::primary_key_type, decltype(std::declval&lt; T &gt;().table_name()), decltype(std::declval&lt; T &gt;().get_metadata()) &gt; &gt;" name="kcenon::database::orm::is_entity&lt; T, std::void_t&lt; typename T::primary_key_type, decltype(std::declval&lt; T &gt;().table_name()), decltype(std::declval&lt; T &gt;().get_metadata()) &gt; &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,177,284,334"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="64,5,226,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,141,147,178,142,176,144,146"/>
+</map>

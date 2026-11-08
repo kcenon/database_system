@@ -1,0 +1,21 @@
+<map id="thread_print" name="thread_print">
+<area shape="rect" id="Node000001" title="Thread&#45;safe print helper." alt="" coords="845,92,945,120"/>
+<area shape="rect" id="Node000002" href="$connection__pool__demo_8cpp.html#a16fa639bf8cb5a1370344356b3983499" title="Worker function: creates its own connection, inserts data, reads it back, and disconnects." alt="" coords="731,92,797,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,106,797,108,797,103,832,106"/>
+<area shape="rect" id="Node000003" href="$connection__pool__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="548,32,603,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="716,85,683,74,603,53,603,48,684,69,722,85"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#adbb31652b636bf7055e57858d2913e7c" title="Gracefully shuts down the executor." alt="" coords="475,84,676,128"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="713,106,677,108,677,103,718,106"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#afe1fdc2efb1410a4e45bf5c4f4aaaab9" title="Shutdown the thread backend gracefully." alt="" coords="468,156,683,218"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="720,125,650,158,648,153,715,126"/>
+<area shape="rect" id="Node000005" href="$async__executor__demo_8cpp.html#a5180e6d40012fbd2f5c89663a41c8dd6" title=" " alt="" coords="177,5,351,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="482,78,467,74,443,60,419,48,352,32,351,26,421,43,445,56,469,69,487,78"/>
+<area shape="rect" id="Node000007" href="$test__async__operations_8cpp.html#a40158301d7297498c2db67a5448757fa" title=" " alt="" coords="230,57,298,85"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="457,94,299,78,298,72,462,92"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1database_1_1async_1_1async__executor.html#abad2e0f3a11003ac6a3486103c4cb3e6" title=" " alt="" coords="170,110,358,171"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="457,119,358,133,357,127,462,118"/>
+<area shape="rect" id="Node000006" href="$async__executor__demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,60,33"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="159,21,61,22,59,17,163,17"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1database_1_1integrated_1_1adapters_1_1backends_1_1fallback__thread__backend.html#ab8a1e0bb334e27286f63ab3263c0a107" title=" " alt="" coords="108,195,420,257"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="455,202,421,209,420,204,450,203"/>
+</map>

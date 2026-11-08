@@ -1,0 +1,10 @@
+<map id="kcenon::database::database_manager::set_mode" name="kcenon::database::database_manager::set_mode">
+<area shape="rect" id="Node000001" title="Sets the database mode (type) for the manager." alt="" coords="5,22,210,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#aeed2ddcd360782a67f673627030cbc17" title=" " alt="" coords="261,5,458,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,65,248,71,243,73,165,70"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="210,51,248,53,243,54,210,56"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="209,33,248,35,243,37,211,38"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="164,19,248,16,244,19,165,24"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1database__manager.html#acf6d0220fbc75699b436e78221793ee4" title="Retrieves the current database type used by the manager." alt="" coords="258,108,462,152"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="176,65,280,101,275,103,175,70"/>
+</map>

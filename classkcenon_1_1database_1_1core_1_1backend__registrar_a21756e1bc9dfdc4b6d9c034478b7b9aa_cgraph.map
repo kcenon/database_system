@@ -1,0 +1,8 @@
+<map id="kcenon::database::core::backend_registrar::backend_registrar" name="kcenon::database::core::backend_registrar::backend_registrar">
+<area shape="rect" id="Node000001" title="Constructor that registers the backend." alt="" coords="5,60,213,121"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="261,29,463,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,72,248,69,243,70,214,77"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a381e330bf39ee7cd470e8a56391c29b3" title="Register a backend factory function." alt="" coords="263,98,460,160"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="213,104,250,111,245,112,213,109"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="314,28,312,19,321,10,337,5,362,3,389,5,407,14,402,14,388,10,362,8,338,10,323,15,317,21,319,30"/>
+</map>

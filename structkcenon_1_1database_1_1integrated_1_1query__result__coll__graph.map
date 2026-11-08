@@ -1,0 +1,20 @@
+<map id="kcenon::database::integrated::query_result" name="kcenon::database::integrated::query_result">
+<area shape="rect" id="Node000001" title="Query result set." alt="" coords="164,644,364,912"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="179,507,349,579"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="265,577,266,628,261,626,263,581"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,352,264,442"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,439,240,491,235,492,210,444"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,160,107,232"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="71,229,82,279,90,304,102,327,111,339,106,341,98,330,85,306,77,280,71,235"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,133,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="69,107,72,160,67,160,69,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="130,160,253,232"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="184,244,185,256,184,306,186,353,181,353,179,306,180,256,183,250"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="173,14,192,86"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="183,83,187,136,187,143,182,143,182,136,182,88"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="302,14,321,86"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="302,64,234,149,229,146,304,60"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="306,256,424,328"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="321,75,336,118,360,240,355,239,331,119,321,81"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="358,341,343,412,314,484,298,509,294,506,309,481,338,410,356,345"/>
+</map>

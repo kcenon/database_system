@@ -1,0 +1,7 @@
+<map id="kcenon::database::integrated::database_coordinator::check_health" name="kcenon::database::integrated::database_coordinator::check_health">
+<area shape="rect" id="Node000001" title="Perform aggregate health check of all adapters." alt="" coords="206,24,470,68"/>
+<area shape="rect" id="Node000002" href="$test__database__coordinator_8cpp.html#ae160a573baa527c8e420eddbce3cab30" title=" " alt="" coords="5,5,158,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,31,158,30,158,24,193,30"/>
+<area shape="rect" id="Node000003" href="$test__database__coordinator_8cpp.html#a5ab0c22e1467d17ba65398c7ddea2604" title=" " alt="" coords="12,57,151,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,61,152,67,151,62,193,60"/>
+</map>

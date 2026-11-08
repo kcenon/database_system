@@ -1,0 +1,5 @@
+<map id="include/kcenon/database/integrated/adapters/backends/common_logger_backend.h" name="include/kcenon/database/integrated/adapters/backends/common_logger_backend.h">
+<area shape="rect" id="Node000001" title="Logger backend using common_system&#39;s ILogger and GlobalLoggerRegistry." alt="" coords="5,5,224,67"/>
+<area shape="rect" id="Node000002" href="$common__logger__backend_8cpp.html" title=" " alt="" coords="17,115,212,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,80,117,115,112,114,113,85"/>
+</map>

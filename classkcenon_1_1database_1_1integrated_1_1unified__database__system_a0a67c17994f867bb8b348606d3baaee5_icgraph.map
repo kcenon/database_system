@@ -1,0 +1,22 @@
+<map id="kcenon::database::integrated::unified_database_system::is_connected" name="kcenon::database::integrated::unified_database_system::is_connected">
+<area shape="rect" id="Node000001" title="Check if connected to database." alt="" coords="370,135,581,197"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#af1871af38f8c8f16de0a872c5e7aba9d" title=" " alt="" coords="125,5,304,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="429,124,380,85,321,48,291,36,290,31,323,43,383,81,435,124"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#af961b3eef7eece3a70004b73c4ca1d5f" title=" " alt="" coords="111,57,319,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="396,128,321,99,285,88,285,83,323,94,401,127"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#ac640983dcc7a6a2e094828200875c069" title=" " alt="" coords="141,109,289,154"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="352,151,290,144,289,138,358,149"/>
+<area shape="rect" id="Node000006" href="$test__unified__database__system_8cpp.html#a11d507820327651b660e123416d8ad05" title=" " alt="" coords="119,178,311,223"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="352,183,312,190,311,185,357,181"/>
+<area shape="rect" id="Node000007" href="$test__unified__database__system_8cpp.html#a762143b39c20a29621445085a40bea13" title=" " alt="" coords="119,247,310,274"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="401,203,323,238,286,249,284,243,321,233,396,205"/>
+<area shape="rect" id="Node000008" href="$test__unified__database__system_8cpp.html#a84abe0eec984b18fcb320064e4ee903e" title=" " alt="" coords="108,299,322,326"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="434,206,383,251,323,288,291,301,290,295,321,283,380,247,430,208"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,152,60,180"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,42,109,48,84,72,65,101,41,152,36,151,60,98,80,69,106,44,118,38"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="117,93,109,99,73,125,47,153,43,150,70,121,106,94,121,89"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="124,150,62,163,59,158,127,146"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="101,181,61,173,60,168,106,178"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="116,241,106,237,70,210,45,182,45,177,73,206,109,233,122,240"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="114,291,106,288,80,263,60,234,38,183,39,178,65,231,84,260,109,284,119,292"/>
+</map>

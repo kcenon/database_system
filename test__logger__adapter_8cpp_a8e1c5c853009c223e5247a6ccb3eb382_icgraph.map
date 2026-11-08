@@ -1,0 +1,16 @@
+<map id="log_file_contains" name="log_file_contains">
+<area shape="rect" id="Node000001" title="Check if a log file contains a specific string." alt="" coords="351,84,481,112"/>
+<area shape="rect" id="Node000002" href="$test__logger__adapter_8cpp.html#ac24210695be1d1dfceafc6db7c76f280" title="Test basic logging functionality." alt="" coords="134,5,276,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="371,77,302,48,265,36,265,31,304,43,376,76"/>
+<area shape="rect" id="Node000004" href="$test__logger__adapter_8cpp.html#a2f046d997ac492444d83d823694b11cd" title="Test log level filtering." alt="" coords="121,57,290,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="333,88,291,85,290,79,338,87"/>
+<area shape="rect" id="Node000005" href="$test__logger__adapter_8cpp.html#a03e885539ec89c84a4958181cfb97fe9" title="Test query logging and SQL sanitization." alt="" coords="133,109,278,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="333,108,279,117,278,112,338,107"/>
+<area shape="rect" id="Node000006" href="$test__logger__adapter_8cpp.html#aa771f6c4e12e240cb22f8810f7afe7b7" title="Test slow query detection." alt="" coords="108,161,303,189"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="375,118,304,151,265,163,264,158,302,146,370,119"/>
+<area shape="rect" id="Node000003" href="$test__logger__adapter_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,84,60,112"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,40,109,48,78,66,52,85,48,82,75,62,106,43,127,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="104,89,61,96,59,91,107,85"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="115,112,60,104,60,99,119,108"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="123,156,106,151,75,133,51,115,51,109,78,129,109,146,128,156"/>
+</map>

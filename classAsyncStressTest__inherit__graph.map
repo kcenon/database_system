@@ -1,0 +1,5 @@
+<map id="AsyncStressTest" name="AsyncStressTest">
+<area shape="rect" id="Node000001" title="Test fixture for async operation stress tests." alt="" coords="5,126,121,220"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,5,108,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,90,66,126,61,125,62,95"/>
+</map>

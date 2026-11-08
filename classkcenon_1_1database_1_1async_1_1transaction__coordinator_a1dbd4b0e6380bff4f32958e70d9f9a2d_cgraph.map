@@ -1,0 +1,18 @@
+<map id="kcenon::database::async::transaction_coordinator::commit_distributed_transaction" name="kcenon::database::async::transaction_coordinator::commit_distributed_transaction">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,125,242,187"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a7e170d29541cbcd96cea9d69ef021555" title=" " alt="" coords="290,125,473,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,154,276,155,271,157,242,159"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a88c32450aabe539e6f5ac2be3825943c" title=" " alt="" coords="521,5,704,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="436,122,520,76,528,75,532,73,522,81,438,127"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1database_1_1async.html#a58708eb78f8410b00a4607f3f6f416ad" title=" " alt="" coords="752,99,935,144"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="474,164,584,169,645,168,704,162,765,150,770,149,705,167,645,173,584,175,474,170"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1async_1_1async__result.html#af000852d8829d0aebf22a688db688ebd" title=" " alt="" coords="522,227,704,272"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="460,185,544,221,538,221,459,190"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1async_1_1transaction__coordinator.html#a5c77188f60a98cc204db08bbbe265bb2" title=" " alt="" coords="521,91,704,152"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="473,140,508,137,503,138,474,145"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1database_1_1async.html#adf8882e1e710b4fa4b62e4d717742eed" title=" " alt="" coords="752,22,935,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="704,37,740,40,734,41,705,42"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="698,65,769,93,764,93,697,70"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="704,88,758,73,763,71,706,93"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="705,119,740,121,734,122,705,124"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="kcenon::database::protocol::protocol_serializer::serialize" name="kcenon::database::protocol::protocol_serializer::serialize">
+<area shape="rect" id="Node000001" title="Serialize connect request." alt="" coords="5,36,218,81"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#af2425d58415140b16f9c414b0fa7e27e" title=" " alt="" coords="266,5,500,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,44,253,42,248,43,219,49"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="548,36,786,81"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="218,59,266,60,500,60,535,62,530,62,500,65,266,65,218,64"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="500,38,535,44,530,44,500,43"/>
+</map>

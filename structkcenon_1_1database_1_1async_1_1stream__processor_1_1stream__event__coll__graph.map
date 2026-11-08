@@ -1,0 +1,16 @@
+<map id="kcenon::database::async::stream_processor::stream_event" name="kcenon::database::async::stream_processor::stream_event">
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,502,372,614"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="207,168,283,240"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,238,298,272,313,329,317,375,311,421,298,479,296,488,291,485,293,478,306,421,312,375,308,330,293,274,277,243"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="125,331,266,437"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="232,238,222,274,212,315,207,313,217,272,230,243"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="181,5,309,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="246,107,248,169,242,168,244,112"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,435,220,477,223,487,218,486,215,479,205,440"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,160,146,249"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="79,261,87,285,97,306,111,324,128,341,123,342,107,327,92,308,82,287,79,266"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="39,14,59,86"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="47,83,53,135,55,143,50,143,48,136,47,89"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="116,14,134,86"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="115,82,98,144,92,143,116,77"/>
+</map>

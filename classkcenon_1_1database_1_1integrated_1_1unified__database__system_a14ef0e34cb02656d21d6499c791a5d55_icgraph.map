@@ -1,0 +1,17 @@
+<map id="kcenon::database::integrated::unified_database_system::check_health" name="kcenon::database::integrated::unified_database_system::check_health">
+<area shape="rect" id="Node000001" title="Perform health check." alt="" coords="360,67,571,129"/>
+<area shape="rect" id="Node000002" href="$monitoring_8cpp.html#a9d63bbcc36f0557919bb8db9d2d698a6" title=" " alt="" coords="142,5,278,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,62,311,48,269,36,268,31,313,43,364,61"/>
+<area shape="rect" id="Node000004" href="$monitoring_8cpp.html#a0ea4c8743984cdce83268f0c5629fff6" title=" " alt="" coords="108,57,312,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,86,313,85,312,79,347,85"/>
+<area shape="rect" id="Node000005" href="$test__unified__database__system_8cpp.html#aa5fbf0c9a289db06f5bdf19910a247e1" title=" " alt="" coords="127,109,293,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="342,110,294,118,293,112,347,109"/>
+<area shape="rect" id="Node000007" href="$test__unified__database__system_8cpp.html#a83eccdb9ba810f5b1a3baa4ba42958f3" title=" " alt="" coords="138,161,282,206"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="359,134,280,163,278,158,354,135"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,32,60,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,34,61,44,59,39,129,30"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="92,56,61,52,59,47,96,53"/>
+<area shape="rect" id="Node000006" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,139,60,166"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="109,141,61,151,59,146,113,138"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="121,170,60,160,60,154,125,166"/>
+</map>

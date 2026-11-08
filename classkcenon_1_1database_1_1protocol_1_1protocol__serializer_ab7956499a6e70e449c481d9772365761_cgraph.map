@@ -1,0 +1,9 @@
+<map id="kcenon::database::protocol::protocol_serializer::serialize" name="kcenon::database::protocol::protocol_serializer::serialize">
+<area shape="rect" id="Node000001" title="Serialize connect response." alt="" coords="5,40,218,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#af2425d58415140b16f9c414b0fa7e27e" title=" " alt="" coords="266,5,500,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,46,253,44,248,45,219,51"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8c703e616e2c27513c52b28ae47edc98" title=" " alt="" coords="268,75,498,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,73,255,80,250,80,218,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1protocol_1_1protocol__serializer.html#a8581337c947d4d4c6ad90fb2bd17a9a4" title=" " alt="" coords="548,5,786,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="500,25,535,27,530,28,501,30"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="kcenon::database::monitoring::performance_monitor::emit_alert" name="kcenon::database::monitoring::performance_monitor::emit_alert">
+<area shape="rect" id="Node000001" title=" " alt="" coords="908,126,1154,170"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a1b91b193be88469e90d00345731ec8a3" title=" " alt="" coords="642,15,859,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="951,120,837,80,837,74,956,120"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a4b51883dc945dada731e56ae1a42f66b" title=" " alt="" coords="344,83,564,144"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="890,141,564,123,564,117,895,139"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a425fc41fedb60b9219bc2b5884b45791" title=" " alt="" coords="641,151,860,212"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="890,165,861,171,860,166,895,164"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a2cc5979a07583321e7fa3aaec684dcfb" title=" " alt="" coords="641,236,860,298"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="969,177,861,227,833,238,832,233,859,222,964,178"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a36fa71829a861905f7d57ab19d90728d" title=" " alt="" coords="315,14,593,58"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="624,42,594,43,593,38,629,41"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="625,74,565,91,563,86,630,73"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1monitoring_1_1performance__monitor.html#a41cf68fab73b6e8e5b28103e42141008" title="Constructor &#45; now public for dependency injection." alt="" coords="5,5,267,67"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="297,37,268,39,266,34,302,35"/>
+</map>

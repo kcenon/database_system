@@ -1,0 +1,27 @@
+<map id="src/core/database_backend.cpp" name="src/core/database_backend.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="611,5,836,33"/>
+<area shape="rect" id="Node000002" href="$database__backend_8h.html" title="Abstract interface for database backends." alt="" coords="497,81,662,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="703,33,632,76,629,71,698,35"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="686,90,760,117"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="725,31,726,76,721,73,722,36"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="785,90,870,117"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="741,31,801,80,796,79,739,36"/>
+<area shape="rect" id="Node000003" href="$database__types_8h.html" title="Defines the enumeration of supported database types." alt="" coords="17,174,214,218"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="496,123,229,175,228,170,498,118"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="238,174,425,218"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="522,125,406,170,404,165,517,127"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="449,182,526,210"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="560,125,513,173,510,169,555,127"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="550,182,608,210"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="581,124,582,168,577,165,578,128"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="632,182,694,210"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="600,123,643,171,638,170,598,128"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="718,182,768,210"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="620,124,707,171,709,175,704,174,705,176,619,129"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="792,182,860,210"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="648,124,782,171,788,176,783,175,780,176,648,129"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,266,71,294"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,218,63,257,59,253,93,220"/>
+<area shape="rect" id="Node000005" href="$compat_8h.html" title="Backward&#45;compatibility namespace alias for the legacy ::database namespace." alt="" coords="95,266,293,294"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="137,216,173,255,168,255,135,221"/>
+</map>

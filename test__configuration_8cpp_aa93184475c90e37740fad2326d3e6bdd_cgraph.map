@@ -1,0 +1,7 @@
+<map id="test_struct_semantics" name="test_struct_semantics">
+<area shape="rect" id="Node000001" title="Test struct copy and move semantics." alt="" coords="5,65,170,93"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#a9502755202a4b85419a86f0063afea85" title="Set database backend type and connection string." alt="" coords="218,5,429,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,62,205,57,200,59,169,67"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1database_1_1integrated_1_1unified__db__config.html#ae8626b2bee706977e79b52d99bf65dde" title="Configure connection pool size." alt="" coords="218,91,429,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,91,205,99,200,100,168,96"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="example_realtime_monitoring" name="example_realtime_monitoring">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,57,224,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system.html#ae99414d762ba08d350283d0c7aa1c190" title="Get current performance metrics." alt="" coords="272,5,483,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,54,259,52,254,53,225,59"/>
+<area shape="rect" id="Node000003" href="$monitoring_8cpp.html#a7d0939161a8f5fb1d36b4e725207a6a4" title=" " alt="" coords="326,92,429,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,83,313,96,307,97,224,88"/>
+</map>

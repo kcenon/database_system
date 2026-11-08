@@ -1,0 +1,13 @@
+<map id="kcenon::database::core::backend_registry::available_backends" name="kcenon::database::core::backend_registry::available_backends">
+<area shape="rect" id="Node000001" title="Get list of all registered backend names." alt="" coords="342,74,549,135"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1core.html#a8897b6bac13854f711e20f1bfaa62878" title="Convenience function for getting available backends." alt="" coords="122,22,294,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,75,295,69,295,64,329,74"/>
+<area shape="rect" id="Node000005" href="$backend__registry__test_8cpp.html#a37fc40b653acfac5c0548add5d211288" title=" " alt="" coords="174,91,242,118"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="324,105,243,107,242,102,329,104"/>
+<area shape="rect" id="Node000006" href="$backend__registry__test_8cpp.html#a9cdc9ae2b144b2b313013cc7373a19ea" title=" " alt="" coords="174,143,242,170"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="330,130,243,152,242,146,324,131"/>
+<area shape="rect" id="Node000003" href="$backend__registry__test_8cpp.html#a860a8a63432cd87a8a2a885172910dc7" title=" " alt="" coords="5,5,74,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,31,75,27,73,22,109,28"/>
+<area shape="rect" id="Node000004" href="$backend__registry__test_8cpp.html#a30878636966576ce9691886e141725e3" title=" " alt="" coords="5,57,74,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="104,62,75,68,73,63,108,59"/>
+</map>

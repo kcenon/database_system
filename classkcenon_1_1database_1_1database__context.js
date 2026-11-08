@@ -1,0 +1,27 @@
+var classkcenon_1_1database_1_1database__context =
+[
+    [ "database_context", "classkcenon_1_1database_1_1database__context.html#a15d64f5743c433e65b610586a7e0e7c2", null ],
+    [ "~database_context", "classkcenon_1_1database_1_1database__context.html#afa431a0b4143cdefa969e802da43ea93", null ],
+    [ "database_context", "classkcenon_1_1database_1_1database__context.html#ac40f3b1949453cee5621b10ada05f88f", null ],
+    [ "database_context", "classkcenon_1_1database_1_1database__context.html#a35cca59718701c822347bd4206225469", null ],
+    [ "get_access_control", "classkcenon_1_1database_1_1database__context.html#a2c33cc0896213c04bd9e5d305c254e47", null ],
+    [ "get_audit_logger", "classkcenon_1_1database_1_1database__context.html#a71b133320307ab6d0c9def9c7e5eef12", null ],
+    [ "get_credential_manager", "classkcenon_1_1database_1_1database__context.html#a10598a9c1b86b7449e8b2e8ab52cf865", null ],
+    [ "get_encryption_manager", "classkcenon_1_1database_1_1database__context.html#ae44f02e3102a2e8da4ff2de2053c1e54", null ],
+    [ "get_entity_manager", "classkcenon_1_1database_1_1database__context.html#ad690dc8f82f97b850387e525fc21c2e3", null ],
+    [ "get_performance_monitor", "classkcenon_1_1database_1_1database__context.html#a6b333b3f141fbb498a9748b5e3e61315", null ],
+    [ "get_security_monitor", "classkcenon_1_1database_1_1database__context.html#a78a812367f758011d5f573dbda754db1", null ],
+    [ "get_transaction_coordinator", "classkcenon_1_1database_1_1database__context.html#aa25eb6b29a6ca368e09e6d793fedb9d3", null ],
+    [ "is_initialized", "classkcenon_1_1database_1_1database__context.html#a9eebfc2fa2271236d64e857ebb11477d", null ],
+    [ "operator=", "classkcenon_1_1database_1_1database__context.html#a0816bf46382e758e546982957c7071fa", null ],
+    [ "operator=", "classkcenon_1_1database_1_1database__context.html#a0196b0126f25caf5b3c7a21af316cd53", null ],
+    [ "access_control_", "classkcenon_1_1database_1_1database__context.html#a51d40d15ddd0d0525e660332e5f6af07", null ],
+    [ "audit_logger_", "classkcenon_1_1database_1_1database__context.html#ace01e81901f602bacebe0292c07f92e8", null ],
+    [ "credential_manager_", "classkcenon_1_1database_1_1database__context.html#ad53e19475a259670c258443f363d0806", null ],
+    [ "encryption_manager_", "classkcenon_1_1database_1_1database__context.html#aa2ae29bcb74b9b10742cb2c8aa31368f", null ],
+    [ "entity_manager_", "classkcenon_1_1database_1_1database__context.html#a8a27c413d8e6a05c41708a2774baebd2", null ],
+    [ "mutex_", "classkcenon_1_1database_1_1database__context.html#abde47b84e1747290b3546e348219e59a", null ],
+    [ "performance_monitor_", "classkcenon_1_1database_1_1database__context.html#a19fd268a16ae223779520ee052234d06", null ],
+    [ "security_monitor_", "classkcenon_1_1database_1_1database__context.html#ab4ac14db8a9fafb70d1c2b994e3f9f7c", null ],
+    [ "transaction_coordinator_", "classkcenon_1_1database_1_1database__context.html#ab7a4a3132e143988b1cdfe133a653ef8", null ]
+];

@@ -1,0 +1,11 @@
+<map id="TEST_F" name="TEST_F">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,94,74,122"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1database_1_1core.html#a8897b6bac13854f711e20f1bfaa62878" title="Convenience function for getting available backends." alt="" coords="122,55,294,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,100,109,95,104,97,75,105"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#a1f5114253279a219a5575c36ae63ddcb" title="Get the singleton instance." alt="" coords="344,115,547,160"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="74,108,329,126,328,132,74,113"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1core_1_1backend__registry.html#ab443e63f6201809dab8b32ba5c07f721" title="Get list of all registered backend names." alt="" coords="342,5,549,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="293,60,329,56,324,58,295,65"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="294,97,343,111,337,111,294,102"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="401,113,399,105,407,96,422,90,446,89,471,91,488,100,483,100,470,96,446,94,423,96,410,101,404,107,405,116"/>
+</map>

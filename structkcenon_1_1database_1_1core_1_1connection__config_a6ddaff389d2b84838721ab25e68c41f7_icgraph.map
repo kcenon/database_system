@@ -1,0 +1,11 @@
+<map id="kcenon::database::core::connection_config::from_string" name="kcenon::database::core::connection_config::from_string">
+<area shape="rect" id="Node000001" title="Construct connection_config from legacy connection string." alt="" coords="292,117,477,179"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1integrated_1_1unified__database__system_1_1impl.html#a261afbb5fd3bc414680a7c9654df83af" title=" " alt="" coords="19,5,230,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,111,243,81,216,70,215,65,245,76,313,109"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1async_1_1async__database.html#a47af5564fca27045574a364fb80aabd3" title=" " alt="" coords="5,91,244,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,134,244,132,244,127,279,133"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1database__manager.html#aaf95a3dadb8fc2405c841f2917c628b2" title="Result&#45;based wrapper for connect()." alt="" coords="22,160,227,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,163,228,172,227,167,279,162"/>
+<area shape="rect" id="Node000005" href="$postgres__advanced_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="97,229,152,257"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="317,186,245,220,196,233,153,242,152,236,195,228,243,215,312,187"/>
+</map>

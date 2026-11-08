@@ -1,0 +1,10 @@
+<map id="kcenon::database::integrated::unified_database_system::disconnect" name="kcenon::database::integrated::unified_database_system::disconnect">
+<area shape="rect" id="Node000001" title="Disconnect from database." alt="" coords="364,15,575,77"/>
+<area shape="rect" id="Node000002" href="$test__unified__database__system_8cpp.html#af961b3eef7eece3a70004b73c4ca1d5f" title=" " alt="" coords="108,5,316,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,33,316,33,316,27,351,33"/>
+<area shape="rect" id="Node000004" href="$test__unified__database__system_8cpp.html#a762143b39c20a29621445085a40bea13" title=" " alt="" coords="116,57,308,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="351,58,308,64,308,59,346,58"/>
+<area shape="rect" id="Node000003" href="$test__unified__database__system_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,32,60,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,38,61,44,59,39,102,34"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="99,57,60,52,60,47,103,54"/>
+</map>

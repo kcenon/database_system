@@ -1,0 +1,15 @@
+<map id="kcenon::database::query::sql_dialect::create" name="kcenon::database::query::sql_dialect::create">
+<area shape="rect" id="Node000001" title="Factory method to create appropriate dialect." alt="" coords="269,223,450,268"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1query_1_1tests_1_1CrossDialectTest.html#a4c3e79fe63f829c608a02666e900d8d3" title=" " alt="" coords="22,5,204,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="334,210,286,146,254,111,219,81,203,70,202,65,222,77,258,108,290,143,339,210"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1database_1_1query_1_1tests_1_1PostgreSQLDialectTest.html#ad306895d6fae21ad3e0faad7ceff8378" title=" " alt="" coords="5,91,221,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="307,215,219,167,197,155,196,150,222,162,312,214"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1database_1_1query_1_1tests_1_1SQLiteDialectTest.html#aba5f3f6848fd06d9f50248a6e49384cd" title=" " alt="" coords="21,176,205,238"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,230,206,224,204,219,256,228"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1database_1_1query_1_1tests.html#a02a41687ee7294f33680317eed3cbb94" title=" " alt="" coords="22,262,204,306"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="251,263,205,272,203,267,256,261"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1database_1_1query_1_1tests.html#aab0898e874ba4a8849051140b427ba6c" title=" " alt="" coords="22,331,204,376"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="304,277,222,321,191,333,189,328,220,316,309,274"/>
+<area shape="rect" id="Node000007" href="$namespacekcenon_1_1database_1_1query_1_1tests.html#ac6ab53b217fbbb3d241a7893b443541a" title=" " alt="" coords="22,400,204,445"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="335,279,286,337,256,366,222,390,199,402,197,398,219,386,252,362,283,334,331,281"/>
+</map>

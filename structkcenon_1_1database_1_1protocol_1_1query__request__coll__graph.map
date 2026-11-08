@@ -1,0 +1,14 @@
+<map id="kcenon::database::protocol::query_request" name="kcenon::database::protocol::query_request">
+<area shape="rect" id="Node000001" title="Query execution request." alt="" coords="128,434,315,524"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="204,160,279,232"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,229,273,255,283,299,287,334,285,369,273,411,269,422,265,418,268,410,279,368,282,334,278,300,268,257,261,234"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="66,297,241,369"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="211,234,197,257,181,284,177,281,193,255,214,230"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="178,5,305,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,107,244,160,239,159,241,112"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="165,367,183,409,188,420,183,419,178,411,163,371"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,160,123,232"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="69,244,82,272,103,297,98,298,78,274,69,249"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="55,14,74,86"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="64,83,67,143,62,143,64,89"/>
+</map>

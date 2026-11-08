@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::sqlite_backend::rollback_transaction" name="kcenon::database::backends::sqlite_backend::rollback_transaction">
+<area shape="rect" id="Node000001" title="Rollback the current transaction." alt="" coords="274,5,479,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1backends_1_1sqlite__backend.html#afb12a4ac295dc83bb9f8646ed1898e09" title="Database&#45;specific shutdown logic." alt="" coords="5,14,226,58"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="256,36,226,39,226,34,261,36"/>
+</map>

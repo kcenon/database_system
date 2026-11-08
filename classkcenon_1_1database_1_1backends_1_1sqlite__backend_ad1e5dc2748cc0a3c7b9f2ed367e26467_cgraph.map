@@ -1,0 +1,5 @@
+<map id="kcenon::database::backends::sqlite_backend::execute_query" name="kcenon::database::backends::sqlite_backend::execute_query">
+<area shape="rect" id="Node000001" title="Execute a general SQL query (DDL, DML)" alt="" coords="5,22,235,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1database_1_1core_1_1backend__base.html#a88ddfd1f13508d200a812d6f94039f63" title=" " alt="" coords="283,5,476,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,42,269,44,264,45,235,47"/>
+</map>

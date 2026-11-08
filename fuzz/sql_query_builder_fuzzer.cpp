@@ -24,6 +24,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -111,8 +112,17 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     }
 
     // Drive the assembly path; result is intentionally unused.
-    const std::string sql = builder.build();
-    (void)sql;
+    // build() rejects programs it cannot assemble by throwing
+    // std::runtime_error ("Invalid query type" when no query type was set;
+    // the empty input already does this) or std::invalid_argument (an
+    // unsupported dialect). Those are rejected inputs, not crashes; any other
+    // exception, abort or sanitizer report still reaches libFuzzer.
+    try {
+        const std::string sql = builder.build();
+        (void)sql;
+    } catch (const std::runtime_error&) {
+    } catch (const std::invalid_argument&) {
+    }
 
     return 0;
 }

@@ -94,3 +94,66 @@ Release sync must reference the reviewed reusable workflow and validator commit.
 Promote it separately only after real release provenance and port hashes pass.
 The release-triggered workflow checks an already published tag; its enforcing
 prepublication boundary is the registry sync.
+
+## Scheduled workflow operations
+
+[Database #607](https://github.com/kcenon/database_system/issues/607) reduces
+four schedules (one daily) to three weekly schedules:
+
+| Workflow | UTC schedule | Purpose |
+| --- | --- | --- |
+| `sbom.yml` | Sunday 03:00 | Syft SBOM and Grype scan of that inventory |
+| `fuzzing.yml` | Monday 03:17 | libFuzzer runs of the SQL value formatter and query builder |
+| `cve-scan.yml` | Wednesday 04:23 | Trivy filesystem scan and license checks |
+
+All three retain `workflow_dispatch`. Trivy and SBOM keep their push/PR
+triggers for `main`; SBOM also keeps its release trigger.
+
+The retired `osv-scanner.yml` never produced a scheduled result: all 24
+scheduled runs from 2026-03-15 to 2026-08-23 ended in `startup_failure`.
+A manual run on 2026-10-19
+([run 39311977582](https://github.com/kcenon/database_system/actions/runs/39311977582))
+found no extractor for `vcpkg.json` (exit 127), extracted zero packages and
+still succeeded with an empty SARIF file. network_system retired the same
+invocation in kcenon/network_system#1193. Trivy finds no language-specific
+dependency files here and Grype scans the Syft inventory, so neither proves
+complete C++/vcpkg dependency coverage; a supported, resolved dependency
+inventory is separate work.
+
+Known tolerated failures: SARIF and report uploads in both scanners, and the
+dependency submission in `sbom.yml`, use `continue-on-error`; Grype fails the
+build only on pull requests. Read the original logs and artifacts; a green
+scheduled run does not prove a complete scan.
+
+`fuzzing.yml` runs the fuzzer step with `shell: bash` (pipefail), so a fuzzer
+crash fails the job instead of being hidden behind `tee`. Run logs are kept
+for 14 days so a seven-day observation window can still inspect them.
+
+`scheduled-workflow-health.yml` inspects completed default-branch scheduled
+runs of these three workflows. With the automatic `GITHUB_TOKEN`, it creates
+or updates one marked issue per workflow for unsuccessful runs, including
+timeout, startup failure and cancellation. It keeps each run/attempt
+identity, reopens the issue for a new failure, and does not duplicate an
+already recorded attempt. Successful reruns do not erase a failed first
+attempt. The reporter checks out only its own default-branch revision, and
+only its reporting job has `issues: write`.
+
+For a controlled replay, manually dispatch **Scheduled Workflow Health** from
+`main` with an existing scheduled run ID. The default `dry_run: true`
+previews without changing issues; inspect the `scheduled-health-report`
+artifact.
+
+Start the observation window after the final delivery to `main` and the
+activation of all three workflows:
+
+```sh
+python3 scripts/scheduled_workflows.py audit \
+  --since <delivery-or-activation-time> --output scheduled-observation.json
+```
+
+The read-only audit requires seven full days, a successful scheduled run of
+every retained workflow, successful original-attempt jobs, retained result
+artifacts and active registrations. Exit 0 covers these metadata checks
+only; review the original logs, artifacts and workflow inventory before
+acceptance, and reset the window after a failed scheduled run or a material
+workflow repair.
